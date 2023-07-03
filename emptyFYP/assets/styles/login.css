@@ -1,0 +1,23 @@
+.navbar{
+color: aquamarine;
+}
+
+.columns {
+    display: flex;
+    column-count: 3;
+    column-gap: 2px;
+
+}
+.column-small {
+    column-width: 10%
+}
+.column-big {
+    column-width: 90%
+
+}
+  
+ .threeLine {
+    display: flex;
+    align-items: center;
+    color: gray;
+}

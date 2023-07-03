@@ -1,0 +1,57 @@
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+<link href="/styles/login.css" rel="stylesheet">
+
+
+<body>
+    <navbar class="navbar" >
+        <a class="navbar-Logo" href="/">
+            <img src="\images\login\compbg.png" width=150 height =50>
+        </a>
+    </navbar>
+    <h1 style="text-align:center">Welcome to FYP Schdeuling System</h1>
+   
+    <div class="columns" >
+       <div class = "column-small" width = "10%">
+            hell
+       </div>
+       <div class = "column-big"  width = "90%">
+        <form  action="/user/login" method="post" onsubmit="submitform(this);return false;">
+            
+            <input type="text"placeholder="Enter Username (SID/TID)" id="username" name="username" value=""><br>
+            
+            <input type="password"placeholder="Enter Password" id="pw" name="pw" value=""><br><br>
+            <button type="submit is-success">Login</button>
+          </form> 
+          
+        </div>
+        <div class = "column-small"  width = "10%">
+            hell
+         </div>
+    </div>
+</body>
+<script>
+ async function submitform(formElem){
+try{
+    var response = await fetch(formElem.action,{
+        method: formElem.method,
+        body: new FormData(formElem),
+    });
+if (response.ok){
+    const user = await response.json();
+    console.log(user.allusersname);
+    alert("Welcom back, "+user.allusersname);
+    location.assign("/home");
+
+}else if(response.status ==401){
+    var msg = await response.json();
+    alert(msg);
+}else{
+    alert(response.statusTest);
+}
+
+}catch(error){
+    console.log(error);
+}
+}
+ 
+</script>
