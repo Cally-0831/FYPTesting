@@ -1,34 +1,31 @@
-<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
-<link href="/styles/login.css" rel="stylesheet">
 
-
-<body>
-    <navbar class="navbar" >
+    <!---
+    <div class="navbar" >
         <a class="navbar-Logo" href="/">
             <img src="\images\login\compbg.png" width=150 height =50>
         </a>
-    </navbar>
-    <h1 style="text-align:center">Welcome to FYP Schdeuling System</h1>
-   
-    <div class="columns" >
-       <div class = "column-small" width = "10%">
-            hell
-       </div>
-       <div class = "column-big"  width = "90%">
+    </div>
+    -->
+
+    <div class="welcome">Welcome to FYP Schdeuling System</div>
+   <br><br>
+    
+       
+       <div class = "column-big" >
+        <div class="title">Login</div>
         <form  action="/user/login" method="post" onsubmit="submitform(this);return false;">
-            
+            <label>Username:&nbsp;&nbsp;</label>
             <input type="text"placeholder="Enter Username (SID/TID)" id="username" name="username" value=""><br>
-            
+            <br>
+            <label>Password:&nbsp;&nbsp;&nbsp;</label>
             <input type="password"placeholder="Enter Password" id="pw" name="pw" value=""><br><br>
             <button type="submit is-success">Login</button>
           </form> 
           
         </div>
-        <div class = "column-small"  width = "10%">
-            hell
-         </div>
-    </div>
-</body>
+        
+    
+
 <script>
  async function submitform(formElem){
 try{

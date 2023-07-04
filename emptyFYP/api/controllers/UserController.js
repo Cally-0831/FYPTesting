@@ -83,4 +83,16 @@ console.log("check1")
         });
        
     },
+
+    logout: async function (req, res) {
+
+        req.session.destroy(function (err) {
+
+            if (err) return res.serverError(err);
+
+            return res.redirect("/");
+        });
+    },
+
+
 }
