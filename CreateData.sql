@@ -75,4 +75,3 @@ INSERT INTO  allusers VALUES ("Prof Lam","tid00002","tpw00002","Active",0,"sup")
 
 INSERT INTO  student_take_course VALUES("s01","c01");
 
-Select * from allusers where role="stu";

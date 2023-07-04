@@ -1,38 +1,57 @@
 this is uploadstudentlist page
+<script>
+  var allstudentarray = new Array(0);
+</script>
+<form enctype="multipart/form-data">
+  <label for="upload">Please upload the student list in .xlsx format </label>
+  <br>
+  <input id="upload" type=file name="files[]">
+</form>
+<br>
 
+  <div id = "getlistdata"></div>
 
-  <script>
-    function uploadlist(){
-
-    }
-  </script>
-
+<br>
+<textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 <script>
-  var ExcelToJSON = function() {
+  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+var allstudentarray=new Array(0);
+var jsonobj ;
+  var ExcelToJSON = function () {
 
-    this.parseExcel = function(file) {
+    this.parseExcel = function (file) {
       var reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         var data = e.target.result;
         var workbook = XLSX.read(data, {
           type: 'binary'
         });
-        workbook.SheetNames.forEach(function(sheetName) {
+        workbook.SheetNames.forEach(function (sheetName) {
           // Here is your object
           var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
           var json_object = JSON.stringify(XL_row_object);
-          console.log(JSON.parse(json_object));
+          
+          console.log("check json_object      "+json_object);
+          jsonobj = json_object
+          console.log("check jsonobj      "+jsonobj);
+          
+          allstudentarray = JSON.parse(json_object);
+          document.getElementById("getlistdata").innerHTML = "Total "+allstudentarray.length+" students will be created under your management,\<br\> Click confirm to create."
+          +"\<br\>\<br\>"
+          +" \<form  action\=\"\/user\/uploadstudentlist\" method\=\"post\" onsubmit\=\"submitform(this)\;return false\;\"\>"
+          +"\<button id\=\"confirm is\-success\"\>Confirm\<\/button\>"
+            +"\<\/form>";
           jQuery('#xlx_json').val(json_object);
         })
       };
 
-      reader.onerror = function(ex) {
+      reader.onerror = function (ex) {
         console.log(ex);
       };
 
@@ -43,17 +62,39 @@ this is uploadstudentlist page
   function handleFileSelect(evt) {
 
     var files = evt.target.files; // FileList object
+    console.log(files[0].name);
+    var namestring = (files[0].name).split("\.");
+    if (namestring[1] != "xlsx") {
+      alert("This is not a .xlsx file, please upload a correct format file");
+      return;
+    }
     var xl2json = new ExcelToJSON();
     xl2json.parseExcel(files[0]);
   }
-</script>
 
-<form enctype="multipart/form-data">
-  <input id="upload" type=file name="files[]">
-</form>
+  async function submitform(formElem){
+    try{
+    //console.log("check all the list     "+allstudentarray);
+    var response = await fetch(formElem.action,{
+        method: formElem.method,
+        body: jsonobj
+    });
+    if (response.ok){
+    
+    alert("Students are created");
+    window.history.back();
 
-<textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+}else if(response.status ==401){
+    var msg = await response.json();
+    alert(msg);
+}else{
+    alert(response.statusTest);
+}
 
-<script>
-  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+
+}catch(error){
+    console.log(error);
+}
+
+  }
 </script>

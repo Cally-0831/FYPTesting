@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS student_take_course;
 DROP TABLE IF EXISTS allrequestfromstudent;
+DROP TABLE IF EXISTS supervisorpairstudent;
+
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;

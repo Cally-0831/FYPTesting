@@ -36,14 +36,14 @@ module.exports = {
         var searchingname = req.body.username;
         var searchingpw = req.body.pw;
 
-      //  console.log(searchingname + "  " + searchingpw);
+        //  console.log(searchingname + "  " + searchingpw);
 
         let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\'";
-      //  console.log(thisistheline);
+        //  console.log(thisistheline);
 
         // Start a new session for the new login user
-        
-        
+
+
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
@@ -60,27 +60,27 @@ module.exports = {
                 user.role = json[0].role;
                 console.log('>> username: ' + user.allusersname);
                 console.log('>> pid: ' + user.pid);
-                if(user.password != searchingpw){
+                if (user.password != searchingpw) {
                     return res.status(401).json("Wrong Password");
                 }
                 req.session.regenerate(function (err) {
                     if (err) return res.serverError(err);
-        
+
                     req.session.role = user.role;
                     req.session.username = user.allusersname;
                     req.session.userid = user.pid;
                     req.session.boo = false;
-        
+
                     return res.json(user);
                 });
             } catch (err) {
                 if (user.pid != searchingname) return res.status(401).json("User not found");
-                
+
             }
 
 
         });
-       
+
     },
 
     logout: async function (req, res) {
@@ -93,7 +93,7 @@ module.exports = {
         });
     },
 
-    submitrequest :async function (req, res) {
+    submitrequest: async function (req, res) {
         if (req.method == "GET") return res.view('user/submitrequest');
 
         console.log(req.body.notokday);
@@ -101,15 +101,73 @@ module.exports = {
 
 
     },
-    
-    uploadstudentlist : async function (req, res) {
+
+    uploadstudentlist: async function (req, res) {
+
+
         if (req.method == "GET") return res.view('user/uploadstudentlist');
 
-        console.log(req.body.notokday);
+        console.log(req.body.length);
 
 
+
+
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('MySQL Connected');
+        });
+        let thisistheline = "";
+        for (var i = 0; i < req.body.length; i++) {
+            console.log(req.body[i].sid);
+      
+            thisistheline = "insert into allusers values(\"" +
+                req.body[i].studentname + "\"\,\""
+                + req.body[i].sid + "\"\,\"" +
+                req.body[i].password + "\"\,\"ACTIVE\"\,0\,\"stu\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    
+                     res.status(401).json("Error happened when excuting : " + thisistheline );
+
+                };
+                console.log("1 record inserted");
+            });
+            
+        }
+
+
+        for (var i = 0; i < req.body.length; i++) {
+            console.log(req.body[i].sid);
+            thisistheline = "insert into supervisorpairstudent values(\"" +
+            req.session.userid + "\"\,\""
+            + req.body[i].sid + "\"\,\"" +
+            req.body[i].topic + "\"\);";
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                
+                res.status(401).json("Error happened when excuting : " + thisistheline);
+
+            };
+            console.log("1 record inserted");
+        });
+            
+        }
+
+
+        
+        return res.json();
 
     },
-
 
 }
