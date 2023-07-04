@@ -1,44 +1,45 @@
-<h1>This is home</h1>
-<% if (req.session.role=="stu" ){%>
-    <p>this is a student</p>
-    <div class="rows is-mobile">
-        <div class="row">
-        <div class="columns is-mobile">
-            <div class="imgcolumn">
-                <a href="#notice">
-                    <img src="images\home\notice.jpg" class="gallery_img">
-                </a>
-            </div>
 
-            <div class="imgcolumn">
-                <a href="#submitttb">
-                    <img src="images\home\ttb.jpg" class="gallery_img">
-                </a>
-            </div>
-            <div class="imgcolumn">
-                <a href="#submitrequest">
-                    <img src="images\home\question.jpg" class="gallery_img">
-                </a>
-            </div>
-            <div class="imgcolumn">
-                <a href="#checkrequest">
-                    <img src="images\home\reply.jpg" class="gallery_img">
-                </a>
-            </div>
-            <div class="imgcolumn">
-                <a href="#checkfypschdule">
-                    <img src="images\home\canlendar.jpg" class="gallery_img">
-                </a>
+    <% if (req.session.role=="stu" ){%>
+        <p>this is a student</p>
+        <div class="rows is-mobile">
+            <div class="row">
+                <div class="columns is-mobile">
+                    <div class="imgcolumn">
+                        <a href="#notice">
+                            <img src="images\home\notice.jpg" class="gallery_img">
+                        </a>
+                    </div>
+
+                    <div class="imgcolumn">
+                        <a href="#submitttb">
+                            <img src="images\home\ttb.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                    <div class="imgcolumn">
+                        <a href="/user/submitrequest">
+                            <img src="images\home\question.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                    <div class="imgcolumn">
+                        <a href="#checkrequest">
+                            <img src="images\home\reply.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                    <div class="imgcolumn">
+                        <a href="#checkfypschdule">
+                            <img src="images\home\canlendar.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 
-    <%}else if(req.session.role=="sup" ) {%>
-        <p>
-            this is a supervisor
+        <%}else if(req.session.role=="sup" ) {%>
+            <p>
+                this is a supervisor
 
-        </p>
+            </p>
 
-        <%}%>
+            <%}%>
+

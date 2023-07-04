@@ -1,0 +1,101 @@
+<div>
+    <% if (req.session.role=="stu" ){%>
+        <form name ="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+            <div class="title">
+                Unavailable timeslot
+            </div>
+            <div class="content"> Please be aware that Presentation of your FYP also count in your personal marks
+                <br>
+                absence due to reasons like Part-time job are unacceptable.
+                <br>
+                Students are required to submit vaild prove to their supervisor when submitting request form.
+            </div>
+            <label for="notokday">Unavailable Date:&nbsp;&nbsp;</label>
+            <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required>
+            <br>
+            <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
+                onclick="dontshowtime()">
+            <label for="notokday_wholeday">Whole Day Unavailable</label>
+            <!--
+        <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
+        -->
+            <br><br>
+            <div id="showthetime">
+                <label for="starttime">Start time:&nbsp;&nbsp;</label>
+                <input type="time" id="starttime" name="starttime" required>
+                <br>
+                <label for="endtime">End time:&nbsp;&nbsp;&nbsp;</label>
+                <input type="time" id="endtime" name="endtime" required>
+            </div>
+            <script>
+                var checkcheck = 0;
+                function dontshowtime() {
+                    checkcheck += 1;
+                    if (checkcheck % 2 == 0) {
+                        showtimetime();
+                    } else {
+                        document.getElementById("showthetime").innerHTML = "";
+                    }
+
+                }
+                function showtimetime() {
+                    document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
+                        + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
+                        + "\<br\>"
+                        + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
+                        + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
+                }
+            </script>
+            <br>
+
+            <label for="reason">Reason:&nbsp;&nbsp;</label>
+            <input type="text" id="reason" name="reason" placeholder="Please describle your difficulties"
+                style="width: 500px; height: 200px;" required>
+            <br><br>
+
+            <label for="prooffile">Upload proof:&nbsp;&nbsp;</label>
+            <input type="file" id="prooffile" name="prooffile" required>
+            <br><br>
+
+            <button type="submit is-success">Submit</button>
+        </form>
+
+
+        <%}else if(req.session.role=="sup" ) {%>
+            <p>
+                this is a supervisor
+
+            </p>
+
+            <%}%>
+
+</div>
+
+<script>
+async function submitrequest(formElem){
+
+  
+    console.log(formElem.json);
+
+try{
+    var response = await fetch(formElem.action,{
+        method: formElem.method,
+        body: new FormData(formElem),
+    });
+if (response.ok){
+    
+    alert("Submission success");
+    location.assign("/home");
+
+}else if(response.status ==401){
+    var msg = await response.json();
+    alert(msg);
+}else{
+    alert(response.statusTest);
+}
+
+}catch(error){
+    console.log(error);
+}
+}
+</script>

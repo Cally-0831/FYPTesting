@@ -94,5 +94,13 @@ console.log("check1")
         });
     },
 
+    submitrequest :async function (req, res) {
+        if (req.method == "GET") return res.view('user/submitrequest');
+
+
+
+
+    },
+
 
 }

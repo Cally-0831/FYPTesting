@@ -22,9 +22,13 @@ module.exports.routes = {
   //'/': { view: 'pages/homepage' },
   '/':"/user/login",
   'GET /home': { view: 'user/home' },
+'GET /user/submitrequest': "UserController.submitrequest",
+'POST /user/submitrequest': "UserController.submitrequest",
+
  'GET /user/login':"UserController.login",
  'POST /user/login':"UserController.login",
  'GET /user/logout':'UserController.logout',
+ 
 
   /***************************************************************************
   *                                                                          *
