@@ -15,7 +15,6 @@ module.exports = {
 
         if (!req.body.username || !req.body.pw) return res.status(401).json("Please enter both username and password");
 
-console.log("check1")
         var mysql = require('mysql');
 
         var db = mysql.createConnection({
@@ -37,10 +36,10 @@ console.log("check1")
         var searchingname = req.body.username;
         var searchingpw = req.body.pw;
 
-        console.log(searchingname + "  " + searchingpw);
+      //  console.log(searchingname + "  " + searchingpw);
 
         let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\'";
-        console.log(thisistheline);
+      //  console.log(thisistheline);
 
         // Start a new session for the new login user
         
@@ -97,6 +96,16 @@ console.log("check1")
     submitrequest :async function (req, res) {
         if (req.method == "GET") return res.view('user/submitrequest');
 
+        console.log(req.body.notokday);
+
+
+
+    },
+    
+    uploadstudentlist : async function (req, res) {
+        if (req.method == "GET") return res.view('user/uploadstudentlist');
+
+        console.log(req.body.notokday);
 
 
 

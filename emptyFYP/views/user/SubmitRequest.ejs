@@ -1,12 +1,12 @@
 <div>
     <% if (req.session.role=="stu" ){%>
-        <form name ="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+        <form name="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
             <div class="title">
                 Unavailable timeslot
             </div>
             <div class="content"> Please be aware that Presentation of your FYP also count in your personal marks
                 <br>
-                absence due to reasons like Part-time job are unacceptable.
+                Absence due to reasons like Part-time job are unacceptable.
                 <br>
                 Students are required to submit vaild prove to their supervisor when submitting request form.
             </div>
@@ -72,30 +72,40 @@
 </div>
 
 <script>
-async function submitrequest(formElem){
+    async function submitrequest(formElem) {
 
-  
-    console.log(formElem.json);
 
-try{
-    var response = await fetch(formElem.action,{
-        method: formElem.method,
-        body: new FormData(formElem),
-    });
-if (response.ok){
-    
-    alert("Submission success");
-    location.assign("/home");
+        var startstart = document.getElementById("starttime").value;
+        var endend = document.getElementById("endtime").value;
 
-}else if(response.status ==401){
-    var msg = await response.json();
-    alert(msg);
-}else{
-    alert(response.statusTest);
-}
+        if (endend <= startstart) {
+            alert("End time cannot be earlier than Start time \n" + "Please review your input");
+            return;
+        } else {
+            try {
+                var response = await fetch(formElem.action, {
+                    method: formElem.method,
+                    body: new FormData(formElem),
+                });
+                if (response.ok) {
 
-}catch(error){
-    console.log(error);
-}
-}
+                    alert("Submission success");
+                    location.assign("/home");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
+
+
+
+    }
 </script>

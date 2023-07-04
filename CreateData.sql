@@ -57,7 +57,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
 delimiter ;
 
 
-insert into allusers 	values("Apple","sid11111","spw11111","active","0","stu");
+insert into allusers values("Apple","sid11111","spw11111","active","0","stu");
 insert into allusers values("Betty","sid22222","spw22222","active","0","stu");
 
 
@@ -70,7 +70,9 @@ insert into student_take_course 	values("COMP100500001","111");
 insert into classroom 	values("RM101");
 insert into classroom 	values("RM102");
 
-INSERT INTO  allusers VALUES ("Prof Chan","tid00001",tpw00001,"Active",0,"sup");
-INSERT INTO  allusers VALUES ("Prof Lam","tid00002",tpw00002,"Active",0,"sup");
+INSERT INTO  allusers VALUES ("Prof Chan","tid00001","tpw00001","Active",0,"sup");
+INSERT INTO  allusers VALUES ("Prof Lam","tid00002","tpw00002","Active",0,"sup");
 
 INSERT INTO  student_take_course VALUES("s01","c01");
+
+Select * from allusers where role="stu";

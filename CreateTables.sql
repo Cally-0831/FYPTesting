@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS class;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS student_take_course;
+DROP TABLE IF EXISTS allrequestfromstudent;
+
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
 
@@ -57,4 +59,23 @@ CID		varchar(20) not null,
 SID		varchar(10) not null,
 CONSTRAINT csid
 primary key (CID,SID)
+);
+
+create table allrequestfromstudent(
+ReqID	varchar(20) not null,
+SID		varchar(10) not null,
+TID		varchar(10) not null,
+RequestDate DATE not null,
+RequestStartTime time not null,
+RequestEndTime time not null,
+reason	varchar(1000) not null,
+proofpath varchar(100) not null,
+primary key (ReqID)
+);
+
+create table supervisorpairstudent(
+TID		varchar(20) not null,
+SID		varchar(10) not null,
+Topic 	varchar(50) not null,
+primary key (TID,SID)
 );
