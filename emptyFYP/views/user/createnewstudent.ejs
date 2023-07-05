@@ -1,6 +1,6 @@
 This is createnewstudent
 <br><br>
-<form action="/user/createnewstudent" method="post" onsubmit="submitform(this);return false;">
+<form action="/user/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
     <label>Student name:&nbsp;&nbsp;</label>
     <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value=""><br>
     <br>
@@ -9,20 +9,15 @@ This is createnewstudent
     <label for="topics">Topic:&nbsp;&nbsp;&nbsp;</label>
     
 <select name="topics" id="topics">
-    
-
+  <% alltopiclist.forEach( function(topic) { %>
+    <option value="<%= topic.topic %>"><%= topic.topic%></option>
+    <% }); %>
     </select>
     <button type="submit is-success">Submit</button>
 </form>
 <script>
+function createnewstudent(){
 
+}
 
-  window.onload = async function(){
-         // Storing response
-   const response = await fetch(gettopic);
-  
-  // Storing data in form of JSON
-  var data = await response.json();
-  console.log(data);
-  }
 </script>

@@ -22,6 +22,7 @@ module.exports.routes = {
   //'/': { view: 'pages/homepage' },
   '/':"/user/login",
   'GET /home': { view: 'user/home' },
+
 'GET /user/submitrequest': "UserController.submitrequest",
 'POST /user/submitrequest': "UserController.submitrequest",
 
@@ -30,7 +31,8 @@ module.exports.routes = {
 
 'GET /user/liststudent': "StudentListController.liststudent",
 'POST /user/liststudent': "StudentListController.liststudent",
-' /user/createnewstudent': { view: 'user/createnewstudent' },
+'GET /user/createnewstudent': "StudentListController.gettopic",
+'POST /user/createnewstudent': "StudentListController.createnewstudent",
 
 'GET /user/read/:sid': "StudentListController.readsinglestudent",
 'DELETE /user/read/:sid': "StudentListController.deletestudent",

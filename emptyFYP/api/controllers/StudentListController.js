@@ -57,22 +57,23 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            console.log('MySQL Connected');
+            console.log('the gettopic MySQL Connected');
         });
 
-        let thisistheline = "SELECT topic FROM supervisorpairstudent where supervisorpairstudent.tid = = \""+req.session.userid+"\"\;";
+        let thisistheline = "SELECT topic FROM supervisorpairstudent where supervisorpairstudent.tid =\""+req.session.userid+"\"\;";
 
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);  
+                //console.log('>> json: ', json);  
                 topiclist=json;    
-                console.log('>> stdlist: ', topiclist);  
+                //console.log('>> stdlist: ', stdlist);  
                 return res.view('user/createnewstudent',{alltopiclist : topiclist});  
             } catch (err) {
-               console.log("sth happened here");
+throw err;
+               console.log("sth happened here" + err);
 
             }
 
@@ -160,5 +161,7 @@ module.exports = {
          });
         
         return res.ok("Deleted"); 
-    }
+    },
+
+    createnewstudent: async function (req, res) {}
 }
