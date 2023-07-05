@@ -20,31 +20,37 @@ module.exports.routes = {
   ***************************************************************************/
 
   //'/': { view: 'pages/homepage' },
-  '/':"/user/login",
+
+  '/': "/user/login",
+  
+  'GET /user/login': "UserController.login",
+  'POST /user/login': "UserController.login",
+  
+  'GET /user/logout': 'UserController.logout',
+
   'GET /home': { view: 'user/home' },
+
+ 'GET /user/classroomlist': "ClassroomListController.listclassroom",
 
   'GET /user/checkrequest': "UserController.listrequest",
   'DELETE /user/checkrequest': "UserController.deleterequest",
 
+  'GET /user/submitrequest': "UserController.submitrequest",
+  'POST /user/submitrequest': "UserController.submitrequest",
 
-'GET /user/submitrequest': "UserController.submitrequest",
-'POST /user/submitrequest': "UserController.submitrequest",
+  'GET /user/uploadstudentlist': "UserController.uploadstudentlist",
+  'POST /user/uploadstudentlist': "UserController.uploadstudentlist",
 
-'GET /user/uploadstudentlist': "UserController.uploadstudentlist",
-'POST /user/uploadstudentlist': "UserController.uploadstudentlist",
+  'GET /user/liststudent': "StudentListController.liststudent",
+  'POST /user/liststudent': "StudentListController.liststudent",
 
-'GET /user/liststudent': "StudentListController.liststudent",
-'POST /user/liststudent': "StudentListController.liststudent",
-'GET /user/createnewstudent': "StudentListController.gettopic",
-'POST /user/createnewstudent': "StudentListController.createnewstudent",
+  'GET /user/createnewstudent': "StudentListController.gettopic",
+  'POST /user/createnewstudent': "StudentListController.createnewstudent",
 
-'GET /user/read/:sid': "StudentListController.readsinglestudent",
-'DELETE /user/read/:sid': "StudentListController.deletestudent",
+  'GET /user/read/:sid': "StudentListController.readsinglestudent",
+  'DELETE /user/read/:sid': "StudentListController.deletestudent",
 
- 'GET /user/login':"UserController.login",
- 'POST /user/login':"UserController.login",
- 'GET /user/logout':'UserController.logout',
- 
+
 
   /***************************************************************************
   *                                                                          *

@@ -1,0 +1,22 @@
+<div class="title">Student List</div>
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th>Campus</th>
+    <th>Room Name</th>
+   
+    
+    
+        <% allClassroomlist.forEach( function(classroom) { %>
+    
+            <tr>
+                <td>
+                    <%= classroom.Campus %>
+                </td>
+                <td>
+                    <%= classroom.RID%>
+                </td>
+               
+            </tr>
+    
+            <% }); %>
+    
+    </table>
