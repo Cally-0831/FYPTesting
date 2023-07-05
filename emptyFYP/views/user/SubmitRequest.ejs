@@ -66,7 +66,52 @@
                 this is a supervisor
 
             </p>
-
+            <form name="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+                <div class="title">
+                    Unavailable timeslot
+                </div>
+               
+                <label for="notokday">Unavailable Date:&nbsp;&nbsp;</label>
+                <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required>
+                <br>
+                <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
+                    onclick="dontshowtime()">
+                <label for="notokday_wholeday">Whole Day Unavailable</label>
+                <!--
+            <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
+            -->
+                <br><br>
+                <div id="showthetime">
+                    <label for="starttime">Start time:&nbsp;&nbsp;</label>
+                    <input type="time" id="starttime" name="starttime" required>
+                    <br>
+                    <label for="endtime">End time:&nbsp;&nbsp;&nbsp;</label>
+                    <input type="time" id="endtime" name="endtime" required>
+                </div>
+                <script>
+                    var checkcheck = 0;
+                    function dontshowtime() {
+                        checkcheck += 1;
+                        if (checkcheck % 2 == 0) {
+                            showtimetime();
+                        } else {
+                            document.getElementById("showthetime").innerHTML = "";
+                        }
+    
+                    }
+                    function showtimetime() {
+                        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
+                            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
+                            + "\<br\>"
+                            + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
+                            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
+                    }
+                </script>
+                <br>
+    
+                <button type="submit is-success">Submit</button>
+            </form>
+    
             <%}%>
 
 </div>

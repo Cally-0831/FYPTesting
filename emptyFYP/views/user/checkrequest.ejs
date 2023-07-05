@@ -1,0 +1,71 @@
+This is checkrequest page
+<div>
+    <% if (req.session.role=="sup" ){%>
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <th>ReqID</th>
+            <th>Unavaildable date</th>
+            <th>Start Time</th>
+            <th>EndTime</th>
+            <th>
+                Action
+            </th>
+
+            <% thisuserRequestlist.forEach( function(request) { %>
+
+                <tr>
+                    <td>
+                        <%= request.ReqID %>
+                    </td>
+                    <td>
+                        <%= request.RequestDate %>
+                    </td>
+
+                    <td>
+                        <%= request.RequestStartTime %>
+                    </td>
+                    <td>
+                        <%= request.RequestEndTime%>
+                    </td>
+                    <td>
+                        <button type="button"
+                            onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>
+                    </td>
+                </tr>
+
+                <% }); %>
+
+        </table>
+        <%}else if(req.session.role=="stu" ) {%>
+
+            <%}%>
+
+
+</div>
+
+<script>
+    async function deleterequestfromsupervisor(reqid) {
+        var r = confirm("Confirm Delete?" + reqid);
+        var requestBody = JSON.stringify({ ReqID: reqid });
+        if (r) {
+
+            var response = await fetch("/user/checkrequest", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Request deleted.");
+                location.assign("/user/checkrequest");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
+
+</script>

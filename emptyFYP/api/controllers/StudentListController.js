@@ -190,7 +190,7 @@ module.exports = {
         }
 
 
-        console.log(pw);
+        //console.log(pw);
         thisistheline = "insert into allusers values(\"" +
             req.body.studentname + "\"\,\""
             + req.body.sid + "\"\,\"" +
@@ -218,5 +218,6 @@ module.exports = {
         });
 
         return res.ok("created");
-    }
+    },
+
 }

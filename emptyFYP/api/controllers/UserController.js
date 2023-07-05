@@ -95,9 +95,54 @@ module.exports = {
 
     submitrequest: async function (req, res) {
         if (req.method == "GET") return res.view('user/submitrequest');
+        if (req.session.role = "sup") {
 
-        console.log(req.body.notokday);
+            var mysql = require('mysql');
 
+            var db = mysql.createConnection({
+                host: "localhost",
+                user: "root",
+                password: "Psycho.K0831",
+                database: "fyptesting"
+            });
+            db.connect(async (err) => {
+                if (err) {
+                    console.log("Database Connection Failed !!!", err);
+                    return;
+                }
+                console.log('MySQL Connected');
+            });
+
+            let reqid = '' + req.session.userid + '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < 5) {
+                reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+
+            let thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                req.body.starttime + "\", \"" + req.body.endtime + "\");";
+
+
+            db.query(thisistheline, (err, results) => {
+                try {
+
+                    console.log("1 row added to allrequestfrom supervisor");
+                    if (user.password != searchingpw) {
+                        return res.status(401).json("Wrong Password");
+                    }
+
+                } catch (err) {
+
+                }
+
+
+            });
+        }
+
+        return res.json("ok");
 
 
     },
@@ -124,46 +169,129 @@ module.exports = {
             }
             console.log('MySQL Connected');
         });
-        
+
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
-      
+
             thisistheline = "insert into allusers values(\"" +
                 req.body[i].studentname + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-                console.log(thisistheline);
+            console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                     res.status(401).json("Error happened when excuting : " + thisistheline );
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 record inserted");
             });
-            
+
         }
 
 
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
             thisistheline = "insert into supervisorpairstudent values(\"" +
-            req.session.userid + "\"\,\""
-            + req.body[i].sid + "\"\,\"" +
-            req.body[i].topic + "\"\);";
-        db.query(thisistheline, function (err, result) {
-            if (err) {
-                
-                res.status(401).json("Error happened when excuting : " + thisistheline);
+                req.session.userid + "\"\,\""
+                + req.body[i].sid + "\"\,\"" +
+                req.body[i].topic + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
 
-            };
-            console.log("1 record inserted");
-        });
-            
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+
+                };
+                console.log("1 record inserted");
+            });
+
         }
 
 
-        
+
         return res.json();
 
     },
-   
+
+
+    listrequest: async function (req, res) {
+        var requestlist;
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('list request MySQL Connected');
+        });
+
+        if (req.session.role == "sup") {
+            let thisistheline = "SELECT * FROM allrequestfromsupervisor where tid = \"" + req.session.userid + "\"\;";
+            //console.log(thisistheline)
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    //console.log('>> string: ', string );
+                    var json = JSON.parse(string);
+                    //console.log('>> json: ', json);  
+                    requestlist = json;
+                   // console.log('>> stdlist: ', requestlist);
+                    return res.view('user/checkrequest', { thisuserRequestlist: requestlist });
+                } catch (err) {
+                    console.log("sth happened here");
+
+                }
+
+
+            });
+        }
+
+
+
+    },
+
+
+    deleterequest: async function (req, res) {
+
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('deleterequest MySQL Connected');
+        });
+        console.log(req.body);
+
+        if (req.session.role = "sup") {
+            let thisistheline = "DELETE FROM allrequestfromsupervisor WHERE reqid= \"" + req.body.ReqID + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                try{
+
+
+                }catch(err){
+                     if (err) { console.log("sth happened here"); }
+                }
+               
+            });
+        }
+
+
+        return res.ok("Deleted");
+    },
+
 }
