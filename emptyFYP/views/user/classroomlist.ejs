@@ -1,12 +1,13 @@
 <div class="title">Student List</div>
-<table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th>Campus</th>
-    <th>Room Name</th>
-   
-    
-    
+<div>
+    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <th>Campus</th>
+        <th>Room Name</th>
+        <th>Action</th>
+
+
         <% allClassroomlist.forEach( function(classroom) { %>
-    
+
             <tr>
                 <td>
                     <%= classroom.Campus %>
@@ -14,9 +15,41 @@
                 <td>
                     <%= classroom.RID%>
                 </td>
-               
+                <td>
+                    <button type="button"
+                        onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">Delete</button>
+                </td>
             </tr>
-    
+
             <% }); %>
-    
+
     </table>
+</div>
+
+<script>
+async function deleteclassroom(campus , rid){
+        var r = confirm("Confirm Delete " +rid +" in "+campus+" ?");
+        var requestBody = JSON.stringify({ Campus: campus, RID:rid });
+        if (r) {
+
+            var response = await fetch("/user/classroomlist", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Classroom deleted.");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
+
+</script>
