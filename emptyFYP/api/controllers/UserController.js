@@ -109,9 +109,6 @@ module.exports = {
 
         console.log(req.body.length);
 
-
-
-
         var mysql = require('mysql');
 
         var db = mysql.createConnection({
@@ -127,14 +124,15 @@ module.exports = {
             }
             console.log('MySQL Connected');
         });
-        let thisistheline = "";
+        
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
       
-            thisistheline = "insert into allusers values(\"" +
+            thisistheline = "insert IGNORE into allusers values(\"" +
                 req.body[i].studentname + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
-                req.body[i].password + "\"\,\"ACTIVE\"\,0\,\"stu\"\);";
+                req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
+                console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
                 if (err) {
                     
@@ -169,5 +167,5 @@ module.exports = {
         return res.json();
 
     },
-
+   
 }
