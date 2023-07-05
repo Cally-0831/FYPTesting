@@ -1,5 +1,17 @@
 This is the list of student follows you, <%=req.session.username%>
+<br>
 
+<button id = "createnewstu" style = "background-color: #4CAF50; /* Green */
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;"
+onclick="gotocreate()">Create a new Student</button>
+<br>
+<div class="title">Student List</div>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
     <th>SID</th>
     <th>Student Name</th>
@@ -15,7 +27,7 @@ This is the list of student follows you, <%=req.session.username%>
     
     
                 <td>
-                    <a href="#<%= allstdlist.sid+allstdlist.stdname %>"><%= allstdlist.stdname %></a>
+                    <a href="/user/read/<%= allstdlist.sid%>"><%= allstdlist.stdname %></a>
                 </td>
                 <td>
                     <%= allstdlist.Topic%>
@@ -26,3 +38,8 @@ This is the list of student follows you, <%=req.session.username%>
             <% }); %>
     
     </table>
+    <script>
+        function gotocreate(){
+            location.assign("/user/createnewstudent");
+        }
+    </script>

@@ -1,5 +1,4 @@
-
-    <!---
+<!---
     <div class="navbar" >
         <a class="navbar-Logo" href="/">
             <img src="\images\login\compbg.png" width=150 height =50>
@@ -7,48 +6,61 @@
     </div>
     -->
 
-    <div class="welcome">Welcome to FYP Schdeuling System</div>
-   <br><br>
-    
-       
-       <div class = "column-big" >
-        <div class="title">Login</div>
-        <form  action="/user/login" method="post" onsubmit="submitform(this);return false;">
-            <label>Username:&nbsp;&nbsp;</label>
-            <input type="text"placeholder="Enter Username (SID/TID)" id="username" name="username" value=""><br>
-            <br>
-            <label>Password:&nbsp;&nbsp;&nbsp;</label>
-            <input type="password"placeholder="Enter Password" id="pw" name="pw" value=""><br><br>
-            <button type="submit is-success">Login</button>
-          </form> 
-          
-        </div>
-        
-    
+<div class="welcome">Welcome to FYP Schdeuling System</div>
+<br><br>
+<button id="autoinputsup" onclick="inputsup()">SUPER</button>
+<button id="autoinputstd" onclick="inputstd()">STD</button>
+
+<div class="column-big">
+    <div class="title">Login</div>
+    <form action="/user/login" method="post" onsubmit="submitform(this);return false;">
+        <label>Username:&nbsp;&nbsp;</label>
+        <input type="text" placeholder="Enter Username (SID/TID)" id="username" name="username" value=""><br>
+        <br>
+        <label>Password:&nbsp;&nbsp;&nbsp;</label>
+        <input type="password" placeholder="Enter Password" id="pw" name="pw" value=""><br><br>
+        <button type="submit is-success">Login</button>
+    </form>
+
+</div>
+
+
 
 <script>
- async function submitform(formElem){
-try{
-    var response = await fetch(formElem.action,{
-        method: formElem.method,
-        body: new FormData(formElem),
-    });
-if (response.ok){
-    const user = await response.json();
-    console.log(user.allusersname);
-    alert("Welcom back, "+user.allusersname);
-    location.assign("/home");
+    async function submitform(formElem) {
+        try {
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.ok) {
+                const user = await response.json();
+                console.log(user.allusersname);
+                //alert("Welcom back, " + user.allusersname);
+                location.assign("/home");
 
-}else if(response.status ==401){
-    var msg = await response.json();
-    alert(msg);
-}else{
-    alert(response.statusTest);
-}
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
 
-}catch(error){
-    console.log(error);
-}
-}
- 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function inputstd() {
+
+        document.getElementById("username").value = "sid11111";
+        document.getElementById("pw").value = "spw11111";
+    }
+
+
+    function inputsup() {
+        document.getElementById("username").value = "tid00001";
+        document.getElementById("pw").value = "tpw00001";
+    }
+
 </script>

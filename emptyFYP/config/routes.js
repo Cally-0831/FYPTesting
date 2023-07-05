@@ -30,6 +30,10 @@ module.exports.routes = {
 
 'GET /user/liststudent': "StudentListController.liststudent",
 'POST /user/liststudent': "StudentListController.liststudent",
+' /user/createnewstudent': { view: 'user/createnewstudent' },
+
+'GET /user/read/:sid': "StudentListController.readsinglestudent",
+'POST /user/read/:sid': "StudentListController.deletestudent",
 
  'GET /user/login':"UserController.login",
  'POST /user/login':"UserController.login",
