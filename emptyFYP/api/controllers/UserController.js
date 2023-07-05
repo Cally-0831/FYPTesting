@@ -128,16 +128,14 @@ module.exports = {
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
       
-            thisistheline = "insert IGNORE into allusers values(\"" +
+            thisistheline = "insert into allusers values(\"" +
                 req.body[i].studentname + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
                 console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    
                      res.status(401).json("Error happened when excuting : " + thisistheline );
-
                 };
                 console.log("1 record inserted");
             });
