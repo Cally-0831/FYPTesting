@@ -28,6 +28,9 @@ module.exports.routes = {
 'GET /user/uploadstudentlist': "UserController.uploadstudentlist",
 'POST /user/uploadstudentlist': "UserController.uploadstudentlist",
 
+'GET /user/liststudent': "StudentListController.liststudent",
+'POST /user/liststudent': "StudentListController.liststudent",
+
  'GET /user/login':"UserController.login",
  'POST /user/login':"UserController.login",
  'GET /user/logout':'UserController.logout',

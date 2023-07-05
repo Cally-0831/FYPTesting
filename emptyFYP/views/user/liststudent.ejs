@@ -1,0 +1,28 @@
+This is the list of student follows you, <%=req.session.username%>
+
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th>SID</th>
+    <th>Student Name</th>
+    <th>Topic</th>
+    
+    
+        <% allstdlist.forEach( function(allstdlist) { %>
+    
+            <tr>
+                <td>
+                    <%= allstdlist.sid %>
+                </td>
+    
+    
+                <td>
+                    <a href="#<%= allstdlist.sid+allstdlist.stdname %>"><%= allstdlist.stdname %></a>
+                </td>
+                <td>
+                    <%= allstdlist.Topic%>
+                </td>
+               
+            </tr>
+    
+            <% }); %>
+    
+    </table>

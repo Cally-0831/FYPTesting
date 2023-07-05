@@ -17,8 +17,6 @@ CREATE TRIGGER testref BEFORE INSERT ON class
   |
 delimiter ;
 
-
-
 ##delimiter |
 ##CREATE TRIGGER checkstudenttakecourse BEFORE INSERT ON student_take_course
 ##  FOR EACH ROW

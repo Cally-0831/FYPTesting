@@ -21,6 +21,7 @@ password	varchar(20) not null,
 states		varchar(20),
 errortime	int,
 role	varchar(20),
+
 PRIMARY key (pid));
 
 create table   student(
