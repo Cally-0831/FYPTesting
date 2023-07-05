@@ -121,15 +121,21 @@ module.exports = {
                 reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
                 counter += 1;
             }
+            let thisistheline = "";
+            console.log(req.body.starttime);
+            if (req.body.starttime == undefined) {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
+                    + "\",\"00:00\", \"23:59\");";
+            } else {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                    req.body.starttime + "\", \"" + req.body.endtime + "\");";
+            }
 
-            let thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
-                req.body.starttime + "\", \"" + req.body.endtime + "\");";
-
-
+            console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
                 try {
 
-                    console.log("1 row added to allrequestfrom supervisor");
+                    console.log("1 row added to allrequestfromsupervisor");
                     if (user.password != searchingpw) {
                         return res.status(401).json("Wrong Password");
                     }
@@ -240,7 +246,7 @@ module.exports = {
                     var json = JSON.parse(string);
                     //console.log('>> json: ', json);  
                     requestlist = json;
-                   // console.log('>> stdlist: ', requestlist);
+                    // console.log('>> stdlist: ', requestlist);
                     return res.view('user/checkrequest', { thisuserRequestlist: requestlist });
                 } catch (err) {
                     console.log("sth happened here");
@@ -280,13 +286,13 @@ module.exports = {
             console.log('delete excution');
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
-                try{
+                try {
 
 
-                }catch(err){
-                     if (err) { console.log("sth happened here"); }
+                } catch (err) {
+                    if (err) { console.log("sth happened here"); }
                 }
-               
+
             });
         }
 

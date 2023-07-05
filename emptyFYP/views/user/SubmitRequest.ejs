@@ -66,16 +66,16 @@
                 this is a supervisor
 
             </p>
-            <form name="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+            <form name="therequest" action="/user/submitrequest" method="post"
+                onsubmit="submitrequest(this);return false;">
                 <div class="title">
                     Unavailable timeslot
                 </div>
-               
+
                 <label for="notokday">Unavailable Date:&nbsp;&nbsp;</label>
                 <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required>
                 <br>
-                <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
-                    onclick="dontshowtime()">
+                <input type="checkbox" id="notokday_wholeday" value="wholeday" onclick="dontshowtime()">
                 <label for="notokday_wholeday">Whole Day Unavailable</label>
                 <!--
             <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
@@ -90,14 +90,17 @@
                 </div>
                 <script>
                     var checkcheck = 0;
+                    var checked = false;
                     function dontshowtime() {
                         checkcheck += 1;
                         if (checkcheck % 2 == 0) {
+                            checked = false;
                             showtimetime();
                         } else {
+                            checked = true;
                             document.getElementById("showthetime").innerHTML = "";
                         }
-    
+
                     }
                     function showtimetime() {
                         document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
@@ -108,10 +111,10 @@
                     }
                 </script>
                 <br>
-    
+
                 <button type="submit is-success">Submit</button>
             </form>
-    
+
             <%}%>
 
 </div>
@@ -119,36 +122,37 @@
 <script>
     async function submitrequest(formElem) {
 
+        if (!checked) {
+            var startstart = document.getElementById("starttime").value;
+            var endend = document.getElementById("endtime").value;
 
-        var startstart = document.getElementById("starttime").value;
-        var endend = document.getElementById("endtime").value;
-
-        if (endend <= startstart) {
-            alert("End time cannot be earlier than Start time \n" + "Please review your input");
-            return;
-        } else {
-            try {
-                var response = await fetch(formElem.action, {
-                    method: formElem.method,
-                    body: new FormData(formElem),
-                });
-                if (response.ok) {
-
-                    alert("Submission success");
-                    location.assign("/home");
-
-                } else if (response.status == 401) {
-                    var msg = await response.json();
-                    alert(msg);
-                } else {
-                    alert(response.statusTest);
-                }
-
-            } catch (error) {
-                console.log(error);
+            if (endend <= startstart) {
+                alert("End time cannot be earlier than Start time \n" + "Please review your input");
+                return;
             }
 
         }
+        try {
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.ok) {
+
+                alert("Submission success");
+                location.assign("/home");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
 
 
 
