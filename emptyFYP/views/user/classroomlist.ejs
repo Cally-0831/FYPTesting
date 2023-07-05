@@ -1,4 +1,9 @@
-<div class="title">Student List</div>
+<div class="title">Classroom List</div>
+<br>
+
+<button class="buttonfamily" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
+
+<br>
 <div>
     <table class="table is-bordered is-striped is-hoverable is-fullwidth">
         <th>Campus</th>
@@ -27,9 +32,13 @@
 </div>
 
 <script>
-async function deleteclassroom(campus , rid){
-        var r = confirm("Confirm Delete " +rid +" in "+campus+" ?");
-        var requestBody = JSON.stringify({ Campus: campus, RID:rid });
+    function gotocreateroom() {
+        location.assign("/user/createnewclassroom");
+    }
+
+    async function deleteclassroom(campus, rid) {
+        var r = confirm("Confirm Delete " + rid + " in " + campus + " ?");
+        var requestBody = JSON.stringify({ Campus: campus, RID: rid });
         if (r) {
 
             var response = await fetch("/user/classroomlist", {

@@ -21,6 +21,24 @@
     font-size: 20px; 
     font:bold;
 }
+
+.Pagetitle{
+  font-size: 50px; 
+  text-align: center;
+  font:bold;
+}
+
+.buttonfamily{
+  background-color: chocolate; 
+border: none;
+color: white;
+padding: 10px 10px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 10px;
+}
+
 .navbar {
     overflow: hidden;
     background-color: wheat;

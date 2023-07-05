@@ -1,0 +1,51 @@
+This is createnewclassroom
+
+<br><br>
+<form action="/user/createnewclassroom" method="post" onsubmit="createnewclassroom(this);return false;">
+  
+  <label for="Campus">Topic:&nbsp;&nbsp;&nbsp;</label>
+
+  <select name="Campus" id="Campus">
+    <% allCampuslist.forEach( function(campus) { %>
+      <option value="<%= campus.campus %>">
+        <%= campus.campus %>
+      </option>
+      <% }); %>
+  </select>
+  <br>
+  <label>Room ID:&nbsp;&nbsp;&nbsp;</label>
+  <input type="text" placeholder="Enter RID" id="RID" name="RID" value=""><br><br>
+  
+  <button type="submit is-success">Submit</button>
+
+</form>
+<script>
+
+  async function createnewclassroom(formElem) {
+    try {
+    
+      var response = await fetch(formElem.action, {
+        method: formElem.method,
+        body: new FormData(formElem),
+      });
+      if (response.ok) {
+        alert("Room created");
+        location.assign("/user/classroomlist");
+
+      } else if (response.status == 401) {
+        var msg = await response.json();
+        alert(msg);
+      } else {
+        alert(response.statusTest);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+</script>
+
+
+

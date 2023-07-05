@@ -30,6 +30,9 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
 
+  'GET /user/createnewclassroom':  "ClassroomListController.getcampus",
+  'POST /user/createnewclassroom': "ClassroomListController.createnewclassroom",
+
  'GET /user/classroomlist': "ClassroomListController.listclassroom",
  'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
  
