@@ -33,7 +33,7 @@ module.exports.routes = {
 ' /user/createnewstudent': { view: 'user/createnewstudent' },
 
 'GET /user/read/:sid': "StudentListController.readsinglestudent",
-'POST /user/read/:sid': "StudentListController.deletestudent",
+'DELETE /user/read/:sid': "StudentListController.deletestudent",
 
  'GET /user/login':"UserController.login",
  'POST /user/login':"UserController.login",

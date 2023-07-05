@@ -142,19 +142,23 @@ module.exports = {
             console.log('MySQL Connected');
         });
         
-        let thisistheline = "DELETE FROM allusers WHERE pid= \""+req.params.sid+"\"\n"+
-        "DELETE FROM student WHERE sid= \""+req.params.sid+"\"\n"+
-        "DELETE FROM supervisorpairstudent WHERE sid= \""+req.params.sid+"\"\n";
+        let thisistheline = "DELETE FROM allusers WHERE pid= \""+req.params.sid+"\"\n";
+        console.log('delete excution');
+        console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
-            try {
-                
-            } catch (err) {
-               console.log("sth happened here");
-
-            }
-
-
+           if(err) {console.log("sth happened here");}
         });
-        return res.json; 
+
+        thisistheline = "DELETE FROM student WHERE sid= \""+req.params.sid+"\"\n";
+        db.query(thisistheline, (err, results) => {
+            if(err) {console.log("sth happened here");}
+         });
+
+         thisistheline ="DELETE FROM supervisorpairstudent WHERE sid= \""+req.params.sid+"\"\n";
+         db.query(thisistheline, (err, results) => {
+            if(err) {console.log("sth happened here");}
+         });
+        
+        return res.ok("Deleted"); 
     }
 }

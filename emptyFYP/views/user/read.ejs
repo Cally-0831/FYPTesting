@@ -2,7 +2,7 @@
     <th>SID</th>
     <th>Student Name</th>
     <th>Topic</th>
-
+    <th>Action</th>
 
     <% thatstudent.forEach( function(thatstudent) { %>
 
@@ -18,39 +18,42 @@
             <td>
                 <%= thatstudent.Topic%>
             </td>
-
+<td>
+    <button type="button" onclick="deletestudent('<%= thatstudent.sid %>')">Delete</button>
+</td>
         </tr>
 
         <% }); %>
 
 </table>
 
-<form action="/user/liststudent/read/:sid" method="post" onsubmit="submitform(this);return false;">
-    <button type="submit is-success">Delete</button>
-</form>
+   
+
 
 <script>
-    async function submitform(formElem) {
-        try {
-           
-            var response = await fetch(formElem.action, {
-                method: formElem.method,
-                body: new FormData(formElem),
-            });
-            if (response.ok) {
-                
-                alert("deleted");
-                location.assign("/liststudent");
+    async function deletestudent(sid) {
+        var r = confirm("Confirm Delete?"+sid);
 
-            } else if (response.status == 401) {
-                var msg = await response.json();
-                alert(msg);
+        if (r) {
+
+            var response = await fetch("/user/read/" + sid, {
+                method: "DELETE",
+                body: sid
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("student deleted.");
+                location.assign("/user/liststudent");
             } else {
-                alert(response.statusTest);
+                alert(response.status + ": " + response.statusText);
             }
 
-        } catch (error) {
-            console.log(error);
+        } else {
+            alert("cancelled");
         }
-    }
+    };
+
 </script>
