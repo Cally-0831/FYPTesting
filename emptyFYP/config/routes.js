@@ -30,15 +30,16 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
 
-  
+  'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
+
   'GET /user/createnewclassroom':  "ClassroomListController.getcampus",
   'POST /user/createnewclassroom': "ClassroomListController.createnewclassroom",
 
  'GET /user/classroomlist': "ClassroomListController.listclassroom",
  'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
 
- 'GET /user/read/:campus/:rid': "ClassroomListController.getsingleroom",
- 'POST /user/read/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
+ 'GET /user/addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
+ 'POST /user/addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
 
  'GET /user/managetimeslot': "ClassroomListController.listalltimeslot",
  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",

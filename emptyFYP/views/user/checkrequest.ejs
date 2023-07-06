@@ -11,14 +11,14 @@
             </th>
 
             <% thisuserRequestlist.forEach( function(request) {
-                const StartDay=request.RequestDate.split('T'); %>
+                const StartDay=new Date(request.RequestDate).toLocaleDateString('en-CA'); %>
                 
                 <tr>
                     <td style="text-align: center;vertical-align:center;">
                         <%= request.ReqID %>
                     </td>
                     <td style="text-align: center;vertical-align:center;">
-                        <%= StartDay[0] %>
+                        <%= StartDay %>
                     </td>
 
                     <td style="text-align: center;vertical-align:center;">

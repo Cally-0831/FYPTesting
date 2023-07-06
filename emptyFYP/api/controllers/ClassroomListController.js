@@ -247,7 +247,6 @@ module.exports = {
     deletetimeslot: async function (req, res) {
 
         var mysql = require('mysql');
-
         var db = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -263,7 +262,7 @@ module.exports = {
         });
         console.log(req.body);
 
-        if (req.session.role = "sup") {
+        if (req.session.role = "adm") {
             let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
             console.log('delete excution');
             console.log(thisistheline);
@@ -278,5 +277,35 @@ module.exports = {
             });
         }
     },
+
+    getinfobycampus: async function (req, res) {
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('getinfobycampus MySQL Connected');
+        });
+        let thisistheline="SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string); 
+                console.log(json);
+                return res.ok("Deleted");
+            } catch (err) {
+                if (err) { console.log("sth happened here"); }
+            }
+
+        });
+    
+    }
 
 }

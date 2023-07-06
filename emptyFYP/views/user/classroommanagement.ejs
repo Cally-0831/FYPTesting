@@ -1,0 +1,37 @@
+<div class="Pagetitle">Classroom Management Page</div>
+
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Campus</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Room Name</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Status</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Add timeslot</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Delete</th>
+
+
+    <% allClassroomlist.forEach( function(classroom) { %>
+
+        <tr>
+            <td style="text-align: center;vertical-align:center;">
+                <%= classroom.Campus %>
+            </td>
+            <td style="text-align: center;vertical-align:center;">
+                <%= classroom.RID%>
+            </td>
+            <td style="text-align: center;vertical-align:center;">
+                <%= classroom.status%>
+            </td>
+            <td style="text-align: center;vertical-align:center;">
+                <a href="/user/read/<%= classroom.Campus %>/<%= classroom.RID%>">
+                    <button class="button" type="button">Add</button>
+                </a>
+                
+            </td>
+            <td style="text-align: center;vertical-align:center;">
+                <button class="button" type="button"
+                    onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">Delete</button>
+            </td>
+        </tr>
+
+        <% }); %>
+
+</table>

@@ -1,3 +1,4 @@
+
 <div class="Pagetitle">All submitted timeslots of Classrooms</div>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
     <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
@@ -13,9 +14,11 @@
     <th style="font-size:20px;text-align: center;vertical-align:center;">Delete</th>
 
 
-    <% thetimeslotlist.forEach( function(timeslotlist) { const StartDay=timeslotlist.StartDate.split('T'); const
-        EndDay=timeslotlist.EndDate.split('T'); %>
-
+    <% thetimeslotlist.forEach( function(timeslotlist) { 
+        const StartDay= new Date(timeslotlist.StartDate).toLocaleDateString('en-CA');
+        const EndDay = new Date(timeslotlist.EndDate).toLocaleDateString('en-CA');
+        
+        %>
         <tr>
             <td style="text-align: center;vertical-align:center;">
                 <%= timeslotlist.ReqID %>
@@ -28,10 +31,10 @@
             </td>
 
             <td style="text-align: center;vertical-align:center;">
-                <%= StartDay[0] %>
+                <%= StartDay%>
             </td>
             <td style="text-align: center;vertical-align:center;">
-                <%= EndDay[0] %>
+                <%= EndDay %>
             </td>
             <td style="text-align: center;vertical-align:center;">
                 <%= timeslotlist.StartTime %>

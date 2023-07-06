@@ -102,4 +102,59 @@ StartTime time not null,
 EndTime time not null,
 Remarks varchar(100),
 primary key (ReqID)
-)
+);
+
+delimiter |
+
+CREATE TRIGGER testref BEFORE INSERT ON class
+  FOR EACH ROW
+  BEGIN
+  declare stringstring  varchar(8000);
+  declare countcount integer;
+  set stringstring = new.cid;
+  set countcount =0;
+  select count(*) into countcount from class 
+  where rid = new.rid and weekday = new.weekday and (starttime <= new.starttime and endtime >= new.starttime);
+  if countcount >0 then
+    set new.rid ="empty";
+    END IF;
+  END;
+  |
+delimiter ;
+
+##delimiter |
+##CREATE TRIGGER checkstudenttakecourse BEFORE INSERT ON student_take_course
+##  FOR EACH ROW
+##  BEGIN
+##  declare stringstring  varchar(8000);
+##  declare countcount integer;
+##  set stringstring = new.cid;allusersallusers
+##  set countcount =0;
+##  select count(*) into countcount from student_take_course 
+##  where cid = new.cid and sid = new.sid;
+##  if countcount >0 then
+##    insert into logs values("duplicated");
+##    END IF;
+##  END;
+##  |
+##delimiter ;
+
+delimiter |
+CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
+  FOR EACH ROW
+  BEGIN
+##  declare stringstring  varchar(8000);
+##  declare countcount integer;
+##  set stringstring = new.cid;allusersallusers
+
+##  set countcount =0;
+##  select count(*) into countcount from student_take_course 
+##  where cid = new.cid and sid = new.sid;
+  if new.role = "stu" then
+    insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime);
+	elseif new.role = "sup" then
+    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime);
+    END IF;
+  END;
+  |
+delimiter ;
