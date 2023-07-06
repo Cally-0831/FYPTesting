@@ -93,7 +93,7 @@ module.exports = {
         });
 
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
-console.log(thisistheline)
+        console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
@@ -104,7 +104,7 @@ console.log(thisistheline)
                 //console.log('>> stdlist: ', stdlist);  
                 return res.view('user/createnewclassroom', { allCampuslist: campuslist });
             } catch (err) {
-                
+
                 console.log("sth happened here");
 
             }
@@ -113,8 +113,8 @@ console.log(thisistheline)
         });
     },
 
-    createnewclassroom : async function (req, res) {
-      
+    createnewclassroom: async function (req, res) {
+
         var mysql = require('mysql');
         var db = mysql.createConnection({
             host: "localhost",
@@ -129,7 +129,7 @@ console.log(thisistheline)
             }
             console.log(' createstudent MySQL Connected');
         });
-        
+
 
 
         thisistheline = "insert into classroom values(\"" +
@@ -143,8 +143,140 @@ console.log(thisistheline)
             console.log("1 record inserted");
         });
 
-    
+
 
         return res.ok("created");
     },
+
+    getsingleroom: async function (req, res) {
+        const roominfo = {
+            Campus: req.params.campus,
+            RID: req.params.rid
+        };
+        //console.log(roominfo);
+        return res.view('user/createnewclassroomtimeslot', { roominfo: roominfo });
+
+    },
+
+    addclassroomtimeslot: async function (req, res) {
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log(' createclassroomtimeslot MySQL Connected');
+        });
+
+
+        let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
+        reqid = reqid.replace(/ /g, "_");
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < 5) {
+            reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+
+        let thisistheline;
+        if (req.body.Unavailabletype == "timeslot") {
+            thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
+                + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"" + req.body.starttime
+                + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
+        } else if (req.body.Unavailabletype == "wholeday") {
+            thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
+                + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"00:00\",\"23:59\",\"" + req.body.remarks + "\")";
+        } else if (req.body.Unavailabletype == "dayrange") {
+            thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
+                + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokendday + "\",\"" + req.body.starttime
+                + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
+        }
+
+
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                return res.status(401).json("Error happened when excuting : " + thisistheline);
+            } else {
+                console.log("1 record inserted");
+                return res.json("created");
+            }
+
+        });
+
+    },
+
+    listalltimeslot: async function (req, res) {
+        var timeslotlist;
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log(' listclassroomtimeslot MySQL Connected');
+        });
+
+        let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
+        db.query(thisistheline, function (err, results) {
+            if (err) {
+               return res.status(401).json("Error happened when excuting : " + thisistheline);
+            }else{
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string); 
+                timeslotlist = json;
+            console.log(timeslotlist)
+                return res.view('user/managetimeslot', { thetimeslotlist: timeslotlist });
+            }
+            
+        });
+    },
+
+    deletetimeslot: async function (req, res) {
+
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('deleterequest MySQL Connected');
+        });
+        console.log(req.body);
+
+        if (req.session.role = "sup") {
+            let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                try {
+
+                    return res.ok("Deleted");
+                } catch (err) {
+                    if (err) { console.log("sth happened here"); }
+                }
+
+            });
+        }
+    },
+
 }

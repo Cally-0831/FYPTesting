@@ -41,7 +41,7 @@
       <!--STYLES END-->
 </head>
 <script defer src="https://use.fontawesome.com/releases/v5.10.0/js/all.js"></script>
-
+<script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
 <body>
 
   <header>
@@ -60,12 +60,12 @@
       <div class="navbar-end">
         <% if (req.session.username!=null) { %>
           <div class="navbar-item">
-            <div class="button is-primary">
+            <div class="buttonuser">
             <%= req.session.username %>
           </div>
-          
+          <div> </div>
             <a class="active"href="/user/logout">
-            <div class="button is-light">Logout</div>
+            <div class="buttonlogout">Logout</div>
           </a>
           </div>        
           <% } %>

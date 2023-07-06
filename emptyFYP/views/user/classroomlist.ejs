@@ -1,14 +1,15 @@
 <div class="title">Classroom List</div>
 <br>
 
-<button class="buttonfamily" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
+<button class="button" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
 
 <br>
 <div>
     <table class="table is-bordered is-striped is-hoverable is-fullwidth">
         <th>Campus</th>
         <th>Room Name</th>
-        <th>Action</th>
+        <th>Add timeslot</th>
+        <th>Delete</th>
 
 
         <% allClassroomlist.forEach( function(classroom) { %>
@@ -21,7 +22,13 @@
                     <%= classroom.RID%>
                 </td>
                 <td>
-                    <button type="button"
+                    <a href="/user/read/<%= classroom.Campus %>/<%= classroom.RID%>">
+                        <button class="button" type="button">Add</button>
+                    </a>
+                    
+                </td>
+                <td>
+                    <button class="button" type="button"
                         onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">Delete</button>
                 </td>
             </tr>
@@ -35,6 +42,7 @@
     function gotocreateroom() {
         location.assign("/user/createnewclassroom");
     }
+
 
     async function deleteclassroom(campus, rid) {
         var r = confirm("Confirm Delete " + rid + " in " + campus + " ?");

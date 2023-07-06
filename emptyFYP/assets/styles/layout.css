@@ -1,87 +1,209 @@
-.welcome{
-    
-    text-align:center;
-    font-size: 30px;
-    font:bold;
+.welcome {
+
+  text-align: center;
+  font-size: 30px;
+  font: bold;
 }
 
 .column-big {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    background-color: wheat;
-    text-align: center;
-    font-size: 15px;
-    width: 80%;
-    padding: 20px 20px 20px 20px
-}
-.title{
-    font-size: 20px; 
-    font:bold;
-}
-
-.Pagetitle{
-  font-size: 50px; 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  background-color: wheat;
   text-align: center;
-  font:bold;
+  font-size: 15px;
+  width: 80%;
+  padding: 20px 20px 20px 20px
 }
 
-.buttonfamily{
-  background-color: chocolate; 
-border: none;
-color: white;
-padding: 10px 10px;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 10px;
+.title {
+  font-size: 20px;
+  font: bold;
+}
+
+.Pagetitle {
+  font-size: 40px;
+  text-align: center;
+  font: bold;
+}
+
+
+.button {
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 18px 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button:hover {
+  background-color: #fff;
+}
+
+.button:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .button {
+    min-width: 120px;
+    padding: 0px 25px;
+  }
+}
+
+
+.buttonuser {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.buttonuser:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 768px) {
+  .buttonuser {
+    padding: 0.25em 0.75em;
+  }
+}
+
+.buttonlogout {
+  align-items: center;
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  height: 48px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 100%;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.buttonlogout:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 48px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+.buttonlogout:hover:after {
+  transform: translate(0, 0);
+}
+
+.buttonlogout:active {
+  background-color: #ffdeda;
+  outline: 0;
+}
+
+.buttonlogout:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .buttonlogout {
+    padding: 0 40px;
+  }
 }
 
 .navbar {
-    overflow: hidden;
-    background-color: wheat;
-    top: 0; /* Position the navbar at the top of the page */
-    width: 100%; /* Full width */
-  }
-
-  .navbar-start{
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-
-  .navbar-item :hover {
-    background: #ddd;
-    color: black;
-  }
-  .navbar-end{
-    float: right;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-
-  .gallery {
-    float: left;
-    display: block;
-    padding: 10px;
-}
-.imgcolumn{
-    width: 30%;
-    height: 30%;
-    padding: 20px 20px;
-   
+  overflow: hidden;
+  background-color: wheat;
+  top: 0;
+  /* Position the navbar at the top of the page */
+  width: 100%;
+  /* Full width */
 }
 
-.allcontent{
+.navbar-start {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar-item :hover {
+  background: #ddd;
+  color: black;
+}
+
+.navbar-end {
+  float: right;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.gallery {
+  float: left;
+  display: block;
+  padding: 10px;
+}
+
+.imgcolumn {
+  width: 30%;
+  height: 30%;
+  padding: 20px 20px;
+
+}
+
+.allcontent {
 
   padding: 20px 20px;
 }
-  
+
+.pagecontent {
+font-size: 20px;
+font: bold
+}

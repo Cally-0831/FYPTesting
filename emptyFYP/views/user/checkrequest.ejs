@@ -1,33 +1,34 @@
-This is checkrequest page
+<div class="Pagetitle">All submitted Unavailable timeslots</div>
 <div>
     <% if (req.session.role=="sup" ){%>
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-            <th>ReqID</th>
-            <th>Unavaildable date</th>
-            <th>Start Time</th>
-            <th>EndTime</th>
-            <th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">Unavaildable date</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">Start Time</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">
                 Action
             </th>
 
-            <% thisuserRequestlist.forEach( function(request) { %>
-
+            <% thisuserRequestlist.forEach( function(request) {
+                const StartDay=request.RequestDate.split('T'); %>
+                
                 <tr>
-                    <td>
+                    <td style="text-align: center;vertical-align:center;">
                         <%= request.ReqID %>
                     </td>
-                    <td>
-                        <%= request.RequestDate %>
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= StartDay[0] %>
                     </td>
 
-                    <td>
+                    <td style="text-align: center;vertical-align:center;">
                         <%= request.RequestStartTime %>
                     </td>
-                    <td>
+                    <td style="text-align: center;vertical-align:center;">
                         <%= request.RequestEndTime%>
                     </td>
-                    <td>
-                        <button class="buttonfamily" type="button"
+                    <td style="text-align: center;vertical-align:center;">
+                        <button class="button" type="button"
                             onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>
                     </td>
                 </tr>

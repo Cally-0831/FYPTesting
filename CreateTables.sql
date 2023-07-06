@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS student_take_course;
 DROP TABLE IF EXISTS allrequestfromstudent;
 DROP TABLE IF EXISTS supervisorpairstudent;
 Drop table if exists allrequestfromsupervisor;
-
+Drop table if exists allclassroomtimeslot;
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
 
@@ -90,3 +90,15 @@ SID		varchar(10) not null,
 Topic 	varchar(50) not null,
 primary key (TID,SID)
 );
+
+create table allclassroomtimeslot(
+ReqID	varchar(20) not null,
+Campus varchar(10) not null,
+RID		varchar(10) Not null,
+StartDate DATE not null,
+EndDate DATE not null,
+StartTime time not null,
+EndTime time not null,
+Remarks varchar(100),
+primary key (ReqID)
+)
