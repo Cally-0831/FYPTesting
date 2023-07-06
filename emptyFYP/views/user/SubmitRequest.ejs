@@ -27,25 +27,6 @@
                 <label for="endtime">End time:&nbsp;&nbsp;&nbsp;</label>
                 <input type="time" id="endtime" name="endtime" required>
             </div>
-            <script>
-                var checkcheck = 0;
-                function dontshowtime() {
-                    checkcheck += 1;
-                    if (checkcheck % 2 == 0) {
-                        showtimetime();
-                    } else {
-                        document.getElementById("showthetime").innerHTML = "";
-                    }
-
-                }
-                function showtimetime() {
-                    document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
-                        + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
-                        + "\<br\>"
-                        + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
-                        + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
-                }
-            </script>
             <br>
 
             <label for="reason">Reason:&nbsp;&nbsp;</label>
@@ -54,7 +35,7 @@
             <br><br>
 
             <label for="prooffile">Upload proof:&nbsp;&nbsp;</label>
-            <input type="file" id="prooffile" name="prooffile" required>
+            <input type="file" id="prooffile" name="prooffile" enctype="multipart/form-data" required>
             <br><br>
 
             <button class="button" type="submit is-success">Submit</button>
@@ -88,31 +69,10 @@
                     <label for="endtime">End time:&nbsp;&nbsp;&nbsp;</label>
                     <input type="time" id="endtime" name="endtime" required>
                 </div>
-                <script>
-                    var checkcheck = 0;
-                    var checked = false;
-                    function dontshowtime() {
-                        checkcheck += 1;
-                        if (checkcheck % 2 == 0) {
-                            checked = false;
-                            showtimetime();
-                        } else {
-                            checked = true;
-                            document.getElementById("showthetime").innerHTML = "";
-                        }
 
-                    }
-                    function showtimetime() {
-                        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
-                            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
-                            + "\<br\>"
-                            + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
-                            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
-                    }
-                </script>
                 <br>
 
-                <button class ="button" type="submit is-success">Submit</button>
+                <button class="button" type="submit is-success">Submit</button>
             </form>
 
             <%}%>
@@ -120,6 +80,26 @@
 </div>
 
 <script>
+    var checkcheck = 0;
+    var checked = false;
+    function dontshowtime() {
+        checkcheck += 1;
+        if (checkcheck % 2 == 0) {
+            checked = false;
+            showtimetime();
+        } else {
+            checked = true;
+            document.getElementById("showthetime").innerHTML = "";
+        }
+
+    }
+    function showtimetime() {
+        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
+            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
+            + "\<br\>"
+            + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
+            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
+    }
     async function submitrequest(formElem) {
 
         if (!checked) {

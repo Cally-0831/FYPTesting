@@ -77,12 +77,12 @@ primary key (ReqID)
 create table allrequestfromstudent(
 ReqID	varchar(20) not null,
 SID		varchar(10) not null,
-TID		varchar(10) not null,
 RequestDate DATE not null,
 RequestStartTime time not null,
 RequestEndTime time not null,
 reason	varchar(1000) not null,
 proofpath varchar(100) not null,
+status varchar(10) not null,
 primary key (ReqID)
 );
 create table supervisorpairstudent(
@@ -158,3 +158,4 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   END;
   |
 delimiter ;
+

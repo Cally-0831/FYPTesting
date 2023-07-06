@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="imgcolumn">
-                    <a href="#checkrequest">
+                    <a href="/user/checkrequest">
                         <img src="images\home\reply.jpg" class="gallery_img">
                     </a>
                 </div>
@@ -32,8 +32,6 @@
             </div>
         </div>
     </div>
-
-
     <%}else if(req.session.role=="sup" ) {%>
         <p>this is a supervisor</p>
         <div class="rows is-mobile">
@@ -67,6 +65,11 @@
                     <div class="imgcolumn">
                         <a href="/user/checkrequest">
                             <img src="images\home\reply.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                    <div class="imgcolumn">
+                        <a href="/user/readstudentrequestlist">
+                            <img src="images\home\approve.jpg" class="gallery_img">
                         </a>
                     </div>
                     <div class="imgcolumn">

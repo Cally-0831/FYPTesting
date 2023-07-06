@@ -29,8 +29,10 @@ module.exports.routes = {
   'GET /user/logout': 'UserController.logout',
 
   'GET /home': { view: 'user/home' },
+  'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
+  'GET /user/approvalpage/:ReqID': "RequestController.viewstudentrequest",
 
-  'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
+  //'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
 
   'GET /user/createnewclassroom':  "ClassroomListController.getcampus",
   'POST /user/createnewclassroom': "ClassroomListController.createnewclassroom",
@@ -47,8 +49,8 @@ module.exports.routes = {
  'GET /user/managetimeslot': "ClassroomListController.listalltimeslot",
  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
 
-  'GET /user/checkrequest': "UserController.listrequest",
-  'DELETE /user/checkrequest': "UserController.deleterequest",
+  'GET /user/checkrequest': "RequestController.listrequest",
+  'DELETE /user/checkrequest': "RequestController.deleterequest",
 
   'GET /user/submitrequest': "UserController.submitrequest",
   'POST /user/submitrequest': "UserController.submitrequest",
