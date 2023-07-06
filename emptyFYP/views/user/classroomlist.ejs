@@ -11,7 +11,7 @@
         <th style="font-size:20px;text-align: center;vertical-align:center;">Status</th>
         <th style="font-size:20px;text-align: center;vertical-align:center;">Add timeslot</th>
         <th style="font-size:20px;text-align: center;vertical-align:center;">Delete</th>
-
+        <th style="font-size:20px;text-align: center;vertical-align:center;">View</th>
 
         <% allClassroomlist.forEach( function(classroom) { %>
 
@@ -26,14 +26,21 @@
                     <%= classroom.status%>
                 </td>
                 <td style="text-align: center;vertical-align:center;">
-                    <a href="/user/addtimeslot/<%= classroom.Campus %>/<%= classroom.RID%>">
+                    <a href="/user/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>">
                         <button class="button" type="button">Add</button>
                     </a>
                     
                 </td>
                 <td style="text-align: center;vertical-align:center;">
                     <button class="button" type="button"
-                        onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">Delete</button>
+                        onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
+                        Delete
+                    </button>
+                </td>
+                <td style="text-align: center;vertical-align:center;">
+                    <a href="/user/view/<%= classroom.Campus%>/<%= classroom.RID%>">
+                        <button class="button" type="button">view</button>
+                    </a>
                 </td>
             </tr>
 

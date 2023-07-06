@@ -38,6 +38,9 @@ module.exports.routes = {
  'GET /user/classroomlist': "ClassroomListController.listclassroom",
  'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
 
+ 'GET /user/view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
+ 'DELETE /user/view': "ClassroomListController.deletetimeslot",
+
  'GET /user/addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
  'POST /user/addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
 

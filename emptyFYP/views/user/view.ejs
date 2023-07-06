@@ -1,0 +1,74 @@
+<div class="Pagetitle">Submitted Timeslots for <%=roominfo.Campus%> <%=roominfo.RID%></div>
+<br>
+    <div>
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            
+            <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">StartDay</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">EndDay</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">StartTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">Remarks</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;">Delete</th>
+            <% thetimeslotlist.forEach( function(list) { 
+                
+                const StartDay= new Date(list.StartDate).toLocaleDateString('en-CA');
+                const EndDay = new Date(list.EndDate).toLocaleDateString('en-CA');
+                %>
+                <tr>
+                    
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= list.ReqID%>
+                    </td>
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= StartDay%>
+                    </td>
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= EndDay %>
+                    </td>
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= list.StartTime %>
+                    </td>
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= list.EndTime %>
+                    </td>
+
+                    <td style="text-align: center;vertical-align:center;">
+                        <%= list.Remarks%>
+                    </td>
+                    <td style="text-align: center;vertical-align:center;">
+                        <button class="button" type="button"
+                            onclick="deletetimeslot('<%= list.ReqID %>', '<%=roominfo.Campus%>','<%=roominfo.RID%>')">Delete</button>
+                    </td>
+                </tr>
+
+                <% }); %>
+
+        </table>
+    </div>
+    <script>
+        async function deletetimeslot(reqid,campus,rid) {
+        var r = confirm("Confirm Delete?" + reqid);
+        var requestBody = JSON.stringify({ ReqID: reqid });
+        if (r) {
+
+            var response = await fetch("/user/view", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Request deleted.");
+                location.assign("/user/view/"+campus+"/"+rid);
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
+    </script>

@@ -226,7 +226,7 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            console.log(' listclassroomtimeslot MySQL Connected');
+           // console.log(' listalltimeslot MySQL Connected');
         });
 
         let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
@@ -306,6 +306,43 @@ module.exports = {
 
         });
     
+    },
+
+    getsingleroomtimeslot: async function (req, res) {
+        const roominfo = {
+            Campus: req.params.campus,
+            RID: req.params.rid
+        };
+        var timeslotlist ;
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            //console.log('getsingleroomtimeslot MySQL Connected');
+        });
+        let thisistheline="SELECT * FROM allclassroomtimeslot where campus = \""+req.params.campus+"\" and RID =\""+req.params.rid+"\" order by startdate,enddate;";
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string); 
+                timeslotlist=json;
+                console.log(json);
+                return res.view('user/view', { roominfo: roominfo , thetimeslotlist : timeslotlist});
+            } catch (err) {
+                if (err) { console.log("sth happened here"); }
+            }
+
+        });
+        //console.log(roominfo);
+        
     }
 
 }
