@@ -69,8 +69,8 @@ INSERT INTO  student_take_course VALUES("s01","c01");
 insert into allrequestfromsupervisor values("askhjdfoasdjfi","tid00001","2023-04-03","00:00", "14:00");
 
 insert into student_take_course values("COMP100500001","111");
-insert into classroom 	values("Campus A","RM101");
-insert into classroom 	values("Campus B","RM102");
+insert into classroom 	values("Campus A","RM101","Open");
+insert into classroom 	values("Campus B","RM102","Open");
 insert into allclassroomtimeslot values("Campus_B_RM102_0sdf1","Campus B","RM102","2023-04-03","2023-04-03","00:00","23:59","remarks");
 
 

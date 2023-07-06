@@ -54,6 +54,7 @@ PRIMARY key (CID));
 create table classroom(
 Campus varchar(10) not null,
 RID		varchar(10) Not null,
+status varchar(10) not null,
 PRIMARY key (Campus,RID));
 
 create table logs(logstring varchar(8000));

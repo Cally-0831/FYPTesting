@@ -25,7 +25,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                //console.log('>> json: ', json);  
+                console.log('>> json: ', json);  
                 classroomlist = json;
                 //console.log('>> stdlist: ', stdlist);  
                 return res.view('user/classroomlist', { allClassroomlist: classroomlist });
@@ -134,7 +134,7 @@ module.exports = {
 
         thisistheline = "insert into classroom values(\"" +
             req.body.Campus + "\"\,\""
-            + req.body.RID + "\"\)\;\n";
+            + req.body.RID + "\",\"Open\"\)\;\n";
         console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             if (err) {
