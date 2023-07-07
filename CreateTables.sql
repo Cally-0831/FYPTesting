@@ -83,6 +83,7 @@ RequestEndTime time not null,
 reason	varchar(1000) not null,
 proofpath varchar(100) not null,
 status varchar(10) not null,
+reply varchar(100),
 primary key (ReqID)
 );
 create table supervisorpairstudent(

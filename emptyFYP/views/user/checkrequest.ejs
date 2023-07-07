@@ -44,8 +44,9 @@
                 <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
                 <th style="font-size:20px;text-align: center;vertical-align:center;">Status</th>
                 <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-    
-                <% thisuserRequestlist.forEach( function(request) {
+                <th style="font-size:20px;text-align: center;vertical-align:center;">View Details</th>
+
+                <%  thisuserRequestlist.forEach( function(request) {
                     const StartDay=new Date(request.RequestDate).toLocaleDateString('en-CA'); %>
                     
                     <tr>
@@ -67,6 +68,11 @@
                         <td style="text-align: center;vertical-align:center;">
                             <button class="button" type="button"
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
+                        </td>
+                        <td style="text-align: center;vertical-align:center;">
+                            <a href="/user/approvalpage/<%=request.ReqID%>">
+                                <button class="button" type="button">view</button>
+                            </a>
                         </td>
                     </tr>
     
@@ -128,4 +134,5 @@
         }
     };
 
+   
 </script>

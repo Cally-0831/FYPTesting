@@ -30,7 +30,8 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
-  'GET /user/approvalpage/:ReqID': "RequestController.viewstudentrequest",
+  'GET /user/approvalpage/:ReqID': "RequestController.viewstudentrequestdeatils",
+  'POST /user/approvalpage/:ReqID': "RequestController.replystudentrequest",
 
   //'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
 
@@ -50,6 +51,7 @@ module.exports.routes = {
  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
 
   'GET /user/checkrequest': "RequestController.listrequest",
+ 
   'DELETE /user/checkrequest': "RequestController.deleterequest",
 
   'GET /user/submitrequest': "UserController.submitrequest",

@@ -11,7 +11,7 @@ module.exports = {
 
         };
 
-        if (req.method == "GET" ) return res.view('user/login');
+        if (req.method == "GET") return res.view('user/login');
 
         if (!req.body.username || !req.body.pw) return res.status(401).json("Please enter both username and password");
 
@@ -109,7 +109,7 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-         //   console.log('MySQL Connected');
+            //   console.log('MySQL Connected');
         });
         let reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -125,38 +125,38 @@ module.exports = {
 
 
         if (req.session.role == "sup") {
-            //console.log("enter sup");
-                if (req.body.starttime == undefined) {
-                    thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
-                        + "\",\"00:00\", \"23:59\");";
-                } else {
-                    thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
-                        req.body.starttime + "\", \"" + req.body.endtime + "\");";
-                }
+            console.log("enter sup");
+            if (req.body.starttime == undefined) {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
+                    + "\",\"00:00\", \"23:59\");";
+            } else {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                    req.body.starttime + "\", \"" + req.body.endtime + "\");";
+            }
         } else if (req.session.role == "stu") {
-           // console.log("enter stu");
+            console.log("enter stu");
             if (req.body.starttime == undefined) {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
-                    + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",\"" + req.body.prooffile + "\",\"Pending\");";
+                    + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",\"" + req.body.prooffile + "\",\"Pending\",\"\");";
             } else {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
-                    req.body.starttime + "\", \"" + req.body.endtime + "\",\"" + req.body.reason + "\",\"" + req.body.prooffile + "\",\"Pending\");";
+                    req.body.starttime + "\", \"" + req.body.endtime + "\",\"" + req.body.reason + "\",\"" + req.body.prooffile + "\",\"Pending\",\"\");";
             }
         }
 
-        //console.log(thisistheline);
+        console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
- return res.json("ok");
+                return res.json("ok");
                 //console.log("1 row added");
-               
+
             } catch (err) {
                 return res.stauts(401).json("Error happened when excuting");
             }
 
 
         });
-       
+
 
 
     },
