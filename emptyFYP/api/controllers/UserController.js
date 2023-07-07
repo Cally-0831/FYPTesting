@@ -28,7 +28,7 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            console.log('MySQL Connected');
+            //console.log('MySQL Connected');
         });
 
 

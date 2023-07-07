@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS allrequestfromstudent;
 DROP TABLE IF EXISTS supervisorpairstudent;
 Drop table if exists allrequestfromsupervisor;
 Drop table if exists allclassroomtimeslot;
+Drop table if exists allnotice;
+
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
 
@@ -104,6 +106,15 @@ EndTime time not null,
 Remarks varchar(100),
 primary key (ReqID)
 );
+
+create table allnotice(
+NID	varchar(20) not null,
+Creator		varchar(10) Not null,
+CreateDate  timestamp not null,
+contents varchar(1000),
+primary key (NID)
+);
+
 
 delimiter |
 

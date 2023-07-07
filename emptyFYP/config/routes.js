@@ -29,6 +29,7 @@ module.exports.routes = {
   'GET /user/logout': 'UserController.logout',
 
   'GET /home': { view: 'user/home' },
+  'GET /notice': "NoticeListController.listallnotice",
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",

@@ -1,0 +1,37 @@
+<div class="Pagetitle">
+    <%= req.session.role%> Notice Page
+</div>
+
+<% if (req.session.role!="stu"  ){%>
+    <button class="buttonlogout">Create Notice</button>
+    <br>
+    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+
+        <th style="font-size:20px;text-align: center;vertical-align:center;">No.</th>
+        <th style="font-size:20px;text-align: center;vertical-align:center;">Announced Date</th>
+        <th style="font-size:20px;text-align: center;vertical-align:center;">Content</th>
+        <th style="font-size:20px;text-align: center;vertical-align:center;">Announcer</th>
+
+        <% for(var i=0 ; i < thisusernoticetlist.length;i++){%>
+            <tr>
+                <td style="text-align: center;vertical-align:center;">
+                    <%= i+1%>
+                </td>
+                <td style="text-align: center;vertical-align:center;">
+                    <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleString('en-CA'); %>
+                </td>
+                <td style="text-align: center;vertical-align:center;">
+                    <%= thisusernoticetlist[i].contents %>
+                </td>
+                <td style="text-align: center;vertical-align:center;">
+                    <%= thisusernoticetlist[i].allusersname%>
+                </td>
+            </tr>
+
+
+            <% }%>
+
+
+
+                <%}%>
+    </table>
