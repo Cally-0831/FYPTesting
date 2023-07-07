@@ -18,7 +18,7 @@ module.exports = {
         });
         if (req.session.role == "adm") {
             let thisistheline = "SELECT  NID, allusersname,content,CreateDate,Creatorname,title from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
-            console.log(thisistheline)
+          //  console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -26,7 +26,7 @@ module.exports = {
                     var json = JSON.parse(string);
                     //console.log('>> json: ', json);  
                     noticelist = json;
-                    console.log('>> noticelist: ', noticelist);
+           //         console.log('>> noticelist: ', noticelist);
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
                 } catch (err) {
                     console.log("sth happened here");
@@ -100,6 +100,7 @@ module.exports = {
             nid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
+        console.log(">> req "+req.body.content.replace("\n","\"+Char(10)+\""));
         let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
         console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
