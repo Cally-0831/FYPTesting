@@ -30,8 +30,8 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
-  'GET /user/approvalpage/:ReqID': "RequestController.viewstudentrequestdeatils",
-  'POST /user/approvalpage/:ReqID': "RequestController.replystudentrequest",
+  'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
+  'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",
 
   //'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
 

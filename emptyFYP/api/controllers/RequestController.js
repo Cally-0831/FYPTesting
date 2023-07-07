@@ -47,7 +47,7 @@ module.exports = {
                     var json = JSON.parse(string);
                     //console.log('>> json: ', json);  
                     requestlist = json;
-                    console.log('>> stdlist: ', requestlist);
+                    console.log('>> my request ist: ', requestlist);
                     return res.view('user/checkrequest', { thisuserRequestlist: requestlist });
                 } catch (err) {
                     console.log("sth happened here");
@@ -175,7 +175,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     viewthisrequestinfo = json[0];
                     console.log('>> stdlist: ', viewthisrequestinfo);
-                    return res.view('user/approvalpage', { thisrequestdetails: viewthisrequestinfo });
+                    return res.view('user/requestdetail', { thisrequestdetails: viewthisrequestinfo });
                 } catch (err) {
                     console.log("sth happened here " + err);
 
@@ -192,7 +192,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     viewthisrequestinfo = json[0];
                     //console.log('>> stdlist: ', studentrequestlist);
-                    return res.view('user/checkrequest', { thisrequestdetails: viewthisrequestinfo });
+                    return res.view('user/requestdetail', { thisrequestdetails: viewthisrequestinfo });
                 } catch (err) {
                     console.log("sth happened here " + err);
 
