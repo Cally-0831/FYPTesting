@@ -51,7 +51,6 @@ module.exports.routes = {
  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
 
   'GET /user/checkrequest': "RequestController.listrequest",
- 
   'DELETE /user/checkrequest': "RequestController.deleterequest",
 
   'GET /user/submitrequest': "UserController.submitrequest",
