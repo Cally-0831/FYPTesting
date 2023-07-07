@@ -15,6 +15,7 @@ Drop table if exists allnotice;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
+Drop trigger if exists insertcretorname;
 
 create table  allusers(
 allusersname	varchar(100) Not null,
@@ -110,6 +111,7 @@ primary key (ReqID)
 create table allnotice(
 NID	varchar(20) not null,
 Creator		varchar(10) Not null,
+Creatorname		varchar(10),
 CreateDate  timestamp not null,
 title varchar(50) not null,
 content varchar(1000),
@@ -172,3 +174,15 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   |
 delimiter ;
 
+delimiter |
+CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
+  FOR EACH ROW
+  BEGIN
+  declare stringstring  varchar(10);
+
+ select allusersname into stringstring from allusers 
+ where new.creator = pid;
+ set new.creatorname = stringstring;
+   END;
+  |
+delimiter ;

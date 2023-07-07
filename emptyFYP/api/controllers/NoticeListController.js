@@ -17,7 +17,7 @@ module.exports = {
             //console.log('list notice MySQL Connected');
         });
         if (req.session.role == "adm") {
-            let thisistheline = "SELECT  NID, allusersname,content,CreateDate from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
+            let thisistheline = "SELECT  NID, allusersname,content,CreateDate,Creatorname,title from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
             console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
@@ -36,7 +36,7 @@ module.exports = {
 
             });
         } else if (req.session.role == "sup") {
-            let thisistheline = " SELECT  allnotice.NID, allusers.allusersname,allnotice.content,allnotice.CreateDate,allnotice.Creator,allnotice.title from allnotice" +
+            let thisistheline = " SELECT  allnotice.NID, allusers.allusersname,allnotice.content,allnotice.CreateDate,allnotice.Creator,allnotice.Creatorname,allnotice.title from allnotice" +
                 "\ninner join allusers on allnotice.Creator = allusers.pid "
                 + " where allnotice.creator = \"admin\" or allnotice.creator= \"" + req.session.userid + "\" order by allnotice.CreateDate DESC;";
 
@@ -55,7 +55,7 @@ module.exports = {
                 }
             });
         } else {
-            let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
+            let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
                 + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
             console.log(thisistheline)
@@ -100,7 +100,7 @@ module.exports = {
             nid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
-        let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+        let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
         console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
