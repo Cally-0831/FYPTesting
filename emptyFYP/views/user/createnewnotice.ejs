@@ -1,0 +1,40 @@
+<div class="Pagetitle">
+    Create New Notice
+</div>
+<br><br>
+
+    <input type="text" id="title" style="width: 500px; height: 30px;" required>
+    <br>
+    <br>
+    <label for="NoticeContent">Content&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input type="text" id="content" style="width: 500px; height: 200px;" required>
+    <br><br>
+    <button class="buttonlogout" onclick="submitform()" style="position: absolute; right: 20px;">Submit</button>
+
+
+<script>
+    async function submitform() {
+        const r = confirm("Confirm to create this notice?");
+        var requestBody = JSON.stringify({
+            title: document.getElementById("title").value,
+            content: document.getElementById("content").value,
+        });
+        if (r) {
+            var response = await fetch("/notice/createnewnotice", {
+                method: "POST",
+                body: requestBody,
+            });
+
+            if (response.ok) {
+                
+                // var html = await response.text();
+                // alert(html);
+                alert("Notice Created");
+                location.assign("/notice");
+            } else {
+                
+                alert(response.status + ": " + response.statusText);
+            }
+        }
+    }
+</script>

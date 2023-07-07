@@ -14,10 +14,10 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            console.log('list notice MySQL Connected');
+            //console.log('list notice MySQL Connected');
         });
         if (req.session.role == "adm") {
-            let thisistheline = "SELECT  NID, allusersname,contents,CreateDate from allnotice inner join allusers on allnotice.Creator = allusers.pid;";
+            let thisistheline = "SELECT  NID, allusersname,content,CreateDate from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
             console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
@@ -36,9 +36,9 @@ module.exports = {
 
             });
         } else if (req.session.role == "sup") {
-            let thisistheline = " SELECT  allnotice.NID, allusers.allusersname,allnotice.contents,allnotice.CreateDate,allnotice.Creator from allnotice"+
+            let thisistheline = " SELECT  allnotice.NID, allusers.allusersname,allnotice.content,allnotice.CreateDate,allnotice.Creator,allnotice.title from allnotice"+
             "\ninner join allusers on allnotice.Creator = allusers.pid "
-                + " where allnotice.creator = \"admin\" or allnotice.creator= \"" + req.session.userid + "\";";
+                + " where allnotice.creator = \"admin\" or allnotice.creator= \"" + req.session.userid + "\" order by allnotice.CreateDate DESC;";
 
             console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
@@ -52,14 +52,52 @@ module.exports = {
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
                 } catch (err) {
                     console.log("sth happened here");
-
                 }
-
-
             });
         } else {
 
         }
 
-    }
+    },
+
+    addnotice: async function (req, res) {
+        console.log(req.body);
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('add notice MySQL Connected');
+        });
+        let nid = 'nid';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < 5) {
+            nid += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+        let thisistheline = "insert into allnotice values(\""+nid+"\",\""+req.session.userid+"\",now(),\""+req.body.title+"\",\""+req.body.content+"\"\);"
+        console.log(thisistheline);
+        db.query(thisistheline, (err, results) => {
+            try {
+                console.log("insert new notice");
+                return res.json("ok");
+            } catch (err) {
+                console.log("sth happened here");
+
+            }
+
+
+        });
+    },
+
+
 }

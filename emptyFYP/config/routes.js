@@ -30,6 +30,9 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
   'GET /notice': "NoticeListController.listallnotice",
+  'GET /notice/createnewnotice': { view: 'user/createnewnotice' },
+  'POST /notice/createnewnotice': "NoticeListController.addnotice",
+
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",

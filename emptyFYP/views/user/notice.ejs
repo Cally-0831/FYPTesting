@@ -3,12 +3,14 @@
 </div>
 
 <% if (req.session.role!="stu"  ){%>
-    <button class="buttonlogout">Create Notice</button>
+
+    <button class="buttonlogout" onclick="gotocreate()">Create Notice</button>
     <br>
     <table class="table is-bordered is-striped is-hoverable is-fullwidth">
 
         <th style="font-size:20px;text-align: center;vertical-align:center;">No.</th>
         <th style="font-size:20px;text-align: center;vertical-align:center;">Announced Date</th>
+        <th style="font-size:20px;text-align: center;vertical-align:center;">Title</th>
         <th style="font-size:20px;text-align: center;vertical-align:center;">Content</th>
         <th style="font-size:20px;text-align: center;vertical-align:center;">Announcer</th>
 
@@ -21,7 +23,10 @@
                     <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleString('en-CA'); %>
                 </td>
                 <td style="text-align: center;vertical-align:center;">
-                    <%= thisusernoticetlist[i].contents %>
+                    <%= thisusernoticetlist[i].title %>
+                </td>
+                <td style="text-align: center;vertical-align:center;">
+                    <%= thisusernoticetlist[i].content %>
                 </td>
                 <td style="text-align: center;vertical-align:center;">
                     <%= thisusernoticetlist[i].allusersname%>
@@ -35,3 +40,8 @@
 
                 <%}%>
     </table>
+    <script>
+        function gotocreate(){
+            location.assign("/notice/createnewnotice");
+        }
+    </script>

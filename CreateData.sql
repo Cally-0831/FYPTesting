@@ -22,9 +22,9 @@ insert into classroom 	values("Campus B","RM103","Open");
 insert into classroom 	values("Campus A","RM103","Open");
 insert into classroom 	values("Campus B","RM101","Open");
 insert into allclassroomtimeslot values("Campus_B_RM102_0sdf1","Campus B","RM102","2023-07-13","2023-07-13","00:00","23:59","remarks");
-insert into allnotice values("nid0001","admin","2023-07-07 11:21:42","Testing");
-insert into allnotice values("nid0002","tid00001",now(),"Testing2");
-insert into allnotice values("nid0003","tid00002",now(),"Testing3");
+insert into allnotice values("nid0001","admin","2023-07-07 11:21:42","title1","Testing");
+insert into allnotice values("nid0002","tid00001",now(),"title2","Testing2");
+insert into allnotice values("nid0003","tid00002",now(),"title3","Testing3");
 
 insert into class values("COMP1005","00001","COMP100500001","RM101","MON","08:30","09:20");
 insert into class values("COMP1005","10001","COMP100510001","RM101","MON","08:30","09:20");

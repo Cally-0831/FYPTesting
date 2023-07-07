@@ -111,7 +111,8 @@ create table allnotice(
 NID	varchar(20) not null,
 Creator		varchar(10) Not null,
 CreateDate  timestamp not null,
-contents varchar(1000),
+title varchar(50) not null,
+content varchar(1000),
 primary key (NID)
 );
 
