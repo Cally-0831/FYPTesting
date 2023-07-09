@@ -1,0 +1,13 @@
+ <% var dept=""; const deptlist=[]; const classlist=[]; 
+                    allclasslist.forEach( function(classlist) {
+                        if(deptlist.length==0){ deptlist.push(classlist.CDept); }else{ const
+                        filterObj=deptlist.filter((e)=> e == classlist.CDept);
+                        if(filterObj[0] == undefined){deptlist.push(classlist.CDept);}
+                        }
+                        %>
+                        <% });%>
+                            <% deptlist.forEach( function(list) { %>
+                                <option value="<%=list%>">
+                                    <%=list %>
+                                </option>
+                                <% })%>
