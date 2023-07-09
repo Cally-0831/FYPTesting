@@ -28,22 +28,10 @@
                         <% })%>
                 </select>
             </div>
-            <%if (typeof allCCodelist !='undefined' ){%>
-                <div id="classcodeinputfield" class="singleclassinfocontent">
-                    <label for="classdep">Please input your class's code&nbsp;:&nbsp;</label>
-                    <select name="classdep" id="classdep" onchange="createclassscetion(value)">
-                        <%console.log(allCCodelist +" sure this is not undefined")%>
-                            <option value="">---Please Select---</option>
-                            <% allCCodelist.forEach( function(list) { %>
-                                <%console.log(list.CCode +" sure this is not undefined")%>
-                                    <option value="<%=list.CCode %>">
-                                        <%=allCCodelist %>
-                                    </option>
-                                    <% })%>
-                    </select>
-                </div>
-                <%}%>
-
+            <div id="classcodeinputfield" class="singleclassinfocontent">
+               
+                    
+            </div>
         </div>
     </div>
 </form>
@@ -52,14 +40,37 @@
     async function createclassscetion(value) { }
 
     async function createclasscode(value) {
-        //location.assign("/user/submitttb/"+value);
-        console.log("creat class code request now")
-        var response = await fetch('submitttb/' + value, {
-            method: "GET",
+
+
+        var requestBody = JSON.stringify({ CDept: document.getElementById("classdep").value });
+        console.log(requestBody)
+        console.log("creat class code request now " + document.getElementById("classdep").value)
+        var response = await fetch('/submitttb', {
+            method: "POST",
+            body: requestBody,
         });
         if (response.ok) {
-console.log(response)
-
+            document.load("/user/classcode")
+            /**
+            const xhr = new XMLHttpRequest();
+            const container = document.getElementById("classcodeinputfield");
+            container.innerHTML = "please say hello"
+            
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    console.log("come to here");
+                    var stringstring = String(xhr.responseText)
+                    const ans = stringstring.split("classcodefile");
+                    console.log(ans[1]);
+                    container.innerHTML = xhr.responseText;
+                } else {
+                    console.warn("Oops");
+                }
+            }
+            xhr.open("post", "/submitttb");
+            xhr.send(JSON.stringify({ CDept: document.getElementById("classdep").value }))
+            **/
+            
         }
 
     }

@@ -1,12 +1,12 @@
 module.exports = {
-    allDeptlist:{},
-    allCCodelist:{},
-    deptlist:{},
-    ccodelist:{},
+    allDeptlist: {},
+    allCCodelist: {},
+    deptlist: {},
+    ccodelist: {},
 
     getallclass: async function (req, res) {
-        
-         var ccodelist;
+
+        var ccodelist;
         var mysql = require('mysql');
 
         var db = mysql.createConnection({
@@ -20,7 +20,7 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            //console.log('getallclass MySQL Connected');
+            console.log('getallclass MySQL Connected');
         });
         let thisistheline = "select distinct CDept from allclass";
 
@@ -31,10 +31,11 @@ module.exports = {
                 var json = JSON.parse(string);
                 deptlist = json;
                 allDeptlist = deptlist;
-                //console.log('>> classlist: ', classlist);  
-                return res.view('user/submitttb', { 
+                console.log('>> classlist: ', allDeptlist);
+                return res.view('user/submitttb', {
                     allDeptlist: deptlist,
-                    allCCodelist: ccodelist  });
+                    allCCodelist: ccodelist
+                });
             } catch (err) {
                 console.log("sth happened here" + err);
 
@@ -46,10 +47,8 @@ module.exports = {
     },
 
     getccode: async function (req, res) {
-var ccodelist;
+        var ccodelist;
         var mysql = require('mysql');
-        
-
         var db = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -63,20 +62,24 @@ var ccodelist;
             }
             console.log('getclassinfo MySQL Connected');
         });
-
-        //console.log(req.params.CDept);
+        console.log("@@@@@@@@@@@");
+        console.log(req.body);
+        console.log("@@@@@@@@@@@");
         var ccodelist;
-        thisistheline = "select distinct CCode from allclass where CDept=\"" + req.params.CDept + "\"";
-        //console.log(thisistheline);
+        thisistheline = "select distinct CCode from allclass where CDept=\"" + req.body.CDept + "\"";
+        console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 ccodelist = json;
-                //console.log('>> classlist: ', ccodelist);
-                return res.view('user/submitttb',{ 
-                    allDeptlist: allDeptlist, 
-                    allCCodelist: ccodelist });
+                allCCodelist = ccodelist;
+                console.log('>> ccodelist: ', ccodelist);
+                res.body = req.body;
+                return res.view('user/classcode', {
+                    allDeptlist: allDeptlist,
+                    allCCodelist: ccodelist
+                });
             } catch (err) {
                 console.log("sth happened here");
 

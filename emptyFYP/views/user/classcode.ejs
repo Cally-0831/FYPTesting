@@ -1,0 +1,20 @@
+<div id ="classcodefile">
+    <%if (typeof allCCodelist !='undefined' ){%>
+    <label for="classdep">Please input your class's code&nbsp;:&nbsp;</label>
+    <select name="classdep" id="classdep" onchange="createclassscetion(value)">
+        <%=console.log(allCCodelist +" sure this is not undefined")%>
+            <option value="">---Please Select---</option>
+            <% allCCodelist.forEach( function(list) { %>
+                <%console.log(list.CCode +" sure this is not undefined")%>
+                    <option value="<%=list.CCode %>">
+                        <%=list.CCode %>
+                    </option>
+                    <% })%>
+    </select>
+
+    <%}%>
+</div>
+
+asdfas
+asdfasd
+asdfasdf
