@@ -3,6 +3,10 @@ module.exports = {
     allCCodelist: {},
     deptlist: {},
     ccodelist: {},
+    allClassentry: {},
+
+  
+    
 
     getallclass: async function (req, res) {
 
@@ -22,20 +26,44 @@ module.exports = {
             }
             console.log('getallclass MySQL Connected');
         });
-        let thisistheline = "select distinct CDept from allclass";
-
+        let thisistheline = "select * from allclass";
+var newdeptlist = [];
         db.query(thisistheline, (err, results) => {
             try {
 
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 deptlist = json;
-                allDeptlist = deptlist;
-                console.log('>> classlist: ', allDeptlist);
-                return res.view('user/submitttb', {
-                    allDeptlist: deptlist,
-                    allCCodelist: ccodelist
+                allClassentry = json;
+
+                const distinct = (value ,index,self)=>{
+                    return self.indexOf(value) === index;
+                }
+
+                var alldeptlistlist =[];
+                allClassentry.forEach(element => {
+                    alldeptlistlist.push(element.CDept);
                 });
+                const distinctdept = alldeptlistlist.filter(distinct);
+                 console.log("distinct dept list    "+distinctdept);
+
+                 var allcourselistlist =[];
+                 allClassentry.forEach(element => {
+                    allcourselistlist.push(element.CDept+element.CCode);
+                 });
+                 const distinctcode =  allcourselistlist.filter(distinct);
+                 console.log("distinct course list    "+distinctcode);
+
+
+                
+                allDeptlist = deptlist;
+                //console.log('>> classlist: ', allDeptlist);
+                return res.view('user/submitttb', {
+                    allClasslist : allClassentry,
+                    allDeptlist: distinctdept,
+                 //   allCCodelist: distinctcode
+                });
+
             } catch (err) {
                 console.log("sth happened here" + err);
 
@@ -77,7 +105,7 @@ module.exports = {
                 console.log('>> ccodelist: ', ccodelist);
                 res.body = req.body;
                 return res.view('user/classcode', {
-                    allDeptlist: allDeptlist,
+                //    allDeptlist: allDeptlist,
                     allCCodelist: ccodelist
                 });
             } catch (err) {

@@ -16,63 +16,65 @@
     <br>
     <div id="allclassinputfield">
         <div id="singleclassinfo" class="singleclassinfo">
+            
             <div id="deptinputfield" class="singleclassinfocontent">
                 <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
                 <select name="classdep" id="classdep" onchange="createclasscode(value)">
                     <option value="">---Please Select---</option>
 
-                    <% allDeptlist.forEach( function(list) { %>
-                        <option value="<%=list.CDept %>">
-                            <%=list.CDept %>
+                    <%allClasslist.forEach( function(list) { %>
+                        <option value="<%=list.CSecCode %>">
+                            <%=list.CSecCode %>
                         </option>
                         <% })%>
                 </select>
             </div>
-            <div id="classcodeinputfield" class="singleclassinfocontent">
+            <div id="codeinputfield" class="singleclassinfocontent">
                
-                    
+                    <%- include('../user/classcode') %>
+               
             </div>
         </div>
-    </div>
 </form>
 
 <script>
+
     async function createclassscetion(value) { }
 
     async function createclasscode(value) {
-
-
-        var requestBody = JSON.stringify({ CDept: document.getElementById("classdep").value });
-        console.log(requestBody)
-        console.log("creat class code request now " + document.getElementById("classdep").value)
-        var response = await fetch('/submitttb', {
-            method: "POST",
-            body: requestBody,
-        });
-        if (response.ok) {
-            document.load("/user/classcode")
-            /**
-            const xhr = new XMLHttpRequest();
-            const container = document.getElementById("classcodeinputfield");
-            container.innerHTML = "please say hello"
-            
-            xhr.onload = function () {
-                if (this.status === 200) {
-                    console.log("come to here");
-                    var stringstring = String(xhr.responseText)
-                    const ans = stringstring.split("classcodefile");
-                    console.log(ans[1]);
-                    container.innerHTML = xhr.responseText;
-                } else {
-                    console.warn("Oops");
-                }
-            }
-            xhr.open("post", "/submitttb");
-            xhr.send(JSON.stringify({ CDept: document.getElementById("classdep").value }))
-            **/
-            
-        }
-
+        
+               var requestBody = JSON.stringify({ CDept: document.getElementById("classdep").value });
+               console.log(requestBody)
+               console.log("creat class code request now " + document.getElementById("classdep").value)
+               var response = await fetch('/submitttb', {
+                   method: "POST",
+                   body: requestBody,
+               });
+               /**
+               if (response.ok) {
+                   
+                   //document.load("/user/classcode")
+                  
+                   const xhr = new XMLHttpRequest();
+                   const container = document.getElementById("classcodeinputfield");
+                   container.innerHTML = "please say hello"
+                   
+                   xhr.onload = function () {
+                       if (this.status === 200) {
+                           console.log("come to here");
+                           
+                           container.innerHTML = xhr.responseText;
+                       } else {
+                           console.warn("Oops");
+                       }
+                   }
+                   xhr.open("post", "/user/classcode");
+                   xhr.send(JSON.stringify({ CDept: document.getElementById("classdep").value }))
+                   
+                   
+               }
+               **/
+       
     }
     function createlessoninput(value) {
         console.log(value);

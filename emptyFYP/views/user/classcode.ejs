@@ -1,5 +1,6 @@
 <div id ="classcodefile">
-    <%if (typeof allCCodelist !='undefined' ){%>
+    <% var booboo = typeof allCCodelist;
+    if (booboo != "undefined"){%>
     <label for="classdep">Please input your class's code&nbsp;:&nbsp;</label>
     <select name="classdep" id="classdep" onchange="createclassscetion(value)">
         <%=console.log(allCCodelist +" sure this is not undefined")%>
@@ -12,7 +13,7 @@
                     <% })%>
     </select>
 
-    <%}%>
+    <%}else{console.log(booboo)}%>
 </div>
 
 asdfas
