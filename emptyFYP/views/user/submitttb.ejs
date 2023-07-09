@@ -1,0 +1,55 @@
+<div class="Pagetitle">This is TimeTable Submission Page</div>
+<br><br>
+<form action="/submitttb" method="post" onsubmit="submitform(this);return false;">
+    <label for="numofclass">Please input your total number of classes of this semester:&nbsp;</label>
+    <select name="numofclass" id="numofclass" onchange="createlessoninput(value)">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </select>
+    <br>
+    <div id="allclassinputfield">
+        <div id="classinputfield">
+            <label for="classdep">Please input your class's department code:&nbsp;</label>
+            <select name="classdep" id="classdep">
+                <% const deptlist=[]; 
+                    const classlist=[];
+                allclasslist.forEach( function(classlist) { 
+                    if(deptlist.length==0){  
+                        deptlist.push(classlist.CDept);
+                     }else{ 
+                        const filterObj=deptlist.filter((e)=> e == classlist.CDept);
+                        if(filterObj[0] == undefined){deptlist.push(classlist.CDept);}
+                     }
+                    %>
+                    <% });%>
+                        <% deptlist.forEach( function(list) { %>
+                            <option value="<%= list %>">
+                                <%=list %>
+                            </option>
+                            <% })%>
+
+
+
+
+            </select>
+        </div>
+    </div>
+</form>
+
+<script>
+    async function createlessoninput(value) {
+        console.log(value);
+        document.getElementById("allclassinputfield").innerHTML = "";
+
+    }
+    function submitform(formElem) {
+        console.log(formElem);
+    }
+</script>

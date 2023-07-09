@@ -26,7 +26,12 @@ insert into allnotice values("nid0001","admin","","2023-07-07 11:21:42","title1"
 insert into allnotice values("nid0002","tid00001","",now(),"title2","Testing2");
 insert into allnotice values("nid0003","tid00002","",now(),"title3","Testing3");
 
-insert into class values("COMP1005","00001","COMP100500001","RM101","MON","08:30","09:20");
-insert into class values("COMP1005","10001","COMP100510001","RM101","MON","08:30","09:20");
-insert into class values("COMP1005","10002","COMP100510002","RM101","TUE","09:00","09:20");
-insert into class values("COMP1005","10003","COMP100510003","RM101","MON","09:30","10:20");
+insert into allclass values("COMP","1005","00001","","Campus A","RM101","MON","08:30","09:20");
+insert into allclass values("COMP","1005","10001","","Campus A","RM101","MON","10:30","12:20");
+insert into allclass values("COMP","1005","10002","","Campus A","RM101","TUE","09:00","09:20");
+insert into allclass values("COMP","1005","10003","","Campus A","RM101","MON","09:30","10:20");
+
+insert into allclass values("COMP","2005","00001","","Campus A","RM101","FRI","08:30","09:20");
+insert into allclass values("COMP","2005","10001","","Campus B","RM101","TUE","10:30","12:20");
+insert into allclass values("COMP","2005","10002","","Campus B","RM103","WED","09:00","09:20");
+insert into allclass values("COMP","2005","10003","","Campus A","RM101","THU","09:30","10:20");

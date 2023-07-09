@@ -3,7 +3,7 @@
 DROP TABLE IF EXISTS allusers;
 DROP TABLE IF EXISTS student;
 DROP TABLE IF EXISTS supervisor;
-DROP TABLE IF EXISTS class;
+DROP TABLE IF EXISTS allclass;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS student_take_course;
@@ -43,12 +43,14 @@ states		varchar(20),
 errortime	int,
 PRIMARY key (tid));
 
-create table class(
-CCode		varchar(10) Not null,
-CSecCode	varchar(10) not null,
+create table allclass(
+CDept		varchar(10) Not null,
+CCode		varchar(10)  Not null,
+CSecCode	varchar(10)  not null,
 CID			varchar(20) not null,
+Campus		Varchar(10) not null,
 RID			varchar(10) not null,
-weekday 	varchar(10) not null,
+weekdays 	varchar(10) not null,
 startTime	time,
 endTime		time,
 Check (endTime>startTime),
@@ -121,15 +123,15 @@ primary key (NID)
 
 delimiter |
 
-CREATE TRIGGER testref BEFORE INSERT ON class
+CREATE TRIGGER testref BEFORE INSERT ON allclass
   FOR EACH ROW
   BEGIN
   declare stringstring  varchar(8000);
   declare countcount integer;
-  set stringstring = new.cid;
+  set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode);
   set countcount =0;
-  select count(*) into countcount from class 
-  where rid = new.rid and weekday = new.weekday and (starttime <= new.starttime and endtime >= new.starttime);
+  select count(*) into countcount from allclass 
+  where (rid = new.rid and campus = new.campus) and weekdays = new.weekdays and (starttime <= new.starttime and endtime >= new.starttime);
   if countcount >0 then
     set new.rid ="empty";
     END IF;
@@ -186,3 +188,4 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
    END;
   |
 delimiter ;
+
