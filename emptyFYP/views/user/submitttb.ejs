@@ -15,38 +15,47 @@
     </select>
     <br>
     <div id="allclassinputfield">
-        <div id="classinputfield">
-            <label for="classdep">Please input your class's department code:&nbsp;</label>
-            <select name="classdep" id="classdep">
-                <% const deptlist=[]; 
-                    const classlist=[];
-                allclasslist.forEach( function(classlist) { 
-                    if(deptlist.length==0){  
-                        deptlist.push(classlist.CDept);
-                     }else{ 
-                        const filterObj=deptlist.filter((e)=> e == classlist.CDept);
+        <div id="singleclassinfo" class="singleclassinfo">
+            <div id="deptinputfield" class="singleclassinfocontent">
+                <label for="classdep">Please input your class's department code:&nbsp;</label>
+                <select name="classdep" id="classdep" onchange="createclasscode(value)">
+                    <option value="">---Please Select---</option>
+                    <% var dept=""; const deptlist=[]; const classlist=[]; 
+                    allclasslist.forEach( function(classlist) {
+                        if(deptlist.length==0){ deptlist.push(classlist.CDept); }else{ const
+                        filterObj=deptlist.filter((e)=> e == classlist.CDept);
                         if(filterObj[0] == undefined){deptlist.push(classlist.CDept);}
-                     }
-                    %>
-                    <% });%>
-                        <% deptlist.forEach( function(list) { %>
-                            <option value="<%= list %>">
-                                <%=list %>
-                            </option>
-                            <% })%>
-
-
-
-
-            </select>
+                        }
+                        %>
+                        <% });%>
+                            <% deptlist.forEach( function(list) { %>
+                                <option value="<%=list%>">
+                                    <%=list %>
+                                </option>
+                                <% })%>
+                </select>
+            </div>
+            <div id="classcodeinputfield" class="singleclassinfocontent">
+                <label for="classcode">Please input your class's code:&nbsp;</label>
+               
+                <div id="classcode"></div>
+            </div>
         </div>
     </div>
 </form>
 
 <script>
-    async function createlessoninput(value) {
+    async function createclasscode(value) {
+        location.assign("/user/submitttb/"+value);
+        console.log("creat class code request now")
+        document.getElementById("classcode").innerHTML = value;
+        var response = await fetch('/submitttb/'+value, {
+                method: "GET",
+            });
+    }
+    function createlessoninput(value) {
         console.log(value);
-        document.getElementById("allclassinputfield").innerHTML = "";
+        //document.getElementById("allclassinputfield").innerHTML = allclasslist;
 
     }
     function submitform(formElem) {
