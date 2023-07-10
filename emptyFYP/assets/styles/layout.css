@@ -209,7 +209,8 @@
 }
 
 .singleclassinfo {
-  height:100px;
+  
+  
  padding: 10px;
   margin: 50px 50px 50px 50px;
   margin-top: 50px;
@@ -225,6 +226,8 @@
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9bc635', endColorstr='#c0ea67', GradientType=1);
   /* IE6-9 fallback on horizontal gradient */
+  display: inline-block;
+  overflow:auto
 }
 
 .singleclassinfocontent{
