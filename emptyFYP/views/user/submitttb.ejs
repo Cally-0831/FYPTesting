@@ -1,6 +1,6 @@
 <div class="Pagetitle">This is TimeTable Submission Page</div>
 <br><br>
-<form action="/submitttb" method="post" onsubmit="submitform(this);return false;">
+<form action="/timetable/submitttb" method="post" onsubmit="submitform(this);return false;">
     <br>
     <div id="allclassinputfield" style="font-size: 20px;">
         <div id="singleclassinfo" class="singleclassinfo">
@@ -40,15 +40,14 @@
 
 <script>
      async function submitform(formElem) {
-        console.log(document.getElementById("classlabsection"))
-        console.log(document.getElementById("classlabsection").value)
+        
         if(document.getElementById("classdep").value == ""){
             return alert("Department Code cannot be empty")
         }else if(document.getElementById("classcode").value == ""){
             return alert("Class Code cannot be empty")
         }else if(document.getElementById("classsection").value == ""){
             return alert("Class Section Code cannot be empty")
-        }else if(document.getElementById("classlabsection").value == ""){
+        }else if(document.getElementById("classlabsection") !=null &&  document.getElementById("classlabsection").value == ""){
             return alert("Class Tutorial Section Code cannot be empty")
         }
 
@@ -59,7 +58,7 @@
             });
             if (response.ok) {
                 
-                location.assign("/home");
+                location.assign("/timetable");
 
             } else if (response.status == 401) {
                 var msg = await response.json();
@@ -78,7 +77,7 @@
     }
 
     function fetch_data(parent_element, child_element, type) {
-        fetch("/get_data?type=" + type + "&parent_value=" + parent_element + "").then(function (response) {
+        fetch("/timetable/submitttb/get_data?type=" + type + "&parent_value=" + parent_element + "").then(function (response) {
             return response.json();
         }).then(function (responseData) {
 

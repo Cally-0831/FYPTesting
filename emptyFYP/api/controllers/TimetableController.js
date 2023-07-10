@@ -34,9 +34,9 @@ module.exports = {
                 var json = JSON.parse(string);
                 deptlist = json;
                 return res.view('user/submitttb', {
-                    
+
                     allDeptlist: deptlist,
-                    
+
                 });
 
             } catch (err) {
@@ -48,8 +48,6 @@ module.exports = {
         });
 
     },
-
- 
 
     getotherfield: async function (req, res, next) {
 
@@ -65,11 +63,11 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-           // console.log('getclassinfo MySQL Connected');
+            // console.log('getclassinfo MySQL Connected');
         });
         var type = req.query.type;
         var search_query = req.query.parent_value;
-       
+
         //console.log(type+"     "+search_query);
         var thisistheline;
         if (type == 'load_code') {
@@ -79,29 +77,29 @@ module.exports = {
 
         if (type == 'load_section') {
             thisistheline = "SELECT DISTINCT CSecCode FROM allclass "
-                + "WHERE CID like \"" + search_query +"_0"+ "\%\"";
+                + "WHERE CID like \"" + search_query + "_0" + "\%\"";
         }
         if (type == 'load_lab') {
             var depcode = search_query.split("_")
             var getlecturesection = search_query.at(-1);
-            
+
             thisistheline = "SELECT CSecCode FROM allclass "
-                + "WHERE CID like \"" + depcode[0]+"_"+"10"+""+getlecturesection + "\%\"";
+                + "WHERE CID like \"" + depcode[0] + "_" + "10" + "" + getlecturesection + "\%\"";
         }
         //console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             var string = JSON.stringify(results);
-                var json = JSON.parse(string);
-               // console.log(json);
-           
+            var json = JSON.parse(string);
+            // console.log(json);
+
             res.json(json);
 
         })
 
     },
 
-    submitclass :  async function(req,res){
-        
+    submitclass: async function (req, res) {
+
         var mysql = require('mysql');
 
         var db = mysql.createConnection({
@@ -118,17 +116,17 @@ module.exports = {
             console.log('submitclass MySQL Connected');
         });
         console.log(req.body);
-        
-        let thisistheline="";
-        if(req.body.classlabsection!= undefined){
-            
-            thisistheline = "insert into alltakecourse values(\""+req.body.classdep +""+req.body.classcode+"_"+req.body.classlabsection+"\",\""+req.session.userid+"\");\n";
-        }else if(req.body.classsection!= ""){
-            thisistheline = "insert into alltakecourse values(\""+req.body.classdep +""+req.body.classcode+"_"+req.body.classsection+"\",\""+req.session.userid+"\");\n";
-       
+
+        let thisistheline = "";
+        if (req.body.classlabsection != undefined) {
+
+            thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+        } else if (req.body.classsection != "") {
+            thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+
         }
 
-         
+
         db.query(thisistheline, function (err, result) {
             if (err) {
 
@@ -138,5 +136,44 @@ module.exports = {
             console.log("1 record inserted");
         });
         return res.json("ok");
+    },
+
+    getpersonalallclass: async function (req, res) {
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log(' getpersonalallclass MySQL Connected');
+        });
+        //console.log(req.body);
+
+        let thisistheline = "select * from alltakecourse where PID=\"" + req.session.userid + "\"";
+        console.log(thisistheline);
+        db.query(thisistheline, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                personallist = json;
+                return res.view('user/timetable', {
+
+                    allpersonallist: personallist,
+
+                });
+
+            } catch (err) {
+                console.log(' getpersonalallclass MySQL Problem'+"    "+err);
+            }
+
+        });
+       // return res.json("ok");
     }
 }

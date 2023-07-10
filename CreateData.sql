@@ -37,3 +37,11 @@ insert into allclass values("COMP","2005","00001","","Campus A","RM101","FRI","0
 insert into allclass values("PHYS","2005","10001","","Campus B","RM101","TUE","10:30","12:20");
 insert into allclass values("COMP","2005","10002","","Campus B","RM103","WED","09:00","09:20");
 insert into allclass values("MATH","2005","10003","","Campus A","RM101","THU","09:30","10:20");
+
+#Yr3S2 ttb
+insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","MON","10:30","12:20");
+insert into allclass values("COMP","4025","00001","","Sin Hang","CEC911","FRI","11:30","13:20");
+insert into allclass values("COMP","4025","10001","","Sin Hang","FSC901C","MON","12:30","14:20");
+insert into allclass values("GCAP","3205","00001","","AAB","AAB610","TUE","09:30","12:20");
+insert into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","THU","08:30","11:20");
+insert into allclass values("COMP","4096","00001","","Sin Hang","LMC509","FRI","14:30","17:20");

@@ -1,0 +1,28 @@
+<div class="Pagetitle">
+    <%=req.session.username%>'s TimeTable
+</div>
+<a href="/timetable/submitttb">
+    <button class="buttonlogout">Add Class</button>
+</a>
+<br><br>
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
+
+    <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
+        <tr>
+            <td>
+                <%=stringstring[0]%>
+            </td>
+            <td>
+                <%=stringstring[1]%>
+            </td>
+        </tr>
+        <%})%>
+
+</table>
+
+
+<script>
+
+</script>
