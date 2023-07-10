@@ -16,72 +16,86 @@
     <br>
     <div id="allclassinputfield">
         <div id="singleclassinfo" class="singleclassinfo">
-            
+
             <div id="deptinputfield" class="singleclassinfocontent">
                 <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
-                <select name="classdep" id="classdep" onchange="createclasscode(value)">
+                <select name="classdep" id="classdep" >
                     <option value="">---Please Select---</option>
 
-                    <%allClasslist.forEach( function(list) { %>
-                        <option value="<%=list.CSecCode %>">
-                            <%=list.CSecCode %>
+                    <%allDeptlist.forEach( function(list) { %>
+                        <option value="<%=list.CDept%>">
+                            <%=list.CDept%>
                         </option>
                         <% })%>
                 </select>
             </div>
             <div id="codeinputfield" class="singleclassinfocontent">
-               
-                    <%- include('../user/classcode') %>
-               
+                <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
+                <select name="classcode" id="classcode">
+                    <option value="">---Please Select---</option>
+
+                </select>
+            </div>
+            <div id="sectioninputfield" class="singleclassinfocontent">
+                <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
+                <select name="classsection" id="classsection" >
+                    <option value="">---Please Select---</option>
+
+                </select>
             </div>
         </div>
 </form>
 
 <script>
 
-    async function createclassscetion(value) { }
+function _(element)
+{
+    return document.getElementById(element);
+}
 
-    async function createclasscode(value) {
+function fetch_data(parent_element, child_element, type)
+{
+    fetch('/get_data?type='+type+'&parent_value='+parent_element+'').then(function(response){
+        return response.json();
+    }).then(function(responseData){
+
+        var html = '';
+
+        if(type == 'load_code')
+        {
+            html = '<option value="">Select Code</option>';
+            for(var count = 0; count < responseData.length; count++)
+        {
+            html += '<option value="'+responseData[count].CCode+'">'+responseData[count].CCode+'</option>';
+        }
+        }
+
+        if(type == 'load_section')
+        {
+            html = '<option value="">Select Section</option>';
+            for(var count = 0; count < responseData.length; count++)
+        {
+            html += '<option value="'+responseData[count].CSecCode+'">'+responseData[count].CSecCode+'</option>';
+        }
+        }
+
         
-               var requestBody = JSON.stringify({ CDept: document.getElementById("classdep").value });
-               console.log(requestBody)
-               console.log("creat class code request now " + document.getElementById("classdep").value)
-               var response = await fetch('/submitttb', {
-                   method: "POST",
-                   body: requestBody,
-               });
-               /**
-               if (response.ok) {
-                   
-                   //document.load("/user/classcode")
-                  
-                   const xhr = new XMLHttpRequest();
-                   const container = document.getElementById("classcodeinputfield");
-                   container.innerHTML = "please say hello"
-                   
-                   xhr.onload = function () {
-                       if (this.status === 200) {
-                           console.log("come to here");
-                           
-                           container.innerHTML = xhr.responseText;
-                       } else {
-                           console.warn("Oops");
-                       }
-                   }
-                   xhr.open("post", "/user/classcode");
-                   xhr.send(JSON.stringify({ CDept: document.getElementById("classdep").value }))
-                   
-                   
-               }
-               **/
-       
-    }
-    function createlessoninput(value) {
-        console.log(value);
-        //document.getElementById("allclassinputfield").innerHTML = allclasslist;
 
-    }
-    function submitform(formElem) {
-        console.log(formElem);
-    }
+        document.getElementById(child_element).innerHTML = html;
+    });
+}
+
+_('classdep').onchange = function(){
+
+    fetch_data(document.getElementById('classdep').value, 'classcode', 'load_code');
+
+};
+
+_('classcode').onchange = function(){
+
+    fetch_data(document.getElementById('classdep').value+""+document.getElementById('classcode').value, 'classsection', 'load_section');
+
+};
+
+
 </script>

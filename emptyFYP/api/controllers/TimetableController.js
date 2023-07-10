@@ -5,8 +5,8 @@ module.exports = {
     ccodelist: {},
     allClassentry: {},
 
-  
-    
+
+
 
     getallclass: async function (req, res) {
 
@@ -26,15 +26,16 @@ module.exports = {
             }
             console.log('getallclass MySQL Connected');
         });
-        let thisistheline = "select * from allclass";
-var newdeptlist = [];
+        let thisistheline = "select distinct CDept from allclass";
+
         db.query(thisistheline, (err, results) => {
             try {
 
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 deptlist = json;
-                allClassentry = json;
+                /**
+                 * allClassentry = json;
 
                 const distinct = (value ,index,self)=>{
                     return self.indexOf(value) === index;
@@ -53,15 +54,16 @@ var newdeptlist = [];
                  });
                  const distinctcode =  allcourselistlist.filter(distinct);
                  console.log("distinct course list    "+distinctcode);
+ */
 
 
-                
+
                 allDeptlist = deptlist;
                 //console.log('>> classlist: ', allDeptlist);
-                return res.view('user/submitttb', {
-                    allClasslist : allClassentry,
-                    allDeptlist: distinctdept,
-                 //   allCCodelist: distinctcode
+                return res.render('user/submitttb', {
+                    //  allClasslist : allClassentry,
+                    allDeptlist: deptlist,
+                    //   allCCodelist: distinctcode
                 });
 
             } catch (err) {
@@ -105,7 +107,7 @@ var newdeptlist = [];
                 console.log('>> ccodelist: ', ccodelist);
                 res.body = req.body;
                 return res.view('user/classcode', {
-                //    allDeptlist: allDeptlist,
+                    //    allDeptlist: allDeptlist,
                     allCCodelist: ccodelist
                 });
             } catch (err) {
@@ -113,10 +115,49 @@ var newdeptlist = [];
 
             }
 
+        })
+
+
+    },
+
+    getotherfield: async function (req, res, next) {
+
+        var mysql = require('mysql');
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('getclassinfo MySQL Connected');
+        });
+        var type = req.query.type;
+        var search_query = req.query.parent_value;
+        console.log(type+"     "+search_query);
+        var thisistheline;
+        if (type == 'load_code') {
+            thisistheline = "SELECT DISTINCT CCode FROM allclass "
+                + "WHERE CDept = \"" + search_query + "\"";
         }
 
-        )
+        if (type == 'load_section') {
+            thisistheline = "SELECT DISTINCT CSecCode FROM allclass "
+                + "WHERE CID like \"" + search_query + "\%\"";
+        }
+        console.log(thisistheline);
+        db.query(thisistheline, (err, results) => {
+            var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                console.log(json);
+           
+            res.json(json);
 
+        })
 
-    }
+    },
 }
