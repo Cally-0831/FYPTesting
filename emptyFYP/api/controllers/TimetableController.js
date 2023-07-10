@@ -65,12 +65,12 @@ module.exports = {
                 console.log("Database Connection Failed !!!", err);
                 return;
             }
-            console.log('getclassinfo MySQL Connected');
+           // console.log('getclassinfo MySQL Connected');
         });
         var type = req.query.type;
         var search_query = req.query.parent_value;
        
-        console.log(type+"     "+search_query);
+        //console.log(type+"     "+search_query);
         var thisistheline;
         if (type == 'load_code') {
             thisistheline = "SELECT DISTINCT CCode FROM allclass "
@@ -88,15 +88,55 @@ module.exports = {
             thisistheline = "SELECT CSecCode FROM allclass "
                 + "WHERE CID like \"" + depcode[0]+"_"+"10"+""+getlecturesection + "\%\"";
         }
-        console.log(thisistheline);
+        //console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             var string = JSON.stringify(results);
                 var json = JSON.parse(string);
-                console.log(json);
+               // console.log(json);
            
             res.json(json);
 
         })
 
     },
+
+    submitclass :  async function(req,res){
+        
+        var mysql = require('mysql');
+
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log('submitclass MySQL Connected');
+        });
+        console.log(req.body);
+        
+        let thisistheline="";
+        if(req.body.classlabsection!= undefined){
+            
+            thisistheline = "insert into alltakecourse values(\""+req.body.classdep +""+req.body.classcode+"_"+req.body.classlabsection+"\",\""+req.session.userid+"\");\n";
+        }else if(req.body.classsection!= ""){
+            thisistheline = "insert into alltakecourse values(\""+req.body.classdep +""+req.body.classcode+"_"+req.body.classsection+"\",\""+req.session.userid+"\");\n";
+       
+        }
+
+         
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+
+                res.status(401).json("Error happened when excuting : " + thisistheline);
+
+            };
+            console.log("1 record inserted");
+        });
+        return res.json("ok");
+    }
 }

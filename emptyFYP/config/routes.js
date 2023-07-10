@@ -35,10 +35,9 @@ module.exports.routes = {
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
   'GET /submitttb': "TimetableController.getallclass",
   'GET /get_data': "TimetableController.getotherfield",
-  //'POST /user/classcode': "TimetableController.getccode",
+  'POST /submitttb': "TimetableController.submitclass",
   
-  //"GET /submitttb" : {view :"user/submitttb"},
-
+  
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",

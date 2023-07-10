@@ -11,10 +11,11 @@ INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 
 
 #sample data
-INSERT INTO  student_take_course VALUES("s01","c01");
+#INSERT INTO  alltakecourse VALUES("COMP1005_10101","sid11111");
+#insert into alltakecourse values("COMP1005_00001","sid11111");
 insert into allrequestfromsupervisor values("askhjdfoasdjfi","tid00001","2023-04-03","00:00", "14:00");
 
-insert into student_take_course values("COMP100500001","111");
+
 insert into classroom 	values("Campus A","RM101","Open");
 insert into classroom 	values("Campus B","RM102","Open");
 insert into classroom 	values("Campus A","RM102","Open");

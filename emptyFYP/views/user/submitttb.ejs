@@ -1,20 +1,8 @@
 <div class="Pagetitle">This is TimeTable Submission Page</div>
 <br><br>
 <form action="/submitttb" method="post" onsubmit="submitform(this);return false;">
-    <label for="numofclass">Please input your total number of classes of this semester:&nbsp;</label>
-    <select name="numofclass" id="numofclass" onchange="createlessoninput(value)">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-    </select>
     <br>
-    <div id="allclassinputfield">
+    <div id="allclassinputfield" style="font-size: 20px;">
         <div id="singleclassinfo" class="singleclassinfo">
 
             <div id="deptinputfield" class="singleclassinfocontent">
@@ -45,10 +33,45 @@
             <div id="labsectioninputfield" class="singleclassinfocontent">
 
             </div>
+            <button class="buttonlogout" type="submit is-success" >Add Class</button>
+
         </div>
 </form>
 
 <script>
+     async function submitform(formElem) {
+        console.log(document.getElementById("classlabsection"))
+        console.log(document.getElementById("classlabsection").value)
+        if(document.getElementById("classdep").value == ""){
+            return alert("Department Code cannot be empty")
+        }else if(document.getElementById("classcode").value == ""){
+            return alert("Class Code cannot be empty")
+        }else if(document.getElementById("classsection").value == ""){
+            return alert("Class Section Code cannot be empty")
+        }else if(document.getElementById("classlabsection").value == ""){
+            return alert("Class Tutorial Section Code cannot be empty")
+        }
+
+        try {
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.ok) {
+                
+                location.assign("/home");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+     }
 
     function _(element) {
         return document.getElementById(element);
@@ -75,12 +98,12 @@
                 }
             }
 
-            if (type == "load_lab" && responseData.length>0) {
-                html = "<label for=\"classsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
-                    + "<select name=\"classsection\" id=\"classsection\"\>"
+            if (type == "load_lab" && responseData.length > 0) {
+                html = "<label for=\"classlabsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
+                    + "<select name=\"classlabsection\" id=\"classlabsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
                 for (var i = 0; i < responseData.length; i++) {
-                    html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>\"";
+                    html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>";
                 }
                 html += "</select\>"
             }
@@ -92,25 +115,25 @@
     _("classdep").onchange = function () {
         document.getElementById("classcode").value = "";
         document.getElementById("classsection").value = "";
-        if(document.getElementById("classlabsection") != null){
+        if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        
+
         fetch_data(document.getElementById("classdep").value, "classcode", "load_code");
     };
 
     _("classcode").onchange = function () {
         document.getElementById("classsection").value = "";
-        if(document.getElementById("classlabsection") != null){
+        if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
         fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section");
     };
     _("classsection").onchange = function () {
-        if(document.getElementById("classlabsection") != null){
+        if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value+"_" + document.getElementById("classsection").value,"labsectioninputfield", "load_lab");
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab");
     };
 
 

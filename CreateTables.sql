@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS supervisor;
 DROP TABLE IF EXISTS allclass;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS logs;
-DROP TABLE IF EXISTS student_take_course;
+DROP TABLE IF EXISTS alltakecourse;
 DROP TABLE IF EXISTS allrequestfromstudent;
 DROP TABLE IF EXISTS supervisorpairstudent;
 Drop table if exists allrequestfromsupervisor;
@@ -16,6 +16,7 @@ Drop table if exists allnotice;
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
 Drop trigger if exists insertcretorname;
+Drop trigger if exists alltakelect;
 
 create table  allusers(
 allusersname	varchar(100) Not null,
@@ -64,11 +65,11 @@ PRIMARY key (Campus,RID));
 
 create table logs(logstring varchar(8000));
 
-create table Student_take_Course(
+create table alltakecourse(
 CID		varchar(20) not null,
-SID		varchar(10) not null,
+PID		varchar(10) not null,
 CONSTRAINT csid
-primary key (CID,SID)
+primary key (CID,PID)
 );
 
 create table allrequestfromsupervisor(
@@ -185,6 +186,15 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
  select allusersname into stringstring from allusers 
  where new.creator = pid;
  set new.creatorname = stringstring;
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER alltakelect BEFORE INSERT ON alltakecourse
+  FOR EACH ROW
+  BEGIN
+ 
    END;
   |
 delimiter ;
