@@ -37,6 +37,7 @@ module.exports.routes = {
   'GET /get_data': "TimetableController.getotherfield",
   //'POST /user/classcode': "TimetableController.getccode",
   
+  //"GET /submitttb" : {view :"user/submitttb"},
 
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",

@@ -16,6 +16,7 @@
     <br>
     <div id="allclassinputfield">
         <div id="singleclassinfo" class="singleclassinfo">
+
             <div id="deptinputfield" class="singleclassinfocontent">
                 <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
                 <select name="classdep" id="classdep">
@@ -61,20 +62,20 @@
             var html = "";
 
             if (type == "load_code") {
-                html = "<option value=\"\">Select Code</option>";
+                html = "\<option value=\"\"\>---Please Select---</option\>";
                 for (var i = 0; i < responseData.length; i++) {
                     html += "<option value=\"" + responseData[i].CCode + "\">" + responseData[i].CCode + "</option>";
                 }
             }
 
             if (type == "load_section") {
-                html = "<option value=\"\">Select Section</option>";
+                html = "\<option value=\"\"\>---Please Select---</option\>";
                 for (var i = 0; i < responseData.length; i++) {
                     html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>";
                 }
             }
 
-            if (type == "load_lab" && responseData.length > 0) {
+            if (type == "load_lab" && responseData.length>0) {
                 html = "<label for=\"classsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
                     + "<select name=\"classsection\" id=\"classsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
@@ -89,14 +90,27 @@
     }
 
     _("classdep").onchange = function () {
+        document.getElementById("classcode").value = "";
+        document.getElementById("classsection").value = "";
+        if(document.getElementById("classlabsection") != null){
+            document.getElementById("classlabsection").value = "";
+        }
+        
         fetch_data(document.getElementById("classdep").value, "classcode", "load_code");
     };
 
     _("classcode").onchange = function () {
+        document.getElementById("classsection").value = "";
+        if(document.getElementById("classlabsection") != null){
+            document.getElementById("classlabsection").value = "";
+        }
         fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section");
     };
     _("classsection").onchange = function () {
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab");
+        if(document.getElementById("classlabsection") != null){
+            document.getElementById("classlabsection").value = "";
+        }
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value+"_" + document.getElementById("classsection").value,"labsectioninputfield", "load_lab");
     };
 
 
