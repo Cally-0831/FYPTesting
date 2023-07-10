@@ -21,7 +21,31 @@
         <%})%>
 
 </table>
-
+<br><Br><br>
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:center;"></th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">MON</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">TUE</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">WED</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">THU</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">FRI</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">SAT</th>
+    
+    <tr>
+        <td>08:30</td>
+        <% console.log(allpersonallist);
+         for(var i = 0 ; i < allpersonallist.length;i++){
+            console.log(allpersonallist[i].weekdays == i+1)%>
+          
+            <%if(allpersonallist[i].startTime =="08:30:00"){%>
+                <td><%=allpersonallist[i].CID%></td>  
+                <%}else{%>
+                <td></td> 
+            <%}}%>
+       
+    </tr>
+  
+</table>
 
 <script>
 
