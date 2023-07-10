@@ -27,9 +27,10 @@ insert into allnotice values("nid0002","tid00001","",now(),"title2","Testing2");
 insert into allnotice values("nid0003","tid00002","",now(),"title3","Testing3");
 
 insert into allclass values("COMP","1005","00001","","Campus A","RM101","MON","08:30","09:20");
-insert into allclass values("COMP","1005","10001","","Campus A","RM101","MON","10:30","12:20");
-insert into allclass values("COMP","1005","10002","","Campus A","RM101","TUE","09:00","09:20");
-insert into allclass values("COMP","1005","10003","","Campus A","RM101","MON","09:30","10:20");
+insert into allclass values("COMP","1005","00002","","Campus B","RM101","MON","08:30","09:20");
+insert into allclass values("COMP","1005","10101","","Campus A","RM101","MON","10:30","12:20");
+insert into allclass values("COMP","1005","10102","","Campus A","RM101","TUE","09:00","09:20");
+insert into allclass values("COMP","1005","10201","","Campus A","RM101","MON","09:30","10:20");
 
 insert into allclass values("COMP","2005","00001","","Campus A","RM101","FRI","08:30","09:20");
 insert into allclass values("COMP","2005","10001","","Campus B","RM101","TUE","10:30","12:20");

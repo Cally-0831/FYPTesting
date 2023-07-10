@@ -138,6 +138,7 @@ module.exports = {
         });
         var type = req.query.type;
         var search_query = req.query.parent_value;
+       
         console.log(type+"     "+search_query);
         var thisistheline;
         if (type == 'load_code') {
@@ -147,7 +148,14 @@ module.exports = {
 
         if (type == 'load_section') {
             thisistheline = "SELECT DISTINCT CSecCode FROM allclass "
-                + "WHERE CID like \"" + search_query + "\%\"";
+                + "WHERE CID like \"" + search_query +"_0"+ "\%\"";
+        }
+        if (type == 'load_lab') {
+            var depcode = search_query.split("_")
+            var getlecturesection = search_query.at(-1);
+            console.log(depcode);
+            thisistheline = "SELECT CSecCode FROM allclass "
+                + "WHERE CID like \"" + depcode[0]+"_"+"10"+""+getlecturesection + "\%\"";
         }
         console.log(thisistheline);
         db.query(thisistheline, (err, results) => {

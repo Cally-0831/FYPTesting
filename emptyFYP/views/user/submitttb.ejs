@@ -16,10 +16,9 @@
     <br>
     <div id="allclassinputfield">
         <div id="singleclassinfo" class="singleclassinfo">
-
             <div id="deptinputfield" class="singleclassinfocontent">
                 <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
-                <select name="classdep" id="classdep" >
+                <select name="classdep" id="classdep">
                     <option value="">---Please Select---</option>
 
                     <%allDeptlist.forEach( function(list) { %>
@@ -38,64 +37,67 @@
             </div>
             <div id="sectioninputfield" class="singleclassinfocontent">
                 <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
-                <select name="classsection" id="classsection" >
+                <select name="classsection" id="classsection">
                     <option value="">---Please Select---</option>
-
                 </select>
+            </div>
+            <div id="labsectioninputfield" class="singleclassinfocontent">
+
             </div>
         </div>
 </form>
 
 <script>
 
-function _(element)
-{
-    return document.getElementById(element);
-}
+    function _(element) {
+        return document.getElementById(element);
+    }
 
-function fetch_data(parent_element, child_element, type)
-{
-    fetch('/get_data?type='+type+'&parent_value='+parent_element+'').then(function(response){
-        return response.json();
-    }).then(function(responseData){
+    function fetch_data(parent_element, child_element, type) {
+        fetch("/get_data?type=" + type + "&parent_value=" + parent_element + "").then(function (response) {
+            return response.json();
+        }).then(function (responseData) {
 
-        var html = '';
+            var html = "";
 
-        if(type == 'load_code')
-        {
-            html = '<option value="">Select Code</option>';
-            for(var count = 0; count < responseData.length; count++)
-        {
-            html += '<option value="'+responseData[count].CCode+'">'+responseData[count].CCode+'</option>';
-        }
-        }
+            if (type == "load_code") {
+                html = "<option value=\"\">Select Code</option>";
+                for (var i = 0; i < responseData.length; i++) {
+                    html += "<option value=\"" + responseData[i].CCode + "\">" + responseData[i].CCode + "</option>";
+                }
+            }
 
-        if(type == 'load_section')
-        {
-            html = '<option value="">Select Section</option>';
-            for(var count = 0; count < responseData.length; count++)
-        {
-            html += '<option value="'+responseData[count].CSecCode+'">'+responseData[count].CSecCode+'</option>';
-        }
-        }
+            if (type == "load_section") {
+                html = "<option value=\"\">Select Section</option>";
+                for (var i = 0; i < responseData.length; i++) {
+                    html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>";
+                }
+            }
 
-        
+            if (type == "load_lab" && responseData.length > 0) {
+                html = "<label for=\"classsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
+                    + "<select name=\"classsection\" id=\"classsection\"\>"
+                    + "\<option value=\"\"\>---Please Select---</option\>"
+                for (var i = 0; i < responseData.length; i++) {
+                    html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>\"";
+                }
+                html += "</select\>"
+            }
 
-        document.getElementById(child_element).innerHTML = html;
-    });
-}
+            document.getElementById(child_element).innerHTML = html;
+        });
+    }
 
-_('classdep').onchange = function(){
+    _("classdep").onchange = function () {
+        fetch_data(document.getElementById("classdep").value, "classcode", "load_code");
+    };
 
-    fetch_data(document.getElementById('classdep').value, 'classcode', 'load_code');
-
-};
-
-_('classcode').onchange = function(){
-
-    fetch_data(document.getElementById('classdep').value+""+document.getElementById('classcode').value, 'classsection', 'load_section');
-
-};
+    _("classcode").onchange = function () {
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section");
+    };
+    _("classsection").onchange = function () {
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab");
+    };
 
 
 </script>
