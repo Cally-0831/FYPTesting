@@ -140,7 +140,7 @@ module.exports = {
 
     getpersonalallclass: async function (req, res) {
         var mysql = require('mysql');
-
+        const date = require('date-and-time')
         var db = mysql.createConnection({
             host: "localhost",
             user: "root",
@@ -156,24 +156,24 @@ module.exports = {
         });
         //console.log(req.body);
 
-        let thisistheline = "select * from alltakecourse where PID=\"" + req.session.userid + "\"";
-        console.log(thisistheline);
+        let thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime from alltakecourse inner join allclass on allclass.cid = alltakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+       // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
                 return res.view('user/timetable', {
-
+                    date: date,
                     allpersonallist: personallist,
 
                 });
 
             } catch (err) {
-                console.log(' getpersonalallclass MySQL Problem'+"    "+err);
+               // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
             }
 
         });
-       // return res.json("ok");
+        // return res.json("ok");
     }
 }

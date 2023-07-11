@@ -11,10 +11,10 @@
 
     <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
         <tr>
-            <td>
+            <td style="font-size:20px;text-align: center;vertical-align:center;">
                 <%=stringstring[0]%>
             </td>
-            <td>
+            <td style="font-size:20px;text-align: center;vertical-align:center;">
                 <%=stringstring[1]%>
             </td>
         </tr>
@@ -30,21 +30,476 @@
     <th style="font-size:20px;text-align: center;vertical-align:center;">THU</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">FRI</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">SAT</th>
-    
+
     <tr>
-        <td>08:30</td>
-        <% console.log(allpersonallist);
-         for(var i = 0 ; i < allpersonallist.length;i++){
-            console.log(allpersonallist[i].weekdays == i+1)%>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">08:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+           
+            let currenttime =new Date();
+            currenttime.setHours(8, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(9,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+           
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+           
           
-            <%if(allpersonallist[i].startTime =="08:30:00"){%>
-                <td><%=allpersonallist[i].CID%></td>  
-                <%}else{%>
-                <td></td> 
-            <%}}%>
-       
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+             
+                        
+
     </tr>
-  
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">09:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+          
+            let currenttime =new Date();
+            currenttime.setHours(9, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(10,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+           
+          
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }arraylist = new Array(6);%>
+
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">10:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+          
+            let currenttime =new Date();
+            currenttime.setHours(10, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(11,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+             
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">11:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+            
+            let currenttime =new Date();
+            currenttime.setHours(11, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(12,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+            
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">12:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+           
+            let currenttime =new Date();
+            currenttime.setHours(12, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(13,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+            
+          
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">13:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+            
+            let currenttime =new Date();
+            currenttime.setHours(13, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(14,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+            
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">14:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+            
+            let currenttime =new Date();
+            currenttime.setHours(14, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(15,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+ 
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">15:30</td>
+        <% 
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+          
+            let currenttime =new Date();
+            currenttime.setHours(15, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(16,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+            
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">16:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+           
+            let currenttime =new Date();
+            currenttime.setHours(16, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(17,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+          
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">17:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+            
+            let currenttime =new Date();
+            currenttime.setHours(17, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(18,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
+    <tr>
+        <td style="font-size:20px;text-align: center;vertical-align:center;">18:30</td>
+        <% 
+        var lastbox;
+        var arraylist = new Array(6);
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+           
+            let currenttime =new Date();
+            currenttime.setHours(18, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(19,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); 
+            const classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+           if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+        
+           }
+
+           if(classstart < currenttime && classend >=endend){
+            arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
+           }
+           
+        }for(var x = 0 ; x < 6;x++){
+            if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
+<td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
+           <% }else{%>
+            <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
+           }
+           arraylist = new Array(6);
+           %>
+    </tr>
 </table>
 
 <script>

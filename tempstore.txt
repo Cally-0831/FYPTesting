@@ -1,13 +1,64 @@
- <% var dept=""; const deptlist=[]; const classlist=[]; 
-                    allclasslist.forEach( function(classlist) {
-                        if(deptlist.length==0){ deptlist.push(classlist.CDept); }else{ const
-                        filterObj=deptlist.filter((e)=> e == classlist.CDept);
-                        if(filterObj[0] == undefined){deptlist.push(classlist.CDept);}
-                        }
-                        %>
-                        <% });%>
-                            <% deptlist.forEach( function(list) { %>
-                                <option value="<%=list%>">
-                                    <%=list %>
-                                </option>
-                                <% })%>
+ <% console.log(allpersonallist); 
+        var lastbox;
+        var arraylist;
+        for(var i=0 ; i < allpersonallist.length;i++){ 
+            console.log("\nenterforloop"); 
+            let currenttime =new Date();
+            currenttime.setHours(8, 30, 0, 0); 
+            
+            
+            let endend=new Date();
+            endend.setHours(9,20,0,0) 
+            
+            let classend=new Date(); const
+            classendstr=(allpersonallist[i].endTime).split(":"); 
+            classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
+            
+
+            let classstart=new Date(); const
+            classstartstr=(allpersonallist[i].startTime).split(":"); 
+            classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+
+            console.log(currenttime.toLocaleString("en-GB") +"    "+endend.toLocaleString("en-GB") +"     "+classstart.toLocaleString("en-GB")+"      "+classend.toLocaleString("en-GB"));
+           
+           
+           
+           console.log("check instarttime")
+           console.log(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") );
+             if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){ 
+                 
+                lastbox =allpersonallist[i].weekdays;
+                console.log("check firstone")
+                  console.log(i==0 ); 
+                  console.log("check weekdays & i >0");
+                  console.log(allpersonallist[i].weekdays-1 == i && i!=0)%>
+                <%if(i==0){%>
+                
+                <%console.log("enterforloop weekdays"); %>
+            <%for(var j=0 ; j < allpersonallist[i].weekdays-1;j++){%>
+                
+            <td></td>
+            <%}%>
+                <td><%=allpersonallist[i].CID%></td>
+                <%if(endend == classend){
+                    allpersonallist.shift()
+                }else{
+                    allpersonallist.push(allpersonallist.shift());
+                }%>
+
+                        <%}else if(allpersonallist.weekdays-1 == i && i!=0){%>
+                           
+                            <td><%=allpersonallist[i].CID%></td>
+                            <%if(endend == classend){
+                                allpersonallist.shift()
+                            }else{
+                                allpersonallist.push(allpersonallist.shift());
+                            }%>
+                            <%}%>
+                        
+                        
+                        <%}%>
+                        <%}console.log(allpersonallist)%>
+                        <%for(var x = 0 ; x < 6-lastbox;x++){%>
+                            <td></td>
+                        <%}%>
