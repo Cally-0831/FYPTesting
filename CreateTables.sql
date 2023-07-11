@@ -129,12 +129,23 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
   BEGIN
   declare stringstring  varchar(8000);
   declare countcount integer;
+  declare count22 integer;
+  
   set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode);
   set countcount =0;
+  set count22 =0 ;
   select count(*) into countcount from allclass 
   where (rid = new.rid and campus = new.campus) and weekdays = new.weekdays and (starttime <= new.starttime and endtime >= new.starttime);
+  
+   select count(*) into count22 from allclass
+    where(CID = new.CID) and (weekdays != new.weekdays or starttime != new.startTime or endtime != new.endTime);
+    
   if countcount >0 then
     set new.rid ="empty";
+    END IF;
+    
+    if count22 >0 then
+    set new.cid = concat(new.CDept, new.CCode, '_', new.CSecCode,"_",count22+1);
     END IF;
   END;
   |

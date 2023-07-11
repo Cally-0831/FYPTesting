@@ -40,6 +40,7 @@ insert into allclass values("MATH","2005","10003","","Campus A","RM101","4","09:
 
 #Yr3S2 ttb
 insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","1","10:30","12:20");
+insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","3","08:30","09:20");
 insert into allclass values("COMP","4025","00001","","Sin Hang","CEC911","5","11:30","13:20");
 insert into allclass values("COMP","4025","10001","","Sin Hang","FSC901C","1","12:30","14:20");
 insert into allclass values("GCAP","3205","00001","","AAB","AAB610","2","09:30","12:20");
