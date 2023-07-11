@@ -1,21 +1,25 @@
+var mysql = require('mysql');
+
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting"
+});
+db.connect(async (err) => {
+    if (err) {
+        console.log("Database Connection Failed !!!", err);
+        return;
+    }
+    console.log('MySQL Connected');
+});
+
+
 module.exports = {
 
     listallnotice: async function (req, res) {
         var noticelist;
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            //console.log('list notice MySQL Connected');
-        });
+        
         if (req.session.role == "adm") {
             let thisistheline = "SELECT  NID, allusersname,content,CreateDate,Creatorname,title from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
           //  console.log(thisistheline)
@@ -78,20 +82,7 @@ module.exports = {
 
     addnotice: async function (req, res) {
         console.log(req.body);
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('add notice MySQL Connected');
-        });
+        
         let nid = 'nid';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;

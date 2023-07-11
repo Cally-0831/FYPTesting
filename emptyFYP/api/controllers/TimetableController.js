@@ -26,21 +26,6 @@ module.exports = {
 
     getallclass: async function (req, res) {
 
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('getallclass MySQL Connected');
-        });
         let thisistheline = "select distinct CDept from allclass";
 
         db.query(thisistheline, (err, results) => {
@@ -67,20 +52,7 @@ module.exports = {
 
     getotherfield: async function (req, res, next) {
 
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            // console.log('getclassinfo MySQL Connected');
-        });
+       
         var type = req.query.type;
         var search_query = req.query.parent_value;
 
@@ -116,23 +88,6 @@ module.exports = {
 
     submitclass: async function (req, res) {
 
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('submitclass MySQL Connected');
-        });
-        console.log(req.body);
-
         let thisistheline = "";
         if (req.body.classlabsection != undefined) {
 
@@ -155,21 +110,7 @@ module.exports = {
     },
 
     getpersonalallclass: async function (req, res) {
-        var mysql = require('mysql');
-        const date = require('date-and-time')
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log(' getpersonalallclass MySQL Connected');
-        });
+        
         //console.log(req.body);
         let thisistheline;
 if(req.session.role =="sup"){

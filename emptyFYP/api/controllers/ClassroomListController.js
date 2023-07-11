@@ -1,24 +1,24 @@
+var mysql = require('mysql');
+
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting"
+});
+db.connect(async (err) => {
+    if (err) {
+        console.log("Database Connection Failed !!!", err);
+        return;
+    }
+    console.log('MySQL Connected');
+});
 
 module.exports = {
 
     listclassroom: async function (req, res) {
         var classroomlist;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
-
+        
         let thisistheline = "SELECT * FROM classroom";
 
         db.query(thisistheline, (err, results) => {
@@ -43,20 +43,6 @@ module.exports = {
 
     deleteclassroom: async function (req, res) {
 
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
         let thisistheline = "DELETE FROM classroom WHERE rid= \"" + req.body.RID + "\" and campus = \"" + req.body.Campus + "\"";
         console.log('delete excution');
         console.log(thisistheline);
@@ -77,22 +63,7 @@ module.exports = {
 
     getcampus: async function (req, res) {
         var campuslist;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('get campus MySQL Connected');
-        });
-
+        
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
         console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
@@ -115,23 +86,6 @@ module.exports = {
     },
 
     createnewclassroom: async function (req, res) {
-
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log(' createstudent MySQL Connected');
-        });
-
-
 
         thisistheline = "insert into classroom values(\"" +
             req.body.Campus + "\"\,\""
@@ -160,23 +114,7 @@ module.exports = {
     },
 
     addclassroomtimeslot: async function (req, res) {
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log(' createclassroomtimeslot MySQL Connected');
-        });
-
-
-        let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
+                let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
         reqid = reqid.replace(/ /g, "_");
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -215,21 +153,7 @@ module.exports = {
 
     listalltimeslot: async function (req, res) {
         var timeslotlist;
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-           // console.log(' listalltimeslot MySQL Connected');
-        });
-
+       
         let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
         db.query(thisistheline, function (err, results) {
             if (err) {
@@ -246,22 +170,6 @@ module.exports = {
     },
 
     deletetimeslot: async function (req, res) {
-
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('deleterequest MySQL Connected');
-        });
-        console.log(req.body);
 
         if (req.session.role = "adm") {
             let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
@@ -280,20 +188,7 @@ module.exports = {
     },
 
     getinfobycampus: async function (req, res) {
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('getinfobycampus MySQL Connected');
-        });
+      
         let thisistheline="SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
         db.query(thisistheline, (err, results) => {
             try {
@@ -315,20 +210,7 @@ module.exports = {
             RID: req.params.rid
         };
         var timeslotlist ;
-        var mysql = require('mysql');
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            //console.log('getsingleroomtimeslot MySQL Connected');
-        });
+       
         let thisistheline="SELECT * FROM allclassroomtimeslot where campus = \""+req.params.campus+"\" and RID =\""+req.params.rid+"\" order by startdate,enddate;";
         db.query(thisistheline, (err, results) => {
             try {

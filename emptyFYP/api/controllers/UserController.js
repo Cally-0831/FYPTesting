@@ -1,3 +1,19 @@
+var mysql = require('mysql');
+
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting"
+});
+db.connect(async (err) => {
+    if (err) {
+        console.log("Database Connection Failed !!!", err);
+        return;
+    }
+    //console.log('MySQL Connected');
+});
+
 module.exports = {
 
     login: async function (req, res) {
@@ -15,21 +31,7 @@ module.exports = {
 
         if (!req.body.username || !req.body.pw) return res.status(401).json("Please enter both username and password");
 
-        var mysql = require('mysql');
 
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            //console.log('MySQL Connected');
-        });
 
 
 
@@ -96,21 +98,7 @@ module.exports = {
     submitrequest: async function (req, res) {
         //console.log(req.body);
         if (req.method == "GET") return res.view('user/submitrequest');
-        var mysql = require('mysql');
 
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            //   console.log('MySQL Connected');
-        });
         let reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -168,21 +156,7 @@ module.exports = {
 
         console.log(req.body.length);
 
-        var mysql = require('mysql');
 
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
 
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);

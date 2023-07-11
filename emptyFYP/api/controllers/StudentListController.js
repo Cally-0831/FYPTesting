@@ -1,22 +1,25 @@
+var mysql = require('mysql');
+
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting"
+});
+db.connect(async (err) => {
+    if (err) {
+        console.log("Database Connection Failed !!!", err);
+        return;
+    }
+    console.log('MySQL Connected');
+});
+
+
 module.exports = {
 
     liststudent: async function (req, res) {
         var stdlist;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
+       
 
         let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
@@ -44,21 +47,7 @@ module.exports = {
 
     gettopic: async function (req, res) {
         var topiclist;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
+        
 
         let thisistheline = "SELECT  DISTINCT topic FROM supervisorpairstudent where supervisorpairstudent.tid =\"" + req.session.userid + "\"\;";
 
@@ -83,22 +72,7 @@ module.exports = {
 
     readsinglestudent: async function (req, res) {
         var studentresult;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
-        console.log(req.params.sid);
+       
 
         let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
@@ -127,21 +101,7 @@ module.exports = {
 
     deletestudent: async function (req, res) {
         var studentresult;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log('MySQL Connected');
-        });
+        
 
         let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.sid + "\"\n";
         console.log('delete excution');
@@ -165,21 +125,7 @@ module.exports = {
 
     createnewstudent: async function (req, res) {
         var stdlist;
-        var mysql = require('mysql');
-
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log(' createstudent MySQL Connected');
-        });
+       
         let pw = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
