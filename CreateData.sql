@@ -27,25 +27,25 @@ insert into allnotice values("nid0001","admin","","2023-07-07 11:21:42","title1"
 insert into allnotice values("nid0002","tid00001","",now(),"title2","Testing2");
 insert into allnotice values("nid0003","tid00002","",now(),"title3","Testing3");
 
-insert into allclass values("COMP","1005","00001","","Campus A","RM101","1","08:30","09:20");
-insert into allclass values("COMP","1005","00002","","Campus B","RM101","1","08:30","09:20");
-insert into allclass values("COMP","1005","10101","","Campus A","RM101","1","10:30","12:20");
-insert into allclass values("COMP","1005","10102","","Campus A","RM101","2","09:00","09:20");
-insert into allclass values("COMP","1005","10201","","Campus A","RM101","1","09:30","10:20");
+insert into allclass values("COMP","1005","00001","","Campus A","RM101","1","08:30","09:20","0");
+insert into allclass values("COMP","1005","00002","","Campus B","RM101","1","08:30","09:20","0");
+insert into allclass values("COMP","1005","10101","","Campus A","RM101","1","10:30","12:20","0");
+insert into allclass values("COMP","1005","10102","","Campus A","RM101","2","09:00","09:20","0");
+insert into allclass values("COMP","1005","10201","","Campus A","RM101","1","09:30","10:20","0");
 
-insert into allclass values("COMP","2005","00001","","Campus A","RM101","5","08:30","09:20");
-insert into allclass values("PHYS","2005","10001","","Campus B","RM101","2","10:30","12:20");
-insert into allclass values("COMP","2005","10002","","Campus B","RM103","3","09:00","09:20");
-insert into allclass values("MATH","2005","10003","","Campus A","RM101","4","09:30","10:20");
+insert into allclass values("COMP","2005","00001","","Campus A","RM101","5","08:30","09:20","0");
+insert into allclass values("PHYS","2005","10001","","Campus B","RM101","2","10:30","12:20","0");
+insert into allclass values("COMP","2005","10002","","Campus B","RM103","3","09:00","09:20","0");
+insert into allclass values("MATH","2005","10003","","Campus A","RM101","4","09:30","10:20","0");
 
 #Yr3S2 ttb
-insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","1","10:30","12:20");
-insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","3","08:30","09:20");
-insert into allclass values("COMP","4025","00001","","Sin Hang","CEC911","5","11:30","13:20");
-insert into allclass values("COMP","4025","10001","","Sin Hang","FSC901C","1","12:30","14:20");
-insert into allclass values("GCAP","3205","00001","","AAB","AAB610","2","09:30","12:20");
-insert into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","4","08:30","11:20");
-insert into allclass values("COMP","4096","00001","","Sin Hang","LMC509","5","14:30","17:20");
+insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","1","10:30","12:20","0");
+insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","3","08:30","09:20","0");
+insert into allclass values("COMP","4025","00001","","Sin Hang","CEC911","5","11:30","13:20","0");
+insert into allclass values("COMP","4025","10001","","Sin Hang","FSC901C","1","12:30","14:20","0");
+insert into allclass values("GCAP","3205","00001","","AAB","AAB610","2","09:30","12:20","0");
+insert into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","4","08:30","11:20","0");
+insert into allclass values("COMP","4096","00001","","Sin Hang","LMC509","5","14:30","17:20","0");
 
 insert into alltakecourse values("COMP4107_00001","tid00001");
 insert into alltakecourse values("COMP4096_00001","tid00001");
@@ -53,3 +53,12 @@ insert into alltakecourse values("COMP4057_00001","tid00001");
 insert into alltakecourse values("COMP4025_00001","tid00001");
 insert into alltakecourse values("COMP4025_10001","tid00001");
 insert into alltakecourse values("GCAP3205_00001","tid00001");
+
+insert into alltakecourse values("COMP4107_00001","sid11111");
+insert into alltakecourse values("COMP4096_00001","sid11111");
+insert into alltakecourse values("COMP4057_00001","sid11111");
+insert into alltakecourse values("COMP4025_00001","sid11111");
+insert into alltakecourse values("COMP4025_10001","sid11111");
+insert into alltakecourse values("GCAP3205_00001","sid11111");
+
+select * from allsupertakecourse

@@ -155,14 +155,21 @@ module.exports = {
             console.log(' getpersonalallclass MySQL Connected');
         });
         //console.log(req.body);
-
-        let thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime from alltakecourse inner join allclass on allclass.cid = alltakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+        let thisistheline;
+if(req.session.role =="sup"){
+      thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\""+req.session.userid+"\" ORDER BY  startTime asc ,weekdays asc";
+      
+}else {
+    thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+      
+}
        // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
+                console.log(personallist)
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,

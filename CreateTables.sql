@@ -7,16 +7,21 @@ DROP TABLE IF EXISTS allclass;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS alltakecourse;
+DROP TABLE IF EXISTS allsupertakecourse;
+DROP TABLE IF EXISTS allstudenttakecourse;
 DROP TABLE IF EXISTS allrequestfromstudent;
 DROP TABLE IF EXISTS supervisorpairstudent;
 Drop table if exists allrequestfromsupervisor;
 Drop table if exists allclassroomtimeslot;
 Drop table if exists allnotice;
+Drop table if exists temptakecourse;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
 Drop trigger if exists insertcretorname;
-Drop trigger if exists alltakelect;
+Drop trigger if exists addlessontimeforoneCode;
+Drop trigger if exists takeallcourseofonecode;
+Drop trigger if exists inputallcourseofonecode;
 
 create table  allusers(
 allusersname	varchar(100) Not null,
@@ -54,6 +59,7 @@ RID			varchar(10) not null,
 weekdays 	integer,
 startTime	time,
 endTime		time,
+lesson		integer default 0,
 Check (endTime>startTime),
 PRIMARY key (CID));
 
@@ -66,6 +72,20 @@ PRIMARY key (Campus,RID));
 create table logs(logstring varchar(8000));
 
 create table alltakecourse(
+CID		varchar(20) not null,
+PID		varchar(10) not null,
+CONSTRAINT csid
+primary key (CID,PID)
+);
+
+create table allsupertakecourse(
+CID		varchar(20) not null,
+PID		varchar(10) not null,
+CONSTRAINT csid
+primary key (CID,PID)
+);
+
+create table allstudenttakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
 CONSTRAINT csid
@@ -129,23 +149,22 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
   BEGIN
   declare stringstring  varchar(8000);
   declare countcount integer;
-  declare count22 integer;
+
   
   set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode);
   set countcount =0;
-  set count22 =0 ;
+  
   select count(*) into countcount from allclass 
   where (rid = new.rid and campus = new.campus) and weekdays = new.weekdays and (starttime <= new.starttime and endtime >= new.starttime);
   
-   select count(*) into count22 from allclass
-    where(CID = new.CID) and (weekdays != new.weekdays or starttime != new.startTime or endtime != new.endTime);
+  
     
   if countcount >0 then
     set new.rid ="empty";
     END IF;
     
-    if count22 >0 then
-    set new.cid = concat(new.CDept, new.CCode, '_', new.CSecCode,"_",count22+1);
+    if new.lesson >0 then
+    set new.cid = concat(new.CDept, new.CCode, '_', new.CSecCode,"_",new.lesson);
     END IF;
   END;
   |
@@ -202,11 +221,77 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
 delimiter ;
 
 delimiter |
-CREATE TRIGGER alltakelect BEFORE INSERT ON alltakecourse
+CREATE TRIGGER addlessontimeforoneCode BEFORE INSERT ON allclass
   FOR EACH ROW
   BEGIN
- 
+  declare countcount integer;
+  declare stringstring  varchar(20);
+  set countcount =0;
+  set stringstring = concat(new.CDept,new.CCode,"_",new.CSecCode,"%");
+   select count(*) into  countcount from allclass
+  where CID like stringstring;
+set new.lesson = countcount;
+if countcount >0 then
+set new.CID = concat(new.CDept,new.CCode,"_",new.CSecCode,"_",countcount);
+ END IF;
    END;
   |
 delimiter ;
+
+delimiter |
+CREATE TRIGGER takeallcourseofonecode after INSERT ON alltakecourse
+  FOR EACH ROW
+  BEGIN
+   declare countcount integer;
+  declare stringstring  varchar(20);
+    declare thisisrole varchar(10);
+  declare x integer;
+  declare issup boolean;
+  set issup = false;
+  set thisisrole ="";
+  set countcount =0;
+  
+select Max(lesson) into  countcount from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%") 
+where alltakecourse.cid  like concat(new.cid,"%");
+select role into thisisrole from allusers where new.pid = pid;
+ if thisisrole="sup" then 
+	set issup = true;
+    END IF;
+    
+ if issup then
+ 
+ if countcount >0 then
+ while countcount >=0 do
+ 
+ if countcount =0 then
+ set stringstring = concat(new.cid);
+ else
+ set stringstring = concat(new.cid,"_",countcount,"");
+ END IF;
+
+insert into allsupertakecourse values(stringstring,new.pid);
+   set countcount= countcount -1;
+   end while;
+else
+insert into allsupertakecourse values(new.cid,new.pid);
+END IF;
+else if !issup then
+
+if countcount >0 then
+ while countcount >0 do
+set stringstring = concat(new.cid,"_",countcount,"");
+insert into allstudenttakecourse values(stringstring,new.pid);
+   set countcount= countcount -1;
+   end while;
+   insert into allstudenttakecourse values(new.cid,new.pid);
+else
+insert into allstudenttakecourse values(new.cid,new.pid);
+END IF;
+   END IF;
+   END IF;
+   END;
+  |
+delimiter ;
+
+
 
