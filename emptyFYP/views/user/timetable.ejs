@@ -1,16 +1,31 @@
-<div class="Pagetitle">
-    <%=req.session.username%>'s TimeTable
-</div>
-
-<a href="/timetable/submitttb">
+<% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
+<% if(allpersonallist[0].confirmation == 0){%>
+    <div class="Pagetitle">
+        <%=req.session.username%>'s TimeTable
+    </div>
+    <a href="/timetable/submitttb">
     <button class="buttonlogout" id="addclass">Add Class</button>
+    <% if(req.session.role=="stu"){%>
+    <button class="buttonlogout" onclick="">Upload Timetable Proof</button>
+<%}%>
+<br>
+<button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+
 </a>
+    
+    <%}else{%>
+        
+        <div class="Pagetitle">
+            <%=req.session.username%>'s Submitted TimeTable
+        </div>
+        <%}%>
+
+
 
 <br>
-    <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
-
+    
 <br><br>
-<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+<table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
@@ -35,14 +50,14 @@
 
 </table>
 <br><Br><br>
-<table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:center;"></th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">MON</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">TUE</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">WED</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">THU</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">FRI</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">SAT</th>
+<table class="table is-bordered is-striped is-hoverable is-halfwidth center">
+    <th class="th"></th>
+    <th class="th">MON</th>
+    <th class="th">TUE</th>
+    <th class="th">WED</th>
+    <th class="th">THU</th>
+    <th class="th">FRI</th>
+    <th class="th">SAT</th>
 
     <tr>
         <td style="font-size:20px;text-align: center;vertical-align:center;">08:30</td>
@@ -547,8 +562,26 @@
 </table>
 
 <script>
-function Submitthisttb(){
+async function Submitthisttb(){
     var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+if(r){
+    
+    var response = await fetch("/timetable", {
+                method: "POST",
+                
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Timetable submitted.");
+                location.assign("/timetable");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+}
 }
 async function deleteclassinput(ccode,cseccode) {
         var r = confirm("Confirm Delete " + ccode +"_"+cseccode+ " ?");

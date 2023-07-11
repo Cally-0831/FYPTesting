@@ -81,6 +81,7 @@ primary key (CID,PID)
 create table allsupertakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
+confirmation boolean ,
 CONSTRAINT csid
 primary key (CID,PID)
 );
@@ -88,6 +89,7 @@ primary key (CID,PID)
 create table allstudenttakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
+confirmation boolean,
 CONSTRAINT csid
 primary key (CID,PID)
 );
@@ -269,23 +271,23 @@ select role into thisisrole from allusers where new.pid = pid;
  set stringstring = concat(new.cid,"_",countcount,"");
  END IF;
 
-insert into allsupertakecourse values(stringstring,new.pid);
+insert into allsupertakecourse values(stringstring,new.pid,false);
    set countcount= countcount -1;
    end while;
 else
-insert into allsupertakecourse values(new.cid,new.pid);
+insert into allsupertakecourse values(new.cid,new.pid,false);
 END IF;
 else if not issup then
 
 if countcount >0 then
- while countcount >0 do
-set stringstring = concat(new.cid,"_",countcount,"");
-insert into allstudenttakecourse values(stringstring,new.pid);
-   set countcount= countcount -1;
-   end while;
-   insert into allstudenttakecourse values(new.cid,new.pid);
+	while countcount >0 do
+		set stringstring = concat(new.cid,"_",countcount,"");
+		insert into allstudenttakecourse values(stringstring,new.pid,false);
+		set countcount= countcount -1;
+	end while;
+	insert into allstudenttakecourse values(new.cid,new.pid,false);
 else
-insert into allstudenttakecourse values(new.cid,new.pid);
+	insert into allstudenttakecourse values(new.cid,new.pid,false);
 END IF;
    END IF;
    END IF;

@@ -33,11 +33,13 @@ module.exports.routes = {
   'GET /notice': "NoticeListController.listallnotice",
   'GET /notice/createnewnotice': { view: 'user/createnewnotice' },
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
+
   'GET /timetable/submitttb': "TimetableController.getallclass",
   'GET /timetable/submitttb/get_data': "TimetableController.getotherfield",
   'POST /timetable/submitttb': "TimetableController.submitclass",
   'GET /timetable':"TimetableController.getpersonalallclass",
   'DELETE /timetable':"TimetableController.delpersonalallclass",
+  'POST /timetable':"TimetableController.submitpersonalallclass",
   
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
