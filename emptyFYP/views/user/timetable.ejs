@@ -1,22 +1,35 @@
 <div class="Pagetitle">
     <%=req.session.username%>'s TimeTable
 </div>
+
 <a href="/timetable/submitttb">
-    <button class="buttonlogout">Add Class</button>
+    <button class="buttonlogout" id="addclass">Add Class</button>
 </a>
+
+<br>
+    <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+
 <br><br>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
 
     <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
         <tr>
-            <td style="font-size:20px;text-align: center;vertical-align:center;">
+            <%if(stringstring.length < 3){%>
+                <td style="font-size:20px;text-align: center;vertical-align:center;">
                 <%=stringstring[0]%>
             </td>
             <td style="font-size:20px;text-align: center;vertical-align:center;">
                 <%=stringstring[1]%>
-            </td>
+            </td>   
+            <td style="font-size:20px;text-align: center;vertical-align:center;">
+                <button class="button" type="button"
+                onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
+            </td>              
+                <%} %>
+            
         </tr>
         <%})%>
 
@@ -37,6 +50,9 @@
         var lastbox;
         var arraylist = new Array(6);
         for(var i=0 ; i < allpersonallist.length;i++){ 
+
+            var cidstr = allpersonallist[i].CID.split("_");
+            allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
            
             let currenttime =new Date();
             currenttime.setHours(8, 30, 0, 0); 
@@ -503,5 +519,31 @@
 </table>
 
 <script>
+function Submitthisttb(){
+    var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+}
+async function deleteclassinput(ccode,cseccode) {
+        var r = confirm("Confirm Delete " + ccode +"_"+cseccode+ " ?");
+        var requestBody = JSON.stringify({ cid:  ccode +"_"+cseccode });
+        if (r) {
 
+            var response = await fetch("/timetable", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Class input deleted.");
+                location.assign("/timetable");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
 </script>

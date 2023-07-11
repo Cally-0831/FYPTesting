@@ -275,7 +275,7 @@ insert into allsupertakecourse values(stringstring,new.pid);
 else
 insert into allsupertakecourse values(new.cid,new.pid);
 END IF;
-else if !issup then
+else if not issup then
 
 if countcount >0 then
  while countcount >0 do
@@ -293,5 +293,16 @@ END IF;
   |
 delimiter ;
 
-
+delimiter |
+CREATE TRIGGER delalltakecourse After DELETE ON allsupertakecourse
+  FOR EACH ROW
+  BEGIN
+  declare countcount integer;
+  declare stringstring  varchar(20);
+  set countcount =0;
+  DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+  
+   END;
+  |
+delimiter ;
 

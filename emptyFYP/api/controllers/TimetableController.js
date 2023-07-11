@@ -1,3 +1,19 @@
+var mysql = require('mysql');
+        const date = require('date-and-time')
+        var db = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "Psycho.K0831",
+            database: "fyptesting"
+        });
+        db.connect(async (err) => {
+            if (err) {
+                console.log("Database Connection Failed !!!", err);
+                return;
+            }
+            console.log(' getpersonalallclass MySQL Connected');
+        });
+
 module.exports = {
     allDeptlist: {},
     allCCodelist: {},
@@ -182,5 +198,30 @@ if(req.session.role =="sup"){
 
         });
         // return res.json("ok");
+    },
+
+    delpersonalallclass: async function(req,res){
+        let thisistheline;
+        if(req.session.role =="sup"){
+              thisistheline = "DELETE from allsupertakecourse where pid=\""+req.session.userid+"\" and cid like\""+req.body.cid+"%\"";
+              
+        }else {
+            thisistheline = "DELETE from allstudenttakecourse where pid=\""+req.session.userid+"\" and cid like\""+req.body.cid+"%\"";
+              
+        }
+        console.log(thisistheline);
+               // console.log(thisistheline);
+                db.query(thisistheline, function (err, result) {
+                    try {
+                        console.log("Deleted")
+                       return res.json("ok");
+
+        
+                    } catch (err) {
+                        console.log(' delpersonalallclass MySQL Problem' + "    " + err);
+                    }
+        
+                });
+                // return res.json("ok");
     }
 }
