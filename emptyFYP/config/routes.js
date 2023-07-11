@@ -22,10 +22,10 @@ module.exports.routes = {
   //'/': { view: 'pages/homepage' },
 
   '/': "/user/login",
-  
+
   'GET /user/login': "UserController.login",
   'POST /user/login': "UserController.login",
-  
+
   'GET /user/logout': 'UserController.logout',
 
   'GET /home': { view: 'user/home' },
@@ -37,30 +37,30 @@ module.exports.routes = {
   'GET /timetable/submitttb': "TimetableController.getallclass",
   'GET /timetable/submitttb/get_data': "TimetableController.getotherfield",
   'POST /timetable/submitttb': "TimetableController.submitclass",
-  'GET /timetable':"TimetableController.getpersonalallclass",
-  'DELETE /timetable':"TimetableController.delpersonalallclass",
-  'POST /timetable':"TimetableController.submitpersonalallclass",
-  
+  'GET /timetable': "TimetableController.getpersonalallclass",
+  'DELETE /timetable': "TimetableController.delpersonalallclass",
+  'POST /timetable': "TimetableController.submitpersonalallclass",
+
   'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",
 
   //'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
 
-  'GET /user/createnewclassroom':  "ClassroomListController.getcampus",
+  'GET /user/createnewclassroom': "ClassroomListController.getcampus",
   'POST /user/createnewclassroom': "ClassroomListController.createnewclassroom",
 
- 'GET /user/classroomlist': "ClassroomListController.listclassroom",
- 'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
+  'GET /user/classroomlist': "ClassroomListController.listclassroom",
+  'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
 
- 'GET /user/view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
- 'DELETE /user/view': "ClassroomListController.deletetimeslot",
+  'GET /user/view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
+  'DELETE /user/view': "ClassroomListController.deletetimeslot",
 
- 'GET /user/addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
- 'POST /user/addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
+  'GET /user/addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
+  'POST /user/addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
 
- 'GET /user/managetimeslot': "ClassroomListController.listalltimeslot",
- 'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
+  'GET /user/managetimeslot': "ClassroomListController.listalltimeslot",
+  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
 
   'GET /user/checkrequest': "RequestController.listrequest",
   'DELETE /user/checkrequest': "RequestController.deleterequest",
@@ -79,7 +79,7 @@ module.exports.routes = {
 
   'GET /user/read/:sid': "StudentListController.readsinglestudent",
   'DELETE /user/read/:sid': "StudentListController.deletestudent",
-
+  "GET /setting": { view: "user/setting" },
 
 
   /***************************************************************************

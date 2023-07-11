@@ -8,7 +8,7 @@
                         <img src="images\home\notice.jpg" class="gallery_img">
                     </a>
                 </div>
-
+               
                 <div class="imgcolumn">
                     <a href="/timetable">
                         <img src="images\home\ttb.jpg" class="gallery_img">
@@ -40,6 +40,11 @@
                     <div class="imgcolumn">
                         <a href="/notice">
                             <img src="images\home\notice.jpg" class="gallery_img">
+                        </a>
+                    </div>
+                    <div class="imgcolumn">
+                        <a href="/setting">
+                            <img src="images\home\setting.png" class="gallery_img">
                         </a>
                     </div>
                     <div class="imgcolumn">
@@ -81,44 +86,44 @@
             </div>
         </div>
         <%}else if(req.session.role=="adm" ) {%>
-        <p>this is a admin</p>
-        <div class="rows is-mobile">
-            <div class="row">
-                <div class="columns is-multiline is-mobile">
-                    <div class="imgcolumn">
-                        <a href="/notice">
-                            <img src="images\home\notice.jpg" class="gallery_img">
-                        </a>
-                    </div>
+            <p>this is a admin</p>
+            <div class="rows is-mobile">
+                <div class="row">
+                    <div class="columns is-multiline is-mobile">
+                        <div class="imgcolumn">
+                            <a href="/notice">
+                                <img src="images\home\notice.jpg" class="gallery_img">
+                            </a>
+                        </div>
 
-                    <div class="imgcolumn">
-                        <a href="/user/classroomlist">
-                            <img src="images\home\classroomlist.jpg" class="gallery_img">
-                        </a>
-                    </div>
+                        <div class="imgcolumn">
+                            <a href="/user/classroomlist">
+                                <img src="images\home\classroomlist.jpg" class="gallery_img">
+                            </a>
+                        </div>
 
-                    <!---Submit timeperiod user-->
-                    <div class="imgcolumn">
-                        <a href="/user/managetimeslot">
-                            <img src="images\home\managetimeslot.jpg" class="gallery_img">
-                        </a>
-                    </div>
+                        <!---Submit timeperiod user-->
+                        <div class="imgcolumn">
+                            <a href="/user/managetimeslot">
+                                <img src="images\home\managetimeslot.jpg" class="gallery_img">
+                            </a>
+                        </div>
 
-                    <!-----manage timeperiod open and close-->
-                    <div class="imgcolumn">
-                        <a href="/user/classroommanagement">
-                            <img src="images\home\classroommanagement.jpg" class="gallery_img">
-                        </a>
-                    </div>
-<!-----display classroom usage in ttb mode (with date/calendar view)-->
-                    <div class="imgcolumn">
-                        <a href="#checkfypschdule">
-                            <img src="images\home\canlendar.jpg" class="gallery_img">
-                        </a>
-                    </div>
+                        <!-----manage timeperiod open and close-->
+                        <div class="imgcolumn">
+                            <a href="/user/classroommanagement">
+                                <img src="images\home\classroommanagement.jpg" class="gallery_img">
+                            </a>
+                        </div>
+                        <!-----display classroom usage in ttb mode (with date/calendar view)-->
+                        <div class="imgcolumn">
+                            <a href="#checkfypschdule">
+                                <img src="images\home\canlendar.jpg" class="gallery_img">
+                            </a>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <%}%>
+            <%}%>
