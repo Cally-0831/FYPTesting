@@ -18,6 +18,11 @@
         <div class="Pagetitle">
             <%=req.session.username%>'s Submitted TimeTable
         </div>
+        <br>
+        <div>
+            <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
+            Submitted at <%=submitteddate%>
+        </div>
         <%}%>
 
 

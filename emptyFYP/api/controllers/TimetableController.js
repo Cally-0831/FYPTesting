@@ -173,10 +173,10 @@ module.exports = {
         //console.log(req.body);
         let thisistheline;
 if(req.session.role =="sup"){
-      thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\""+req.session.userid+"\" ORDER BY  startTime asc ,weekdays asc";
+      thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\""+req.session.userid+"\" ORDER BY  startTime asc ,weekdays asc";
       
 }else {
-    thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+    thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
       
 }
        // console.log(thisistheline);
@@ -228,10 +228,10 @@ if(req.session.role =="sup"){
     submitpersonalallclass: async function(req,res){
         let thisistheline;
         if(req.session.role =="sup"){
-              thisistheline = "Update allsupertakecourse set confirmation = true where pid=\""+req.session.userid+"\"";
+              thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\""+req.session.userid+"\"";
               
         }else {
-            thisistheline = "Update allstudenttakecourse set confirmation = true where pid=\""+req.session.userid+"\"";
+            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now() where pid=\""+req.session.userid+"\"";
         }
         console.log(thisistheline);
                // console.log(thisistheline);
