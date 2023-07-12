@@ -10,7 +10,7 @@
     <% if(req.session.role=="stu"){%>
         <br>
         <br>
-        <form method="post"  action="/timetable">
+        <form method="post"  action="/timetable" onsubmit="submitform(this);return false;">
             <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
             <input
             type="file"
@@ -18,7 +18,7 @@
             name="studentttbpic"
             accept=".png ,.jpg ,.jpeg"
             onchange="getFileData(this)" /> 
-            <div id="appearthebutton"></div>
+            <div id="appearthebutton" ></div>
           </form>
           <br><br><Br>
        
@@ -589,11 +589,12 @@
 
 <script>
 
-var filedata;
+var thisfile;
    
 function getFileData(myFile){
 
     var file = myFile.files[0];
+    thisfile = file;
     filedata = file;
     var filename = file.name;
    var filetype = (file.name.split("."))[1]
@@ -603,41 +604,35 @@ function getFileData(myFile){
     document.getElementById("studentttbpic").value ="";
     return alert("Please Upload a correct format of proof");
    }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" onclick=\"Submitthisstudentttb()\">Submit Timetable</button>";
-    var reader = new FileReader();
-  reader.onloadend = function() {
+    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit is-success\">Submit Timetable</button>";
+   
+   }
+}
+
+async function submitform(){
+ 
+    var file = thisfile;
+    var filedata;
+    var filename = file.name;
+   var filetype = (file.name.split("."))[1]
+   
+   var reader = new FileReader();
+  reader.onloadend = async function() {
     //console.log('Encoded Base 64 File String:', reader.result);
     
     /******************* for Binary ***********************/
     var data=(reader.result).split(',')[1];
      var binaryBlob = atob(data);
-   //  filedata =  binaryBlob;
-     //console.log('Encoded Binary File String:', binaryBlob);
-  }
-  reader.readAsDataURL(file);
-
-   }
-}
-
-async function Submitthisstudentttb(){
-var binaryBlob;
-    var reader = new FileReader();
-  reader.onloadend = function() {
-    //console.log('Encoded Base 64 File String:', reader.result);
-    
-    /******************* for Binary ***********************/
-    var data=(reader.result).split(',')[1];
-    binaryBlob = atob(data);
-    // filedata =  binaryBlob;
-     //console.log('Encoded Binary File String:', binaryBlob);
-  }
-  reader.readAsDataURL(filedata);
+    filedata =  data;
+     //console.log('Encoded Binary File String:', filedata);
+  
 
 var requestBody;
     var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
  if(filedata!= null || filedata!= undefined){
    requestBody= JSON.stringify({
-           filedata:binaryBlob
+    fileorg : thisfile,
+           filedata: filedata
         });
  }
     if(r){
@@ -656,6 +651,8 @@ var requestBody;
             }
 
 }
+}
+  reader.readAsDataURL(file);
 }
 
 async function Submitthisttb(){

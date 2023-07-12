@@ -14,7 +14,19 @@ db.connect(async (err) => {
     console.log(' getpersonalallclass MySQL Connected');
 });
 
+const ftp = require("basic-ftp");
 
+const client = new ftp.Client();
+
+client.access({
+    host: "sftp://faith.comp.hkbu.edu.hk",
+    user: "e9222068",
+    password: "7BfRebBP"
+}).then(() => {
+    console.log("Connected to FTP server.");
+}).catch(err => {
+    console.log("Error connecting to FTP server: " + err);
+});
 
 module.exports = {
     allDeptlist: {},
@@ -98,7 +110,7 @@ module.exports = {
             thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
         }
-      
+
 
         db.query(thisistheline, function (err, result) {
             if (err) {
@@ -128,7 +140,7 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-               // console.log(personallist)
+                // console.log(personallist)
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,
@@ -170,18 +182,18 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-        console.log(req.session.role);
+       
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
-        } else if(req.body.studentttbpic != undefined){
-            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now(), picdata = "+req.body.studentttbpic+" where pid=\"" + req.session.userid + "\"";
+        } else if (req.session.role == "stu") {
+            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now(), picdata = \"" + req.body.filedata + "\" where pid=\"" + req.session.userid + "\"";
         }
         console.log(thisistheline);
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             try {
-
+                
                 console.log("Submitted")
                 return res.json("ok");
             } catch (err) {
@@ -191,5 +203,5 @@ module.exports = {
         });
         // return res.json("ok");
     },
-    
+
 }
