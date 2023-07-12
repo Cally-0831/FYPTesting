@@ -1,7 +1,199 @@
 <div class="Pagetitle">Setting</div>
 
-<div id = "handleTTB">TimeTable Submission Deadline</div>
+<div class="rows is-centered">
+    <div class="columns is-mobile is-onethird is-multiline is-centered">
+        <div class="column">
+            <div id="ttbdealine" class="setttbdeadline">
+                <div class="row">
+                    <div id="handleTTB" style="font-size : 25px;" class="title">TimeTable Submission Deadline</div>
+                </div>
+                <br>
+                <div class="row" style="text-align: center;">
+                    <input type="Date" id="deadlineforttb" style="width: 150px; font-size:20px;text-align: center;"
+                        required>
+                    <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
+                        style="width: 150px; font-size:20px;text-align: center;" required>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="buttons is-right">
+                        <button class="buttonlogout" onclick="submitdeadlineforttb()"> Submit</button>
+                    </div>
+                </div>
 
-<div id = "handleRequest">Request Submission Deadline</div>
+                <br>
 
-<div id= "Handleschdule">Release Schdeule Date</div>
+            </div>
+
+        </div>
+        <div class="column is-centered">
+            <div id="requestdealine" class="setrequestdeadline">
+                <div class="row">
+                    <div id="handleRequest" style="font-size : 25px" class="title">Request Submission Deadline</div>
+                </div>
+                <br>
+                <div class="row" style="text-align: center;">
+                    <input type="Date" id="deadlineforrequest" style="width: 150px; font-size:20px;text-align: center;"
+                        required>
+                    <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
+                        style="width: 150px; font-size:20px;text-align: center;" required>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="buttons is-right">
+                        <button class="buttonlogout" onclick="submitdeadlineforrequest()"> Submit</button>
+                    </div>
+                </div>
+
+                <br>
+
+            </div>
+
+
+        </div>
+        <div class="column is-centered">
+            <div id="schdeulerelease" class="setschdulerelease">
+                <div id="Handleschdule" style="font-size : 25px" class="title">Release Schdeule Date</div>
+                <div class="row" style="text-align: center;">
+                    <input type="Date" id="deadlineforreleaseschdule"
+                        style="width: 150px; font-size:20px;text-align: center;" required>
+                    <input type="time" id="deadlineforreleaseschduletime" name="deadlineforreleaseschduletime"
+                        style="width: 150px; font-size:20px; text-align: center;" required>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="buttons is-right">
+                        <button class="buttonlogout" onclick="submitdeadlineforreleaseschdule()"> Submit</button>
+                    </div>
+                </div>
+
+                <br>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    async function submitdeadlineforttb() {
+
+        var today = new Date();
+        //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
+        var settledate = new Date(document.getElementById("deadlineforttb").value + " " + document.getElementById("deadlineforttbtime").value);
+
+        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
+
+        var r = confirm("Please Confirm Your Setting for Timetable Submission\n\n"
+            + "Deadline :       " + document.getElementById("deadlineforttb").value + "\n"
+            + "Time         :      " + document.getElementById("deadlineforttbtime").value)
+        if (r) {
+            try {
+                var requestbody = JSON.stringify({
+                    type: "1",
+                    command: "insert",
+                    date: document.getElementById("deadlineforttb").value,
+                    time: document.getElementById("deadlineforttbtime").value,
+                });
+                var response = await fetch("/setting", {
+                    method: "POST",
+                    body: requestbody,
+                });
+                if (response.ok) {
+
+
+                    alert("Timetable Submission Deadline has been settle as\n" + document.getElementById("deadlineforttb").value + " , " + document.getElementById("deadlineforttbtime").value);
+                    location.assign("/home");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    async function submitdeadlineforrequest() {
+        var today = new Date();
+        //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
+        var settledate = new Date(document.getElementById("deadlineforrequest").value + " " + document.getElementById("deadlineforrequesttime").value);
+
+        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
+        var r = confirm("Please Confirm Your Setting for Timetable Submission\n\n"
+            + "Deadline :       " + document.getElementById("deadlineforrequest").value + "\n"
+            + "Time         :      " + document.getElementById("deadlineforrequesttime").value)
+        if (r) {
+            try {
+                var requestbody = JSON.stringify({
+                    type: "2",
+                    command: "insert",
+                    date: document.getElementById("deadlineforrequest").value,
+                    time: document.getElementById("deadlineforrequesttime").value,
+                });
+                var response = await fetch("/setting", {
+                    method: "POST",
+                    body: requestbody,
+                });
+                if (response.ok) {
+
+
+                    alert("Request Submission Deadline has been settle as\n" + document.getElementById("deadlineforrequest").value + " , " + document.getElementById("deadlineforrequesttime").value);
+                    location.assign("/home");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    async function submitdeadlineforreleaseschdule(){
+        var today = new Date();
+        //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
+        var settledate = new Date(document.getElementById("deadlineforreleaseschdule").value + " " + document.getElementById("deadlineforreleaseschduletime").value);
+
+        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
+        var r = confirm("Please Confirm Your Setting for Presentation Schdeule Release Date\n\n"
+            + "Deadline :       " + document.getElementById("deadlineforreleaseschdule").value + "\n"
+            + "Time         :      " + document.getElementById("deadlineforreleaseschduletime").value)
+        if (r) {
+            try {
+                var requestbody = JSON.stringify({
+                    type: "3",
+                    command: "insert",
+                    date: document.getElementById("deadlineforreleaseschdule").value,
+                    time: document.getElementById("deadlineforreleaseschduletime").value,
+                });
+                var response = await fetch("/setting", {
+                    method: "POST",
+                    body: requestbody,
+                });
+                if (response.ok) {
+
+
+                    alert("Presentation Schdeule Release Date has been settle as\n" + document.getElementById("deadlineforreleaseschdule").value + " , " + document.getElementById("deadlineforreleaseschduletime").value);
+                    location.assign("/home");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+</script>

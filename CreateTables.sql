@@ -15,6 +15,7 @@ Drop table if exists allrequestfromsupervisor;
 Drop table if exists allclassroomtimeslot;
 Drop table if exists allnotice;
 Drop table if exists temptakecourse;
+Drop table if exists allsupersetting;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
@@ -143,6 +144,17 @@ CreateDate  timestamp not null,
 title varchar(50) not null,
 content varchar(1000),
 primary key (NID)
+);
+
+create table allsupersetting(
+SID	varchar(20) not null,
+Creator		varchar(10) Not null,
+CreateDate  timestamp ,
+typeofsetting integer,
+deadlinedate date,
+deadlinetime time,
+LastUpdate timestamp,
+primary key (SID)
 );
 
 
@@ -284,7 +296,7 @@ else if not issup then
 if countcount >0 then
 	while countcount >0 do
 		set stringstring = concat(new.cid,"_",countcount,"");
-		insert into allstudenttakecourse values(stringstring,new.pid,false);
+		insert into allstudenttakecourse values(stringstring,new.pid,false,now());
 		set countcount= countcount -1;
 	end while;
 	insert into allstudenttakecourse values(new.cid,new.pid,false,now());
@@ -310,3 +322,14 @@ CREATE TRIGGER delalltakecourse After DELETE ON allsupertakecourse
   |
 delimiter ;
 
+delimiter |
+CREATE TRIGGER addintosetting before insert ON allsupersetting
+  FOR EACH ROW
+  BEGIN
+  
+  set new.createdate = now();
+  set new.LastUpdate = now();
+  
+   END;
+  |
+delimiter ;

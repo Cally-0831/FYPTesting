@@ -80,6 +80,7 @@ module.exports.routes = {
   'GET /user/read/:sid': "StudentListController.readsinglestudent",
   'DELETE /user/read/:sid': "StudentListController.deletestudent",
   "GET /setting": { view: "user/setting" },
+  "POST /setting": "SettingController.submitsetting",
 
 
   /***************************************************************************
