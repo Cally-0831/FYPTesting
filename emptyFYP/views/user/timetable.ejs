@@ -10,18 +10,22 @@
     <% if(req.session.role=="stu"){%>
         <br>
         <br>
-        <form method="post" enctype="multipart/form-data" action="/user/timetable/submitttb">
+        <form method="post"  action="/timetable">
             <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
             <input
             type="file"
             id="studentttbpic"
             name="studentttbpic"
             accept=".png ,.jpg ,.jpeg"
-            onchange="getFileData(this)" />
+            onchange="getFileData(this)" /> 
+            <div id="appearthebutton"></div>
           </form>
-        <div id="appearthebutton"></div>
+          <br><br><Br>
+       
+         
 
-    <br>
+
+    <br> <br> <br> <br> <br> <br>
 <%}else{%>
     <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
     <br>
@@ -44,7 +48,8 @@
 
 
 <br>
-    
+
+
 <br><br>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
@@ -583,9 +588,13 @@
 </table>
 
 <script>
+
+var filedata;
+   
 function getFileData(myFile){
-   var file = myFile.files[0];  
-   var filename = file.name;
+
+    var file = myFile.files[0];
+    var filename = file.name;
    var filetype = (file.name.split("."))[1]
    
    if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
@@ -593,13 +602,50 @@ function getFileData(myFile){
     document.getElementById("studentttbpic").value ="";
     return alert("Please Upload a correct format of proof");
    }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" onclick=\"Submitthisttb()\">Submit Timetable</button>";
-   
-
+    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" onclick=\"Submitthisstudentttb()\">Submit Timetable</button>";
+    var reader = new FileReader();
+  reader.onloadend = function() {
+    //console.log('Encoded Base 64 File String:', reader.result);
+    
+    /******************* for Binary ***********************/
+    var data=(reader.result).split(',')[1];
+     var binaryBlob = atob(data);
+     console.log('Encoded Binary File String:', binaryBlob);
+  }
+  reader.readAsDataURL(file);
+filedata =  binaryBlob;
    }
-   
 }
 
+async function Submitthisstudentttb(){
+var requestBody;
+    var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+ if(filedata!= null || filedata!= undefined){
+   requestBody= JSON.stringify({
+           filedata:filedata
+        });
+ }
+    if(r){
+    
+    var response = await fetch("/timetable", {
+                method: "POST",
+                body:   requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Timetable submitted.");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+}else{
+
+}
+}
 
 async function Submitthisttb(){
     
@@ -609,7 +655,7 @@ if(r){
     
     var response = await fetch("/timetable", {
                 method: "POST",
-                
+                body:   document.getElementById("studentttbpic").Files[0]
             });
 
             if (response.ok) {
@@ -617,7 +663,7 @@ if(r){
                 // alert(html);
 
                 alert("Timetable submitted.");
-                location.assign("/timetable");
+                location.reload();
             } else {
                 alert(response.status + ": " + response.statusText);
             }

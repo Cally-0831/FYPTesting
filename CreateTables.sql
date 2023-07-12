@@ -23,6 +23,9 @@ Drop trigger if exists insertcretorname;
 Drop trigger if exists addlessontimeforoneCode;
 Drop trigger if exists takeallcourseofonecode;
 Drop trigger if exists inputallcourseofonecode;
+Drop trigger if exists delallstudenttakecourse;
+
+
 
 create table  allusers(
 allusersname	varchar(100) Not null,
@@ -93,6 +96,7 @@ CID		varchar(20) not null,
 PID		varchar(10) not null,
 confirmation boolean,
 Submissiontime timestamp,
+picdata varbinary(60000),
 CONSTRAINT csid
 primary key (CID,PID)
 );
@@ -296,12 +300,12 @@ else if not issup then
 if countcount >0 then
 	while countcount >0 do
 		set stringstring = concat(new.cid,"_",countcount,"");
-		insert into allstudenttakecourse values(stringstring,new.pid,false,now());
+		insert into allstudenttakecourse values(stringstring,new.pid,false,now(),"");
 		set countcount= countcount -1;
 	end while;
-	insert into allstudenttakecourse values(new.cid,new.pid,false,now());
+	insert into allstudenttakecourse values(new.cid,new.pid,false,now(),"");
 else
-	insert into allstudenttakecourse values(new.cid,new.pid,false,now());
+	insert into allstudenttakecourse values(new.cid,new.pid,false,now(),"");
 END IF;
    END IF;
    END IF;
@@ -311,6 +315,19 @@ delimiter ;
 
 delimiter |
 CREATE TRIGGER delalltakecourse After DELETE ON allsupertakecourse
+  FOR EACH ROW
+  BEGIN
+  declare countcount integer;
+  declare stringstring  varchar(20);
+  set countcount =0;
+  DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+  
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER delallstudenttakecourse After DELETE ON allstudenttakecourse
   FOR EACH ROW
   BEGIN
   declare countcount integer;

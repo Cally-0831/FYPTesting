@@ -1,18 +1,20 @@
 var mysql = require('mysql');
-        const date = require('date-and-time')
-        var db = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "Psycho.K0831",
-            database: "fyptesting"
-        });
-        db.connect(async (err) => {
-            if (err) {
-                console.log("Database Connection Failed !!!", err);
-                return;
-            }
-            console.log(' getpersonalallclass MySQL Connected');
-        });
+const date = require('date-and-time')
+var db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting"
+});
+db.connect(async (err) => {
+    if (err) {
+        console.log("Database Connection Failed !!!", err);
+        return;
+    }
+    console.log(' getpersonalallclass MySQL Connected');
+});
+
+
 
 module.exports = {
     allDeptlist: {},
@@ -52,7 +54,7 @@ module.exports = {
 
     getotherfield: async function (req, res, next) {
 
-       
+
         var type = req.query.type;
         var search_query = req.query.parent_value;
 
@@ -96,7 +98,7 @@ module.exports = {
             thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
         }
-
+        sftp
 
         db.query(thisistheline, function (err, result) {
             if (err) {
@@ -110,23 +112,23 @@ module.exports = {
     },
 
     getpersonalallclass: async function (req, res) {
-        
+
         //console.log(req.body);
         let thisistheline;
-if(req.session.role =="sup"){
-      thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\""+req.session.userid+"\" ORDER BY  startTime asc ,weekdays asc";
-      
-}else {
-    thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
-      
-}
-       // console.log(thisistheline);
+        if (req.session.role == "sup") {
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+
+        } else {
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+
+        }
+        // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                console.log(personallist)
+               // console.log(personallist)
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,
@@ -134,59 +136,62 @@ if(req.session.role =="sup"){
                 });
 
             } catch (err) {
-               // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
+                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
             }
 
         });
         // return res.json("ok");
     },
 
-    delpersonalallclass: async function(req,res){
+    delpersonalallclass: async function (req, res) {
         let thisistheline;
-        if(req.session.role =="sup"){
-              thisistheline = "DELETE from allsupertakecourse where pid=\""+req.session.userid+"\" and cid like\""+req.body.cid+"%\"";
-              
-        }else {
-            thisistheline = "DELETE from allstudenttakecourse where pid=\""+req.session.userid+"\" and cid like\""+req.body.cid+"%\"";
-              
+        if (req.session.role == "sup") {
+            thisistheline = "DELETE from allsupertakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
+
+        } else {
+            thisistheline = "DELETE from allstudenttakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
+
         }
         console.log(thisistheline);
-               // console.log(thisistheline);
-                db.query(thisistheline, function (err, result) {
-                    try {
-                        console.log("Deleted")
-                       return res.json("ok");
+        // console.log(thisistheline);
+        db.query(thisistheline, function (err, result) {
+            try {
+                console.log("Deleted")
+                return res.json("ok");
 
-        
-                    } catch (err) {
-                        console.log(' delpersonalallclass MySQL Problem' + "    " + err);
-                    }
-        
-                });
-                // return res.json("ok");
+
+            } catch (err) {
+                console.log(' delpersonalallclass MySQL Problem' + "    " + err);
+            }
+
+        });
+        // return res.json("ok");
     },
 
-    submitpersonalallclass: async function(req,res){
+    submitpersonalallclass: async function (req, res) {
         let thisistheline;
-        if(req.session.role =="sup"){
-              thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\""+req.session.userid+"\"";
-              
-        }else {
-            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now() where pid=\""+req.session.userid+"\"";
+        if (req.session.role == "sup") {
+            thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+
+        } else {
+            console.log(req.body);
+            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now(), picdata = "+req.body.studentttbpic+" where pid=\"" + req.session.userid + "\"";
         }
         console.log(thisistheline);
-               // console.log(thisistheline);
-                db.query(thisistheline, function (err, result) {
-                    try {
-                        console.log("Submitted")
-                       return res.json("ok");
+        // console.log(thisistheline);
+        db.query(thisistheline, function (err, result) {
+            try {
 
-        
-                    } catch (err) {
-                        console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
-                    }
-        
-                });
-                // return res.json("ok");
-    }
+                console.log("Submitted")
+                //return res.json("ok");
+
+
+            } catch (err) {
+                console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
+            }
+
+        });
+        // return res.json("ok");
+    },
+    
 }
