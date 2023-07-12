@@ -98,7 +98,7 @@ module.exports = {
             thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
         }
-        sftp
+      
 
         db.query(thisistheline, function (err, result) {
             if (err) {
@@ -170,11 +170,11 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
+        console.log(req.session.role);
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
-        } else {
-            console.log(req.body);
+        } else if(req.body.studentttbpic != undefined){
             thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now(), picdata = "+req.body.studentttbpic+" where pid=\"" + req.session.userid + "\"";
         }
         console.log(thisistheline);
@@ -183,9 +183,7 @@ module.exports = {
             try {
 
                 console.log("Submitted")
-                //return res.json("ok");
-
-
+                return res.json("ok");
             } catch (err) {
                 console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
             }

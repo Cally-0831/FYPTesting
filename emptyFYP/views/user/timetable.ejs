@@ -1,6 +1,6 @@
 
 <% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
-<% if(allpersonallist[0].confirmation == 0){%>
+<% if(allpersonallist.length ==0 || allpersonallist[0].confirmation == 0){%>
     <div class="Pagetitle">
         <%=req.session.username%>'s TimeTable
     </div>
@@ -594,6 +594,7 @@ var filedata;
 function getFileData(myFile){
 
     var file = myFile.files[0];
+    filedata = file;
     var filename = file.name;
    var filetype = (file.name.split("."))[1]
    
@@ -610,58 +611,66 @@ function getFileData(myFile){
     /******************* for Binary ***********************/
     var data=(reader.result).split(',')[1];
      var binaryBlob = atob(data);
-     console.log('Encoded Binary File String:', binaryBlob);
+   //  filedata =  binaryBlob;
+     //console.log('Encoded Binary File String:', binaryBlob);
   }
   reader.readAsDataURL(file);
-filedata =  binaryBlob;
+
    }
 }
 
 async function Submitthisstudentttb(){
+var binaryBlob;
+    var reader = new FileReader();
+  reader.onloadend = function() {
+    //console.log('Encoded Base 64 File String:', reader.result);
+    
+    /******************* for Binary ***********************/
+    var data=(reader.result).split(',')[1];
+    binaryBlob = atob(data);
+    // filedata =  binaryBlob;
+     //console.log('Encoded Binary File String:', binaryBlob);
+  }
+  reader.readAsDataURL(filedata);
+
 var requestBody;
-    var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+    var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
  if(filedata!= null || filedata!= undefined){
    requestBody= JSON.stringify({
-           filedata:filedata
+           filedata:binaryBlob
         });
  }
     if(r){
-    
+        console.log("enterhere2")
     var response = await fetch("/timetable", {
                 method: "POST",
                 body:   requestBody
             });
 
             if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
-
-                alert("Timetable submitted.");
+               
+                alert(" Your Timetable submitted.");
                 location.reload();
             } else {
                 alert(response.status + ": " + response.statusText);
             }
-
-}else{
 
 }
 }
 
 async function Submitthisttb(){
     
-    
+   
     var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
 if(r){
     
     var response = await fetch("/timetable", {
                 method: "POST",
-                body:   document.getElementById("studentttbpic").Files[0]
+                
             });
 
             if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
-
+               
                 alert("Timetable submitted.");
                 location.reload();
             } else {
