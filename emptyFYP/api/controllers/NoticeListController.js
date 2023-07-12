@@ -91,7 +91,7 @@ module.exports = {
             nid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
-        console.log(">> req "+req.body.content.replace("\n","\"+Char(10)+\""));
+        
         let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
         console.log(thisistheline);
         db.query(thisistheline, (err, results) => {

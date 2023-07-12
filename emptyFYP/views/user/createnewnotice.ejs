@@ -20,7 +20,7 @@
     async function submitform() {
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
-        stringstring= stringstring.replace(/\n/g,"<br>");
+        stringstring= stringstring.replace(/\n/g," newline ");
         console.log("!@#$!@#$!@#$!               "+stringstring)
         var requestBody = JSON.stringify({
             title: document.getElementById("title").value,
