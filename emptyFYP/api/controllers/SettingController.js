@@ -25,10 +25,13 @@ module.exports = {
             counter += 1;
         }
         let thisistheline = "";
-        
+
         if (req.body.command == "insert") {
 
             thisistheline = "Insert into allsupersetting (sid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + sid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
+            console.log(thisistheline);
+        }else if(req.body.command =="update"){
+            thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\""+req.body.date+"\" , deadlinetime=\""+req.body.time+"\" where creator=\""+req.session.userid+"\" and typeofsetting=\""+req.body.type+"\" "
             console.log(thisistheline);
         }
 
@@ -36,6 +39,27 @@ module.exports = {
             try {
                 console.log("setting done")
                 return res.json("ok")
+            } catch (err) {
+                console.log("sth happened here");
+
+            }
+
+
+        });
+    },
+
+    getsetting: async function (req, res) {
+        let thisistheline = " select * from allsupersetting where creator=\"" + req.session.userid + "\" order by typeofsetting asc";
+        var supersetting;
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                //console.log('>> string: ', string );
+                var json = JSON.parse(string);
+                //console.log('>> json: ', json);  
+                supersetting = json;
+                console.log("getting done")
+                return res.view('user/setting', { thissupersetting: supersetting });
             } catch (err) {
                 console.log("sth happened here");
 

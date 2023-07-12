@@ -8,20 +8,43 @@
                     <div id="handleTTB" style="font-size : 25px;" class="title">TimeTable Submission Deadline</div>
                 </div>
                 <br>
-                <div class="row" style="text-align: center;">
-                    <input type="Date" id="deadlineforttb" style="width: 150px; font-size:20px;text-align: center;"
-                        required>
-                    <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
-                        style="width: 150px; font-size:20px;text-align: center;" required>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="buttons is-right">
-                        <button class="buttonlogout" onclick="submitdeadlineforttb()"> Submit</button>
-                    </div>
-                </div>
+                <%if(thissupersetting[0] !=null){ 
+                    var updatedate=new Date(thissupersetting[1].LastUpdate);
+                    
+                    
+                    var theupdatedate = updatedate.toLocaleDateString();
+                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
 
-                <br>
+
+                     var datedate=new Date(thissupersetting[0].deadlinedate).toLocaleDateString(); %>
+                    <div class="row" style="font-size: 10px;">
+                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
+                            <br>
+                            Setting Details:&emsp;<%=datedate%>
+                                <%=thissupersetting[0].deadlinetime%>
+                    </div>
+                    <%}%>
+                        <br>
+                        <div class="row" style="text-align: center;">
+                            <input type="Date" id="deadlineforttb"
+                                style="width: 150px; font-size:20px;text-align: center;" required>
+                            <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
+                                style="width: 150px; font-size:20px;text-align: center;" required>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="buttons is-right">
+                                <% if(thissupersetting[0] !=null){%>
+                                    <button class="buttonlogout"
+                                        onclick="submitdeadlineforttb('update')">Update</button>
+                                    <%}else{%>
+                                        <button class="buttonlogout"
+                                            onclick="submitdeadlineforttb('insert')">Submit</button>
+                                        <%}%>
+                            </div>
+                        </div>
+
+                        <br>
 
             </div>
 
@@ -32,20 +55,44 @@
                     <div id="handleRequest" style="font-size : 25px" class="title">Request Submission Deadline</div>
                 </div>
                 <br>
-                <div class="row" style="text-align: center;">
-                    <input type="Date" id="deadlineforrequest" style="width: 150px; font-size:20px;text-align: center;"
-                        required>
-                    <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
-                        style="width: 150px; font-size:20px;text-align: center;" required>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="buttons is-right">
-                        <button class="buttonlogout" onclick="submitdeadlineforrequest()"> Submit</button>
-                    </div>
-                </div>
+                <%if(thissupersetting[1] !=null){ 
+                    var updatedate=new Date(thissupersetting[1].LastUpdate);
+                    
+                    
+                    var theupdatedate = updatedate.toLocaleDateString();
+                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
 
-                <br>
+
+                     var datedate=new Date(thissupersetting[2].deadlinedate).toLocaleDateString(); %>
+                    <div class="row" style="font-size: 10px;">
+                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
+                            <br>
+                            Setting Details:&emsp;<%=datedate%>
+                                <%=thissupersetting[1].deadlinetime%>
+                    </div>
+                    <%}%>
+                        <br>
+                        <div class="row" style="text-align: center;">
+                            <input type="Date" id="deadlineforrequest"
+                                style="width: 150px; font-size:20px;text-align: center;" required>
+                            <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
+                                style="width: 150px; font-size:20px;text-align: center;" required>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="buttons is-right">
+                                <% if(thissupersetting[1] !=null){%>
+                                    <button class="buttonlogout"
+                                        onclick="submitdeadlineforrequest('update')">Update</button>
+                                    <%}else{%>
+                                        <button class="buttonlogout"
+                                            onclick="submitdeadlineforrequest('insert')">Submit</button>
+                                        <%}%>
+
+                            </div>
+                        </div>
+
+                        <br>
 
             </div>
 
@@ -53,21 +100,47 @@
         </div>
         <div class="column is-centered">
             <div id="schdeulerelease" class="setschdulerelease">
-                <div id="Handleschdule" style="font-size : 25px" class="title">Release Schdeule Date</div>
-                <div class="row" style="text-align: center;">
-                    <input type="Date" id="deadlineforreleaseschdule"
-                        style="width: 150px; font-size:20px;text-align: center;" required>
-                    <input type="time" id="deadlineforreleaseschduletime" name="deadlineforreleaseschduletime"
-                        style="width: 150px; font-size:20px; text-align: center;" required>
-                </div>
-                <br>
                 <div class="row">
-                    <div class="buttons is-right">
-                        <button class="buttonlogout" onclick="submitdeadlineforreleaseschdule()"> Submit</button>
-                    </div>
+                    <div id="Handleschdule" style="font-size : 25px" class="title">Release Schdeule Date</div>
                 </div>
-
                 <br>
+                <%if(thissupersetting[2] !=null){ 
+                    var updatedate=new Date(thissupersetting[2].LastUpdate);
+                    
+                    
+                    var theupdatedate = updatedate.toLocaleDateString();
+                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
+
+
+                     var datedate=new Date(thissupersetting[2].deadlinedate).toLocaleDateString(); %>
+                    <div class="row" style="font-size: 10px;">
+                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
+                            <br>
+                            Setting Details:&emsp;<%=datedate%>
+                                <%=thissupersetting[2].deadlinetime%>
+                    </div>
+                    <%}%>
+                    <br>
+                        <div class="row" style="text-align: center;">
+                            <input type="Date" id="deadlineforreleaseschdule"
+                                style="width: 150px; font-size:20px;text-align: center;" required>
+                            <input type="time" id="deadlineforreleaseschduletime" name="deadlineforreleaseschduletime"
+                                style="width: 150px; font-size:20px; text-align: center;" required>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="buttons is-right">
+                                <% if(thissupersetting[2] !=null){%>
+                                    <button class="buttonlogout"
+                                        onclick="submitdeadlineforreleaseschdule('update')">Update</button>
+                                    <%}else{%>
+                                        <button class="buttonlogout"
+                                            onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
+                                        <%}%>
+                            </div>
+                        </div>
+
+                        <br>
 
             </div>
 
@@ -75,7 +148,7 @@
     </div>
 </div>
 <script>
-    async function submitdeadlineforttb() {
+    async function submitdeadlineforttb(command) {
 
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
@@ -90,7 +163,7 @@
             try {
                 var requestbody = JSON.stringify({
                     type: "1",
-                    command: "insert",
+                    command: command,
                     date: document.getElementById("deadlineforttb").value,
                     time: document.getElementById("deadlineforttbtime").value,
                 });
@@ -102,7 +175,7 @@
 
 
                     alert("Timetable Submission Deadline has been settle as\n" + document.getElementById("deadlineforttb").value + " , " + document.getElementById("deadlineforttbtime").value);
-                    location.assign("/home");
+                    location.assign("/setting");
 
                 } else if (response.status == 401) {
                     var msg = await response.json();
@@ -117,7 +190,7 @@
         }
     }
 
-    async function submitdeadlineforrequest() {
+    async function submitdeadlineforrequest(command) {
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
         var settledate = new Date(document.getElementById("deadlineforrequest").value + " " + document.getElementById("deadlineforrequesttime").value);
@@ -130,7 +203,7 @@
             try {
                 var requestbody = JSON.stringify({
                     type: "2",
-                    command: "insert",
+                    command: command,
                     date: document.getElementById("deadlineforrequest").value,
                     time: document.getElementById("deadlineforrequesttime").value,
                 });
@@ -142,7 +215,7 @@
 
 
                     alert("Request Submission Deadline has been settle as\n" + document.getElementById("deadlineforrequest").value + " , " + document.getElementById("deadlineforrequesttime").value);
-                    location.assign("/home");
+                    location.assign("/setting");
 
                 } else if (response.status == 401) {
                     var msg = await response.json();
@@ -157,7 +230,7 @@
         }
     }
 
-    async function submitdeadlineforreleaseschdule(){
+    async function submitdeadlineforreleaseschdule(command) {
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
         var settledate = new Date(document.getElementById("deadlineforreleaseschdule").value + " " + document.getElementById("deadlineforreleaseschduletime").value);
@@ -170,7 +243,7 @@
             try {
                 var requestbody = JSON.stringify({
                     type: "3",
-                    command: "insert",
+                    command: command,
                     date: document.getElementById("deadlineforreleaseschdule").value,
                     time: document.getElementById("deadlineforreleaseschduletime").value,
                 });
@@ -182,7 +255,7 @@
 
 
                     alert("Presentation Schdeule Release Date has been settle as\n" + document.getElementById("deadlineforreleaseschdule").value + " , " + document.getElementById("deadlineforreleaseschduletime").value);
-                    location.assign("/home");
+                    location.assign("/setting");
 
                 } else if (response.status == 401) {
                     var msg = await response.json();
