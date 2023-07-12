@@ -1,3 +1,4 @@
+
 <% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
 <% if(allpersonallist[0].confirmation == 0){%>
     <div class="Pagetitle">
@@ -5,11 +6,26 @@
     </div>
     <a href="/timetable/submitttb">
     <button class="buttonlogout" id="addclass">Add Class</button>
+    
     <% if(req.session.role=="stu"){%>
-    <button class="buttonlogout" onclick="">Upload Timetable Proof</button>
-<%}%>
-<br>
-<button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+        <br>
+        <br>
+        <form method="post" enctype="multipart/form-data" action="/user/timetable/submitttb">
+            <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
+            <input
+            type="file"
+            id="studentttbpic"
+            name="studentttbpic"
+            accept=".png ,.jpg ,.jpeg"
+            onchange="getFileData(this)" />
+          </form>
+        <div id="appearthebutton"></div>
+
+    <br>
+<%}else{%>
+    <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+    <br>
+    <%}%>
 
 </a>
     
@@ -567,7 +583,27 @@
 </table>
 
 <script>
+function getFileData(myFile){
+   var file = myFile.files[0];  
+   var filename = file.name;
+   var filetype = (file.name.split("."))[1]
+   
+   if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
+   {
+    document.getElementById("studentttbpic").value ="";
+    return alert("Please Upload a correct format of proof");
+   }else{
+    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" onclick=\"Submitthisttb()\">Submit Timetable</button>";
+   
+
+   }
+   
+}
+
+
 async function Submitthisttb(){
+    
+    
     var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
 if(r){
     
@@ -585,6 +621,8 @@ if(r){
             } else {
                 alert(response.status + ": " + response.statusText);
             }
+
+}else{
 
 }
 }
