@@ -47,54 +47,47 @@ module.exports = {
 
     gettopic: async function (req, res) {
         var topiclist = new Array();
-
+        console.log(topiclist)
+        console.log(topiclist.length)
 
         let thisistheline = "SELECT  topics FROM supervisor where tid =\"" + req.session.userid + "\"\;";
 
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
-                console.log('>> string: ', string);
+                
                 var json = JSON.parse(string);
                 //   console.log('>> json: ', json);  
-                var stringstring = json[0].topics.split("/")
-                console.log(stringstring);
-                var havesame = -1;
-
-
-                var ans;
-
-                for (var i = 0; i < stringstring.length; i++) {
-                    for (var j = 0; j < topiclist.length;j++) {
-                        
-                        if (topiclist.length == 0 && stringstring[i] == "") {
-                            console.log("case 1");
-                            havesame = -1
-                            return;
-                        } else if (topiclist[j] == stringstring[i]) {
-                            console.log(topiclist[j]+"     "+stringstring[i]);
-                            havesame = 1
-                            return;
-                        }else {
-                            havesame = -1
+                var stringstring = json[0].topics.split("/").sort()
+                
+                var check = true;
+                var i = 0;
+                var y = 0;
+                while (check) {
+                    if (topiclist.length == 0 && stringstring[i] != "") {
+                        topiclist.push(stringstring[i])
+                    } else if (topiclist[y] == stringstring[i]) {
+                        if (topiclist.length == y + 1) {
+                        } else {
+                            y++;
                         }
-
-
-                    } if (stringstring[i] != "") {
-                        console.log("now here");
-                        if (havesame < 0) {
-                            console.log("get in here");
-                            topiclist.push(stringstring[i]);
+                    } else if (topiclist[y] != stringstring[i] && stringstring[i] != "") {
+                        topiclist.push(stringstring[i])
+                        if (topiclist.length == y + 1) {
+                        } else {
+                            y++;
                         }
                     }
-
+                    i++;
+                    if (i == stringstring.length) {
+                        check = false;
+                    }
                 }
-
 
                 console.log(">>topiclist final   " + topiclist)
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
             } catch (err) {
-                throw err;
+
                 console.log("sth happened here" + err);
 
             }
