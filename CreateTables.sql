@@ -339,22 +339,25 @@ CREATE TRIGGER addtopicinsupervisor after insert ON supervisorpairstudent
   
   label: LOOP
   
-  select SUBSTRING_INDEX(topics, '/',x) into stringstring from supervisor.topic  where tid = new.tid;
-  if stringstring ="" then
-   LEAVE label;
-end if;
-  if stringstring = new.topic then
-		set y=1;
+  select SUBSTRING_INDEX(topics, '/',x) into stringstring from supervisor  where tid = new.tid;
+  
+  if x=1 then
+  set y=1;
+  LEAVE label;
+  elseif stringstring = concat("/",new.topic) then
+		set y=-1;
         LEAVE label;
    else 
 	set x = x+1;
      iterate LABEL;
-	end if;
+	
+  end if;
+
   end LOOP;
   
   if y=1 then
    select topics into alltopic from supervisor  where tid = new.tid;
-  update supervisor set topic = concat(alltopic,"/",new.topic) where tid = new.tid;
+  update supervisor set topics = concat(alltopic,"/",new.topic) where tid = new.tid;
   end if;
   
    END;

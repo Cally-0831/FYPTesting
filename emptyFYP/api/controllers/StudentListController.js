@@ -19,7 +19,7 @@ module.exports = {
 
     liststudent: async function (req, res) {
         var stdlist;
-       
+
 
         let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
@@ -46,19 +46,52 @@ module.exports = {
     },
 
     gettopic: async function (req, res) {
-        var topiclist;
-        
+        var topiclist = new Array();
 
-        let thisistheline = "SELECT  DISTINCT topic FROM supervisorpairstudent where supervisorpairstudent.tid =\"" + req.session.userid + "\"\;";
+
+        let thisistheline = "SELECT  topics FROM supervisor where tid =\"" + req.session.userid + "\"\;";
 
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 console.log('>> string: ', string);
                 var json = JSON.parse(string);
-                //console.log('>> json: ', json);  
-                topiclist = json;
-                //console.log('>> stdlist: ', stdlist);  
+                //   console.log('>> json: ', json);  
+                var stringstring = json[0].topics.split("/")
+                console.log(stringstring);
+                var havesame = -1;
+
+
+                var ans;
+
+                for (var i = 0; i < stringstring.length; i++) {
+                    for (var j = 0; j < topiclist.length;j++) {
+                        
+                        if (topiclist.length == 0 && stringstring[i] == "") {
+                            console.log("case 1");
+                            havesame = -1
+                            return;
+                        } else if (topiclist[j] == stringstring[i]) {
+                            console.log(topiclist[j]+"     "+stringstring[i]);
+                            havesame = 1
+                            return;
+                        }else {
+                            havesame = -1
+                        }
+
+
+                    } if (stringstring[i] != "") {
+                        console.log("now here");
+                        if (havesame < 0) {
+                            console.log("get in here");
+                            topiclist.push(stringstring[i]);
+                        }
+                    }
+
+                }
+
+
+                console.log(">>topiclist final   " + topiclist)
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
             } catch (err) {
                 throw err;
@@ -72,7 +105,7 @@ module.exports = {
 
     readsinglestudent: async function (req, res) {
         var studentresult;
-       
+
 
         let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
@@ -101,7 +134,7 @@ module.exports = {
 
     deletestudent: async function (req, res) {
         var studentresult;
-        
+
 
         let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.sid + "\"\n";
         console.log('delete excution');
@@ -125,7 +158,7 @@ module.exports = {
 
     createnewstudent: async function (req, res) {
         var stdlist;
-       
+
         let pw = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -141,7 +174,7 @@ module.exports = {
             req.body.studentname + "\"\,\""
             + req.body.sid + "\"\,\"" +
             pw + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-        console.log(thisistheline);
+        //  console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);
@@ -149,13 +182,23 @@ module.exports = {
             console.log("1 record inserted");
         });
 
-        console.log(req.body);
 
 
-        thisistheline = "insert into supervisorpairstudent values(\"" +
-            req.session.userid + "\"\,\""
-            + req.body.sid + "\"\,\"" +
-            req.body.topics + "\"\);";
+        if (req.body.topic != "") {
+
+            thisistheline = "insert into supervisorpairstudent values(\"" +
+                req.session.userid + "\"\,\""
+                + req.body.sid + "\"\,\"" +
+                req.body.topic + "\"\);";
+
+        } else {
+            thisistheline = "insert into supervisorpairstudent values(\"" +
+                req.session.userid + "\"\,\""
+                + req.body.sid + "\"\,\"" +
+                req.body.othertext + "\"\);";
+        }
+
+        console.log(thisistheline)
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);

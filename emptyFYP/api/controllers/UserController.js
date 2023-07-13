@@ -168,6 +168,7 @@ module.exports = {
             console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
                 if (err) {
+                    console.log(err);
                     res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 record inserted");
@@ -184,7 +185,7 @@ module.exports = {
                 req.body[i].topic + "\"\);";
             db.query(thisistheline, function (err, result) {
                 if (err) {
-
+                    console.log(err);
                     res.status(401).json("Error happened when excuting : " + thisistheline);
 
                 };

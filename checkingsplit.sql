@@ -1,1 +1,1 @@
-select SUBSTRING_INDEX(topics, '/',0)  from supervisor  where tid ="tid00001";
+select SUBSTRING_INDEX(topics, '/',1)  from supervisor  where tid ="tid00001";

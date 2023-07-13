@@ -1,26 +1,40 @@
 <div class="Pagetitle">Create New Student</div>
 <br><br>
-<div class="createnewstudent " >
+<div class="createnewstudent ">
   <form action="/user/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
     <label>Student name:&emsp;&emsp;</label>
-    <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value="" style="width:300px"><br>
+    <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value=""
+      style="width:300px" required><br>
     <br>
     <label>SID:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</label>
-    <input type="text" placeholder="Enter SID" id="sid" name="sid" value="" style="width:300px"><br><br>
-    <label for="topics">Topic:&emsp;&emsp;&emsp;&emsp;&emsp;</label>
+    <input type="text" placeholder="Enter SID" id="sid" name="sid" value="" style="width:300px" required><br><br>
+    <label for="topics">Topic:</label>
 
-    <select name="topics" id="topics" style="width:300px">
-      <% alltopiclist.forEach( function(topic) { %>
-        <option value="<%= topic.topic %>">
-          <%= topic.topic%>
-        </option>
-        <% }); %>
-    </select>
-    <br><br>
-    <div class="buttons is-right">
-      <button type="submit is-success" class="buttonlogout">Submit</button>
-    </div>
-    <br>
+
+ 
+      <% for(var i=0; i < alltopiclist.length;i++) {%>
+        &emsp;&emsp;&emsp;&emsp;&emsp;
+        <%if(i>0) {%>
+          &emsp;&emsp;&nbsp;&nbsp;
+          <%}%>
+
+            <%if(alltopiclist[i]!=""){%>
+
+              <input type="radio" id="topic" name="topic" value="<%=alltopiclist[i]%>">
+               <label for="<%=alltopiclist[i]%>">
+                <%= alltopiclist[i]%>
+              </label><br>
+              <%}%>
+
+                <% }; %>
+                  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="topic" value="" id="Other">&nbsp;&nbsp;&nbsp;Other
+                  <input type="text" name="othertext" id="inputtext" >
+                  <br><br>
+                  <div class="buttons is-right">
+                    <button type="submit is-success" class="buttonlogout">Submit</button>
+                  </div>
+                  <br>
 
   </form>
 
@@ -28,9 +42,30 @@
 
 <script>
 
+function changeradioother(){
+ 
+ if(document.getElementById("Other").checked ) {
+  
+    if(document.getElementById("inputtext").value == ''){
+        alert('input required'); 
+        return false
+    }else{
+      document.getElementById("Other").value = document.getElementById("inputtext").value
+      return true;
+    }
+ }else{
+  document.getElementById("Other").value ="";
+  return true;
+ }
+   
+ }
+
+  
+
   async function createnewstudent(formElem) {
     try {
-
+console.log(document.getElementById("inputtext").value +"   "+document.getElementById("Other").checked)
+if(!changeradioother()){return alert("Please input the topic for the student");}
 
       var response = await fetch(formElem.action, {
         method: formElem.method,
