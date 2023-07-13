@@ -61,4 +61,4 @@ insert into alltakecourse values("COMP4025_00001","sid11111");
 insert into alltakecourse values("COMP4025_10001","sid11111");
 insert into alltakecourse values("GCAP3205_00001","sid11111");
 
-select * from allsupertakecourse
+select * from supervisor

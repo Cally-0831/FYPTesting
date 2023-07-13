@@ -98,7 +98,7 @@ primary key (ReqID)
 create table supervisorpairstudent(
 TID		varchar(20) not null,
 SID		varchar(10) not null,
-Topic 	varchar(50) not null,
+Topic 	varchar(100) not null,
 primary key (TID,SID)
 );
 
@@ -326,18 +326,18 @@ CREATE TRIGGER addintosetting before insert ON allsupersetting
 delimiter ;
 
 delimiter |
-CREATE TRIGGER addtopicinsupervisor after insert ON supervisorpairstudent
+CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent
   FOR EACH ROW
   BEGIN
 declare alltopic varchar(100);
 declare countcount integer;
 set countcount = 0;
-set alltopic ="";
-select count(*) into  countcount from supervisorpairstudent where topic = new.topic;
+
+select count(*) into  countcount from supervisorpairstudent where Topic like new.Topic and tid = new.tid;
+
 if countcount = 0 then
 select topics into alltopic from supervisor  where tid = new.tid;
-update supervisor set topics = concat(alltopic,"/",new.topic) where tid = new.tid;
-
+update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.tid;
 end if;
 
 

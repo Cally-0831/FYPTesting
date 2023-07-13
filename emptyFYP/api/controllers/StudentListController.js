@@ -59,30 +59,8 @@ module.exports = {
                 var json = JSON.parse(string);
                 //   console.log('>> json: ', json);  
                 var stringstring = json[0].topics.split("/").sort()
+                topiclist = stringstring;
                 
-                var check = true;
-                var i = 0;
-                var y = 0;
-                while (check) {
-                    if (topiclist.length == 0 && stringstring[i] != "") {
-                        topiclist.push(stringstring[i])
-                    } else if (topiclist[y] == stringstring[i]) {
-                        if (topiclist.length == y + 1) {
-                        } else {
-                            y++;
-                        }
-                    } else if (topiclist[y] != stringstring[i] && stringstring[i] != "") {
-                        topiclist.push(stringstring[i])
-                        if (topiclist.length == y + 1) {
-                        } else {
-                            y++;
-                        }
-                    }
-                    i++;
-                    if (i == stringstring.length) {
-                        check = false;
-                    }
-                }
 
                 console.log(">>topiclist final   " + topiclist)
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
