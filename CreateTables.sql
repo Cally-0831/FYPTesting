@@ -331,6 +331,7 @@ CREATE TRIGGER addtopicinsupervisor after insert ON supervisorpairstudent
   BEGIN
   declare alltopic varchar(200);
   declare stringstring varchar(50);
+  declare countcount integer;
   declare x integer;
   declare y integer;
   set stringstring="start";
