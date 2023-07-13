@@ -1,0 +1,1 @@
+update allstudenttakecourse set confirmation =0 where pid = "sid11111";

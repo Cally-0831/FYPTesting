@@ -1,32 +1,5 @@
 
 
-DROP TABLE IF EXISTS allusers;
-DROP TABLE IF EXISTS student;
-DROP TABLE IF EXISTS supervisor;
-DROP TABLE IF EXISTS allclass;
-DROP TABLE IF EXISTS classroom;
-DROP TABLE IF EXISTS logs;
-DROP TABLE IF EXISTS alltakecourse;
-DROP TABLE IF EXISTS allsupertakecourse;
-DROP TABLE IF EXISTS allstudenttakecourse;
-DROP TABLE IF EXISTS allrequestfromstudent;
-DROP TABLE IF EXISTS supervisorpairstudent;
-Drop table if exists allrequestfromsupervisor;
-Drop table if exists allclassroomtimeslot;
-Drop table if exists allnotice;
-Drop table if exists temptakecourse;
-Drop table if exists allsupersetting;
-
-DROP trigger IF exists testref;
-Drop trigger if exists checkstudenttakecourse;
-Drop trigger if exists insertcretorname;
-Drop trigger if exists addlessontimeforoneCode;
-Drop trigger if exists takeallcourseofonecode;
-Drop trigger if exists inputallcourseofonecode;
-Drop trigger if exists delallstudenttakecourse;
-
-
-
 create table  allusers(
 allusersname	varchar(100) Not null,
 pid			varchar(20) not null,
@@ -51,6 +24,7 @@ tid			varchar(20) not null,
 password	varchar(20) not null,
 states		varchar(20),
 errortime	int,
+topics		varchar(100) Not null,
 PRIMARY key (tid));
 
 create table allclass(
@@ -221,7 +195,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   if new.role = "stu" then
     insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime);
 	elseif new.role = "sup" then
-    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime);
+    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"");
     END IF;
   END;
   |
@@ -346,6 +320,42 @@ CREATE TRIGGER addintosetting before insert ON allsupersetting
   
   set new.createdate = now();
   set new.LastUpdate = now();
+  
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER addtopicinsupervisor after insert ON supervisorpairstudent
+  FOR EACH ROW
+  BEGIN
+  declare alltopic varchar(200);
+  declare stringstring varchar(50);
+  declare x integer;
+  declare y integer;
+  set stringstring="start";
+  set x =1;
+  set y = -1;
+  
+  label: LOOP
+  
+  select SUBSTRING_INDEX(topics, '/',x) into stringstring from supervisor.topic  where tid = new.tid;
+  if stringstring ="" then
+   LEAVE label;
+end if;
+  if stringstring = new.topic then
+		set y=1;
+        LEAVE label;
+   else 
+	set x = x+1;
+     iterate LABEL;
+	end if;
+  end LOOP;
+  
+  if y=1 then
+   select topics into alltopic from supervisor  where tid = new.tid;
+  update supervisor set topic = concat(alltopic,"/",new.topic) where tid = new.tid;
+  end if;
   
    END;
   |

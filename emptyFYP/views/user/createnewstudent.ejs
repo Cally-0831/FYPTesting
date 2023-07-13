@@ -1,28 +1,36 @@
-This is createnewstudent
+<div class="Pagetitle">Create New Student</div>
 <br><br>
-<form action="/user/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
-  <label>Student name:&nbsp;&nbsp;</label>
-  <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value=""><br>
-  <br>
-  <label>SID:&nbsp;&nbsp;&nbsp;</label>
-  <input type="text" placeholder="Enter SID" id="sid" name="sid" value=""><br><br>
-  <label for="topics">Topic:&nbsp;&nbsp;&nbsp;</label>
+<div class="createnewstudent " >
+  <form action="/user/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
+    <label>Student name:&emsp;&emsp;</label>
+    <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value="" style="width:300px"><br>
+    <br>
+    <label>SID:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</label>
+    <input type="text" placeholder="Enter SID" id="sid" name="sid" value="" style="width:300px"><br><br>
+    <label for="topics">Topic:&emsp;&emsp;&emsp;&emsp;&emsp;</label>
 
-  <select name="topics" id="topics">
-    <% alltopiclist.forEach( function(topic) { %>
-      <option value="<%= topic.topic %>">
-        <%= topic.topic%>
-      </option>
-      <% }); %>
-  </select>
-  <button type="submit is-success">Submit</button>
+    <select name="topics" id="topics" style="width:300px">
+      <% alltopiclist.forEach( function(topic) { %>
+        <option value="<%= topic.topic %>">
+          <%= topic.topic%>
+        </option>
+        <% }); %>
+    </select>
+    <br><br>
+    <div class="buttons is-right">
+      <button type="submit is-success" class="buttonlogout">Submit</button>
+    </div>
+    <br>
 
-</form>
+  </form>
+
+</div>
+
 <script>
 
   async function createnewstudent(formElem) {
     try {
-      
+
 
       var response = await fetch(formElem.action, {
         method: formElem.method,

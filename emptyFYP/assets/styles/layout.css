@@ -270,6 +270,25 @@ select:focus {
   margin-right: auto;
 }
 
+.createnewstudent {
+  padding: 10px;
+  margin: 50px 50px 50px 50px;
+  border-radius: 15px;
+  box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
+  background: rgb(155, 198, 53);
+  /* Old browsers */
+  background: -moz-linear-gradient(45deg, #E8DED1 0%, #E8DED1 99%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #E8DED1 0%, #E8DED1 99%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #E8DED1 0%, #E8DED1 99%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9bc635', endColorstr='#c0ea67', GradientType=1);
+  /* IE6-9 fallback on horizontal gradient */
+  display: inline-block;
+  overflow: auto
+}
+
 .setttbdeadline {
   padding: 10px;
   margin: 50px 50px 50px 50px;
