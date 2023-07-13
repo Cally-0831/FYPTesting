@@ -2,29 +2,48 @@
     Create New Notice
 </div>
 <br><br>
-<label for="title">Notice Title :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="text" id="title" style="width: 500px; height: 30px;" required>
+<div class="columns is-centered createnewstudent">
+    <div class=""rows>
+        <div class="row">
+        <label for="title">Notice Title :&emsp;&emsp;&emsp;</label>
+        <input type="text" id="title" style="width: 340px; height: 30px;" required>
+
+    </div>
+
     <br>
     <br>
-    <label for="NoticeContent">Content&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <!---
+
+    <div class="row">
+        <label for="content" class = "content">Content:&emsp;&emsp;&emsp;&emsp;&emsp;</label>
+        <!---
     <input type="text" id="content" style="width: 500px; height: 200px;" required>
     -->
-    <textarea id="content" name="content" rows="4" cols="50" required></textarea>
-   
-    <br><br>
-    <button class="buttonlogout" onclick="submitform()" style="position: absolute; right: 20px;">Submit</button>
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea>
 
+    </div> <br><br>
+
+    <div class="row">
+
+        <button class="buttonlogout" onclick="submitform()" style="position: absolute; right: 20px;">Submit</button>
+
+    </div>
+
+    </div>
+    
+
+
+
+</div>
 
 <script>
     async function submitform() {
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
-        stringstring= stringstring.replace(/\n/g," newline ");
-        console.log("!@#$!@#$!@#$!               "+stringstring)
+        stringstring = stringstring.replace(/\n/g, " newline ");
+        console.log("!@#$!@#$!@#$!               " + stringstring)
         var requestBody = JSON.stringify({
             title: document.getElementById("title").value,
-            content:stringstring,
+            content: stringstring,
         });
         if (r) {
             var response = await fetch("/notice/createnewnotice", {
@@ -33,13 +52,13 @@
             });
 
             if (response.ok) {
-                
+
                 // var html = await response.text();
                 // alert(html);
                 alert("Notice Created");
                 location.assign("/notice");
             } else {
-                
+
                 alert(response.status + ": " + response.statusText);
             }
         }
