@@ -1,1 +1,1 @@
-select * from supervisor
+select * from supervisor where tid = "tid00001"

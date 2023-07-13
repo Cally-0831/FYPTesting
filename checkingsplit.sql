@@ -1,1 +1,1 @@
-select SUBSTRING_INDEX(topics, '/',1)  from supervisor  where tid ="tid00001";
+insert into supervisorpairstudent values("tid00001","sid77777","hello")

@@ -329,38 +329,18 @@ delimiter |
 CREATE TRIGGER addtopicinsupervisor after insert ON supervisorpairstudent
   FOR EACH ROW
   BEGIN
-  declare alltopic varchar(200);
-  declare stringstring varchar(50);
-  declare countcount integer;
-  declare x integer;
-  declare y integer;
-  set stringstring="start";
-  set x =1;
-  set y = -1;
-  
-  label: LOOP
-  
-  select SUBSTRING_INDEX(topics, '/',x) into stringstring from supervisor  where tid = new.tid;
-  
-  if x=1 then
-  set y=1;
-  LEAVE label;
-  elseif stringstring = concat("/",new.topic) then
-		set y=-1;
-        LEAVE label;
-   else 
-	set x = x+1;
-     iterate LABEL;
-	
-  end if;
+declare alltopic varchar(100);
+declare countcount integer;
+set countcount = 0;
+set alltopic ="";
+select count(*) into  countcount from supervisorpairstudent where topic = new.topic;
+if countcount = 0 then
+select topics into alltopic from supervisor  where tid = new.tid;
+update supervisor set topics = concat(alltopic,"/",new.topic) where tid = new.tid;
 
-  end LOOP;
-  
-  if y=1 then
-   select topics into alltopic from supervisor  where tid = new.tid;
-  update supervisor set topics = concat(alltopic,"/",new.topic) where tid = new.tid;
-  end if;
-  
+end if;
+
+
    END;
   |
 delimiter ;
