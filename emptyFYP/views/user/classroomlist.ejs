@@ -26,7 +26,7 @@
                     <%= classroom.status%>
                 </td>
                 <td style="text-align: center;vertical-align:center;">
-                    <a href="/user/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>">
+                    <a href="/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>">
                         <button class="button" type="button">Add</button>
                     </a>
                     
@@ -38,7 +38,7 @@
                     </button>
                 </td>
                 <td style="text-align: center;vertical-align:center;">
-                    <a href="/user/view/<%= classroom.Campus%>/<%= classroom.RID%>">
+                    <a href="/view/<%= classroom.Campus%>/<%= classroom.RID%>">
                         <button class="button" type="button">view</button>
                     </a>
                 </td>
@@ -51,7 +51,7 @@
 
 <script>
     function gotocreateroom() {
-        location.assign("/user/createnewclassroom");
+        location.assign("/createnewclassroom");
     }
 
 
@@ -60,7 +60,7 @@
         var requestBody = JSON.stringify({ Campus: campus, RID: rid });
         if (r) {
 
-            var response = await fetch("/user/classroomlist", {
+            var response = await fetch("/classroomlist", {
                 method: "DELETE",
                 body: requestBody
             });

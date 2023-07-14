@@ -96,7 +96,7 @@
         });
 
 
-        var response = await fetch("/user/requestdetail/"+reqid, {
+        var response = await fetch("/requestdetail/"+reqid, {
             method: "POST",
             body: requestBody
         });
@@ -105,7 +105,7 @@
             // var html = await response.text();
             // alert(html);
             alert("Status of this thisrequestdetails has been updated to " + answer);
-            location.assign("/user/readstudentrequestlist");
+            location.assign("/readstudentrequestlist");
         } else {
             alert(response.status + ": " + response.statusText);
         }

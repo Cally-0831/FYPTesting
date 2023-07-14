@@ -1,7 +1,7 @@
 <div class="Pagetitle">Create New Student</div>
 <br>
 <div class="columns is-centered createnewstudent ">
-  <form action="/user/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
+  <form action="/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
     <label>Student name:&emsp;&emsp;</label>
     <input type="text" placeholder="Enter Student name" id="studentname" name="studentname" value=""
       style="width:300px" required><br>
@@ -72,7 +72,7 @@ if(!changeradioother()){return alert("Please input the topic for the student");}
       });
       if (response.ok) {
         alert("student created");
-        location.assign("/user/liststudent");
+        location.assign("/liststudent");
 
       } else if (response.status == 401) {
         var msg = await response.json();

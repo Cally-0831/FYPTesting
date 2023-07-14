@@ -20,7 +20,7 @@
     
     
                 <td>
-                    <a href="/user/read/<%= allstdlist.sid%>"><%= allstdlist.stdname %></a>
+                    <a href="/read/<%= allstdlist.sid%>"><%= allstdlist.stdname %></a>
                 </td>
                 <td>
                     <%= allstdlist.Topic%>
@@ -36,6 +36,6 @@
     </table>
     <script>
         function gotocreate(){
-            location.assign("/user/createnewstudent");
+            location.assign("/createnewstudent");
         }
     </script>

@@ -188,14 +188,15 @@ module.exports = {
     },
 
     getinfobycampus: async function (req, res) {
-      
+      var roomlist;
         let thisistheline="SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string); 
-                console.log(json);
-                return res.ok("Deleted");
+                roomlist = json;
+                return res.view('user/classroommanagement', { allClassroomlist:roomlist});
+           
             } catch (err) {
                 if (err) { console.log("sth happened here"); }
             }

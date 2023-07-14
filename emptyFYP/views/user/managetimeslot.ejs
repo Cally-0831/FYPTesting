@@ -62,7 +62,7 @@
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
 
-            var response = await fetch("/user/managetimeslot", {
+            var response = await fetch("/managetimeslot", {
                 method: "DELETE",
                 body: requestBody
             });
@@ -72,7 +72,7 @@
                 // alert(html);
 
                 alert("Request deleted.");
-                location.assign("/user/managetimeslot");
+                location.assign("/managetimeslot");
             } else {
                 alert(response.status + ": " + response.statusText);
             }

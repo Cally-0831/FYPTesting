@@ -21,7 +21,7 @@ module.exports.routes = {
 
   //'/': { view: 'pages/homepage' },
 
-  '/': "/user/login",
+  '/': { view: 'user/login' },
 
   'GET /user/login': "UserController.login",
   'POST /user/login': "UserController.login",
@@ -42,44 +42,44 @@ module.exports.routes = {
   'POST /timetable': "TimetableController.submitpersonalallclass",
   
 
-  'GET /user/readstudentrequestlist': "RequestController.liststudentrequest",
-  'GET /user/requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
-  'POST /user/requestdetail/:ReqID': "RequestController.replystudentrequest",
+  'GET /readstudentrequestlist': "RequestController.liststudentrequest",
+  'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
+  'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",
 
-  //'GET /user/classroommanagement': "ClassroomListController.getinfobycampus",
+  'GET /classroommanagement': "ClassroomListController.getinfobycampus",
 
-  'GET /user/createnewclassroom': "ClassroomListController.getcampus",
-  'POST /user/createnewclassroom': "ClassroomListController.createnewclassroom",
+  'GET /createnewclassroom': "ClassroomListController.getcampus",
+  'POST /createnewclassroom': "ClassroomListController.createnewclassroom",
 
-  'GET /user/classroomlist': "ClassroomListController.listclassroom",
-  'DELETE /user/classroomlist': "ClassroomListController.deleteclassroom",
+  'GET /classroomlist': "ClassroomListController.listclassroom",
+  'DELETE /classroomlist': "ClassroomListController.deleteclassroom",
 
-  'GET /user/view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
-  'DELETE /user/view': "ClassroomListController.deletetimeslot",
+  'GET /view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
+  'DELETE /view': "ClassroomListController.deletetimeslot",
 
-  'GET /user/addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
-  'POST /user/addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
+  'GET /addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
+  'POST /addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",
 
-  'GET /user/managetimeslot': "ClassroomListController.listalltimeslot",
-  'DELETE /user/managetimeslot': "ClassroomListController.deletetimeslot",
+  'GET /managetimeslot': "ClassroomListController.listalltimeslot",
+  'DELETE /managetimeslot': "ClassroomListController.deletetimeslot",
 
-  'GET /user/checkrequest': "RequestController.listrequest",
-  'DELETE /user/checkrequest': "RequestController.deleterequest",
+  'GET /checkrequest': "RequestController.listrequest",
+  'DELETE /checkrequest': "RequestController.deleterequest",
 
-  'GET /user/submitrequest': "UserController.submitrequest",
-  'POST /user/submitrequest': "UserController.submitrequest",
+  'GET /submitrequest': "UserController.submitrequest",
+  'POST /submitrequest': "UserController.submitrequest",
 
-  'GET /user/uploadstudentlist': "UserController.uploadstudentlist",
-  'POST /user/uploadstudentlist': "UserController.uploadstudentlist",
+  'GET /uploadstudentlist': "UserController.uploadstudentlist",
+  'POST /uploadstudentlist': "UserController.uploadstudentlist",
 
-  'GET /user/liststudent': "StudentListController.liststudent",
-  'POST /user/liststudent': "StudentListController.liststudent",
+  'GET /liststudent': "StudentListController.liststudent",
+  'POST /liststudent': "StudentListController.liststudent",
 
-  'GET /user/createnewstudent': "StudentListController.gettopic",
-  'POST /user/createnewstudent': "StudentListController.createnewstudent",
+  'GET /createnewstudent': "StudentListController.gettopic",
+  'POST /createnewstudent': "StudentListController.createnewstudent",
 
-  'GET /user/read/:sid': "StudentListController.readsinglestudent",
-  'DELETE /user/read/:sid': "StudentListController.deletestudent",
+  'GET /read/:sid': "StudentListController.readsinglestudent",
+  'DELETE /read/:sid': "StudentListController.deletestudent",
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
 

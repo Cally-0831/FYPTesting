@@ -36,7 +36,7 @@
 
         if (r) {
 
-            var response = await fetch("/user/read/" + sid, {
+            var response = await fetch("/read/" + sid, {
                 method: "DELETE",
                 body: sid
             });
@@ -46,7 +46,7 @@
                 // alert(html);
 
                 alert("student deleted.");
-                location.assign("/user/liststudent");
+                location.assign("/liststudent");
             } else {
                 alert(response.status + ": " + response.statusText);
             }

@@ -1,6 +1,6 @@
 <div>
     <% if (req.session.role=="stu" ){%>
-        <form name="therequest" action="/user/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+        <form name="therequest" action="/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
             <div class="title">
                 Unavailable timeslot
             </div>
@@ -47,7 +47,7 @@
                 this is a supervisor
 
             </p>
-            <form name="therequest" action="/user/submitrequest" method="post"
+            <form name="therequest" action="/submitrequest" method="post"
                 onsubmit="submitrequest(this);return false;">
                 <div class="title">
                     Unavailable timeslot
@@ -120,7 +120,7 @@
             if (response.ok) {
 
                 alert("Submission success");
-                location.assign("/home");
+                location.assign("/checkrequest");
 
             } else if (response.status == 401) {
                 var msg = await response.json();

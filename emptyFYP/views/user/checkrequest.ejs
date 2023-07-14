@@ -70,7 +70,7 @@
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         </td>
                         <td style="text-align: center;vertical-align:center;">
-                            <a href="/user/requestdetail/<%=request.ReqID%>">
+                            <a href="/requestdetail/<%=request.ReqID%>">
                                 <button class="button" type="button">view</button>
                             </a>
                         </td>
@@ -114,7 +114,7 @@
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
 
-            var response = await fetch("/user/checkrequest", {
+            var response = await fetch("/checkrequest", {
                 method: "DELETE",
                 body: requestBody
             });
@@ -124,7 +124,7 @@
                 // alert(html);
 
                 alert("Request deleted.");
-                location.assign("/user/checkrequest");
+                location.assign("/checkrequest");
             } else {
                 alert(response.status + ": " + response.statusText);
             }

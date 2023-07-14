@@ -1,36 +1,45 @@
-This is createnewclassroom
-<div class = "Pagetitle"> Create new Classroom</div>
+<div class="Pagetitle"> Create new Classroom</div>
 <br><br>
-<form action="/user/createnewclassroom" method="post" onsubmit="createnewclassroom(this);return false;">
-  
-  <label for="Campus">Campus :&nbsp;&nbsp;&nbsp;</label>
+<div class="columns is-centered is-onethird">
+  <div class="column"></div>
+  <div class="column column-big">
+    <form action="/createnewclassroom" method="post" onsubmit="createnewclassroom(this);return false;">
+<br><br>
+      <label for="Campus" style="font-size: 20px;">Campus&emsp;:&emsp;&nbsp;</label>
 
-  <select name="Campus" id="Campus">
-    <% allCampuslist.forEach( function(campus) { %>
-      <option value="<%= campus.campus %>">
-        <%= campus.campus %>
-      </option>
-      <% }); %>
-  </select>
-  <br>
-  <label>Room ID:&nbsp;&nbsp;&nbsp;</label>
-  <input type="text" placeholder="Enter RID" id="RID" name="RID" value=""><br><br>
-  
-  <button type="submit is-success">Submit</button>
+      <select name="Campus" id="Campus" style=" font-size: 20px; width : 232px;">
+        <% allCampuslist.forEach( function(campus) { %>
+          <option value="<%= campus.campus %>" style="font-size: 20px;">
+            <%= campus.campus %>
+          </option>
+          <% }); %>
+      </select>
+      <br><br>
+      <label for="RID" style="font-size: 20px; ">Room ID&emsp;:&emsp;&emsp;</label>
+      <input type="text" placeholder="Enter RID" id="RID" name="RID" value="" style="font-size: 20px;">
+      <br><br><br>
+      <div class="buttons is-right">
+        <button type="submit is-success" class="buttonlogout">Submit</button>
+      </div>
+<br>
+    </form>
 
-</form>
+  </div>
+  <div class="column"></div>
+</div>
+
 <script>
 
   async function createnewclassroom(formElem) {
     try {
-    
+
       var response = await fetch(formElem.action, {
         method: formElem.method,
         body: new FormData(formElem),
       });
       if (response.ok) {
         alert("Room created");
-        location.assign("/user/classroomlist");
+        location.assign("/classroomlist");
 
       } else if (response.status == 401) {
         var msg = await response.json();
@@ -46,6 +55,3 @@ This is createnewclassroom
 
 
 </script>
-
-
-
