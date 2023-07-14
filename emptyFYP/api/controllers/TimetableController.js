@@ -184,10 +184,11 @@ module.exports = {
         let thisistheline;
        
         if (req.session.role == "sup") {
-            thisistheline = "Update allsupertakecourse set confirmation = true,SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+            thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
         } else if (req.session.role == "stu") {
-            thisistheline = "Update allstudenttakecourse set confirmation = true,SubmissionTime = now(), picdata = \"" + req.body.filedata + "\" where pid=\"" + req.session.userid + "\"";
+            //, picdata = \"" + req.body.filedata + "\"
+            thisistheline = "Update  allstudenttakecourse set confirmation =\"1\" , SubmissionTime = now() , picdata = \"" + req.body.filedata + "\" where pid=\"" + req.session.userid + "\"";
         }
         console.log(thisistheline);
         // console.log(thisistheline);

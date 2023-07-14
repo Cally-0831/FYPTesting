@@ -21,7 +21,7 @@ module.exports = {
         var stdlist;
 
 
-        let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
+        let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic,student.submission " +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
             "\n where supervisorpairstudent.tid = \"" + req.session.userid + "\"\;";
 

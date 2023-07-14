@@ -16,6 +16,7 @@ sid			varchar(20) not null,
 password	varchar(20) not null,
 states		varchar(20),
 errortime	int,
+submission  varchar(10) default "N",
 PRIMARY key (sid));
 
 create table supervisor(
@@ -59,7 +60,7 @@ primary key (CID,PID)
 create table allsupertakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
-confirmation boolean ,
+confirmation integer default 0 ,
 Submissiontime timestamp,
 CONSTRAINT csid
 primary key (CID,PID)
@@ -68,7 +69,7 @@ primary key (CID,PID)
 create table allstudenttakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
-confirmation boolean,
+confirmation integer default 0 ,
 Submissiontime timestamp,
 picdata varbinary(60000),
 CONSTRAINT csid
@@ -154,7 +155,7 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
   
     
   if countcount >0 then
-    set new.rid ="empty";
+    set new.rid ="N";
     END IF;
     
     if new.lesson >0 then
@@ -193,7 +194,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
 ##  select count(*) into countcount from student_take_course 
 ##  where cid = new.cid and sid = new.sid;
   if new.role = "stu" then
-    insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime);
+    insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
 	elseif new.role = "sup" then
     insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"");
     END IF;
@@ -340,6 +341,18 @@ select topics into alltopic from supervisor  where tid = new.tid;
 update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.tid;
 end if;
 
+
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER addsubinstudent before update ON allstudenttakecourse
+  FOR EACH ROW
+  BEGIN
+	if new.confirmation = "1" then
+		update student set submission ="Y" where sid = new.pid;
+	end if;
 
    END;
   |

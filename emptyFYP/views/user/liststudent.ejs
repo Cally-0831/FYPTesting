@@ -8,6 +8,7 @@
     <th>SID</th>
     <th>Student Name</th>
     <th>Topic</th>
+    <th>Submission of TTB</th>
     
     
         <% allstdlist.forEach( function(allstdlist) { %>
@@ -23,6 +24,9 @@
                 </td>
                 <td>
                     <%= allstdlist.Topic%>
+                </td>
+                <td>
+                    <%=allstdlist.submission%>
                 </td>
                
             </tr>
