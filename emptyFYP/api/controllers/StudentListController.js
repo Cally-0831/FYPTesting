@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-
+const date = require('date-and-time')
 var db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -179,5 +179,32 @@ module.exports = {
 
         return res.ok("created");
     },
+
+    readsinglestudentttb : async function(req,res){
+
+        let thisistheline;
+       
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
+
+        // console.log(thisistheline);
+        db.query(thisistheline, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                personallist = json;
+                // console.log(personallist)
+                
+                return res.view("user/readttb",{ 
+                    date:date,
+                    allpersonallist: personallist,
+                    SID : req.params.SID})
+
+            } catch (err) {
+                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
+            }
+
+        });
+        
+    }
 
 }

@@ -1,55 +1,16 @@
+<div class="Pagetitle"><%=SID%> TimeTable</div>
 
-<% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
-<% if(allpersonallist.length ==0 || allpersonallist[0].confirmation == 0){%>
-    <div class="Pagetitle">
-        <%=req.session.username%>'s TimeTable
+<div class="rows">
+    <div class="columns">
+        <div class="column">
+            <div class="buttons">
+                <div class="buttonlogout" onclick="history.back()">
+                    Back
+                </div>
+            </div>
+        </div>
     </div>
-    <a href="/timetable/submitttb">
-    <button class="buttonlogout" id="addclass">Add Class</button>
-    
-    <% if(req.session.role=="stu"){%>
-        <br>
-        <br>
-        <form method="post"  action="/timetable" onsubmit="submitform(this);return false;">
-            <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
-            <input
-            type="file"
-            id="studentttbpic"
-            name="studentttbpic"
-            accept=".png ,.jpg ,.jpeg"
-            onchange="getFileData(this)" /> 
-            <div id="appearthebutton" ></div>
-          </form>
-          <br><br><Br>
-       
-         
-
-
-    <br> <br> <br> <br> <br> <br>
-<%}else{%>
-    <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
-    <br>
-    <%}%>
-
-</a>
-    
-    <%}else{%>
-        
-        <div class="Pagetitle">
-            <%=req.session.username%>'s Submitted TimeTable
-        </div>
-        <br>
-        <div>
-            <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
-            Submitted at <%=submitteddate%>
-        </div>
-        <%}%>
-
-
-
-<br>
-
-
+</div>
 <br><br>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
@@ -586,121 +547,3 @@
            %>
     </tr>
 </table>
-
-<script>
-
-
-var thisfile;
-   
-function getFileData(myFile){
-
-    var file = myFile.files[0];
-    thisfile = file;
-    filedata = file;
-    var filename = file.name;
-   var filetype = (file.name.split("."))[1]
-   
-   if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
-   {
-    document.getElementById("studentttbpic").value ="";
-    return alert("Please Upload a correct format of proof");
-   }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit is-success\">Submit Timetable</button>";
-   
-   }
-}
-
-async function submitform(formElem){
- 
-    var file = thisfile;
-    var filedata;
-    var filename = file.name;
-   var filetype = (file.name.split("."))[1]
-   
-   var reader = new FileReader();
-  reader.onloadend = async function() {
-    //console.log('Encoded Base 64 File String:', reader.result);
-    
-    /******************* for Binary ***********************/
-    //var data=(reader.result).split(',')[1];
-    // var binaryBlob = atob(data);
-    var data = reader.result;
-    filedata =  data;
-     //console.log('Encoded Binary File String:', filedata);
-  
-
-var requestBody;
-    var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
- if(filedata!= null || filedata!= undefined){
-   requestBody= JSON.stringify({
-    fileorg : thisfile,
-           filedata: filedata
-        });
- }
-    if(r){
-        console.log("enterhere2")
-    var response = await fetch(formElem.action, {
-                method: "POST",
-                body:   requestBody
-            });
-
-            if (response.ok) {
-                alert(" Your Timetable submitted.");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-}
-}
-  reader.readAsDataURL(file);
-}
-
-async function Submitthisttb(){
-    
-   
-    var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
-if(r){
-    
-    var response = await fetch("/timetable", {
-                method: "POST",
-                
-            });
-
-            if (response.ok) {
-               
-                alert("Timetable submitted.");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-}else{
-
-}
-}
-async function deleteclassinput(ccode,cseccode) {
-        var r = confirm("Confirm Delete " + ccode +"_"+cseccode+ " ?");
-        var requestBody = JSON.stringify({ cid:  ccode +"_"+cseccode });
-        if (r) {
-
-            var response = await fetch("/timetable", {
-                method: "DELETE",
-                body: requestBody
-            });
-
-            if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
-
-                alert("Class input deleted.");
-                location.assign("/timetable");
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-        } else {
-            alert("cancelled");
-        }
-    };
-</script>

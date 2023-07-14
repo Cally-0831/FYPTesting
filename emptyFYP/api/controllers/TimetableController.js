@@ -197,6 +197,8 @@ module.exports = {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
         } else if (req.session.role == "stu") {
+            thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now(),picdata="+req.body.filedata+" where pid=\"" + req.session.userid + "\"";
+
            /**
             *  console.log("enter SFTP")
                 const file = req.body.fileorg;

@@ -26,7 +26,15 @@
                     <%= allstdlist.Topic%>
                 </td>
                 <td>
-                    <%=allstdlist.submission%>
+                    <% if (allstdlist.submission =="N"){%>
+                        
+                        <%=allstdlist.submission%>
+                        <%}else if(allstdlist.submission =="Y"){%>
+                            <a href="/readttb/<%= allstdlist.sid%>">
+                                <button class = "buttonlogout">View Submission</button>
+                            </a>
+                            <%}%>
+                    
                 </td>
                
             </tr>
@@ -35,6 +43,7 @@
     
     </table>
     <script>
+        
         function gotocreate(){
             location.assign("/createnewstudent");
         }

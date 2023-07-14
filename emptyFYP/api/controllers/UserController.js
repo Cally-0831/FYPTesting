@@ -1,5 +1,6 @@
 var mysql = require('mysql');
-
+ //var url = new url(sails.config.datastores.mysql.url);
+ console.log(mysql);
 var db = mysql.createConnection({
     host: "localhost",
     user: "root",

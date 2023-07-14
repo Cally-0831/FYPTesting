@@ -55,5 +55,15 @@ module.exports.datastores = {
 
   },
 
+  /**
+   * 
+   *   putty:{
+    adapter: require('sails-mysql'),
+    url: 'sftp://e9222068:7BfRebBP@faith.comp.hkbu.edu.hk:22',
+
+  }
+   */
+
+
 
 };
