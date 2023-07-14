@@ -4,46 +4,69 @@
     <div class="Pagetitle">
         <%=req.session.username%>'s TimeTable
     </div>
-    <a href="/timetable/submitttb">
-    <button class="buttonlogout" id="addclass">Add Class</button>
-    
-    <% if(req.session.role=="stu"){%>
-        <br>
-        <br>
-        <form method="post"  action="/timetable" onsubmit="submitform(this);return false;">
-            <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
-            <input
-            type="file"
-            id="studentttbpic"
-            name="studentttbpic"
-            accept=".png ,.jpg ,.jpeg"
-            onchange="getFileData(this)" /> 
-            <div id="appearthebutton" ></div>
-          </form>
-          <br><br><Br>
-       
-         
-
-
-    <br> <br> <br> <br> <br> <br>
+    <div>
+        <div class="buttons is-left">
+            <button class="button buttonlogout" onclick="history.back()">Back</button>
+        </div>
+        <div class="buttons is-right">
+                    <a href="/timetable/submitttb">
+                        <button class="button buttonlogout" id="addclass">Add Class</button>
+                    </a>
+                    <% if(req.session.role=="stu"){%>
+                        <br>
+                        <br>
+                        <form method="post"  action="/timetable" onsubmit="submitform(this);return false;">
+                            <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
+                            <input
+                            type="file"
+                            id="studentttbpic"
+                            name="studentttbpic"
+                            accept=".png ,.jpg ,.jpeg"
+                            onchange="getFileData(this)" /> 
+                            <div id="appearthebutton" ></div>
+                          </form>
+                          <br><br><Br>
+                           
+                    <%}else{%>
+                            <button class="button buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+                            <br>
+                    <%}%>
+                    <br> <br> 
+    </div>
+                
+                
+           
+        
 <%}else{%>
-    <button class="buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
-    <br>
-    <%}%>
-
-</a>
-    
-    <%}else{%>
         
         <div class="Pagetitle">
             <%=req.session.username%>'s Submitted TimeTable
         </div>
         <br>
-        <div>
-            <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
+        <div class="rows">
+            <div class="row">
+              <div class="columns is-mobile">
+                <div class="column is-half">
+                  <div class="buttons is-left">
+                    <div class="button buttonlogout " onclick="history.back()">
+                      Back
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
             Submitted at <%=submitteddate%>
-        </div>
-        <%}%>
+            </div>
+         </div>
+        <%}%>      
+    
+
+
+
+    
+    
 
 
 
@@ -624,7 +647,7 @@ async function submitform(formElem){
     /******************* for Binary ***********************/
     //var data=(reader.result).split(',')[1];
     // var binaryBlob = atob(data);
-    var data = reader.result;
+    var data = reader.result
     filedata =  data;
      //console.log('Encoded Binary File String:', filedata);
   

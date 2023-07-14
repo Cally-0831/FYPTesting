@@ -1,53 +1,63 @@
-<div class="Pagetitle">This is TimeTable Submission Page</div>
-<br><br>
-<form action="/timetable/submitttb" method="post" onsubmit="submitform(this);return false;">
-    <br>
-    <div id="allclassinputfield" style="font-size: 20px;">
-        <div id="singleclassinfo" class="singleclassinfo">
+<div class="Pagetitle">Add Class To Your TimeTable</div>
+<div class="buttons">
+    <div class="button buttonlogout is-left" onclick="history.back()">
+        Back
+    </div>
 
-            <div id="deptinputfield" class="singleclassinfocontent">
-                <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
-                <select name="classdep" id="classdep">
-                    <option value="">---Please Select---</option>
+</div>
+<br>
+<div class="columns is-mobile">
+    <div class="column is-one-third"></div>
+    <div class="column is-one-third singleclassinfo">
+        <form action="/timetable/submitttb" method="post" onsubmit="submitform(this);return false;">
+            <br>
+            <div id="allclassinputfield" style="font-size: 20px;">
+                <div id="singleclassinfo">
+                    <div id="deptinputfield">
+                        <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
+                        <select name="classdep" id="classdep">
+                            <option value="">---Please Select---</option>
+                            <%allDeptlist.forEach( function(list) { %>
+                                <option value="<%=list.CDept%>">
+                                    <%=list.CDept%>
+                                </option>
+                                <% })%>
+                        </select>
+                    </div>
+                    <div id="codeinputfield">
+                        <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
+                        <select name="classcode" id="classcode">
+                            <option value="">---Please Select---</option>
 
-                    <%allDeptlist.forEach( function(list) { %>
-                        <option value="<%=list.CDept%>">
-                            <%=list.CDept%>
-                        </option>
-                        <% })%>
-                </select>
-            </div>
-            <div id="codeinputfield" class="singleclassinfocontent">
-                <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
-                <select name="classcode" id="classcode">
-                    <option value="">---Please Select---</option>
+                        </select>
+                    </div>
+                    <div id="sectioninputfield">
+                        <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
+                        <select name="classsection" id="classsection">
+                            <option value="">---Please Select---</option>
+                        </select>
+                    </div>
+                    <div id="labsectioninputfield"></div>
+                    <div class="buttons is-right">
+                        <button class="button buttonlogout" type="submit is-success">Add Class</button>
+                    </div>
+                </div>
+        </form>
+    </div>
 
-                </select>
-            </div>
-            <div id="sectioninputfield" class="singleclassinfocontent">
-                <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
-                <select name="classsection" id="classsection">
-                    <option value="">---Please Select---</option>
-                </select>
-            </div>
-            <div id="labsectioninputfield" class="singleclassinfocontent">
+</div>
 
-            </div>
-            <button class="buttonlogout" type="submit is-success" >Add Class</button>
-
-        </div>
-</form>
 
 <script>
-     async function submitform(formElem) {
-        
-        if(document.getElementById("classdep").value == ""){
+    async function submitform(formElem) {
+
+        if (document.getElementById("classdep").value == "") {
             return alert("Department Code cannot be empty")
-        }else if(document.getElementById("classcode").value == ""){
+        } else if (document.getElementById("classcode").value == "") {
             return alert("Class Code cannot be empty")
-        }else if(document.getElementById("classsection").value == ""){
+        } else if (document.getElementById("classsection").value == "") {
             return alert("Class Section Code cannot be empty")
-        }else if(document.getElementById("classlabsection") !=null &&  document.getElementById("classlabsection").value == ""){
+        } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "") {
             return alert("Class Tutorial Section Code cannot be empty")
         }
 
@@ -57,7 +67,7 @@
                 body: new FormData(formElem),
             });
             if (response.ok) {
-                
+
                 location.assign("/timetable");
 
             } else if (response.status == 401) {
@@ -70,7 +80,7 @@
         } catch (error) {
             console.log(error);
         }
-     }
+    }
 
     function _(element) {
         return document.getElementById(element);

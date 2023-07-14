@@ -1,9 +1,26 @@
 <div class="Pagetitle">Classroom List</div>
 <br>
+<div class="columns is-mobile">
+    <div class="column is-half">
+        <div class="buttons">
+            <div class="button buttonlogout " onclick="history.back()">
+                Back
+            </div>
+        </div>
 
-<button class="button" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
 
-<br><br>
+    </div>
+    <div class="column is-half">
+        <div class="buttons is-right">
+            <button class="button" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<br>
 <div>
     <table class="table is-bordered is-striped is-hoverable is-fullwidth">
         <th style="font-size:20px;text-align: center;vertical-align:center;">Campus</th>
@@ -29,7 +46,7 @@
                     <a href="/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>">
                         <button class="button" type="button">Add</button>
                     </a>
-                    
+
                 </td>
                 <td style="text-align: center;vertical-align:center;">
                     <button class="button" type="button"

@@ -1,13 +1,30 @@
-<div class="Pagetitle">
-    <%= req.session.role%> Notice Page
-</div>
+<div class="Pagetitle">Notice Page</div>
 
-<% if (req.session.role!="stu" ){%>
+<div class="rows">
+    <div class="row">
+        <div class="columns ">
+            <div class="column">
+                <div class="buttons is-left">
+                    <div class="button buttonlogout " onclick="history.back()">
+                        Back
+                    </div>
 
-    <button class="buttonlogout" onclick="gotocreate()">Create Notice</button>
-    <br>
-    <% }%>
+                </div>
+            </div>
+            <div class="column ">
+                <div class="buttons is-right">
 
+                    <% if (req.session.role!="stu" ){%>
+
+                        <button class="buttonlogout" onclick="gotocreate()">Create Notice</button>
+                        <br>
+                        <% }%>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
 
             <th style="font-size:20px;text-align: center;vertical-align:middle;">No.</th>
@@ -16,35 +33,34 @@
             <th style="font-size:20px;text-align: center;vertical-align:middle;">Content</th>
             <th style="font-size:20px;text-align: center;vertical-align:middle;">Announcer</th>
 
-            <% for(var i=0 ; i < thisusernoticetlist.length;i++){
-                var contents = thisusernoticetlist[i].content.split('newline');
-
-                %>
+            <% for(var i=0 ; i < thisusernoticetlist.length;i++){ var
+                contents=thisusernoticetlist[i].content.split('newline'); %>
                 <tr>
                     <td style="text-align: center;vertical-align:middle;">
                         <%= i+1%>
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
                         <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleDateString(); %>
-                        <br>
-                        <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleTimeString('en-US',{hour12: false}) %>
+                            <br>
+                            <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleTimeString('en-US',{hour12: false})
+                                %>
 
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
                         <%= thisusernoticetlist[i].title %>
                     </td>
                     <td style="text-align: left;vertical-align:middle;">
-                        <%if(contents != null){%>
-                             <%for(var j = 0 ;j < contents.length;j++){%>
-                            <%=contents[j]%>
-                            <br>
-                            <%}%>
-                            
-                            <%}else{%>
-                                <%= thisusernoticetlist[i].content %>
-                                <%}%>
-                       
-                        
+                        <%if(contents !=null){%>
+                            <%for(var j=0 ;j < contents.length;j++){%>
+                                <%=contents[j]%>
+                                    <br>
+                                    <%}%>
+
+                                        <%}else{%>
+                                            <%= thisusernoticetlist[i].content %>
+                                                <%}%>
+
+
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
                         <%= thisusernoticetlist[i].Creatorname%>
@@ -54,12 +70,13 @@
 
 
         </table>
+    </div>
+</div>
 
 
 
-
-        <script>
-            function gotocreate() {
-                location.assign("/notice/createnewnotice");
-            }
-        </script>
+<script>
+    function gotocreate() {
+        location.assign("/notice/createnewnotice");
+    }
+</script>

@@ -1,7 +1,24 @@
-
 <div class="Pagetitle">Student List</div>
 <br>
-<button class="button" id= "createnewstu" onclick="gotocreate()">Create a new Student</button>
+<div class="rows">
+    <div class="columns">
+        <div class="column is-left">
+            <div class="buttons">
+                <div class="button buttonlogout is-left" onclick="history.back()">
+                    Back
+                </div>
+
+            </div>
+        </div>
+        <div class="column ">
+            <div class="buttons is-right">
+                <button class="buttonlogout" id="createnewstu" onclick="gotocreate()">Create a new Student</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <br><br>
 
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
@@ -9,42 +26,44 @@
     <th>Student Name</th>
     <th>Topic</th>
     <th>Submission of TTB</th>
-    
-    
-        <% allstdlist.forEach( function(allstdlist) { %>
-    
-            <tr>
-                <td>
-                    <%= allstdlist.sid %>
-                </td>
-    
-    
-                <td>
-                    <a href="/read/<%= allstdlist.sid%>"><%= allstdlist.stdname %></a>
-                </td>
-                <td>
-                    <%= allstdlist.Topic%>
-                </td>
-                <td>
-                    <% if (allstdlist.submission =="N"){%>
-                        
-                        <%=allstdlist.submission%>
-                        <%}else if(allstdlist.submission =="Y"){%>
+
+
+    <% allstdlist.forEach( function(allstdlist) { %>
+
+        <tr>
+            <td>
+                <%= allstdlist.sid %>
+            </td>
+
+
+            <td>
+                <a href="/read/<%= allstdlist.sid%>">
+                    <%= allstdlist.stdname %>
+                </a>
+            </td>
+            <td>
+                <%= allstdlist.Topic%>
+            </td>
+            <td>
+                <% if (allstdlist.submission=="N" ){%>
+
+                    <%=allstdlist.submission%>
+                        <%}else if(allstdlist.submission=="Y" ){%>
                             <a href="/readttb/<%= allstdlist.sid%>">
-                                <button class = "buttonlogout">View Submission</button>
+                                <button class="buttonlogout">View Submission</button>
                             </a>
                             <%}%>
-                    
-                </td>
-               
-            </tr>
-    
-            <% }); %>
-    
-    </table>
-    <script>
-        
-        function gotocreate(){
-            location.assign("/createnewstudent");
-        }
-    </script>
+
+            </td>
+
+        </tr>
+
+        <% }); %>
+
+</table>
+<script>
+
+    function gotocreate() {
+        location.assign("/createnewstudent");
+    }
+</script>

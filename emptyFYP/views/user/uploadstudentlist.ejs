@@ -1,19 +1,46 @@
 <div class="Pagetitle">Upload Student List</div>
+<div class="rows">
+  <div class="row">
+    <div class="columns">
+      <div class="column">
+        <div class="buttons is-left">
+          <div class="button buttonlogout " onclick="history.back()">
+            Back
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <br><br>
 <script>
   var allstudentarray = new Array(0);
 </script>
-<form enctype="multipart/form-data">
-  <label for="allcontent">Please upload the student list in .xlsx format </label>
-  <br>
-  <input id="upload" type=file name="files[]">
-</form>
-<br>
 
-  <div id = "getlistdata"></div>
+<div class="columns is-mobile">
+  <div class="column "></div>
+  <div class="column is-three-quarters template">
+    <form enctype="multipart/form-data">
+      <label for="allcontent" style="font-size: 20px;">Please upload the student list in .xlsx format </label>
+      <br><br>
+      <input id="upload" type=file name="files[]">
+    </form>
+    <br>
 
-<br>
-<textarea class="form-control" rows=35 cols=120 id="xlx_json"></textarea>
+    <div id="getlistdata" style="font-size: 20px;"></div>
+
+    <br>
+    <textarea class="form-control" id="xlx_json" style="width:100% ;height:50% ; overflow: scroll;" readonly="true"></textarea>
+    <br><br><br><br><br><br><br><br><br>
+  </div>
+  <div class="column"></div>
+</div>
+
+
+
+
+
+
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -21,8 +48,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 <script>
   document.getElementById('upload').addEventListener('change', handleFileSelect, false);
-var allstudentarray=new Array(0);
-var jsonobj ;
+  var allstudentarray = new Array(0);
+  var jsonobj;
   var ExcelToJSON = function () {
 
     this.parseExcel = function (file) {
@@ -37,17 +64,17 @@ var jsonobj ;
           // Here is your object
           var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
           var json_object = JSON.stringify(XL_row_object);
-          
-          console.log("check json_object      "+json_object);
+
+          console.log("check json_object      " + json_object);
           jsonobj = json_object
-          console.log("check jsonobj      "+jsonobj);
-          
+          console.log("check jsonobj      " + jsonobj);
+
           allstudentarray = JSON.parse(json_object);
-          document.getElementById("getlistdata").innerHTML = "Total "+allstudentarray.length+" students will be created under your management,\<br\> Click confirm to create."
-          +"\<br\>\<br\>"
-          +" \<form  action\=\"\/uploadstudentlist\" method\=\"post\" onsubmit\=\"submitform(this)\;return false\;\"\>"
-          +"\<button class=\"buttonfamily\" id\=\"confirm is\-success\"\>Confirm\<\/button\>"
-            +"\<\/form>";
+          document.getElementById("getlistdata").innerHTML = "Total " + allstudentarray.length + " students will be created under your management,\<br\> Click confirm to create."
+            + "\<br\>\<br\>"
+            + " \<form  action\=\"\/uploadstudentlist\" method\=\"post\" onsubmit\=\"submitform(this)\;return false\;\"\>"
+            + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\>"
+            + "\<\/form>";
           jQuery('#xlx_json').val(json_object);
         })
       };
@@ -73,29 +100,29 @@ var jsonobj ;
     xl2json.parseExcel(files[0]);
   }
 
-  async function submitform(formElem){
-    try{
-    //console.log("check all the list     "+allstudentarray);
-    var response = await fetch(formElem.action,{
+  async function submitform(formElem) {
+    try {
+      //console.log("check all the list     "+allstudentarray);
+      var response = await fetch(formElem.action, {
         method: formElem.method,
         body: jsonobj
-    });
-    if (response.ok){
-    
-    alert("Students are created");
-    window.history.back();
+      });
+      if (response.ok) {
 
-}else if(response.status ==401){
-    var msg = await response.json();
-    alert(msg);
-}else{
-    alert(response.statusTest);
-}
+        alert("Students are created");
+        window.history.back();
+
+      } else if (response.status == 401) {
+        var msg = await response.json();
+        alert(msg);
+      } else {
+        alert(response.statusTest);
+      }
 
 
-}catch(err){
-    console.log("Things happened here");
-}
+    } catch (err) {
+      console.log("Things happened here");
+    }
 
   }
 </script>
