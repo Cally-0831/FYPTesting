@@ -141,7 +141,7 @@ module.exports = {
 
 
         //console.log(pw);
-        thisistheline = "insert into allusers values(\"" +
+        thisistheline = "insert IGNORE into allusers values(\"" +
             req.body.studentname + "\"\,\""
             + req.body.sid + "\"\,\"" +
             pw + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
@@ -157,13 +157,13 @@ module.exports = {
 
         if (req.body.topic != "") {
 
-            thisistheline = "insert into supervisorpairstudent values(\"" +
+            thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
                 req.session.userid + "\"\,\""
                 + req.body.sid + "\"\,\"" +
                 req.body.topic + "\"\);";
 
         } else {
-            thisistheline = "insert into supervisorpairstudent values(\"" +
+            thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
                 req.session.userid + "\"\,\""
                 + req.body.sid + "\"\,\"" +
                 req.body.othertext + "\"\);";

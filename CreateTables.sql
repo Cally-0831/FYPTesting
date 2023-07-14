@@ -186,18 +186,16 @@ delimiter |
 CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   FOR EACH ROW
   BEGIN
-##  declare stringstring  varchar(8000);
-##  declare countcount integer;
-##  set stringstring = new.cid;allusersallusers
-
-##  set countcount =0;
-##  select count(*) into countcount from student_take_course 
-##  where cid = new.cid and sid = new.sid;
+	declare countcount integer;
+    set countcount =0;
+    select count(*) into countcount from allusers where pid = new.pid;
+    if countcount =0 then
   if new.role = "stu" then
     insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
 	elseif new.role = "sup" then
     insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"");
     END IF;
+    end if;
   END;
   |
 delimiter ;
@@ -332,7 +330,11 @@ CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent
   BEGIN
 declare alltopic varchar(100);
 declare countcount integer;
+declare countcountcount integer;
+set countcountcount =0;
 set countcount = 0;
+select count(*) into countcountcount from supervisorpairstudent where tid=new.tid and sid=new.sid;
+if countcountcount =0 then
 
 select count(*) into  countcount from supervisorpairstudent where Topic like new.Topic and tid = new.tid;
 
@@ -341,7 +343,7 @@ select topics into alltopic from supervisor  where tid = new.tid;
 update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.tid;
 end if;
 
-
+end if;
    END;
   |
 delimiter ;

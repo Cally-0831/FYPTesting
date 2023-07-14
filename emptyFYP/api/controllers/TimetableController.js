@@ -1,3 +1,4 @@
+
 var mysql = require('mysql');
 const date = require('date-and-time')
 var db = mysql.createConnection({
@@ -14,19 +15,28 @@ db.connect(async (err) => {
     console.log(' getpersonalallclass MySQL Connected');
 });
 
-const ftp = require("basic-ftp");
 
-const client = new ftp.Client();
 
-client.access({
-    host: "sftp://faith.comp.hkbu.edu.hk",
-    user: "e9222068",
-    password: "7BfRebBP"
-}).then(() => {
-    console.log("Connected to FTP server.");
-}).catch(err => {
-    console.log("Error connecting to FTP server: " + err);
+/**
+ * const express = require('express');
+const cors = require('cors');
+const fileupload = require('express-fileupload');
+const app = express();
+app.use(fileupload(), cors())
+const jsftp = require('jsftp');
+const thisurl = new URL(sails.config.custom.URL);
+const Ftp = new jsftp({
+    host: thisurl.hostname,
+    user: thisurl.user,
+    password: thisurl.password,
+    port: thisurl.port
 });
+
+const PORT = sails.config.PORT || 8080;
+app.listen(PORT);
+ * 
+ */
+
 
 module.exports = {
     allDeptlist: {},
@@ -182,19 +192,34 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-       
+
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
         } else if (req.session.role == "stu") {
-            //, picdata = \"" + req.body.filedata + "\"
-            thisistheline = "Update  allstudenttakecourse set confirmation =\"1\" , SubmissionTime = now() , picdata = \"" + req.body.filedata + "\" where pid=\"" + req.session.userid + "\"";
-        }
+           /**
+            *  console.log("enter SFTP")
+                const file = req.body.fileorg;
+                const fileName = file.name; 
+                const fileData = file.data;
+                Ftp.put(fileData, sails.config.custom.DEFAULT_FOLDER + fileName, err => {
+                  if(!err) {
+                    res.json('Upload Done');
+                  } else {
+                    res.status(401).json("find some error     "+err);
+                  }
+                });
+            * 
+            */
+               
+            
+                
+            }
         console.log(thisistheline);
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             try {
-                
+
                 console.log("Submitted")
                 return res.json("ok");
             } catch (err) {
@@ -203,6 +228,9 @@ module.exports = {
 
         });
         // return res.json("ok");
+
     },
+    
+  
 
 }

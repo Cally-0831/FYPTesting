@@ -609,7 +609,7 @@ function getFileData(myFile){
    }
 }
 
-async function submitform(){
+async function submitform(formElem){
  
     var file = thisfile;
     var filedata;
@@ -637,13 +637,12 @@ var requestBody;
  }
     if(r){
         console.log("enterhere2")
-    var response = await fetch("/timetable", {
+    var response = await fetch(formElem.action, {
                 method: "POST",
                 body:   requestBody
             });
 
             if (response.ok) {
-               
                 alert(" Your Timetable submitted.");
                 location.reload();
             } else {

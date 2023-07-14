@@ -1,1 +1,1 @@
-select count(*) from supervisorpairstudent where Topic like "hello" and tid = "tid00001";
+select * from supervisorpairstudent 
