@@ -37,7 +37,16 @@
 
 </table>
 <br><Br><br>
-<table class="table is-bordered is-striped is-hoverable is-halfwidth center">
+    <div class = "columns is-mobile">
+        <div class="column is-half">
+<div class ="picdisplay">
+    <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
+   <%console.log(base64obj)%>
+    <img src ="data:image/jpeg;base64,<%=base64obj%>">
+</div>
+        </div>
+        <div class="column is-half">
+            <table class="table is-bordered is-striped is-hoverable is-halfwidth center">
     <th class="th"></th>
     <th class="th">MON</th>
     <th class="th">TUE</th>
@@ -547,3 +556,7 @@
            %>
     </tr>
 </table>
+        </div>
+    </div>
+
+

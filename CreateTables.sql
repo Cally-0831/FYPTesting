@@ -71,7 +71,7 @@ CID		varchar(20) not null,
 PID		varchar(10) not null,
 confirmation integer default 0 ,
 Submissiontime timestamp,
-picdata varbinary(60000),
+picdata LONGBLOB,
 CONSTRAINT csid
 primary key (CID,PID)
 );

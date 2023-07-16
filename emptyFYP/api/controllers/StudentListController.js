@@ -184,7 +184,7 @@ module.exports = {
 
         let thisistheline;
        
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
 
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {

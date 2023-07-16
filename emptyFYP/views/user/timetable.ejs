@@ -5,10 +5,11 @@
         <%=req.session.username%>'s TimeTable
     </div>
     <div class="columns is-mobile">
-        <div class = "column is-half">
+        <div class = "column is-half is-mobile">
             <div class="buttons is-left">
             <button class="button buttonlogout" onclick="history.back()">Back</button>
         </div>
+        
         </div>
         <div class = "column is-one-quarter">
             <div class="buttons is-right">
@@ -17,11 +18,11 @@
                     </a>
                 </div>
             </div>
-            <div class = "column is-one-quarter">
+            <div class = "column is-one-quarter is-mobile">
                 <div class="buttons is-right">
                     <% if(req.session.role=="stu"){%>
                         
-                        <form method="post"  action="/timetable/file/upload" enctype="multipart/form-data">
+                        <form method="POST"  action="/timetable" enctype="multipart/form-data" >
                             <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
                             <input type="file" name="avatar" multiple="multiple" onchange="savefile(this)"><br>
                             <div id="appearthebutton" ></div>
@@ -48,6 +49,10 @@
         <div class="Pagetitle">
             <%=req.session.username%>'s Submitted TimeTable
         </div>
+        <div class="row" style="text-align: center;">
+            <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
+        Submitted at <%=submitteddate.toLocaleDateString()%> , <%=submitteddate.toLocaleTimeString('en-US')%>
+        </div>
         <br>
         <div class="rows">
             <div class="row">
@@ -61,10 +66,8 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-                <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
-            Submitted at <%=submitteddate%>
-            </div>
+            <br><br>
+            
          </div>
         <%}%>      
     
@@ -636,7 +639,7 @@ function savefile(myFile){
     document.getElementById("studentttbpic").value ="";
     return alert("Please Upload a correct format of proof");
    }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit\" value=\"Upload\">Submit Timetable</button>";
+    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit\" value=\"Upload\" onclick = \"submitform(formElem);return false\">Submit Timetable</button>";
    }
    return(myFile);
 }
@@ -644,16 +647,12 @@ function savefile(myFile){
 
 
 async function submitform(formElem){
+ var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
 
-    
-    var requestbody = JSON.stringify({file: thisfile.read, filename:thisfilename})
-    var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
-console.log(requestbody);
     if(r){
        
-    var response = await fetch(formElem.action, {
+    var response = await fetch("/timetable", {
                 method: "POST",
-                body:   requestbody
             });
 
             if (response.ok) {
