@@ -4,25 +4,26 @@
     <div class="Pagetitle">
         <%=req.session.username%>'s TimeTable
     </div>
-    <div>
-        <div class="buttons is-left">
+    <div class="columns is-mobile">
+        <div class = "column is-half">
+            <div class="buttons is-left">
             <button class="button buttonlogout" onclick="history.back()">Back</button>
         </div>
-        <div class="buttons is-right">
+        </div>
+        <div class = "column is-one-quarter">
+            <div class="buttons is-right">
                     <a href="/timetable/submitttb">
                         <button class="button buttonlogout" id="addclass">Add Class</button>
                     </a>
+                </div>
+            </div>
+            <div class = "column is-one-quarter">
+                <div class="buttons is-right">
                     <% if(req.session.role=="stu"){%>
-                        <br>
-                        <br>
-                        <form method="post"  action="/timetable" onsubmit="submitform(this);return false;">
+                        
+                        <form method="post"  action="/timetable/file/upload" enctype="multipart/form-data">
                             <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
-                            <input
-                            type="file"
-                            id="studentttbpic"
-                            name="studentttbpic"
-                            accept=".png ,.jpg ,.jpeg"
-                            onchange="getFileData(this)" /> 
+                            <input type="file" name="avatar" multiple="multiple" onchange="savefile(this)"><br>
                             <div id="appearthebutton" ></div>
                           </form>
                           <br><br><Br>
@@ -31,7 +32,12 @@
                             <button class="button buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
                             <br>
                     <%}%>
+                </div>
+                    
                     <br> <br> 
+            </div>
+        </div>
+        
     </div>
                 
                 
@@ -614,13 +620,15 @@
 
 
 var thisfile;
+var thisfilename;
    
-function getFileData(myFile){
+function savefile(myFile){
 
     var file = myFile.files[0];
     thisfile = file;
-    filedata = file;
-    var filename = file.name;
+    thisfilename =  myFile.files[0].name;
+    console.log(thisfile);
+    console.log(thisfilename);
    var filetype = (file.name.split("."))[1]
    
    if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
@@ -628,43 +636,24 @@ function getFileData(myFile){
     document.getElementById("studentttbpic").value ="";
     return alert("Please Upload a correct format of proof");
    }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit is-success\">Submit Timetable</button>";
-   
+    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit\" value=\"Upload\">Submit Timetable</button>";
    }
+   return(myFile);
 }
 
-async function submitform(formElem){
- 
-    var file = thisfile;
-    var filedata;
-    var filename = file.name;
-   var filetype = (file.name.split("."))[1]
-   
-   var reader = new FileReader();
-  reader.onloadend = async function() {
-    //console.log('Encoded Base 64 File String:', reader.result);
-    
-    /******************* for Binary ***********************/
-    //var data=(reader.result).split(',')[1];
-    // var binaryBlob = atob(data);
-    var data = reader.result
-    filedata =  data;
-     //console.log('Encoded Binary File String:', filedata);
-  
 
-var requestBody;
+
+async function submitform(formElem){
+
+    
+    var requestbody = JSON.stringify({file: thisfile.read, filename:thisfilename})
     var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
- if(filedata!= null || filedata!= undefined){
-   requestBody= JSON.stringify({
-    fileorg : thisfile,
-           filedata: filedata
-        });
- }
+console.log(requestbody);
     if(r){
-        console.log("enterhere2")
+       
     var response = await fetch(formElem.action, {
                 method: "POST",
-                body:   requestBody
+                body:   requestbody
             });
 
             if (response.ok) {
@@ -676,8 +665,7 @@ var requestBody;
 
 }
 }
-  reader.readAsDataURL(file);
-}
+
 
 async function Submitthisttb(){
     

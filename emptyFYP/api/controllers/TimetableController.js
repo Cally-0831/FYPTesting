@@ -16,7 +16,6 @@ db.connect(async (err) => {
 });
 
 
-
 /**
  * const express = require('express');
 const cors = require('cors');
@@ -192,31 +191,12 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
+        console.log(req.body)
 
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
 
-        } else if (req.session.role == "stu") {
-            thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now(),picdata="+req.body.filedata+" where pid=\"" + req.session.userid + "\"";
-
-           /**
-            *  console.log("enter SFTP")
-                const file = req.body.fileorg;
-                const fileName = file.name; 
-                const fileData = file.data;
-                Ftp.put(fileData, sails.config.custom.DEFAULT_FOLDER + fileName, err => {
-                  if(!err) {
-                    res.json('Upload Done');
-                  } else {
-                    res.status(401).json("find some error     "+err);
-                  }
-                });
-            * 
-            */
-               
-            
-                
-            }
+        }
         console.log(thisistheline);
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
@@ -232,7 +212,28 @@ module.exports = {
         // return res.json("ok");
 
     },
-    
-  
+
+    upload: function (req, res) {
+        req.file('avatar').upload(function (err, files) {
+
+
+
+            thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now(),picdata=" + files + " where pid=\"" + req.session.userid + "\"";
+            db.query(thisistheline, function (err, result) {
+                try {
+
+                    console.log("Submitted")
+                    return res.json("ok");
+                } catch (err) {
+                    console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
+                }
+
+            });
+
+
+        });
+    }
+
+
 
 }

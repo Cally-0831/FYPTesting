@@ -41,7 +41,7 @@ module.exports.routes = {
   'POST /timetable/submitttb': "TimetableController.submitclass",
   'GET /timetable': "TimetableController.getpersonalallclass",
   'DELETE /timetable': "TimetableController.delpersonalallclass",
-  'POST /timetable': "TimetableController.submitpersonalallclass",
+  'POST /timetable/file/upload': "TimetableController.upload",
   
 
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
