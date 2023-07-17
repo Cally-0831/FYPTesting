@@ -279,7 +279,7 @@ if countcount >0 then
 	end while;
 	insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
 else
-	insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null);
+	insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
 END IF;
    END IF;
    END IF;

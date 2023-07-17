@@ -10,8 +10,13 @@
     <div class="column is-one-third"></div>
     <div class="column is-one-third singleclassinfo">
         <form action="/timetable/submitttb" method="post" onsubmit="submitform(this);return false;">
-            <br>
+
+
             <div id="allclassinputfield" style="font-size: 20px;">
+                <div id="enrollnotclass">
+                    <input id="enrollnotclassbox" type="checkbox" value="noclassenrolled" onchange="cleartheform()"> I
+                    take 0 course this semester
+                </div>
                 <div id="singleclassinfo">
                     <div id="deptinputfield">
                         <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
@@ -49,22 +54,37 @@
 
 
 <script>
-    async function submitform(formElem) {
+    function cleartheform() {
+        if (document.getElementById("enrollnotclassbox").checked == true) {
+            alert("Please Double Confirm that you take 0 courses this sememster." + "\n\nIf Yes, Click Add Class Button" + "\n\n Uncheck this box if you are not.");
+            // document.getElementById("enrollnotclassbox").checked=true
 
-        if (document.getElementById("classdep").value == "") {
-            return alert("Department Code cannot be empty")
-        } else if (document.getElementById("classcode").value == "") {
-            return alert("Class Code cannot be empty")
-        } else if (document.getElementById("classsection").value == "") {
-            return alert("Class Section Code cannot be empty")
-        } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "") {
-            return alert("Class Tutorial Section Code cannot be empty")
         }
+    }
+
+    async function submitform(formElem) {
+        var requestbody = new FormData(formElem);
+        if (document.getElementById("enrollnotclassbox").checked != true) {
+            if (document.getElementById("classdep").value == "") {
+                return alert("Department Code cannot be empty")
+            } else if (document.getElementById("classcode").value == "") {
+                return alert("Class Code cannot be empty")
+            } else if (document.getElementById("classsection").value == "") {
+                return alert("Class Section Code cannot be empty")
+            } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "") {
+                return alert("Class Tutorial Section Code cannot be empty")
+            }
+        }else{
+            var requestbody = new FormData(formElem);
+            requestbody.append(document.getElementById("enrollnotclassbox").value , true)
+            //console.log(requestbody)
+        }
+
 
         try {
             var response = await fetch(formElem.action, {
                 method: formElem.method,
-                body: new FormData(formElem),
+                body: requestbody
             });
             if (response.ok) {
 
@@ -78,7 +98,7 @@
             }
 
         } catch (error) {
-            console.log(error);
+            console.log("Error happened   "+error);
         }
     }
 

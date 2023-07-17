@@ -1,894 +1,194 @@
-
-<% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
-<% console.log(allpersonallist[0])%>
-<% if(allpersonallist.length ==0 || allpersonallist[0].submission == "N"){%>
-    <div class="Pagetitle">
-        <%=req.session.username%>'s TimeTable
-    </div>
-    <div class = "rows is-mobile">
-        <div class = "row">
-            <div class="columns is-mobile">
-                <div class = "column is-half is-mobile">
-                    <div class="buttons is-left">
-                    <button class="button buttonlogout" onclick="history.back()">Back</button>
-                </div>
-                
-                </div>
-                
+<div>
+    <%console.log(allpersonallist)%>
+        this is timetable
+        <!---Empty case / init case == no any class inputted-->
+        <% if(allpersonallist.length==0 ){%>
+            <div class="Pagetitle">
+                <%=req.session.username%>'s TimeTable
             </div>
-        </div>
-        <br><br>
-        <div class = "row">
-            <div class = "columns is-mobile">
-                <div class = "column is-onefifth">
-                    <div class="buttons">
-                            <a href="/timetable/submitttb">
-                                <button class="button buttonlogout" id="addclass">Add Class</button>
-                            </a>
+            <%}else if(allpersonallist.length>0){%>
+                <div class="Pagetitle">
+                    <%=req.session.username%>'s Submitted TimeTable
+                </div>
+                <%}%>
+                    <div class="rows is-mobile">
+                        <div class="row">
+                            <div class="columns is-mobile">
+                                <div class="column is-half is-mobile">
+                                    <div class="buttons is-left">
+                                        <button class="button buttonlogout" onclick="history.back()">Back</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="columns is-mobile">
+                                    <div class="column is-onethird">
+                                        <div class="buttons">
+                                            <a href="/timetable/submitttb">
+                                                <button class="button buttonlogout" id="addclass">Add Class</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="column is-onethird">
+                                        <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
+                                            <div class="columns is-mobile">
+                                                <div class="column is-onethird">
+                                                    <label for="studentttbpic">Timetable
+                                                        Proof:&emsp;&emsp;&emsp;</label>
+                                                    <input type="file" id="iploadfileinput" name="avatar"
+                                                        multiple="multiple" accept="image/*" onchange="savefile(this)">
+                                                </div>
+                                                <div class="column is-onethird" id="appearthebutton">
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                    <div class="column is-onethird">
+                                        <%if(req.session.role="stu" ){%>
+                                            <%if(allpersonallist.length==0){%>
+                                                <div class="buttons is-right">
+                                                    <button class="button buttonlogout"
+                                                        onclick="submitstudentttb('0')">Submit
+                                                        Student Timetable</button>
+                                                </div>
+                                                <%}else{%>
+                                                    <div class="buttons is-right">
+                                                        <button class="button buttonlogout"
+                                                            onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
+                                                            Student Timetable</button>
+                                                    </div>
+                                                    <%}%>
+                                                        <%}else{%>
+                                                            <button class="button buttonlogout"
+                                                                onclick="submitttb()">Submit
+                                                                Timetable</button>
+                                                            <%}%>
+
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class = "column is-mobile  ">
-                        
-                            <% if(req.session.role=="stu" && (allpersonallist.length ==0 || allpersonallist[0].submission == "N")){%>
-                               
-                                    <form method="POST"  action="/timetable/pic" enctype="multipart/form-data" >
-                                        <div class = "columns is-mobile">
-                                            <div class = "column is-onethird" style="text-align: right;">
-                                                <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
-                                            </div>
-                                            <div class = "column is-onethird">
-                                                  <input type="file" id="iploadfileinput" name="avatar" multiple="multiple" accept="image/*" onchange="savefile(this)"><br>
-                                            </div>
-                                            <div class = "column is-onethird" id ="appearthebutton" >
-                                                
-                                            </div>
-                                        </div>
-                                    
-                                  
-                                    <br>
-                                    
-                                  </form>
-                                  <%if(allpersonallist.length == 0){%>
-                                    <div class = "buttons is-right">
-                                             <button class="button buttonlogout" onclick="submitstudentttb('0')">Submit Student Timetable</button>
-                                        </div>
-                                    <%}else{%>
-                                        <div class = "buttons is-right">
-                                            <button class="button buttonlogout" onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit Student Timetable</button>
-                                       </div>
-                                        <%}%>
-                                        
-                                    <br><br><Br>
-                                   <%}else if(req.session.role = "sup"){%>
-                                    <div class="buttons is-right">
-                                    <button class="button buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
-                                    <br>
+
+                    <%if(allpersonallist.length>0 ){%>
+                        <%if(allpersonallist[0].picdata!= null){%>
+                            <div class="columns ">
+
+                                <div class="column is half">
+                                    <div class="picdisplay">
+                                        <%var base64obj=Buffer.from(allpersonallist[0].picdata)%>
+                                            <img src="data:image/jpeg;base64,<%=base64obj%>">
+                                    </div>
+
+
                                 </div>
-                            <%}%>
-                        
-                            
-                          
-                    </div>
-                    
-            </div>
-        </div>
-    </div>
-    
-          
-<%}else if (allpersonallist.length == 0 &&allpersonallist[0].confirmation == "1"){%>
-    
-    
-    
-    
-    
-    
-    <%}else if(allpersonallist.length > 0 && allpersonallist[0].confirmation == "1"){%>
-        
-        <div class="Pagetitle">
-            <%=req.session.username%>'s Submitted TimeTable
-        </div>
-        <% if (allpersonallist[0].confirmation == "1"){%>
-            <div class="row" style="text-align: center;">
-            <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
-        Submitted at <%=submitteddate.toLocaleDateString()%> , <%=submitteddate.toLocaleTimeString('en-US')%>
-        </div>
-            <%}%>
-        
-        <br>
-        <div class="rows">
-            <div class="row">
-              <div class="columns is-mobile">
-                <div class="column is-half">
-                  <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="history.back()">
-                      Back
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            
-         </div>
-        <%}%>      
-<br><br><br>
-
-<!--- table view-->
-        <%if(allpersonallist.length >0 && allpersonallist[0].CID !="EMPTY_"){%>
-            <%if(allpersonallist[0].picdata != null){%>
-        <div class = "columns "> 
-            
-            <div class = "column is half">
-                <div class ="picdisplay">
-                    <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
-                    <img src ="data:image/jpeg;base64,<%=base64obj%>">
-                </div>
-                
-                
-            </div>
-            <div class = "column is half">
-                <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
-            <%if(allpersonallist[0].confirmation =="0"){%>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-
-                <%}%>
-            
-            <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
-                <tr>
-                    <%if(stringstring.length < 3){%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;">
-                        <%=stringstring[0]%>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">
-                        <%=stringstring[1]%>
-                    </td>   
-                    <%if(allpersonallist[0].confirmation =="0"){%>
-                <td style="font-size:20px;text-align: center;vertical-align:center;">
-                        <button class="button" type="button"
-                        onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-                    </td> 
-                        <%}%>
-                                 
-                        <%} %>
-                    
-                </tr>
-                <%})%>
-
-        </table>
-            </div>
-        </div>
-            <%}else{%>
-                <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
-                    
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-        
-                    <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
-                        <tr>
-                            <%if(stringstring.length < 3){%>
-                                <td style="font-size:20px;text-align: center;vertical-align:center;">
-                                <%=stringstring[0]%>
-                            </td>
-                            <td style="font-size:20px;text-align: center;vertical-align:center;">
-                                <%=stringstring[1]%>
-                            </td>   
-                            <td style="font-size:20px;text-align: center;vertical-align:center;">
-                                <button class="button" type="button"
-                                onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-                            </td>              
-                                <%} %>
-                            
-                        </tr>
-                        <%})%>
-        
-                </table>
-                
-                <%}%>
-<%}else if(allpersonallist[0].CID =="EMPTY_" && allpersonallist[0].picdata != null){%>
-    
-    <div class = "columns "> 
-            
-        <div class = "column is half">
-            <div class ="picdisplay">
-                <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
-                <img src ="data:image/jpeg;base64,<%=base64obj%>">
-            </div>
-            
-            
-        </div>
-        <div class = "column is half">
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-        <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
-        <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
-        <%if(allpersonallist[0].confirmation =="0"){%>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-
-            <%}%>
-        
-        <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
-            <tr>
-                <%if(stringstring.length < 3){%>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">
-                    <%=stringstring[0]%>
-                </td>
-                <td style="font-size:20px;text-align: center;vertical-align:center;">
-                    <%=stringstring[1]%>
-                </td>   
-                <%if(allpersonallist[0].confirmation =="0"){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;">
-                    <button class="button" type="button"
-                    onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-                </td> 
-                    <%}%>
-                             
-                    <%} %>
-                
-            </tr>
-            <%})%>
-
-    </table>
-        </div>
-    </div>
-
-        <%}else{%>
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-                <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
-                    <tr>
-                        <%if(stringstring.length < 3){%>
-                            <td style="font-size:20px;text-align: center;vertical-align:center;">
-                            <%=stringstring[0]%>
-                        </td>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;">
-                            <%=stringstring[1]%>
-                        </td>   
-                     <td style="font-size:20px;text-align: center;vertical-align:center;">
-                            <button class="button" type="button"
-                            onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-                        </td> 
-                           <%} %>    
-                    </tr>
-                    <%})%>
-            </table>
-            <%}%>
+                                <div class="column is half">
 
 
-<br><Br><br>
-    <div class = "columns is-mobile">
-        <div class = "column">
-            <table class="table is-bordered is-striped is-hoverable is-halfwidth center">
-                <th class="th"></th>
-                <th class="th">MON</th>
-                <th class="th">TUE</th>
-                <th class="th">WED</th>
-                <th class="th">THU</th>
-                <th class="th">FRI</th>
-                <th class="th">SAT</th>
+                                    <%}%>
+                                        <table
+                                            class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
+                                            <th style="font-size:20px;text-align: center;vertical-align:center;">Class
+                                                Code</th>
+                                            <th style="font-size:20px;text-align: center;vertical-align:center;">Class
+                                                Section</th>
+                                            <%if(allpersonallist[0].confirmation=="0" || allpersonallist[0].CID
+                                                !="EMPTY_" ){%>
+                                                <th style="font-size:20px;text-align: center;vertical-align:center;">
+                                                    Action</th>
 
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">08:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
+                                                <%}%>
 
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-                    
-                        let currenttime =new Date();
-                        currenttime.setHours(8, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(9,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
+                                                    <% allpersonallist.forEach(function(list){ var
+                                                        stringstring=list.CID.split("_"); %>
+                                                        <tr>
+                                                            <%if(stringstring.length < 3 && allpersonallist[0].CID
+                                                                !="EMPTY_" ){%>
+                                                                <td
+                                                                    style="font-size:20px;text-align: center;vertical-align:center;">
+                                                                    <%=stringstring[0]%>
+                                                                </td>
+                                                                <td
+                                                                    style="font-size:20px;text-align: center;vertical-align:center;">
+                                                                    <%=stringstring[1]%>
+                                                                </td>
+                                                                <%if(allpersonallist[0].confirmation=="0" ){%>
+                                                                    <td
+                                                                        style="font-size:20px;text-align: center;vertical-align:center;">
+                                                                        <button class="button" type="button"
+                                                                            onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
+                                                                    </td>
+                                                                    <%}%>
 
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
+                                                                        <%} %>
 
-                    
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
+                                                        </tr>
+                                                        <%})%>
 
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-                    
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                        
-                                    
+                                        </table>
+                                        <%if(allpersonallist[0].picdata!= null){%>
+                                </div>
+                                <%}%>
+                            </div>
+                            <%}else{%>
+                                <br>
+                                <div class="columns is-mobile">
+                                    <div class="column is-onethird">
 
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">09:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                    
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
+                                    </div>
 
-                        let currenttime =new Date();
-                        currenttime.setHours(9, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(10,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
+                                    <div class="column is-onethird">
+                                        <article class="message is-large">
+                                            <div class="message-header">
+                                                <p>Attension</p>
+                                            </div>
+                                            <div class="message-body">
+                                                Currently there are no class inputted by you
+                                                <br><br>
+                                                Please be reminded that if you input <strong>0</strong> classes
+                                                <br>
+                                                Which means except for approved unavailable timeslots
+                                                <br>
+                                                You are <strong><u>fine to accept anytime</u></strong> assigned by your
+                                                supervisor
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <div class="column is-onethird">
 
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                    
-                    
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }arraylist = new Array(6);%>
-
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">10:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                    
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(10, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(11,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                        
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">11:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(11, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(12,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                        
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">12:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(12, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(13,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                        
-                    
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">13:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(13, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(14,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                        
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">14:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(14, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(15,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-            
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">15:30</td>
-                    <% 
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                    
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(15, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(16,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                        
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">16:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(16, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(17,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                    
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">17:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                        
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
-
-                        let currenttime =new Date();
-                        currenttime.setHours(17, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(18,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
-
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
-
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
-
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:center;">18:30</td>
-                    <% 
-                    var lastbox;
-                    var arraylist = new Array(6);
-                    for(var i=0 ; i < allpersonallist.length;i++){ 
-                    
-            
-                        var cidstr = allpersonallist[i].CID.split("_");
-                        allpersonallist[i].CID = cidstr[0]+"_"+cidstr[1];
+                                    </div>
+                                </div>
 
 
-                        let currenttime =new Date();
-                        currenttime.setHours(18, 30, 0, 0); 
-                        
-                        
-                        let endend=new Date();
-                        endend.setHours(19,20,0,0) 
-                        
-                        let classend=new Date(); const
-                        classendstr=(allpersonallist[i].endTime).split(":"); 
-                        classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)
-                        
+                                <%}%>
 
-                        let classstart=new Date(); 
-                        const classstartstr=(allpersonallist[i].startTime).split(":"); 
-                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)
 
-                    if(classstart.toLocaleString("en-GB") == currenttime.toLocaleString("en-GB") ){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    
-                    }
 
-                    if(classstart < currenttime && classend >=endend){
-                        arraylist[allpersonallist[i].weekdays -1] = allpersonallist[i];
-                    }
-                    
-                    }for(var x = 0 ; x < 6;x++){
-                        if(arraylist[x]!= undefined && x == arraylist[x].weekdays-1){%>
-            <td style="font-size:20px;text-align: center;vertical-align:center;"><%=arraylist[x].CID%></td>
-                    <% }else{%>
-                        <td style="font-size:20px;text-align: center;vertical-align:center;"></td><%}
-                    }
-                    arraylist = new Array(6);
-                    %>
-                </tr>
-            </table>
-        </div>
-    </div>
 
+
+</div>
 <script>
+    function savefile(myFile) {
 
+        var file = myFile.files[0];
+        var filetype = (file.name.split("."))[1]
 
-
-   
-function savefile(myFile){
-
-    var file = myFile.files[0];
-   var filetype = (file.name.split("."))[1]
-   
-   if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
-   {
-    alert("Please Upload .png / .jpg / .jpeg format of image")
-    document.getElementById("uploadfileinput") ="";
-    
-   }else{
-    var newbutton = document.createElement("button");
-    newbutton.setAttribute("id", "upload");
-    newbutton.setAttribute("class", "button buttonlogout");
-    newbutton.innerText="Upload"
-    document.getElementById("appearthebutton").appendChild(newbutton);
-   }
- 
-}
-
-
-
-async function submitstudentttb(picdata){
-    
-    
-    if(picdata =="0"){
-        var rr = confirm ("Do You Confirm that you take 0 course this term?"+"\n\n"
-        + "This means you can accept any timeslots (except approved unavailable timeslots request) assigned.")
-        if (!rr){
-            return;
-        }else{
-            var response = await fetch("/timetable/submitempty", {
-                method: "POST",
-            });
-
-            if (response.ok) {
-               location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-        }
-    }else if(picdata == null || picdata == ""){return alert ("Please Upload a vaild proof before submit");}
-    else{
-var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
-
-    if(r){
-       
-    var response = await fetch("/timetable", {
-                method: "POST",
-            });
-
-            if (response.ok) {
-                alert(" Your Timetable submitted.");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-}
-}
-
-    }
-    
-
-
-async function Submitthisttb(){
-    
-   
-    var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
-if(r){
-    
-    var response = await fetch("/timetable", {
-                method: "POST",
-                
-            });
-
-            if (response.ok) {
-               
-                alert("Timetable submitted.");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-}else{
-
-}
-}
-async function deleteclassinput(ccode,cseccode) {
-        var r = confirm("Confirm Delete " + ccode +"_"+cseccode+ " ?");
-        var requestBody = JSON.stringify({ cid:  ccode +"_"+cseccode });
-        if (r) {
-
-            var response = await fetch("/timetable", {
-                method: "DELETE",
-                body: requestBody
-            });
-
-            if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
-
-                alert("Class input deleted.");
-                location.assign("/timetable");
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
+        if (filetype != "png" && filetype != "jpg" && filetype != "jpeg") {
+            alert("Please Upload .png / .jpg / .jpeg format of image")
+            document.getElementById("uploadfileinput") = "";
 
         } else {
-            alert("cancelled");
+            var newbutton = document.createElement("button");
+            newbutton.setAttribute("id", "upload");
+            newbutton.setAttribute("class", "button buttonlogout");
+            newbutton.innerText = "Upload"
+            document.getElementById("appearthebutton").appendChild(newbutton);
         }
-    };
+
+    }
 </script>

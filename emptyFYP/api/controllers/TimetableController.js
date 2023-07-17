@@ -113,16 +113,19 @@ module.exports = {
     },
 
     submitclass: async function (req, res) {
-
+        console.log(req.body)
         let thisistheline = "";
-        if (req.body.classlabsection != undefined) {
+        if (req.body.noclassenrolled == "true") {
+            thisistheline = "insert into alltakecourse values(\"EMPTY\",\"" + req.session.userid + "\");\n";
+        } else {
+            if (req.body.classlabsection != undefined) {
 
-            thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
-        } else if (req.body.classsection != "") {
-            thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
-
+                thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+            } else if (req.body.classsection != "") {
+                thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+            }
         }
-
+        console.log(thisistheline);
 
         db.query(thisistheline, function (err, result) {
             if (err) {
@@ -134,10 +137,10 @@ module.exports = {
         });
         return res.json("ok");
     },
-    submitempty:async function (req, res) {
+    submitempty: async function (req, res) {
 
-        let thisistheline = "insert ignore into alltakecourse values(\"EMPTY\",\""+req.session.userid+"\")";
-    
+        let thisistheline = "insert ignore into alltakecourse values(\"EMPTY\",\"" + req.session.userid + "\")";
+
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);
@@ -155,7 +158,7 @@ module.exports = {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, submission from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \""+req.session.userid+"\"order BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, submission from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
         // console.log(thisistheline);
@@ -222,12 +225,42 @@ module.exports = {
 
             });
         } else if (req.session.role == "stu") {
-            
-           
+
+
+            //console.log(req.file('avatar'));
+            thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+            //console.log(thisistheline);
+            console.log("Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"");
+            db.query(thisistheline, function (error, result) {
+                try {
+
+                    console.log("Submitted")
+                    return res.redirect("../timetable");
+                } catch (err) {
+                    console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                }
+
+            });
+        };
+    },
+    //pageback : function (req,res){ return res.redirect("/timetable");},
+
+    upload: function (req, res) {
+        req.file('avatar').upload(function (err, files) {
+            console.log(files[0].fd);
+
+            const fs = require('fs');
+
+            fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                //    console.log(data);
+
                 //console.log(req.file('avatar'));
-                thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+                thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
                 //console.log(thisistheline);
-                console.log("Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"");
                 db.query(thisistheline, function (error, result) {
                     try {
 
@@ -238,37 +271,7 @@ module.exports = {
                     }
 
                 });
-            };
- },
-    //pageback : function (req,res){ return res.redirect("/timetable");},
-
-    upload: function (req, res) {
-        req.file('avatar').upload(function (err, files) {
-            console.log(files[0].fd);
-            
-            const fs = require('fs');
-
-            fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-            //    console.log(data);
-            
-            //console.log(req.file('avatar'));
-            thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
-            //console.log(thisistheline);
-             db.query(thisistheline, function (error, result) {
-                try {
-
-                    console.log("Submitted")
-                    return res.redirect("../timetable");
-                } catch (err) {
-                    console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
-                }
-
             });
-        });
             fs.unlink(files[0].fd, function (err) {
                 if (err) return console.log(err); // handle error as you wish
                 // file deleted... continue your logic

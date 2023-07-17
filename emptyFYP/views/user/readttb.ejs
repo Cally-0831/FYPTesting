@@ -1,35 +1,38 @@
 <div class="Pagetitle"><%=SID%> TimeTable</div>
 
 <div class="rows">
-    <div class="columns">
+    <div class="columns is-mobile">
         <div class="column">
             <div class="buttons">
-                <div class="buttonlogout" onclick="history.back()">
+                <div class="button buttonlogout" onclick="history.back()">
                     Back
                 </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="buttons is-right">
+                <div class="button buttonlogout" >Reject</div>
+                <div class="button buttonlogout" >Approve</div>
+                
             </div>
         </div>
     </div>
 </div>
 <br><br>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-
+    <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Code</th>
+    <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Section</th>
+    
     <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
         <tr>
-            <%if(stringstring.length < 3){%>
+            <%if(stringstring.length < 3 && stringstring[0] != "EMPTY"){%>
                 <td style="font-size:20px;text-align: center;vertical-align:center;">
                 <%=stringstring[0]%>
             </td>
-            <td style="font-size:20px;text-align: center;vertical-align:center;">
+            <td style="font-size:20px;text-align: center;vertical-align:center; ">
                 <%=stringstring[1]%>
             </td>   
-            <td style="font-size:20px;text-align: center;vertical-align:center;">
-                <button class="button" type="button"
-                onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-            </td>              
+                    
                 <%} %>
             
         </tr>
@@ -47,16 +50,16 @@
         </div>
         <div class="column is-half">
             <table class="table is-bordered is-striped is-hoverable is-halfwidth center">
-    <th class="th"></th>
-    <th class="th">MON</th>
-    <th class="th">TUE</th>
-    <th class="th">WED</th>
-    <th class="th">THU</th>
-    <th class="th">FRI</th>
-    <th class="th">SAT</th>
+    <th class="th" ></th>
+    <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">MON</th>
+    <th class="th"style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">TUE</th>
+    <th class="th"style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">WED</th>
+    <th class="th"style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">THU</th>
+    <th class="th"style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">FRI</th>
+    <th class="th"style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">SAT</th>
 
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">08:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">08:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -105,7 +108,7 @@
 
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">09:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">09:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -151,7 +154,7 @@
 
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">10:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">10:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -196,7 +199,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">11:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">11:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -240,7 +243,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">12:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">12:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -286,7 +289,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">13:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">13:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -331,7 +334,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">14:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">14:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -376,7 +379,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">15:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">15:30</td>
         <% 
         var arraylist = new Array(6);
         for(var i=0 ; i < allpersonallist.length;i++){ 
@@ -420,7 +423,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">16:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">16:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -465,7 +468,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">17:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">17:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -510,7 +513,7 @@
            %>
     </tr>
     <tr>
-        <td style="font-size:20px;text-align: center;vertical-align:center;">18:30</td>
+        <td style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">18:30</td>
         <% 
         var lastbox;
         var arraylist = new Array(6);
@@ -559,4 +562,21 @@
         </div>
     </div>
 
+    <script>
+        async function approve(SID){
+var r = confirm("Approve ?")
+if(r){
+    var response = await fetch("/readttb",
+    {
+        method : "POST",
+        body: JSON.stringify({ sid : SID , type:"approve"})
+    })
+    if(response.ok){
+        alert("Approved");
+        location.reload();
+    }
+}else {}
+
+        }
+    </script>
 
