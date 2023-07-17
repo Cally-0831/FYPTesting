@@ -1,58 +1,87 @@
 
 <% if(allpersonallist == null || allpersonallist == undefined){return res.view('/user/login')}%>
-<% if(allpersonallist.length ==0 || allpersonallist[0].confirmation == 0){%>
+
+<% if(allpersonallist.length ==0){%>
     <div class="Pagetitle">
         <%=req.session.username%>'s TimeTable
     </div>
-    <div class="columns is-mobile">
-        <div class = "column is-half is-mobile">
-            <div class="buttons is-left">
-            <button class="button buttonlogout" onclick="history.back()">Back</button>
-        </div>
-        
-        </div>
-        <div class = "column is-one-quarter">
-            <div class="buttons is-right">
-                    <a href="/timetable/submitttb">
-                        <button class="button buttonlogout" id="addclass">Add Class</button>
-                    </a>
+    <div class = "rows is-mobile">
+        <div class = "row">
+            <div class="columns is-mobile">
+                <div class = "column is-half is-mobile">
+                    <div class="buttons is-left">
+                    <button class="button buttonlogout" onclick="history.back()">Back</button>
                 </div>
+                
+                </div>
+                
             </div>
-            <div class = "column is-one-quarter is-mobile">
-                <div class="buttons is-right">
-                    <% if(req.session.role=="stu"){%>
+        </div>
+        <br><br>
+        <div class = "row">
+            <div class = "columns is-mobile">
+                <div class = "column is-onefifth">
+                    <div class="buttons">
+                            <a href="/timetable/submitttb">
+                                <button class="button buttonlogout" id="addclass">Add Class</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class = "column is-onethird is-mobile is-right ">
                         
-                        <form method="POST"  action="/timetable" enctype="multipart/form-data" >
-                            <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
-                            <input type="file" name="avatar" multiple="multiple" onchange="savefile(this)"><br>
-                            <div id="appearthebutton" ></div>
-                          </form>
-                          <br><br><Br>
-                           
-                    <%}else{%>
-                            <button class="button buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
-                            <br>
-                    <%}%>
-                </div>
+                            <% if(req.session.role=="stu"){%>
+                               
+                                    <form method="POST"  action="/timetable/pic" enctype="multipart/form-data" >
+                                        <div class = "columns is-mobile">
+                                            <div class = "column is-onethird" style="text-align: right;">
+                                                <label for="studentttbpic">Timetable Proof:&emsp;&emsp;&emsp;</label>
+                                            </div>
+                                            <div class = "column is-onethird">
+                                                  <input type="file" name="avatar" multiple="multiple" onchange="savefile(this)"><br>
+                                            </div>
+                                            <div class = "column is-onethird" id ="appearthebutton" >
+                                                
+                                            </div>
+                                        </div>
+                                    
+                                  
+                                    <br>
+                                  </form>
+                                  <br><br><Br>
+                                        
+                                <%}else{%>
+                                    <div class="buttons is-right">
+                                    <button class="button buttonlogout" onclick="Submitthisttb()">Submit Timetable</button>
+                                    <br>
+                                </div>
+                            <%}%>
+                        
+                            
+                          
+                    </div>
+                    <div class = "column is-one-quarter is-mobile">
+                        <div class = "buttons is-right">
+                            <button class="button buttonlogout" onclick="submitstudentttb()">Submit Student Timetable</button>
                     
-                    <br> <br> 
+                        </div>
+                         </div>
             </div>
         </div>
-        
     </div>
-                
-                
-           
-        
-<%}else{%>
+    
+          
+<%}else if(allpersonallist.length > 0 ){%>
         
         <div class="Pagetitle">
             <%=req.session.username%>'s Submitted TimeTable
         </div>
-        <div class="row" style="text-align: center;">
+        <% if (allpersonallist[0].confirmation == "1"){%>
+            <div class="row" style="text-align: center;">
             <% var submitteddate = new Date(allpersonallist[0].Submissiontime)%>
         Submitted at <%=submitteddate.toLocaleDateString()%> , <%=submitteddate.toLocaleTimeString('en-US')%>
         </div>
+            <%}%>
+        
         <br>
         <div class="rows">
             <div class="row">
@@ -70,20 +99,25 @@
             
          </div>
         <%}%>      
-    
-
-
-
-    
-    
-
-
-
 <br>
 
 
 <br><br>
-<table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
+<div class = "columns is-mobile"> 
+    <%if (typeof allpersonallist[0].picdata == Buffer){%>
+    <div class = "column is half">
+        
+       
+            <div class ="picdisplay">
+            <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
+           <%console.log(base64obj)%>
+            <img src ="data:image/jpeg;base64,<%=base64obj%>">
+        </div>
+           
+        
+    </div>
+    <div class = "column is half"> <%}%>
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Code</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">Class Section</th>
     <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
@@ -107,6 +141,9 @@
         <%})%>
 
 </table>
+    </div>
+</div>
+
 <br><Br><br>
 <table class="table is-bordered is-striped is-hoverable is-halfwidth center">
     <th class="th"></th>
@@ -622,16 +659,11 @@
 <script>
 
 
-var thisfile;
-var thisfilename;
+
    
 function savefile(myFile){
 
     var file = myFile.files[0];
-    thisfile = file;
-    thisfilename =  myFile.files[0].name;
-    console.log(thisfile);
-    console.log(thisfilename);
    var filetype = (file.name.split("."))[1]
    
    if(filetype != "png" && filetype != "jpg" && filetype != "jpeg")
@@ -639,14 +671,18 @@ function savefile(myFile){
     document.getElementById("studentttbpic").value ="";
     return alert("Please Upload a correct format of proof");
    }else{
-    document.getElementById("appearthebutton").innerHTML = "<br><button class=\"buttonlogout\" type=\"submit\" value=\"Upload\" onclick = \"submitform(formElem);return false\">Submit Timetable</button>";
+    var newbutton = document.createElement("button");
+    newbutton.setAttribute("id", "upload");
+    newbutton.setAttribute("class", "button buttonlogout");
+    newbutton.innerText="Upload"
+    document.getElementById("appearthebutton").appendChild(newbutton);
    }
-   return(myFile);
+ 
 }
 
 
 
-async function submitform(formElem){
+async function submitstudentttb(){
  var r = confirm("This is student button\n\nConfirm to Upload This Timetable? \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
 
     if(r){

@@ -42,7 +42,7 @@ module.exports.routes = {
   'GET /timetable': "TimetableController.getpersonalallclass",
   'DELETE /timetable': "TimetableController.delpersonalallclass",
   'POST /timetable': "TimetableController.submitpersonalallclass",
-  'POST /timetable/pic': "TimetableController.submitpersonalallclass",
+  'POST /timetable/pic': "TimetableController.upload",
   
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
