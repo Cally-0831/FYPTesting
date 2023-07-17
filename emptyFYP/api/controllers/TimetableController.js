@@ -152,7 +152,7 @@ module.exports = {
 
     getpersonalallclass: async function (req, res) {
 
-        //console.log(req.body);
+        console.log("\n\n\n\n\n");
         let thisistheline;
         if (req.session.role == "sup") {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
@@ -209,7 +209,7 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-        console.log(req.body)
+        console.log(req.body+"         $$$$$$$$$$$            "+ req.session.role)
 
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
@@ -218,7 +218,7 @@ module.exports = {
             db.query(thisistheline, function (err, result) {
                 try {
                     console.log("Submitted")
-                    return res.view("user/timetable");
+                    return res.redirect("../timetable");
                 } catch (err) {
                     console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
                 }
