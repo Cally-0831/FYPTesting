@@ -134,6 +134,18 @@ module.exports = {
         });
         return res.json("ok");
     },
+    submitempty:async function (req, res) {
+
+        let thisistheline = "insert ignore into alltakecourse values(\"EMPTY\",\""+req.session.userid+"\")";
+    
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                res.status(401).json("Error happened when excuting : " + thisistheline);
+            };
+            console.log("1 record inserted");
+        });
+        return res.json("ok");
+    },
 
     getpersonalallclass: async function (req, res) {
 
@@ -143,7 +155,7 @@ module.exports = {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, submission from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \""+req.session.userid+"\"order BY  startTime asc ,weekdays asc";
 
         }
         // console.log(thisistheline);

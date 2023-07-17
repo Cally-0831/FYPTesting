@@ -26,6 +26,7 @@ password	varchar(20) not null,
 states		varchar(20),
 errortime	int,
 topics		varchar(100) Not null,
+submission  varchar(10) default "N", 
 PRIMARY key (tid));
 
 create table allclass(
@@ -193,7 +194,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   if new.role = "stu" then
     insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
 	elseif new.role = "sup" then
-    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"");
+    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N");
     END IF;
     end if;
   END;
@@ -243,7 +244,7 @@ CREATE TRIGGER takeallcourseofonecode after INSERT ON alltakecourse
   set issup = false;
   set thisisrole ="";
   set countcount =0;
-  
+ 
 select Max(lesson) into  countcount from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%") 
 where alltakecourse.cid  like concat(new.cid,"%");
 select role into thisisrole from allusers where new.pid = pid;
@@ -273,15 +274,18 @@ else if not issup then
 if countcount >0 then
 	while countcount >0 do
 		set stringstring = concat(new.cid,"_",countcount,"");
-		insert into allstudenttakecourse values(stringstring,new.pid,false,now(),"");
+		insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null);
 		set countcount= countcount -1;
 	end while;
-	insert into allstudenttakecourse values(new.cid,new.pid,false,now(),"");
+	insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
 else
-	insert into allstudenttakecourse values(new.cid,new.pid,false,now(),"");
+	insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null);
 END IF;
    END IF;
    END IF;
+   
+  
+   
    END;
   |
 delimiter ;
@@ -354,6 +358,18 @@ CREATE TRIGGER addsubinstudent before update ON allstudenttakecourse
   BEGIN
 	if new.confirmation = "1" then
 		update student set submission ="Y" where sid = new.pid;
+	end if;
+
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER addsubinsuper before update ON allsupertakecourse
+  FOR EACH ROW
+  BEGIN
+	if new.confirmation = "1" then
+		update supervisor set submission ="Y" where tid = new.pid;
 	end if;
 
    END;

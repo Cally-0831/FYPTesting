@@ -32,7 +32,7 @@ insert into allclass values("COMP","1005","00002","","Campus B","RM101","1","08:
 insert into allclass values("COMP","1005","10101","","Campus A","RM101","1","10:30","12:20","0");
 insert into allclass values("COMP","1005","10102","","Campus A","RM101","2","09:00","09:20","0");
 insert into allclass values("COMP","1005","10201","","Campus A","RM101","1","09:30","10:20","0");
-
+insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
 insert into allclass values("COMP","2005","00001","","Campus A","RM101","5","08:30","09:20","0");
 insert into allclass values("PHYS","2005","10001","","Campus B","RM101","2","10:30","12:20","0");
 insert into allclass values("COMP","2005","10002","","Campus B","RM103","3","09:00","09:20","0");

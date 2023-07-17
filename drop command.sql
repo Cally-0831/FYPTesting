@@ -25,3 +25,4 @@ Drop trigger if exists inputallcourseofonecode;
 Drop trigger if exists delallstudenttakecourse;
 Drop trigger if exists addtopicinsupervisor;
 Drop trigger if exists addsubinstudent;
+Drop trigger if exists addsubinsuper;
