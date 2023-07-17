@@ -248,44 +248,48 @@ CREATE TRIGGER takeallcourseofonecode after INSERT ON alltakecourse
 select Max(lesson) into  countcount from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%") 
 where alltakecourse.cid  like concat(new.cid,"%");
 select role into thisisrole from allusers where new.pid = pid;
+
  if thisisrole="sup" then 
 	set issup = true;
-    END IF;
+ END IF;
     
  if issup then
  
- if countcount >0 then
- while countcount >=0 do
- 
- if countcount =0 then
- set stringstring = concat(new.cid);
- else
- set stringstring = concat(new.cid,"_",countcount,"");
- END IF;
-
-insert into allsupertakecourse values(stringstring,new.pid,false,now());
-   set countcount= countcount -1;
-   end while;
-else
-insert into allsupertakecourse values(new.cid,new.pid,false,now());
+	if countcount >0 then
+		while countcount >=0 do
+ 			if countcount =0 then
+				set stringstring = concat(new.cid);
+			else
+				set stringstring = concat(new.cid,"_",countcount,"");
+			END IF;
+			insert into allsupertakecourse values(stringstring,new.pid,false,now());
+			set countcount= countcount -1;
+		end while;
+	else if countcount =0 then
+		insert ignore into allsupertakecourse values(new.cid,new.pid,false,now());
+	else 
+		insert ignore into allsupertakecourse values( concat(new.cid,"_"),new.pid,false,now());
+	end if;
+	END IF;
 END IF;
-else if not issup then
 
-if countcount >0 then
-	while countcount >0 do
-		set stringstring = concat(new.cid,"_",countcount,"");
-		insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null);
-		set countcount= countcount -1;
-	end while;
-	insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
-else
-	insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
-END IF;
-   END IF;
-   END IF;
-   
-  
-   
+if not issup then
+
+	if countcount >0 then
+		while countcount >0 do
+			set stringstring = concat(new.cid,"_",countcount,"");
+			insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null);
+			set countcount= countcount -1;
+		end while;
+		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
+		
+	else if countcount = 0 then
+		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
+	else
+		insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null);
+	end if;
+End if;
+end if;
    END;
   |
 delimiter ;

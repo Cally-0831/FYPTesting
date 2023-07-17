@@ -63,6 +63,7 @@ module.exports = {
                 user.role = json[0].role;
                 console.log('>> username: ' + user.allusersname);
                 console.log('>> pid: ' + user.pid);
+                console.log('>> pid: ' + user.role);
                 if (user.password != searchingpw) {
                     return res.status(401).json("Wrong Password");
                 }

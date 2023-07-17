@@ -1,4 +1,4 @@
-<div>
+<div><%console.log("$$$$$$$$$$$$$$$$$$$$$              "+req.session.role)%>
     <%console.log(allpersonallist)%>
         this is timetable
         <!---Empty case / init case == no any class inputted-->
@@ -76,6 +76,7 @@
                     </div>
 
                     <%if(allpersonallist.length>0 ){%>
+                        <!---if have input picture , display in a better view use-->
                         <%if(allpersonallist[0].picdata!= null){%>
                             <div class="columns ">
 
@@ -88,17 +89,16 @@
 
                                 </div>
                                 <div class="column is half">
-
-
                                     <%}%>
+                                        <!--------------------------------------------------------->
+
                                         <table
                                             class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
                                             <th style="font-size:20px;text-align: center;vertical-align:center;">Class
                                                 Code</th>
                                             <th style="font-size:20px;text-align: center;vertical-align:center;">Class
                                                 Section</th>
-                                            <%if(allpersonallist[0].confirmation=="0" || allpersonallist[0].CID
-                                                !="EMPTY_" ){%>
+                                            <%if(allpersonallist[0].confirmation=="0"){%>
                                                 <th style="font-size:20px;text-align: center;vertical-align:center;">
                                                     Action</th>
 
@@ -107,15 +107,19 @@
                                                     <% allpersonallist.forEach(function(list){ var
                                                         stringstring=list.CID.split("_"); %>
                                                         <tr>
-                                                            <%if(stringstring.length < 3 && allpersonallist[0].CID
-                                                                !="EMPTY_" ){%>
+                                                            <%if(stringstring.length < 3){%>
                                                                 <td
                                                                     style="font-size:20px;text-align: center;vertical-align:center;">
                                                                     <%=stringstring[0]%>
                                                                 </td>
                                                                 <td
                                                                     style="font-size:20px;text-align: center;vertical-align:center;">
-                                                                    <%=stringstring[1]%>
+                                                                    <% if(stringstring[0]=="EMPTY" ){%>
+                                                                        <strong style="color: red;">If you wish to input
+                                                                            class, please first remove this
+                                                                            entry</strong>
+                                                                        <%}%>
+                                                                            <%=stringstring[1]%>
                                                                 </td>
                                                                 <%if(allpersonallist[0].confirmation=="0" ){%>
                                                                     <td
@@ -131,11 +135,14 @@
                                                         <%})%>
 
                                         </table>
+                                        <!---if have input picture , display in a better view use-->
                                         <%if(allpersonallist[0].picdata!= null){%>
                                 </div>
+                                <!------------------------------------------------------------------>
                                 <%}%>
                             </div>
                             <%}else{%>
+                                <!--- 0 input init -->
                                 <br>
                                 <div class="columns is-mobile">
                                     <div class="column is-onethird">
@@ -148,14 +155,27 @@
                                                 <p>Attension</p>
                                             </div>
                                             <div class="message-body">
-                                                Currently there are no class inputted by you
-                                                <br><br>
-                                                Please be reminded that if you input <strong>0</strong> classes
-                                                <br>
-                                                Which means except for approved unavailable timeslots
-                                                <br>
-                                                You are <strong><u>fine to accept anytime</u></strong> assigned by your
-                                                supervisor
+                                                <strong>Currently there are no class inputted by you</strong>
+                                                <%console.log(req.session.role)%>
+                                                <% if(req.session.role=="stu" ){%>
+                                                    <br><br>
+                                                    Please be reminded that even if you enrolled <strong>0
+                                                        course</strong>
+                                                    this sememster
+                                                    <br>
+                                                    You are required to add an entry for declaring your course number
+                                                    and
+                                                    provide valid proof as well.
+                                                    <br><br>
+                                                    Please be reminded that if you input <strong>0</strong> classes
+                                                    <br>
+                                                    Which means except for approved unavailable timeslots
+                                                    <br>
+                                                    You are <strong><u>fine to accept anytime</u></strong> assigned by
+                                                    your
+                                                    supervisor
+                                                    <%}%>
+
                                             </div>
                                         </article>
                                     </div>
@@ -190,5 +210,61 @@
             document.getElementById("appearthebutton").appendChild(newbutton);
         }
 
+    }
+
+    async function deleteclassinput(ccode, cseccode) {
+        var r = confirm("Confirm Delete " + ccode + "_" + cseccode + " ?");
+        var requestBody;
+        if (ccode != "EMPTY") {
+            requestBody = JSON.stringify({ cid: ccode + "_" + cseccode });
+
+        } else {
+            requestBody = JSON.stringify({ cid: ccode + "_" });
+
+        }
+
+        if (r) {
+
+            var response = await fetch("/timetable", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Class input deleted.");
+                location.assign("/timetable");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
+    async function Submitthisttb() {
+
+
+        var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+        if (r) {
+
+            var response = await fetch("/timetable", {
+                method: "POST",
+
+            });
+
+            if (response.ok) {
+
+                alert("Timetable submitted.");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+
+        }
     }
 </script>

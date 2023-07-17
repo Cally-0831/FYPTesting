@@ -116,13 +116,13 @@ module.exports = {
         console.log(req.body)
         let thisistheline = "";
         if (req.body.noclassenrolled == "true") {
-            thisistheline = "insert into alltakecourse values(\"EMPTY\",\"" + req.session.userid + "\");\n";
+            thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\");\n";
         } else {
             if (req.body.classlabsection != undefined) {
 
-                thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+                thisistheline = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
             } else if (req.body.classsection != "") {
-                thisistheline = "insert into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+                thisistheline = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
             }
         }
         console.log(thisistheline);

@@ -1,1 +1,1 @@
-select * from supervisorpairstudent 
+select * from student

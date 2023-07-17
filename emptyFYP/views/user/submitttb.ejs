@@ -23,10 +23,12 @@
                         <select name="classdep" id="classdep">
                             <option value="">---Please Select---</option>
                             <%allDeptlist.forEach( function(list) { %>
-                                <option value="<%=list.CDept%>">
-                                    <%=list.CDept%>
-                                </option>
-                                <% })%>
+                                <% if(list.CDept !="EMPTY" ){%>
+                                    <option value="<%=list.CDept%>">
+                                        <%=list.CDept%>
+                                    </option>
+                                    <%}%>
+                                        <% })%>
                         </select>
                     </div>
                     <div id="codeinputfield">
@@ -74,9 +76,9 @@
             } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "") {
                 return alert("Class Tutorial Section Code cannot be empty")
             }
-        }else{
+        } else {
             var requestbody = new FormData(formElem);
-            requestbody.append(document.getElementById("enrollnotclassbox").value , true)
+            requestbody.append(document.getElementById("enrollnotclassbox").value, true)
             //console.log(requestbody)
         }
 
@@ -98,7 +100,7 @@
             }
 
         } catch (error) {
-            console.log("Error happened   "+error);
+            console.log("Error happened   " + error);
         }
     }
 
