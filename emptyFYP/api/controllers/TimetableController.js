@@ -115,7 +115,6 @@ module.exports = {
                     }
                 }
             }
-            console.log(array);
             res.json(json);
 
         })

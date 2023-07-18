@@ -379,3 +379,16 @@ CREATE TRIGGER addsubinsuper before update ON allsupertakecourse
    END;
   |
 delimiter ;
+
+delimiter |
+CREATE TRIGGER copypicdatatonewentry_student before insert ON allstudenttakecourse
+  FOR EACH ROW
+  BEGIN
+  declare picpic LONGBLOB;
+  
+  select distinct(picdata) into picpic from allstudenttakecourse where pid = new.pid;
+set new.picdata = picpic;  
+
+   END;
+  |
+delimiter ;

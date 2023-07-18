@@ -1,5 +1,4 @@
 <div>
-    <%console.log(allpersonallist)%>
         this is timetable
         <!---Empty case / init case == no any class inputted-->
         <% if(allpersonallist.length==0 ){%>
@@ -47,7 +46,8 @@
                                             </div>
                                             <div class="column is-onethird">
                                                 <%if(req.session.role=="stu" ){%>
-                                                    <form method="POST" action="/timetable/pic"
+                                                    <%if(allpersonallist.length ==0 || allpersonallist[0].confirmation =="0"){%>
+                                                        <form method="POST" action="/timetable/pic"
                                                         enctype="multipart/form-data">
                                                         <div class="columns is-mobile">
                                                             <div class="column is-onethird">
@@ -62,6 +62,8 @@
                                                         </div>
 
                                                     </form>
+                                                    <%}%>
+                                                    
                                                     <%}%>
                                             </div>
                                             <div class="column is-onethird">
@@ -187,8 +189,7 @@
                                                     </div>
                                                     <div class="message-body">
                                                         <strong>Currently there are no class inputted by you</strong>
-                                                        <%console.log(req.session.role)%>
-                                                            <% if(req.session.role=="stu" ){%>
+                                                           <% if(req.session.role=="stu" ){%>
                                                                 <br><br>
                                                                 Please be reminded that even if you enrolled <strong>0
                                                                     course</strong>
@@ -312,13 +313,11 @@
                                                                                                 <%=j%>:30
                                                                                             </td>
                                                                                             <%}%>
-                                                                                                <%console.log(" my week array       "+arraylist.length)%>
                                                                                                 <!---i = arraybox-->
                                                                                                 <% for(var i=0 ; i < arraylist.length;i++){ %>
                                                                                                     
                                                                                                 
                                                                                                     <% for(var x=0 ; x < arraylist[i].length;x++){ %>
-                                                                                                        <%console.log(" my week  "+(i+1)+"     array       "+arraylist[i].length)%>
                                                                                                         <%if (arraylist[i][x] =="EMPTY"){%>
                                                                                                             <%firstbox++;%>
                                                                                                         <%}else{%>
@@ -332,9 +331,7 @@
                                                                                                         <% const classstartstr=(arraylist[i][x].startTime).split(":"); %>
                                                                                                         <% classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)%>
                                                                                                         
-                                                                                                        <%console.log( arraylist[i][x].CID+"\n"+currenttime+"\n"+classstart+"\n"+endend+"\n"+classend)%>
-                                                                                                        <%console.log(currenttime.toLocaleTimeString()==classstart.toLocaleTimeString())%>
-                                                                                                        
+                                                                                                         
                                                                                                         <%if ( currenttime.toLocaleTimeString()==classstart.toLocaleTimeString() && arraylist[i].CID != "SKIP"){%>
                                                                                                             
                                                                                                             <%for(var q = 0 ; q < firstbox ; q++){%>
@@ -344,9 +341,7 @@
                                                                                                                 <%=arraylist[i][x].CID%></td>
                                                                                                                 <%firstbox =0;lastbox = 6-(arraylist[i][x].weekdays);%>
                                                                                                                 <%if(classend.toLocaleTimeString() == endend.toLocaleTimeString()){%>
-                                                                                                                    <%console.log("poped   "+arraylist[i][x].CID)%>
                                                                                                                     <%arraylist[i].shift()%>
-                                                                                                                    <%console.log(arraylist[i].length)%>
                                                                                                                     <%if(arraylist[i].length ==0){%>
                                                                                                                         <%arraylist[i].push("EMPTY")%>
                                                                                                                         <%}%>
@@ -354,7 +349,6 @@
                                                                                                                 <%}else{%>
                                                                                                                     <%if((j+1) < 10){newtime = "0"+(j+1)+":30:00"}else{newtime =(j+1)+":30:00";}%>
                                                                                                                 <%arraylist[i][x].startTime = newtime;%>
-                                                                                                                <%console.log(arraylist[i][x].startTime +"        "+newtime)%>
                                                                                                                     <%}%>
                                                                                                                 
                                                                                                                    
@@ -369,7 +363,6 @@
                                                                                                                 <%}%>
                                                                                                                 
                                                                                                     <%}%>
-                                                                                                    <%console.log("first   "+firstbox+"    last     "+lastbox+"$$$$$$$$$$$$$$$$$$$$$$$\n\n\n\n\n")%>
                                                                                                             
                                                                                                     <%}%>
                                                                                                     <%}%>
@@ -392,6 +385,34 @@
 
 </div>
 <script>
+    async function submitstudentttb(picdata){
+    
+    
+    if(picdata =="0"){
+         alert("Please go to \"Add Class\" and input the form of declaring you have enrolled 0 course this semester");
+        location.assign("/timetable/submitttb");
+    }else if(picdata == null || picdata == ""){return alert ("Please Upload a vaild proof before submit");}
+    else{
+var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+
+    if(r){
+       
+    var response = await fetch("/timetable", {
+                method: "POST",
+            });
+
+            if (response.ok) {
+                alert(" Your Timetable submitted.");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+}
+}
+
+    }
+
     function savefile(myFile) {
 
         var file = myFile.files[0];
