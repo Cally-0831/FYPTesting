@@ -262,19 +262,12 @@
                                                             thu=[]; const fri=[]; const sat=[]; const
                                                             arraylist=[mon,tue,wed,thu,fri,sat]; %>
                                                             <% for (var y=0 ; y < allpersonallist.length;y++){%>
-                                                                <%console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")%>
-                                                                <%console.log(mon[0])%>
-                                                                <%console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")%>
+                                                               
                                                                 <%arraylist[allpersonallist[y].weekdays-1].push(allpersonallist[y])%>
                                                                     <%}%>
 
-                                                                    <%console.log("############################################")%>
-                                                                    <% for (var y=0 ; y < arraylist.length;y++){%>
-                                                                        <%console.log("*************************************")%>
-                                                                        <% for (var x=0 ; x < arraylist[y].length;x++){%>
-                                                                        <%console.log(arraylist[y][x])%>
-                                                                            <%}%>
-                                                                            <%}%>
+                                                                   
+                                                                   
                                                                         <table
                                                                             class="table is-bordered is-striped is-hoverable is-halfwidth center">
                                                                             <th
@@ -300,7 +293,7 @@
                                                                                 SAT</th>
 
                                                                             <!---j = timebox-->
-                                                                            <%var firstbox = 0;var lastbox = 0;%>
+                                                                            <%var firstbox = 0;var lastbox = 6;%>
                                                                             <% for(var j=8 ; j < 20;j++){ 
                                                                                 let currenttime =new Date();
                                                                                 currenttime.setHours(j, 30, 0, 0);
@@ -314,10 +307,16 @@
                                                                                                 <%=j%>:30
                                                                                             </td>
                                                                                             <%}%>
-
+                                                                                                <%console.log(" my week array       "+arraylist.length)%>
                                                                                                 <!---i = arraybox-->
                                                                                                 <% for(var i=0 ; i < arraylist.length;i++){ %>
+                                                                                                    
+                                                                                                
                                                                                                     <% for(var x=0 ; x < arraylist[i].length;x++){ %>
+                                                                                                        <%console.log(" my week  "+(i+1)+"     array       "+arraylist[i].length)%>
+                                                                                                        <%if (arraylist[i][x] =="EMPTY"){%>
+                                                                                                            <%firstbox++;%>
+                                                                                                        <%}else{%>
                                                                                                         
                                                                                                         <% let classend=new Date();  %>
                                                                                                         <% const classendstr=(arraylist[i][x].endTime).split(":"); %>
@@ -329,29 +328,50 @@
                                                                                                         <% classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)%>
                                                                                                         
                                                                                                         <%console.log( arraylist[i][x].CID+"\n"+currenttime+"\n"+classstart+"\n"+endend+"\n"+classend)%>
-                                                                                                        <%console.log(classstart.toLocaleTimeString())%>
-                                                                                                        <%console.log(currenttime.toLocaleTimeString())%>
                                                                                                         <%console.log(currenttime.toLocaleTimeString()==classstart.toLocaleTimeString())%>
-                                                                                                        <%console.log(i == arraylist[i][x].weekdays-1)%>
-                                                                                                        <%console.log("^^^^^^^^^^^^^^^^^^^^^\n\n\n")%>
                                                                                                         
-                                                                                                        <%if ( currenttime.toLocaleTimeString()==classstart.toLocaleTimeString() && i == arraylist[i][x].weekdays-1 ){%>
+                                                                                                        <%if ( currenttime.toLocaleTimeString()==classstart.toLocaleTimeString() && arraylist[i].CID != "SKIP"){%>
+                                                                                                            
                                                                                                             <%for(var q = 0 ; q < firstbox ; q++){%>
                                                                                                                 <td></td>
                                                                                                                 <%}%>
                                                                                                             <td style="font-size:20px;text-align: center;vertical-align:center;">
                                                                                                                 <%=arraylist[i][x].CID%></td>
-                                                                                                                <%firstbox =0;lastbox = 6-(i+1);%>
+                                                                                                                <%firstbox =0;lastbox = 6-(arraylist[i][x].weekdays);%>
+                                                                                                                <%if(classend.toLocaleTimeString() == endend.toLocaleTimeString()){%>
+                                                                                                                    <%console.log("poped   "+arraylist[i][x].CID)%>
+                                                                                                                    <%arraylist[i].shift()%>
+                                                                                                                    <%console.log(arraylist[i].length)%>
+                                                                                                                    <%if(arraylist[i].length ==0){%>
+                                                                                                                        <%arraylist[i].push("EMPTY")%>
+                                                                                                                        <%}%>
+                                                                                                                    
+                                                                                                                <%}else{%>
+                                                                                                                    <%if((j+1) < 10){newtime = "0"+(j+1)+":30:00"}else{newtime =(j+1)+":30:00";}%>
+                                                                                                                <%arraylist[i][x].startTime = newtime;%>
+                                                                                                                <%console.log(arraylist[i][x].startTime +"        "+newtime)%>
+                                                                                                                    <%}%>
+                                                                                                                
+                                                                                                                   
                                                                                                             <%}else{%>
-                                                                                                                <%firstbox = arraylist[i][x].weekdays;%>
+                                                                                                                    
+                                                                                                                   <%if(x==0 || (x>0 && arraylist[i][x] == "EMPTY")){%>
+                                                                                                                    <%firstbox = arraylist[i][x].weekdays;%>
+                                                                                                                    <%}%>
+                                                                                                                        
+                                                                                                                        
+                                                                                                                    
                                                                                                                 <%}%>
+                                                                                                                
                                                                                                     <%}%>
-                                                                                                    
+                                                                                                    <%console.log("first   "+firstbox+"    last     "+lastbox+"$$$$$$$$$$$$$$$$$$$$$$$\n\n\n\n\n")%>
+                                                                                                            
+                                                                                                    <%}%>
                                                                                                     <%}%>
                                                                                                     <%for(var q = 0 ; q < lastbox ; q++){%>
                                                                                                         <td></td>
                                                                                                         <%}%>
-                                                                                                        <%firstbox =0; lastbox =0;%>
+                                                                                                        <%firstbox =0; lastbox =6;%>
                                                                                 </tr>
                                                                                 <%}%>
 

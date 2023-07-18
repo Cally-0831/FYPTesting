@@ -1,1 +1,2 @@
-select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, submission from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = "sid33333" order BY  startTime asc ,weekdays asc;
+select Max(lesson) from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%") 
+where alltakecourse.cid  like concat("EMPTY_","%") 
