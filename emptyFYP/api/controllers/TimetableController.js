@@ -218,8 +218,7 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-        console.log(req.body + "         $$$$$$$$$$$            " + req.session.role)
-
+       
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
             console.log(thisistheline);

@@ -9,7 +9,8 @@
     <div class="column template">
 
         <% if (req.session.role=="stu" ){%>
-            <form name="therequest" action="/submitrequest" method="post" onsubmit="submitrequest(this);return false;">
+            <form name="therequest" action="/submitrequest" method="post"
+                onsubmit="submitstudetrequest(this);return false;">
 
 
                 <article class="message is-warning">
@@ -52,16 +53,25 @@
                 <input type="text" id="reason" name="reason" placeholder="Please describle your difficulties"
                     style="width: 100%; height: 200px;" required>
                 <br><br>
+                <!--
+                <form method="POST" action="/submitrequest/pic" enctype="multipart/form-data">
+                -->
 
-                <label for="prooffile" style="font-size: 20px;">Upload proof:&emsp;&emsp;</label>
-                <input type="file" id="prooffile" name="prooffile" enctype="multipart/form-data" required>
+
+                <label for="studentttbpic">Upload Proof:&emsp;&emsp;&emsp;</label>
+                <input type="file" id="uploadfileinput" name="avatar" multiple="multiple" accept="image/*"
+                    onchange="savefile(this)">
+
+                <div class="column is-onethird" id="appearthebutton"></div>
+
+                <!--
+                </form>
+-->
                 <br><br>
-
-
-                <div class="buttons is-right">
+                <!--   <div class="buttons is-right">
                     <button class="button buttonlogout" type="submit is-success">Submit</button>
                 </div>
-
+           -->
             </form>
 
 
@@ -93,6 +103,7 @@
                     <div class="buttons is-right">
                         <button class="button buttonlogout" type="submit is-success">Submit</button>
                     </div>
+
                 </form>
 
                 <%}%>
@@ -104,6 +115,27 @@
 
 
 <script>
+    function savefile(myFile) {
+
+
+        var file = myFile.files[0];
+        var filetype = (file.name.split("."))[1]
+
+        if (filetype != "png" && filetype != "jpg" && filetype != "jpeg") {
+            alert("Please Upload .png / .jpg / .jpeg format of image")
+            document.getElementById("uploadfileinput") = "";
+
+        } else {
+            var newbutton = document.createElement("button");
+            newbutton.setAttribute("id", "upload");
+            newbutton.setAttribute("class", "button buttonlogout");
+            newbutton.innerText = "Upload"
+            newbutton.setAttribute("type", "submit is-success")
+            document.getElementById("appearthebutton").appendChild(newbutton);
+        }
+
+    }
+
     var checkcheck = 0;
     var checked = false;
     function dontshowtime() {
@@ -125,7 +157,8 @@
             + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"  style=\"font-size: 20px;\" required>";
     }
     async function submitrequest(formElem) {
-
+        console.log("!!!!!!!!!!!!!!!!")
+       
         if (!checked) {
             var startstart = document.getElementById("starttime").value;
             var endend = document.getElementById("endtime").value;
@@ -140,6 +173,55 @@
             var response = await fetch(formElem.action, {
                 method: formElem.method,
                 body: new FormData(formElem),
+            });
+            if (response.ok) {
+
+                alert("Submission success");
+                location.assign("/checkrequest");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+
+
+
+    }
+
+    async function submitstudentrequest(formElem) {
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        let imageBlob = await new Promise(resolve => document.getElementById("uploadfileinput").files[0].toBlob(resolve, 'image/*'));
+
+
+        if (!checked) {
+            var startstart = document.getElementById("starttime").value;
+            var endend = document.getElementById("endtime").value;
+
+            if (endend <= startstart) {
+                alert("End time cannot be earlier than Start time \n" + "Please review your input");
+                return;
+            }
+
+        }
+        try {
+            var requestBody = new FormData(formElem)
+            
+            requestBody.append("image", imageBlob);
+
+            console.log(requestBody.get(notokday))
+            var filefile = document.getElementById("uploadfileinput").files[0];
+            console.log("$!@$!@$!@$!@        "+typeof filefile)
+
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: requestBody,
             });
             if (response.ok) {
 

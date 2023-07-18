@@ -393,7 +393,7 @@
         location.assign("/timetable/submitttb");
     }else if(picdata == null || picdata == ""){return alert ("Please Upload a vaild proof before submit");}
     else{
-var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+        var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
 
     if(r){
        
@@ -464,6 +464,7 @@ var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre 
             alert("cancelled");
         }
     };
+    
     async function submitttb() {
 
 

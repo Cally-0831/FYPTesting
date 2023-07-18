@@ -98,7 +98,8 @@ module.exports = {
     },
 
     submitrequest: async function (req, res) {
-        //console.log(req.body);
+        console.log("I am UserContorller Submitrequest")
+        console.log(req.body);
         if (req.method == "GET") return res.view('user/submitrequest');
 
         let reqid = '' + req.session.userid + '';

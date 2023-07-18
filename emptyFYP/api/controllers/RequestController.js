@@ -175,5 +175,39 @@ module.exports = {
 
     },
 
+    upload: function (req, res) {
+        req.file('avatar').upload(function (err, files) {
+            console.log(files[0].fd);
+
+            const fs = require('fs');
+
+            fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                //    console.log(data);
+
+                //console.log(req.file('avatar'));
+                thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
+                //console.log(thisistheline);
+                db.query(thisistheline, function (error, result) {
+                    try {
+
+                        console.log("Submitted")
+                        return res.redirect("../home");
+                    } catch (err) {
+                        console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                    }
+
+                });
+            });
+            fs.unlink(files[0].fd, function (err) {
+                if (err) return console.log(err); // handle error as you wish
+                // file deleted... continue your logic
+            });
+        });
+
+    }
 
 }
