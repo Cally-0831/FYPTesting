@@ -30,7 +30,8 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
 
-  "GET /readttb/:SID": "StudentListController.readsinglestudentttb",
+  "GET /readttb/:SID": "TimetableController.readsinglestudentttb",
+  "POST /readttb/:SID": "TimetableController.judgettb",
 
   'GET /notice': "NoticeListController.listallnotice",
   'GET /notice/createnewnotice': { view: 'user/createnewnotice' },
