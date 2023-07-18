@@ -6,76 +6,193 @@
             <div class="Pagetitle">Deatil Page for <%=req.params.ReqID%>
             </div>
             <%}%>
-            <div class="buttons">
-                <div class="button buttonlogout is-left" onclick="history.back()">
-                    Back
-                </div>
-            
-            </div>
-                <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">SID</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Unavaildable date
-                    </th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Start Time</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Reason</th>
-                    <th style="font-size:20px;text-align: center;vertical-align:center;">Status</th>
+                <%var lasttime=new Date(thisrequestdetails.submission)%>
+                    <div style="Padding :0px; font-size: 15px; text-align: center;"> Last Updated at:
+                        <%=lasttime.toLocaleDateString()%> ,
+                            <%=lasttime.toLocaleTimeString("en-US")%>
+                    </div>
+                    <div class="buttons">
+                        <div class="button buttonlogout is-left" onclick="history.go(-2)">
+                            Back
+                        </div>
 
-
-
-                    <tr>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.ReqID %>
-                        </td>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.SID %>
-                        </td>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= new Date(thisrequestdetails.RequestDate).toLocaleDateString('en-CA') %>
-                        </td>
-
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.RequestStartTime %>
-                        </td>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.RequestEndTime%>
-                        </td>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.reason%>
-                        </td>
-                        <td style="text-align: center;vertical-align:center;">
-                            <%= thisrequestdetails.status%>
-                        </td>
-                    </tr>
-
-
-
-                </table>
-
-                <div id="photohere">Later do this</div>
-                <br><br>
-
-                <% if(req.session.role=="sup" ){%>
-
-                    <label for="Comments">Comments:</label>
-                    <input type="text" id="Comments" name="Comments" placeholder=""
-                        style="width: 500px; height: 200px;">
+                    </div>
                     <br><br>
-                    <button class="button" type="submit is-success" style="position: absolute; right: 10px;"
-                        value="approve" onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
-                    <button class="button" type="submit is-success" style="position: absolute; right: 150px;"
-                        value="disapprove" onclick="disapprovethis('<%=thisrequestdetails.ReqID%>')">Disapprove</button>
+                    <div id="acceptpic">
+                        <%if(req.session.role == "stu"&& (thisrequestdetails.picdata==null || thisrequestdetails.status=="Pending" )){%>
+                            <form method="POST" action="/requestdetail/proof/<%=thisrequestdetails.ReqID %>"
+                                enctype="multipart/form-data">
+                                <div class="columns is-mobile">
+                                    <div class="column is-onethird">
+                                        <label for="studentttbpic">Timetable
+                                            Proof:&emsp;&emsp;&emsp;</label>
+                                        <input type="file" id="uploadfileinput" name="avatar" multiple="multiple"
+                                            accept="image/*" onchange="savefile(this)">
+                                    </div>
+                                    <div class="column is-onethird" id="appearthebutton">
+                                    </div>
+                                </div>
 
-                    <%}else if(req.session.role=="stu" ){%>
-                        <label for="Comments">Comments from your supervisor:</label>
-                        <%= thisrequestdetails.reply%>
+                            </form>
+                            <%}%>
+
+                    </div>
+                    <br><br>
+                    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center; background-color: burlywood;">
+                            ReqID</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            SID</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            Unavaildable date
+                        </th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            Start Time</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            EndTime</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            Reason</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                            Status</th>
+
+
+
+                        <tr>
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= thisrequestdetails.ReqID %>
+                            </td>
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= thisrequestdetails.SID %>
+                            </td>
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= new Date(thisrequestdetails.RequestDate).toLocaleDateString('en-CA') %>
+                            </td>
+
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= thisrequestdetails.RequestStartTime %>
+                            </td>
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= thisrequestdetails.RequestEndTime%>
+                            </td>
+                            <td style="text-align: center;vertical-align:center;">
+                                <%= thisrequestdetails.reason%>
+                            </td>
+
+                            <% if(thisrequestdetails.status=="Require Proof" ){%>
+                                <td style="text-align: center;vertical-align:center; color: red;  font-weight: bold;">
+                                    <%= thisrequestdetails.status%>
+                                </td>
+                                <%}else if(thisrequestdetails.status=="Pending" ){%>
+                                    <td
+                                        style="text-align: center;vertical-align:center; color: rgb(158, 73, 201);  font-weight: bold;">
+                                        <%= thisrequestdetails.status%>
+                                    </td>
+                                    <%}else if(request.status=="Approved" ){%>
+                                        <td
+                                            style="text-align: center;vertical-align:center; color: green;  font-weight: bold;">
+                                            <%= thisrequestdetails.status%>
+                                        </td>
+                                        <%}else if(thisrequestdetails.status=="Rejected" ){%>
+                                            <td
+                                                style="text-align: center;vertical-align:center; color: orange;  font-weight: bold;">
+                                                <%= thisrequestdetails.status%>
+                                            </td>
+                                            <%}%>
+
+                        </tr>
+
+
+
+                    </table>
+
+
+                    <br><br>
+
+                    <% if(req.session.role=="sup" ){%>
+                        <div class="columns is-mobile">
+                            <div class="column is-three-fifths">
+                                <div id="photohere">
+                                    <%if(thisrequestdetails.picdata !=null){%>
+                                        <%var base64obj=Buffer.from(thisrequestdetails.picdata)%>
+                                            <img src="data:image/*;base64,<%=base64obj%>">
+                                            <%}%>
+                                </div>
+
+                            </div>
+                            <div class="column">
+                                <label for="Comments">Comments:</label>
+                                <input type="text" id="Comments" name="Comments" placeholder=""
+                                    style="width: 500px; height: 200px;">
+                                <br><br>
+                                <div class = "buttons is-right">
+                                    <button class="button buttonlogout" type="submit is-success" onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
+                                <button class="button buttonlogout" type="submit is-success"  onclick="disapprovethis('<%=thisrequestdetails.ReqID%>')">Disapprove</button>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+
+
+
+                        <%}else if(req.session.role=="stu" ){%>
+                            <div class="columns is-mobile">
+                                <div class="column is-three-fifths">
+                                    <div id="photohere">
+                                        <%if(thisrequestdetails.picdata !=null){%>
+                                            <%var base64obj=Buffer.from(thisrequestdetails.picdata)%>
+                                                <img src="data:image/*;base64,<%=base64obj%>">
+                                                <%}%>
+                                    </div>
+
+                                </div>
+                                <div class="column">
+                                    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                        <th
+                                            style="font-size:20px;text-align: center;vertical-align:center;background-color:burlywood;">
+                                            Comments from your supervisor:</th>
+                                        <tr>
+                                            <td>
+                                                <%= thisrequestdetails.reply%>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+
                             <%}%>
 
 
 
 </div>
 <script>
+
+    function savefile(myFile) {
+
+        var file = myFile.files[0];
+        var filetype = (file.name.split("."))[1]
+
+        if (filetype != "png" && filetype != "jpg" && filetype != "jpeg") {
+            alert("Please Upload .png / .jpg / .jpeg format of image")
+            document.getElementById("uploadfileinput") = "";
+
+        } else {
+            var newbutton = document.createElement("button");
+            newbutton.setAttribute("id", "upload");
+            newbutton.setAttribute("class", "button buttonlogout");
+            newbutton.innerText = "Upload"
+            document.getElementById("appearthebutton").appendChild(newbutton);
+        }
+
+    }
 
     function approvethis(reqid) {
 
@@ -94,7 +211,7 @@
     }
 
     async function reply(answer, reqid) {
-        
+
         var requestBody = JSON.stringify({
             ReqID: reqid,
             comment: document.getElementById("Comments").value,
@@ -102,7 +219,7 @@
         });
 
 
-        var response = await fetch("/requestdetail/"+reqid, {
+        var response = await fetch("/requestdetail/" + reqid, {
             method: "POST",
             body: requestBody
         });

@@ -98,9 +98,10 @@ module.exports = {
     },
 
     submitrequest: async function (req, res) {
-        console.log("I am UserContorller Submitrequest")
+        
         console.log(req.body);
-        if (req.method == "GET") return res.view('user/submitrequest');
+        console.log(typeof req.body.avatar);
+        console.log(req.body.avatar);
 
         let reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -136,6 +137,7 @@ module.exports = {
         }
 
         console.log(thisistheline);
+        /**
         db.query(thisistheline, (err, results) => {
             try {
                 return res.json("ok");
@@ -148,7 +150,7 @@ module.exports = {
 
         });
 
-
+ */
 
     },
 

@@ -9,32 +9,32 @@
 <div>
     <% if (req.session.role=="sup" ){%>
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-            <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Unavaildable date</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Start Time</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">
+            <th style="font-size:20px;text-align: center;vertical-align:middle;">ReqID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;">Unavaildable date</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;">Start Time</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;">EndTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;">
                 Action
             </th>
 
-            <% thisuserRequestlist.forEach( function(request) {
-                const StartDay=new Date(request.RequestDate).toLocaleDateString('en-CA'); %>
-                
+            <% thisuserRequestlist.forEach( function(request) { const StartDay=new
+                Date(request.RequestDate).toLocaleDateString('en-CA'); %>
+
                 <tr>
-                    <td style="text-align: center;vertical-align:center;">
+                    <td style="text-align: center;vertical-align:middle;">
                         <%= request.ReqID %>
                     </td>
-                    <td style="text-align: center;vertical-align:center;">
+                    <td style="text-align: center;vertical-align:middle;">
                         <%= StartDay %>
                     </td>
 
-                    <td style="text-align: center;vertical-align:center;">
+                    <td style="text-align: center;vertical-align:middle;">
                         <%= request.RequestStartTime %>
                     </td>
-                    <td style="text-align: center;vertical-align:center;">
+                    <td style="text-align: center;vertical-align:middle;">
                         <%= request.RequestEndTime%>
                     </td>
-                    <td style="text-align: center;vertical-align:center;">
+                    <td style="text-align: center;vertical-align:middle;">
                         <button class="button" type="button"
                             onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>
                     </td>
@@ -45,46 +45,71 @@
         </table>
         <%}else if(req.session.role=="stu" ) {%>
             <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-                <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Unavaildable date</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Start Time</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Status</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">Action</th>
-                <th style="font-size:20px;text-align: center;vertical-align:center;">View Details</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">ReqID</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Unavaildable date</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Start Time</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">EndTime</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Status</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Action</th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">View Details</th>
 
-                <%  thisuserRequestlist.forEach( function(request) {
-                    const StartDay=new Date(request.RequestDate).toLocaleDateString('en-CA'); %>
-                    
+                <% thisuserRequestlist.forEach( function(request) { const StartDay=new
+                    Date(request.RequestDate).toLocaleDateString('en-CA'); %>
+
                     <tr>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <%= request.ReqID %>
                         </td>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <%= StartDay %>
                         </td>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <%= request.RequestStartTime %>
                         </td>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <%= request.RequestEndTime%>
                         </td>
-                        <td id ="status" style="text-align: center;vertical-align:center;">
-                            <%= request.status%>
+                        
+                        <td id="status" style="text-align: center;vertical-align:middle;">
+                            <% if(request.status=="Require Proof" ){%>
+                                <div style="color: red;  font-weight: bold;">
+                                    <%= request.status%>
+                                </div>
+                                <%}else if(request.status=="Pending" ){%>
+                                    <div style="color: rgb(158, 73, 201);  font-weight: bold;">
+                                        <%= request.status%>
+                                    </div>
+                                    <%}else if(request.status=="Approved" ){%>
+                                        <div style="color: green;  font-weight: bold;">
+                                            <%= request.status%>
+                                        </div>
+                                        <%}else if(request.status=="Rejected" ){%>
+                                            <div style="color: orange;  font-weight: bold;">
+                                                <%= request.status%>
+                                            </div>
+                                            <%}%>
+                                                <br>
+                                                <%var lasttime=new Date(request.submission)%>
+                                                    <div style="Padding :0px; font-size: 10px;"> Last Updated at:
+                                                        <%=lasttime.toLocaleDateString()%> ,
+                                                            <%=lasttime.toLocaleTimeString("en-US")%>
+                                                    </div>
+
+
                         </td>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <button class="button" type="button"
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         </td>
-                        <td style="text-align: center;vertical-align:center;">
+                        <td style="text-align: center;vertical-align:middle;">
                             <a href="/requestdetail/<%=request.ReqID%>">
                                 <button class="button" type="button">view</button>
                             </a>
                         </td>
                     </tr>
-    
+
                     <% }); %>
-    
+
             </table>
             <%}%>
 
@@ -92,12 +117,12 @@
 </div>
 
 <script>
-    async function deleterequestfromstudent(reqid,status) {
-        var r = confirm("Confirm Delete " + reqid+" ?");
+    async function deleterequestfromstudent(reqid, status) {
+        var r = confirm("Confirm Delete " + reqid + " ?");
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
 
-            var response = await fetch("/user/checkrequest", {
+            var response = await fetch("checkrequest", {
                 method: "DELETE",
                 body: requestBody
             });
@@ -107,7 +132,7 @@
                 // alert(html);
 
                 alert("Request deleted.");
-                location.assign("/user/checkrequest");
+                location.assign("/checkrequest");
             } else {
                 alert(response.status + ": " + response.statusText);
             }
@@ -117,11 +142,11 @@
         }
     }
     async function deleterequestfromsupervisor(reqid) {
-        var r = confirm("Confirm Delete " + reqid+" ?");
+        var r = confirm("Confirm Delete " + reqid + " ?");
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
 
-            var response = await fetch("/checkrequest", {
+            var response = await fetch("checkrequest", {
                 method: "DELETE",
                 body: requestBody
             });
@@ -141,5 +166,5 @@
         }
     };
 
-   
+
 </script>

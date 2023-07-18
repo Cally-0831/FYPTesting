@@ -49,6 +49,7 @@ module.exports.routes = {
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",
+  "POST /requestdetail/proof/:ReqID":"RequestController.upload",
 
   'GET /classroommanagement': "ClassroomListController.getinfobycampus",
 
@@ -70,8 +71,9 @@ module.exports.routes = {
   'GET /checkrequest': "RequestController.listrequest",
   'DELETE /checkrequest': "RequestController.deleterequest",
 
-  'GET /submitrequest': "UserController.submitrequest",
-  'POST /submitrequest': "UserController.submitrequest",
+  'GET /submitrequest': { view: 'user/submitrequest' },
+  'POST /submitrequest': "RequestController.submitrequest",
+  'POST /submitrequest/pic': "RequestController.upload",
 
   'GET /uploadstudentlist': "UserController.uploadstudentlist",
   'POST /uploadstudentlist': "UserController.uploadstudentlist",

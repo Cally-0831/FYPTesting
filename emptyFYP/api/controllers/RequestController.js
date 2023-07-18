@@ -65,7 +65,7 @@ module.exports = {
 
     liststudentrequest: async function (req, res) {
         var studentrequestlist;
-    
+
         let thisistheline = "select * from allrequestfromstudent inner join supervisorpairstudent "
             + "on allrequestfromstudent.sid = supervisorpairstudent.sid and supervisorpairstudent.tid = \"" + req.session.userid + "\" ;";
         //console.log(thisistheline)
@@ -92,7 +92,7 @@ module.exports = {
     },
 
     deleterequest: async function (req, res) {
-        
+
         let thisistheline = "";
         if (req.session.role == "sup") {
             thisistheline = "DELETE FROM allrequestfromsupervisor WHERE reqid= \"" + req.body.ReqID + "\"\n";
@@ -117,7 +117,7 @@ module.exports = {
     viewstudentrequestdeatils: async function (req, res) {
 
         var viewthisrequestinfo;
-       
+
         if (req.session.role == "sup") {
             let thisistheline = "select * from allrequestfromstudent where reqid = \"" + req.params.ReqID + "\"";
             //console.log(thisistheline)
@@ -158,12 +158,12 @@ module.exports = {
     },
 
     replystudentrequest: async function (req, res) {
-        
+
         console.log(req.body);
-       
+
         let thisistheline = "UPDATE allrequestfromstudent SET status = \"" + req.body.status + "\" , reply=\"" + req.body.comment
-            + "\" WHERE ReqID =\"" +req.body.ReqID + "\";";
-            console.log(thisistheline)
+            + "\", submission = now() WHERE ReqID =\"" + req.body.ReqID + "\";";
+        console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("Updated");
@@ -172,6 +172,63 @@ module.exports = {
                 console.log("sth happened here " + err);
             }
         });
+
+    },
+
+    submitrequest: async function (req, res) {
+
+        console.log(req.body);
+        console.log(typeof req.body.avatar);
+        console.log(req.body.avatar);
+
+        let reqid = '' + req.session.userid + '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < 5) {
+            reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+
+
+        let thisistheline = "";
+
+
+        if (req.session.role == "sup") {
+            console.log("enter sup");
+            if (req.body.starttime == undefined) {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
+                    + "\",\"00:00\", \"23:59\");";
+            } else {
+                thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                    req.body.starttime + "\", \"" + req.body.endtime + "\");";
+            }
+        } else if (req.session.role == "stu") {
+            console.log("enter stu");
+            if (req.body.starttime == undefined) {
+                thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
+                    + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
+            } else {
+                thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                    req.body.starttime + "\", \"" + req.body.endtime + "\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
+            }
+        }
+
+        console.log(thisistheline);
+     
+        db.query(thisistheline, (err, results) => {
+            try {
+                return res.json("ok");
+                //console.log("1 row added");
+
+            } catch (err) {
+                return res.stauts(401).json("Error happened when excuting");
+            }
+
+
+        });
+
+
 
     },
 
@@ -189,13 +246,13 @@ module.exports = {
                 //    console.log(data);
 
                 //console.log(req.file('avatar'));
-                thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
+                thisistheline = "Update allrequestfromstudent set picdata= \"" + data + "\", status = \"Pending\" ,submission = now() where sid=\"" + req.session.userid + "\" and reqid = \""+req.params.ReqID+"\"";
                 //console.log(thisistheline);
                 db.query(thisistheline, function (error, result) {
                     try {
 
                         console.log("Submitted")
-                        return res.redirect("../home");
+                        return res.redirect("/requestdetail/"+req.params.ReqID);
                     } catch (err) {
                         console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
                     }
