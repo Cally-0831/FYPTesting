@@ -16,6 +16,7 @@ db.connect(async (err) => {
 });
 
 const fs = require('fs');
+const { get } = require('https');
 
 
 
@@ -96,16 +97,25 @@ module.exports = {
         if (type == 'load_lab') {
             var depcode = search_query.split("_")
             var getlecturesection = search_query.at(-1);
-
             thisistheline = "SELECT CSecCode FROM allclass "
-                + "WHERE CID like \"" + depcode[0] + "_" + "10" + "" + getlecturesection + "\%\"";
+                + "WHERE CID like \"" + depcode[0] + "_" + "10" + "" + getlecturesection + "\%\" or CID Like \"" + depcode[0] + "_" + "10\%\" ;";
         }
         //console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             var string = JSON.stringify(results);
             var json = JSON.parse(string);
-            // console.log(json);
-
+            var array = json;
+            if (type == "load_lab") {
+                array = new Array();
+                for (var i = 0; i < json.length; i++) {
+                    var stringstring = json[i].CSecCode.charAt(2);
+                    if (stringstring != 0 && stringstring != getlecturesection) {
+                    } else {
+                        array.push(json[i]);
+                    }
+                }
+            }
+            console.log(array);
             res.json(json);
 
         })
@@ -209,7 +219,7 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-        console.log(req.body+"         $$$$$$$$$$$            "+ req.session.role)
+        console.log(req.body + "         $$$$$$$$$$$            " + req.session.role)
 
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
