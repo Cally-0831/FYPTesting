@@ -73,6 +73,7 @@ PID		varchar(10) not null,
 confirmation integer default 0 ,
 Submissiontime timestamp,
 picdata LONGBLOB,
+review timestamp,
 CONSTRAINT csid
 primary key (CID,PID)
 );
@@ -279,15 +280,15 @@ if not issup then
 	if countcount >0 then
 		while countcount >0 do
 			set stringstring = concat(new.cid,"_",countcount,"");
-			insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null);
+			insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null,null);
 			set countcount= countcount -1;
 		end while;
-		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
+		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null,null);
 		
 	else if countcount = 0 then
-		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null);
+		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null,null);
 	else
-		insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null);
+		insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null,null);
 	end if;
 End if;
 end if;

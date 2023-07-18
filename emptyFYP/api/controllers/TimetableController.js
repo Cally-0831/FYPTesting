@@ -167,7 +167,7 @@ module.exports = {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, submission from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
         // console.log(thisistheline);
@@ -318,11 +318,20 @@ module.exports = {
         console.log(req.body);
         let thisistheline;
         if(req.body.type == "Approved"){
-            thisistheline = "Update allstudenttakecourse set confirmation = \"2\"";
+            thisistheline = "Update allstudenttakecourse set confirmation = \"2\", review = now() where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }else{
-
+            thisistheline = "Update allstudenttakecourse set confirmation = \"3\", review = now() where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }
-        return res.ok();
+        db.query(thisistheline, function (err, result) {
+            try {
+               
+                return res.redirect("../liststudent");
+
+            } catch (err) {
+                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
+            }
+
+        });
     },
 
 

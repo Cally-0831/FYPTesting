@@ -22,36 +22,51 @@
 <br><br>
 
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th>SID</th>
-    <th>Student Name</th>
-    <th>Topic</th>
-    <th>Submission of TTB</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">TTB status</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Submission of TTB</th>
 
 
     <% allstdlist.forEach( function(allstdlist) { %>
 
         <tr>
-            <td>
+             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.sid %>
             </td>
 
 
-            <td>
+             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                 <a href="/read/<%= allstdlist.sid%>">
                     <%= allstdlist.stdname %>
                 </a>
             </td>
-            <td>
+             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.Topic%>
             </td>
-            <td>
+             <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%if (allstdlist.confirmation=="0" ){%>
+                    <div style="font-weight: bold;color: red;">Require Proof</div>
+                    <%}else if (allstdlist.confirmation=="1" ){%>
+                    <div style="font-weight: bold;color: blueviolet;">Pending</div>
+                    <%}else if (allstdlist.confirmation=="2" ){%>
+                        <div style="font-weight: bold;color: green;">Approved</div>
+                        <%}else if (allstdlist.confirmation=="3" ){%>
+                            <div style="font-weight: bold;color: orange;">Rejected</div>
+                            <%}%>
+            </td>
+             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                 <% if (allstdlist.submission=="N" ){%>
 
                     <%=allstdlist.submission%>
                         <%}else if(allstdlist.submission=="Y" ){%>
-                            <a href="/readttb/<%= allstdlist.sid%>">
-                                <button class="buttonlogout">View Submission</button>
+                            <div class = "buttons is-centered">
+                                <a href="/readttb/<%= allstdlist.sid%>">
+                                <button class="button buttonlogout">View Submission</button>
                             </a>
+                            </div>
+                            
                             <%}%>
 
             </td>
