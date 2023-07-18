@@ -265,7 +265,12 @@
                                                                
                                                                 <%arraylist[allpersonallist[y].weekdays-1].push(allpersonallist[y])%>
                                                                     <%}%>
-
+                                                                    <% for (var y=0 ; y < arraylist.length;y++){%>
+                                                               
+                                                                        <%if(arraylist[y].length==0){%>
+                                                                            <%arraylist[y].push("EMPTY")%>
+                                                                            <%}%>
+                                                                            <%}%>
                                                                    
                                                                    
                                                                         <table
