@@ -19,7 +19,8 @@
                     </div>
                     <br><br>
                     <div id="acceptpic">
-                        <%if(req.session.role == "stu"&& (thisrequestdetails.picdata==null || thisrequestdetails.status=="Pending" )){%>
+                        <%if(req.session.role=="stu" && (thisrequestdetails.picdata==null ||
+                            thisrequestdetails.status=="Pending" )){%>
                             <form method="POST" action="/requestdetail/proof/<%=thisrequestdetails.ReqID %>"
                                 enctype="multipart/form-data">
                                 <div class="columns is-mobile">
@@ -94,7 +95,7 @@
                                         style="text-align: center;vertical-align:center; color: rgb(158, 73, 201);  font-weight: bold;">
                                         <%= thisrequestdetails.status%>
                                     </td>
-                                    <%}else if(request.status=="Approved" ){%>
+                                    <%}else if(thisrequestdetails.status=="Approved" ){%>
                                         <td
                                             style="text-align: center;vertical-align:center; color: green;  font-weight: bold;">
                                             <%= thisrequestdetails.status%>
@@ -127,16 +128,41 @@
 
                             </div>
                             <div class="column">
-                                <label for="Comments">Comments:</label>
-                                <input type="text" id="Comments" name="Comments" placeholder=""
-                                    style="width: 500px; height: 200px;">
-                                <br><br>
-                                <div class = "buttons is-right">
-                                    <button class="button buttonlogout" type="submit is-success" onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
-                                <button class="button buttonlogout" type="submit is-success"  onclick="disapprovethis('<%=thisrequestdetails.ReqID%>')">Disapprove</button>
+                                <div class="rows">
+                                    <div class="row">
+                                        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                            <th
+                                                style="font-size:20px;text-align: center;vertical-align:center;background-color:burlywood;">
+                                                Comments from you:</th>
+                                            <tr>
+                                                <td>
+                                                    <%contents=thisrequestdetails.reply.split('newline');%>
+                                                        <%for (var i=0 ; i < contents.length;i++){%>
+                                                            <%= contents[i]%>
+                                                                <br>
+                                                                <%}%>
 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br>
+                                    <div class="row"><label for="Comments"
+                                            style="font-size: 20px; font-weight: bold;">Comments:</label>
+                                        <textarea id="Comments" name="Comments" rows="4" cols="50" style="width:100%"
+                                            required></textarea>
+                                        <br><br>
+                                        <div class="buttons is-right">
+                                            <button class="button buttonlogout" type="submit is-success"
+                                                onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
+                                            <button class="button buttonlogout" type="submit is-success"
+                                                onclick="disapprovethis('<%=thisrequestdetails.ReqID%>')">Disapprove</button>
+
+                                        </div>
+                                    </div>
                                 </div>
-                                
+
+
                             </div>
                         </div>
 
@@ -160,7 +186,11 @@
                                             Comments from your supervisor:</th>
                                         <tr>
                                             <td>
-                                                <%= thisrequestdetails.reply%>
+                                                <%contents=thisrequestdetails.reply.split('newline');%>
+                                                    <%for (var i=0 ; i < contents.length;i++){%>
+                                                        <%= contents[i]%>
+                                                            <br>
+                                                            <%}%>
                                             </td>
                                         </tr>
                                     </table>
@@ -199,22 +229,24 @@
         var r = confirm("Confirm APPROVE " + reqid + " ?");
         if (r) {
 
-            reply("approve", reqid);
+            reply("Approved", reqid);
         }
     }
 
     function disapprovethis(reqid) {
         var r = confirm("Confirm REJECT " + reqid + " ?");
         if (r) {
-            reply("disapprove", reqid);
+            reply("Rejected", reqid);
         }
     }
 
     async function reply(answer, reqid) {
+        var stringstring = document.getElementById("Comments").value;
+        stringstring = stringstring.replace(/\n/g, " newline ");
 
         var requestBody = JSON.stringify({
             ReqID: reqid,
-            comment: document.getElementById("Comments").value,
+            comment: stringstring,
             status: answer
         });
 

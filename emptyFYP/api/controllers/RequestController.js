@@ -159,8 +159,6 @@ module.exports = {
 
     replystudentrequest: async function (req, res) {
 
-        console.log(req.body);
-
         let thisistheline = "UPDATE allrequestfromstudent SET status = \"" + req.body.status + "\" , reply=\"" + req.body.comment
             + "\", submission = now() WHERE ReqID =\"" + req.body.ReqID + "\";";
         console.log(thisistheline)
