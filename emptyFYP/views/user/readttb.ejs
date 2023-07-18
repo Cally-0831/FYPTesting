@@ -1,4 +1,9 @@
 <div class="Pagetitle"><%=SID%> TimeTable</div>
+<div class="row" style="text-align: center;font-size: 15px;color: grey;">
+    <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
+        Submitted at <%=submitteddate.toLocaleDateString()%> ,
+            <%=submitteddate.toLocaleTimeString('en-US')%>
+</div>
 
 <div class="rows">
     <div class="columns is-mobile">
@@ -11,7 +16,7 @@
         </div>
         <div class="column">
             <div class="buttons is-right">
-                <div class="button buttonlogout" >Reject</div>
+                <div class="button buttonlogout" onclick="reject('<%=SID%>')">Reject</div>
                 <div class="button buttonlogout" onclick="approve('<%=SID%>')">Approve</div>
                 
             </div>
@@ -573,6 +578,22 @@
                 })
                 if(response.ok){
                     alert("Approved");
+                    location.reload();
+                }
+            }else {}
+
+        }
+
+        async function reject(SID){
+            var r = confirm("Reject ?")
+            if(r){
+                var response = await fetch("/readttb/"+SID,
+                {
+                    method : "POST",
+                    body: JSON.stringify({ sid : SID , type:"Rejected"})
+                })
+                if(response.ok){
+                    alert("Rejected");
                     location.reload();
                 }
             }else {}

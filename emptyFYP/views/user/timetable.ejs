@@ -9,7 +9,7 @@
                 <div class="Pagetitle">
                     <%=req.session.username%>'s Submitted TimeTable
                 </div>
-                <% if (allpersonallist[0].confirmation!="1" ){%>
+                <% if (allpersonallist[0].confirmation!="0" ){%>
                     <div class="row" style="text-align: center;font-size: 15px;color: grey;">
                         <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
                             Submitted at <%=submitteddate.toLocaleDateString()%> ,
@@ -30,12 +30,11 @@
                                         </div>
 
                                     </div>
-
-                                    <div class="row">
+                                </div>
+                                <div class="row">
                                         <div class="columns is-mobile">
                                             <div class="column is-onethird">
-                                                <% if (allpersonallist.length==0 || allpersonallist[0].confirmation=="0"
-                                                    ){%>
+                                                <% if (allpersonallist.length==0 || allpersonallist[0].confirmation !="1"||allpersonallist[0].confirmation !="2"){%>
                                                     <div class="buttons">
                                                         <a href="/timetable/submitttb">
                                                             <button class="button buttonlogout" id="addclass">Add
@@ -46,7 +45,7 @@
                                             </div>
                                             <div class="column is-onethird">
                                                 <%if(req.session.role=="stu" ){%>
-                                                    <%if(allpersonallist.length ==0 || allpersonallist[0].confirmation =="0"){%>
+                                                    <%if(allpersonallist.length ==0 ||  allpersonallist[0].confirmation !="1"||allpersonallist[0].confirmation !="2"){%>
                                                         <form method="POST" action="/timetable/pic"
                                                         enctype="multipart/form-data">
                                                         <div class="columns is-mobile">
@@ -85,6 +84,17 @@
                                                                     onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
                                                                     Student Timetable</button>
                                                             </div>
+                                                            <div class="box" style="background-color: blanchedalmond; text-align: right;">
+                                                            <%if(allpersonallist[0].confirmation == "0"){%>
+                                                                <div style="font-size: 20px;">Status :<strong><u style="color: red;">Require Upload Proof</u> for Supervisor to review</strong></div>
+                                                                    <%}else if(allpersonallist[0].confirmation == "3"){%>
+                                                                        <div style="font-size: 20px;">Status :<strong><u style="color: orangered;">Rejected</u> after Supervisor Review </strong></div> 
+                                                                            <% var reviewdate=new Date(allpersonallist[0].review)%>
+                                                                            <div style="font-size: 15px; color: gray;">Reviewed at <%=reviewdate.toLocaleDateString()%> , <%=reviewdate.toLocaleTimeString('en-US')%></div>
+                                                                            <%}%>
+                                                            </div>
+                                                            
+                                                           
                                                             <%}else{%>
                                                                 <div class="box" style="background-color: blanchedalmond; text-align: right;">
                                                                    <%if(allpersonallist[0].confirmation == "1"){%>
@@ -115,8 +125,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                           </div>
                             <%if(allpersonallist.length>0 ){%>
                                 <!---if have input picture , display in a better view use-->
                                 <%if(allpersonallist[0].picdata!= null){%>
