@@ -153,7 +153,7 @@
                                                         style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                                                         Class
                                                         Section</th>
-                                                    <%if(allpersonallist[0].confirmation=="0"){%>
+                                                    <%if(allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3"){%>
                                                         <th
                                                             style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
 
@@ -171,8 +171,8 @@
                                                                         <td
                                                                             style="font-size:20px;text-align: center;vertical-align:middle;">
                                                                             <% if(stringstring[0]=="EMPTY" &&
-                                                                                allpersonallist[0].confirmation=="0"
-                                                                                ){%>
+                                                                               ( allpersonallist[0].confirmation=="0" ||allpersonallist[0].confirmation=="3"
+                                                                            )){%>
                                                                                 <strong style="color: red;">If you wish
                                                                                     to input
                                                                                     class, please first remove this
@@ -180,7 +180,7 @@
                                                                                 <%}%>
                                                                                     <%=stringstring[1]%>
                                                                         </td>
-                                                                        <%if(allpersonallist[0].confirmation=="0" ){%>
+                                                                        <%if(allpersonallist[0].confirmation=="0" || allpersonallist[0].confirmation=="3"){%>
                                                                             <td
                                                                                 style="font-size:20px;text-align: center;vertical-align:middle;">
                                                                                 <button class="button" type="button"
