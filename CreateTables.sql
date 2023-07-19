@@ -345,30 +345,24 @@ end if;
 delimiter ;
 
 delimiter |
-CREATE TRIGGER addsubinstudent before update ON allstudenttakecourse
+CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse
   FOR EACH ROW
   BEGIN
- declare comments varchar(200);
- declare stringstring varchar(200);
- 
- select distinct(ttbcomments) into comments from allstudenttakecourse where pid = new.pid;
- set stringstring = new.ttbcomments;
- if comments= null then
- set new.ttbcomments = stringstring;
- else 
-  set new.ttbcomments = concat(comments,"_",stringstring);
-	   end if;
+  
+
 	IF new.confirmation = "0" then
-		update student set ttbsubmission ="N" where sid = new.pid;
+		update student set ttbsubmission ="N"  where sid = new.pid;
 	elseif new.confirmation = "1" then
 		update student set ttbsubmission ="Pending" where sid = new.pid;
 	elseif new.confirmation = "2" then
-		update student set ttbsubmission ="Approved" where sid = new.pid;
+		update student set ttbsubmission ="Approved" ,ttbcomments = new.ttbcomments  where sid = new.pid;
 	elseif new.confirmation = "3" then
-		update student set ttbsubmission ="Rejected" where sid = new.pid;
+		update student set ttbsubmission ="Rejected",ttbcomments = new.ttbcomments where sid = new.pid;
 	else
 		update student set ttbsubmission = null where sid = new.pid;
 	end if;
+    
+    
    END;
   |
 delimiter ;
@@ -392,9 +386,12 @@ CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allst
   declare picpic LONGBLOB;
   declare comments varchar(200);
   
-  select distinct(picdata),ttbcomments into picpic,comments from allstudenttakecourse where pid = new.pid;
+  select distinct(picdata) into picpic from allstudenttakecourse where pid = new.pid;
+  select distinct(ttbcomments) into comments from allstudenttakecourse where pid = new.pid;
+  
 	set new.picdata = picpic;  
 	set new.ttbcomments = comments;
    END;
   |
 delimiter ;
+

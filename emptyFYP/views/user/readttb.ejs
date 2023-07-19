@@ -1,3 +1,4 @@
+
 <div class="Pagetitle"><%=SID%> TimeTable</div>
 <div class="row" style="text-align: center;font-size: 15px;color: grey;">
     <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
@@ -17,8 +18,8 @@
         <div class="column">
             <div class="buttons is-right">
             
-                <div class="button buttonlogout" onclick="reject('<%=SID%>')">Reject</div>
-                <div class="button buttonlogout" onclick="approve('<%=SID%>')">Approve</div>
+                <div class="button buttonlogout" onclick="reject('<%=SID%>','<%=allpersonallist[0].CID%>')">Reject</div>
+                <div class="button buttonlogout" onclick="approve('<%=SID%>','<%=allpersonallist[0].CID%>')">Approve</div>
                 
             </div>
         </div>
@@ -582,37 +583,38 @@
     </div>
 
     <script>
-        async function approve(sid){
+        async function approve(sid,cid){
             var r = confirm("Approve ?")
             if(r){
-                reply("Approved",sid)
+                reply("Approved",sid,cid)
             }else {}
 
         }
 
-        async function reject(sid){
+        async function reject(sid,cid){
             var r = confirm("Reject ?")
             if(r){
-                reply("Rejected",sid)
+                reply("Rejected",sid,cid)
             }else {}
 
         }
 
-        async function reply(answer,sid) {
+        async function reply(answer,sid,cid) {
         var stringstring = document.getElementById("Comments").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
 
         var requestBody = JSON.stringify({
-            ReqID: sid,
-            comment: stringstring,
-            status: answer
+            sid: sid,
+            comments: stringstring,
+            type: answer,
+            cid : cid
         });
 
 
         var response = await fetch("/readttb/"+sid,
                 {
                     method : "POST",
-                    body: JSON.stringify({ sid : sid , type:answer,comments : stringstring})
+                    body: requestBody
                 })
                 if(response.ok){
                     alert(answer);

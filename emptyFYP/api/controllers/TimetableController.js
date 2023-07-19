@@ -319,9 +319,9 @@ module.exports = {
         console.log(req.body);
         let thisistheline;
         if(req.body.type == "Approved"){
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
+            thisistheline = "Update student set student.ttbsubmission = \"Approved\", student.ttbcomments = \""+req.body.comments+"\" where student.sid=\""+req.params.SID+"\"";
         }else{
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\" and allstudenttakecourse.cid = \""+req.body.cid+"\"";
         }
         console.log(thisistheline);_
     },

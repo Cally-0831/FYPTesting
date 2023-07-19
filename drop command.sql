@@ -26,4 +26,4 @@ Drop trigger if exists delallstudenttakecourse;
 Drop trigger if exists addtopicinsupervisor;
 Drop trigger if exists addsubinstudent;
 Drop trigger if exists addsubinsuper;
-Drop trigger if exists copypicdata_and_commentstonewentry_student
+Drop trigger if exists copypicdata_and_commentstonewentry_student;
