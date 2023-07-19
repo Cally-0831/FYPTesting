@@ -21,52 +21,62 @@
 
 <br><br>
 
-<table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">TTB status</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Submission of TTB</th>
+<table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;"> 
+        <a class="sorting" id='headerSID' onclick="sorting('headerSID',0);">&#8593;</a>SID
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting" id='headerstuname' onclick="sorting('headerstuname',1);">&#8593;</a>Student Name</th>
+    <th  style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a  class="sorting" id='headertopic' onclick="sorting('headertopic',2);">&#8593;</a>Topic</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting" id='headerTTBstatus' onclick="sorting('headerTTBstatus',3);">&#8593;</a>TTB status
+    </th>
+    <th 
+        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Submission of TTB
+    </th>
 
 
     <% allstdlist.forEach( function(allstdlist) { %>
 
         <tr>
-             <td style="font-size:20px;text-align: center;vertical-align:middle;">
+            <td id="sid" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.sid %>
             </td>
 
 
-             <td style="font-size:20px;text-align: center;vertical-align:middle;">
+            <td id="studentname" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <a href="/read/<%= allstdlist.sid%>">
                     <%= allstdlist.stdname %>
                 </a>
             </td>
-             <td style="font-size:20px;text-align: center;vertical-align:middle;">
+            <td id="studenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.Topic%>
             </td>
-             <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%if (allstdlist.confirmation=="0" ){%>
+            <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%if (allstdlist.submission=="Require Proof" ){%>
                     <div style="font-weight: bold;color: red;">Require Proof</div>
-                    <%}else if (allstdlist.confirmation=="1" ){%>
-                    <div style="font-weight: bold;color: blueviolet;">Pending</div>
-                    <%}else if (allstdlist.confirmation=="2" ){%>
-                        <div style="font-weight: bold;color: green;">Approved</div>
-                        <%}else if (allstdlist.confirmation=="3" ){%>
-                            <div style="font-weight: bold;color: orange;">Rejected</div>
-                            <%}%>
+                    <%}else if (allstdlist.submission=="Pending" ){%>
+                        <div style="font-weight: bold;color: blueviolet;">Pending</div>
+                        <%}else if (allstdlist.submission=="Approved" ){%>
+                            <div style="font-weight: bold;color: green;">Approved</div>
+                            <%}else if (allstdlist.submission=="Rejected" ){%>
+                                <div style="font-weight: bold;color: orange;">Rejected</div>
+                                <%}else{%>
+                                    <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
+                                    <%}%>
             </td>
-             <td style="font-size:20px;text-align: center;vertical-align:middle;">
+            <td style="font-size:20px;text-align: center;vertical-align:middle;">
                 <% if (allstdlist.submission=="N" ){%>
 
                     <%=allstdlist.submission%>
-                        <%}else if(allstdlist.submission=="Y" ){%>
-                            <div class = "buttons is-centered">
+                        <%}else{%>
+                            <div class="buttons is-centered">
                                 <a href="/readttb/<%= allstdlist.sid%>">
-                                <button class="button buttonlogout">View Submission</button>
-                            </a>
+                                    <button class="button buttonlogout">View Submission</button>
+                                </a>
                             </div>
-                            
+
                             <%}%>
 
             </td>
@@ -77,6 +87,65 @@
 
 </table>
 <script>
+    function sorting(idlocation, tablelocation) {
+        for(var i = 0 ; i < document.getElementsByClassName("sorting").length;i++){
+             if(i != tablelocation){
+                document.getElementsByClassName("sorting")[i].innerHTML = '↑'
+            } 
+        }
+
+        if (document.getElementById(idlocation).innerHTML == '↑') {
+            document.getElementById(idlocation).innerHTML = '\&\#8595;';
+            sortingtable("dsc", tablelocation);
+        } else {
+            document.getElementById(idlocation).innerHTML = '\&\#8593;'
+            sortingtable("asc", tablelocation);
+        }
+
+    }
+
+    function sortingtable(ordering, tablelocation) {
+        var table, rows, switching, i, x, y, shouldSwitch, switchcount = 0;
+        table = document.getElementById("mytable");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[tablelocation];
+                y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
+                
+                
+                if (ordering == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (ordering == "dsc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && ordering == "asc") {
+                    ordering = "dsc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+
+
+
+
 
     function gotocreate() {
         location.assign("/createnewstudent");
