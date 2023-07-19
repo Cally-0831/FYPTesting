@@ -1,442 +1,525 @@
 <div>
-       
-        <!---Empty case / init case == no any class inputted-->
-        <% if(allpersonallist.length==0 ){%>
+
+    <!---Empty case / init case == no any class inputted-->
+    
+    <% if(allpersonallist.length==0 || allpersonallist[0].confirmation=="0" ){%>
+        <div class="Pagetitle">
+            <%=req.session.username%>'s TimeTable
+        </div>
+        <%}else if(allpersonallist[0].confirmation !="0" ){%>
             <div class="Pagetitle">
-                <%=req.session.username%>'s TimeTable
+                <%=req.session.username%>'s Submitted TimeTable
             </div>
-            <%}else if(allpersonallist.length>0){%>
-                <div class="Pagetitle">
-                    <%=req.session.username%>'s Submitted TimeTable
-                </div>
-                <% if (allpersonallist[0].confirmation!="0" ){%>
-                    <div class="row" style="text-align: center;font-size: 15px;color: grey;">
-                        <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
-                            Submitted at <%=submitteddate.toLocaleDateString()%> ,
-                                <%=submitteddate.toLocaleTimeString('en-US')%>
-                    </div>
+            <div class="row" style="text-align: center;font-size: 15px;color: grey;">
+                <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
+                    Submitted at <%=submitteddate.toLocaleDateString()%> ,
+                        <%=submitteddate.toLocaleTimeString('en-US')%>
+            </div>
 
-                    <%}%>
-                        <%}%>
-                            <div class="rows is-mobile">
-                                <div class="row">
-                                    <div class="columns is-mobile">
-                                        <div class="column is-half is-mobile">
-                                            <div class="buttons is-left">
-                                                <button class="button buttonlogout"
-                                                    onclick="history.back()">Back</button>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+            <%}%>
+                <div class="rows is-mobile">
+                    <div class="row">
+                        <div class="columns is-mobile">
+                            <div class="column is-half is-mobile">
+                                <div class="buttons is-left">
+                                    <button class="button buttonlogout" onclick="history.back()">Back</button>
                                 </div>
-                                <div class="row">
-                                        <div class="columns is-mobile">
-                                            <div class="column is-onethird">
-                                                <% if (allpersonallist.length==0 || allpersonallist[0].confirmation !="1"||allpersonallist[0].confirmation !="2"){%>
-                                                    <div class="buttons">
-                                                        <a href="/timetable/submitttb">
-                                                            <button class="button buttonlogout" id="addclass">Add
-                                                                Class</button>
-                                                        </a>
-                                                    </div>
-                                                    <%}%>
-                                            </div>
-                                            <div class="column is-onethird">
-                                                <%if(req.session.role=="stu" ){%>
-                                                    <%if(allpersonallist.length ==0 ||  allpersonallist[0].confirmation !="1"||allpersonallist[0].confirmation !="2"){%>
-                                                        <form method="POST" action="/timetable/pic"
-                                                        enctype="multipart/form-data">
-                                                        <div class="columns is-mobile">
-                                                            <div class="column is-onethird">
-                                                                <label for="studentttbpic">Timetable
-                                                                    Proof:&emsp;&emsp;&emsp;</label>
-                                                                <input type="file" id="uploadfileinput" name="avatar"
-                                                                    multiple="multiple" accept="image/*"
-                                                                    onchange="savefile(this)">
-                                                            </div>
-                                                            <div class="column is-onethird" id="appearthebutton">
-                                                            </div>
-                                                        </div>
 
-                                                    </form>
-                                                    <%}%>
-                                                    
-                                                    <%}%>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="columns is-mobile">
+                            <div class="column is-onethird">
+                                <% if (allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
+                                    &&allpersonallist[0].confirmation !="2" )){%>
+                                    <div class="buttons">
+                                        <a href="/timetable/submitttb">
+                                            <button class="button buttonlogout" id="addclass">Add
+                                                Class</button>
+                                        </a>
+                                    </div>
+                                    <%}%>
+                            </div>
+                            <div class="column is-onethird">
+                                <%if(req.session.role=="stu" ){%>
+                                    <%if(allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
+                                        &&allpersonallist[0].confirmation !="2" )){%>
+                                        <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
+                                            <div class="columns is-mobile">
+                                                <div class="column is-onethird">
+                                                    <label for="studentttbpic">Timetable
+                                                        Proof:&emsp;&emsp;&emsp;</label>
+                                                    <input type="file" id="uploadfileinput" name="avatar"
+                                                        multiple="multiple" accept="image/*" onchange="savefile(this)">
+                                                </div>
+                                                <div class="column is-onethird" id="appearthebutton">
+                                                </div>
                                             </div>
-                                            <div class="column is-onethird">
-                                                <%if(req.session.role=="stu" ){%>
-                                                    
-                                                    <%if(allpersonallist.length==0){%>
-                                                        <!--no class input status-->
-                                                        <div class="buttons is-right">
-                                                            <button class="button buttonlogout"
-                                                                onclick="submitstudentttb('0')">Submit
-                                                                Student Timetable</button>
-                                                        </div>
-                                                        <%}else if(allpersonallist[0].confirmation != "1" && allpersonallist[0].confirmation != "2"){%>
-                                                           <!--have class input and confirmation 1 == Pending for approve && confirmation 2 == approved-->
-                                                           <!--have class input and confirmation 0 == Require Proof && confirmation 3 == rejected -->
-                                                           <!--this is 0 & 3 case--> 
-                                                           <div class="buttons is-right">
-                                                                <button class="button buttonlogout"
-                                                                    onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
-                                                                    Student Timetable</button>
-                                                            </div>
-                                                            <div class="box" style="background-color: blanchedalmond; text-align: right;">
-                                                            <%if(allpersonallist[0].confirmation == "0"){%>
-                                                                <div style="font-size: 20px;">Status :<strong><u style="color: red;">Require Upload Proof</u> for Supervisor to review</strong></div>
-                                                                    <%}else if(allpersonallist[0].confirmation == "3"){%>
-                                                                        <div style="font-size: 20px;">Status :<strong><u style="color: orangered;">Rejected</u> after Supervisor Review </strong></div> 
-                                                                            <% var reviewdate=new Date(allpersonallist[0].review)%>
-                                                                            <div style="font-size: 15px; color: gray;">Reviewed at <%=reviewdate.toLocaleDateString()%> , <%=reviewdate.toLocaleTimeString('en-US')%></div>
-                                                                            <%}%>
-                                                            </div>
-                                                            
-                                                           
-                                                            <%}else{%>
-                                                                <div class="box" style="background-color: blanchedalmond; text-align: right;">
-                                                                   <%if(allpersonallist[0].confirmation == "1"){%>
-                                                                    <div style="font-size: 20px;">Status :<strong><u style="color: rgb(127, 18, 189);">Pending</u> for Supervisor Review </strong>
-                                                                        <%}else if(allpersonallist[0].confirmation == "2"){%>
-                                                                            <div style="font-size: 20px;">Status :<strong><u style="color: green;">Approved</u> after Supervisor Review </strong> 
-                                                                                <% var reviewdate=new Date(allpersonallist[0].review)%>
-                                                                                <div style="font-size: 15px; color: gray;">Reviewed at <%=reviewdate.toLocaleDateString()%> , <%=reviewdate.toLocaleTimeString('en-US')%></div>
-                                                                                <%}%>
-                                                                       </div> 
-                                                                </div>
-                                                                
-                                                                <%}%>
-                                                                <%}else{%>
-                                                                    <%if(allpersonallist.length==0 ||
-                                                                        allpersonallist[0].confirmation=="0" ){%>
-                                                                        <div class="buttons is-right">
-                                                                            <button class="button buttonlogout"
-                                                                                onclick="submitttb()">Submit
-                                                                                Timetable</button>
+
+                                        </form>
+                                        <%}%>
+
+                                            <%}%>
+                            </div>
+                            <div class="column is-onethird">
+                                <%if(req.session.role=="stu" ){%>
+
+                                    <%if(allpersonallist.length==0){%>
+                                        <!--no class input status-->
+                                        <div class="buttons is-right">
+                                            <button class="button buttonlogout" onclick="submitstudentttb('0')">Submit
+                                                Student Timetable</button>
+                                        </div>
+                                        <%}else if(allpersonallist[0].confirmation !="1" &&
+                                            allpersonallist[0].confirmation !="2" ){%>
+                                            <!--have class input and confirmation 1 == Pending for approve && confirmation 2 == approved-->
+                                            <!--have class input and confirmation 0 == Require Proof && confirmation 3 == rejected -->
+                                            <!--this is 0 & 3 case-->
+                                            <div class="buttons is-right">
+                                                <button class="button buttonlogout"
+                                                    onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
+                                                    Student Timetable</button>
+                                            </div>
+                                            <div class="box"
+                                                style="background-color: blanchedalmond; text-align: right;">
+                                                <%if(allpersonallist[0].confirmation=="0" ){%>
+                                                    <%if(allpersonallist[0].picdata!=null){%>
+                                                        <div style="font-size: 20px;">Status :<strong><u
+                                                                    style="color: red;">Click Submit</u> for Supervisor
+                                                                to review</strong></div>
+
+                                                        <%}else{%>
+                                                            <div style="font-size: 20px;">Status :<strong><u
+                                                                        style="color: red;">Require Upload Proof</u> for
+                                                                    Supervisor to review</strong></div>
+
+                                                            <%}%>
+                                                                <%}else if(allpersonallist[0].confirmation=="3" ){%>
+                                                                    <div style="font-size: 20px;">Status :<strong><u
+                                                                                style="color: orangered;">Rejected</u>
+                                                                            after Supervisor Review </strong></div>
+                                                                    <% var reviewdate=new
+                                                                        Date(allpersonallist[0].review)%>
+                                                                        <div style="font-size: 15px; color: gray;">
+                                                                            Reviewed at
+                                                                            <%=reviewdate.toLocaleDateString()%> ,
+                                                                                <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                         </div>
                                                                         <%}%>
-
-                                                                            <%}%>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                           </div>
-                            <%if(allpersonallist.length>0 ){%>
-                                <!---if have input picture , display in a better view use-->
-                                <%if(allpersonallist[0].picdata!= null){%>
-                                    <br><br>
-                                    <div>
-                                        
-                                    <div class="columns ">
-
-                                        <div class="column is half">
-                                            <div class="picdisplay">
-                                                <%var base64obj=Buffer.from(allpersonallist[0].picdata)%>
-                                                    <img src="data:image/jpeg;base64,<%=base64obj%>">
                                             </div>
 
 
-                                        </div>
-                                        <div class="column is half">
-                                            <%}%>
-                                                <!--------------------------------------------------------->
-                                                <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-                                                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                        Class
-                                                        Code</th>
-                                                    <th
-                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                        Class
-                                                        Section</th>
-                                                    <%if(allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3"){%>
-                                                        <th
-                                                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-
-                                                            Action</th>
+                                            <%}else{%>
+                                                <div class="box"
+                                                    style="background-color: blanchedalmond; text-align: right;">
+                                                    <%if(allpersonallist[0].confirmation=="1" ){%>
+                                                        <div style="font-size: 20px;">Status :<strong><u
+                                                                    style="color: rgb(127, 18, 189);">Pending</u> for
+                                                                Supervisor Review </strong>
+                                                            <%}else if(allpersonallist[0].confirmation=="2" ){%>
+                                                                <div style="font-size: 20px;">Status :<strong><u
+                                                                            style="color: green;">Approved</u> after
+                                                                        Supervisor Review </strong>
+                                                                    <% var reviewdate=new
+                                                                        Date(allpersonallist[0].review)%>
+                                                                        <div style="font-size: 15px; color: gray;">
+                                                                            Reviewed at
+                                                                            <%=reviewdate.toLocaleDateString()%> ,
+                                                                                <%=reviewdate.toLocaleTimeString('en-US')%>
+                                                                        </div>
+                                                                        <%}%>
+                                                                </div>
+                                                        </div>
 
                                                         <%}%>
-
-                                                            <% allpersonallist.forEach(function(list){ var
-                                                                stringstring=list.CID.split("_"); %>
-                                                                <tr>
-                                                                    <%if(stringstring.length < 3){%>
-                                                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                            <%=stringstring[0]%>
-                                                                        </td>
-                                                                        <td
-                                                                            style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                            <% if(stringstring[0]=="EMPTY" &&
-                                                                               ( allpersonallist[0].confirmation=="0" ||allpersonallist[0].confirmation=="3"
-                                                                            )){%>
-                                                                                <strong style="color: red;">If you wish
-                                                                                    to input
-                                                                                    class, please first remove this
-                                                                                    entry</strong>
-                                                                                <%}%>
-                                                                                    <%=stringstring[1]%>
-                                                                        </td>
-                                                                        <%if(allpersonallist[0].confirmation=="0" || allpersonallist[0].confirmation=="3"){%>
-                                                                            <td
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                                <button class="button" type="button"
-                                                                                    onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
-                                                                            </td>
-                                                                            <%}%>
-
-                                                                                <%} %>
-
-                                                                </tr>
-                                                                <%})%>
-
-                                                </table>
-                                                <!---if have input picture , display in a better view use-->
-                                                <%if(allpersonallist[0].picdata!= null){%>
-                                        </div>
-                                        <!------------------------------------------------------------------>
-                                        <%}%>
-                                    </div>
-                                </div>
-                                    <%}else{%>
-                                        <!--- 0 input init -->
-                                        <br>
-                                        <div class="columns is-mobile">
-                                            <div class="column is-onethird">
-
-                                            </div>
-
-                                            <div class="column is-onethird">
-                                                <article class="message is-large">
-                                                    <div class="message-header">
-                                                        <p>Attension</p>
-                                                    </div>
-                                                    <div class="message-body">
-                                                        <strong>Currently there are no class inputted by you</strong>
-                                                           <% if(req.session.role=="stu" ){%>
-                                                                <br><br>
-                                                                Please be reminded that even if you enrolled <strong>0
-                                                                    course</strong>
-                                                                this sememster
-                                                                <br>
-                                                                You are required to add an entry for declaring your
-                                                                course
-                                                                number
-                                                                and
-                                                                provide valid proof as well.
-                                                                <br><br>
-                                                                Please be reminded that if you input <strong>0</strong>
-                                                                classes
-                                                                <br>
-                                                                Which means except for approved unavailable timeslots
-                                                                <br>
-                                                                You are <strong><u>fine to accept anytime</u></strong>
-                                                                assigned
-                                                                by
-                                                                your
-                                                                supervisor
-                                                                <%}else{%>
-                                                                    <br><br>
-                                                                    <div class="text" style="color:red;">
-                                                                        Please be reminded that even if you teach
-                                                                        <strong>0
-                                                                            course</strong>
-                                                                        this sememster
-                                                                        <br>
-                                                                        You are required to <strong>add an entry for
-                                                                            declaring</strong> your
-                                                                        course
-                                                                        number
-                                                                        <br><br>
-                                                                        Please <strong><u>check the box</u></strong> in
-                                                                        the form by clicking the top
-                                                                        left button "Add Class"
-
+                                                            <%}else{%>
+                                                                <%if(allpersonallist.length==0 ||
+                                                                    allpersonallist[0].confirmation=="0" ){%>
+                                                                    <div class="buttons is-right">
+                                                                        <button class="button buttonlogout"
+                                                                            onclick="submitttb()">Submit
+                                                                            Timetable</button>
                                                                     </div>
-                                                                    <br><br>
-                                                                    Please be reminded that if you input
-                                                                    <strong>0</strong>
-                                                                    classes
-                                                                    <br>
-                                                                    Which means except for approved unavailable
-                                                                    timeslots
-                                                                    <br><br>
-                                                                    The presentation time will schduled at <strong>any
-                                                                        daytime
-                                                                        without limitations.</strong>
-
-
                                                                     <%}%>
-
-                                                    </div>
-                                                </article>
-                                            </div>
-                                            <div class="column is-onethird">
-
-                                            </div>
-                                        </div>
-
-
-                                        <%}%>
-                                            <br><br>
-                                            <div class="columns is-mobile">
-                                                
-                                                    <%if (allpersonallist.length>0 && allpersonallist[0].CID !=
-                                                        "EMPTY_") {%>
-                                                        <% var lastbox; const mon=[]; const tue=[]; const wed=[]; const
-                                                            thu=[]; const fri=[]; const sat=[]; const
-                                                            arraylist=[mon,tue,wed,thu,fri,sat]; %>
-                                                            <% for (var y=0 ; y < allpersonallist.length;y++){%>
-                                                               
-                                                                <%arraylist[allpersonallist[y].weekdays-1].push(allpersonallist[y])%>
-                                                                    <%}%>
-                                                                    <% for (var y=0 ; y < arraylist.length;y++){%>
-                                                               
-                                                                        <%if(arraylist[y].length==0){%>
-                                                                            <%arraylist[y].push("EMPTY")%>
-                                                                            <%}%>
-                                                                            <%}%>
-                                                                   
-                                                                   
-                                                                        <table
-                                                                            class="table is-bordered is-striped is-hoverable is-halfwidth center">
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                            </th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                MON</th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                TUE</th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                WED</th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                THU</th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                FRI</th>
-                                                                            <th
-                                                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                                                                SAT</th>
-
-                                                                            <!---j = timebox-->
-                                                                            <%var firstbox = 0;var lastbox = 6;%>
-                                                                            <% for(var j=8 ; j < 20;j++){ 
-                                                                                let currenttime =new Date();
-                                                                                currenttime.setHours(j, 30, 0, 0);
-                                                                                let endend=new Date();
-                                                                                endend.setHours(j+1,20,0,0)  %>
-                                                                                <tr>
-                                                                                    <% if(j < 10){%>
-                                                                                        <td> 0<%=j%>:30 </td>
-                                                                                        <%}else{%>
-                                                                                            <td>
-                                                                                                <%=j%>:30
-                                                                                            </td>
-                                                                                            <%}%>
-                                                                                                <!---i = arraybox-->
-                                                                                                <% for(var i=0 ; i < arraylist.length;i++){ %>
-                                                                                                    
-                                                                                                
-                                                                                                    <% for(var x=0 ; x < arraylist[i].length;x++){ %>
-                                                                                                        <%if (arraylist[i][x] =="EMPTY"){%>
-                                                                                                            <%firstbox++;%>
-                                                                                                        <%}else{%>
-                                                                                                        
-                                                                                                        <% let classend=new Date();  %>
-                                                                                                        <% const classendstr=(arraylist[i][x].endTime).split(":"); %>
-                                                                                                        <%classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)%>
-                                                                                                        
-
-                                                                                                        <%  let classstart=new Date(); %>
-                                                                                                        <% const classstartstr=(arraylist[i][x].startTime).split(":"); %>
-                                                                                                        <% classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)%>
-                                                                                                        
-                                                                                                         
-                                                                                                        <%if ( currenttime.toLocaleTimeString()==classstart.toLocaleTimeString() && arraylist[i].CID != "SKIP"){%>
-                                                                                                            
-                                                                                                            <%for(var q = 0 ; q < firstbox ; q++){%>
-                                                                                                                <td></td>
-                                                                                                                <%}%>
-                                                                                                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                                                                <%=arraylist[i][x].CID%></td>
-                                                                                                                <%firstbox =0;lastbox = 6-(arraylist[i][x].weekdays);%>
-                                                                                                                <%if(classend.toLocaleTimeString() == endend.toLocaleTimeString()){%>
-                                                                                                                    <%arraylist[i].shift()%>
-                                                                                                                    <%if(arraylist[i].length ==0){%>
-                                                                                                                        <%arraylist[i].push("EMPTY")%>
-                                                                                                                        <%}%>
-                                                                                                                    
-                                                                                                                <%}else{%>
-                                                                                                                    <%if((j+1) < 10){newtime = "0"+(j+1)+":30:00"}else{newtime =(j+1)+":30:00";}%>
-                                                                                                                <%arraylist[i][x].startTime = newtime;%>
-                                                                                                                    <%}%>
-                                                                                                                
-                                                                                                                   
-                                                                                                            <%}else{%>
-                                                                                                                    
-                                                                                                                   <%if(x==0 || (x>0 && arraylist[i][x] == "EMPTY")){%>
-                                                                                                                    <%firstbox = arraylist[i][x].weekdays;%>
-                                                                                                                    <%}%>
-                                                                                                                        
-                                                                                                                        
-                                                                                                                    
-                                                                                                                <%}%>
-                                                                                                                
-                                                                                                    <%}%>
-                                                                                                            
-                                                                                                    <%}%>
-                                                                                                    <%}%>
-                                                                                                    <%for(var q = 0 ; q < lastbox ; q++){%>
-                                                                                                        <td></td>
-                                                                                                        <%}%>
-                                                                                                        <%firstbox =0; lastbox =6;%>
-                                                                                </tr>
-                                                                                <%}%>
-
-
-                                                                        </table>
 
                                                                         <%}%>
-                                              
-                                            </div>
+
+                                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%if(allpersonallist.length>0 ){%>
+                    <!---if have input picture , display in a better view use-->
+                    <%if(allpersonallist[0].picdata!= null){%>
+                        <br><br>
+                        <div>
+
+                            <div class="columns ">
+
+                                <div class="column is half">
+                                    <div class="picdisplay">
+                                        <%var base64obj=Buffer.from(allpersonallist[0].picdata)%>
+                                            <img src="data:image/jpeg;base64,<%=base64obj%>">
+                                    </div>
+
+
+                                </div>
+                                <div class="column is half">
+                                    
+                                    <%}%><br><br>
+                                        <!--------------------------------------------------------->
+                                        <table
+                                            class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
+                                            <th
+                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                Class
+                                                Code</th>
+                                            <th
+                                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                Class
+                                                Section</th>
+                                            <%if(allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3"){%>
+                                                <th
+                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+
+                                                    Action</th>
+
+                                                <%}%>
+
+                                                    <% allpersonallist.forEach(function(list){ var
+                                                        stringstring=list.CID.split("_"); %>
+                                                        <tr>
+                                                            <%if(stringstring.length < 3){%>
+                                                                <td
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                    <%=stringstring[0]%>
+                                                                </td>
+                                                                <td
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                    <% if(stringstring[0]=="EMPTY" && (
+                                                                        allpersonallist[0].confirmation=="0"
+                                                                        ||allpersonallist[0].confirmation=="3" )){%>
+                                                                        <strong style="color: red;">If you wish
+                                                                            to input
+                                                                            class, please first remove this
+                                                                            entry</strong>
+                                                                        <%}%>
+                                                                            <%=stringstring[1]%>
+                                                                </td>
+                                                                <%if(allpersonallist[0].confirmation=="0" ||
+                                                                    allpersonallist[0].confirmation=="3" ){%>
+                                                                    <td
+                                                                        style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                        <button class="button" type="button"
+                                                                            onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
+                                                                    </td>
+                                                                    <%}%>
+
+                                                                        <%} %>
+
+                                                        </tr>
+                                                        <%})%>
+
+                                        </table>
+                                        <!---if have input picture , display in a better view use-->
+                                        <%if(allpersonallist[0].picdata!= null){%>
+                                </div>
+                                <!------------------------------------------------------------------>
+                                <%}%>
+                            </div>
+                        </div>
+                        <%}else{%>
+                            <!--- 0 input init -->
+                            <br>
+                            <div class="columns is-mobile">
+                                <div class="column is-onethird">
+
+                                </div>
+
+                                <div class="column is-onethird">
+                                    <article class="message is-large">
+                                        <div class="message-header">
+                                            <p>Attension</p>
+                                        </div>
+                                        <div class="message-body">
+                                            <strong>Currently there are no class inputted by you</strong>
+                                            <% if(req.session.role=="stu" ){%>
+                                                <br><br>
+                                                Please be reminded that even if you enrolled <strong>0
+                                                    course</strong>
+                                                this sememster
+                                                <br>
+                                                You are required to add an entry for declaring your
+                                                course
+                                                number
+                                                and
+                                                provide valid proof as well.
+                                                <br><br>
+                                                Please be reminded that if you input <strong>0</strong>
+                                                classes
+                                                <br>
+                                                Which means except for approved unavailable timeslots
+                                                <br>
+                                                You are <strong><u>fine to accept anytime</u></strong>
+                                                assigned
+                                                by
+                                                your
+                                                supervisor
+                                                <%}else{%>
+                                                    <br><br>
+                                                    <div class="text" style="color:red;">
+                                                        Please be reminded that even if you teach
+                                                        <strong>0
+                                                            course</strong>
+                                                        this sememster
+                                                        <br>
+                                                        You are required to <strong>add an entry for
+                                                            declaring</strong> your
+                                                        course
+                                                        number
+                                                        <br><br>
+                                                        Please <strong><u>check the box</u></strong> in
+                                                        the form by clicking the top
+                                                        left button "Add Class"
+
+                                                    </div>
+                                                    <br><br>
+                                                    Please be reminded that if you input
+                                                    <strong>0</strong>
+                                                    classes
+                                                    <br>
+                                                    Which means except for approved unavailable
+                                                    timeslots
+                                                    <br><br>
+                                                    The presentation time will schduled at <strong>any
+                                                        daytime
+                                                        without limitations.</strong>
+
+
+                                                    <%}%>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <div class="column is-onethird">
+
+                                </div>
+                            </div>
+
+
+                            <%}%>
+                                <br><br>
+                                <div class="columns is-mobile">
+
+                                    <%if (allpersonallist.length>0 && allpersonallist[0].CID !=
+                                        "EMPTY_") {%>
+                                        <% var lastbox; const mon=[]; const tue=[]; const wed=[]; const thu=[]; const
+                                            fri=[]; const sat=[]; const arraylist=[mon,tue,wed,thu,fri,sat]; %>
+                                            <% for (var y=0 ; y < allpersonallist.length;y++){%>
+
+                                                <%arraylist[allpersonallist[y].weekdays-1].push(allpersonallist[y])%>
+                                                    <%}%>
+                                                        <% for (var y=0 ; y < arraylist.length;y++){%>
+
+                                                            <%if(arraylist[y].length==0){%>
+                                                                <%arraylist[y].push("EMPTY")%>
+                                                                    <%}%>
+                                                                        <%}%>
+
+
+                                                                            <table
+                                                                                class="table is-bordered is-striped is-hoverable is-halfwidth center">
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                </th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    MON</th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    TUE</th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    WED</th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    THU</th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    FRI</th>
+                                                                                <th
+                                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                    SAT</th>
+
+                                                                                <!---j = timebox-->
+                                                                                <%var firstbox=0;var lastbox=6;%>
+                                                                                    <% for(var j=8 ; j < 20;j++){ let
+                                                                                        currenttime=new Date();
+                                                                                        currenttime.setHours(j, 30, 0,
+                                                                                        0); let endend=new Date();
+                                                                                        endend.setHours(j+1,20,0,0) %>
+                                                                                        <tr>
+                                                                                            <% if(j < 10){%>
+                                                                                                <td> 0<%=j%>:30 </td>
+                                                                                                <%}else{%>
+                                                                                                    <td>
+                                                                                                        <%=j%>:30
+                                                                                                    </td>
+                                                                                                    <%}%>
+                                                                                                        <!---i = arraybox-->
+                                                                                                        <% for(var i=0 ;
+                                                                                                            i <
+                                                                                                            arraylist.length;i++){
+                                                                                                            %>
+
+
+                                                                                                            <% for(var
+                                                                                                                x=0 ; x
+                                                                                                                <
+                                                                                                                arraylist[i].length;x++){
+                                                                                                                %>
+                                                                                                                <%if (arraylist[i][x]=="EMPTY"
+                                                                                                                    ){%>
+                                                                                                                    <%firstbox++;%>
+                                                                                                                        <%}else{%>
+
+                                                                                                                            <% let
+                                                                                                                                classend=new
+                                                                                                                                Date();
+                                                                                                                                %>
+                                                                                                                                <% const
+                                                                                                                                    classendstr=(arraylist[i][x].endTime).split(":");
+                                                                                                                                    %>
+                                                                                                                                    <%classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)%>
+
+
+                                                                                                                                        <% let
+                                                                                                                                            classstart=new
+                                                                                                                                            Date();
+                                                                                                                                            %>
+                                                                                                                                            <% const
+                                                                                                                                                classstartstr=(arraylist[i][x].startTime).split(":");
+                                                                                                                                                %>
+                                                                                                                                                <%
+                                                                                                                                                    classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)%>
+
+
+                                                                                                                                                    <%if (
+                                                                                                                                                        currenttime.toLocaleTimeString()==classstart.toLocaleTimeString()
+                                                                                                                                                        &&
+                                                                                                                                                        arraylist[i].CID
+                                                                                                                                                        !="SKIP"
+                                                                                                                                                        ){%>
+
+                                                                                                                                                        <%for(var
+                                                                                                                                                            q=0
+                                                                                                                                                            ;
+                                                                                                                                                            q
+                                                                                                                                                            <
+                                                                                                                                                            firstbox
+                                                                                                                                                            ;
+                                                                                                                                                            q++){%>
+                                                                                                                                                            <td>
+                                                                                                                                                            </td>
+                                                                                                                                                            <%}%>
+                                                                                                                                                                <td
+                                                                                                                                                                    style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                                                                                                                    <%=arraylist[i][x].CID%>
+                                                                                                                                                                </td>
+                                                                                                                                                                <%firstbox=0;lastbox=6-(arraylist[i][x].weekdays);%>
+                                                                                                                                                                    <%if(classend.toLocaleTimeString()==endend.toLocaleTimeString()){%>
+                                                                                                                                                                        <%arraylist[i].shift()%>
+                                                                                                                                                                            <%if(arraylist[i].length==0){%>
+                                                                                                                                                                                <%arraylist[i].push("EMPTY")%>
+                                                                                                                                                                                    <%}%>
+
+                                                                                                                                                                                        <%}else{%>
+                                                                                                                                                                                            <%if((j+1)
+                                                                                                                                                                                                <
+                                                                                                                                                                                                10){newtime="0"
+                                                                                                                                                                                                +(j+1)+":30:00"}else{newtime=(j+1)+":30:00";}%>
+                                                                                                                                                                                                <%arraylist[i][x].startTime=newtime;%>
+                                                                                                                                                                                                    <%}%>
+
+
+                                                                                                                                                                                                        <%}else{%>
+
+                                                                                                                                                                                                            <%if(x==0
+                                                                                                                                                                                                                ||
+                                                                                                                                                                                                                (x>
+                                                                                                                                                                                                                0
+                                                                                                                                                                                                                &&
+                                                                                                                                                                                                                arraylist[i][x]
+                                                                                                                                                                                                                ==
+                                                                                                                                                                                                                "EMPTY")){%>
+                                                                                                                                                                                                                <%firstbox=arraylist[i][x].weekdays;%>
+                                                                                                                                                                                                                    <%}%>
+
+
+
+                                                                                                                                                                                                                        <%}%>
+
+                                                                                                                                                                                                                            <%}%>
+
+                                                                                                                                                                                                                                <%}%>
+                                                                                                                                                                                                                                    <%}%>
+                                                                                                                                                                                                                                        <%for(var
+                                                                                                                                                                                                                                            q=0
+                                                                                                                                                                                                                                            ;
+                                                                                                                                                                                                                                            q
+                                                                                                                                                                                                                                            <
+                                                                                                                                                                                                                                            lastbox
+                                                                                                                                                                                                                                            ;
+                                                                                                                                                                                                                                            q++){%>
+                                                                                                                                                                                                                                            <td>
+                                                                                                                                                                                                                                            </td>
+                                                                                                                                                                                                                                            <%}%>
+                                                                                                                                                                                                                                                <%firstbox=0;
+                                                                                                                                                                                                                                                    lastbox=6;%>
+                                                                                        </tr>
+                                                                                        <%}%>
+
+
+                                                                            </table>
+
+                                                                            <%}%>
+
+                                </div>
 
 
 
 
 </div>
 <script>
-    async function submitstudentttb(picdata){
-    
-    
-    if(picdata =="0"){
-         alert("Please go to \"Add Class\" and input the form of declaring you have enrolled 0 course this semester");
-        location.assign("/timetable/submitttb");
-    }else if(picdata == null || picdata == ""){return alert ("Please Upload a vaild proof before submit");}
-    else{
-        var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+    async function submitstudentttb(picdata) {
 
-    if(r){
-       
-    var response = await fetch("/timetable", {
-                method: "POST",
-            });
 
-            if (response.ok) {
-                alert(" Your Timetable submitted.");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
+        if (picdata == "0") {
+            alert("Please go to \"Add Class\" and input the form of declaring you have enrolled 0 course this semester");
+            location.assign("/timetable/submitttb");
+        } else if (picdata == null || picdata == "") { return alert("Please Upload a vaild proof before submit"); }
+        else {
+            var r = confirm("This is student button\n\nPlease Confirm All Your Input Beofre Upload This Timetable. \n(Confirm the displayed Timetable Pic and Course Inputs) \n\n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+
+            if (r) {
+
+                var response = await fetch("/timetable", {
+                    method: "POST",
+                });
+
+                if (response.ok) {
+                    alert(" Your Timetable submitted.");
+                    location.reload();
+                } else {
+                    alert(response.status + ": " + response.statusText);
+                }
+
             }
-
-}
-}
+        }
 
     }
 
@@ -491,7 +574,7 @@
             alert("cancelled");
         }
     };
-    
+
     async function submitttb() {
 
 

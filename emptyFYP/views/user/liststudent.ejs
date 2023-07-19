@@ -56,20 +56,20 @@
                 <%= allstdlist.Topic%>
             </td>
             <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%if (allstdlist.submission=="Require Proof" ){%>
+                <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
                     <div style="font-weight: bold;color: red;">Require Proof</div>
-                    <%}else if (allstdlist.submission=="Pending" ){%>
+                    <%}else if (allstdlist.ttbsubmission=="Pending" ){%>
                         <div style="font-weight: bold;color: blueviolet;">Pending</div>
-                        <%}else if (allstdlist.submission=="Approved" ){%>
+                        <%}else if (allstdlist.ttbsubmission=="Approved" ){%>
                             <div style="font-weight: bold;color: green;">Approved</div>
-                            <%}else if (allstdlist.submission=="Rejected" ){%>
+                            <%}else if (allstdlist.ttbsubmission=="Rejected" ){%>
                                 <div style="font-weight: bold;color: orange;">Rejected</div>
                                 <%}else{%>
                                     <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
                                     <%}%>
             </td>
             <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% if (allstdlist.submission !="N" ){%>
+                <% if (allstdlist.ttbsubmission !=null ){%>
                     <div class="buttons is-centered">
                         <a href="/readttb/<%= allstdlist.sid%>">
                             <button class="button buttonlogout">View Submission</button>

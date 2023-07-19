@@ -176,7 +176,7 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                // console.log(personallist)
+                 console.log(personallist)
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,
@@ -314,24 +314,16 @@ module.exports = {
         });
         
     },
+
     judgettb: async function(req,res){
         console.log(req.body);
         let thisistheline;
         if(req.body.type == "Approved"){
-            thisistheline = "Update allstudenttakecourse set confirmation = \"2\", review = now() where allstudenttakecourse.pid=\""+req.params.SID+"\"";
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }else{
-            thisistheline = "Update allstudenttakecourse set confirmation = \"3\", review = now() where allstudenttakecourse.pid=\""+req.params.SID+"\"";
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }
-        db.query(thisistheline, function (err, result) {
-            try {
-               
-                return res.redirect("../liststudent");
-
-            } catch (err) {
-                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
-            }
-
-        });
+        console.log(thisistheline);_
     },
 
 

@@ -16,6 +16,7 @@
         </div>
         <div class="column">
             <div class="buttons is-right">
+            
                 <div class="button buttonlogout" onclick="reject('<%=SID%>')">Reject</div>
                 <div class="button buttonlogout" onclick="approve('<%=SID%>')">Approve</div>
                 
@@ -24,33 +25,46 @@
     </div>
 </div>
 <br><br>
-<table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
-    <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Code</th>
-    <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Section</th>
-    
-    <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
-        <tr>
-            <%if(stringstring.length < 3 && stringstring[0] != "EMPTY"){%>
-                <td style="font-size:20px;text-align: center;vertical-align:center;">
-                <%=stringstring[0]%>
-            </td>
-            <td style="font-size:20px;text-align: center;vertical-align:center; ">
-                <%=stringstring[1]%>
-            </td>   
-                    
-                <%} %>
+<div class = "rows">
+    <div class = "row">
+<div class="columns">
+    <div class="column">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
+            <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Code</th>
+            <th style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">Class Section</th>
             
-        </tr>
-        <%})%>
+            <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
+                <tr>
+                    <%if(stringstring.length < 3 && stringstring[0] != "EMPTY"){%>
+                        <td style="font-size:20px;text-align: center;vertical-align:center;">
+                        <%=stringstring[0]%>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:center; ">
+                        <%=stringstring[1]%>
+                    </td>   
+                       <%} %>
+                </tr>
+                <%})%>
+        </table>
+    </div>
+    <div class="column">
+        <div class = "box" style="background-color: blanchedalmond; padding : 2px 15px 2px 15px">
+            <label for="Comments" style="font-size: 20px; font-weight: bold;">Comments:</label>
+        <textarea id="Comments" name="Comments" rows="4" cols="50" style="width:100%; padding:5px" required></textarea>
+        </div>
+        
+    </div>
+</div>
 
-</table>
+    </div>
+</div>
+
 <br><Br><br>
     <div class = "columns is-mobile">
         <div class="column is-half">
 <div class ="picdisplay">
     <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
-   <%console.log(base64obj)%>
-    <img src ="data:image/jpeg;base64,<%=base64obj%>">
+       <img src ="data:image/jpeg;base64,<%=base64obj%>">
 </div>
         </div>
         <div class="column is-half">
@@ -568,36 +582,46 @@
     </div>
 
     <script>
-        async function approve(SID){
+        async function approve(sid){
             var r = confirm("Approve ?")
             if(r){
-                var response = await fetch("/readttb/"+SID,
-                {
-                    method : "POST",
-                    body: JSON.stringify({ sid : SID , type:"Approved"})
-                })
-                if(response.ok){
-                    alert("Approved");
-                    location.assign("/liststudent");
-                }
+                reply("Approved",sid)
             }else {}
 
         }
 
-        async function reject(SID){
+        async function reject(sid){
             var r = confirm("Reject ?")
             if(r){
-                var response = await fetch("/readttb/"+SID,
-                {
-                    method : "POST",
-                    body: JSON.stringify({ sid : SID , type:"Rejected"})
-                })
-                if(response.ok){
-                    alert("Rejected");
-                    location.assign("/liststudent");
-                }
+                reply("Rejected",sid)
             }else {}
 
         }
+
+        async function reply(answer,sid) {
+        var stringstring = document.getElementById("Comments").value;
+        stringstring = stringstring.replace(/\n/g, " newline ");
+
+        var requestBody = JSON.stringify({
+            ReqID: sid,
+            comment: stringstring,
+            status: answer
+        });
+
+
+        var response = await fetch("/readttb/"+sid,
+                {
+                    method : "POST",
+                    body: JSON.stringify({ sid : sid , type:answer,comments : stringstring})
+                })
+                if(response.ok){
+                    alert(answer);
+                    location.assign("/liststudent");
+                } else {
+                    alert(response.status + ": " + response.statusText);
+                }
+
+
+    }
     </script>
 

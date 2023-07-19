@@ -14,9 +14,10 @@ create table   student(
 stdname		varchar(100) Not null,
 sid			varchar(20) not null,
 password	varchar(20) not null,
-states		varchar(20),
-errortime	int,
-submission  varchar(20),
+states		varchar(20) default "ACTIVE",
+errortime	int default 0,
+ttbsubmission  varchar(20) default null,
+ttbcomments varchar(200) default "",
 PRIMARY key (sid));
 
 create table supervisor(
@@ -71,9 +72,10 @@ create table allstudenttakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
 confirmation integer default 0 ,
-Submissiontime timestamp,
-picdata LONGBLOB,
-review timestamp,
+Submissiontime timestamp default now(),
+picdata LONGBLOB default null,
+review timestamp default null,
+ttbcomments varchar(200) default "",
 CONSTRAINT csid
 primary key (CID,PID)
 );
@@ -168,22 +170,6 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
   |
 delimiter ;
 
-##delimiter |
-##CREATE TRIGGER checkstudenttakecourse BEFORE INSERT ON student_take_course
-##  FOR EACH ROW
-##  BEGIN
-##  declare stringstring  varchar(8000);
-##  declare countcount integer;
-##  set stringstring = new.cid;allusersallusers
-##  set countcount =0;
-##  select count(*) into countcount from student_take_course 
-##  where cid = new.cid and sid = new.sid;
-##  if countcount >0 then
-##    insert into logs values("duplicated");
-##    END IF;
-##  END;
-##  |
-##delimiter ;
 
 delimiter |
 CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
@@ -194,7 +180,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
     select count(*) into countcount from allusers where pid = new.pid;
     if countcount =0 then
   if new.role = "stu" then
-    insert into student values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
+    insert into student(stdname,sid,password) values(new.allusersname,new.pid,new.password);
 	elseif new.role = "sup" then
     insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N");
     END IF;
@@ -280,15 +266,15 @@ if not issup then
 	if countcount >0 then
 		while countcount >0 do
 			set stringstring = concat(new.cid,"_",countcount,"");
-			insert ignore into allstudenttakecourse values(stringstring,new.pid,false,now(),null,null);
+			insert ignore into allstudenttakecourse(cid,pid) values(stringstring,new.pid);
 			set countcount= countcount -1;
 		end while;
-		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null,null);
+		insert ignore into  allstudenttakecourse(cid,pid) values(new.cid,new.pid);
 		
 	else if countcount = 0 then
-		insert ignore into allstudenttakecourse values(new.cid,new.pid,false,now(),null,null);
+		insert ignore into  allstudenttakecourse(cid,pid)values(new.cid,new.pid);
 	else
-		insert ignore into allstudenttakecourse values(concat(new.cid,"_"),new.pid,false,now(),null,null);
+		insert ignore into  allstudenttakecourse(cid,pid) values(concat(new.cid,"_"),new.pid);
 	end if;
 End if;
 end if;
@@ -362,18 +348,26 @@ delimiter |
 CREATE TRIGGER addsubinstudent before update ON allstudenttakecourse
   FOR EACH ROW
   BEGIN
+ declare comments varchar(200);
+ declare stringstring varchar(200);
  
-	   
+ select distinct(ttbcomments) into comments from allstudenttakecourse where pid = new.pid;
+ set stringstring = new.ttbcomments;
+ if comments= null then
+ set new.ttbcomments = stringstring;
+ else 
+  set new.ttbcomments = concat(comments,"_",stringstring);
+	   end if;
 	IF new.confirmation = "0" then
-		update student set submission ="N" where sid = new.pid;
+		update student set ttbsubmission ="N" where sid = new.pid;
 	elseif new.confirmation = "1" then
-		update student set submission ="Pending" where sid = new.pid;
+		update student set ttbsubmission ="Pending" where sid = new.pid;
 	elseif new.confirmation = "2" then
-		update student set submission ="Approved" where sid = new.pid;
+		update student set ttbsubmission ="Approved" where sid = new.pid;
 	elseif new.confirmation = "3" then
-		update student set submission ="Rejected" where sid = new.pid;
+		update student set ttbsubmission ="Rejected" where sid = new.pid;
 	else
-		update student set submission = null where sid = new.pid;
+		update student set ttbsubmission = null where sid = new.pid;
 	end if;
    END;
   |
@@ -392,14 +386,15 @@ CREATE TRIGGER addsubinsuper before update ON allsupertakecourse
 delimiter ;
 
 delimiter |
-CREATE TRIGGER copypicdatatonewentry_student before insert ON allstudenttakecourse
+CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allstudenttakecourse
   FOR EACH ROW
   BEGIN
   declare picpic LONGBLOB;
+  declare comments varchar(200);
   
-  select distinct(picdata) into picpic from allstudenttakecourse where pid = new.pid;
-set new.picdata = picpic;  
-
+  select distinct(picdata),ttbcomments into picpic,comments from allstudenttakecourse where pid = new.pid;
+	set new.picdata = picpic;  
+	set new.ttbcomments = comments;
    END;
   |
 delimiter ;
