@@ -22,18 +22,20 @@
 <br><br>
 
 <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;"> 
-        <a class="sorting" id='headerSID' onclick="sorting('headerSID',0);">&#8593;</a>SID
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+       <a class="sorting" id='headerSID' onclick="sorting('headerSID',0);">&#8593;</a> SID
     </th>
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerstuname' onclick="sorting('headerstuname',1);">&#8593;</a>Student Name</th>
-    <th  style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a  class="sorting" id='headertopic' onclick="sorting('headertopic',2);">&#8593;</a>Topic</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerTTBstatus' onclick="sorting('headerTTBstatus',3);">&#8593;</a>TTB status
+        <a class="sorting" id='headerstuname' onclick="sorting('headerstuname',1);">&#8593;</a> Student Name
     </th>
-    <th 
-        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Submission of TTB
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting" id='headertopic' onclick="sorting('headertopic',2);">&#8593;</a> Topic
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting" id='headerTTBstatus' onclick="sorting('headerTTBstatus',3);">&#8593;</a> TTB status
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting" id='headerTTBview' onclick="sorting('headerTTBview',4);">&#8593;</a> Submission of TTB
     </th>
 
 
@@ -66,19 +68,14 @@
                                     <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
                                     <%}%>
             </td>
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% if (allstdlist.submission=="N" ){%>
-
-                    <%=allstdlist.submission%>
-                        <%}else{%>
-                            <div class="buttons is-centered">
-                                <a href="/readttb/<%= allstdlist.sid%>">
-                                    <button class="button buttonlogout">View Submission</button>
-                                </a>
-                            </div>
-
-                            <%}%>
-
+            <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <% if (allstdlist.submission !="N" ){%>
+                    <div class="buttons is-centered">
+                        <a href="/readttb/<%= allstdlist.sid%>">
+                            <button class="button buttonlogout">View Submission</button>
+                        </a>
+                    </div>
+                    <%}%>
             </td>
 
         </tr>
@@ -88,10 +85,10 @@
 </table>
 <script>
     function sorting(idlocation, tablelocation) {
-        for(var i = 0 ; i < document.getElementsByClassName("sorting").length;i++){
-             if(i != tablelocation){
+        for (var i = 0; i < document.getElementsByClassName("sorting").length; i++) {
+            if (i != tablelocation) {
                 document.getElementsByClassName("sorting")[i].innerHTML = '↑'
-            } 
+            }
         }
 
         if (document.getElementById(idlocation).innerHTML == '↑') {
@@ -115,8 +112,8 @@
                 shouldSwitch = false;
                 x = rows[i].getElementsByTagName("TD")[tablelocation];
                 y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
-                
-                
+
+
                 if (ordering == "asc") {
                     if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                         shouldSwitch = true;

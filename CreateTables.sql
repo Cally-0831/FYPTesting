@@ -16,7 +16,7 @@ sid			varchar(20) not null,
 password	varchar(20) not null,
 states		varchar(20),
 errortime	int,
-submission  varchar(10) default "N",
+submission  varchar(20),
 PRIMARY key (sid));
 
 create table supervisor(
@@ -362,10 +362,19 @@ delimiter |
 CREATE TRIGGER addsubinstudent before update ON allstudenttakecourse
   FOR EACH ROW
   BEGIN
-	if new.confirmation = "1" then
-		update student set submission ="Y" where sid = new.pid;
+ 
+	   
+	IF new.confirmation = "0" then
+		update student set submission ="N" where sid = new.pid;
+	elseif new.confirmation = "1" then
+		update student set submission ="Pending" where sid = new.pid;
+	elseif new.confirmation = "2" then
+		update student set submission ="Approved" where sid = new.pid;
+	elseif new.confirmation = "3" then
+		update student set submission ="Rejected" where sid = new.pid;
+	else
+		update student set submission = null where sid = new.pid;
 	end if;
-
    END;
   |
 delimiter ;

@@ -1,1 +1,1 @@
-select * from allsupertakecourse
+select * from allclass

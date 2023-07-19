@@ -1,1 +1,1 @@
-select * from student
+SELECT * FROM allclass  
