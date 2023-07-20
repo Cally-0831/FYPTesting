@@ -107,6 +107,11 @@
                                                                             <%=reviewdate.toLocaleDateString()%> ,
                                                                                 <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                         </div>
+                                                                        <div style="font-size: 15px; color: gray;">
+                                                                            Comments: 
+                                                                            <%var stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                                                                            <%=stringstring.slice(-1)%>
+                                                                        </div>
                                                                         <%}%>
                                             </div>
 
@@ -129,10 +134,15 @@
                                                                             <%=reviewdate.toLocaleDateString()%> ,
                                                                                 <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                         </div>
+                                                                        <div style="font-size: 15px; color: gray;">
+                                                                            Comments: 
+                                                                            <%var stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                                                                            <%=stringstring.slice(-1)%>
+                                                                        </div>
                                                                         <%}%>
                                                                 </div>
                                                         </div>
-
+                                                </div>
                                                         <%}%>
                                                             <%}else{%>
                                                                 <%if(allpersonallist.length==0 ||
@@ -146,7 +156,7 @@
 
                                                                         <%}%>
 
-                                                </div>
+                                                
 
                             </div>
                         </div>

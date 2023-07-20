@@ -167,7 +167,7 @@ module.exports = {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
         // console.log(thisistheline);
@@ -292,7 +292,7 @@ module.exports = {
 
         let thisistheline;
        
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime, allstudenttakecourse.ttbcomments, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
 
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
@@ -316,14 +316,24 @@ module.exports = {
     },
 
     judgettb: async function(req,res){
-        console.log(req.body);
+        
         let thisistheline;
         if(req.body.type == "Approved"){
-            thisistheline = "Update student set student.ttbsubmission = \"Approved\", student.ttbcomments = \""+req.body.comments+"\" where student.sid=\""+req.params.SID+"\"";
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \""+req.body.comments+"\"  where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }else{
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\" and allstudenttakecourse.cid = \""+req.body.cid+"\"";
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
         }
-        console.log(thisistheline);_
+        console.log(thisistheline);
+        db.query(thisistheline, function (error, result) {
+            try {
+
+                
+                return res.redirect("../liststudent");
+            } catch (err) {
+                console.log(' judgettb MySQL Problem' + "    " + error);
+            }
+
+        });
     },
 
 

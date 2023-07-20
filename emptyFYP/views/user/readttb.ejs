@@ -18,8 +18,8 @@
         <div class="column">
             <div class="buttons is-right">
             
-                <div class="button buttonlogout" onclick="reject('<%=SID%>','<%=allpersonallist[0].CID%>')">Reject</div>
-                <div class="button buttonlogout" onclick="approve('<%=SID%>','<%=allpersonallist[0].CID%>')">Approve</div>
+                <div class="button buttonlogout" onclick="reject('<%=SID%>')">Reject</div>
+                <div class="button buttonlogout" onclick="approve('<%=SID%>')">Approve</div>
                 
             </div>
         </div>
@@ -49,7 +49,30 @@
         </table>
     </div>
     <div class="column">
-        <div class = "box" style="background-color: blanchedalmond; padding : 2px 15px 2px 15px">
+        <%if (allpersonallist[0].ttbcomments != null){%>
+            
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
+                    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Review Time</th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Comments</th>
+                    <%var stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                    <%for (var i = 0 ; i < stringstring.length;i++){%>
+                        <tr>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <% var reviewtime=new Date(allpersonallist[0].review)%>
+                                    <%=reviewtime.toLocaleDateString()%> ,
+                                        <%=reviewtime.toLocaleTimeString('en-US')%>
+                                     
+                            </td>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <%= stringstring[i]%>
+                             </td>
+                        </tr>
+                        
+                        <%}%>
+                </table>
+            
+            <%}%>
+        <div class = "box" style="background-color: #C3B091;; padding : 2px 15px 2px 15px">
             <label for="Comments" style="font-size: 20px; font-weight: bold;">Comments:</label>
         <textarea id="Comments" name="Comments" rows="4" cols="50" style="width:100%; padding:5px" required></textarea>
         </div>
@@ -583,23 +606,23 @@
     </div>
 
     <script>
-        async function approve(sid,cid){
+        async function approve(sid){
             var r = confirm("Approve ?")
             if(r){
-                reply("Approved",sid,cid)
+                reply("Approved",sid)
             }else {}
 
         }
 
-        async function reject(sid,cid){
+        async function reject(sid){
             var r = confirm("Reject ?")
             if(r){
-                reply("Rejected",sid,cid)
+                reply("Rejected",sid)
             }else {}
 
         }
 
-        async function reply(answer,sid,cid) {
+        async function reply(answer,sid) {
         var stringstring = document.getElementById("Comments").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
 
@@ -607,7 +630,7 @@
             sid: sid,
             comments: stringstring,
             type: answer,
-            cid : cid
+            
         });
 
 

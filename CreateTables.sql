@@ -346,8 +346,14 @@ delimiter ;
 
 delimiter |
 CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse
-  FOR EACH ROW
+  FOR EACH ROW 
   BEGIN
+  declare oldcomments varchar(200);
+  declare newcomments varchar(200);
+  set newcomments = new.ttbcomments;
+   select distinct(ttbcomments) into oldcomments from allstudenttakecourse where pid = new.pid Limit 1;
+   
+    
   
 
 	IF new.confirmation = "0" then
@@ -355,9 +361,9 @@ CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse
 	elseif new.confirmation = "1" then
 		update student set ttbsubmission ="Pending" where sid = new.pid;
 	elseif new.confirmation = "2" then
-		update student set ttbsubmission ="Approved" ,ttbcomments = new.ttbcomments  where sid = new.pid;
+		update student set ttbsubmission ="Approved" ,ttbcomments = oldcomments  where sid = new.pid;
 	elseif new.confirmation = "3" then
-		update student set ttbsubmission ="Rejected",ttbcomments = new.ttbcomments where sid = new.pid;
+		update student set ttbsubmission ="Rejected",ttbcomments =  oldcomments  where sid = new.pid;
 	else
 		update student set ttbsubmission = null where sid = new.pid;
 	end if;
@@ -395,3 +401,25 @@ CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allst
   |
 delimiter ;
 
+delimiter |
+CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
+  FOR EACH ROW
+  BEGIN
+  
+  declare oldcomments varchar(200);
+  declare newcomments varchar(200);
+  declare oldtime timestamp;
+  set newcomments = new.ttbcomments;
+   select distinct(ttbcomments,review) into oldcomments,oldtime from allstudenttakecourse where pid = new.pid Limit 1;
+    if(oldcomments is not null) then
+		if SUBSTRING_INDEX(oldcomments,'_',-1) not like newcomments then
+			set new.ttbcomments = concat(oldcomments,"_",newcomments);
+        end if;
+    elseif (oldcomments is null) then
+    set new.ttbcomments = newcomments;
+    end if;
+
+    
+   END;
+  |
+delimiter ;
