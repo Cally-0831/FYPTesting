@@ -1,3 +1,12 @@
+<script type='text/javascript' charset='UTF-8'>
+    (function (config) {  
+        config.urlCapture = { 
+            filterURLQuery: true
+        }
+    })(window['adrum-config'] || (window['adrum-config'] = {}));
+ </script>
+ <script src='//cdn.appdynamics.com/adrum/adrum-latest.js' type='text/javascript' charset='UTF-8'></script>
+ 
 <div class="Pagetitle">
     Create New Notice
 </div>
@@ -15,10 +24,14 @@
         <div class="rows">
             <div class="row">
                 <label for="title" style="font-size: 20px;">Notice Title</label>
-                <input type="text" id="title" style="width: 100%; height: 30px;" required>
+
                 <%if(title!=null){%>
-                    <%=title%>
-                    <%}%>
+                    <input type="text" id="title" style="width: 100%; height: 30px;" value="<%=title%>" required>
+
+                    <%}else{%>
+                        <input type="text" id="title" style="width: 100%; height: 30px;" required>
+
+                        <%}%>
 
             </div>
 
@@ -26,17 +39,23 @@
             <br>
 
             <div class="row">
-                <label for="content" class="content"  style="font-size: 20px;">Content</label>
-              
-                <textarea id="content" name="content" rows="4" cols="50" style="width:100%" required></textarea>
+                <label for="content" class="content" style="font-size: 20px;">Content</label>
+
                 <%if(content!=null){%>
-                    <%=content%>
-                    <%}%>
+                    <textarea id="content" name="content" rows="4" cols="50" style="width:100%"
+                        required><%=content%></textarea>
+                    <%}else{%>
+                        <textarea id="content" name="content" rows="4" cols="50" style="width:100%" required></textarea>
+
+                        <%}%>
             </div>
             <br><br>
             <div class="row">
                 <div class="buttons is-right">
-                    <button class="buttonlogout" onclick="submitform()">Submit</button>
+
+                    <button class="buttonlogout" onclick="submitform('<%=id%>')">Submit</button>
+
+
                 </div>
             </div>
             <br><br>
@@ -46,7 +65,7 @@
 </div>
 
 <script>
-    async function submitform() {
+    async function submitform(id) {
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
@@ -54,11 +73,13 @@
         var requestBody = JSON.stringify({
             title: document.getElementById("title").value,
             content: stringstring,
+            id: id
         });
         if (r) {
             var response = await fetch("/notice/createnewnotice", {
                 method: "POST",
                 body: requestBody,
+
             });
 
             if (response.ok) {

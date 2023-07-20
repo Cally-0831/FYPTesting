@@ -31,7 +31,7 @@ module.exports = {
             thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
             console.log(thisistheline);
         }else if(req.body.command =="update"){
-            thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\""+req.body.date+"\" , deadlinetime=\""+req.body.time+"\" where creator=\""+req.session.userid+"\" and typeofsetting=\""+req.body.type+"\" "
+            thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\""+req.body.date+"\" , deadlinetime=\""+req.body.time+"\",announcetime=null where creator=\""+req.session.userid+"\" and typeofsetting=\""+req.body.type+"\" "
             console.log(thisistheline);
         }
 

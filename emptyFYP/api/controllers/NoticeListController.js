@@ -82,16 +82,21 @@ module.exports = {
 
     addnotice: async function (req, res) {
         console.log(req.body);
-
         let nid = 'nid';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < 5) {
-            nid += characters.charAt(Math.floor(Math.random() * charactersLength));
-            counter += 1;
-        }
+        if (req.body.id == null) {
 
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < 5) {
+                nid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+
+        } else if (req.body.id != null) {
+            nid +=req.body.id;
+        }
+        console.log(nid)
         let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
         //    console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
@@ -108,48 +113,46 @@ module.exports = {
     },
 
     viewnoticepage: async function (req, res) {
-        if(req.body == null){
-            return res.view('user/createnewnotice', { title: null, content: null });
+
+        if (req.query.type == null) {
+            return res.view('user/createnewnotice', { title: null, content: null, id: null });
         }
-       
-            console.log(req.body)
-            
 
-            var title;
-            var content;
 
-            if (req.body.type == 0) {
-                title = "Deadline for Submitting Sememster Timetable";
-                content = "The deadline of submitting semester timetable has been set as follows:\n"
-                    + "Date: " + req.body.date
-                    + "\nTime: " + req.body.time
-                    + "\n\nPlease be remined that to upload your timetable pic from Buniport as proof."
-                    + "\nSubmission without valid proof will not be reviewd by Supervisor."
-                    + "\n\nFor Student who enrolled 0 course this sememster, should all input an entry as a declaration."
-            } else if (req.body.type == 1) {
-                title = "Deadline for Submitting Unavailable Timeslots";
-                content = "The deadline of submitting unavailable timeslots has been set as follows:\n"
-                    + "Date: " + req.body.date
-                    + "\nTime: " + req.body.time
-                    + "\n\nPlease be remined that to upload a valid proof."
-                    + "\nSubmission without valid proof will not be reviewd by Supervisor."
-                    + "\n\nReasons like part-time job will not be approved."
-            } else if (req.body.type == 2) {
-                title = "Presentation Schdeule Release Date";
-                content = "The release date for presentation schdeule has been set as follows:\n"
-                    + "Date: " + req.body.date
-                    + "\nTime: " + req.body.time
-                    + "\n\nStudents should check and follow their personal timeslots after the release of the schdeule."
+        var title;
+        var content;
 
-            }
-            try {
-                return res.view('user/createnewnotice', { title: title, content: content });
-            } catch (err) {
-                console.log(err)
-            }
+        if (req.query.type == 0) {
+            title = "Deadline for Submitting Sememster Timetable";
+            content = "The deadline of submitting semester timetable has been set as follows:\n"
+                + "Date: " + req.query.date
+                + "\nTime: " + req.query.time
+                + "\n\nPlease be remined that to upload your timetable pic from Buniport as proof."
+                + "\nSubmission without valid proof will not be reviewd by Supervisor."
+                + "\n\nFor Student who enrolled 0 course this sememster, should all input an entry as a declaration."
+        } else if (req.query.type == 1) {
+            title = "Deadline for Submitting Unavailable Timeslots";
+            content = "The deadline of submitting unavailable timeslots has been set as follows:\n"
+                + "Date: " + req.query.date
+                + "\nTime: " + req.query.time
+                + "\n\nPlease be remined that to upload a valid proof."
+                + "\nSubmission without valid proof will not be reviewd by Supervisor."
+                + "\n\nReasons like part-time job will not be approved."
+        } else if (req.query.type == 2) {
+            title = "Presentation Schdeule Release Date";
+            content = "The release date for presentation schdeule has been set as follows:\n"
+                + "Date: " + req.query.date
+                + "\nTime: " + req.query.time
+                + "\n\nStudents should check and follow their personal timeslots after the release of the schdeule."
 
-        
+        }
+        console.log(req.query)
+
+        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID });
+
+
+
+
+
     }
-
-
 }

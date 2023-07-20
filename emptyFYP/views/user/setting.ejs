@@ -34,6 +34,13 @@
                                                 <br>
                                                 Setting Details:&emsp;<%=datedate%>
                                                     <%=thissupersetting[0].deadlinetime%>
+                                                    <br>
+                                                        <%if (thissupersetting[0].Announcetime !=null){%>
+                                                            <%var announced=new Date(thissupersetting[0].Announcetime);%>
+                                                                <%var theannounced=announced.toLocaleDateString(); %>
+                                                                    <%var announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
+                                                                    Notice Created:&emsp;<%=theannounced%> <%=announcedtime%>
+                                                                    <%}%>
 
 
                                     </div>
@@ -49,9 +56,12 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 <% if(thissupersetting[0] !=null){%>
-                                                    <button class="button buttonlogout"
-                                                        onclick="CreateNotice(0,'<%=datedate%>','<%=thissupersetting[0].deadlinetime%>')">Create
+                                                    <% if(thissupersetting[0].Announcetime ==null){%>
+                                                        <button class="button buttonlogout"
+                                                        onclick="CreateNotice(0,'<%=datedate%>','<%=thissupersetting[0].deadlinetime%>','<%=thissupersetting[0].STID%>')">Create
                                                         Notice</button>
+                                                        <%}%>
+                                                    
 
                                                     <button class="button buttonlogout"
                                                         onclick="submitdeadlineforttb('update')">Update</button>
@@ -83,6 +93,13 @@
                                                 <br>
                                                 Setting Details:&emsp;<%=datedate%>
                                                     <%=thissupersetting[1].deadlinetime%>
+                                                    <br>
+                                                        <%if (thissupersetting[1].Announcetime !=null){%>
+                                                            <%var announced=new Date(thissupersetting[1].Announcetime);%>
+                                                                <%var theannounced=announced.toLocaleDateString(); %>
+                                                                    <%var announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
+                                                                    Notice Created:&emsp;<%=theannounced%> <%=announcedtime%>
+                                                                    <%}%>
                                     </div>
                                     <%}%>
                                         <br>
@@ -96,9 +113,11 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 <% if(thissupersetting[1] !=null){%>
+                                                    <% if(thissupersetting[1].Announcetime ==null){%>
                                                     <button class="button buttonlogout"
-                                                        onclick="CreateNotice(1,'<%=datedate%>','<%=thissupersetting[1].deadlinetime%>')">Create
+                                                        onclick="CreateNotice(1,'<%=datedate%>','<%=thissupersetting[1].deadlinetime%>','<%=thissupersetting[1].STID%>')">Create
                                                         Notice</button>
+                                                        <%}%>
                                                     <button class="button buttonlogout"
                                                         onclick="submitdeadlineforrequest('update')">Update</button>
                                                     <%}else{%>
@@ -128,6 +147,13 @@
                                                 <br>
                                                 Setting Details:&emsp;<%=datedate%>
                                                     <%=thissupersetting[2].deadlinetime%>
+                                                    <br>
+                                                        <%if (thissupersetting[2].Announcetime !=null){%>
+                                                            <%var announced=new Date(thissupersetting[2].Announcetime);%>
+                                                                <%var theannounced=announced.toLocaleDateString(); %>
+                                                                    <%var announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
+                                                                    Notice Created:&emsp;<%=theannounced%> <%=announcedtime%>
+                                                                    <%}%>
                                     </div>
                                     <%}%>
                                         <br>
@@ -142,9 +168,11 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 <% if(thissupersetting[2] !=null){%>
+                                                    <% if(thissupersetting[0].Announcetime ==null){%>
                                                     <button class="button buttonlogout"
-                                                        onclick="CreateNotice(2,'<%=datedate%>','<%=thissupersetting[2].deadlinetime%>')">Create
+                                                        onclick="CreateNotice(2,'<%=datedate%>','<%=thissupersetting[2].deadlinetime%>','<%=thissupersetting[2].STID%>')">Create
                                                         Notice</button>
+                                                        <%}%>
 
                                                     <button class="button buttonlogout"
                                                         onclick="submitdeadlineforreleaseschdule('update')">Update</button>
@@ -170,15 +198,16 @@
 <script>
 
 
-    async function CreateNotice(command, datedate, deadlinetime) {
+    async function CreateNotice(command, datedate, deadlinetime, id) {
 
-        var requestbody = command+"&"+datedate+"&"+deadlinetime;
-
-        var response = await fetch("/notice/createnewnotice/auto?"+requestbody, {
+        var requestbody = "type=" + command + "&date=" + datedate + "&time=" + deadlinetime + "&STID=" + id;
+        var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
             method: "GET",
-            
         });
-        
+        console.log(response)
+        location.assign(response.url)
+
+
 
     }
 

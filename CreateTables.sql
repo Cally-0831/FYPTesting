@@ -138,6 +138,7 @@ typeofsetting integer,
 deadlinedate date,
 deadlinetime time,
 LastUpdate timestamp,
+Announcetime timestamp default null,
 primary key (STID)
 );
 
@@ -194,7 +195,11 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
   FOR EACH ROW
   BEGIN
   declare stringstring  varchar(10);
-
+  declare timetime timestamp;
+  declare idid varchar(15);
+  set idid = SUBSTRING_INDEX(new.nid, "nid", -1);
+  update allsupersetting set Announcetime = now() where stid = idid;
+  
  select allusersname into stringstring from allusers 
  where new.creator = pid;
  set new.creatorname = stringstring;
@@ -319,6 +324,24 @@ CREATE TRIGGER addintosetting before insert ON allsupersetting
    END;
   |
 delimiter ;
+
+delimiter |
+CREATE TRIGGER addintosetting before Update ON allsupersetting
+  FOR EACH ROW
+  BEGIN
+  
+  declare thenotice integer;
+  set thenotice =0;
+  select count(nid) into thenotice from allnotice where nid = concat("nid",new.stid);
+  
+  if(thenotice >0)then
+  delete from allnotice where nid = concat("nid",new.stid);
+  end if;
+  
+   END;
+  |
+delimiter ;
+
 
 delimiter |
 CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent
