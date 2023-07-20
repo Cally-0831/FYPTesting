@@ -77,14 +77,15 @@
                                             <!--have class input and confirmation 1 == Pending for approve && confirmation 2 == approved-->
                                             <!--have class input and confirmation 0 == Require Proof && confirmation 3 == rejected -->
                                             <!--this is 0 & 3 case-->
-                                            <div class="buttons is-right">
-                                                <button class="button buttonlogout"
-                                                    onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
-                                                    Student Timetable</button>
-                                            </div>
-                                            <div class="box"
-                                                style="background-color: blanchedalmond; text-align: right;">
+                                            
                                                 <%if(allpersonallist[0].confirmation=="0" ){%>
+                                                    <div class="buttons is-right">
+                                                        <button class="button buttonlogout"
+                                                            onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
+                                                            Student Timetable</button>
+                                                    </div>
+                                                    <div class="box"
+                                                        style="background-color: blanchedalmond; text-align: right;">
                                                     <%if(allpersonallist[0].picdata!=null){%>
                                                         <div style="font-size: 20px;">Status :<strong><u
                                                                     style="color: red;">Click Submit</u> for Supervisor
@@ -97,6 +98,13 @@
 
                                                             <%}%>
                                                                 <%}else if(allpersonallist[0].confirmation=="3" ){%>
+                                                                    <div class="buttons is-right">
+                                                                        <button class="button buttonlogout"
+                                                                            onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Resubmit
+                                                                            Student Timetable</button>
+                                                                    </div>
+                                                                    <div class="box"
+                                                                        style="background-color: blanchedalmond; text-align: right;">
                                                                     <div style="font-size: 20px;">Status :<strong><u
                                                                                 style="color: orangered;">Rejected</u>
                                                                             after Supervisor Review </strong></div>
