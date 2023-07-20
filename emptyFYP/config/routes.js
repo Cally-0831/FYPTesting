@@ -75,7 +75,8 @@ module.exports.routes = {
   'GET /checkrequest': "RequestController.listrequest",
   'DELETE /checkrequest': "RequestController.deleterequest",
 
-  'GET /submitrequest': { view: 'user/submitrequest' },
+  //'GET /submitrequest': { view: 'user/submitrequest' },
+  'GET /submitrequest': "RequestController.getview",
   'POST /submitrequest': "RequestController.submitrequest",
   'POST /submitrequest/pic': "RequestController.upload",
 
