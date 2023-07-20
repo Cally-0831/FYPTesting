@@ -131,14 +131,14 @@ primary key (NID)
 );
 
 create table allsupersetting(
-SID	varchar(20) not null,
+STID	varchar(20) not null,
 Creator		varchar(10) Not null,
 CreateDate  timestamp ,
 typeofsetting integer,
 deadlinedate date,
 deadlinetime time,
 LastUpdate timestamp,
-primary key (SID)
+primary key (STID)
 );
 
 
@@ -408,9 +408,9 @@ CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
   
   declare oldcomments varchar(200);
   declare newcomments varchar(200);
-  declare oldtime timestamp;
+  
   set newcomments = new.ttbcomments;
-   select distinct(ttbcomments,review) into oldcomments,oldtime from allstudenttakecourse where pid = new.pid Limit 1;
+   select distinct(ttbcomments) into oldcomments from allstudenttakecourse where pid = new.pid Limit 1;
     if(oldcomments is not null) then
 		if SUBSTRING_INDEX(oldcomments,'_',-1) not like newcomments then
 			set new.ttbcomments = concat(oldcomments,"_",newcomments);

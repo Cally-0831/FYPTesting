@@ -34,7 +34,9 @@ module.exports.routes = {
   "POST /readttb/:SID": "TimetableController.judgettb",
 
   'GET /notice': "NoticeListController.listallnotice",
-  'GET /notice/createnewnotice': { view: 'user/createnewnotice' },
+  //'GET /notice/createnewnotice': { view: 'user/createnewnotice' },
+  'GET /notice/createnewnotice': "NoticeListController.viewnoticepage",
+  'GET /notice/createnewnotice/auto': "NoticeListController.viewnoticepage",
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
 
   'GET /timetable/submitttb': "TimetableController.getallclass",
@@ -89,7 +91,7 @@ module.exports.routes = {
   'DELETE /read/:sid': "StudentListController.deletestudent",
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
-
+  //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   /***************************************************************************
   *                                                                          *

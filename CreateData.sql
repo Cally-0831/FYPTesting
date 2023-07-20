@@ -61,4 +61,6 @@ insert into alltakecourse values("COMP4025_00001","sid11111");
 insert into alltakecourse values("COMP4025_10001","sid11111");
 insert into alltakecourse values("GCAP3205_00001","sid11111");
 
+insert into alltakecourse values("COMP4107_00001","sid22222");
+
 select * from allclass

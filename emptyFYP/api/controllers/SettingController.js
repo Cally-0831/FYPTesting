@@ -16,19 +16,19 @@ db.connect(async (err) => {
 
 module.exports = {
     submitsetting: async function (req, res) {
-        let sid = 'sid';
+        let stid = 'stid';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
         let counter = 0;
         while (counter < 5) {
-            sid += characters.charAt(Math.floor(Math.random() * charactersLength));
+            stid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
         let thisistheline = "";
 
         if (req.body.command == "insert") {
 
-            thisistheline = "Insert into allsupersetting (sid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + sid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
+            thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
             console.log(thisistheline);
         }else if(req.body.command =="update"){
             thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\""+req.body.date+"\" , deadlinetime=\""+req.body.time+"\" where creator=\""+req.session.userid+"\" and typeofsetting=\""+req.body.type+"\" "
@@ -67,5 +67,6 @@ module.exports = {
 
 
         });
-    }
+    },
+   
 }

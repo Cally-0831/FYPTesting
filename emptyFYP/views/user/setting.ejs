@@ -12,155 +12,176 @@
         </div>
     </div>
 </div>
-
-<div class="rows is-centered">
-    <div class="columns is-mobile is-onethird is-multiline is-centered">
-        <div class="column">
-            <div id="ttbdealine" class="setttbdeadline">
-                <div class="row">
-                    <div id="handleTTB" style="font-size : 25px;" class="title">TimeTable Submission Deadline</div>
-                </div>
-                <br>
-                <%if(thissupersetting[0] !=null){ 
-                    var updatedate=new Date(thissupersetting[1].LastUpdate);
-                    
-                    
-                    var theupdatedate = updatedate.toLocaleDateString();
-                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
-
-
-                     var datedate=new Date(thissupersetting[0].deadlinedate).toLocaleDateString(); %>
-                    <div class="row" style="font-size: 10px;">
-                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
-                            <br>
-                            Setting Details:&emsp;<%=datedate%>
-                                <%=thissupersetting[0].deadlinetime%>
+<br><br>
+<div class="rows">
+    <div class="row">
+        <div class="columns is-mobile">
+            <div class="column is-one-third">
+                <div id="ttbdealine" class="setttbdeadline">
+                    <div class="row">
+                        <div id="handleTTB" style="font-size : 23px;padding-top: 10px;" class="title">TimeTable
+                            Submission Deadline</div>
                     </div>
-                    <%}%>
-                        <br>
-                        <div class="row" style="text-align: center;">
-                            <input type="Date" id="deadlineforttb"
-                                style="width: 150px; font-size:20px;text-align: center;" required>
-                            <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
-                                style="width: 150px; font-size:20px;text-align: center;" required>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="buttons is-right">
-                                <% if(thissupersetting[0] !=null){%>
-                                    <button class="buttonlogout"
-                                        onclick="submitdeadlineforttb('update')">Update</button>
-                                    <%}else{%>
-                                        <button class="buttonlogout"
-                                            onclick="submitdeadlineforttb('insert')">Submit</button>
-                                        <%}%>
-                            </div>
-                        </div>
-
-                        <br>
-
-            </div>
-
-        </div>
-        <div class="column is-centered">
-            <div id="requestdealine" class="setrequestdeadline">
-                <div class="row">
-                    <div id="handleRequest" style="font-size : 25px" class="title">Request Submission Deadline</div>
-                </div>
-                <br>
-                <%if(thissupersetting[1] !=null){ 
-                    var updatedate=new Date(thissupersetting[1].LastUpdate);
-                    
-                    
-                    var theupdatedate = updatedate.toLocaleDateString();
-                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
-
-
-                     var datedate=new Date(thissupersetting[2].deadlinedate).toLocaleDateString(); %>
-                    <div class="row" style="font-size: 10px;">
-                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
-                            <br>
-                            Setting Details:&emsp;<%=datedate%>
-                                <%=thissupersetting[1].deadlinetime%>
-                    </div>
-                    <%}%>
-                        <br>
-                        <div class="row" style="text-align: center;">
-                            <input type="Date" id="deadlineforrequest"
-                                style="width: 150px; font-size:20px;text-align: center;" required>
-                            <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
-                                style="width: 150px; font-size:20px;text-align: center;" required>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="buttons is-right">
-                                <% if(thissupersetting[1] !=null){%>
-                                    <button class="buttonlogout"
-                                        onclick="submitdeadlineforrequest('update')">Update</button>
-                                    <%}else{%>
-                                        <button class="buttonlogout"
-                                            onclick="submitdeadlineforrequest('insert')">Submit</button>
-                                        <%}%>
-
-                            </div>
-                        </div>
-
-                        <br>
-
-            </div>
-
-
-        </div>
-        <div class="column is-centered">
-            <div id="schdeulerelease" class="setschdulerelease">
-                <div class="row">
-                    <div id="Handleschdule" style="font-size : 25px" class="title">Release Schdeule Date</div>
-                </div>
-                <br>
-                <%if(thissupersetting[2] !=null){ 
-                    var updatedate=new Date(thissupersetting[2].LastUpdate);
-                    
-                    
-                    var theupdatedate = updatedate.toLocaleDateString();
-                    var updatetime = updatedate.toLocaleTimeString('en-US',{hour12: false})
-
-
-                     var datedate=new Date(thissupersetting[2].deadlinedate).toLocaleDateString(); %>
-                    <div class="row" style="font-size: 10px;">
-                        Last Update:&emsp;&emsp;<%=theupdatedate%> <%=updatetime%>
-                            <br>
-                            Setting Details:&emsp;<%=datedate%>
-                                <%=thissupersetting[2].deadlinetime%>
-                    </div>
-                    <%}%>
                     <br>
-                        <div class="row" style="text-align: center;">
-                            <input type="Date" id="deadlineforreleaseschdule"
-                                style="width: 150px; font-size:20px;text-align: center;" required>
-                            <input type="time" id="deadlineforreleaseschduletime" name="deadlineforreleaseschduletime"
-                                style="width: 150px; font-size:20px; text-align: center;" required>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="buttons is-right">
-                                <% if(thissupersetting[2] !=null){%>
-                                    <button class="buttonlogout"
-                                        onclick="submitdeadlineforreleaseschdule('update')">Update</button>
-                                    <%}else{%>
-                                        <button class="buttonlogout"
-                                            onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
-                                        <%}%>
-                            </div>
-                        </div>
+                    <%if(thissupersetting[0] !=null){ var updatedate=new Date(thissupersetting[0].LastUpdate);%>
+                        <%var theupdatedate=updatedate.toLocaleDateString(); %>
+                            <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
+                                <% var datedate=new Date(thissupersetting[0].deadlinedate).toLocaleDateString(); %>
+                                    <div class="row" style="font-size: 10px;">
 
-                        <br>
+                                        Updated At:&emsp;&emsp;<%=theupdatedate%>
+                                            <%=updatetime%>
+                                                <br>
+                                                Setting Details:&emsp;<%=datedate%>
+                                                    <%=thissupersetting[0].deadlinetime%>
+
+
+                                    </div>
+                                    <%}%>
+                                        <br>
+                                        <div class="row" style="text-align: center;">
+                                            <input type="Date" id="deadlineforttb"
+                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                            <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
+                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="buttons is-right">
+                                                <% if(thissupersetting[0] !=null){%>
+                                                    <button class="button buttonlogout"
+                                                        onclick="CreateNotice(0,'<%=datedate%>','<%=thissupersetting[0].deadlinetime%>')">Create
+                                                        Notice</button>
+
+                                                    <button class="button buttonlogout"
+                                                        onclick="submitdeadlineforttb('update')">Update</button>
+                                                    <%}else{%>
+                                                        <button class="buttonlogout"
+                                                            onclick="submitdeadlineforttb('insert')">Submit</button>
+                                                        <%}%>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                </div>
 
             </div>
+            <div class="column is-one-third">
 
+                <div id="requestdealine" class="setrequestdeadline">
+                    <div class="row">
+                        <div id="handleRequest" style="font-size : 23px" class="title">Request Submission Deadline</div>
+                    </div>
+                    <br>
+                    <%if(thissupersetting[1] !=null){ var updatedate=new Date(thissupersetting[1].LastUpdate);%>
+                        <%var theupdatedate=updatedate.toLocaleDateString(); %>
+                            <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
+                                <% var datedate=new Date(thissupersetting[1].deadlinedate).toLocaleDateString(); %>
+                                    <div class="row" style="font-size: 10px;">
+                                        Updated At:&emsp;&emsp;<%=theupdatedate%>
+                                            <%=updatetime%>
+                                                <br>
+                                                Setting Details:&emsp;<%=datedate%>
+                                                    <%=thissupersetting[1].deadlinetime%>
+                                    </div>
+                                    <%}%>
+                                        <br>
+                                        <div class="row" style="text-align: center;">
+                                            <input type="Date" id="deadlineforrequest"
+                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                            <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
+                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="buttons is-right">
+                                                <% if(thissupersetting[1] !=null){%>
+                                                    <button class="button buttonlogout"
+                                                        onclick="CreateNotice(1,'<%=datedate%>','<%=thissupersetting[1].deadlinetime%>')">Create
+                                                        Notice</button>
+                                                    <button class="button buttonlogout"
+                                                        onclick="submitdeadlineforrequest('update')">Update</button>
+                                                    <%}else{%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="submitdeadlineforrequest('insert')">Submit</button>
+                                                        <%}%>
+
+                                            </div>
+                                        </div>
+
+                                        <br>
+                </div>
+            </div>
+            <div class="column is-one-third">
+                <div id="schdeulerelease" class="setschdulerelease">
+                    <div class="row">
+                        <div id="Handleschdule" style="font-size : 23px" class="title">Release Schdeule Date</div>
+                    </div>
+                    <br>
+                    <%if(thissupersetting[2] !=null){ var updatedate=new Date(thissupersetting[2].LastUpdate);%>
+                        <%var theupdatedate=updatedate.toLocaleDateString(); %>
+                            <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
+                                <% var datedate=new Date(thissupersetting[2].deadlinedate).toLocaleDateString(); %>
+                                    <div class="row" style="font-size: 10px;">
+                                        Updated At:&emsp;&emsp;<%=theupdatedate%>
+                                            <%=updatetime%>
+                                                <br>
+                                                Setting Details:&emsp;<%=datedate%>
+                                                    <%=thissupersetting[2].deadlinetime%>
+                                    </div>
+                                    <%}%>
+                                        <br>
+                                        <div class="row" style="text-align: center;">
+                                            <input type="Date" id="deadlineforreleaseschdule"
+                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                            <input type="time" id="deadlineforreleaseschduletime"
+                                                name="deadlineforreleaseschduletime"
+                                                style="width: 150px; font-size:20px; text-align: center;" required>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="buttons is-right">
+                                                <% if(thissupersetting[2] !=null){%>
+                                                    <button class="button buttonlogout"
+                                                        onclick="CreateNotice(2,'<%=datedate%>','<%=thissupersetting[2].deadlinetime%>')">Create
+                                                        Notice</button>
+
+                                                    <button class="button buttonlogout"
+                                                        onclick="submitdeadlineforreleaseschdule('update')">Update</button>
+                                                    <%}else{%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
+                                                        <%}%>
+                                            </div>
+                                        </div>
+
+                                        <br>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+
+
 <script>
+
+
+    async function CreateNotice(command, datedate, deadlinetime) {
+
+        var requestbody = command+"&"+datedate+"&"+deadlinetime;
+
+        var response = await fetch("/notice/createnewnotice/auto?"+requestbody, {
+            method: "GET",
+            
+        });
+        
+
+    }
+
     async function submitdeadlineforttb(command) {
 
         var today = new Date();

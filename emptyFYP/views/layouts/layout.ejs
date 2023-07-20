@@ -62,12 +62,12 @@
       <div class="navbar-end">
         <% if (req.session.username!=null) { %>
           <div class="navbar-item">
-            <div class="buttonlogout">
+            <div class="button buttonlogout">
               <%= req.session.username %>
             </div>
           <p>&nbsp;&nbsp;</p>
             <a class="active" href="/user/logout">
-              <div class="buttonlogout">Logout</div>
+              <div class="button buttonlogout">Logout</div>
             </a>
           </div>
           <% } %>

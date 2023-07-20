@@ -133,7 +133,7 @@ font-size: 20px;
 
 .buttonlogout {
   align-items: center;
-  background-color: #fee6e3;
+  background-color: #f7f2d7;
   border: 2px solid #111;
   border-radius: 8px;
   box-sizing: border-box;
@@ -316,8 +316,9 @@ select:focus {
 }
 
 .setttbdeadline {
-  padding: 10px;
-  margin: 50px 50px 50px 50px;
+  width:100%;
+  padding:20px 10px 10px 20px;
+  margin: 0;
   border-radius: 15px;
   box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
   background: rgb(155, 198, 53);
@@ -335,8 +336,9 @@ select:focus {
 }
 
 .setrequestdeadline {
-  padding: 10px;
-  margin: 50px 50px 50px 50px;
+  width:100%;
+  padding:20px 10px 10px 20px;
+  margin: 0;
   
   border-radius: 15px;
   box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
@@ -355,8 +357,9 @@ select:focus {
 }
 
 .setschdulerelease {
-  padding: 10px;
-  margin: 50px 50px 50px 50px;
+  width:100%;
+  padding:20px 10px 10px 20px;
+  margin: 0;
   
   border-radius: 15px;
   box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
