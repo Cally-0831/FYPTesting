@@ -71,15 +71,15 @@
                     <%var today=new Date().toJSON()%>
                         <%console.log("\n\n\n\n"+today+"\n"+theday[0].requestdeadline)%>
                             <%if ((theday[0].requestdeadline==null) || (theday[0].requestdeadline!=null&& today < theday[0].requestdeadline)){%>
-                                <%console.log("hoeel")%>
+                                
                                     <div id="orgformbutton " class="buttons is-right">
                                         <button class="button buttonlogout" type="submit is-success">Submit</button>
                                     </div>
 
                                     <%}else {%>
-                                        <%console.log("asdfasd")%>
+                                        
                                         <div id="row" style="text-align: center;">
-                                            <div class="box" style="font-size: 20px;font-weight: bold; color : red;">Not Accepting
+                                            <div class="box" style="background-color:transparent; box-shadow: none ;font-size: 20px;font-weight: bold; color : red;">Not Accepting
                                                 Submission Anymore</div>
                                         </div>
                                         <%}%>
@@ -190,8 +190,9 @@
 
     }
 
-    async function submitstudetrequest(formElem) {
-
+    async function submitstudetrequest(formElem,deadlinedate) {
+        var form = new FormData(formElem);
+        form.append("deadlinedate" , deadlinedate)
 
         if (!checked) {
             var startstart = document.getElementById("starttime").value;
@@ -206,16 +207,18 @@
         try {
             var response = await fetch(formElem.action, {
                 method: formElem.method,
-                body: new FormData(formElem),
+                body: form,
+
             });
             if (response.ok) {
 
-                alert("Submission success");
+                alert("Submission success"+"\n\nPlease remember to upload valid proof\n"+"Or else your submission will not be considered.");
                 location.assign("/checkrequest");
 
-            } else if (response.status == 401) {
+            } else if (response.status == 402) {
                 var msg = await response.json();
                 alert(msg);
+                return location.reload();
             } else {
                 alert(response.statusTest);
             }
