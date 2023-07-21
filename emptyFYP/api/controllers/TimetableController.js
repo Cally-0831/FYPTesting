@@ -160,14 +160,14 @@ module.exports = {
     },
 
     getpersonalallclass: async function (req, res) {
-
+        var date;
         console.log("\n\n\n\n\n");
         let thisistheline;
         if (req.session.role == "sup") {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments, student.ttbdeadline from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid right join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
         // console.log(thisistheline);
@@ -176,7 +176,13 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                 console.log(personallist)
+                console.log(personallist)
+                date = personallist[0].ttbdeadline;
+                if (personallist[0].CID == null) {
+                    date = personallist[0].ttbdeadline;
+                    personallist=[];
+                }
+                
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,
@@ -218,7 +224,7 @@ module.exports = {
 
     submitpersonalallclass: async function (req, res) {
         let thisistheline;
-       
+
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
             console.log(thisistheline);
@@ -288,11 +294,11 @@ module.exports = {
 
     },
 
-    readsinglestudentttb : async function(req,res){
+    readsinglestudentttb: async function (req, res) {
 
         let thisistheline;
-       
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime, allstudenttakecourse.ttbcomments, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
+
+        thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime, allstudenttakecourse.ttbcomments, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
 
         // console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
@@ -301,33 +307,34 @@ module.exports = {
                 var json = JSON.parse(string);
                 personallist = json;
                 // console.log(personallist)
-                
-                return res.view("user/readttb",{ 
-                    date:date,
+
+                return res.view("user/readttb", {
+                    date: date,
                     allpersonallist: personallist,
-                    SID : req.params.SID})
+                    SID: req.params.SID
+                })
 
             } catch (err) {
                 // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
             }
 
         });
-        
+
     },
 
-    judgettb: async function(req,res){
-        
+    judgettb: async function (req, res) {
+
         let thisistheline;
-        if(req.body.type == "Approved"){
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \""+req.body.comments+"\"  where allstudenttakecourse.pid=\""+req.params.SID+"\"";
-        }else{
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\""+req.body.comments+"\" where allstudenttakecourse.pid=\""+req.params.SID+"\"";
+        if (req.body.type == "Approved") {
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"" + req.body.comments + "\"  where allstudenttakecourse.pid=\"" + req.params.SID + "\"";
+        } else {
+            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\"" + req.body.comments + "\" where allstudenttakecourse.pid=\"" + req.params.SID + "\"";
         }
         console.log(thisistheline);
         db.query(thisistheline, function (error, result) {
             try {
 
-                
+
                 return res.redirect("../liststudent");
             } catch (err) {
                 console.log(' judgettb MySQL Problem' + "    " + error);

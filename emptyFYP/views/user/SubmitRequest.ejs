@@ -1,3 +1,5 @@
+<%var today=new Date().toJSON()%>
+<% var date=new Date(theday[0].requestdeadline)%>
 <div class="Pagetitle">
     Unavailable timeslot
 </div>
@@ -11,12 +13,13 @@
         <% if (req.session.role=="stu" ){%>
             <form name="therequest" action="/submitrequest" method="post"
                 onsubmit="submitstudetrequest(this,'<%=theday[0].requestdeadline%>');return false;">
-                <% var date=new Date(theday[0].requestdeadline)%>
+                
 
                     <article class="message is-warning">
                         <div class="message-header" style="font-size: 19px; color: red;">
                             <p>Submission Deadline for Request Submission
                                 <br>
+                                
                                 <%if(theday[0].requestdeadline!=null){%>
                                     <%=date.toLocaleDateString()%> <%=date.toLocaleTimeString('en-US')%>
                                             <%}%>
@@ -66,20 +69,21 @@
                     <br><br>
 
                     <%var today=new Date().toJSON()%>
-                        <%console.log(today+"\n"+theday[0].requestdeadline)%>
-                            <%if (theday[0].requestdeadline!=null){%>
-                                <% if(today < theday[0].requestdeadline){%>
+                        <%console.log("\n\n\n\n"+today+"\n"+theday[0].requestdeadline)%>
+                            <%if ((theday[0].requestdeadline==null) || (theday[0].requestdeadline!=null&& today < theday[0].requestdeadline)){%>
+                                <%console.log("hoeel")%>
                                     <div id="orgformbutton " class="buttons is-right">
                                         <button class="button buttonlogout" type="submit is-success">Submit</button>
                                     </div>
 
-                                    <%}else{%>
+                                    <%}else {%>
+                                        <%console.log("asdfasd")%>
                                         <div id="row" style="text-align: center;">
-                                            <box style="font-size: 20px;font-weight: bold; color : red;">Not Accepting
-                                                Submission Anymore</box>
+                                            <div class="box" style="font-size: 20px;font-weight: bold; color : red;">Not Accepting
+                                                Submission Anymore</div>
                                         </div>
                                         <%}%>
-                                            <%}%>
+                                            
 
 
             </form>
