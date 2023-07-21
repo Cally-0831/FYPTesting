@@ -36,54 +36,53 @@
                             <div class="column is-onethird">
                                 <% if (allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
                                     &&allpersonallist[0].confirmation !="2" )){%>
-                                        <%if ((date == null) || (date !=null && today < date)){%>
-                                    <div class="buttons">
-                                        <a href="/timetable/submitttb">
-                                            <button class="button buttonlogout" id="addclass">Add Class</button>
-                                        </a>
-                                    </div>
-                                    <%}%>
-                                    <%}%>
+                                    <%if ((date==null) || (date !=null && today < date)){%>
+                                        <div class="buttons">
+                                            <a href="/timetable/submitttb">
+                                                <button class="button buttonlogout" id="addclass"
+                                                    onclick="checkdeadline('<%=date%>')">Add Class</button>
+                                            </a>
+                                        </div>
+                                        <%}%>
+                                            <%}%>
                             </div>
                             <div class="column is-onethird">
                                 <%if(req.session.role=="stu" ){%>
                                     <%if(allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
                                         &&allpersonallist[0].confirmation !="2" )){%>
-                                            <%if ((date == null) || (date !=null && today < date)){%>
-                                        <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
-                                            <div class="columns is-mobile">
-                                                <div class="column is-onethird">
-                                                    <label for="studentttbpic">Timetable
-                                                        Proof:&emsp;&emsp;&emsp;</label>
-                                                    <input type="file" id="uploadfileinput" name="avatar"
-                                                        multiple="multiple" accept="image/*" onchange="savefile(this)">
+                                        <%if ((date==null) || (date !=null && today < date)){%>
+                                            <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
+                                                <div class="columns is-mobile">
+                                                    <div class="column is-onethird">
+                                                        <label for="studentttbpic">Timetable
+                                                            Proof:&emsp;&emsp;&emsp;</label>
+                                                        <input type="file" id="uploadfileinput" name="avatar"
+                                                            multiple="multiple" accept="image/*"
+                                                            onchange="savefile(this,'<%=date%>')">
+                                                    </div>
+                                                    <div class="column is-onethird" id="appearthebutton">
+                                                    </div>
                                                 </div>
-                                                <div class="column is-onethird" id="appearthebutton">
-                                                </div>
-                                            </div>
 
-                                        </form>
-                                        <%}%>
-                                        <%}%>
-
+                                            </form>
                                             <%}%>
+                                                <%}%>
+
+                                                    <%}%>
                             </div>
                             <div class="column is-onethird" style="text-align: right;">
                                 <%if(req.session.role=="stu" ){%>
-<%console.log(allpersonallist.length )%>
-<%console.log(date !=null)%>
-<%console.log(today> date)%>
-<%console.log(today+"\n"+date)%>
+
                                     <%if(allpersonallist.length==0){%>
 
                                         <%if (date !=null && today> date){%>
-                                            <div class = "box"
+                                            <div class="box"
                                                 style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                 No Submission will be Accepted</div>
                                             <%}else{%>
                                                 <div class="buttons is-right">
                                                     <button class="button buttonlogout"
-                                                        onclick="submitstudentttb('0')">Submit
+                                                        onclick="submitstudentttb('0','<%=date%>')">Submit
                                                         Student Timetable</button>
                                                 </div>
                                                 <%}%>
@@ -96,142 +95,160 @@
                                                         <!--this is 0 & 3 case-->
 
                                                         <%if(allpersonallist[0].confirmation=="0" ){%>
-                                                            <%if (date ==null || today < date){%>
-                                                            <div class="buttons is-right">
-                                                                <button class="button buttonlogout"
-                                                                    onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Submit
-                                                                    Student Timetable</button>
-                                                            </div>
+                                                            <%if (date==null || today < date){%>
+                                                                <div class="buttons is-right">
+                                                                    <button class="button buttonlogout"
+                                                                        onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Submit
+                                                                        Student Timetable</button>
+                                                                </div>
 
-                                                            <div class="box"
-                                                                style="background-color: blanchedalmond; text-align: right;">
-                                                                <%if(allpersonallist[0].picdata!=null){%>
-                                                                    <div style="font-size: 17px;">Status :<strong><u
-                                                                                style="color: red;">Click Submit</u> for
-                                                                            Supervisor
-                                                                            to review</strong></div>
-
-                                                                    <%}else{%>
+                                                                <div class="box"
+                                                                    style="background-color: blanchedalmond; text-align: right;">
+                                                                    <%if(allpersonallist[0].picdata!=null){%>
                                                                         <div style="font-size: 17px;">Status :<strong><u
-                                                                                    style="color: red;">Require Upload
-                                                                                    Proof</u> for
-                                                                                Supervisor to review</strong></div>
+                                                                                    style="color: red;">Click Submit</u>
+                                                                                for
+                                                                                Supervisor
+                                                                                to review</strong></div>
 
-                                                                        <%}%>
                                                                         <%}else{%>
-                                                                            <div class="box"
-                                                style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
-                                                No Submission will be Accepted</div>
+                                                                            <div style="font-size: 17px;">Status
+                                                                                :<strong><u style="color: red;">Require
+                                                                                        Upload
+                                                                                        Proof</u> for
+                                                                                    Supervisor to review</strong></div>
+
                                                                             <%}%>
-
-
-                                                                            <%}else
-                                                                                if(allpersonallist[0].confirmation=="3"
-                                                                                ){%>
-                                                                                    <%if (date ==null || today < date){%>
-                                                                                <div class="buttons is-right">
-                                                                                    <button class="button buttonlogout"
-                                                                                        onclick="submitstudentttb('<%=allpersonallist[0].picdata%>')">Resubmit
-                                                                                        Student Timetable</button>
-                                                                                </div>
                                                                                 <%}else{%>
                                                                                     <div class="box"
-                                                style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
-                                                No Submission will be Accepted</div>
-                                                                                    <%}%>
-                                                                                <div class="box"
-                                                                                    style="background-color: blanchedalmond; text-align: right;">
-                                                                                    <div style="font-size: 17px;">Status
-                                                                                        :<strong><u
-                                                                                                style="color: orangered;">Rejected</u>
-                                                                                            after Supervisor Review
-                                                                                        </strong></div>
-                                                                                    <% var reviewdate=new
-                                                                                        Date(allpersonallist[0].review)%>
-                                                                                        <div
-                                                                                            style="font-size: 15px; color: gray;">
-                                                                                            Reviewed at
-                                                                                            <%=reviewdate.toLocaleDateString()%>
-                                                                                                ,
-                                                                                                <%=reviewdate.toLocaleTimeString('en-US')%>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            style="font-size: 15px; color: gray;">
-                                                                                            Comments:
-                                                                                            <%var
-                                                                                                stringstring=allpersonallist[0].ttbcomments.split("_");%>
-                                                                                                <%=stringstring.slice(-1)%>
-                                                                                        </div>
-                                                                                        <%}%>
-                                                                                </div>
-
-
-                                                                                <%}else{%>
-                                                                                    <div class="box"
-                                                                                        style="background-color: blanchedalmond; text-align: right;">
-                                                                                        <%if(allpersonallist[0].confirmation=="1"
-                                                                                            ){%>
-                                                                                            <div
-                                                                                                style="font-size:17px;">
-                                                                                                Status :<strong><u
-                                                                                                        style="color: rgb(127, 18, 189);">Pending</u>
-                                                                                                    for
-                                                                                                    Supervisor Review
-                                                                                                </strong>
-                                                                                                <%}else
-                                                                                                    if(allpersonallist[0].confirmation=="2"
-                                                                                                    ){%>
-                                                                                                    <div
-                                                                                                        style="font-size: 17px;">
-                                                                                                        Status
-                                                                                                        :<strong><u
-                                                                                                                style="color: green;">Approved</u>
-                                                                                                            after
-                                                                                                            Supervisor
-                                                                                                            Review
-                                                                                                        </strong>
-                                                                                                        <% var
-                                                                                                            reviewdate=new
-                                                                                                            Date(allpersonallist[0].review)%>
-                                                                                                            <div
-                                                                                                                style="font-size: 15px; color: gray;">
-                                                                                                                Reviewed
-                                                                                                                at
-                                                                                                                <%=reviewdate.toLocaleDateString()%>
-                                                                                                                    ,
-                                                                                                                    <%=reviewdate.toLocaleTimeString('en-US')%>
-                                                                                                            </div>
-                                                                                                            <div
-                                                                                                                style="font-size: 15px; color: gray;">
-                                                                                                                Comments:
-                                                                                                                <%var
-                                                                                                                    stringstring=allpersonallist[0].ttbcomments.split("_");%>
-                                                                                                                    <%=stringstring.slice(-1)%>
-                                                                                                            </div>
-                                                                                                            <%}%>
-                                                                                                    </div>
-                                                                                            </div>
+                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                        No Submission will be Accepted
                                                                                     </div>
                                                                                     <%}%>
-                                                                                        <%}else{%>
-                                                                                            <%if(allpersonallist.length==0
-                                                                                                ||
-                                                                                                allpersonallist[0].confirmation=="0"
-                                                                                                ){%>
+
+
+                                                                                        <%}else
+                                                                                            if(allpersonallist[0].confirmation=="3"
+                                                                                            ){%>
+                                                                                            <%if (date==null || today <
+                                                                                                date){%>
                                                                                                 <div
                                                                                                     class="buttons is-right">
                                                                                                     <button
                                                                                                         class="button buttonlogout"
-                                                                                                        onclick="submitttb()">Submit
+                                                                                                        onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Resubmit
+                                                                                                        Student
                                                                                                         Timetable</button>
                                                                                                 </div>
-                                                                                                <%}%>
-
+                                                                                                <%}else{%>
+                                                                                                    <div class="box"
+                                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                                        No Submission
+                                                                                                        will be Accepted
+                                                                                                    </div>
                                                                                                     <%}%>
+                                                                                                        <div class="box"
+                                                                                                            style="background-color: blanchedalmond; text-align: right;">
+                                                                                                            <div
+                                                                                                                style="font-size: 17px;">
+                                                                                                                Status
+                                                                                                                :<strong><u
+                                                                                                                        style="color: orangered;">Rejected</u>
+                                                                                                                    after
+                                                                                                                    Supervisor
+                                                                                                                    Review
+                                                                                                                </strong>
+                                                                                                            </div>
+                                                                                                            <% var
+                                                                                                                reviewdate=new
+                                                                                                                Date(allpersonallist[0].review)%>
+                                                                                                                <div
+                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    Reviewed
+                                                                                                                    at
+                                                                                                                    <%=reviewdate.toLocaleDateString()%>
+                                                                                                                        ,
+                                                                                                                        <%=reviewdate.toLocaleTimeString('en-US')%>
+                                                                                                                </div>
+                                                                                                                <div
+                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    Comments:
+                                                                                                                    <%var
+                                                                                                                        stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                                                                                                                        <%=stringstring.slice(-1)%>
+                                                                                                                </div>
+                                                                                                                <%}%>
+                                                                                                        </div>
+
+
+                                                                                                        <%}else{%>
+                                                                                                            <div class="box"
+                                                                                                                style="background-color: blanchedalmond; text-align: right;">
+                                                                                                                <%if(allpersonallist[0].confirmation=="1"
+                                                                                                                    ){%>
+                                                                                                                    <div
+                                                                                                                        style="font-size:17px;">
+                                                                                                                        Status
+                                                                                                                        :<strong><u
+                                                                                                                                style="color: rgb(127, 18, 189);">Pending</u>
+                                                                                                                            for
+                                                                                                                            Supervisor
+                                                                                                                            Review
+                                                                                                                        </strong>
+                                                                                                                        <%}else
+                                                                                                                            if(allpersonallist[0].confirmation=="2"
+                                                                                                                            ){%>
+                                                                                                                            <div
+                                                                                                                                style="font-size: 17px;">
+                                                                                                                                Status
+                                                                                                                                :<strong><u
+                                                                                                                                        style="color: green;">Approved</u>
+                                                                                                                                    after
+                                                                                                                                    Supervisor
+                                                                                                                                    Review
+                                                                                                                                </strong>
+                                                                                                                                <% var
+                                                                                                                                    reviewdate=new
+                                                                                                                                    Date(allpersonallist[0].review)%>
+                                                                                                                                    <div
+                                                                                                                                        style="font-size: 15px; color: gray;">
+                                                                                                                                        Reviewed
+                                                                                                                                        at
+                                                                                                                                        <%=reviewdate.toLocaleDateString()%>
+                                                                                                                                            ,
+                                                                                                                                            <%=reviewdate.toLocaleTimeString('en-US')%>
+                                                                                                                                    </div>
+                                                                                                                                    <div
+                                                                                                                                        style="font-size: 15px; color: gray;">
+                                                                                                                                        Comments:
+                                                                                                                                        <%var
+                                                                                                                                            stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                                                                                                                                            <%=stringstring.slice(-1)%>
+                                                                                                                                    </div>
+                                                                                                                                    <%}%>
+                                                                                                                            </div>
+                                                                                                                    </div>
+                                                                                                            </div>
+                                                                                                            <%}%>
+                                                                                                                <%}else{%>
+                                                                                                                    <%if(allpersonallist.length==0
+                                                                                                                        ||
+                                                                                                                        allpersonallist[0].confirmation=="0"
+                                                                                                                        ){%>
+                                                                                                                        <div
+                                                                                                                            class="buttons is-right">
+                                                                                                                            <button
+                                                                                                                                class="button buttonlogout"
+                                                                                                                                onclick="submitttb()">Submit
+                                                                                                                                Timetable</button>
+                                                                                                                        </div>
+                                                                                                                        <%}%>
+
+                                                                                                                            <%}%>
 
 
 
-                                                            </div>
+                                                                </div>
                             </div>
                         </div>
                     </div>
@@ -591,7 +608,8 @@
 
                 </div>
                 <script>
-                    async function submitstudentttb(picdata) {
+                    async function submitstudentttb(picdata, date) {
+                        var requestBody = JSON.stringify({ deadline:date });
 
 
                         if (picdata == "0") {
@@ -605,13 +623,16 @@
 
                                 var response = await fetch("/timetable", {
                                     method: "POST",
+                                    body: requestBody,
                                 });
 
                                 if (response.ok) {
                                     alert(" Your Timetable submitted.");
                                     location.reload();
-                                } else {
-                                    alert(response.status + ": " + response.statusText);
+                                } else if (response.status == 402) {
+                                    var msg = await response.json();
+                                    alert(msg);
+                                    location.reload();
                                 }
 
                             }
@@ -619,7 +640,7 @@
 
                     }
 
-                    function savefile(myFile) {
+                    function savefile(myFile, date) {
 
                         var file = myFile.files[0];
                         var filetype = (file.name.split("."))[1]
@@ -629,7 +650,8 @@
                             document.getElementById("uploadfileinput") = "";
 
                         } else {
-                            document.getElementById("appearthebutton").innerHTML ="";
+                            
+                            document.getElementById("appearthebutton").innerHTML = "";
                             var newbutton = document.createElement("button");
                             newbutton.setAttribute("id", "upload");
                             newbutton.setAttribute("class", "button buttonlogout");

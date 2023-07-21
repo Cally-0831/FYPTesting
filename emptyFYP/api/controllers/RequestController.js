@@ -198,20 +198,12 @@ module.exports = {
         var today = new Date();
         var deadline = new Date(req.body.deadlinedate)
         
-        console.log("\n\n\n\n"+today.toLocaleString() +"     "+deadline.toLocaleString());
-
-        console.log(typeof req.body.deadlinedate)
-        console.log(today > req.body.deadlinedate);
-
-        console.log(today > deadline);
-
-
         if (req.session.role == "stu") {
             if (req.body.deadlinedate != null) {
                 if (today > deadline) {
                     return res.status(402).json("Submission Box was closed\n"
-                    +"Current Time:&emsp;&emsp;"+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')
-                    +"\nSubmission Deadline:&emsp;"+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
+                    +"Current Time       :  "+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')+"\n"
+                    +"Submission Deadline:  "+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
                 }
             }
         }

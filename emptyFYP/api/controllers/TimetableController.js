@@ -180,9 +180,9 @@ module.exports = {
                 date = personallist[0].ttbdeadline;
                 if (personallist[0].CID == null) {
                     date = personallist[0].ttbdeadline;
-                    personallist=[];
+                    personallist = [];
                 }
-                
+
                 return res.view('user/timetable', {
                     date: date,
                     allpersonallist: personallist,
@@ -223,6 +223,7 @@ module.exports = {
     },
 
     submitpersonalallclass: async function (req, res) {
+
         let thisistheline;
 
         if (req.session.role == "sup") {
@@ -239,6 +240,18 @@ module.exports = {
 
             });
         } else if (req.session.role == "stu") {
+
+            var today = new Date();
+            var deadline = new Date(req.body.deadline)
+
+
+            if (req.body.deadline != null) {
+                if (today > deadline) {
+                    return res.status(402).json("Submission Box was closed\n"
+                    +"Current Time       :  "+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')+"\n"
+                    +"Submission Deadline:  "+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
+                }
+            }
 
 
             //console.log(req.file('avatar'));
@@ -260,6 +273,8 @@ module.exports = {
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
     upload: function (req, res) {
+        
+        console.log(req);
         req.file('avatar').upload(function (err, files) {
             console.log(files[0].fd);
 
