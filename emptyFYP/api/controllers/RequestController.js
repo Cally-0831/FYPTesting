@@ -20,16 +20,16 @@ module.exports = {
         let thisistheline = "Select requestdeadline from student where sid = \"" + req.session.userid + "\"";
         db.query(thisistheline, (err, results) => {
             try {
-                var today;
+                
                 var deadline ;
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
-                requestlist = json;
-                // console.log('>> stdlist: ', requestlist);
+                deadline = json;
+                 console.log('>> stdlist: ', deadline);
                 
-                return res.ok;
+                return  res.view('user/submitrequest', { theday :deadline });
             } catch (err) {
                 console.log("sth happened here");
 

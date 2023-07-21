@@ -10,57 +10,80 @@
 
         <% if (req.session.role=="stu" ){%>
             <form name="therequest" action="/submitrequest" method="post"
-                onsubmit="submitstudetrequest(this);return false;">
+                onsubmit="submitstudetrequest(this,'<%=theday[0].requestdeadline%>');return false;">
+                <% var date=new Date(theday[0].requestdeadline)%>
+
+                    <article class="message is-warning">
+                        <div class="message-header" style="font-size: 19px; color: red;">
+                            <p>Submission Deadline for Request Submission
+                                <br>
+                                <%if(theday[0].requestdeadline!=null){%>
+                                    <%=date.toLocaleDateString()%> <%=date.toLocaleTimeString('en-US')%>
+                                            <%}%>
+
+                            </p>
+                        </div>
+                        <div class="message-body">
+                            Please be aware that Presentation of your FYP also count in your personal
+                            marks.
+                            <br><br>
+                            Absence due to reasons like Part-time job are unacceptable.
+                            <br><br>
+                            Students are required to submit <u>vaild proof</u> to their supervisor when submitting
+                            request
+                            form.
+                            <br><br>
+                            <u>No submissions will be accecpted after the due date.</u>
+                        </div>
+                    </article>
 
 
-                <article class="message is-warning">
-                    <div class="message-header">
-                        <p>Remarks</p>
-
-                    </div>
-                    <div class="message-body">
-                        Please be aware that Presentation of your FYP also count in your personal
-                        marks.
-                        <br><br>
-                        Absence due to reasons like Part-time job are unacceptable.
-                        <br><br>
-                        Students are required to submit vaild prove to their supervisor when submitting request form.
-                    </div>
-                </article>
-
-
-                <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
-                <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required
-                    style="font-size: 15px;">
-                &nbsp;
-                <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
-                    onclick="dontshowtime()">
-                <label for="notokday_wholeday">Whole Day</label>
-                <!--
+                    <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
+                    <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required
+                        style="font-size: 15px;">
+                    &nbsp;
+                    <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
+                        onclick="dontshowtime()">
+                    <label for="notokday_wholeday">Whole Day</label>
+                    <!--
         <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
         -->
-                <br><br>
-                <div id="showthetime">
-                    <label for="starttime" style="font-size: 20px;">Start time&emsp;:&emsp;&emsp;</label>
-                    <input type="time" id="starttime" name="starttime" style="font-size: 20px;" required>
+                    <br><br>
+                    <div id="showthetime">
+                        <label for="starttime" style="font-size: 20px;">Start time&emsp;:&emsp;&emsp;</label>
+                        <input type="time" id="starttime" name="starttime" style="font-size: 20px;" required>
+                        <br>
+                        <label for="endtime" style="font-size: 20px;">End time&emsp;&nbsp;:&emsp;&emsp;</label>
+                        <input type="time" id="endtime" name="endtime" style="font-size: 20px;" required>
+                    </div>
                     <br>
-                    <label for="endtime" style="font-size: 20px;">End time&emsp;&nbsp;:&emsp;&emsp;</label>
-                    <input type="time" id="endtime" name="endtime" style="font-size: 20px;" required>
-                </div>
-                <br>
 
-                <label for="reason" style="font-size: 20px;">Reason:&emsp;&emsp;</label>
-                <input type="text" id="reason" name="reason" placeholder="Please describle your difficulties"
-                    style="width: 100%; height: 200px;" required>
+                    <label for="reason" style="font-size: 20px;">Reason:&emsp;&emsp;</label>
+                    <input type="text" id="reason" name="reason" placeholder="Please describle your difficulties"
+                        style="width: 100%; height: 200px;" required>
 
 
-                <br><br>
-                <div id="orgformbutton " class="buttons is-right">
-                    <button class="button buttonlogout" type="submit is-success">Submit</button>
-                </div>
+                    <br><br>
+
+                    <%var today=new Date().toJSON()%>
+                        <%console.log(today+"\n"+theday[0].requestdeadline)%>
+                            <%if (theday[0].requestdeadline!=null){%>
+                                <% if(today < theday[0].requestdeadline){%>
+                                    <div id="orgformbutton " class="buttons is-right">
+                                        <button class="button buttonlogout" type="submit is-success">Submit</button>
+                                    </div>
+
+                                    <%}else{%>
+                                        <div id="row" style="text-align: center;">
+                                            <box style="font-size: 20px;font-weight: bold; color : red;">Not Accepting
+                                                Submission Anymore</box>
+                                        </div>
+                                        <%}%>
+                                            <%}%>
+
 
             </form>
-            
+
 
             <%}else if(req.session.role=="sup" ) {%>
 
@@ -94,7 +117,7 @@
                 </form>
 
                 <%}%>
-                  
+
     </div>
     <div class="column"></div>
 </div>
@@ -102,7 +125,7 @@
 
 <script>
 
-    
+
     var checkcheck = 0;
     var checked = false;
     function dontshowtime() {
@@ -125,7 +148,7 @@
     }
 
     async function submitrequest(formElem) {
-        console.log("!!!!!!!!!!!!!!!!")
+
 
         if (!checked) {
             var startstart = document.getElementById("starttime").value;

@@ -212,10 +212,17 @@
     }
 
     async function submitdeadlineforttb(command) {
+        
+        var deadlinedate = document.getElementById("deadlineforttb").value;
+        var deadlinetime = document.getElementById("deadlineforttbtime").value;
+       
+        if(deadlinedate == null || deadlinedate == ""||deadlinetime == null||deadlinetime == ""){
+            return alert("Please input BOTH deadline date and time");
+        }
 
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
-        var settledate = new Date(document.getElementById("deadlineforttb").value + " " + document.getElementById("deadlineforttbtime").value);
+        var settledate = new Date(deadlinedate + " " + deadlinetime);
 
         if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
 
@@ -254,9 +261,16 @@
     }
 
     async function submitdeadlineforrequest(command) {
+        var deadlinedate = document.getElementById("deadlineforrequest").value;
+        var deadlinetime = document.getElementById("deadlineforrequesttime").value;
+       
+        if(deadlinedate == null || deadlinedate == ""||deadlinetime == null||deadlinetime == ""){
+            return alert("Please input BOTH deadline date and time");
+        }
+
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
-        var settledate = new Date(document.getElementById("deadlineforrequest").value + " " + document.getElementById("deadlineforrequesttime").value);
+        var settledate = new Date(deadlinedate + " " + deadlinetime);
 
         if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
         var r = confirm("Please Confirm Your Setting for Timetable Submission\n\n"
@@ -294,11 +308,18 @@
     }
 
     async function submitdeadlineforreleaseschdule(command) {
+        var deadlinedate = document.getElementById("deadlineforreleaseschdule").value;
+        var deadlinetime = document.getElementById("deadlineforreleaseschduletime").value;
+       
+        if(deadlinedate == null || deadlinedate == ""||deadlinetime == null||deadlinetime == ""){
+            return alert("Please input BOTH deadline date and time");
+        }
+
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
-        var settledate = new Date(document.getElementById("deadlineforreleaseschdule").value + " " + document.getElementById("deadlineforreleaseschduletime").value);
+        var settledate = new Date(deadlinedate + " " + deadlinetime);
 
-        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
+              if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlies than today.") }
         var r = confirm("Please Confirm Your Setting for Presentation Schdeule Release Date\n\n"
             + "Deadline :       " + document.getElementById("deadlineforreleaseschdule").value + "\n"
             + "Time         :      " + document.getElementById("deadlineforreleaseschduletime").value)

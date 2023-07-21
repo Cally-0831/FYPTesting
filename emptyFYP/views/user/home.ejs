@@ -8,7 +8,7 @@
                         <img src="images\home\notice.jpg" class="gallery_img">
                     </a>
                 </div>
-               
+
                 <div class="imgcolumn">
                     <a href="/timetable">
                         <img src="images\home\ttb.jpg" class="gallery_img">
@@ -128,9 +128,17 @@
 
             <%}%>
 
-            <script>
-                async function checkrequestdeadline(rolerole){
+                <script>
+                    async function checkrequestdeadline(rolerole) {
 
+                        var response = await fetch("/home", {
+                            method: "GET",
+                            });
+
+                        if (response.ok) {
+
+                            location.assign("/submitrequest");
+                        } 
                     
                 }
-            </script>
+                </script>
