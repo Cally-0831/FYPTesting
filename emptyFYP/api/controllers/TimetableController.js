@@ -102,7 +102,7 @@ module.exports = {
             thisistheline = "SELECT CSecCode FROM allclass "
                 + "WHERE CID like \"" + depcode[0] + "_" + "10" + "" + getlecturesection + "\%\" or CID Like \"" + depcode[0] + "_" + "10\%\" ;";
         }
-        //console.log(thisistheline);
+        console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             var string = JSON.stringify(results);
             var json = JSON.parse(string);
@@ -117,7 +117,8 @@ module.exports = {
                     }
                 }
             }
-            res.json(json);
+            json = array;
+          return  res.json(json);
 
         })
 
@@ -274,7 +275,7 @@ module.exports = {
     },
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
-    upload: function (req, res) {
+    upload: function (req, res) {  
         let thisistheline;
         let today = new Date();
 
