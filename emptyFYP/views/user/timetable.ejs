@@ -1,7 +1,7 @@
 <div>
 
     <!---Empty case / init case == no any class inputted-->
-    <%console.log("allpersonallist.length "+allpersonallist.length)%>
+    
     <% var datedate=new Date(date)%> 
     <%var today=new Date().toJSON()%>
     <% if(allpersonallist.length==0 || allpersonallist[0].confirmation==" 0" ){%>
@@ -721,7 +721,7 @@
                     }
 
                     async function checkcheck() {
-                        console.log("get to here");
+                    //    console.log("get to here");
                         var response = await fetch("/timetable/deadline", {
                             method: "POST",
                         });
