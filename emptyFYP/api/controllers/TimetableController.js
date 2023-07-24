@@ -118,36 +118,157 @@ module.exports = {
                 }
             }
             json = array;
-          return  res.json(json);
+            return res.json(json);
 
         })
 
     },
 
     submitclass: async function (req, res) {
+        console.log("\n\n\n\n\n\n\nbefore submit to personal class list")
         console.log(req.body)
         let thisistheline = "";
-        if (req.body.noclassenrolled == "true") {
-            thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\");\n";
-        } else {
-            if (req.body.classlabsection != undefined) {
+        let thisistheline2 = "";
+        let thisistheline3 = "";
+        let thisistheline4 = "";
+        var thisclassinfo;
+        var havethis;
+        var codecode = 200;
+        var msg = "";
 
-                thisistheline = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
-            } else if (req.body.classsection != "") {
-                thisistheline = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
-            }
+
+        if (req.body.classlabsection == undefined) {
+            thisistheline = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\"";
+
         }
-        console.log(thisistheline);
+        if (req.body.classsection == undefined) {
+            thisistheline = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
+        }
 
-        db.query(thisistheline, function (err, result) {
-            if (err) {
+        console.log("find classinfo      " + thisistheline);
+        db.query(thisistheline, function (err1, result1) {
+            try {
+                var string = JSON.stringify(result1);
+                var json = JSON.parse(string);
+                thisclassinfo = json;
+                console.log(">>thisclassinfo\n");
+                console.log(thisclassinfo)
+                if (req.session.role == "sup") {
+                    thisistheline2 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
 
-                res.status(401).json("Error happened when excuting : " + thisistheline);
+                } else {
+                    thisistheline2 = "select * from allstudenttakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+                }
+                console.log("\n\n\n\n\n\n\nfind already inputted      " + thisistheline2);
+                db.query(thisistheline2, function (err2, result2) {
+                    try {
+                        string = JSON.stringify(result2);
+                        json = JSON.parse(string);
+                        havethis = json;
+                        console.log(">>havethis\n")
+                        console.log(havethis.length);
+                        if (havethis.length > 0) {
 
-            };
-            console.log("1 record inserted");
+                            codecode = 401;
+                            msg = "Duplicate with exitising input";
+                             return res.status(codecode).json(msg);
+
+                        } else {
+                            if (req.session.role == "sup") {
+                                thisistheline3 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+
+                            } else {
+                                thisistheline3 = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[0].weekdays + "\" and (\"" + thisclassinfo[0].startTime + "\" between startTime and endtime );"
+                            }
+                            console.log("\n\n\n\n\n>>thisistheline3         " + thisistheline3)
+                            db.query(thisistheline3, function (err3, result3) {
+                                string = JSON.stringify(result3);
+                                json = JSON.parse(string);
+                                var colipsethis = json;
+                                console.log(colipsethis)
+                                if (colipsethis.length == 0) {
+                                    if (req.body.classlabsection != undefined) {
+
+                                        thisistheline4 = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+                                    } else if (req.body.classsection != "") {
+                                        thisistheline4 = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+                                    }
+                                    console.log("\n\n\n\n\n>>thisistheline4    " + thisistheline4)
+                                    db.query(thisistheline4, function (err4, result4) {
+                                        try {
+                                            console.log("1 record inserted");
+
+                                            res.ok();
+                                        } catch (err4) {
+                                            codecode = 401;
+                                            msg = "Cannot insert";
+                                            return res.status(codecode).json(msg);
+                                        }
+
+                                    });
+
+                                } else {
+                                    codecode = 401;
+                                    msg = "Please review your input, there is a coplision between your input and your saved class";
+                                    return res.status(codecode).json(msg);
+                                }
+
+                            })
+                        }
+                    } catch (err2) {
+                        codecode = 401;
+                        msg = havethis[0].CID + " has been inputted into your personal class already"
+                        return res.status(codecode).json(msg);
+                    }
+
+
+                })
+            } catch (err1) {
+                codecode = 401;
+                msg = havethis[0].CID + " found in your personal class already"
+                return res.status(codecode).json(msg);
+            }
+
         });
-        return res.json("ok");
+
+
+
+        /** 
+                if (personallist.length > 0) {
+                    console.log("have comlipse case")
+                } else {
+        
+                    console.log("look gd look gd")
+                    if (req.body.noclassenrolled == "true") {
+                        thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\");\n";
+                    } else {
+                        if (req.body.classlabsection != undefined) {
+        
+                            thisistheline = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+                        } else if (req.body.classsection != "") {
+                            thisistheline = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+                        }
+                    }
+                    console.log(thisistheline);
+        
+                    db.query(thisistheline, function (err, result) {
+                        if (err) {
+        
+                            res.status(401).json("Error happened when excuting : " + thisistheline);
+        
+                        };
+                        console.log("1 record inserted");
+                    });
+                    return res.json("ok");
+        
+                }
+        **/
+        return res.status(codecode).json(msg);
+
+
+
+
+
     },
     submitempty: async function (req, res) {
 
@@ -179,7 +300,7 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                console.log(personallist)
+                //console.log(personallist)
                 date = personallist[0].ttbdeadline;
                 if (personallist[0].CID == null) {
                     date = personallist[0].ttbdeadline;
@@ -275,7 +396,7 @@ module.exports = {
     },
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
-    upload: function (req, res) {  
+    upload: function (req, res) {
         let thisistheline;
         let today = new Date();
 
@@ -297,8 +418,8 @@ module.exports = {
                         var msg = "Submission Box was closed\n"
                             + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
                             + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us');
-                            res.append('alert', msg);
-                            return res.redirect("../timetable");
+                        res.append('alert', msg);
+                        return res.redirect("../timetable");
                     }
                 }
                 console.log(req);
@@ -454,8 +575,8 @@ module.exports = {
                     }
 
                 }
-                console.log("just check")
-                return res.ok;
+
+                return res.ok();
             } catch (err) {
                 console.log('checkdeadlinettb MySQL Problem' + "    " + error);
             }
