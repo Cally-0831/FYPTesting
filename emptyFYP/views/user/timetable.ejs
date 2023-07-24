@@ -38,12 +38,12 @@
                                     &&allpersonallist[0].confirmation !="2" )){%>
                                     <%if ((date==null) || (date !=null && today < date)){%>
                                         <div class="buttons">
-                                            <a href = "timetable/submitttb">
+                                            <a href="timetable/submitttb">
                                                 <button class="button buttonlogout" id="addclass"
-                                                onclick="checkdeadline('<%=date%>')">Add Class</button>
+                                                    onclick="checkdeadline('<%=date%>')">Add Class</button>
                                         </div>
-                                            </a>
-                                            
+                                        </a>
+
                                         <%}%>
                                             <%}%>
                             </div>
@@ -59,7 +59,7 @@
                                                             Proof:&emsp;&emsp;&emsp;</label>
                                                         <input type="file" id="uploadfileinput" name="avatar"
                                                             multiple="multiple" accept="image/*"
-                                                            onchange="savefile(this,'<%=date%>')">
+                                                            onchange="savefile(this)">
                                                     </div>
                                                     <div class="column is-onethird" id="appearthebutton">
                                                     </div>
@@ -641,7 +641,7 @@
 
                     }
 
-                    function savefile(myFile, date) {
+                    function savefile(myFile) {
 
                         var file = myFile.files[0];
                         var filetype = (file.name.split("."))[1]
@@ -656,6 +656,7 @@
                             var newbutton = document.createElement("button");
                             newbutton.setAttribute("id", "upload");
                             newbutton.setAttribute("class", "button buttonlogout");
+                            newbutton.setAttribute("onclick", "checkcheck()");
                             newbutton.innerText = "Upload"
                             document.getElementById("appearthebutton").appendChild(newbutton);
                         }
@@ -719,5 +720,17 @@
                         }
                     }
 
-                    
+                    async function checkcheck() {
+                        console.log("get to here");
+                        var response = await fetch("/timetable/deadline", {
+                            method: "POST",
+                        });
+                        if (!response.ok) {
+                            var msg = await response.json();
+                            alert(msg);
+                            location.reload();
+                        }
+                    }
+
+
                 </script>

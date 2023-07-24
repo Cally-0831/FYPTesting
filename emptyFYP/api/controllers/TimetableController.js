@@ -275,39 +275,106 @@ module.exports = {
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
     upload: function (req, res) {
+        let thisistheline;
+        let today = new Date();
 
-        console.log(req);
-        req.file('avatar').upload(function (err, files) {
-            console.log(files[0].fd);
 
-            const fs = require('fs');
+        thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
+        console.log(thisistheline);
 
-            fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                //    console.log(data);
+        db.query(thisistheline, function (error, result) {
+            try {
 
-                //console.log(req.file('avatar'));
-                thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
-                //console.log(thisistheline);
-                db.query(thisistheline, function (error, result) {
-                    try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                deadline = new Date(json[0].ttbdeadline);
 
-                        console.log("Submitted")
-                        return res.redirect("../timetable");
-                    } catch (err) {
-                        console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                if (json[0].ttbdeadline != null) {
+                    if (today > deadline) {
+                        console.log("overtime !!!!!")
+
+                        var msg = "Submission Box was closed\n"
+                            + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
+                            + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us');
+                            res.append('alert', msg);
+                            return res.redirect("../timetable");
                     }
+                }
+                console.log(req);
+                req.file('avatar').upload(function (err, files) {
+                    console.log(files[0].fd);
 
+                    const fs = require('fs');
+
+                    fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        //    console.log(data);
+
+                        //console.log(req.file('avatar'));
+                        thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
+                        //console.log(thisistheline);
+                        db.query(thisistheline, function (error, result) {
+                            try {
+
+                                console.log("Submitted")
+                                return res.redirect("../timetable");
+                            } catch (err) {
+                                console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                            }
+
+                        });
+                    });
+                    fs.unlink(files[0].fd, function (err) {
+                        if (err) return console.log(err); // handle error as you wish
+                        // file deleted... continue your logic
+                    });
                 });
-            });
-            fs.unlink(files[0].fd, function (err) {
-                if (err) return console.log(err); // handle error as you wish
-                // file deleted... continue your logic
-            });
+
+
+            } catch (err) {
+                console.log('checkdeadlinettb MySQL Problem' + "    " + error);
+            }
+
         });
+
+
+        /**
+                console.log(req);
+                req.file('avatar').upload(function (err, files) {
+                    console.log(files[0].fd);
+        
+                    const fs = require('fs');
+        
+                    fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        //    console.log(data);
+        
+                        //console.log(req.file('avatar'));
+                        thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
+                        //console.log(thisistheline);
+                        db.query(thisistheline, function (error, result) {
+                            try {
+        
+                                console.log("Submitted")
+                                return res.redirect("../timetable");
+                            } catch (err) {
+                                console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                            }
+        
+                        });
+                    });
+                    fs.unlink(files[0].fd, function (err) {
+                        if (err) return console.log(err); // handle error as you wish
+                        // file deleted... continue your logic
+                    });
+                });
+                **/
 
     },
 
@@ -380,11 +447,11 @@ module.exports = {
                         return res.status(401).json("Submission Box was closed\n"
                             + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
                             + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us'));
-                    }else{
-                        
+                    } else {
+
                         return res.ok()
                     }
-                    
+
                 }
                 console.log("just check")
                 return res.ok;
