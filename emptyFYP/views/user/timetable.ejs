@@ -38,11 +38,12 @@
                                     &&allpersonallist[0].confirmation !="2" )){%>
                                     <%if ((date==null) || (date !=null && today < date)){%>
                                         <div class="buttons">
-                                            <a href="/timetable/submitttb">
+                                            <a href = "timetable/submitttb">
                                                 <button class="button buttonlogout" id="addclass"
-                                                    onclick="checkdeadline('<%=date%>')">Add Class</button>
-                                            </a>
+                                                onclick="checkdeadline('<%=date%>')">Add Class</button>
                                         </div>
+                                            </a>
+                                            
                                         <%}%>
                                             <%}%>
                             </div>
@@ -609,7 +610,7 @@
                 </div>
                 <script>
                     async function submitstudentttb(picdata, date) {
-                        var requestBody = JSON.stringify({ deadline:date });
+                        var requestBody = JSON.stringify({ deadline: date });
 
 
                         if (picdata == "0") {
@@ -650,7 +651,7 @@
                             document.getElementById("uploadfileinput") = "";
 
                         } else {
-                            
+
                             document.getElementById("appearthebutton").innerHTML = "";
                             var newbutton = document.createElement("button");
                             newbutton.setAttribute("id", "upload");
@@ -717,4 +718,6 @@
 
                         }
                     }
+
+                    
                 </script>

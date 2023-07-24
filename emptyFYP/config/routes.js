@@ -39,10 +39,12 @@ module.exports.routes = {
   'GET /notice/createnewnotice/auto': "NoticeListController.viewnoticepage",
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
   
-
+  
   'GET /timetable/submitttb': "TimetableController.getallclass",
+ //'GET /timetable/submitttb/': "TimetableController.checkdeadline",
   'GET /timetable/submitttb/get_data': "TimetableController.getotherfield",
   'POST /timetable/submitttb': "TimetableController.submitclass",
+  'POST /timetable/submitttb/deadline': "TimetableController.checkdeadline",
   'POST /timetable/submitempty': "TimetableController.submitempty",
 
   'GET /timetable': "TimetableController.getpersonalallclass",

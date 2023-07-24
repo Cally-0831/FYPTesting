@@ -53,7 +53,8 @@ module.exports = {
 
     getallclass: async function (req, res) {
 
-        let thisistheline = "select distinct CDept from allclass";
+
+        thisistheline = "select distinct CDept from allclass";
 
         db.query(thisistheline, (err, results) => {
             try {
@@ -74,6 +75,7 @@ module.exports = {
 
 
         });
+
 
     },
 
@@ -248,8 +250,8 @@ module.exports = {
             if (req.body.deadline != null) {
                 if (today > deadline) {
                     return res.status(402).json("Submission Box was closed\n"
-                    +"Current Time       :  "+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')+"\n"
-                    +"Submission Deadline:  "+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
+                        + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
+                        + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us'));
                 }
             }
 
@@ -273,7 +275,7 @@ module.exports = {
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
     upload: function (req, res) {
-        
+
         console.log(req);
         req.file('avatar').upload(function (err, files) {
             console.log(files[0].fd);
@@ -358,6 +360,39 @@ module.exports = {
         });
     },
 
+    checkdeadline: async function (req, res) {
+        let thisistheline;
+        let today = new Date();
 
+
+        thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
+        console.log(thisistheline);
+        db.query(thisistheline, function (error, result) {
+            try {
+
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                deadline = new Date(json[0].ttbdeadline);
+
+                if (json[0].ttbdeadline != null) {
+                    if (today > deadline) {
+                        console.log("overtime !!!!!")
+                        return res.status(401).json("Submission Box was closed\n"
+                            + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
+                            + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us'));
+                    }else{
+                        
+                        return res.ok()
+                    }
+                    
+                }
+                console.log("just check")
+                return res.ok;
+            } catch (err) {
+                console.log('checkdeadlinettb MySQL Problem' + "    " + error);
+            }
+
+        });
+    }
 
 }

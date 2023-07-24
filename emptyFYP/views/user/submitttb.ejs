@@ -83,25 +83,60 @@
         }
 
 
-        try {
-            var response = await fetch(formElem.action, {
-                method: formElem.method,
-                body: requestbody
-            });
-            if (response.ok) {
 
-                location.assign("/timetable");
+        var response = await fetch("/timetable/submitttb/deadline", {
+            method: "POST",
+        });
+        console.log("stoped here ")
+        if (response.ok) {
+            console.log("get a ok from check deadline")
+            var response2 = await fetch(formElem.action, {
+                    method: formElem.method,
+                    body: requestbody
+                });
+                console.log(response2);
+                if (response2.ok) {
 
-            } else if (response.status == 401) {
-                var msg = await response.json();
-                alert(msg);
-            } else {
-                alert(response.statusTest);
-            }
+                    location.assign("/timetable");
 
-        } catch (error) {
-            console.log("Error happened   " + error);
+                } else if (response2.status == 401) {
+                    var msg = await response2.json();
+                    alert(msg);
+                } else {
+                    alert(response2.statusTest);
+                }
+
+
+        } else if (response.status == 401) {
+            var msg = await response.json();
+
+            alert(msg);
+            location.assign("../timetable");
+        } else {
+            alert(response.statusTest);
         }
+
+        /**
+                try {
+                    var response = await fetch(formElem.action, {
+                        method: formElem.method,
+                        body: requestbody
+                    });
+                    if (response.ok) {
+        
+                        location.assign("/timetable");
+        
+                    } else if (response.status == 401) {
+                        var msg = await response.json();
+                        alert(msg);
+                    } else {
+                        alert(response.statusTest);
+                    }
+        
+                } catch (error) {
+                    console.log("Error happened   " + error);
+                }
+                **/
     }
 
     function _(element) {

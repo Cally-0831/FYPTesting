@@ -201,7 +201,7 @@ module.exports = {
         if (req.session.role == "stu") {
             if (req.body.deadlinedate != null) {
                 if (today > deadline) {
-                    return res.status(402).json("Submission Box was closed\n"
+                    return res.status(401).json("Submission Box was closed\n"
                     +"Current Time       :  "+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')+"\n"
                     +"Submission Deadline:  "+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
                 }

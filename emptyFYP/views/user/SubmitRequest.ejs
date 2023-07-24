@@ -215,7 +215,7 @@
                 alert("Submission success"+"\n\nPlease remember to upload valid proof\n"+"Or else your submission will not be considered.");
                 location.assign("/checkrequest");
 
-            } else if (response.status == 402) {
+            } else if (response.status == 401) {
                 var msg = await response.json();
                 alert(msg);
                 return location.reload();
