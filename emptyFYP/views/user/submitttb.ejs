@@ -96,14 +96,16 @@
                 });
                 console.log("!@#$%!@#$%!@#$!@#$!@$            "+response2.status);
                 if (response2.ok) {
-
-                   // location.assign("/timetable");
+                    alert("Inserted");
+                   location.assign("/timetable");
 
                 } else if (response2.status == 401) {
                     var msg = await response2.json();
                     alert(msg);
+                    location.reload();
                 } else {
                     alert(response2.statusTest);
+                    location.reload();
                 }
 
 

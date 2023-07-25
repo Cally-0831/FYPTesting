@@ -17,6 +17,7 @@ db.connect(async (err) => {
 
 const fs = require('fs');
 const { get } = require('https');
+const { Console } = require('console');
 
 
 
@@ -39,7 +40,9 @@ const PORT = sails.config.PORT || 8080;
 app.listen(PORT);
  * 
  */
-var filefile;
+
+
+
 
 module.exports = {
     allDeptlist: {},
@@ -125,16 +128,17 @@ module.exports = {
     },
 
     submitclass: async function (req, res) {
-        console.log("\n\n\n\n\n\n\nbefore submit to personal class list")
-        console.log(req.body)
+        
         let thisistheline = "";
         let thisistheline2 = "";
         let thisistheline3 = "";
-        let thisistheline4 = "";
-        var thisclassinfo;
-        var havethis;
-        var codecode = 200;
-        var msg = "";
+       
+        let thisclassinfo;
+        let havethis;
+        let timecrash;
+        let codecode = 200;
+        let msg = "";
+       
 
 
         if (req.body.classlabsection == undefined) {
@@ -145,7 +149,105 @@ module.exports = {
             thisistheline = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
         }
 
-        console.log("find classinfo      " + thisistheline);
+       
+        db.query(thisistheline, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                thisclassinfo = json;
+                
+                if (req.session.role == "sup") {
+                    thisistheline2 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+
+                } else {
+                    thisistheline2 = "select * from allstudenttakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+                }
+
+                db.query(thisistheline2, function (err, result) {
+                    try {
+                        var string = JSON.stringify(result);
+                        var json = JSON.parse(string);
+                        havethis = json;
+                    
+                        if (havethis.length > 0) {
+                            codecode = 401;
+                            msg = "This class has already been inputed before"
+                            return res.status(codecode).json(msg);
+                        } else {
+                            if (req.session.role == "sup") {
+                                thisistheline3 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+
+                            } else {
+                                thisistheline3 = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[0].weekdays + "\" and (\"" + thisclassinfo[0].startTime + "\" between startTime and endtime );"
+                            }
+                            db.query(thisistheline3, function (err, result) {
+                                try {
+                                    var string = JSON.stringify(result);
+                                    var json = JSON.parse(string);
+                                    timecrash = json;
+                                     if (timecrash.length > 0) {
+                                        codecode = 401;
+                                        msg = "Please Review your input since there was a time crash between your inputs"
+                                        return res.status(codecode).json(msg);
+                                    } else {
+                                      
+                                        db.query(thisistheline3, function (err, result) {
+                                            try {
+
+                                                if (req.body.noclassenrolled == "true") {
+                                                    thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\");\n";
+                                                } else {
+                                                    if (req.body.classlabsection != undefined) {
+
+                                                        thisistheline = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+                                                    } else if (req.body.classsection != "") {
+                                                        thisistheline = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+                                                    }
+
+                                                }
+
+                                                db.query(thisistheline, function (err, result) {
+                                                    if (err) {
+                                                        codecode = 401;
+                                                        msg = "Probelm existed when inserting."
+                                                        return res.status(codecode).json(msg);
+                                                    } else {
+                                                        return res.ok();
+                                                    }
+
+                                                })
+
+
+
+                                            } catch (err) {
+                                                console.log("insert have err     " + err)
+                                            }
+                                        })
+                                    }
+                                } catch (err) {
+                                    console.log("find time crash have err     " + err)
+                                }
+
+                            })
+
+                        }
+                    } catch (err) {
+                        console.log("find class in personal list have err     " + err)
+                    }
+
+                })
+            } catch (err) {
+                console.log("get this classinfo have err     " + err)
+            }
+
+        })
+
+
+
+
+
+
+        /** 
         db.query(thisistheline, function (err1, result1) {
             try {
                 var string = JSON.stringify(result1);
@@ -231,8 +333,8 @@ module.exports = {
 
         });
 
-
-
+console.log("just check      "+ thisclassinfo[0])
+**/
         /** 
                 if (personallist.length > 0) {
                     console.log("have comlipse case")
@@ -263,7 +365,7 @@ module.exports = {
         
                 }
         **/
-        return res.status(codecode).json(msg);
+        //    return res.status(codecode).json(msg);
 
 
 
