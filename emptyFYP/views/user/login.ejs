@@ -8,19 +8,20 @@
 
 <div class="welcome">Welcome to FYP Schdeuling System</div>
 <br><br>
-<div>
-    <button class="button" id="autoinputsup" onclick="inputsup()">SUPER1</button>
-    <button class="button" id="autoinputsup" onclick="inputsup2()">SUPER2</button>
-    <button class="button" id="autoinputstd" onclick="inputstd()">Apple</button>
-    <button class="button" id="autoinputstd" onclick="inputstd2()">Cathy</button>
-    <button class="button" id="autoinputstd" onclick="inputstd3()">Emily</button>
-    <button class="button" id="autoinputadm" onclick="inputadm()">Admin</button>
+<div class="buttons is-centered">
+    <button class="button button-64" id="autoinputsup" onclick="inputsup()">SUPER1</button>
+    <button class="button button-64" id="autoinputsup" onclick="inputsup2()">SUPER2</button>
+    <button class="button button-64" id="autoinputstd" onclick="inputstd()">Apple</button>
+    <button class="button button-64" id="autoinputstd" onclick="inputstd2()">Cathy</button>
+    <button class="button button-64" id="autoinputstd" onclick="inputstd3()">Emily</button>
+    <button class="button button-64" id="autoinputadm" onclick="inputadm()">Admin</button>
 </div>
 
 <br><br>
 
-<div class="columns is-centered column-big ">
-    <div class="column">
+<div class="columns column-big is-mobile ">
+    <div class="column is-one-fifth"></div>
+    <div class="column is-three-fifths">
         <div class="rows">
             <div class="row">
                 <div class="title is-3">Login</div>
@@ -29,13 +30,16 @@
             <div class="row">
                 <form action="/user/login" method="post" onsubmit="submitform(this);return false;">
                     <label for="username" class="subtitle is-4">Username</label>
-                    <input type="text" class="input is-rounded is-half" style="width :500px"
-                        placeholder="Enter Username (SID/TID)" id="username" name="username" value=""><br>
+                    <input type="text" class="input is-rounded is-half" placeholder="Enter Username (SID/TID)"
+                        id="username" name="username" value=""><br>
                     <br>
                     <label for="pw" class="subtitle is-4">Password </label>
-                    <input type="password" class="input is-rounded is-half" style="width :500px"
-                        placeholder="Enter Password" id="pw" name="pw" value=""><br><br>
-                    <button class="button" type="submit is-success">Login</button>
+                    <input type="password" class="input is-rounded is-half" placeholder="Enter Password" id="pw"
+                        name="pw" value=""><br><br>
+                    <div class="buttons is-centered">
+                        <button class="button button-64" type="submit is-success">Login</button>
+                    </div>
+
                 </form>
 
             </div>
