@@ -27,11 +27,22 @@ module.exports = {
         let thisistheline = "";
 
         if (req.body.command == "insert") {
+            if (req.body.type == 3) {
+                thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,startdate,starttime,enddate,endtime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.startdate + "\",\"" + req.body.starttime + "\",\"" + req.body.enddate + "\",\"" + req.body.endtime + "\")"
+            } else {
+                thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
 
-            thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
+            }
+
             console.log(thisistheline);
-        }else if(req.body.command =="update"){
-            thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\""+req.body.date+"\" , deadlinetime=\""+req.body.time+"\",announcetime=null where creator=\""+req.session.userid+"\" and typeofsetting=\""+req.body.type+"\" "
+        } else if (req.body.command == "update") {
+            if (req.body.type == 3) {
+                thisistheline = "update allsupersetting set lastUpdate = now(), startdate =\"" + req.body.startdate + "\" , starttime=\"" + req.body.starttime + "\", enddate =\"" + req.body.enddate + "\" , endtime=\"" + req.body.endtime + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
+
+            } else {
+                thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\"" + req.body.date + "\" , deadlinetime=\"" + req.body.time + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
+
+            }
             console.log(thisistheline);
         }
 
@@ -68,5 +79,5 @@ module.exports = {
 
         });
     },
-   
+
 }

@@ -139,6 +139,16 @@ module.exports = {
                 + "\nSubmission without valid proof will not be reviewd by Supervisor."
                 + "\n\nReasons like part-time job will not be approved."
         } else if (req.query.type == 2) {
+            title = "Presentation Period Date";
+            content = "The presentation period date has been set as follows:\n"
+                + "From : " + req.query.startdate+" , " + req.query.starttime+"\n"
+                + "To   : " + req.query.enddate+" , " + req.query.endtime
+                + "\n\nStudents should start applying their unavaliable timeslots for the presentation period."
+                + "\nReasons like parttime job will not be acceptable."
+                + "\n\nPlease be reminded that to provide valid proof to your supervisor when submitting the request,"
+                + "\nor else the request will not be consider."
+
+        }else if (req.query.type == 3) {
             title = "Presentation Schdeule Release Date";
             content = "The release date for presentation schdeule has been set as follows:\n"
                 + "Date: " + req.query.date

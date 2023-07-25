@@ -18,6 +18,8 @@ states		varchar(20) default "ACTIVE",
 errortime	int default 0,
 ttbsubmission  varchar(20) default null,
 ttbcomments varchar(200) default "",
+ttbdeadline timestamp default null,
+requestdeadline timestamp default null,
 PRIMARY key (sid));
 
 create table supervisor(
@@ -137,6 +139,10 @@ CreateDate  timestamp ,
 typeofsetting integer,
 deadlinedate date,
 deadlinetime time,
+startdate date,
+starttime time,
+enddate date,
+endtime time,
 LastUpdate timestamp,
 Announcetime timestamp default null,
 primary key (STID)
@@ -197,8 +203,22 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
   declare stringstring  varchar(10);
   declare timetime timestamp;
   declare idid varchar(15);
+  declare thesetting integer;
+  declare deaddate date;
+  declare deadtime time;
+  
   set idid = SUBSTRING_INDEX(new.nid, "nid", -1);
   update allsupersetting set Announcetime = now() where stid = idid;
+  select typeofsetting,deadlinedate,deadlinetime into thesetting,deaddate,deadtime from allsupersetting where stid = idid;
+  set timetime = STR_TO_DATE(CONCAT(deaddate, ' ', deadtime), '%Y-%m-%d %H:%i:%s');
+  
+  if(thesetting =1)then
+  update student set student.ttbdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
+  elseif(thesetting =2)then
+  update student set student.requestdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
+  end if;
+  
+  
   
  select allusersname into stringstring from allusers 
  where new.creator = pid;
@@ -326,7 +346,7 @@ CREATE TRIGGER addintosetting before insert ON allsupersetting
 delimiter ;
 
 delimiter |
-CREATE TRIGGER addintosetting before Update ON allsupersetting
+CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting
   FOR EACH ROW
   BEGIN
   
