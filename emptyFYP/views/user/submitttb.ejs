@@ -9,7 +9,8 @@
 <div class="columns is-mobile">
     <div class="column is-one-third"></div>
     <div class="column is-one-third singleclassinfo">
-        <form action="/timetable/submitttb" method="post" onsubmit="submitform(this);return false;">
+        <form action="/timetable/submitttb" method="post"
+            onsubmit="submitform(this,'<%=req.session.role%>');return false;">
 
 
             <div id="allclassinputfield" style="font-size: 20px;">
@@ -64,7 +65,7 @@
         }
     }
 
-    async function submitform(formElem) {
+    async function submitform(formElem, role) {
         var requestbody = new FormData(formElem);
         if (document.getElementById("enrollnotclassbox").checked != true) {
             if (document.getElementById("classdep").value == "") {
@@ -83,21 +84,21 @@
         }
 
 
+        if (role == "stu") {
+            var response = await fetch("/timetable/submitttb/deadline", {
+                method: "POST",
+            });
 
-        var response = await fetch("/timetable/submitttb/deadline", {
-            method: "POST",
-        });
-        
-        if (response.ok) {
-            
-            var response2 = await fetch(formElem.action, {
+            if (response.ok) {
+
+                var response2 = await fetch(formElem.action, {
                     method: formElem.method,
                     body: requestbody
                 });
-                console.log("!@#$%!@#$%!@#$!@#$!@$            "+response2.status);
+                console.log("!@#$%!@#$%!@#$!@#$!@$            " + response2.status);
                 if (response2.ok) {
                     alert("Inserted");
-                   location.assign("/timetable");
+                    location.assign("/timetable");
 
                 } else if (response2.status == 401) {
                     var msg = await response2.json();
@@ -109,14 +110,40 @@
                 }
 
 
-        } else if (response.status == 401) {
-            var msg = await response.json();
+            } else if (response.status == 401) {
+                var msg = await response.json();
 
-            alert(msg);
-            location.assign("../timetable");
+                alert(msg);
+                location.assign("../timetable");
+            } else {
+                alert(response.statusTest);
+            }
+
         } else {
-            alert(response.statusTest);
+
+
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: requestbody
+            });
+            console.log("!@#$%!@#$%!@#$!@#$!@$            " + response.status);
+            if (response.ok) {
+                alert("Inserted");
+                location.assign("/timetable");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+                location.reload();
+            } else {
+                alert(response.statusTest);
+                location.reload();
+            }
+
+
+
         }
+
 
         /**
                 try {

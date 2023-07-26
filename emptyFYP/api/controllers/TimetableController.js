@@ -128,17 +128,17 @@ module.exports = {
     },
 
     submitclass: async function (req, res) {
-        
+
         let thisistheline = "";
         let thisistheline2 = "";
         let thisistheline3 = "";
-       
+
         let thisclassinfo;
         let havethis;
         let timecrash;
         let codecode = 200;
         let msg = "";
-       
+
 
 
         if (req.body.classlabsection == undefined) {
@@ -149,17 +149,20 @@ module.exports = {
             thisistheline = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
         }
 
-       
+
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 thisclassinfo = json;
-                
+
                 if (req.session.role == "sup") {
                     thisistheline2 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
 
-                } else {
+                } else if (req.session.role == "obs") {
+                    thisistheline2 = "select * from allobstakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+
+                } else{
                     thisistheline2 = "select * from allstudenttakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
                 }
 
@@ -168,14 +171,17 @@ module.exports = {
                         var string = JSON.stringify(result);
                         var json = JSON.parse(string);
                         havethis = json;
-                    
+
                         if (havethis.length > 0) {
                             codecode = 401;
                             msg = "This class has already been inputed before"
                             return res.status(codecode).json(msg);
                         } else {
                             if (req.session.role == "sup") {
-                                thisistheline3 = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
+                                thisistheline3 = "select * from allsupertakecourse join allclass on allclass.CID = allsupertakecourse.CID  where pid = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[0].weekdays + "\" and (\"" + thisclassinfo[0].startTime + "\" between startTime and endtime );"
+
+                            } else if (req.session.role == "obs") {
+                                thisistheline3 = "select * from allobstakecourse join allclass on allclass.CID = allobstakecourse.CID  where pid = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[0].weekdays + "\" and (\"" + thisclassinfo[0].startTime + "\" between startTime and endtime );"
 
                             } else {
                                 thisistheline3 = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[0].weekdays + "\" and (\"" + thisclassinfo[0].startTime + "\" between startTime and endtime );"
@@ -185,12 +191,12 @@ module.exports = {
                                     var string = JSON.stringify(result);
                                     var json = JSON.parse(string);
                                     timecrash = json;
-                                     if (timecrash.length > 0) {
+                                    if (timecrash.length > 0) {
                                         codecode = 401;
                                         msg = "Please Review your input since there was a time crash between your inputs"
                                         return res.status(codecode).json(msg);
                                     } else {
-                                      
+
                                         db.query(thisistheline3, function (err, result) {
                                             try {
 
@@ -392,6 +398,9 @@ console.log("just check      "+ thisclassinfo[0])
         if (req.session.role == "sup") {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
+        } else if (req.session.role == "obs") {
+            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allobstakecourse.confirmation,allobstakecourse.Submissiontime from allobstakecourse inner join allclass on allclass.cid = allobstakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+
         } else {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments, student.ttbdeadline from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid right join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
@@ -402,12 +411,19 @@ console.log("just check      "+ thisclassinfo[0])
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                //console.log(personallist)
-                date = personallist[0].ttbdeadline;
-                if (personallist[0].CID == null) {
-                    date = personallist[0].ttbdeadline;
+                console.log(personallist.length)
+                if (personallist.length == 0 && req.session.role != "stu") {
+                    date = undefined;
                     personallist = [];
+
+                } else {
+                    date = personallist[0].ttbdeadline;
+                    if (personallist[0].CID == null) {
+                        date = personallist[0].ttbdeadline;
+                        personallist = [];
+                    }
                 }
+
 
                 return res.view('user/timetable', {
                     date: date,
@@ -427,6 +443,9 @@ console.log("just check      "+ thisclassinfo[0])
         let thisistheline;
         if (req.session.role == "sup") {
             thisistheline = "DELETE from allsupertakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
+
+        }else if (req.session.role == "obs") {
+            thisistheline = "DELETE from allobstakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
 
         } else {
             thisistheline = "DELETE from allstudenttakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
@@ -454,6 +473,19 @@ console.log("just check      "+ thisclassinfo[0])
 
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+            console.log(thisistheline);
+            // console.log(thisistheline);
+            db.query(thisistheline, function (err, result) {
+                try {
+                    console.log("Submitted")
+                    return res.redirect("../timetable");
+                } catch (err) {
+                    console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
+                }
+
+            });
+        } else if (req.session.role == "obs") {
+            thisistheline = "Update allobstakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
             console.log(thisistheline);
             // console.log(thisistheline);
             db.query(thisistheline, function (err, result) {

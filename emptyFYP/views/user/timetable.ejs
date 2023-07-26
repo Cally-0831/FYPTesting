@@ -1,8 +1,10 @@
 <div>
-
+    <%console.log(date +" %%%%%% "+allpersonallist)%>
     <!---Empty case / init case == no any class inputted-->
+    <%if (date != null || date != undefined){
+        var datedate=new Date(date)
+    }%>
     
-    <% var datedate=new Date(date)%> 
     <%var today=new Date().toJSON()%>
     <% if(allpersonallist.length==0 || allpersonallist[0].confirmation==" 0" ){%>
         <div class="Pagetitle">
@@ -240,7 +242,7 @@
                                                                                                                             class="buttons is-right">
                                                                                                                             <button
                                                                                                                                 class="button buttonlogout"
-                                                                                                                                onclick="submitttb()">Submit
+                                                                                                                                onclick="submitttb('<%=allpersonallist.length%>')">Submit
                                                                                                                                 Timetable</button>
                                                                                                                         </div>
                                                                                                                         <%}%>
@@ -355,7 +357,7 @@
                                             </div>
                                             <div class="message-body" style="font-size: 18px;">
                                                 <strong>Currently there are no class inputted by you</strong>
-                                                <% if(req.session.role=="stu" ){%>
+                                                <% if(req.session.role!="sup" ){%>
                                                     <br><br>
                                                     Please be reminded that even if you enrolled <strong>0
                                                         course</strong>
@@ -696,41 +698,44 @@
                         }
                     };
 
-                    async function submitttb() {
+                    async function submitttb(length) {
+                        if (length == 0) {
+                            alert("Please go to \"Add Class\" and input the form of declaring you have 0 course this semester");
+                            location.assign("/timetable/submitttb");
+                        } else {
+                            var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
+                            if (r) {
+
+                                var response = await fetch("/timetable", {
+                                    method: "POST",
+
+                                });
+
+                                if (response.ok) {
+
+                                    alert("Timetable submitted.");
+                                    location.reload();
+                                } else {
+                                    alert(response.status + ": " + response.statusText);
+                                }
 
 
-                        var r = confirm("Confirm to Upload This Timetable? \n Once the Timetable has been uploaded to the System,\n the timetable cannot be modified.");
-                        if (r) {
-
-                            var response = await fetch("/timetable", {
-                                method: "POST",
-
-                            });
-
-                            if (response.ok) {
-
-                                alert("Timetable submitted.");
-                                location.reload();
-                            } else {
-                                alert(response.status + ": " + response.statusText);
                             }
 
-                        } else {
 
-                        }
-                    }
+                        }}
 
-                    async function checkcheck() {
-                    //    console.log("get to here");
-                        var response = await fetch("/timetable/deadline", {
-                            method: "POST",
-                        });
-                        if (!response.ok) {
-                            var msg = await response.json();
-                            alert(msg);
-                            location.reload();
+                        async function checkcheck() {
+                            //    console.log("get to here");
+                            var response = await fetch("/timetable/deadline", {
+                                method: "POST",
+                            });
+                            if (!response.ok) {
+                                var msg = await response.json();
+                                alert(msg);
+                                location.reload();
+                            }
                         }
-                    }
 
 
                 </script>
