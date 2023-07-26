@@ -8,7 +8,8 @@ INSERT INTO  allusers VALUES ("Prof Chan","tid00001","tpw00001","Active",0,"sup"
 INSERT INTO  allusers VALUES ("Prof Lam","tid00002","tpw00002","Active",0,"sup");
 INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 
-
+INSERT INTO  allusers VALUES ("AAmantha","oid00001","opw00001","Active",0,"obs");
+INSERT INTO  allusers VALUES ("BBanana","oid00002","opw00002","Active",0,"obs");
 
 #sample data
 #INSERT INTO  alltakecourse VALUES("COMP1005_10101","sid11111");
@@ -64,4 +65,9 @@ insert into alltakecourse values("GCAP3205_00001","sid11111");
 
 insert into alltakecourse values("COMP4107_00001","sid22222");
 
-select * from allclass
+insert into alltakecourse values("COMP4107_00001","oid00001");
+insert into alltakecourse values("COMP4096_00001","oid00001");
+insert into alltakecourse values("COMP4057_00001","oid00001");
+insert into alltakecourse values("COMP4025_00001","oid00001");
+insert into alltakecourse values("COMP4025_10001","oid00001");
+insert into alltakecourse values("GCAP3205_00001","oid00001");

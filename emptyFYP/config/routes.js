@@ -85,6 +85,7 @@ module.exports.routes = {
 
   'GET /uploadstudentlist': "UserController.uploadstudentlist",
   'POST /uploadstudentlist': "UserController.uploadstudentlist",
+  'POST /uploadobserverlist': "UserController.uploadobserverlist",
 
   'GET /liststudent': "StudentListController.liststudent",
   'POST /liststudent': "StudentListController.liststudent",

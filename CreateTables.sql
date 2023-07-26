@@ -32,6 +32,15 @@ topics		varchar(100) Not null,
 submission  varchar(10) default "N", 
 PRIMARY key (tid));
 
+create table observer(
+obsname		varchar(100) Not null,
+oid			varchar(20) not null,
+password	varchar(20) not null,
+states		varchar(20),
+errortime	int,
+submission  varchar(10) default "N", 
+PRIMARY key (oid));
+
 create table allclass(
 CDept		varchar(10) Not null,
 CCode		varchar(10)  Not null,
@@ -70,6 +79,15 @@ CONSTRAINT csid
 primary key (CID,PID)
 );
 
+create table allobstakecourse(
+CID		varchar(20) not null,
+PID		varchar(10) not null,
+confirmation integer default 0 ,
+Submissiontime timestamp,
+CONSTRAINT csid
+primary key (CID,PID)
+);
+
 create table allstudenttakecourse(
 CID		varchar(20) not null,
 PID		varchar(10) not null,
@@ -90,6 +108,16 @@ RequestStartTime time not null,
 RequestEndTime time not null,
 primary key (ReqID)
 );
+
+create table allrequestfromobserver(
+ReqID	varchar(20) not null,
+OID		varchar(10) not null,
+RequestDate DATE not null,
+RequestStartTime time not null,
+RequestEndTime time not null,
+primary key (ReqID)
+);
+
 create table allrequestfromstudent(
 ReqID	varchar(20) not null,
 SID		varchar(10) not null,
@@ -103,11 +131,24 @@ reply varchar(100),
 submission timestamp,
 primary key (ReqID)
 );
+
 create table supervisorpairstudent(
 TID		varchar(20) not null,
 SID		varchar(10) not null,
 Topic 	varchar(100) not null,
 primary key (TID,SID)
+);
+
+create table supervisorpairobserver(
+TID		varchar(20) not null,
+OID		varchar(10) not null,
+primary key (TID,OID)
+);
+
+create table observerpairstudent(
+OID		varchar(20) not null,
+SID		varchar(10) not null,
+primary key (OID,SID)
 );
 
 create table allclassroomtimeslot(
@@ -190,6 +231,8 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
     insert into student(stdname,sid,password) values(new.allusersname,new.pid,new.password);
 	elseif new.role = "sup" then
     insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N");
+    elseif new.role = "obs" then
+    insert into observer values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
     END IF;
     end if;
   END;
@@ -262,11 +305,8 @@ select Max(lesson) into  countcount from alltakecourse inner join allclass on al
 where alltakecourse.cid  like concat(new.cid,"%");
 select role into thisisrole from allusers where new.pid = pid;
 
- if thisisrole="sup" then 
-	set issup = true;
- END IF;
     
- if issup then
+ if thisisrole="sup" then
  
 	if countcount >0 then
 		while countcount >=0 do
@@ -285,8 +325,26 @@ select role into thisisrole from allusers where new.pid = pid;
 	end if;
 	END IF;
 END IF;
-
-if not issup then
+ if thisisrole="obs" then
+ 
+	if countcount >0 then
+		while countcount >=0 do
+ 			if countcount =0 then
+				set stringstring = concat(new.cid);
+			else
+				set stringstring = concat(new.cid,"_",countcount,"");
+			END IF;
+			insert into allobstakecourse values(stringstring,new.pid,false,now());
+			set countcount= countcount -1;
+		end while;
+	else if countcount =0 then
+		insert ignore into allobstakecourse values(new.cid,new.pid,false,now());
+	else 
+		insert ignore into allobstakecourse values( concat(new.cid,"_"),new.pid,false,now());
+	end if;
+	END IF;
+END IF;
+if thisisrole="stu" then
 
 	if countcount >0 then
 		while countcount >0 do
@@ -308,7 +366,7 @@ end if;
 delimiter ;
 
 delimiter |
-CREATE TRIGGER delalltakecourse After DELETE ON allsupertakecourse
+CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse
   FOR EACH ROW
   BEGIN
   declare countcount integer;
@@ -319,6 +377,20 @@ CREATE TRIGGER delalltakecourse After DELETE ON allsupertakecourse
    END;
   |
 delimiter ;
+
+delimiter |
+CREATE TRIGGER delallobstakecourse After DELETE ON allobstakecourse
+  FOR EACH ROW
+  BEGIN
+  declare countcount integer;
+  declare stringstring  varchar(20);
+  set countcount =0;
+  DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+  
+   END;
+  |
+delimiter ;
+
 
 delimiter |
 CREATE TRIGGER delallstudenttakecourse After DELETE ON allstudenttakecourse
@@ -422,6 +494,18 @@ CREATE TRIGGER addsubinsuper before update ON allsupertakecourse
   BEGIN
 	if new.confirmation = "1" then
 		update supervisor set submission ="Y" where tid = new.pid;
+	end if;
+
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER addsubinobs before update ON allobstakecourse
+  FOR EACH ROW
+  BEGIN
+	if new.confirmation = "1" then
+		update observer set submission ="Y" where oid = new.pid;
 	end if;
 
    END;

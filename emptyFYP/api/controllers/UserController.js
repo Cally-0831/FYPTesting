@@ -1,6 +1,6 @@
 var mysql = require('mysql');
- //var url = new url(sails.config.datastores.mysql.url);
- console.log(mysql);
+//var url = new url(sails.config.datastores.mysql.url);
+console.log(mysql);
 var db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -98,7 +98,7 @@ module.exports = {
     },
 
     submitrequest: async function (req, res) {
-        
+
         console.log(req.body);
         console.log(typeof req.body.avatar);
         console.log(req.body.avatar);
@@ -159,8 +159,7 @@ module.exports = {
 
         if (req.method == "GET") return res.view('user/uploadstudentlist');
 
-        console.log(req.body.length);
-
+        console.log(req.body);
 
 
         for (var i = 0; i < req.body.length; i++) {
@@ -201,8 +200,56 @@ module.exports = {
 
 
 
+
+
+
         return res.json();
 
     },
 
+    uploadobserverlist: async function (req, res) {
+
+
+        if (req.method == "GET") return res.view('user/uploadstudentlist');
+
+
+
+        for (var i = 0; i < req.body.length; i++) {
+            console.log(req.body[i].oid);
+
+            thisistheline = "insert IGNORE into allusers values(\"" +
+                req.body[i].observername + "\"\,\""
+                + req.body[i].oid + "\"\,\"" +
+                req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
+            console.log(thisistheline);
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+                };
+                console.log("1 record inserted");
+            });
+
+        }
+
+
+        for (var i = 0; i < req.body.length; i++) {
+            console.log(req.body[i].oid);
+            thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
+                req.session.userid + "\"\,\""
+                + req.body[i].oid + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+
+                };
+                console.log("1 record inserted");
+            });
+
+        }
+
+        return res.json();
+
+    },
 }
