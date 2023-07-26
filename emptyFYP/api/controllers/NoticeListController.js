@@ -58,7 +58,25 @@ module.exports = {
                     console.log("sth happened here");
                 }
             });
-        } else {
+        } else if(req.session.role = "obs"){
+            let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
+                + "inner join  supervisorpairobserver on supervisorpairobserver.oid=\"" + req.session.userid + "\" "
+                + "and  allnotice.Creator =supervisorpairobserver.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
+            console.log(thisistheline)
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    //console.log('>> string: ', string );
+                    var json = JSON.parse(string);
+                    //console.log('>> json: ', json);  
+                    noticelist = json;
+                    //       console.log('>> noticelist: ', noticelist);
+                    return res.view('user/notice', { thisusernoticetlist: noticelist });
+                } catch (err) {
+                    console.log("sth happened here");
+                }
+            });
+        }else {
             let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
                 + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
