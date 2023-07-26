@@ -92,6 +92,8 @@ module.exports.routes = {
 
   'GET /createnewstudent': "StudentListController.gettopic",
   'POST /createnewstudent': "StudentListController.createnewstudent",
+  'GET /createnewobs': { view: 'user/createnewobs' },
+  'POST /createnewobs': "StudentListController.createnewobs",
 
   'GET /read/:sid': "StudentListController.readsinglestudent",
   'DELETE /read/:sid': "StudentListController.deletestudent",

@@ -1,0 +1,49 @@
+<div class="Pagetitle">Create New Observer</div>
+<br>
+<div class="columns is-centered createnewstudent ">
+    <form action="/createnewobs" method="post" onsubmit="createnewobs(this);return false;">
+        <label>Observer name:&emsp;&emsp;</label>
+        <input type="text" placeholder="Enter Observer name" id="observername" name="observername" value=""
+            style="width:300px" required><br>
+        <br>
+        <label>OID:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</label>
+        <input type="text" placeholder="Enter OID" id="oid" name="oid" value="" style="width:300px" required><br><br>
+
+        <div class="buttons is-right">
+            <button type="submit is-success" class="buttonlogout">Submit</button>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+    
+
+    async function createnewobs(formElem) {
+        try {
+           console.log(formElem)
+
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.ok) {
+                alert("observer created");
+                location.assign("/liststudent");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+</script>

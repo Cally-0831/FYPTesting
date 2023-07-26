@@ -12,7 +12,7 @@
         </div>
         <div class="column ">
             <div class="buttons is-right">
-                <button class="buttonlogout" id="createnewstu" onclick="gotocreate()">Create a new Student</button>
+                <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
             </div>
         </div>
     </div>
@@ -83,7 +83,10 @@
         <% }); %>
 
 </table>
-
+<br><br>
+<div class="buttons is-right">
+    <button class="buttonlogout" id="createnewobs" onclick="gotocreateobs()">Create new Observer</button>
+</div>
 <br><br>
 <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
@@ -178,12 +181,12 @@
         }
     }
 
-
-
-
-
-
-    function gotocreate() {
+    function gotocreatestu() {
         location.assign("/createnewstudent");
     }
+
+    function gotocreateobs() {
+        location.assign("/createnewobs");
+    }
+
 </script>

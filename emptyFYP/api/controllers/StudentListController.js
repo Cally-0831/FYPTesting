@@ -43,13 +43,13 @@ module.exports = {
                         var json = JSON.parse(string);
                         //console.log('>> json: ', json);  
                         obslist = json;
-                        return res.view('user/liststudent', { allstdlist: stdlist ,allobslist : obslist});
+                        return res.view('user/liststudent', { allstdlist: stdlist, allobslist: obslist });
                     } catch (err) {
                         console.log("sth happened here");
                     }
-                    
+
                 })
-               
+
             } catch (err) {
                 console.log("sth happened here");
 
@@ -195,6 +195,52 @@ module.exports = {
 
         return res.ok("created");
     },
+    createnewobs: async function (req, res) {
+        var stdlist;
+        console.log(req.body);
+        let pw = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < 8) {
+            pw += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
 
+
+        //console.log(pw);
+        thisistheline = "insert IGNORE into allusers values(\"" +
+            req.body.observername + "\"\,\""
+            + req.body.oid + "\"\,\"" +
+            pw + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
+        //  console.log(thisistheline);
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                res.status(401).json("Error happened when excuting : " + thisistheline);
+            };
+            console.log("1 record inserted");
+        });
+
+
+
+
+
+        thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
+            req.session.userid + "\"\,\""
+            + req.body.oid + "\"\)";
+
+
+
+
+            console.log(thisistheline)
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                res.status(401).json("Error happened when excuting : " + thisistheline);
+            };
+            console.log("1 record inserted");
+        });
+
+        return res.ok("created");
+    },
 
 }
