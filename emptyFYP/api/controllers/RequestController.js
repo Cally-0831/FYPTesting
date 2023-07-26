@@ -59,6 +59,25 @@ module.exports = {
 
 
             });
+        } else if (req.session.role == "obs") {
+            let thisistheline = "SELECT * FROM allrequestfromobserver where oid = \"" + req.session.userid + "\"\;";
+            //console.log(thisistheline)
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    //console.log('>> string: ', string );
+                    var json = JSON.parse(string);
+                    //console.log('>> json: ', json);  
+                    requestlist = json;
+                    // console.log('>> stdlist: ', requestlist);
+                    return res.view('user/checkrequest', { thisuserRequestlist: requestlist });
+                } catch (err) {
+                    console.log("sth happened here");
+
+                }
+
+
+            });
         } else if (req.session.role == "stu") {
             let thisistheline = "SELECT * FROM allrequestfromstudent where sid = \"" + req.session.userid + "\"\;";
             console.log(thisistheline)
@@ -86,6 +105,7 @@ module.exports = {
 
     liststudentrequest: async function (req, res) {
         var studentrequestlist;
+        var observerrequestlist;
 
         let thisistheline = "select * from allrequestfromstudent inner join supervisorpairstudent "
             + "on allrequestfromstudent.sid = supervisorpairstudent.sid and supervisorpairstudent.tid = \"" + req.session.userid + "\" ;";
@@ -98,9 +118,23 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 studentrequestlist = json;
                 //console.log('>> stdlist: ', studentrequestlist);
-                return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist });
+                thisistheline = "select * from allrequestfromobserver inner join supervisorpairobserver "
+                    + "on allrequestfromobserver.oid = supervisorpairobserver.oid and supervisorpairobserver.tid = \"" + req.session.userid + "\" ;";
+
+                db.query(thisistheline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        observerrequestlist = json;
+                        return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist, thisobserverrequestlist: observerrequestlist });
+
+                    } catch (err) {
+                        return res.status(401).json("error happened when getting observsers' request list");
+                    }
+
+                })
             } catch (err) {
-                console.log("sth happened here " + err);
+                return res.status(401).json("error happened when getting students' request list");
 
             }
 
@@ -117,6 +151,10 @@ module.exports = {
         let thisistheline = "";
         if (req.session.role == "sup") {
             thisistheline = "DELETE FROM allrequestfromsupervisor WHERE reqid= \"" + req.body.ReqID + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+        } else if (req.session.role == "obs") {
+            thisistheline = "DELETE FROM allrequestfromobserver WHERE reqid= \"" + req.body.ReqID + "\"\n";
             console.log('delete excution');
             console.log(thisistheline);
         } else if (req.session.role == "stu") {
@@ -197,17 +235,17 @@ module.exports = {
     submitrequest: async function (req, res) {
         var today = new Date();
         var deadline = new Date(req.body.deadlinedate)
-        
+
         if (req.session.role == "stu") {
             if (req.body.deadlinedate != null) {
                 if (today > deadline) {
                     return res.status(401).json("Submission Box was closed\n"
-                    +"Current Time       :  "+today.toLocaleDateString()+" "+today.toLocaleTimeString('en-us')+"\n"
-                    +"Submission Deadline:  "+deadline.toLocaleDateString()+" "+deadline.toLocaleTimeString('en-us'));
+                        + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
+                        + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us'));
                 }
             }
         }
-        
+
         let reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -228,6 +266,15 @@ module.exports = {
                     + "\",\"00:00\", \"23:59\");";
             } else {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
+                    req.body.starttime + "\", \"" + req.body.endtime + "\");";
+            }
+        } else if (req.session.role == "obs") {
+            console.log("enter obs");
+            if (req.body.starttime == undefined) {
+                thisistheline = "insert into allrequestfromobserver values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
+                    + "\",\"00:00\", \"23:59\");";
+            } else {
+                thisistheline = "insert into allrequestfromobserver values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\");";
             }
         } else if (req.session.role == "stu") {

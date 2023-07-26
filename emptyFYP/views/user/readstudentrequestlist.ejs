@@ -1,20 +1,32 @@
-<div class="Pagetitle">Student Request List</div>
+<div class="Pagetitle">Request List</div>
 <div class="buttons">
     <div class="button buttonlogout is-left" onclick="history.back()">
         Back
     </div>
 
 </div>
+<br><br>
 <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">ReqID</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">SID</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">Unavaildable date</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">Start Time</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">EndTime</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">Reason</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">Status</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;">View</th>
-
+    <tr>
+        <th colspan="8"
+            style="font-size:25px;text-align: center;vertical-align:middle;background-color: rgb(229, 173, 89);">
+            Students Request List</th>
+    </tr>
+    <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">ReqID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">SID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">
+            Unavaildable date</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">Start Time
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">EndTime
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">Reason
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">Status
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">View</th>
+    </tr>
     <% thisstudentrequestlist.forEach( function(request) { const StartDay=new
         Date(request.RequestDate).toLocaleDateString('en-CA'); %>
 
@@ -38,37 +50,80 @@
             <td style="text-align: center;vertical-align:middle;">
                 <%= request.reason%>
             </td>
-           
+
             <% if(request.status=="Pending" ){%>
                 <td style="text-align: center;vertical-align:middle; color: rgb(158, 73, 201);  font-weight: bold;">
+                    <%= request.status%>
+                </td>
+                <%}else if(request.status=="Approved" ){%>
+                    <td style="text-align: center;vertical-align:middle; color: green;  font-weight: bold;">
                         <%= request.status%>
                     </td>
-                    <%}else if(request.status=="Approved" ){%>
-                        <td style="text-align: center;vertical-align:middle; color: green;  font-weight: bold;">
+                    <%}else if(request.status=="Rejected" ){%>
+                        <td style="text-align: center;vertical-align:middle; color: orange;  font-weight: bold;">
                             <%= request.status%>
                         </td>
-                        <%}else if(request.status=="Rejected" ){%>
+                        <%}else if(request.status=="Require Proof" ){%>
                             <td style="text-align: center;vertical-align:middle; color: orange;  font-weight: bold;">
                                 <%= request.status%>
                             </td>
-                            <%}else if(request.status=="Require Proof" ){%>
-                                <td style="text-align: center;vertical-align:middle; color: orange;  font-weight: bold;">
-                                    <%= request.status%>
+                            <%}%>
+                                <td style="text-align: center;vertical-align:middle;">
+                                    <div class="buttons is-centered">
+                                        <div class="button buttonlogout" onclick="Viewqrequest('<%= request.ReqID %>')">
+                                            View</div>
+                                    </div>
+
                                 </td>
-                                <%}%>
-            <td style="text-align: center;vertical-align:middle;">
-                <div class ="buttons is-centered">
-                    <div class="button buttonlogout"  onclick="Viewqrequest('<%= request.ReqID %>')">View</div>
-                </div>
-                
-            </td>
         </tr>
 
         <% }); %>
 
 </table>
+<br><br>
+
+<table class="table is-bordered is-striped is-hoverable is-fullwidth ;">
+    <tr>
+        <th colspan="8"
+            style="font-size:25px;text-align: center;vertical-align:middle;background-color: rgb(229, 173, 89);">
+            Observers Request List</th>
+    </tr>
+    <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">ReqID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">OID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">
+            Unavaildable
+            date</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">Start Time
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">EndTime
+        </th>
+    </tr>
+    <% thisobserverrequestlist.forEach( function(request) { const StartDay=new
+        Date(request.RequestDate).toLocaleDateString('en-CA'); %>
+
+        <tr>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= request.ReqID %>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= request.OID %>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= StartDay %>
+            </td>
+
+            <td style="text-align: center;vertical-align:middle;">
+                <%= request.RequestStartTime %>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= request.RequestEndTime%>
+            </td>
+        </tr>
+        <%})%>
+</table>
 <script>
-    async function Viewqrequest(ReqID){
-        location.assign("/requestdetail/"+ReqID);
+    async function Viewqrequest(ReqID) {
+        location.assign("/requestdetail/" + ReqID);
     };
 </script>
