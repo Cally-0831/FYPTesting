@@ -58,7 +58,7 @@ module.exports = {
                     console.log("sth happened here");
                 }
             });
-        } else if(req.session.role = "obs"){
+        } else if(req.session.role == "obs"){
             let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairobserver on supervisorpairobserver.oid=\"" + req.session.userid + "\" "
                 + "and  allnotice.Creator =supervisorpairobserver.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
@@ -101,7 +101,7 @@ module.exports = {
     addnotice: async function (req, res) {
         console.log(req.body);
         let nid = 'nid';
-        if (req.body.id == null) {
+        if (req.body.id == "") {
 
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             const charactersLength = characters.length;
@@ -111,12 +111,12 @@ module.exports = {
                 counter += 1;
             }
 
-        } else if (req.body.id != null) {
+        } else if (req.body.id != "") {
             nid +=req.body.id;
         }
         console.log(nid)
         let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
-        //    console.log(thisistheline);
+           console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("insert new notice");

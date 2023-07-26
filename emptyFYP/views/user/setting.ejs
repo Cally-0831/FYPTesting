@@ -289,7 +289,7 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 <% if(hv4>=0){%>
-                                                    <% if(thissupersetting[hv1].Announcetime==null){%>
+                                                    <% if(thissupersetting[hv4].Announcetime==null){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(3,'<%=datedate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>',null,null)">Create
                                                             Notice</button>
@@ -322,7 +322,7 @@
     async function CreateNotice(command, startdatedate,starttime, id, enddatedate,endtime) {
 
         if(command != 2){
-            var requestbody = "type=" + command + "&date=" + datedate + "&time=" + deadlinetime + "&STID=" + id;
+            var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id;
         var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
             method: "GET",
         });

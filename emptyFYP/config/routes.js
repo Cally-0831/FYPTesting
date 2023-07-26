@@ -23,15 +23,15 @@ module.exports.routes = {
 
   '/': { view: 'user/login' },
 
-  'GET /user/login': "UserController.login",
-  'POST /user/login': "UserController.login",
+  'GET /login': "UserController.login",
+  'POST /login': "UserController.login",
 
   'GET /user/logout': 'UserController.logout',
 
   'GET /home': { view: 'user/home' },
 
   'GET /schduledesign': { view: 'user/schduledesign' },
-
+"GET /checkschdule" :"SchduleController.viewfinalschdule",
 
 
 

@@ -1,0 +1,19 @@
+<% if(releasedate != null){%>
+    <% var today = new Date();
+        var releasedday = new Date(releasedate).toDateString();
+    var stringstring = releasedday+" "+releasetime;
+    releasedday = new Date(stringstring);
+    console.log(releasedday);
+    %>
+    <%if(releasedday < today){%>
+        <div> The Time has come</div>
+        <%}else{%>
+            <div> So Sorry the day is yet to come, the schdule will not be disclose until the date</div>
+            <br><br>
+            <div>Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></div>
+            <%}%>
+    
+    
+    <%}else{%>
+        <div>Your Supervisior havent set releasedate</div>
+        <%}%>

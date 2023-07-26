@@ -1,8 +1,7 @@
 module.exports = async function (req, res, proceed) {
     const user = req.session;
-    if (user.role == "stu") {
+    if (user.role == "sup" || user.role== "adm") {
         return proceed();
     }
-    console.log("you badbad")
-    return res.redirect("home");
+    return res.redirect("/home")
 }

@@ -3,5 +3,5 @@ module.exports = async function (req, res, proceed) {
     if (user.role == "obs") {
         return proceed();
     }
-    return res.forbidden();
+    return res.redirect("/home")
 }
