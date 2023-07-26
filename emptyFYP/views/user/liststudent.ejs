@@ -23,19 +23,19 @@
 
 <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-       <a class="sorting" id='headerSID' onclick="sorting('headerSID',0);">&#8593;</a> SID
+       <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
     </th>
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerstuname' onclick="sorting('headerstuname',1);">&#8593;</a> Student Name
+        <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a> Student Name
     </th>
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headertopic' onclick="sorting('headertopic',2);">&#8593;</a> Topic
+        <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a> Topic
     </th>
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerTTBstatus' onclick="sorting('headerTTBstatus',3);">&#8593;</a> TTB status
+        <a class="sorting" id='headerTTBstatus' onclick="sorting('sorting','mytable','headerTTBstatus',3);">&#8593;</a> TTB status
     </th>
     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerTTBview' onclick="sorting('headerTTBview',4);">&#8593;</a> Submission of TTB
+        <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',4);">&#8593;</a> Submission of TTB
     </th>
 
 
@@ -83,27 +83,66 @@
         <% }); %>
 
 </table>
+
+<br><br>
+<table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+       <a class="sorting2" id='headerOID' onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a> OID
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting2" id='headerobsname' onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+        <a class="sorting2" id='headerobsTTBview' onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
+    </th>
+
+    <% allobslist.forEach( function(allobslist) { %>
+
+        <tr>
+            <td id="oid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%= allobslist.oid %>
+            </td>
+
+
+            <td id="obsname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                
+                    <%= allobslist.obsname %>
+                
+            </td>
+            <td id="obssubmission" style="font-size:20px;text-align: center;vertical-align:middle;">
+                
+                <%= allobslist.submission %>
+            
+        </td></tr>
+
+<%})%>
+</table>
+
+
+
+
+
 <script>
-    function sorting(idlocation, tablelocation) {
-        for (var i = 0; i < document.getElementsByClassName("sorting").length; i++) {
+    function sorting(thissortingclass,thistable,idlocation, tablelocation) {
+        for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
             if (i != tablelocation) {
-                document.getElementsByClassName("sorting")[i].innerHTML = '↑'
+                document.getElementsByClassName(thissortingclass)[i].innerHTML = '↑'
             }
         }
 
         if (document.getElementById(idlocation).innerHTML == '↑') {
             document.getElementById(idlocation).innerHTML = '\&\#8595;';
-            sortingtable("dsc", tablelocation);
+            sortingtable(thistable,"dsc", tablelocation);
         } else {
             document.getElementById(idlocation).innerHTML = '\&\#8593;'
-            sortingtable("asc", tablelocation);
+            sortingtable(thistable,"asc", tablelocation);
         }
 
     }
 
-    function sortingtable(ordering, tablelocation) {
+    function sortingtable(thistable,ordering, tablelocation) {
         var table, rows, switching, i, x, y, shouldSwitch, switchcount = 0;
-        table = document.getElementById("mytable");
+        table = document.getElementById(thistable);
         switching = true;
         while (switching) {
             switching = false;

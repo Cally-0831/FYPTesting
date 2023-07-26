@@ -19,11 +19,12 @@ module.exports = {
 
     liststudent: async function (req, res) {
         var stdlist;
+        var obslist;
 
 
         let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic,student.ttbsubmission" +
             "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
-           
+
             "\n where supervisorpairstudent.tid = \"" + req.session.userid + "\"\;";
 
         db.query(thisistheline, (err, results) => {
@@ -33,8 +34,22 @@ module.exports = {
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 stdlist = json;
-                //console.log('>> stdlist: ', stdlist);  
-                return res.view('user/liststudent', { allstdlist: stdlist });
+                //console.log('>> stdlist: ', stdlist); 
+                thisistheline = "SELECT obsname , observer.oid ,observer.submission FROM supervisorpairobserver INNER JOIN observer ON observer.oid = supervisorpairobserver.oid where supervisorpairobserver.tid = \"" + req.session.userid + "\";"
+                db.query(thisistheline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        //console.log('>> string: ', string );
+                        var json = JSON.parse(string);
+                        //console.log('>> json: ', json);  
+                        obslist = json;
+                        return res.view('user/liststudent', { allstdlist: stdlist ,allobslist : obslist});
+                    } catch (err) {
+                        console.log("sth happened here");
+                    }
+                    
+                })
+               
             } catch (err) {
                 console.log("sth happened here");
 
@@ -56,12 +71,12 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
-                
+
                 var json = JSON.parse(string);
                 //   console.log('>> json: ', json);  
                 var stringstring = json[0].topics.split("/").sort()
                 topiclist = stringstring;
-                
+
 
                 console.log(">>topiclist final   " + topiclist)
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
@@ -181,5 +196,5 @@ module.exports = {
         return res.ok("created");
     },
 
-  
+
 }

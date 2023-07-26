@@ -13,6 +13,7 @@ module.exports.policies = {
 
   UserController: {
     uploadstudentlist: "isSuper",
+    uploadobserverlist:"isSuper",
   },
   TimetableController: {
     judgettb: "isSuper",
