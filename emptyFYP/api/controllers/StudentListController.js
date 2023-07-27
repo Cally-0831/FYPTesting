@@ -51,6 +51,7 @@ module.exports = {
                         var json = JSON.parse(string);
                         //console.log('>> json: ', json);  
                         obslist = json;
+                    
                         return res.view('user/liststudent', { allstdlist: stdlist, allobslist: obslist });
                     } catch (err) {
                         console.log("sth happened here");
@@ -101,7 +102,8 @@ module.exports = {
     readsinglestudent: async function (req, res) {
         var studentresult;
         var type;
-       
+        var obslist;
+
         if (req.params.id.charAt(0) == "s") {
             type = "stu";
             thisistheline = "select student.stdname, student.sid,supervisorpairstudent.Topic,student.ttbsubmission,observer.obsname,observerpairstudent.oid from student"
@@ -126,7 +128,7 @@ module.exports = {
 
 
 
-       
+
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
@@ -134,8 +136,27 @@ module.exports = {
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 studentresult = json;
-                //console.log('>> stdlist: ',studentresult);  
-                return res.view('user/read', { type: type, thatstudent: studentresult });
+                //console.log('>> stdlist: ',studentresult); 
+                if (req.params.id.charAt(0) == "s" && studentresult[0].oid == null) {
+                    thisistheline = "select * from observer left join supervisorpairobserver on observer.oid = supervisorpairobserver.oid where supervisorpairobserver.tid = \"" + req.session.userid + "\"";
+                    db.query(thisistheline, (err, results) => {
+                        try {
+                            var string = JSON.stringify(results);
+                            //console.log('>> string: ', string );
+                            var json = JSON.parse(string);
+                            obslist = json
+                            console.log('>> json: ', obslist);  
+                            return res.view('user/read', { type: type, thatstudent: studentresult , obslist : obslist});
+                        } catch (err) {
+                            console.log("sth happened here");
+
+                        }
+                    });
+                }else{
+                    return res.view('user/read', { type: type, thatstudent: studentresult });
+                      
+                }
+
             } catch (err) {
                 console.log("sth happened here");
 
@@ -153,12 +174,12 @@ module.exports = {
         console.log(checktype);
 
         //remove pair
-        if(checktype.length > 1){
+        if (checktype.length > 1) {
             thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + checktype[0] + "\"\n";
             db.query(thisistheline, (err, results) => {
                 if (err) { console.log("sth happened here"); }
             });
-        }else{
+        } else {
             //remove single ppl
             console.log(String(req.params.id).charAt(0))
             if (String(req.params.id).charAt(0) == "s") {
@@ -168,12 +189,12 @@ module.exports = {
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
                 });
-    
+
                 thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
                 });
-    
+
                 thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
@@ -189,12 +210,12 @@ module.exports = {
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
                 });
-    
+
                 thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
                 });
-    
+
                 thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.params.id + "\"\n";
                 db.query(thisistheline, (err, results) => {
                     if (err) { console.log("sth happened here"); }
@@ -204,10 +225,10 @@ module.exports = {
                     if (err) { console.log("sth happened here"); }
                 });
             }
-    
+
         }
-        
-       
+
+
 
 
 
@@ -257,7 +278,7 @@ module.exports = {
                 req.body.othertext + "\"\);";
         }
 
-     
+
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);
@@ -314,5 +335,22 @@ module.exports = {
 
         return res.ok("created");
     },
+
+    addpairing: async function(req,res){
+        var checktype = req.params.id.split('&');
+        thisistheline = "insert IGNORE into observerpairstudent values(\"" +
+        checktype[1] + "\"\,\""
+       +checktype[0] + "\"\);";
+
+       db.query(thisistheline, function (err, result) {
+        if (err) {
+            res.status(401).json("Error happened when excuting : " + thisistheline);
+        };
+        console.log("1 record inserted");
+        return res.ok();
+    });
+
+
+    }
 
 }

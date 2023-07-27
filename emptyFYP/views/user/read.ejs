@@ -6,7 +6,7 @@
 </div>
 <div>
     <%if (type=="stu" ){%>
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <table class="table is-bordered is-striped is-fullwidth">
             <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
             <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name
             </th>
@@ -30,23 +30,72 @@
                         <%= thatstudent.Topic%>
                     </td>
                     <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <a href="/read/<%=thatstudent.oid%>">
-                            <%= thatstudent.oid %>
-                        </a>
+                        <%if (thatstudent.oid !=null){%>
+                            <a href="/read/<%=thatstudent.oid%>">
+                                <%= thatstudent.oid %>
+                            </a>
+                            <%}else{%>
+                                <div class="dropdown is-hoverable">
+                                    <div class="dropdown-trigger">
+                                        <button class="button buttonlogout">
+                                            <div id="selectedoid">
+
+                                            </div>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                                <%}%>
+
                     </td>
+
                     <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <a href="/read/<%=thatstudent.oid%>">
-                            <%= thatstudent.obsname%>
-                        </a>
+                        <%if (thatstudent.oid !=null){%>
+                            <a href="/read/<%=thatstudent.oid%>">
+                                <%= thatstudent.obsname%>
+                            </a>
+                            <%}else{%>
+                                <div class="dropdown is-hoverable">
+                                    <div class="dropdown-trigger">
+                                        <button class="button buttonlogout" aria-haspopup="true"
+                                            aria-controls="dropdown-menu4">
+                                            <div id = "selectedobs">--Please Select--</div>
+                                            <span class="icon is-small">
+                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                        <div class="dropdown-content" id="dropdownoptions" value="">
+                                            
+                                            <% obslist.forEach( function(obs) { %>
+                                                <div class="dropdown-item" value="<%=obs.obsname%>" onclick="selectthisobs('<%=obs.obsname%>','<%=obs.oid%>')">
+                                                    <p>
+                                                        <%=obs.obsname%>
+                                                    </p>
+                                                </div>
+                                                <%})%>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%}%>
+
                     </td>
                     <td style="font-size:20px;text-align: center;vertical-align:middle;">
                         <div class="buttons is-centered">
                             <div class="button buttonlogout" type="button"
                                 onclick="deletestudent('<%= thatstudent.sid %>')">
                                 Delete</div>
-                            <div class="button buttonlogout" type="button"
-                                onclick="breakpair('<%= thatstudent.sid %>','<%=thatstudent.oid%>')">
-                                Remove Pair</div>
+                            <%if (thatstudent.oid==null){%>
+                                <div class="button buttonlogout" type="button"
+                                    onclick="addpair('<%= thatstudent.sid %>')">
+                                    Add Pairing</div>
+                                <%}else{%>
+                                    <div class="button buttonlogout" type="button"
+                                        onclick="breakpair('<%= thatstudent.sid %>','<%=thatstudent.oid%>')">
+                                        Remove Pairing</div>
+                                    <%}%>
+
                         </div>
 
                     </td>
@@ -59,7 +108,7 @@
         <%}else{%>
 
 
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <table class="table is-bordered is-striped  is-fullwidth">
                 <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting2" id='headerOID'
                         onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a>
@@ -130,6 +179,31 @@
 
 <script>
 
+    async function addpair(sid) {
+        var obs = document.getElementById("selectedobs").innerText;
+        var oid = document.getElementById("selectedoid").innerText;
+        console.log(oid!="")
+        if(oid!=""){
+            var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
+            if(r){
+                var response = await fetch("/read/" + sid + "&" + oid, {
+                method: "POST"})
+                if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Pairing { " + sid + "  &  " + oid + " } has been added");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+            }
+        }else{
+            alert("Please Select An Observer")
+        }
+      //  var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
+    }
+
     async function breakpair(sid, oid) {
 
         var r = confirm("Confirm remove pairing  {" + sid + "  &  " + oid + "} ?");
@@ -143,7 +217,7 @@
                 // var html = await response.text();
                 // alert(html);
 
-                alert("Pairing { "+sid+"  &  "+oid+" } has been removed");
+                alert("Pairing { " + sid + "  &  " + oid + " } has been removed");
                 location.reload();
             } else {
                 alert(response.status + ": " + response.statusText);
@@ -152,7 +226,7 @@
         } else {
             alert("cancelled");
         }
-        
+
     }
     function back() {
         location.assign("/liststudent");
@@ -181,5 +255,10 @@
             alert("cancelled");
         }
     };
+    function selectthisobs(obs,oid){
+        document.getElementById("selectedobs").innerText = obs;
+        document.getElementById("selectedoid").innerText = oid;
+        
+    }
 
 </script>

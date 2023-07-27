@@ -105,6 +105,7 @@ module.exports.routes = {
   'POST /createnewobs': "StudentListController.createnewobs",
 
   'GET /read/:id': "StudentListController.readsinglestudent",
+  'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
