@@ -1,4 +1,4 @@
-<div class="Pagetitle">Student List</div>
+<div class="Pagetitle">Student & Observer List</div>
 <br>
 <div class="rows">
     <div class="columns">
@@ -22,38 +22,66 @@
 <br><br>
 
 <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-       <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a> Student Name
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a> Topic
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerTTBstatus' onclick="sorting('sorting','mytable','headerTTBstatus',3);">&#8593;</a> TTB status
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',4);">&#8593;</a> Submission of TTB
-    </th>
+    <tr>
+        <th colspan="7"
+            style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+            Student List</th>
+    </tr>
+    <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a>
+            Student Name
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a>
+            Topic
+        </th>
+
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerstudoid' onclick="sorting('sorting','mytable','headerstudoid',3);">&#8593;</a>
+            OID
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerstudobs' onclick="sorting('sorting','mytable','headerstudobs',4);">&#8593;</a>
+            Observer
+        </th>
+
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerTTBstatus'
+                onclick="sorting('sorting','mytable','headerTTBstatus',5);">&#8593;</a> TTB status
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',6);">&#8593;</a>
+            Submission of TTB
+        </th>
+    </tr>
+
 
 
     <% allstdlist.forEach( function(allstdlist) { %>
 
-        <tr>
+        <tr onclick="redirectplease('<%= allstdlist.sid%>')">
             <td id="sid" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.sid %>
             </td>
 
-
             <td id="studentname" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <a href="/read/<%= allstdlist.sid%>">
-                    <%= allstdlist.stdname %>
-                </a>
+
+                <%= allstdlist.stdname %>
+
             </td>
+
             <td id="studenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= allstdlist.Topic%>
+            </td>
+            <td id="studentoid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%= allstdlist.oid%>
+            </td>
+            <td id="studentobsname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%= allstdlist.obsname%>
             </td>
             <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
@@ -89,36 +117,86 @@
 </div>
 <br><br>
 <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-       <a class="sorting2" id='headerOID' onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a> OID
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting2" id='headerobsname' onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
-    </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-        <a class="sorting2" id='headerobsTTBview' onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
-    </th>
 
-    <% allobslist.forEach( function(allobslist) { %>
+    <tr>
+        <th colspan="5"
+            style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+            Observer List</th>
+    </tr>
+    <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting2" id='headerOID' onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a> OID
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting2" id='headerobsname'
+                onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            SID
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            Student Name
+        </th>
 
-        <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting2" id='headerobsTTBview'
+                onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
+        </th>
+    </tr>
+    <%var obslist =[] ;%>
+<% for(var j = 0 ; j < allobslist.length ; j++){
+    
+    if(obslist.length ==0 || (obslist.length >0 && obslist[obslist.length-1].oid != allobslist[j].oid)){
+        
+        var thisobs=allobslist[j].oid; var obssidlist=[]; var obsstunamelist=[]; var oid = allobslist[j].oid;
+        var obsname = allobslist[j].obsname; var submission = allobslist[j].submission;
+    for(var i=0 ; i < allobslist.length;i++){
+       console.log(allobslist[i].oid+"    "+allobslist[j].sid+"    "+thisobs)
+        if( allobslist[i].oid==thisobs){ 
+            obssidlist.push(allobslist[i].sid)
+            obsstunamelist.push(allobslist[i].stdname) 
+            console.log(obssidlist.length +"     "+obsstunamelist.length+"\n\n")
+        }
+    }
+    var currentobs = {oid:oid ,obsname:obsname,submission:submission, obssidlist:obssidlist , obsstunamelist:obsstunamelist}
+    obslist.push(currentobs) 
+    }
+}%>
+
+    <% obslist.forEach( function(list) { %>
+<%console.log(list)%>
+        <tr  onclick="redirectplease('<%=list.oid%>')">
             <td id="oid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= allobslist.oid %>
+                <%= list.oid %>
             </td>
 
 
             <td id="obsname" style="font-size:20px;text-align: center;vertical-align:middle;">
-                
-                    <%= allobslist.obsname %>
-                
+
+                <%= list.obsname %>
+
+            </td>
+            <td id="obssid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <% for(var j = 0 ; j < list.obssidlist.length ; j++){%>
+                    <a href="/read/<%= list.obssidlist[j]%>"><%=list.obssidlist[j]%></a><br>
+                <%}%>
+                   
+
+
+            </td>
+            <td id=" obsstuname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <% for(var j = 0 ; j < list.obsstunamelist.length ; j++){%>
+                    <a href="/read/<%= list.obssidlist[j]%>"><%= list.obsstunamelist[j]%></a> <br>
+                                    <%}%>
             </td>
             <td id="obssubmission" style="font-size:20px;text-align: center;vertical-align:middle;">
-                
-                <%= allobslist.submission %>
-            
-        </td></tr>
 
-<%})%>
+                <%= list.submission %>
+
+            </td>
+        </tr>
+
+        <%})%>
 </table>
 
 
@@ -126,49 +204,54 @@
 
 
 <script>
-    function sorting(thissortingclass,thistable,idlocation, tablelocation) {
+    function sorting(thissortingclass, thistable, idlocation, tablelocation) {
+
         for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
+
             if (i != tablelocation) {
+
                 document.getElementsByClassName(thissortingclass)[i].innerHTML = '↑'
             }
         }
 
         if (document.getElementById(idlocation).innerHTML == '↑') {
             document.getElementById(idlocation).innerHTML = '\&\#8595;';
-            sortingtable(thistable,"dsc", tablelocation);
+            sortingtable(thistable, "dsc", tablelocation);
         } else {
             document.getElementById(idlocation).innerHTML = '\&\#8593;'
-            sortingtable(thistable,"asc", tablelocation);
+            sortingtable(thistable, "asc", tablelocation);
         }
 
     }
 
-    function sortingtable(thistable,ordering, tablelocation) {
+    function sortingtable(thistable, ordering, tablelocation) {
         var table, rows, switching, i, x, y, shouldSwitch, switchcount = 0;
         table = document.getElementById(thistable);
         switching = true;
         while (switching) {
             switching = false;
             rows = table.rows;
-            for (i = 1; i < (rows.length - 1); i++) {
+            for (i = 2; i < (rows.length - 1); i++) {
+
                 shouldSwitch = false;
                 x = rows[i].getElementsByTagName("TD")[tablelocation];
                 y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
 
-
                 if (ordering == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
                         shouldSwitch = true;
                         break;
                     }
                 } else if (ordering == "dsc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
                         shouldSwitch = true;
                         break;
                     }
                 }
             }
+
             if (shouldSwitch) {
+
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
                 switchcount++;
@@ -187,6 +270,10 @@
 
     function gotocreateobs() {
         location.assign("/createnewobs");
+    }
+
+    function redirectplease(path) {
+        location.assign("/read/" + path);
     }
 
 </script>

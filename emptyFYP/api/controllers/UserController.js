@@ -252,4 +252,95 @@ module.exports = {
         return res.json();
 
     },
+
+    uploadpairlist: async function (req, res) {
+
+        for (var i = 0; i < req.body.length; i++) {
+            console.log("\n\n\n\n\n")
+            console.log(req.body[i]);
+
+
+            thisistheline = "insert IGNORE into allusers values(\"" +
+                req.body[i].studentname + "\"\,\""
+                + req.body[i].sid + "\"\,\"" +
+                req.body[i].stupassword + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
+            console.log(thisistheline);
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+                };
+                console.log("1 stu record inserted");
+
+
+            });
+            thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
+                req.session.userid + "\"\,\""
+                + req.body[i].sid + "\"\,\"" +
+                req.body[i].topic + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+
+                };
+                console.log("1 suppairstu record inserted");
+            });
+
+        }
+
+
+
+
+
+        for (var i = 0; i < req.body.length; i++) {
+
+
+            thisistheline = "insert IGNORE into allusers values(\"" +
+                req.body[i].observername + "\"\,\""
+                + req.body[i].oid + "\"\,\"" +
+                req.body[i].obspassword + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
+            console.log(thisistheline);
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+                };
+                console.log("1 obs record inserted");
+            });
+            thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
+                req.session.userid + "\"\,\""
+                + req.body[i].oid + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+
+                };
+                console.log("1 suppairobs record inserted");
+            });
+
+        }
+
+
+        for (var i = 0; i < req.body.length; i++) {
+
+            thisistheline = "insert IGNORE into observerpairstudent values(\"" +
+                req.body[i].oid + "\"\,\""
+                + req.body[i].sid + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
+
+                };
+                console.log("1 pair record inserted");
+            });
+
+        }
+
+        return res.ok();
+
+
+    }
 }

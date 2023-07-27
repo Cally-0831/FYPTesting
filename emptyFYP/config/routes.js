@@ -94,6 +94,7 @@ module.exports.routes = {
   'GET /uploadstudentlist': "UserController.uploadstudentlist",
   'POST /uploadstudentlist': "UserController.uploadstudentlist",
   'POST /uploadobserverlist': "UserController.uploadobserverlist",
+  'POST /uploadpairlist': "UserController.uploadpairlist",
 
   'GET /liststudent': "StudentListController.liststudent",
   'POST /liststudent': "StudentListController.liststudent",
@@ -103,8 +104,9 @@ module.exports.routes = {
   'GET /createnewobs': { view: 'user/createnewobs' },
   'POST /createnewobs': "StudentListController.createnewobs",
 
-  'GET /read/:sid': "StudentListController.readsinglestudent",
-  'DELETE /read/:sid': "StudentListController.deletestudent",
+  'GET /read/:id': "StudentListController.readsinglestudent",
+  
+  'DELETE /read/:id': "StudentListController.deletestudent",
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",

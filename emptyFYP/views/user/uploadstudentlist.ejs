@@ -17,42 +17,87 @@
   var allstudentarray = new Array(0);
 </script>
 
-<div class="columns is-mobile">
 
-  <div class="column is-half template">
-    <form enctype="multipart/form-data">
-      <label for="allcontent" style="font-size: 20px;">Please upload the student list in .xlsx format </label>
-      <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\StudentSample.xlsx"
-          download><u>Student Excel List</u></a></div>
-      <br><br>
-      <input id="studentupload" type=file name="files[]">
-    </form>
-    <br>
 
-    <div id="getliststudentdata" style="font-size: 20px;"></div>
 
-    <br>
-    <textarea class="form-control" id="studentxlx_json" style="width:100% ;height:50% ; overflow: scroll;"
-      readonly="true"></textarea>
-    <br><br><br><br><br><br><br><br><br>
+
+
+<div class="rows">
+  <div class="row">
+    <div class="columns is-mobile is-centered">
+
+      <div class="column is-two-fifths template">
+        <form enctype="multipart/form-data">
+          <div class="Pagetitle">Student List</div>
+          <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
+          <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\StudentSample.xlsx"
+              download><u>Student Excel List</u></a></div>
+          <br>
+          <input id="studentupload" type=file name="files[]">
+
+        </form>
+
+        <br>
+        <div id="getliststudentdata" style="font-size: 20px;"></div>
+
+        <div class="control">
+          <textarea class="textarea form-control" id="studentxlx_json"
+            style="width:90% ;height:40% ; overflow: scroll; " readonly></textarea>
+        </div>
+
+
+
+
+      </div>
+      <div class="column is-two-fifths template">
+        <form enctype="multipart/form-data">
+          <div class="Pagetitle">Observer List</div>
+          <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
+          <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\ObserverSample.xlsx"
+              download><u>Observer Excel List</u></a></div>
+          <br>
+          <input id="observerupload" type=file name="files[]">
+
+        </form>
+        <br>
+        <div id="getlistobserverdata" style="font-size: 20px;"></div>
+        <div class="control">
+          <textarea class="textarea form-control" id="observerxlx_json"
+            style="width:100% ;height:50% ; overflow: scroll;" readonly></textarea>
+        </div>
+
+
+      </div>
+      
+    </div>
+
   </div>
-  <div class="column is-half template">
-    <form enctype="multipart/form-data">
-      <label for="allcontent" style="font-size: 20px;">Please upload the observer list in .xlsx format </label>
-      <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\ObserverSample.xlsx"
-          download><u>Observer Excel List</u></a></div>
-      <br><br>
-      <input id="observerupload" type=file name="files[]">
-    </form>
-    <br>
-    <div id="getlistobserverdata" style="font-size: 20px;"></div>
 
-    <br>
-    <textarea class="form-control" id="observerxlx_json" style="width:100% ;height:50% ; overflow: scroll;"
-      readonly="true"></textarea>
-    <br><br><br><br><br><br><br><br><br>
+  <div class="row">
+    <div class="columns is-mobile is-centered">
+      <div class="column is-four-fifths template">
+        <form enctype="multipart/form-data">
+          <div class="Pagetitle">Observer Student Pair List</div>
+          <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
+          <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\StudentSample.xlsx"
+              download><u>Pairing Excel List</u></a></div>
+          <br>
+          <input id="pairupload" type=file name="files[]">
+
+        </form>
+
+        <br>
+        <div id="getlistpairdata" style="font-size: 20px;"></div>
+
+        <div class="control">
+          <textarea class="textarea form-control" id="pairxlx_json"
+            style="width:90% ;height:40% ; overflow: scroll; " readonly></textarea>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 
 
 
@@ -69,9 +114,12 @@
   var allstudentarray = new Array(0);
   document.getElementById('observerupload').addEventListener('change', handleobserverFileSelect, false);
   var allobserverarray = new Array(0);
+  document.getElementById('pairupload').addEventListener('change', handlepairFileSelect, false);
+  var allpairarray = new Array(0);
 
   var studentjsonobj;
   var observerjsonobj;
+  var pairjsonobj;
   var ExcelToJSON = function (role) {
 
     this.parseExcel = function (file) {
@@ -97,23 +145,35 @@
             console.log("check jsonobj      " + studentjsonobj);
             allstudentarray = JSON.parse(json_object);
             document.getElementById("getliststudentdata").innerHTML = "Total " + allstudentarray.length + " students will be created under your management,\<br\> Click confirm to create."
-              + "\<br\>\<br\>"
+              + "\<br\>"
               + " \<form  action\=\"\/uploadstudentlist\" method\=\"post\" onsubmit\=\"submitform(this,\'stu\')\;return false\;\"\>"
-              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\>"
+              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
               + "\<\/form>";
             jQuery('#studentxlx_json').val(json_object);
-          } else {
+          } else if (role == "obs"){
             console.log("check json_object      " + json_object);
             observerjsonobj = json_object;
             console.log("check jsonobj      " + observerjsonobj);
             allobserverarray = JSON.parse(json_object);
             document.getElementById("getlistobserverdata").innerHTML = "Total " + allobserverarray.length + " observers will be created under your management,\<br\> Click confirm to create."
-              + "\<br\>\<br\>"
+              + "\<br\>"
               + " \<form  action\=\"\/uploadobserverlist\" method\=\"post\" onsubmit\=\"submitform(this,\'obs\')\;return false\;\"\>"
-              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\>"
+              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
               + "\<\/form>";
             jQuery('#observerxlx_json').val(json_object);
+          }else if (role == "pair"){
+            console.log("check json_object      " + json_object);
+            pairjsonobj = json_object;
+            console.log("check jsonobj      " + pairjsonobj);
+            allpairarray = JSON.parse(json_object);
+            document.getElementById("getlistpairdata").innerHTML = "Total " + allpairarray.length + " pairs,\<br\> Click confirm to create."
+              + "\<br\>"
+              + " \<form  action\=\"\/uploadpairlist\" method\=\"post\" onsubmit\=\"submitform(this,\'pair\')\;return false\;\"\>"
+              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
+              + "\<\/form>";
+            jQuery('#pairxlx_json').val(json_object);
           }
+
 
         })
       };
@@ -152,13 +212,29 @@
     xl2json.parseExcel(files[0]);
   }
 
+  function handlepairFileSelect(evt) {
+
+var files = evt.target.files; // FileList object
+console.log(files[0].name);
+var namestring = (files[0].name).split("\.");
+if (namestring[1] != "xlsx") {
+  alert("This is not a .xlsx file, please upload a correct format file");
+  return;
+}
+var xl2json = new ExcelToJSON("pair");
+xl2json.parseExcel(files[0]);
+}
+
+
   async function submitform(formElem, role) {
     var jsonobj;
     try {
       if (role == "stu") {
         jsonobj = studentjsonobj;
-      } else {
+      } else if (role == "obs") {
         jsonobj = observerjsonobj;
+      }else if (role == "pair") {
+        jsonobj = pairjsonobj;
       }
       var response = await fetch(formElem.action, {
         method: formElem.method,
@@ -168,9 +244,12 @@
         if (role == "stu") {
           alert("Students are created");
           location.assign("/liststudent");
-        } else {
+        } else  if (role == "obs"){
           alert("Observers are created");
-          window.history.back();
+          location.assign("/liststudent");
+        }else  if (role == "pair"){
+          alert("pairs are created");
+          location.assign("/liststudent");
         }
 
 

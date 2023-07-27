@@ -22,10 +22,13 @@ module.exports = {
         var obslist;
 
 
-        let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic,student.ttbsubmission" +
-            "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
 
-            "\n where supervisorpairstudent.tid = \"" + req.session.userid + "\"\;";
+        thisistheline = "select student.stdname, student.sid,supervisorpairstudent.Topic,student.ttbsubmission,observer.obsname,observerpairstudent.oid from student"
+            + "\n" + "left join supervisorpairstudent on student.sid = supervisorpairstudent.sid"
+            + "\n" + "left join observerpairstudent on student.sid = observerpairstudent.sid"
+            + "\n" + "left join supervisorpairobserver on supervisorpairobserver.oid = observerpairstudent.oid"
+            + "\n" + "left join observer on observer.oid = observerpairstudent.oid"
+            + "\n" + "where supervisorpairstudent.tid = \"" + req.session.userid + "\"";
 
         db.query(thisistheline, (err, results) => {
             try {
@@ -35,7 +38,12 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 stdlist = json;
                 //console.log('>> stdlist: ', stdlist); 
-                thisistheline = "SELECT obsname , observer.oid ,observer.submission FROM supervisorpairobserver INNER JOIN observer ON observer.oid = supervisorpairobserver.oid where supervisorpairobserver.tid = \"" + req.session.userid + "\";"
+                thisistheline = "SELECT observer.obsname , observer.oid,observer.submission,student.stdname,student.sid FROM observer"
+                    + "\n" + "left join observerpairstudent on observerpairstudent.oid = observer.oid"
+                    + "\n" + "left join supervisorpairobserver on supervisorpairobserver.OID = observer.oid"
+                    + "\n" + "left join student on observerpairstudent.sid = student.sid"
+                    + "\n" + "where supervisorpairobserver.tid = \"" + req.session.userid + "\"";
+                +"\n" + "order by observer.oid asc , student.sid asc;"
                 db.query(thisistheline, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
@@ -92,14 +100,33 @@ module.exports = {
 
     readsinglestudent: async function (req, res) {
         var studentresult;
+        var type;
+       
+        if (req.params.id.charAt(0) == "s") {
+            type = "stu";
+            thisistheline = "select student.stdname, student.sid,supervisorpairstudent.Topic,student.ttbsubmission,observer.obsname,observerpairstudent.oid from student"
+                + "\n" + "left join supervisorpairstudent on student.sid = supervisorpairstudent.sid"
+                + "\n" + "left join observerpairstudent on student.sid = observerpairstudent.sid"
+                + "\n" + "left join supervisorpairobserver on supervisorpairobserver.oid = observerpairstudent.oid"
+                + "\n" + "left join observer on observer.oid = observerpairstudent.oid"
+                + "\n" + "where supervisorpairstudent.tid = \"" + req.session.userid + "\""
+                + "\n and student.sid = \"" + req.params.id + "\"\;";
+        } else {
+            type = "obs";
+            thisistheline = "SELECT observer.obsname , observer.oid,observer.submission,student.stdname,student.sid FROM observer"
+                + "\n" + "left join observerpairstudent on observerpairstudent.oid = observer.oid"
+                + "\n" + "left join supervisorpairobserver on supervisorpairobserver.OID = observer.oid"
+                + "\n" + "left join student on observerpairstudent.sid = student.sid"
+                + "\n" + "where supervisorpairobserver.tid = \"" + req.session.userid + "\""
+                + "\n" + " and observer.oid = \"" + req.params.id + "\"";
+        }
 
 
-        let thisistheline = "SELECT student.stdname, student.sid,supervisorpairstudent.Topic " +
-            "\n FROM supervisorpairstudent " + "\n INNER JOIN student ON student.sid=supervisorpairstudent.sid" +
-            "\n where supervisorpairstudent.tid = \"" + req.session.userid + "\"" +
-            "\n and student.sid = \"" + req.params.sid + "\"\;";
 
-        console.log('>> the line: ', thisistheline);
+
+
+
+       
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
@@ -108,7 +135,7 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 studentresult = json;
                 //console.log('>> stdlist: ',studentresult);  
-                return res.view('user/read', { thatstudent: studentresult });
+                return res.view('user/read', { type: type, thatstudent: studentresult });
             } catch (err) {
                 console.log("sth happened here");
 
@@ -119,26 +146,58 @@ module.exports = {
 
     },
 
+
     deletestudent: async function (req, res) {
         var studentresult;
+        
+        console.log(String(req.body.id).charAt(0))
+        if (String(req.body.id).charAt(0) == "s") {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.body.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+
+            thisistheline = "DELETE FROM student WHERE sid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+
+            thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+        } else {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.body.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+
+            thisistheline = "DELETE FROM observer WHERE oid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+
+            thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.body.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+        }
 
 
-        let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.sid + "\"\n";
-        console.log('delete excution');
-        console.log(thisistheline);
-        db.query(thisistheline, (err, results) => {
-            if (err) { console.log("sth happened here"); }
-        });
 
-        thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.sid + "\"\n";
-        db.query(thisistheline, (err, results) => {
-            if (err) { console.log("sth happened here"); }
-        });
 
-        thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.sid + "\"\n";
-        db.query(thisistheline, (err, results) => {
-            if (err) { console.log("sth happened here"); }
-        });
 
         return res.ok("Deleted");
     },
@@ -232,7 +291,7 @@ module.exports = {
 
 
 
-            console.log(thisistheline)
+        console.log(thisistheline)
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);
