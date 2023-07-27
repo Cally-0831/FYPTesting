@@ -149,52 +149,65 @@ module.exports = {
 
     deletestudent: async function (req, res) {
         var studentresult;
-        
-        console.log(String(req.body.id).charAt(0))
-        if (String(req.body.id).charAt(0) == "s") {
-            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.body.id + "\"\n";
-            console.log('delete excution');
-            console.log(thisistheline);
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
+        var checktype = req.params.id.split('&');
+        console.log(checktype);
 
-            thisistheline = "DELETE FROM student WHERE sid= \"" + req.body.id + "\"\n";
+        //remove pair
+        if(checktype.length > 1){
+            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + checktype[0] + "\"\n";
             db.query(thisistheline, (err, results) => {
                 if (err) { console.log("sth happened here"); }
             });
-
-            thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.body.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.body.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-        } else {
-            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.body.id + "\"\n";
-            console.log('delete excution');
-            console.log(thisistheline);
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-
-            thisistheline = "DELETE FROM observer WHERE oid= \"" + req.body.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-
-            thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.body.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-            thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.body.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
+        }else{
+            //remove single ppl
+            console.log(String(req.params.id).charAt(0))
+            if (String(req.params.id).charAt(0) == "s") {
+                let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+                console.log('delete excution');
+                console.log(thisistheline);
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+    
+                thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+    
+                thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+                thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+            } else {
+                let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+                console.log('delete excution');
+                console.log(thisistheline);
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+    
+                thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+    
+                thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+                thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
+                db.query(thisistheline, (err, results) => {
+                    if (err) { console.log("sth happened here"); }
+                });
+            }
+    
         }
-
+        
+       
 
 
 
@@ -244,7 +257,7 @@ module.exports = {
                 req.body.othertext + "\"\);";
         }
 
-        console.log(thisistheline)
+     
         db.query(thisistheline, function (err, result) {
             if (err) {
                 res.status(401).json("Error happened when excuting : " + thisistheline);

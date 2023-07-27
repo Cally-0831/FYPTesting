@@ -1,67 +1,44 @@
-let thisistheline;
-        let today = new Date();
+ console.log(String(req.params.id).charAt(0))
+        if (String(req.params.id).charAt(0) == "s") {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
+            thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-        thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
-        console.log(thisistheline);
-        db.query(thisistheline, function (error, result) {
-            try {
+            thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+        } else {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                var string = JSON.stringify(result);
-                var json = JSON.parse(string);
-               
-                deadline = new Date(json[0].ttbdeadline);
-                
+            thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                if (json[0].ttbdeadline != null) {
-                    if (today > deadline) {
-                        console.log("overtime !!!!!")
-                  /**
-                        res.status() = 402;
-                     res.json() ="Submission Box was closed\n"
-                     + "Current Time       :  " + today.toLocaleDateString() + " " + today.toLocaleTimeString('en-us') + "\n"
-                     + "Submission Deadline:  " + deadline.toLocaleDateString() + " " + deadline.toLocaleTimeString('en-us');
-**/
-                    alert("Submission box was closed");
-
-                    return res.redirect("/home");
-                        }
-                }
-                thisistheline = "select distinct CDept from allclass";
-
-               
-
-            } catch (err) {
-                
-              console.log('checkdeadlinettb MySQL Problem' + "    " + error);
-            }
-
-        });
-
-
-
-
-        async function checkdeadline(date) {
-                        var requestBody = JSON.stringify({deadline : date})
-                        console.log(date)
-                        /**
-                        var response = await fetch("/timetable/submitttb/date" , {
-                            method: "POST",
-                            body: requestBody,
-
-                        });
-                        **/
-                        var response = await fetch("/timetable/submitttb/" , {
-                            method: "GET",
-                            });
-
-                        if (response.ok) {
-                           location.assign(response.url);
-                        } else if(response.status == 402){
-                            alert(response.status + ": " + response.statusText);
-                            console.log("overtime , get json")
-                            location.assign(response.url);
-                        }else{
-                        location.assign("../timetable")
-                        }
-                    }
+            thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+        }

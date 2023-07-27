@@ -1,141 +1,185 @@
 <div class="buttons">
-    <div class="button buttonlogout is-left" onclick="history.back()">
+    <div class="button buttonlogout is-left" onclick="back()">
         Back
     </div>
 
 </div>
-<%if (type=="stu" ){%>
-    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Observer</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action</th>
-
-        <% thatstudent.forEach( function(thatstudent) { %>
-
-            <tr>
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <%= thatstudent.sid %>
-                </td>
-
-
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <%= thatstudent.stdname %>
-                </td>
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <%= thatstudent.Topic%>
-                </td>
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <a href="/read/<%=thatstudent.oid%>"><%= thatstudent.oid %></a>
-                </td>
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <a href="/read/<%=thatstudent.oid%>"><%= thatstudent.obsname%></a>
-                </td>
-                <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <div class="buttons is-centered">
-                        <div class="button buttonlogout" type="button"
-                            onclick="deletestudent('<%= thatstudent.sid %>')">
-                            Delete</div>
-                    </div>
-
-                </td>
-            </tr>
-
-            <% }); %>
-
-    </table>
-
-    <%}else{%>
-        
-        
+<div>
+    <%if (type=="stu" ){%>
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerOID' onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a> OID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerobsname'
-                onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            SID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            Student Name
-        </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Observer</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action</th>
 
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerobsTTBview'
-                onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action</th>
+            <% thatstudent.forEach( function(thatstudent) { %>
 
-        <tr>
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= thatstudent[0].oid %>
-            </td>
+                <tr>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent.sid %>
+                    </td>
 
 
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= thatstudent[0].obsname %>
-            </td>
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% thatstudent.forEach( function(thatstudent) { %>
-                    <a href="/read/<%=thatstudent.sid%>"><%=thatstudent.sid%></a><br>
-                    <%})%>
-            </td>
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% thatstudent.forEach( function(thatstudent) { %>
-                    <a href="/read/<%=thatstudent.sid%>"><%=thatstudent.stdname%></a><br>
-                    <%})%>
-            </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent.stdname %>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent.Topic%>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <a href="/read/<%=thatstudent.oid%>">
+                            <%= thatstudent.oid %>
+                        </a>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <a href="/read/<%=thatstudent.oid%>">
+                            <%= thatstudent.obsname%>
+                        </a>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <div class="buttons is-centered">
+                            <div class="button buttonlogout" type="button"
+                                onclick="deletestudent('<%= thatstudent.sid %>')">
+                                Delete</div>
+                            <div class="button buttonlogout" type="button"
+                                onclick="breakpair('<%= thatstudent.sid %>','<%=thatstudent.oid%>')">
+                                Remove Pair</div>
+                        </div>
 
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= thatstudent[0].submission %>
-            </td>
-            <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                <div class="buttons is-centered">
-                    <div class="button buttonlogout" type="button"
-                        onclick="deletestudent('<%=thatstudent[0].oid%>')">
-                        Delete</div>
-                </div>
+                    </td>
+                </tr>
 
-            </td>
-        </tr>
+                <% }); %>
+
+        </table>
+
+        <%}else{%>
+
+
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headerOID'
+                        onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a>
+                    OID
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headerobsname'
+                        onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    SID
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    Student Name
+                </th>
+
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headerobsTTBview'
+                        onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action
+                </th>
+
+                <tr>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent[0].oid %>
+                    </td>
+
+
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent[0].obsname %>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <% thatstudent.forEach( function(thatstudent) { %>
+                            <a href="/read/<%=thatstudent.sid%>">
+                                <%=thatstudent.sid%>
+                            </a><br>
+                            <%})%>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <% thatstudent.forEach( function(thatstudent) { %>
+                            <a href="/read/<%=thatstudent.sid%>">
+                                <%=thatstudent.stdname%>
+                            </a><br>
+                            <%})%>
+                    </td>
+
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= thatstudent[0].submission %>
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <div class="buttons is-centered">
+                            <div class="button buttonlogout" type="button"
+                                onclick="deletestudent('<%=thatstudent[0].oid%>')">
+                                Delete</div>
+                        </div>
+
+                    </td>
+                </tr>
+
+            </table>
+
+
+            <%}%>
+
+</div>
+
+
+<script>
+
+    async function breakpair(sid, oid) {
+
+        var r = confirm("Confirm remove pairing  {" + sid + "  &  " + oid + "} ?");
+        if (r) {
+
+            var response = await fetch("/read/" + sid + "&" + oid, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Pairing { "+sid+"  &  "+oid+" } has been removed");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
         
-</table>
+    }
+    function back() {
+        location.assign("/liststudent");
+    }
+    async function deletestudent(id) {
+        var r = confirm("Confirm Delete?" + id);
 
+        if (r) {
 
-        <%}%>
+            var response = await fetch("/read/" + id, {
+                method: "DELETE",
 
+            });
 
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
 
+                alert("student deleted.");
+                location.assign("/liststudent");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
 
-        <script>
-            async function deletestudent(id) {
-                var r = confirm("Confirm Delete?" + id);
+        } else {
+            alert("cancelled");
+        }
+    };
 
-                if (r) {
-
-                    var response = await fetch("/read/" + id, {
-                        method: "DELETE",
-                        body: id
-                    });
-
-                    if (response.ok) {
-                        // var html = await response.text();
-                        // alert(html);
-
-                        alert("student deleted.");
-                        location.assign("/liststudent");
-                    } else {
-                        alert(response.status + ": " + response.statusText);
-                    }
-
-                } else {
-                    alert("cancelled");
-                }
-            };
-
-        </script>
+</script>

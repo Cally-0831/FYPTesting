@@ -4,7 +4,7 @@
     <div class="columns">
         <div class="column is-left">
             <div class="buttons">
-                <div class="button buttonlogout is-left" onclick="history.back()">
+                <div class="button buttonlogout is-left" onclick="back()">
                     Back
                 </div>
 
@@ -151,11 +151,11 @@
         var thisobs=allobslist[j].oid; var obssidlist=[]; var obsstunamelist=[]; var oid = allobslist[j].oid;
         var obsname = allobslist[j].obsname; var submission = allobslist[j].submission;
     for(var i=0 ; i < allobslist.length;i++){
-       console.log(allobslist[i].oid+"    "+allobslist[j].sid+"    "+thisobs)
+      
         if( allobslist[i].oid==thisobs){ 
             obssidlist.push(allobslist[i].sid)
             obsstunamelist.push(allobslist[i].stdname) 
-            console.log(obssidlist.length +"     "+obsstunamelist.length+"\n\n")
+           
         }
     }
     var currentobs = {oid:oid ,obsname:obsname,submission:submission, obssidlist:obssidlist , obsstunamelist:obsstunamelist}
@@ -164,7 +164,7 @@
 }%>
 
     <% obslist.forEach( function(list) { %>
-<%console.log(list)%>
+
         <tr  onclick="redirectplease('<%=list.oid%>')">
             <td id="oid" style="font-size:20px;text-align: center;vertical-align:middle;">
                 <%= list.oid %>
@@ -274,6 +274,10 @@
 
     function redirectplease(path) {
         location.assign("/read/" + path);
+    }
+
+    function back(){
+        location.assign("/home")
     }
 
 </script>
