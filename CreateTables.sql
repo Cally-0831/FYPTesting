@@ -148,8 +148,10 @@ primary key (TID,OID)
 create table observerpairstudent(
 OID		varchar(20) not null,
 SID		varchar(10) not null,
-primary key (OID,SID)
+primary key (SID)
 );
+
+
 
 create table allclassroomtimeslot(
 ReqID	varchar(20) not null,
@@ -550,3 +552,6 @@ CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
    END;
   |
 delimiter ;
+
+
+

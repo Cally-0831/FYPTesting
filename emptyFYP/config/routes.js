@@ -30,8 +30,8 @@ module.exports.routes = {
 
   'GET /home': { view: 'user/home' },
 
-  'GET /schduledesign': { view: 'user/schduledesign' },
-"GET /checkschdule" :"SchduleController.viewfinalschdule",
+  'GET /schduledesign': "SettingController.checksetting",
+  "GET /checkschdule": "SchduleController.viewfinalschdule",
 
 
 
@@ -46,10 +46,10 @@ module.exports.routes = {
   'GET /notice/createnewnotice': "NoticeListController.viewnoticepage",
   'GET /notice/createnewnotice/auto': "NoticeListController.viewnoticepage",
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
-  
-  
+
+
   'GET /timetable/submitttb': "TimetableController.getallclass",
- //'GET /timetable/submitttb/': "TimetableController.checkdeadline",
+  //'GET /timetable/submitttb/': "TimetableController.checkdeadline",
   'GET /timetable/submitttb/get_data': "TimetableController.getotherfield",
   'POST /timetable/submitttb': "TimetableController.submitclass",
   'POST /timetable/submitttb/deadline': "TimetableController.checkdeadline",
@@ -60,11 +60,11 @@ module.exports.routes = {
   'POST /timetable': "TimetableController.submitpersonalallclass",
   'POST /timetable/pic': "TimetableController.upload",
   'POST /timetable/deadline': "TimetableController.checkdeadline",
-  
+
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",
-  "POST /requestdetail/proof/:ReqID":"RequestController.upload",
+  "POST /requestdetail/proof/:ReqID": "RequestController.upload",
 
   'GET /classroommanagement': "ClassroomListController.getinfobycampus",
 

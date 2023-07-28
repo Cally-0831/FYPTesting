@@ -302,6 +302,7 @@ module.exports = {
                 req.body[i].obspassword + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
             console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
+                console.log(thisistheline);
                 if (err) {
                     console.log(err);
                     res.status(401).json("Error happened when excuting : " + thisistheline);
@@ -321,21 +322,21 @@ module.exports = {
             });
 
         }
-
+        console.log("\n\n\n\n\n")
 
         for (var i = 0; i < req.body.length; i++) {
 
             thisistheline = "insert IGNORE into observerpairstudent values(\"" +
-                req.body[i].oid + "\"\,\""
-                + req.body[i].sid + "\"\);";
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
+            req.body[i].oid + "\"\,\""
+            + req.body[i].sid + "\"\);";
+        db.query(thisistheline, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(401).json("Error happened when excuting : " + thisistheline);
 
-                };
-                console.log("1 pair record inserted");
-            });
+            };
+            console.log("1 obspairstud record inserted");
+        });
 
         }
 

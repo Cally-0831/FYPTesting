@@ -165,6 +165,17 @@
                     <%}%>
 </div>
 <script>
+    /**
+    async function wanttodesign() {
+        var response = await fetch("/schduledesign", {
+            method: "GET",
+        });
+        if (response.ok) {
+console.log()
+            location.assign(response.url);
+        }
+
+    }**/
 
     async function checktimecome() {
         var response = await fetch("/checkschdule", {

@@ -5,7 +5,7 @@
         <div class="columns ">
             <div class="column">
                 <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="history.back()">
+                    <div class="button buttonlogout " onclick="backback()">
                         Back
                     </div>
 
@@ -76,6 +76,10 @@
 
 
 <script>
+    function backback(){
+        location.assign("home");
+    }
+    
     function gotocreate() {
         location.assign("/notice/createnewnotice");
     }

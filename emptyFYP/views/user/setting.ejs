@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="history.back()">
+                    <div class="button buttonlogout " onclick="back()">
                         Back
                     </div>
                 </div>
@@ -318,6 +318,10 @@
 
 <script>
 
+    function back(){
+        location.assign("home")
+    }
+
 
     async function CreateNotice(command, startdatedate,starttime, id, enddatedate,endtime) {
 
@@ -326,14 +330,14 @@
         var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
             method: "GET",
         });
-        console.log(response)
+       
         location.assign(response.url)
         }else{
             var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+ "&enddate=" + enddatedate + "&endtime=" + endtime ;
         var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
             method: "GET",
         });
-        console.log(response)
+       
         location.assign(response.url)
         }
         
