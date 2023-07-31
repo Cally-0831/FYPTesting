@@ -1,0 +1,11 @@
+<div>home</div>
+
+<button onclick = "butbut()">button</button>
+<script>
+    async function butbut(){
+var response = await fetch('/',{method : 'GET'})
+if(response.ok){
+    console.log(response)
+}
+    }
+</script>

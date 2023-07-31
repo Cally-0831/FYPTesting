@@ -24,7 +24,8 @@ module.exports.routes = {
   '/': { view: 'user/login' },
 
   'GET /login': "UserController.login",
-  'POST /login': "UserController.login",
+ // 'POST /login': "UserController.login",
+ 'POST /login': "SocketController.becomesocket",
 
   'GET /user/logout': 'UserController.logout',
 
