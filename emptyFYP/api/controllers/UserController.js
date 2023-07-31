@@ -1,3 +1,4 @@
+/** 
 var mysql = require('mysql');
 //var url = new url(sails.config.datastores.mysql.url);
 console.log(mysql);
@@ -14,6 +15,9 @@ db.connect(async (err) => {
     }
     //console.log('MySQL Connected');
 });
+**/
+
+
 
 module.exports = {
 
@@ -31,7 +35,7 @@ module.exports = {
         if (req.method == "GET") return res.view('user/login');
 
         if (!req.body.username || !req.body.pw) return res.status(401).json("Please enter both username and password");
-
+        var db = await sails.helpers.database();
 
 
 
@@ -45,6 +49,7 @@ module.exports = {
         //  console.log(thisistheline);
 
         // Start a new session for the new login user
+
 
 
         db.query(thisistheline, (err, results) => {
@@ -74,7 +79,16 @@ module.exports = {
                     req.session.username = user.allusersname;
                     req.session.userid = user.pid;
                     req.session.boo = false;
-
+                    
+                    const { io } = require("socket.io-client");
+                    const socket = io();
+                    io.on("connection", (socket) => {
+                        console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+                      });
+                         
+           
+                  
+                    
                     return res.json(user);
                 });
             } catch (err) {
@@ -84,6 +98,8 @@ module.exports = {
 
 
         });
+        
+
 
     },
 
@@ -170,6 +186,7 @@ module.exports = {
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
             console.log(thisistheline);
+            var db = await sails.helpers.database();
             db.query(thisistheline, function (err, result) {
                 if (err) {
                     console.log(err);
@@ -187,6 +204,7 @@ module.exports = {
                 req.session.userid + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].topic + "\"\);";
+            var db = await sails.helpers.database();
             db.query(thisistheline, function (err, result) {
                 if (err) {
                     console.log(err);
@@ -209,7 +227,7 @@ module.exports = {
 
     uploadobserverlist: async function (req, res) {
 
-
+        var db = await sails.helpers.database();
         if (req.method == "GET") return res.view('user/uploadstudentlist');
 
 
@@ -222,6 +240,7 @@ module.exports = {
                 + req.body[i].oid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
             console.log(thisistheline);
+
             db.query(thisistheline, function (err, result) {
                 if (err) {
                     console.log(err);
@@ -254,7 +273,7 @@ module.exports = {
     },
 
     uploadpairlist: async function (req, res) {
-
+        var db = await sails.helpers.database();
         for (var i = 0; i < req.body.length; i++) {
             console.log("\n\n\n\n\n")
             console.log(req.body[i]);
@@ -327,16 +346,16 @@ module.exports = {
         for (var i = 0; i < req.body.length; i++) {
 
             thisistheline = "insert IGNORE into observerpairstudent values(\"" +
-            req.body[i].oid + "\"\,\""
-            + req.body[i].sid + "\"\);";
-        db.query(thisistheline, function (err, result) {
-            if (err) {
-                console.log(err);
-                res.status(401).json("Error happened when excuting : " + thisistheline);
+                req.body[i].oid + "\"\,\""
+                + req.body[i].sid + "\"\);";
+            db.query(thisistheline, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json("Error happened when excuting : " + thisistheline);
 
-            };
-            console.log("1 obspairstud record inserted");
-        });
+                };
+                console.log("1 obspairstud record inserted");
+            });
 
         }
 

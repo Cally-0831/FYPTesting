@@ -43,6 +43,9 @@
 <script defer src="https://use.fontawesome.com/releases/v5.10.0/js/all.js"></script>
 <script type="text/JavaScript" src=" https://MomentJS.com/downloads/moment.js"></script>
 <script type="text/Javascript" src="https://cdn.skypack.dev/dayjs@1.10.3"></script>
+<script type="text/javascript" src="/dependencies/sails.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
 
 <body>
 
@@ -65,7 +68,7 @@
             <div class="button buttonlogout">
               <%= req.session.username %>
             </div>
-          <p>&nbsp;&nbsp;</p>
+            <p>&nbsp;&nbsp;</p>
             <a class="active" href="/user/logout">
               <div class="button buttonlogout">Logout</div>
             </a>
@@ -158,6 +161,27 @@
 </div>
 
 </html>
+<script>
+/**
+  io.socket.get('/login', function serverResponded(body, JWR) {
+
+    // JWR ==> "JSON WebSocket Response"
+    console.log('Sails responded with: ', body);
+    //console.log('with headers: ', JWR.headers);
+    //console.log('and with status code: ', JWR.statusCode);
+
+    // first argument `body` === `JWR.body`
+    // (just for convenience, and to maintain familiar usage, a la `JQuery.get()`)
+  });
+  **/
+  const socket = io();
+  socket.on("connect", () => {
+  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+});
+socket.on("disconnect", () => {
+  console.log(socket.id); // undefined
+});
+</script>
 <!---
 <script>
   document.addEventListener("keydown", e => {
