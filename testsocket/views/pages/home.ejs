@@ -1,11 +1,19 @@
+
 <div>home</div>
 
-<button onclick = "butbut()">button</button>
+<button onclick="butbut()">button</button>
+<script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
 <script>
-    async function butbut(){
-var response = await fetch('/',{method : 'GET'})
-if(response.ok){
-    console.log(response)
-}
+    async function butbut() {
+        var response = await fetch('/', { method: 'GET' })
+        if (response.ok) {
+            console.log(response)
+        }
     }
+
+    var socket = io();
+    socket.on('connect', function () {
+        var id = socket.io.engine.id;
+        alert(id);
+    })
 </script>
