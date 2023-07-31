@@ -53,7 +53,10 @@
 
 
 <script>
+    
+
     async function submitform(formElem) {
+       
         try {
             var response = await fetch(formElem.action, {
                 method: formElem.method,
@@ -62,6 +65,8 @@
             if (response.ok) {
                 const user = await response.json();
                 console.log(user.allusersname);
+                window.sessionStorage.setItem("pid", user.pid);
+                console.log(sessionStorage.getItem('pid'))
                 //alert("Welcom back, " + user.allusersname);
                 location.assign("/home");
 
@@ -73,7 +78,7 @@
             }
 
         } catch (error) {
-            console.log(error);
+            console.log(""+error+"");
         }
     }
 

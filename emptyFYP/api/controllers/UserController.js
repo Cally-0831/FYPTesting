@@ -18,7 +18,6 @@ db.connect(async (err) => {
 **/
 
 
-
 module.exports = {
 
     login: async function (req, res) {
@@ -28,7 +27,7 @@ module.exports = {
             password: "",
             status: "",
             errortime: 0,
-            rol: ""
+            role: ""
 
         };
 
@@ -69,29 +68,24 @@ module.exports = {
                 console.log('>> username: ' + user.allusersname);
                 console.log('>> pid: ' + user.pid);
                 console.log('>> pid: ' + user.role);
+               
                 if (user.password != searchingpw) {
                     return res.status(401).json("Wrong Password");
                 }
                 req.session.regenerate(function (err) {
                     if (err) return res.serverError(err);
-
+                   
                     req.session.role = user.role;
                     req.session.username = user.allusersname;
                     req.session.userid = user.pid;
                     req.session.boo = false;
                     
-                    const { io } = require("socket.io-client");
-                    const socket = io();
-                    io.on("connection", (socket) => {
-                        console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-                      });
-                         
-           
-                  
                     
+
                     return res.json(user);
                 });
             } catch (err) {
+                console.log(err)
                 if (user.pid != searchingname) return res.status(401).json("User not found");
 
             }
@@ -108,7 +102,7 @@ module.exports = {
         req.session.destroy(function (err) {
 
             if (err) return res.serverError(err);
-
+            sessionStorage.clear();
             return res.redirect("/");
         });
     },
