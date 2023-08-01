@@ -5,143 +5,207 @@
             ReqID : <%=thistimeslotinfo[0].ReqID%>
 </div>
 
+<% var startstart=new Date(thistimeslotinfo[0].StartDate).toLocaleDateString().split("/")%>
+    <% if(startstart[1].length==1){startstart[1]="0" +startstart[1];}%>
+        <% if(startstart[0].length==1){startstart[0]="0" +startstart[0];}%>
+            <% var startstring=startstart[2]+"-"+startstart[1]+"-"+startstart[0]%>
+                <%= startstring%>
+                    <% var endend=new Date(thistimeslotinfo[0].EndDate).toLocaleDateString().split("/")%>
 
-<% var startstart=new Date(thistimeslotinfo[0].StartDate).toLocaleDateString()%>
-    <% var endend=new Date(thistimeslotinfo[0].EndDate).toLocaleDateString()%>
+                        <% if(endend[1].length==1){endend[1]="0" +endend[1];}%>
+                            <% if(endend[0].length==1){endend[0]="0" +endend[0];}%>
+                                <% var endstring=endend[2]+"-"+endend[1]+"-"+endend[0]%>
+                                    <%= endstring%>
 
-        <div class="row">
-            <button class="button buttonlogout"
-                onclick="backback('/view/<%=thistimeslotinfo[0].Campus%>/<%=thistimeslotinfo[0].RID%>')">Back</button>
-        </div>
-        <br><br>
-        <div class="columns is-centered " style="padding-left : 10px;padding-right : 10px;">
-            <div class="column is-one-third updateclassroomtemplate">
-                <table class="table is-fullwidth"
-                    style=" background-color: transparent;text-align: center; font-size: 20px;">
-                    <tr>
-                        <th style=" text-align: center;">
-                            StartDate
-                        </th>
-                        <td id="oldstartday">
-                            <%=startstart%>
-                        </td>
-                        <td id="oldstarttime">
-                            <%=thistimeslotinfo[0].StartTime%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style=" text-align: center;">
-                            EndDate
-                        </th>
-                        <td id="oldendday">
-                            <%=endend%>
-                        </td>
-                        <td id="oldendtime">
-                            <%=thistimeslotinfo[0].EndTime%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style=" text-align: center;">
-                            Remarks
-                        </th>
-                        <td colspan="2" id="oldremarks">
-                            <%=thistimeslotinfo[0].Remarks%>
-                        </td>
-                    </tr>
-                </table>
-
-
-            </div>
-
-            <div class="column is-one-third  updateclassroomtemplate">
-                <table class="table is-fullwidth"
-                    style=" background-color: transparent;text-align: center; font-size: 20px;">
-                    <tr>
-                        <th style=" text-align: center;">
-                            StartDate
-                        </th>
-                        <td>
-                            <input type="date" id="notokstartday" name="notokstartday">
-                        </td>
-                        <td>
-                            <input type="time" id="starttime" name="starttime">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style=" text-align: center;">
-                            EndDate
-                        </th>
-                        <td>
-                            <input type="date" id="notokendday" name="notokendday">
-                        </td>
-                        <td>
-                            <input type="time" id="endtime" name="endtime">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style=" text-align: center;">
-                            Remarks
-                        </th>
-                        <td colspan="2">
-                            <textarea class="textarea" id="remarks" name="remarks" placeholder=""></textarea>
-                        </td>
-                    </tr>
-                </table>
-                <div class="row">
-                    <div class="buttons is-right">
-                        <button class=" button buttonlogout" onclick="Update()">
-                            Update
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+                                        <div class="row">
+                                            <button class="button buttonlogout"
+                                                onclick="backback('/view/<%=thistimeslotinfo[0].Campus%>/<%=thistimeslotinfo[0].RID%>')">Back</button>
+                                        </div>
+                                        <br><br>
+                                        <div class="columns is-centered "
+                                            style="padding-left : 10px;padding-right : 10px;">
+                                            <div class="column is-one-third updateclassroomtemplate">
+                                                <table class="table is-fullwidth is-mobile"
+                                                    style=" background-color: transparent;text-align: center; font-size: 20px;">
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            StartDate
+                                                        </th>
+                                                        <td id="oldstartday">
+                                                            <%= startstring%>
+                                                        </td>
+                                                        <td id="oldstarttime">
+                                                            <%=thistimeslotinfo[0].StartTime%>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            EndDate
+                                                        </th>
+                                                        <td id="oldendday">
+                                                            <%= endstring%>
+                                                        </td>
+                                                        <td id="oldendtime">
+                                                            <%=thistimeslotinfo[0].EndTime%>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            Remarks
+                                                        </th>
+                                                        <td colspan="2" id="oldremarks">
+                                                            <%=thistimeslotinfo[0].Remarks%>
+                                                        </td>
+                                                    </tr>
+                                                </table>
 
 
-        <script>
-            async function Update() {
-                var newstartday;
-                var newstarttime;
-                var newendday;
-                var newendtime;
-                var newremarks;
-               
-                if (document.getElementById("notokstartday").value !="") {
-                    newstartday = document.getElementById("notokstartday").value;
-                } else{
-                    newstartday = document.getElementById("oldstartday").innerText;
-                }
-                if (document.getElementById("notokendday").value !="") {
-                    newendday = document.getElementById("notokendday").value;
-                } else{
-                    newendday = document.getElementById("oldendday").innerText;
-                }
-                if (document.getElementById("starttime").value !="") {
-                    newstarttime = document.getElementById("starttime").value;
-                } else{
-                    newstarttime = document.getElementById("oldstarttime").innerText;
-                }
-                if (document.getElementById("endtime").value !="") {
-                    newendtime = document.getElementById("endtime").value;
-                } else{
-                    newendtime = document.getElementById("oldendtime").innerText;
-                }
-                if (document.getElementById("remarks").value !="") {
-                    newremarks = document.getElementById("remarks").value;
-                } else{
-                    newremarks = document.getElementById("oldremarks").innerText;
-                }
+                                            </div>
 
-                
-                console.log(newstartday+"\n"+newstarttime+"\n"+newendday+"\n"+newendtime+"\n"+newremarks)
+                                            <div class="column is-one-third  updateclassroomtemplate">
+                                                <table class="table is-fullwidth"
+                                                    style=" background-color: transparent;text-align: center; font-size: 20px;">
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            StartDate
+                                                        </th>
+                                                        <td>
+                                                            <input type="date" id="notokstartday" name="notokstartday">
+                                                        </td>
+                                                        <td>
+                                                            <input type="time" id="starttime" name="starttime">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            EndDate
+                                                        </th>
+                                                        <td>
+                                                            <input type="date" id="notokendday" name="notokendday">
+                                                        </td>
+                                                        <td>
+                                                            <input type="time" id="endtime" name="endtime">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style=" text-align: center;">
+                                                            Remarks
+                                                        </th>
+                                                        <td colspan="2">
+                                                            <textarea class="textarea" id="remarks" name="remarks"
+                                                                placeholder=""></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div class="row">
+                                                    <div class="buttons is-right">
+                                                        <button class=" button buttonlogout"
+                                                            onclick="Update('<%=thistimeslotinfo[0].ReqID%>','/view/<%=thistimeslotinfo[0].Campus%>/<%=thistimeslotinfo[0].RID%>')">
+                                                            Update
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                var response = await fetch(formElem.action, {
-                method: formElem.method,
-                body: new FormData(formElem),
-            });
-            }
-            function backback(link) {
-                location.assign(link)
-            }
-        </script>
+                                        </div>
+
+
+                                        <script>
+                                            async function Update(ReqID, link) {
+                                                var newstartday;
+                                                var newstarttime;
+                                                var newendday;
+                                                var newendtime;
+                                                var newremarks;
+
+
+                                                if (document.getElementById("notokstartday").value != "") {
+                                                    newstartday = document.getElementById("notokstartday").value;
+
+                                                } else {
+
+                                                    newstartday = document.getElementById("oldstartday").innerText;
+
+                                                }
+                                                if (document.getElementById("notokendday").value != "") {
+                                                    newendday = document.getElementById("notokendday").value;
+
+                                                } else {
+                                                    newendday = document.getElementById("oldendday").innerText;
+
+                                                }
+                                                if (document.getElementById("starttime").value != "") {
+                                                    newstarttime = document.getElementById("starttime").value;
+                                                } else {
+                                                    newstarttime = document.getElementById("oldstarttime").innerText;
+                                                }
+                                                if (document.getElementById("endtime").value != "") {
+                                                    newendtime = document.getElementById("endtime").value;
+                                                } else {
+                                                    newendtime = document.getElementById("oldendtime").innerText;
+                                                }
+                                                if (document.getElementById("remarks").value != "") {
+                                                    newremarks = document.getElementById("remarks").value;
+                                                } else {
+                                                    newremarks = document.getElementById("oldremarks").innerText;
+                                                }
+
+                                                var timenewstarttime = newstarttime.toString().split(":");
+                                                var timenewendtime = newendtime.toString().split(":");
+                                                var today1 = new Date();
+                                                today1.setHours(timenewstarttime[0]);
+                                                today1.setMinutes(timenewstarttime[1]);
+
+
+                                                var today2 = new Date();
+                                                today2.setHours(timenewendtime[0]);
+                                                today2.setMinutes(timenewendtime[1]);
+                                                console.log(today1 + "     " + today2)
+                                                newstartday = new Date(newstartday);
+                                                newendday = new Date(newendday);
+                                                console.log(newstartday + "\n" + newstarttime + "\n" + newendday + "\n" + newendtime + "\n" + newremarks)
+                                                console.log(newstartday > newendday);
+                                                console.log(""+newstartday+"" == ""+newendday+"")
+                                                if (newstartday > newendday) {
+                                                    console.log("enter 1")
+                                                    return alert("the start date cannot be later than the end date");
+                                                } else if (""+newstartday+"" == ""+newendday+"") {
+                                                    console.log("enter 2")
+
+                                                    if (today1 >= today2) {
+                                                        return alert("the start time cannot be later than the end time");
+                                                    }
+
+                                                } else {
+                                                    console.log("enter3")
+                                                    var requestbody = JSON.stringify({
+                                                        ReqID: ReqID,
+                                                        type: "Update",
+                                                        newstartday: newstartday,
+                                                        newendday: newendday,
+                                                        newstarttime: newstarttime,
+                                                        newendtime: newendtime,
+                                                        newremarks: newremarks
+                                                    })
+                                                    /**
+                                                    var response = await fetch("/updatetime/" + ReqID, {
+                                                        method: "POST",
+                                                        body: requestbody
+
+                                                    });
+                                                    if (response.ok) {
+                                                        location.assign(link)
+                                                    } else if (response.status == 401) {
+                                                        console.log(response)
+                                                        var msg = response.statusText;
+                                                        alert(msg)
+                                                    }
+**/
+                                                }
+
+
+                                            }
+                                            function backback(link) {
+                                                location.assign(link)
+                                            }
+                                        </script>

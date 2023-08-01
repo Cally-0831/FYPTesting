@@ -126,7 +126,7 @@ module.exports = {
 
         let thisistheline;
         let checkline;
-        console.log(">>>>>>>>>>"+req.body.Unavailabletype)
+        console.log(">>>>>>>>>>" + req.body.Unavailabletype)
         console.log(req.body.Unavailabletype == "timeslot")
         console.log(req.body.Unavailabletype == "wholeday")
         console.log(req.body.Unavailabletype == "dayrange")
@@ -136,15 +136,15 @@ module.exports = {
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"" + req.body.starttime
                 + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
 
-            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + 
-            "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" + req.body.notokstartday + "\" and( \""+req.body.starttime+"\" between starttime and EndTime)"
+            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid +
+                "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" + req.body.notokstartday + "\" and( \"" + req.body.starttime + "\" between starttime and EndTime)"
 
         } else if (req.body.Unavailabletype == "wholeday") {
             console.log("enter case 2")
             thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"00:00\",\"23:59\",\"" + req.body.remarks + "\")";
-            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + 
-            "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" +req.body.notokstartday  + "\" and StartTime = \"00:00\" and EndTime = \"23:59\""
+            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid +
+                "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" + req.body.notokstartday + "\" and StartTime = \"00:00\" and EndTime = \"23:59\""
 
         } else if (req.body.Unavailabletype == "dayrange") {
             console.log("enter case 3")
@@ -152,18 +152,18 @@ module.exports = {
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokendday + "\",\"" + req.body.starttime
                 + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
             checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + "\""
-           + "and (((\"" + req.body.notokstartday + "\" between startdate and enddate) or (( startdate  = \"" + req.body.notokstartday + "\" and \""+req.body.starttime+"\" >= starttime)))"
-            +" or  ((\"" + req.body.notokstartday + "\" between startdate and enddate) and (\"" + req.body.notokstartday + "\" between startdate and enddate))"
-           + "or  ((\""+req.body.notokendday+"\" between startdate and enddate) or (( enddate  = \""+req.body.notokendday+"\" and \""+req.body.endtime +"\" >= endtime)))"
-            +" or (\"" + req.body.notokstartday + "\"< startdate and \""+req.body.notokendday+"\">enddate) )";
+                + "and (((\"" + req.body.notokstartday + "\" between startdate and enddate) or (( startdate  = \"" + req.body.notokstartday + "\" and \"" + req.body.starttime + "\" >= starttime)))"
+                + " or  ((\"" + req.body.notokstartday + "\" between startdate and enddate) and (\"" + req.body.notokstartday + "\" between startdate and enddate))"
+                + "or  ((\"" + req.body.notokendday + "\" between startdate and enddate) or (( enddate  = \"" + req.body.notokendday + "\" and \"" + req.body.endtime + "\" >= endtime)))"
+                + " or (\"" + req.body.notokstartday + "\"< startdate and \"" + req.body.notokendday + "\">enddate) )";
         }
-        console.log("\n\n\n"+checkline+"\n\n\n"+thisistheline)
+        console.log("\n\n\n" + checkline + "\n\n\n" + thisistheline)
         db.query(checkline, function (err, result) {
             if (err) {
                 return res.status(401).json("Error happened when excuting checking : " + checkline);
 
             } else {
-                var question="";
+                var question = "";
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 if (json.length == 0) {
@@ -172,16 +172,16 @@ module.exports = {
                             return res.status(401).json("Error happened when excuting : " + thisistheline);
                         } else {
                             console.log("1 record inserted");
-                            return res.status(200).json(req.params.campus+"&"+req.params.rid);
+                            return res.status(200).json(req.params.campus + "&" + req.params.rid);
                         }
 
                     });
-                }else {
-                    for(var i = 0 ; i < json.length;i++){
-                        question += " "+json[i].ReqID;
+                } else {
+                    for (var i = 0; i < json.length; i++) {
+                        question += " " + json[i].ReqID;
                     }
-                    return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot."+"\n\n Please Review your inputs and submitted timeslots :\n\n"+question);
-                      
+                    return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
+
                 }
 
             }
@@ -270,21 +270,68 @@ module.exports = {
 
     },
 
-    getoneroom : async function(req,res){
+    getoneroom: async function (req, res) {
         var thistimeslotinfo;
-        let thisistheline = "SELECT * FROM allclassroomtimeslot where reqid = \""+req.params.reqid+"\""
+        let thisistheline = "SELECT * FROM allclassroomtimeslot where reqid = \"" + req.params.reqid + "\""
         db.query(thisistheline, (err, result) => {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 thistimeslotinfo = json;
                 console.log(json);
-                return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo});
+                return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo });
             } catch (err) {
                 if (err) { console.log("sth happened here"); }
             }
 
         });
+    },
+    updatetimeslot: async function (req, res) {
+        let thisistheline = "UPDATE allclassroomtimeslot SET StartDate = \"" + req.body.newstartday +
+            "\", EndDate = \"" + req.body.newendday + "\" , StartTime = \"" + req.body.newstarttime + "\", EndTime = \"" + req.body.newendtime + "\", Remarks = \"" + req.body.newremarks + "\""
+            + "where ReqID = \"" + req.body.ReqID + "\"";
+
+        let checkline = "select * from allclassroomtimeslot where ReqID = \"" + req.body.ReqID+"\" "
+            + "and (((\"" + req.body.newstartday + "\" between startdate and enddate) or (( startdate  = \"" +req.body.newendday+ "\" and \"" + req.body.newstarttime + "\" >= starttime)))"
+            + " or  ((\"" + req.body.newstartday + "\" between startdate and enddate) and (\"" + req.body.newstartday + "\" between startdate and enddate))"
+            + "or  ((\"" +req.body.newendday + "\" between startdate and enddate) or (( enddate  = \"" + req.body.newendday + "\" and \"" + req.body.newendtime + "\" >= endtime)))"
+            + " or (\"" + req.body.newstartday + "\"< startdate and \"" + req.body.newendday+ "\">enddate) )";
+
+            console.log(thisistheline+"\n"+checkline)
+        db.query(checkline, function (err, result) {
+
+            if (err) {
+                return res.status(401).json("error happened when chekcing duplication")
+            } else {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                console.log(json)
+                if (json.length == 0) {
+                    db.query(thisistheline, (err, result) => {
+                        try {
+
+                            return res.ok();
+                        } catch (err) {
+                            return res.status(401).json("error happened when updating")
+        
+                        }
+
+                    });
+                }else{
+                    var question ;
+                    for (var i = 0; i < json.length; i++) {
+                        question += " " + json[i].ReqID;
+                    }
+                    return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
+
+
+                }
+                
+            }
+        })
+
+
+
     }
 
 }
