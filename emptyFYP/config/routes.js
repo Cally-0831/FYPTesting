@@ -77,6 +77,7 @@ module.exports.routes = {
 
   'GET /view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",
   'DELETE /view': "ClassroomListController.deletetimeslot",
+  'GET /updatetime/:reqid': "ClassroomListController.getoneroom",
 
   'GET /addtimeslot/:campus/:rid': "ClassroomListController.getsingleroom",
   'POST /addtimeslot/:campus/:rid': "ClassroomListController.addclassroomtimeslot",

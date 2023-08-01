@@ -1,30 +1,47 @@
 <div class="Pagetitle"> Create new Classroom Unavailble timeslot</div>
+<div class="row">
+    <button class="button buttonlogout" onclick="backback()">Back</button>
+</div>
 <br>
-<form action="/addtimeslot/<%=roominfo.Campus%>/<%=roominfo.RID%>" method="post"
-    onsubmit="createnewclassroomtimeslot(this);return false;">
-    <p></p>
-    <div id="roominfo" class="pagecontent">
-        Createing Unavailable timeslot for <%=roominfo.RID%> in <%=roominfo.Campus%>
-    </div>
-    <label for="Unavailabletype">Please choose a type</label>
-    <select name="Unavailabletype" id="Unavailabletype" onchange="showcontent(value)">
-        <option value="">-----Please Choose-----</option>
-        <option value="timeslot">Timeslot in a day</option>
-        <option value="wholeday">Whole Day</option>
-        <option value="dayrange">Day Range</option>
+<div class="columns ">
+    <div class="column is-one-fifth"> </div>
+        <div class=" column template is-three-fifths">
+            <form action="/addtimeslot/<%=roominfo.Campus%>/<%=roominfo.RID%>" method="post"
+                onsubmit="createnewclassroomtimeslot(this);return false;">
+                <p></p>
+                <div id="roominfo" class="pagecontent">
+                    Createing Unavailable timeslot for <%=roominfo.RID%> in <%=roominfo.Campus%>
+                </div>
+                <label for="Unavailabletype">Please choose a type</label>
+                <select name="Unavailabletype" id="Unavailabletype" onchange="showcontent(value)">
+                    <option value="">-----Please Choose-----</option>
+                    <option value="timeslot">Timeslot in a day</option>
+                    <option value="wholeday">Whole Day</option>
+                    <option value="dayrange">Day Range</option>
 
-    </select>
-    <p></p>
-    <div id="showthedayrange"></div>
-    <p></p>
-    <div id="showtheday"></div>
-    <p></p>
-    <div id="showthetime"></div>
-    <br>
-    <input type="text" id="remarks" name="remarks" style="width: 500px; height: 200px;">
-    <br>
-    <button class="button" type="submit is-success">Submit</button>
-</form>
+                </select>
+                <p></p>
+                <div id="showthedayrange"></div>
+                <p></p>
+                <div id="showtheday"></div>
+                <p></p>
+                <div id="showthetime"></div>
+                <br>
+                <textarea class="textarea" id="remarks" name="remarks"  placeholder=""></textarea>
+                  
+                <br>
+                <div class = "buttons is-right">
+                     <button class="button buttonlogout" type="submit is-success">Submit</button>
+                </div>
+               
+            </form>
+
+       
+    </div>
+    <div class="column is-one-fifth"> </div>
+</div>
+
+
 
 
 
@@ -76,49 +93,52 @@
     }
 
     async function createnewclassroomtimeslot(formElem) {
-       
-            if (document.getElementById("Unavailabletype").value == "dayrange") {
-                var startstart = document.getElementById("notokstartday").value;
-                var endend = document.getElementById("notokendday").value;
 
-                if (endend <= startstart) {
-                    alert("End Day cannot be earlier than Start Day \n" + "Please review your input");
-                    return;
-                }
+        if (document.getElementById("Unavailabletype").value == "dayrange") {
+            var startstart = document.getElementById("notokstartday").value;
+            var endend = document.getElementById("notokendday").value;
 
-            } else if (document.getElementById("Unavailabletype").value == "timeslot") {
-                var startstart = document.getElementById("starttime").value;
-                var endend = document.getElementById("endtime").value;
-
-                if (endend <= startstart) {
-                    alert("End time cannot be earlier than Start time \n" + "Please review your input");
-                    return;
-                }
-
+            if (endend <= startstart) {
+                alert("End Day cannot be earlier than Start Day \n" + "Please review your input");
+                return;
             }
 
-            try {
-                var response = await fetch(formElem.action, {
-                    method: formElem.method,
-                    body: new FormData(formElem),
-                });
-                if (response.status == 200) {
-                    alert("Submission success");
-                    var msg = await response.json();
-                    msg = msg.split("&")
-                    location.assign("/view/"+msg[0]+"/"+msg[1]);
+        } else if (document.getElementById("Unavailabletype").value == "timeslot") {
+            var startstart = document.getElementById("starttime").value;
+            var endend = document.getElementById("endtime").value;
 
-                } else if (response.status == 401) {
-                    var msg = await response.json();
-                    alert(msg);
-                } else {
-                    alert(response.statusTest);
-                }
-
-            } catch (error) {
-                console.log(error);
+            if (endend <= startstart) {
+                alert("End time cannot be earlier than Start time \n" + "Please review your input");
+                return;
             }
+
         }
 
-    
+        try {
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.status == 200) {
+                alert("Submission success");
+                var msg = await response.json();
+                msg = msg.split("&")
+                location.assign("/view/" + msg[0] + "/" + msg[1]);
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+            } else {
+                alert(response.statusTest);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function backback() {
+        location.assign('/classroomlist')
+    }
+
 </script>

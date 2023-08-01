@@ -268,6 +268,23 @@ module.exports = {
         });
         //console.log(roominfo);
 
+    },
+
+    getoneroom : async function(req,res){
+        var thistimeslotinfo;
+        let thisistheline = "SELECT * FROM allclassroomtimeslot where reqid = \""+req.params.reqid+"\""
+        db.query(thisistheline, (err, result) => {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                thistimeslotinfo = json;
+                console.log(json);
+                return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo});
+            } catch (err) {
+                if (err) { console.log("sth happened here"); }
+            }
+
+        });
     }
 
 }

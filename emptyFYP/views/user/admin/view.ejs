@@ -1,4 +1,6 @@
-<div class="Pagetitle">Submitted Timeslots for <%=roominfo.Campus%> <%=roominfo.RID%></div>
+<div class="Pagetitle">Submitted Timeslots for <%=roominfo.Campus%>
+        <%=roominfo.RID%>
+</div>
 <div class="buttons">
     <div class="button buttonlogout " onclick="backback()">
         Back
@@ -6,54 +8,76 @@
 </div>
 
 <br>
-    <div>
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-            
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Remarks</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
-            <% thetimeslotlist.forEach( function(list) { 
-                
-                const StartDay= new Date(list.StartDate).toLocaleDateString('en-CA');
-                const EndDay = new Date(list.EndDate).toLocaleDateString('en-CA');
-                %>
-                <tr>
-                    
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= list.ReqID%>
-                    </td>
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= StartDay%>
-                    </td>
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= EndDay %>
-                    </td>
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= list.StartTime %>
-                    </td>
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= list.EndTime %>
-                    </td>
+<div>
+    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
 
-                    <td style="text-align: center;vertical-align:center;">
-                        <%= list.Remarks%>
-                    </td>
-                    <td style="text-align: center;vertical-align:center;">
-                        <button class="button" type="button"
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Remarks</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Update</th>
+
+        <% thetimeslotlist.forEach( function(list) { const StartDay=new
+            Date(list.StartDate).toLocaleDateString('en-CA'); const EndDay=new
+            Date(list.EndDate).toLocaleDateString('en-CA'); %>
+            <tr>
+
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= list.ReqID%>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= StartDay%>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= EndDay %>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= list.StartTime %>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= list.EndTime %>
+                </td>
+
+                <td style="text-align: center;vertical-align:middle;">
+                    <%= list.Remarks%>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <div class="buttons is-centered">
+                        <button class="button buttonlogout" type="button"
                             onclick="deletetimeslot('<%= list.ReqID %>', '<%=roominfo.Campus%>','<%=roominfo.RID%>')">Delete</button>
-                    </td>
-                </tr>
+                    </div>
 
-                <% }); %>
+                </td>
+                <td style="text-align: center;vertical-align:middle;">
+                    <div class="buttons is-centered">
+                        <button class="button buttonlogout" type="button"
+                            onclick="updatetimeslot('<%= list.ReqID %>')">Update</button>
+                    </div>
 
-        </table>
-    </div>
-    <script>
-        async function deletetimeslot(reqid,campus,rid) {
+                </td>
+            </tr>
+
+            <% }); %>
+
+    </table>
+</div>
+<script>
+    async function updatetimeslot(reqid) {
+
+
+        var response = await fetch("/updatetime/"+reqid, {
+            method: "GET",
+           
+        });
+        if (response.ok) {
+            location.assign(response.url);
+        }
+
+    }
+    async function deletetimeslot(reqid, campus, rid) {
         var r = confirm("Confirm Delete?" + reqid);
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
@@ -68,14 +92,14 @@
                 // alert(html);
 
                 alert("Request deleted.");
-                location.assign("/view/"+campus+"/"+rid);
+                location.assign("/view/" + campus + "/" + rid);
             } else {
                 alert(response.status + ": " + response.statusText);
             }
 
-        } 
+        }
     };
-    function backback(){
+    function backback() {
         location.assign("/classroomlist")
     }
-    </script>
+</script>
