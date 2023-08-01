@@ -1,6 +1,6 @@
 <div class="Pagetitle">Submitted Timeslots for <%=roominfo.Campus%> <%=roominfo.RID%></div>
 <div class="buttons">
-    <div class="button buttonlogout " onclick="history.back()">
+    <div class="button buttonlogout " onclick="backback()">
         Back
     </div>
 </div>
@@ -9,13 +9,13 @@
     <div>
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
             
-            <th style="font-size:20px;text-align: center;vertical-align:center;">ReqID</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">StartDay</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">EndDay</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">StartTime</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">EndTime</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Remarks</th>
-            <th style="font-size:20px;text-align: center;vertical-align:center;">Delete</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Remarks</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
             <% thetimeslotlist.forEach( function(list) { 
                 
                 const StartDay= new Date(list.StartDate).toLocaleDateString('en-CA');
@@ -58,7 +58,7 @@
         var requestBody = JSON.stringify({ ReqID: reqid });
         if (r) {
 
-            var response = await fetch("/user/view", {
+            var response = await fetch("/view", {
                 method: "DELETE",
                 body: requestBody
             });
@@ -68,13 +68,14 @@
                 // alert(html);
 
                 alert("Request deleted.");
-                location.assign("/user/view/"+campus+"/"+rid);
+                location.assign("/view/"+campus+"/"+rid);
             } else {
                 alert(response.status + ": " + response.statusText);
             }
 
-        } else {
-            alert("cancelled");
-        }
+        } 
     };
+    function backback(){
+        location.assign("/classroomlist")
+    }
     </script>

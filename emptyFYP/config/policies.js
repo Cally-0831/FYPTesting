@@ -32,7 +32,7 @@ module.exports.policies = {
   },
   RequestController: {
     liststudentrequest: "isSuper",
-    viewstudentrequestdeatils: "isSuper",
+    
     replystudentrequest:"isSuper"
   },
  NoticeListController:{

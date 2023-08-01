@@ -102,7 +102,7 @@ module.exports = {
         req.session.destroy(function (err) {
 
             if (err) return res.serverError(err);
-            sessionStorage.clear();
+          
             return res.redirect("/");
         });
     },

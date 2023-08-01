@@ -102,9 +102,11 @@
                     method: formElem.method,
                     body: new FormData(formElem),
                 });
-                if (response.ok) {
+                if (response.status == 200) {
                     alert("Submission success");
-                    location.assign("/home");
+                    var msg = await response.json();
+                    msg = msg.split("&")
+                    location.assign("/view/"+msg[0]+"/"+msg[1]);
 
                 } else if (response.status == 401) {
                     var msg = await response.json();

@@ -12,7 +12,7 @@
                             <%=lasttime.toLocaleTimeString("en-US")%>
                     </div>
                     <div class="buttons">
-                        <div class="button buttonlogout is-left" onclick="history.go(-2)">
+                        <div class="button buttonlogout is-left" onclick="backback()">
                             Back
                         </div>
 
@@ -267,5 +267,9 @@
         }
 
 
+    }
+
+    function backback(){
+        location.assign("/checkrequest")
     }
 </script>

@@ -102,9 +102,9 @@
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         </td>
                         <td style="text-align: center;vertical-align:middle;">
-                            <a href="/requestdetail/<%=request.ReqID%>">
-                                <button class="button" type="button">view</button>
-                            </a>
+                            
+                                <button class="button" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
+                            
                         </td>
                     </tr>
 
@@ -117,6 +117,11 @@
 </div>
 
 <script>
+    async function Viewqrequest(ReqID){
+        
+        location.assign("/requestdetail/" + ReqID);
+   
+    }
     async function deleterequestfromstudent(reqid, status) {
         var r = confirm("Confirm Delete " + reqid + " ?");
         var requestBody = JSON.stringify({ ReqID: reqid });

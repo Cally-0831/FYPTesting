@@ -18,7 +18,7 @@ module.exports = {
 
     listclassroom: async function (req, res) {
         var classroomlist;
-        
+
         let thisistheline = "SELECT * FROM classroom";
 
         db.query(thisistheline, (err, results) => {
@@ -26,10 +26,10 @@ module.exports = {
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);  
+                console.log('>> json: ', json);
                 classroomlist = json;
                 //console.log('>> stdlist: ', stdlist);  
-                return res.view('user/classroomlist', { allClassroomlist: classroomlist });
+                return res.view('user/admin/classroomlist', { allClassroomlist: classroomlist });
             } catch (err) {
                 console.log("sth happened here");
 
@@ -63,7 +63,7 @@ module.exports = {
 
     getcampus: async function (req, res) {
         var campuslist;
-        
+
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
         console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
@@ -74,7 +74,7 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 campuslist = json;
                 //console.log('>> stdlist: ', stdlist);  
-                return res.view('user/createnewclassroom', { allCampuslist: campuslist });
+                return res.view('user/admin/createnewclassroom', { allCampuslist: campuslist });
             } catch (err) {
 
                 console.log("sth happened here");
@@ -109,12 +109,12 @@ module.exports = {
             RID: req.params.rid
         };
         //console.log(roominfo);
-        return res.view('user/createnewclassroomtimeslot', { roominfo: roominfo });
+        return res.view('user/admin/createnewclassroomtimeslot', { roominfo: roominfo });
 
     },
 
     addclassroomtimeslot: async function (req, res) {
-                let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
+        let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
         reqid = reqid.replace(/ /g, "_");
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -125,47 +125,74 @@ module.exports = {
         }
 
         let thisistheline;
+        let checkline;
         if (req.body.Unavailabletype == "timeslot") {
             thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"" + req.body.starttime
                 + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
+
+            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + 
+            "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" + req.body.notokstartday + "\" and StartTime = \"" + req.body.starttime + "\" and EndTime = \"" + req.body.endtime + "\""
+
         } else if (req.body.Unavailabletype == "wholeday") {
             thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokstartday + "\",\"00:00\",\"23:59\",\"" + req.body.remarks + "\")";
+            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + 
+            "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" +req.body.notokstartday  + "\" and StartTime = \"00:00\" and EndTime = \"23:59\""
+
         } else if (req.body.Unavailabletype == "dayrange") {
             thisistheline = "insert into allclassroomtimeslot values(\"" + reqid + "\",\"" + req.params.campus + "\",\"" + req.params.rid
                 + "\",\"" + req.body.notokstartday + "\",\"" + req.body.notokendday + "\",\"" + req.body.starttime
                 + "\",\"" + req.body.endtime + "\",\"" + req.body.remarks + "\")";
+            checkline = "select * from allclassroomtimeslot where Campus = \"" + req.params.campus + "\" and RID = \"" + req.params.rid + "\" and StartDate = \"" + req.body.notokstartday + "\" and EndDate = \"" + req.body.notokendday + "\" and StartTime = \"" + req.body.starttime + "\" and EndTime = \"" + req.body.endtime + "\""
+
         }
-
-
-        db.query(thisistheline, function (err, result) {
+        console.log("\n\n\n"+checkline+"\n\n\n"+thisistheline)
+        db.query(checkline, function (err, result) {
             if (err) {
-                return res.status(401).json("Error happened when excuting : " + thisistheline);
-            } else {
-                console.log("1 record inserted");
-                return res.json("created");
-            }
+                return res.status(401).json("Error happened when excuting checking : " + checkline);
 
-        });
+            } else {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                if (json.length == 0) {
+                    db.query(thisistheline, function (err, result) {
+                        if (err) {
+                            return res.status(401).json("Error happened when excuting : " + thisistheline);
+                        } else {
+                            console.log("1 record inserted");
+                            return res.status(200).json(req.params.campus+"&"+req.params.rid);
+                        }
+
+                    });
+                }else {
+                    return res.status(401).json("This unavailable info has already been inputed.");
+                      
+                }
+
+            }
+        })
+
+
+
 
     },
 
     listalltimeslot: async function (req, res) {
         var timeslotlist;
-       
+
         let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
         db.query(thisistheline, function (err, results) {
             if (err) {
-               return res.status(401).json("Error happened when excuting : " + thisistheline);
-            }else{
+                return res.status(401).json("Error happened when excuting : " + thisistheline);
+            } else {
                 var string = JSON.stringify(results);
-                var json = JSON.parse(string); 
+                var json = JSON.parse(string);
                 timeslotlist = json;
-            console.log(timeslotlist)
-                return res.view('user/managetimeslot', { thetimeslotlist: timeslotlist });
+                console.log(timeslotlist)
+                return res.view('user/admin/managetimeslot', { thetimeslotlist: timeslotlist });
             }
-            
+
         });
     },
 
@@ -188,21 +215,21 @@ module.exports = {
     },
 
     getinfobycampus: async function (req, res) {
-      var roomlist;
-        let thisistheline="SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
+        var roomlist;
+        let thisistheline = "SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
-                var json = JSON.parse(string); 
+                var json = JSON.parse(string);
                 roomlist = json;
-                return res.view('user/classroommanagement', { allClassroomlist:roomlist});
-           
+                return res.view('user/admin/classroommanagement', { allClassroomlist: roomlist });
+
             } catch (err) {
                 if (err) { console.log("sth happened here"); }
             }
 
         });
-    
+
     },
 
     getsingleroomtimeslot: async function (req, res) {
@@ -210,23 +237,23 @@ module.exports = {
             Campus: req.params.campus,
             RID: req.params.rid
         };
-        var timeslotlist ;
-       
-        let thisistheline="SELECT * FROM allclassroomtimeslot where campus = \""+req.params.campus+"\" and RID =\""+req.params.rid+"\" order by startdate,enddate;";
+        var timeslotlist;
+
+        let thisistheline = "SELECT * FROM allclassroomtimeslot where campus = \"" + req.params.campus + "\" and RID =\"" + req.params.rid + "\" order by startdate,enddate;";
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
-                var json = JSON.parse(string); 
-                timeslotlist=json;
+                var json = JSON.parse(string);
+                timeslotlist = json;
                 console.log(json);
-                return res.view('user/view', { roominfo: roominfo , thetimeslotlist : timeslotlist});
+                return res.view('user/admin/view', { roominfo: roominfo, thetimeslotlist: timeslotlist });
             } catch (err) {
                 if (err) { console.log("sth happened here"); }
             }
 
         });
         //console.log(roominfo);
-        
+
     }
 
 }
