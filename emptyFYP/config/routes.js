@@ -34,6 +34,8 @@ module.exports.routes = {
   'GET /schduledesign': "SettingController.checksetting",
   "GET /checkschdule": "SchduleController.viewfinalschdule",
 
+  "GET /uploadlesson":{view:"user/admin/uploadlesson"},
+  "POST /uploadlesson":"LessonController.uploadlesson",
 
 
 
@@ -94,10 +96,10 @@ module.exports.routes = {
   'POST /submitrequest': "RequestController.submitrequest",
   'POST /submitrequest/pic': "RequestController.upload",
 
-  'GET /uploadstudentlist': "UserController.uploadstudentlist",
-  'POST /uploadstudentlist': "UserController.uploadstudentlist",
-  'POST /uploadobserverlist': "UserController.uploadobserverlist",
-  'POST /uploadpairlist': "UserController.uploadpairlist",
+  'GET /uploadstudentlist': "StudentListController.uploadstudentlist",
+  'POST /uploadstudentlist': "StudentListController.uploadstudentlist",
+  'POST /uploadobserverlist': "StudentListController.uploadobserverlist",
+  'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
   'GET /liststudent': "StudentListController.liststudent",
   'POST /liststudent': "StudentListController.liststudent",
