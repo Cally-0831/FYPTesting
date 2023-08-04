@@ -178,7 +178,7 @@ module.exports = {
                     });
                 } else {
                     for (var i = 0; i < json.length; i++) {
-                        question += " " + json[i].ReqID;
+                        question += json[i].ReqID+"\n";
                     }
                     return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
 
@@ -286,47 +286,49 @@ module.exports = {
 
         });
     },
+
     updatetimeslot: async function (req, res) {
-        let thisistheline = "UPDATE allclassroomtimeslot SET StartDate = \"" + req.body.newstartday +
-            "\", EndDate = \"" + req.body.newendday + "\" , StartTime = \"" + req.body.newstarttime + "\", EndTime = \"" + req.body.newendtime + "\", Remarks = \"" + req.body.newremarks + "\""
+        let thisistheline = "UPDATE allclassroomtimeslot SET StartDate = \"" + req.body.newstartday.split('T')[0] +
+            "\", EndDate = \"" + req.body.newendday.split('T')[0] + "\" , StartTime = \"" + req.body.newstarttime + "\", EndTime = \"" + req.body.newendtime + "\", Remarks = \"" + req.body.newremarks + "\""
             + "where ReqID = \"" + req.body.ReqID + "\"";
 
-        let checkline = "select * from allclassroomtimeslot where ReqID = \"" + req.body.ReqID+"\" "
-            + "and (((\"" + req.body.newstartday + "\" between startdate and enddate) or (( startdate  = \"" +req.body.newendday+ "\" and \"" + req.body.newstarttime + "\" >= starttime)))"
+        let checkline = "select * from allclassroomtimeslot where Campus= \""+req.body.Campus+"\" and RID = \""+req.body.RID+"\""
+            + "and (((\"" + req.body.newstartday + "\" between startdate and enddate) or (( startdate  = \"" + req.body.newendday + "\" and \"" + req.body.newstarttime + "\" >= starttime)))"
             + " or  ((\"" + req.body.newstartday + "\" between startdate and enddate) and (\"" + req.body.newstartday + "\" between startdate and enddate))"
-            + "or  ((\"" +req.body.newendday + "\" between startdate and enddate) or (( enddate  = \"" + req.body.newendday + "\" and \"" + req.body.newendtime + "\" >= endtime)))"
-            + " or (\"" + req.body.newstartday + "\"< startdate and \"" + req.body.newendday+ "\">enddate) )";
+            + "or  ((\"" + req.body.newendday + "\" between startdate and enddate) or (( enddate  = \"" + req.body.newendday + "\" and \"" + req.body.newendtime + "\" >= endtime)))"
+            + " or (\"" + req.body.newstartday + "\"< startdate and \"" + req.body.newendday + "\">enddate) ) and ReqID not like \""+req.body.ReqID+"\"";
 
-            console.log(thisistheline+"\n"+checkline)
+        console.log(thisistheline + "\n\n\n\n\n" + checkline)
         db.query(checkline, function (err, result) {
 
             if (err) {
                 return res.status(401).json("error happened when chekcing duplication")
-            } else {
+            } else { 
+                 var question ="";
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
+                console.log(json.length)
                 console.log(json)
                 if (json.length == 0) {
-                    db.query(thisistheline, (err, result) => {
-                        try {
-
-                            return res.ok();
-                        } catch (err) {
-                            return res.status(401).json("error happened when updating")
-        
+                    db.query(thisistheline, function (err, result) {
+                        if (err) {
+                            return res.status(401).json("Error happened when excuting : " + thisistheline);
+                        } else {
+                            console.log("1 record updated");
+                            return res.status(200).json();
                         }
 
                     });
-                }else{
-                    var question ;
+                } else {
+                  
                     for (var i = 0; i < json.length; i++) {
-                        question += " " + json[i].ReqID;
+                        question +=  json[i].ReqID+"\n" ;
                     }
                     return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
 
 
                 }
-                
+
             }
         })
 

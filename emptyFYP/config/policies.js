@@ -39,6 +39,7 @@ module.exports.policies = {
   addnotice :"isSUser",
   viewnoticepage:"isSUser"
  },
+ 
   ClassroomListController: {
     '*': "isAdmin"
   },
