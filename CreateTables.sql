@@ -200,14 +200,21 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
   declare stringstring  varchar(8000);
   declare countcount integer;
 
+  declare findcampusroom integer;
   
   set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode);
   set countcount =0;
   
+  
   select count(*) into countcount from allclass 
   where (rid = new.rid and campus = new.campus) and weekdays = new.weekdays and (starttime <= new.starttime and endtime >= new.starttime);
   
-  
+
+   select count(*) into  findcampusroom from classroom where campus = new.campus and rid = new.rid;
+    
+    if findcampusroom = 0 then
+		insert into classroom values (new.campus,new.rid,"open");
+    End if;
     
   if countcount >0 then
     set new.rid ="N";

@@ -4,24 +4,35 @@
   <div class="column"></div>
   <div class="column column-big">
     <form action="/createnewclassroom" method="post" onsubmit="createnewclassroom(this);return false;">
-<br><br>
+      <br><br>
       <label for="Campus" style="font-size: 20px;">Campus&emsp;:&emsp;&nbsp;</label>
 
-      <select name="Campus" id="Campus" style=" font-size: 20px; width : 232px;">
+      <select name="Campus" id="Campus" style=" font-size: 20px; width : 232px;" required>
+        <option value="" style="font-size: 20px;">
+          ---Please Select---
+        </option>
         <% allCampuslist.forEach( function(campus) { %>
-          <option value="<%= campus.campus %>" style="font-size: 20px;">
-            <%= campus.campus %>
-          </option>
-          <% }); %>
+          <%console.log("@@"+campus.campus+"@@")%>
+            <%console.log(campus.campus !="" )%>
+              <%if (campus.campus !="" ){%>
+                <option value="<%= campus.campus %>" style="font-size: 20px;">
+
+                  <%= campus.campus %>
+
+
+
+                </option>
+                <%}%>
+                  <% }); %>
       </select>
       <br><br>
       <label for="RID" style="font-size: 20px; ">Room ID&emsp;:&emsp;&emsp;</label>
-      <input type="text" placeholder="Enter RID" id="RID" name="RID" value="" style="font-size: 20px;">
+      <input type="text" placeholder="Enter RID" id="RID" name="RID" value="" style="font-size: 20px;" required>
       <br><br><br>
       <div class="buttons is-right">
         <button type="submit is-success" class="buttonlogout">Submit</button>
       </div>
-<br>
+      <br>
     </form>
 
   </div>
@@ -32,7 +43,11 @@
 
   async function createnewclassroom(formElem) {
     try {
-
+      console.log(document.getElementById("Campus").value)
+      if (document.getElementById("Campus").value == "") {
+        return alert("Please input Campus location before submission")
+      }
+      
       var response = await fetch(formElem.action, {
         method: formElem.method,
         body: new FormData(formElem),
@@ -47,6 +62,7 @@
       } else {
         alert(response.statusTest);
       }
+     
 
     } catch (error) {
       console.log(error);
