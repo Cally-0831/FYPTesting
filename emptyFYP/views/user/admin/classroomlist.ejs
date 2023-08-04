@@ -22,9 +22,13 @@
 
 <br>
 <div>
-    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Campus</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Room Name</th>
+    <table  id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+            <a class="sorting" id='headerCampus' onclick="sorting('sorting','mytable','headerCampus',0);">&#8593;</a>
+            Campus</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+            <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',1);">&#8593;</a>
+            Room Name</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Status</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Add timeslot</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
@@ -96,5 +100,67 @@
             alert("cancelled");
         }
     };
+
+
+    function sorting(thissortingclass, thistable, idlocation, tablelocation) {
+
+for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
+
+    if (i != tablelocation) {
+
+        document.getElementsByClassName(thissortingclass)[i].innerHTML = '↑'
+    }
+}
+
+if (document.getElementById(idlocation).innerHTML == '↑') {
+    document.getElementById(idlocation).innerHTML = '\&\#8595;';
+    sortingtable(thistable, "dsc", tablelocation);
+} else {
+    document.getElementById(idlocation).innerHTML = '\&\#8593;'
+    sortingtable(thistable, "asc", tablelocation);
+}
+
+}
+
+function sortingtable(thistable, ordering, tablelocation) {
+var table, rows, switching, i, x, y, shouldSwitch, switchcount = 0;
+table = document.getElementById(thistable);
+switching = true;
+while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[tablelocation];
+        y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
+
+        if (ordering == "asc") {
+            if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+            }
+        } else if (ordering == "dsc") {
+            if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+            }
+        }
+    }
+
+    if (shouldSwitch) {
+
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        switchcount++;
+    } else {
+        if (switchcount == 0 && ordering == "asc") {
+            ordering = "dsc";
+            switching = true;
+        }
+    }
+}
+}
+
 
 </script>

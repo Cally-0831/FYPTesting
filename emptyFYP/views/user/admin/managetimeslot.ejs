@@ -1,4 +1,3 @@
-
 <div class="Pagetitle">All submitted timeslots of Classrooms</div>
 <div class="buttons">
     <div class="button buttonlogout " onclick="history.back()">
@@ -6,25 +5,50 @@
     </div>
 </div>
 
-<table class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Campus</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">RID</th>
+<table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerReqID' onclick="sorting('sorting','mytable','headerReqID',0);">&#8593;</a>
+        ReqID
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerCampus' onclick="sorting('sorting','mytable','headerCampus',1);">&#8593;</a>
+        Campus
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',2);">&#8593;</a>
+        RID
+    </th>
 
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerStartday' onclick="sorting('sorting','mytable','headerStartday',3);">&#8593;</a>
+        StartDay
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerEndday' onclick="sorting('sorting','mytable','headerEndday',4);">&#8593;</a>
+        EndDay
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerStarttime' onclick="sorting('sorting','mytable','headerStarttime',5);">&#8593;</a>
+        StartTime
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerEndtime' onclick="sorting('sorting','mytable','headerEndtime',6);">&#8593;</a>
+        EndTime
+    </th>
 
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">remarks</th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <a class="sorting" id='headerRemarks' onclick="sorting('sorting','mytable','headerRemarks',7);">&#8593;</a>
+        remarks
+    </th>
+    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+
+        Delete
+    </th>
 
 
-    <% thetimeslotlist.forEach( function(timeslotlist) { 
-        const StartDay= new Date(timeslotlist.StartDate).toLocaleDateString('en-CA');
-        const EndDay = new Date(timeslotlist.EndDate).toLocaleDateString('en-CA');
-        
-        %>
+    <% thetimeslotlist.forEach( function(timeslotlist) { const StartDay=new
+        Date(timeslotlist.StartDate).toLocaleDateString('en-CA'); const EndDay=new
+        Date(timeslotlist.EndDate).toLocaleDateString('en-CA'); %>
         <tr>
             <td style="text-align: center;vertical-align:middle;">
                 <%= timeslotlist.ReqID %>
@@ -87,4 +111,68 @@
             alert("cancelled");
         }
     };
+
+    function sorting(thissortingclass, thistable, idlocation, tablelocation) {
+
+        for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
+
+            if (i != tablelocation) {
+
+                document.getElementsByClassName(thissortingclass)[i].innerHTML = '↑'
+            }
+        }
+
+        if (document.getElementById(idlocation).innerHTML == '↑') {
+            document.getElementById(idlocation).innerHTML = '\&\#8595;';
+            sortingtable(thistable, "dsc", tablelocation);
+        } else {
+            document.getElementById(idlocation).innerHTML = '\&\#8593;'
+            sortingtable(thistable, "asc", tablelocation);
+        }
+
+    }
+
+    function sortingtable(thistable, ordering, tablelocation) {
+        var table, rows, switching, i, x, y, shouldSwitch, switchcount = 0;
+        table = document.getElementById(thistable);
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[tablelocation];
+                y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
+
+                if (ordering == "asc") {
+                    if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (ordering == "dsc") {
+                    if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && ordering == "asc") {
+                    ordering = "dsc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+
+
+
 </script>
