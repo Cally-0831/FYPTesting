@@ -36,7 +36,7 @@ module.exports.routes = {
 
   "GET /uploadlesson":{view:"user/admin/uploadlesson"},
   "POST /uploadlesson":"LessonController.uploadlesson",
-
+  "GET /lessonlist":"LessonController.listlesson",
 
 
 
