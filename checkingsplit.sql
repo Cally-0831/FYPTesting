@@ -1,2 +1,1 @@
-select Max(lesson) from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%") 
-where alltakecourse.cid  like concat("EMPTY_","%") 
+select * from allclass where CID like concat(SUBSTRING_INDEX("COMP4025_10001",'_',0),"%"); 

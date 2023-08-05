@@ -561,4 +561,19 @@ CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
 delimiter ;
 
 
+delimiter |
+CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass
+  FOR EACH ROW
+  BEGIN
+ 
+  If(Substring(SUBSTRING_INDEX(old.CID,'_',2),10,1) =0 ) then
+	delete from alltakecourse where CID like concat(SUBSTRING_INDEX(old.CID,'_',1),"%"); 
+    
+    elseif (Substring(SUBSTRING_INDEX(old.CID,'_',2),10,1) =1 ) then
+		delete from alltakecourse where CID like old.CID; 
+   
+  end if;
+   END;
+  |
+delimiter ;
 

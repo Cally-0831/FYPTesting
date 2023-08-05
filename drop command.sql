@@ -38,3 +38,4 @@ Drop trigger if exists addsubinobs;
 Drop trigger if exists copypicdata_and_commentstonewentry_student;
 Drop trigger if exists concatcomments_student;
 Drop trigger if exists clearnoticeforthesetting;
+Drop trigger if exists cancellessonwhendeletelesson;

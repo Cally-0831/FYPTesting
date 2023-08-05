@@ -27,14 +27,14 @@ module.exports = {
 
     listlesson: async function (req, res) {
         var db = await sails.helpers.database();
-       
-        let thisistheline = "select * from allclass";
+
+        let thisistheline = "select * from allclass order by CID asc , campus asc , RID asc";
         db.query(thisistheline, function (err, result) {
 
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
-                return res.view('user/admin/lessonlist', { lessonlist : json});
+                return res.view('user/admin/lessonlist', { lessonlist: json });
             } catch (err) {
                 return res.status(401).json("Error happened when excuting : " + thisistheline);
             }
@@ -43,4 +43,43 @@ module.exports = {
         });
 
     },
+
+    deletelesson: async function (req, res) {
+        var db = await sails.helpers.database();
+        let thisistheline = "DELETE from allclass where CID = \""+req.body.CID+"\""
+        db.query(thisistheline, function (err, result) {
+
+            try {
+               
+                return res.ok();
+            } catch (err) {
+                return res.status(401).json("Error happened when excuting : " + thisistheline);
+            }
+
+
+        });
+    },
+
+    viewlesson :async function (req, res) {
+        var db = await sails.helpers.database();
+        
+        
+        let thisistheline = "select * from allclass where CID like \""+req.params.CID+"%\" order by weekdays asc, startTime asc, endtime asc";
+        db.query(thisistheline, function (err, result) {
+
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                //console.log(json)
+                return res.view("user/admin/lessondetails",{lessoninfo : json});
+            } catch (err) {
+                return res.status(401).json("Error happened when excuting : " + thisistheline);
+            }
+
+
+        });
+
+    },
+
+    
 }

@@ -1,5 +1,5 @@
 <div>
-    <div class="Pagetitle">All Lessons</div>
+    <div class=" Pagetitle">All Lessons</div>
     <div class="row">
         <div class="buttons">
             <div class="button buttonlogout" onclick="backback()">Back</div>
@@ -57,8 +57,9 @@
                 </td>
                 <td style="text-align: center;vertical-align:middle;">
                     <div class="buttons is-centered">
-                        <button class="button buttonlogout"> Delete</button>
-                        <button class="button buttonlogout"> Update</button>
+                        <button class="button buttonlogout" onclick="deletelesson('<%=lessonlist[i].CID%>')">
+                            Delete</button>
+                        <button class="button buttonlogout" onclick="location.href = '/lessonlist/<%=lessonlist[i].CDept%><%=lessonlist[i].CCode%>';">View</button>
                     </div>
 
                 </td>
@@ -134,6 +135,29 @@
             }
         }
     }
+
+    async function deletelesson(CID) {
+        var r = confirm("Confirm to delete " + CID + " ?");
+        if (r) {
+            var requestBody = JSON.stringify({CID : CID})
+            var response = await fetch("/lessonlist", {
+                method: "DELETE",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("lesson deleted.");
+                location.reload();
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+        
+        }
+    }
+
 
 
 </script>

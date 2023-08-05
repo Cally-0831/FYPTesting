@@ -1,0 +1,199 @@
+<div>
+    <div class="Pagetitle">
+        <%=req.params.CID%>
+    </div>
+    <div class="row">
+        <div class="buttons">
+            <div class="button buttonlogout" onclick="backback()">Back</div>
+        </div>
+    </div>
+    <br><br>
+    <div>
+        <table id="classinfolist" class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+                Section Code
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+                Campus
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+                RID
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+                Weekday
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+                Lesson Time
+            </th>
+           
+
+            <%for(var i=0 ; i < lessoninfo.length;i++){%>
+                <tr>
+                    <td style="text-align: center;vertical-align:middle;">
+                        <%= lessoninfo[i].CID %>
+                    </td>
+                    <td style="text-align: center;vertical-align:middle;">
+                        <%= lessoninfo[i].Campus %>
+                    </td>
+                    <td style="text-align: center;vertical-align:middle;">
+                        <%= lessoninfo[i].RID %>
+                    </td>
+                    <td style="text-align: center;vertical-align:middle;">
+                        <% switch(lessoninfo[i].weekdays){ case 1 :%>
+                            MON
+                            <%break;%>
+
+                                <%case 2 :%>
+                                    TUE
+                                    <%break;%>
+
+                                        <%case 3 :%>
+                                            WED
+                                            <%break;%>
+
+                                                <%case 4 :%>
+                                                    THU
+                                                    <%break;%>
+
+                                                        <%case 5 :%>
+                                                            FRI
+                                                            <%break;%>
+
+                                                                <%case 6 :%>
+                                                                    SAT
+                                                                    <%break;%>
+                                                                        <%default: %>
+                                                                            <%} %>
+                    </td>
+                    <td style="text-align: center;vertical-align:middle;">
+                        <%= lessoninfo[i].startTime%> - <%= lessoninfo[i].endTime%>
+                    </td>
+                    
+                    
+                
+                </tr>
+
+                <%}%>
+        </table>
+    </div>
+    <br><br>
+    <div id="timetable">
+        <% var lastbox; const mon=[]; const tue=[]; const wed=[]; const thu=[]; const fri=[]; const sat=[]; const
+            arraylist=[mon,tue,wed,thu,fri,sat]; var thislesson=0;%>
+            <% for (var y=0 ; y < lessoninfo.length;y++){%>
+
+                <%arraylist[lessoninfo[y].weekdays-1].push(lessoninfo[y])%>
+                    <%}%>
+                        <% for (var y=0 ; y < arraylist.length;y++){%>
+
+                            <%}%>
+                              
+                                        <% for (var y=0 ; y < arraylist.length;y++){%>
+
+                                            <%if(arraylist[y].length==0){%>
+                                                <%arraylist[y].push("EMPTY")%>
+                                                    <%}%>
+                                                        <%}%>
+
+
+
+                                                            <table
+                                                                class="table is-bordered is-striped is-hoverable is-halfwidth center">
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                </th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    MON</th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    TUE</th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    WED</th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    THU</th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    FRI</th>
+                                                                <th
+                                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                    SAT</th>
+                                                                <!---j = timebox-->
+                                                                <%var firstbox=0;var lastbox=6;%>
+                                                                    <% for(var j=8 ; j < 20;j++){ let currenttime=new
+                                                                        Date(); currenttime.setHours(j, 30, 0, 0); let
+                                                                        endend=new Date(); endend.setHours(j+1,20,0,0)
+                                                                        %>
+                                                                        <tr>
+                                                                            <% if(j < 10){%>
+                                                                                <td style="vertical-align:middle;"> 0<%=j%>:30
+                                                                                </td>
+                                                                                <%}else{%>
+                                                                                    <td style="vertical-align:middle;">
+                                                                                        <%=j%>:30
+                                                                                    </td>
+                                                                                    <%}%>
+                                                                                        <!--go through week-->
+                                                                                        
+                                                                                            <%for(var i=0 ; i < arraylist.length;i++){%>
+                                                                                                <td style="vertical-align:middle;">
+                                                                                                   
+                                                                                                  
+                                                                                                    <!-- loop mon/tue/wed list-->
+                                                                                                    <%for (var x=0 ; x < arraylist[i].length;x++){%>
+                                                                                                       
+                                                                                                        <%if (arraylist[i][x].CID!= undefined){%>
+                                                                                                           
+                                                                                                        <%var thislessonstarttime = new Date();%>
+                                                                                                        <%var starttimetime =(arraylist[i][x].startTime).split(":"); %>
+                                                                                                        <%thislessonstarttime.setHours(starttimetime[0],starttimetime[1],0,0)%>
+                                                                                                        <%var thislessonendtime = new Date();%>
+                                                                                                        <%var endtimetime =(arraylist[i][x].endTime).split(":"); %>
+                                                                                                        <%thislessonendtime.setHours(endtimetime[0],endtimetime[1],0,0)%>
+
+                                                                                                        
+                                                                                                        <%if(thislessonstarttime.getTime()===currenttime.getTime()){%>
+                                                                                                            <div style ="font-weight:bold; color: orange;">
+                                                                                                            <%=arraylist[i][x].CID%>
+                                                                                                            <br></div>
+                                                                                                            <%=arraylist[i][x].Campus%>
+                                                                                                            <br>
+                                                                                                            <%=arraylist[i][x].RID%>
+                                                                                                            <br><br>
+                                                                                                            <%if(thislessonendtime.getTime()===endend.getTime()){%>
+                                                                                                                <%arraylist[i][x].CID = undefined%>
+                                                                                                                <%}else{%>
+                                                                                                                    <%thislessonstarttime.setHours(parseInt(starttimetime[0])+1,starttimetime[1],0,0)%>
+                                                                                                    <%arraylist[i][x].startTime = ""+thislessonstarttime.toLocaleTimeString("en-US",{ hour12: false })+""%>
+                                                                                                                    <%}%>
+                                                                                                                <%}%>
+
+                                                                                                                <%if(thislessonendtime.getTime()===endend.getTime()){%>
+                                                                                                                    <%arraylist[i][x].CID = undefined%>
+                                                                                                                    <%}%>
+                                                                                                                    <%}%> <%}%>
+                                                                                                                    
+                                                                                                </td>
+                                                                                                <%}%>
+
+
+
+                                                                        </tr>
+
+                                                                        <%}%>
+
+
+                                                            </table>
+
+
+
+    </div>
+</div>
+
+<script>
+    function backback() {
+        location.assign("/lessonlist");
+    }
+</script>
