@@ -28,6 +28,29 @@ font-size: 20px;
   display: inline-block;
   overflow: auto
 }
+
+.schduledesignchecking{
+ width :100%;
+  padding:20px 20px 10px 20px;
+  margin: 30px 20px 0px 0px;
+  
+  border-radius: 15px;
+  box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
+  background: rgb(155, 198, 53);
+  /* Old browsers */
+  background: -moz-linear-gradient(45deg, #efe5d9 0%, #efe5d9 99%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #efe5d9 0%, #efe5d9 99%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #efe5d9 0%, #efe5d9 99%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9bc635', endColorstr='#c0ea67', GradientType=1);
+  /* IE6-9 fallback on horizontal gradient */
+  display: inline-block;
+  overflow: auto
+}
+
+
 .updateclassroomtemplate{
   width:80%;
   padding:20px 20px 20px 20px;

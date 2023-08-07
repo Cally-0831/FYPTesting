@@ -5,7 +5,7 @@ module.exports = {
         var db = await sails.helpers.database();
         console.log(req.body);
         for (var i = 0; i < req.body.length; i++) {
-            let thisistheline = "insert into allclass values(\"" + req.body[i].Cdept + "\",\"" + req.body[i].Ccode + "\",\""
+            let thisistheline = "insert ignore into allclass values(\"" + req.body[i].Cdept + "\",\"" + req.body[i].Ccode + "\",\""
                 + req.body[i].CSecCode + "\",\"\",\"" + req.body[i].Campus + "\",\"" + req.body[i].RID + "\",\"" + req.body[i].weekdays + "\",\""
                 + req.body[i].startTime + "\",\"" + req.body[i].endTime + "\",\"0\");"
             console.log(thisistheline)

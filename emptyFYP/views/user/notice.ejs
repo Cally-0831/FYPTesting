@@ -27,26 +27,26 @@
     <div class="row">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
 
-            <th style="font-size:20px;text-align: center;vertical-align:middle;">No.</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;">Announced Date</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;">Title</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;">Content</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle;">Announcer</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">No.</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Announced Date</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Title</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Content</th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Announcer</th>
 
             <% for(var i=0 ; i < thisusernoticetlist.length;i++){ var
                 contents=thisusernoticetlist[i].content.split('newline'); %>
                 <tr>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;width: 50px;">
                         <%= i+1%>
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;width: 70px;">
                         <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleDateString(); %>
                             <br>
                             <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleTimeString('en-US',{hour12: false})
                                 %>
 
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;width: 400px;">
                         <%= thisusernoticetlist[i].title %>
                     </td>
                     <td style="text-align: left;vertical-align:middle;">
@@ -62,7 +62,7 @@
 
 
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;width: 50px;">
                         <%= thisusernoticetlist[i].Creatorname%>
                     </td>
                 </tr>
