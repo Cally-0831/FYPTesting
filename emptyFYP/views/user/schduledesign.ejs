@@ -5,58 +5,59 @@
         Msg = <%=msg%>
             <br>
             Presentdate = <%=presentstartday%> - <%=presentendday%>
-                <br>
-                Releaseschduleday = <%=realreleaseday%>
-                    <div class="Pagetitle"> Schdule Design</div>
-                    <div class="row">
-                        <div class="buttons">
-                            <div class="button buttonlogout" onclick="backback()">Back</div>
-                        </div>
-                    </div>
-                    <%if (warning=="401" ){%>
-                        <div class="columns is-centered">
-                            <div class="column is-two-fifths">
-                                <article class="message is-danger">
-                                    <div class="message-header" style="font-size: 25px;">
-                                        <p>Cannot Design Schdule Now</p>
-                                        <button class="delete" aria-label="delete"></button>
-                                    </div>
-                                    <div class="message-body" style="font-size: 20px;">
-                                        Cannot design the Presentation Schdule now since the settings for accpecting
-                                        student's timetable and requests are still ongoing.
-                                    </div>
-                                </article>
+                    <br>
+                    Releaseschduleday = <%=realreleaseday%>
+                        <div class="Pagetitle"> Schdule Design</div>
+                        <div class="row">
+                            <div class="buttons">
+                                <div class="button buttonlogout" onclick="backback()">Back</div>
                             </div>
                         </div>
-                        <%}else if(warning == "200"){%>
+                        <%if (warning=="401" && msg !="4&" ){%>
                             <div class="columns is-centered">
                                 <div class="column is-two-fifths">
-                                    <div class = "schduledesignchecking">
-                                        <div class = "row">
-                                            <div style = "font-size: 25px; font-weight: bold;">
-                                            Schdule Design
-                                            </div>
-                                            
-                                            
+                                    <article class="message is-danger">
+                                        <div class="message-header" style="font-size: 25px;">
+                                            <p>Cannot Design Schdule Now</p>
+
                                         </div>
-<br>
-<div class = "row">
-    <div>
-        Present Period  = <%=presentstartday%> to <%=presentendday%>
-    </div>
-    <br>
-    <div class = "buttons is-right">
-        <div class = "button buttonlogout" onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
-            Create Draft
-        </div>
-    </div>
-</div>
-                                    </div>
+                                        <div class="message-body" style="font-size: 20px;">
+                                            Cannot design the Presentation Schdule now since the settings for accpecting
+                                            student's timetable and requests are still ongoing.
+                                        </div>
+                                    </article>
                                 </div>
                             </div>
-                            
-                            
-                            <%}%>
+                            <%}else if(warning=="401" && msg=="4&" ){%>
+                                <div class="columns is-centered">
+                                    <div class="column is-two-fifths">
+                                        <div class="schduledesignchecking">
+                                            <div class="row">
+                                                <div style="font-size: 25px; font-weight: bold;">
+                                                    Schdule Design
+                                                </div>
+
+
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div style="font-size: 20px; ">
+                                                    Present Period = <u><%=presentstartday.toLocaleDateString()%> <%=presentstartday.toLocaleTimeString("en-US")%></u> to <u><%=presentendday.toLocaleDateString()%> <%=presentendday.toLocaleTimeString("en-US")%></u> 
+                                                </div>
+                                                <br>
+                                                <div class="buttons is-right">
+                                                    <div class="button buttonlogout"
+                                                        onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
+                                                        Create Draft
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <%}%>
 
 </div>
 <script>
@@ -64,10 +65,11 @@
         location.assign("/home");
     }
 
-    async function confirmcreate(startday , endday){
-        var r = confirm("Confirm to create draft for presentation in period of "+startday+" to "+ endday+" ?");
-        if(r){
-            
+    async function confirmcreate(startday, endday) {
+        var r = confirm("Confirm to create ?");
+        
+        if (r) {
+
         }
     }
 </script>
