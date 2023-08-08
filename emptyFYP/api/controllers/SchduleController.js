@@ -34,22 +34,91 @@ module.exports = {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
-                console.log('>> json: ', json); 
-                if(json.length ==0){
+                console.log('>> json: ', json);
+                if (json.length == 0) {
                     releasedate = null
                     releasetime = null
-                } else{
+                } else {
                     releasedate = json[0].deadlinedate;
                     releasetime = json[0].deadlinetime;
                 }
-                
+
                 //console.log('>> stdlist: ', stdlist);  
-                return res.view('user/checkschdule', { releasedate : releasedate , releasetime : releasetime });
+                return res.view('user/checkschdule', { releasedate: releasedate, releasetime: releasetime });
             } catch (err) {
                 console.log("sth happened here");
 
             }
 
+
+        });
+    },
+
+    getallneededinfo: async function (req, res) {
+        let thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
+        db.query(thisistheline, (err, results) => {
+            if (err) { return res.status(401).json("Error happened when updating") }
+        });
+
+
+        thisistheline = "select startdate, starttime,enddate,endtime from allsupersetting where creator = \"" + req.session.userid + "\" and typeofsetting = \"3\" ";
+        /** Get present time */
+        db.query(thisistheline, (err, results) => {
+            var string = JSON.stringify(results);
+            var json = JSON.parse(string);
+            var presentdate = json
+            console.log('>> presentdate: ', presentdate);
+            var startstart = new Date(presentdate[0].startdate);
+            var endend = new Date(presentdate[0].enddate);
+            var strstarttime = presentdate[0].starttime.split(":");
+            var strendtime = presentdate[0].endtime.split(":");
+            startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
+            endend.setHours(strendtime[0], strendtime[1], strendtime[2]);
+            startstart = startstart.getFullYear() + "-" + (startstart.getMonth() + 1) + "-" + startstart.getDate();
+            endend = endend.getFullYear() + "-" + (endend.getMonth() + 1) + "-" + endend.getDate();
+
+
+            console.log(startstart + "    " + endend)
+            var thisistheline2 = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+            /** Get supervisior's ttb */
+            db.query(thisistheline2, (err, results) => {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var personalttb = json
+                console.log('>> personalttb: ', personalttb);
+                var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\"";
+                console.log(thisistheline3)
+                /** Get supervisior's requests */
+                /** whole schdule is designed base on supervisor's schdule first */
+                db.query(thisistheline3, (err, results) => {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    var personalrequestlist = json;
+                    console.log('>> personalrequestlist: ', personalrequestlist);
+                    var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID";
+                    /** Get classroom's ttb */
+                    db.query(thisistheline4, (err, results) => {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var classroomusagelist = json;
+                        console.log('>> classroomusagelist: ', classroomusagelist);
+                        var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\"))";
+                        /** Get classroom's unavailble timeslot */
+                        db.query(thisistheline5, (err, results) => {
+                            var string = JSON.stringify(results);
+                            var json = JSON.parse(string);
+                            var classroomtimeslotlist = json;
+                            console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
+                            return res.view("user/createdraft", {
+                                startdate: startstart, enddate: endend,
+                                personalrequestlist: personalrequestlist,personalttb: personalttb,
+                                classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
+                            });
+                        });
+                    });
+
+                });
+            })
 
         });
     },
