@@ -14,7 +14,7 @@ INSERT INTO  allusers VALUES ("BBanana","oid00002","opw00002","Active",0,"obs");
 #sample data
 #INSERT INTO  alltakecourse VALUES("COMP1005_10101","sid11111");
 #insert into alltakecourse values("COMP1005_00001","sid11111");
-insert into allrequestfromsupervisor values("askhjdfoasdjfi","tid00001","2023-04-03","00:00", "14:00");
+insert into allrequestfromsupervisor values("askhjdfoasdjfi","tid00001","2024-04-03","00:00", "14:00");
 
 
 insert into classroom 	values("Campus A","RM101","Open");
@@ -31,12 +31,12 @@ insert into allnotice values("nid0003","tid00002","",now(),"title3","Testing3");
 insert into allclass values("COMP","1005","00001","","Campus A","RM101","1","08:30","09:20","0");
 insert into allclass values("COMP","1005","00002","","Campus B","RM101","1","08:30","09:20","0");
 insert into allclass values("COMP","1005","10101","","Campus A","RM101","1","10:30","12:20","0");
-insert into allclass values("COMP","1005","10102","","Campus A","RM101","2","09:00","09:20","0");
+insert into allclass values("COMP","1005","10102","","Campus A","RM101","4","09:30","10:20","0");
 insert into allclass values("COMP","1005","10201","","Campus A","RM101","1","09:30","10:20","0");
 insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
 insert into allclass values("COMP","2005","00001","","Campus A","RM101","5","08:30","09:20","0");
 insert into allclass values("PHYS","2005","00001","","Campus B","RM101","2","10:30","12:20","0");
-insert into allclass values("COMP","2005","00002","","Campus B","RM103","3","09:00","09:20","0");
+insert into allclass values("COMP","2005","00002","","Campus B","RM103","3","08:30","09:20","0");
 insert into allclass values("MATH","2005","00003","","Campus A","RM101","4","09:30","10:20","0");
 
 #Yr3S2 ttb

@@ -1,6 +1,7 @@
 <div>
     this is Schduling
     <br>
+    havedraft = <%=havedraft%>
     Waring = <%=warning%>
         Msg = <%=msg%>
             <br>
@@ -30,7 +31,7 @@
                             </div>
                             <%}else if(warning=="401" && msg=="4&" ){%>
                                 <div class="columns is-centered">
-                                    <div class="column is-two-fifths">
+                                    <div id = "create" class="column is-two-fifths">
                                         <div class="schduledesignchecking">
                                             <div class="row">
                                                 <div style="font-size: 25px; font-weight: bold;">
@@ -54,10 +55,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                   
                                 </div>
-
-
-                                <%}%>
+<%}%>
 
 </div>
 <script>
@@ -67,9 +67,7 @@
 
     async function confirmcreate(startday, endday) {
         var r = confirm("Confirm to create ?");
-        
-        if (r) {
-
-        }
+        location.assign("createdraft");
+      
     }
 </script>

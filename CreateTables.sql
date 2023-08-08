@@ -30,6 +30,7 @@ states		varchar(20),
 errortime	int,
 topics		varchar(100) Not null,
 submission  varchar(10) default "N", 
+draft 		varchar(10) default "N", 
 PRIMARY key (tid));
 
 create table observer(

@@ -479,3 +479,7 @@ img{
 .table tbody tr:hover td, .table tbody tr:hover th {
   background-color: rgb(230, 208, 182);
 }
+
+.tablenothover tbody tr:hover td, .tablenothover tbody tr:hover th {
+  background-color: transparent;
+}

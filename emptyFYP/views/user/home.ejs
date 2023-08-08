@@ -79,7 +79,7 @@
                             </a>
                         </div>
                         <div class="imgcolumn">
-                            <a href="/schduledesign">
+                            <a onclick="checkhavedraft()">
                                 <img src="images\home\canlendar.jpg" class="gallery_img">
                             </a>
                         </div>
@@ -157,8 +157,8 @@
                                         <img src="images\home\classinfo.jpg" class="gallery_img">
                                     </a>
                                 </div>
-                                 <!-----check class info-->
-                                 <div class="imgcolumn">
+                                <!-----check class info-->
+                                <div class="imgcolumn">
                                     <a href="/lessonlist">
                                         <img src="images\home\lesson.jpg" class="gallery_img">
                                     </a>
@@ -188,6 +188,20 @@ console.log()
         }
 
     }**/
+    async function checkhavedraft() {
+        var response = await fetch("/schduledesign", {
+            method: "GET",
+        });
+        if (response.ok) {
+            var msg = await response.json();
+            if (msg == "redirect") {
+                location.assign("/createdraft");
+            } else {
+                location.assign("/schduledesign");
+            }
+        }
+
+    }
 
     async function checktimecome() {
         var response = await fetch("/checkschdule", {

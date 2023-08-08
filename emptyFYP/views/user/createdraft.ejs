@@ -1,0 +1,21 @@
+createdraft
+<div>
+    <%var startday = new Date(startdate);%>
+    <%=startday.getDay()%>
+    <%var day="";%>
+    
+    <%var printday=7-startday.getDay();%>
+    <table class="table tablenothover is-bordered is-striped is-halfwidth center">
+        <th class="th" > < </th>
+        <%for(var i = 0 ; i < startday.getDay()-1 ; i++){%>
+            <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;"></th>
+            <%}%>
+        <%for(var i = 0 ; i < printday ; i++){%>
+            <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">
+              4
+            </th>
+            <%}%>
+        
+        <th class="th" > > </th>
+    </table>    
+</div>

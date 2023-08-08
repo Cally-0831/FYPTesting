@@ -33,6 +33,7 @@ module.exports.routes = {
 
   'GET /schduledesign': "SettingController.checksetting",
   "GET /checkschdule": "SchduleController.viewfinalschdule",
+  'GET /createdraft': "SchduleController.getallneededinfo",
 
   "GET /uploadlesson":{view:"user/admin/uploadlesson"},
   "POST /uploadlesson":"LessonController.uploadlesson",
