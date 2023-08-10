@@ -1,44 +1,4 @@
- console.log(String(req.params.id).charAt(0))
-        if (String(req.params.id).charAt(0) == "s") {
-            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
-            console.log('delete excution');
-            console.log(thisistheline);
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
+starttimestr[0],starttimestr[1],starttimestr[2]
 
-            thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-
-            thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-        } else {
-            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
-            console.log('delete excution');
-            console.log(thisistheline);
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-
-            thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-
-            thisistheline = "DELETE FROM supervisorpairobserver WHERE oid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-            thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
-            db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
-            });
-        }
+<%var endtimestr = endtime.split(":")%>
+    <%enddate.setHours(endtimestr[0],endtimestr[1],endtimestr[2])%>

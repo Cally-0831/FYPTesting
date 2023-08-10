@@ -1,21 +1,108 @@
-createdraft
+
 <div>
+    <div class="Pagetitle">
+        Schdule Draft
+    </div>
+    <div class="buttons">
+        <div class="button buttonlogout is-left" onclick="backback()">
+            Back
+        </div>
+    
+    </div>
+    
     <%var startday = new Date(startdate);%>
-    <%=startday.getDay()%>
+    <%var endday = new Date(enddate);%>
+    
+    <%=startday%>  
+    <br>
+    <%=endday%>
     <%var day="";%>
     
     <%var printday=7-startday.getDay();%>
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
-        <th class="th" > < </th>
+        <th class="th" style="width: 10%;vertical-align:middle;"> 
+            <%if(startday.toLocaleDateString() != orgstart.toLocaleDateString()){%>
+            <div class ="buttons is-centered">
+                <div class = "button buttonlogout"  onclick="changepage('<%=pagenum%>','back')"> 
+                    <
+                </div>
+            </div> 
+            <%}%>
+        </th>
         <%for(var i = 0 ; i < startday.getDay()-1 ; i++){%>
-            <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;"></th>
+            <th class="th" style="width: 10%;font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;"></th>
             <%}%>
         <%for(var i = 0 ; i < printday ; i++){%>
-            <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">
-              4
+            <th class="th" style="width: 10%;font-size:20px;text-align: center;vertical-align:middle;background-color: blanchedalmond;">
+              
+               <%if(startday <= endday){%>
+                <% switch (startday.getDay()) {
+                    case 1: %>
+                  MON
+                  <% break;
+                    case 2: %>
+                  TUE
+                  <% break;
+                    case 3: %>
+                  WED
+                  <% break;
+                    case 4: %>
+                    THU
+                    <% break;
+                    case 5: %>
+                    FRI
+                    <% break;
+                    case 6: %>
+                    SAT
+                  <% break;
+                    default:
+                    break; } %>
+                    <%=startday.getDate()%>/<%=(startday.getMonth()+1)%>
+                <%startday = new Date(startday.getTime() + 1*24*60*60*1000)%>
             </th>
             <%}%>
+                
+                <%}%>
+                
         
-        <th class="th" > > </th>
+        <th class="th" style="width: 10%;vertical-align:middle;" >
+            <%if(startday <= endday){%>
+            <div class ="buttons is-centered">
+                <div class = "button buttonlogout"  onclick="changepage('<%=pagenum%>','forward')"> 
+                    >
+                </div>
+            </div> 
+            <%}%>
+        </th>
     </table>    
 </div>
+
+<script>
+    function backback(){
+    
+        var r = confirm("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.\n\nConfirm to move toward next page?");
+        if(r){
+            location.assign("/home");
+        }
+        
+    }
+    async function changepage(pagenum,dir){
+        var r = confirm("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.\n\nConfirm to move toward next page?");
+         if(dir == "back"){
+            pagenum = parseInt(pagenum)-1;
+        }else{
+            pagenum = parseInt(pagenum)+1;
+        }
+        if(r){
+        
+            var response = await fetch("/createdraft/"+pagenum, {
+            method: "GET",
+        });
+
+            if (response.ok) {
+                location.assign(response.url);
+            }
+        }
+    }
+
+</script>
