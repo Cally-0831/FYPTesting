@@ -192,6 +192,17 @@ Announcetime timestamp default null,
 primary key (STID)
 );
 
+create table allschedulebox(
+boxID varchar(30)not null,
+TID varchar(10) not null,
+SID varchar(10)not null,
+OID varchar(10)not null,
+Campus varchar(10) not null,
+RID		varchar(10) Not null,
+LastUpdate timestamp not null,
+primary key (boxID)
+);
+
 
 delimiter |
 
@@ -240,7 +251,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   if new.role = "stu" then
     insert into student(stdname,sid,password) values(new.allusersname,new.pid,new.password);
 	elseif new.role = "sup" then
-    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N");
+    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N","N");
     elseif new.role = "obs" then
     insert into observer values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N");
     END IF;
