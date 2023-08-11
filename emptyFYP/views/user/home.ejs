@@ -195,6 +195,7 @@ console.log()
         if (response.ok) {
             var msg = await response.json();
             if (msg == "redirect") {
+                console.log("redirect from home")
                 location.assign("/createdraft/1");
             } else {
                 location.assign("/schduledesign");

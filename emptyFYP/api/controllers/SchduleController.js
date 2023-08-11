@@ -75,7 +75,7 @@ module.exports = {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var presentdate = json
-                        console.log('>> presentdate: ', presentdate);
+                        //console.log('>> presentdate: ', presentdate);
                         var startstart = new Date(presentdate[0].startdate);
                         var endend = new Date(presentdate[0].enddate);
                         var strstarttime = presentdate[0].starttime.split(":");
@@ -90,8 +90,8 @@ module.exports = {
                         if (req.params.Page > 1) {
 
                             adddate = (8 - parseInt(startstart.getDay())) + ((parseInt(req.params.Page) - 2) * 7);
-                            console.log(8 - parseInt(startstart.getDay()))
-                            console.log((parseInt(req.params.Page) - 2) * 7)
+                        //    console.log(8 - parseInt(startstart.getDay()))
+                        //    console.log((parseInt(req.params.Page) - 2) * 7)
                             startstart = new Date(startstart.getTime() + (adddate) * 24 * 60 * 60 * 1000)
                         } else {
                             startstart = new Date(startstart.getTime() + (req.params.Page - 1) * 24 * 60 * 60 * 1000)
@@ -107,29 +107,29 @@ module.exports = {
                         ansstartdate = startstart;
                         ansenddate = endend;
 
-                        console.log(ansstartdate + "  " + ansenddate)
+                        //console.log(ansstartdate + "  " + ansenddate)
 
                         startstart = startstart.getFullYear() + "-" + (startstart.getMonth() + 1) + "-" + startstart.getDate();
                         endend = endend.getFullYear() + "-" + (endend.getMonth() + 1) + "-" + endend.getDate();
 
 
-                        console.log(startstart + "    " + endend)
-                        var thisistheline2 = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+                        //console.log(startstart + "    " + endend)
+                        var thisistheline2 = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc, weekdays asc";
                         /** Get supervisior's ttb */
                         db.query(thisistheline2, (err, results) => {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             var personalttb = json
-                            // console.log('>> personalttb: ', personalttb);
-                            var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\"";
-                            console.log(thisistheline3)
+                             console.log('>> personalttb: ', personalttb);
+                            var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
+                           // console.log(thisistheline3)
                             /** Get supervisior's requests */
                             /** whole schdule is designed base on supervisor's schdule first */
                             db.query(thisistheline3, (err, results) => {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var personalrequestlist = json;
-                                // console.log('>> personalrequestlist: ', personalrequestlist);
+                                 console.log('>> personalrequestlist: ', personalrequestlist);
                                 var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID";
                                 /** Get classroom's ttb */
                                 db.query(thisistheline4, (err, results) => {
