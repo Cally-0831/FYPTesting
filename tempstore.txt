@@ -93,13 +93,38 @@ starttimestr[0],starttimestr[1],starttimestr[2]
 }
 
 
+<%var hourtime = 8; var mintime= ["30","00"]%>
+     <%var currenttime="";%>
+     <%var currentendtime="";%>
 
-
- <%if(lessonstarttime[0]+":"+lessonstarttime[1] == currenttime ){%>
-                            <div class = "rows">
-                                <div class = "row">
-                                    Class
-                                </div>
-                                </div>
-                            
-                            <%}%>
+ <td>
+                    <!--timebox-->
+                    <%if (i%2 == 0){ 
+                        var timetime="";
+                        if(hourtime < 10){
+                            timetime="0"+hourtime+":"+mintime[0];
+                        }else{
+                            timetime=""+hourtime+":"+mintime[0];
+                        }
+                        hourtime++;
+                        if(hourtime < 10){
+                            currentendtime ="0"+hourtime+":"+mintime[1];
+                        }else{
+                            currentendtime=""+hourtime+":"+mintime[1];
+                        }
+                    }else{
+                        var timetime="";
+                        if(hourtime < 10){
+                            timetime="0"+hourtime+":"+mintime[1];
+                            currentendtime = "0"+hourtime+":"+mintime[0];
+                        }else{
+                            timetime=""+hourtime+":"+mintime[1];
+                            currentendtime = hourtime+":"+mintime[0];
+                        } 
+                        
+                        
+                    }%>
+                    <%=timetime%>
+                     <%currenttime = timetime%>
+                    
+                </td>

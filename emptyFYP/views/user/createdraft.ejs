@@ -115,70 +115,8 @@
                      <%currenttime = timetime%>
                     
                 </td>
-                <%for (var z = 0 ; z < 6 ; z++){%>
-                    <td>
-                        <%if(personalttb.length >0){%>
-                            <%for(var q = 0 ;q < personalttb.length; q++){%>
-                        <%var lessonstarttime = personalttb[i].startTime.split(":");%>
-                        <% var lessonendtime = personalttb[i].endTime.split(":");%>
-                        <% lessonendtime[1] = "30";%>
-                        <%console.log( (z+1)+"   "+personalttb[i].CID+"   "+currenttime +"  "+ lessonstarttime[0]+":"+lessonstarttime[1] +"    "+currentendtime+"   "+(lessonendtime[0]+":"+lessonendtime[1]))%>
-                       
-                        <%if(lessonstarttime[0]+":"+lessonstarttime[1] == currenttime && personalttb[i].weekdays == (z+1)){%>
-                            <div class = "rows">
-                                <div class = "row">
-                                    <%=personalttb[i].CID%>
-                                </div>
-                                <div class = "row">
-                                    <%=personalttb[i].rid%>
-                                </div>
-                            </div>
-                            <%if((lessonendtime[0]+":"+lessonendtime[1]) == currentendtime){
-                                console.log("case 1")
-                                personalttb[i].startTime = "00:00:00";
-                                personalttb[i].endTime = "00:00:00";
-                                
-                                var obj = personalttb[i];
-                                personalttb.shift();
-                                personalttb.push(obj);
-                                console.log("\n\n\n"+">> poped")
-                                console.log(personalttb)
-                            }else{
-                                console.log("case 2")
-                                personalttb[i].startTime = currentendtime+":00";
-                                var obj = personalttb[i];
-                                personalttb.shift();
-                                var check = false;
-                                personalttb.push(obj);
-                                
-                                console.log("\n\n\n"+">> something changed")
-                                console.log(personalttb)
-                            } %>
-                            <%}%>
-
-                            <%}%>
-                        
-                            <%}else{%>
-                            <div class = "rows">
-                                <!--
-                                <div class = "row">
-                                    Student:
-                                </div>
-                                <div class = "row">
-                                    Observer:
-                                </div>
-                                <div class = "row">
-                                    Campus:
-                                </div>
-                                <div class = "row">
-                                    Room:
-                                </div>-->
-                            </div>
-                            <%}%>
-
-                        
-                    </td>
-                    <%}%>
+    
+                
             </tr>
                
             <%}%>
