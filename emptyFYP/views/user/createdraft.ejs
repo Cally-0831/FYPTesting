@@ -19,6 +19,21 @@
     <%var day="";%>
     
     <%var printday=7-startday.getDay();%>
+    <% var lastbox; const mon=[]; const tue=[]; const wed=[];%>
+    <% const thu=[];const fri=[]; const sat=[];%>
+    <%const arraylist=[mon,tue,wed,thu,fri,sat]; %>
+    <% for (var y=0 ; y < personalttb.length;y++){%>
+        <%arraylist[personalttb[y].weekdays-1].push(personalttb[y])%>
+    <%}%>
+    <% for (var y=0 ; y < arraylist.length;y++){%>
+        <%if(arraylist[y].length==0){%>
+            <%arraylist[y].push("EMPTY")%>
+        <%}%>
+    <%}%>
+   
+
+    
+
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
     <tr>
         <th class="th" style="width: 5%;vertical-align:middle;"> 
@@ -62,6 +77,22 @@
                     default:
                     break; } %>
                     <%=startday.getDate()%>/<%=(startday.getMonth()+1)%>
+                    <%for (var j = 0 ; j < personalrequestlist.length;j++){%>
+                        <%var requestdate = new Date(personalrequestlist[j].RequestDate);%>
+                        <%if(requestdate.toLocaleDateString() === startday.toLocaleDateString()){%>
+                           
+                            <%for(var a = 0 ; a < arraylist[startday.getDay()-1].length;a++){
+                                 if(arraylist[startday.getDay()-1][a].startTime > personalrequestlist[j].RequestStartTime){
+                                    pos = a;
+                                }
+                            }%>
+                            
+                            <%arraylist[startday.getDay()-1].splice(a, 0, personalrequestlist[j]);%>
+
+                            <%}%>
+                        <%}%>
+                        <%console.log("\n\n\n")%>
+                        
                 <%startday = new Date(startday.getTime() + 1*24*60*60*1000)%>
                 <%}%>
             </th>
@@ -78,6 +109,7 @@
             <%}%>
         </th>
     </tr>
+    
      <%var hourtime = 8; var mintime= ["30","00"]%>
      <%var currenttime="";%>
      <%var currentendtime="";%>
@@ -115,7 +147,106 @@
                      <%currenttime = timetime%>
                     
                 </td>
-    
+                <%for(var a = 0 ; a < arraylist.length;a++){%>
+                    <!--loop week array-->
+                    <%console.log("\n\n\n")%>
+                    <%var thisboxstring = "";%>
+                    <%var type=0;%>
+                    
+                    <%for(var b = 0 ; b < arraylist[a].length;b++){%>
+                     <!-- <%console.log(arraylist[a][b])%>  -->   
+                        <!--loop week day array-->
+                        
+                        <%if(arraylist[a][b].CID != undefined && arraylist[a][b].CID != "SKIP"){%>
+                            <!---type == lesson -->
+                            
+                            <%var arrayliststarttime = arraylist[a][b].startTime.split(":");%>
+                            <%var arraylistendtime = arraylist[a][b].endTime.split(":");%>
+                            
+                            <%if(arrayliststarttime[0]+":"+arrayliststarttime[1] === timetime){%>
+                                <%type = 1;%>
+                                 <%thisboxstring = ""+arraylist[a][b].CID+"\n"+arraylist[a][b].rid+""%>
+                                 <%var nextsession = parseInt(arrayliststarttime[0])%>
+                                 <%if(arrayliststarttime[1]=="30"){%>
+                                    <% nextsession++; %>
+                                 <%}%>
+                                
+                                <% if(nextsession < 10 ){
+                                    if(arrayliststarttime[1] == "30"){
+                                        arraylist[a][b].startTime = "0"+nextsession+":"+"00";
+                                    }else{
+                                        arraylist[a][b].startTime = "0"+nextsession+":"+"30";
+                                    }
+                                    
+                                }else{
+                                    if(arrayliststarttime[1] == "30"){
+                                        arraylist[a][b].startTime = ""+nextsession+":"+"00";
+                                    }else{
+                                        arraylist[a][b].startTime = ""+nextsession+":"+"30";
+                                    }
+                                }%>
+                                <%if(arraylist[a][b].startTime > arraylistendtime[0]+":"+arraylistendtime[1] ){%>
+                                    <%arraylist[a][b].CID="SKIP"%>
+                                <%}%>
+                                <%}%>
+                         <%}else if(arraylist[a][b].ReqID != undefined && arraylist[a][b].ReqID != "SKIP"){%>
+                            <!---type == req timeslot -->
+                            
+                            <%var thisreqdate = new Date(arraylist[a][b].RequestDate);%>
+                            <%var arrayliststarttime = arraylist[a][b].RequestStartTime.split(":");%>
+                            <%var arraylistendtime = arraylist[a][b].RequestEndTime.split(":");%>
+                           
+                                <%if((arrayliststarttime[0]+":"+arrayliststarttime[1]) >= currenttime && (arrayliststarttime[0]+":"+arrayliststarttime[1]) <= currentendtime){%>
+                                    <%thisboxstring =arraylist[a][b].ReqID%>
+                                    <%type = 2;%>
+                                    <%var nextsession = parseInt(arrayliststarttime[0])%>
+                                    <%if(parseInt(arrayliststarttime[1]) >= 30){%>
+                                        <% nextsession++; %>
+                                     <%}%>
+                                     <% if(nextsession < 10 ){
+                                        if(parseInt(arrayliststarttime[1]) >= 30){
+                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"00";
+                                        }else{
+                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"30";
+                                        }
+                                        
+                                    }else{
+                                        if(parseInt(arrayliststarttime[1]) >= 30){
+                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"00";
+                                        }else{
+                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"30";
+                                        }
+                                    }%>
+
+                                    <%if ( arraylist[a][b].RequestStartTime >  arraylist[a][b].RequestEndTime){%>
+                                        <%  arraylist[a][b].ReqID = "SKIP";%>
+                                        <%}%>
+
+                                    <%}%>
+
+                                
+                            <%}%>
+                            
+                        <%}%>
+                        
+                            <%if (type == 1){%>
+                                <td style="background-color: cornsilk;">
+                                <div style="font-weight: bold; text-align: center; font-size: 20px;">Class</div>
+                            <%}else if (type == 2) {%>
+                                <td style="background-color: lavender;">
+                                <div style="font-weight: bold; text-align: center; font-size: 20px;">Request</div>
+                            <%}else{%>
+                                <td>
+                                
+                            <%}%>
+                            
+                            <%=thisboxstring%></td>
+                    <%}%>
+                
+                
+
+             
+                
                 
             </tr>
                
