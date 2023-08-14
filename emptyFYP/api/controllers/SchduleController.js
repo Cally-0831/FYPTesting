@@ -120,7 +120,7 @@ module.exports = {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             var personalttb = json
-                             console.log('>> personalttb: ', personalttb);
+                            //console.log('>> personalttb: ', personalttb);
                             var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
                            // console.log(thisistheline3)
                             /** Get supervisior's requests */
@@ -129,14 +129,14 @@ module.exports = {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var personalrequestlist = json;
-                                 console.log('>> personalrequestlist: ', personalrequestlist);
+                                //console.log('>> personalrequestlist: ', personalrequestlist);
                                 var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID";
                                 /** Get classroom's ttb */
                                 db.query(thisistheline4, (err, results) => {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     var classroomusagelist = json;
-                                    //  console.log('>> classroomusagelist: ', classroomusagelist);
+                                    console.log('>> classroomusagelist: ', classroomusagelist);
                                     var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\"))";
                                     /** Get classroom's unavailble timeslot */
                                     db.query(thisistheline5, (err, results) => {
