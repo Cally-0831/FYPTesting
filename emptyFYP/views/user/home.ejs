@@ -189,11 +189,12 @@ console.log()
 
     }**/
     async function checkhavedraft() {
-        var response = await fetch("/schduledesign", {
+        var response = await fetch("/checkdraft", {
             method: "GET",
         });
         if (response.ok) {
             var msg = await response.json();
+            console.log("here !!!!!!! "+msg)
             if (msg == "redirect") {
                 console.log("redirect from home")
                 location.assign("/createdraft/1");

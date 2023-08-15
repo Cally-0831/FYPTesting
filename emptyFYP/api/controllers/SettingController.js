@@ -80,6 +80,83 @@ module.exports = {
         });
     },
 
+    nodraft :async function (req, res) {
+        let thisistheline2 = " select * from allsupersetting where creator=\"" + req.session.userid + "\" order by typeofsetting asc";
+        var supersetting;
+        db.query(thisistheline2, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                //console.log('>> string: ', string );
+                var json = JSON.parse(string);
+                //console.log('>> json: ', json);  
+                supersetting = json;
+
+                var today = new Date();
+                var checking = -1;
+                var msg = "";
+                var realreleaseday;
+                var presentstartday;
+                var presentendday;
+                var warning = 200;
+                for (var i = 0; i < supersetting.length; i++) {
+
+                    if (supersetting[i].deadlinedate != null) {
+                        /** this is for setting 1/2/4 */
+                        var settingday = new Date(supersetting[i].deadlinedate).toDateString();
+                        var settingtime = supersetting[i].deadlinetime;
+                        var stringstring = settingday + " " + settingtime;
+                        var dday = new Date(stringstring);
+                        if (supersetting[i].typeofsetting == 4) {
+                            realreleaseday = dday
+                        }
+                        console.log(today + "\n" + dday)
+                        console.log(today < dday)
+                        if (today < dday) {
+                            msg += supersetting[i].typeofsetting + "&"
+                            checking = 1;
+                        }
+                    } else {
+                        /** this is for setting 3 */
+                        var settingstartday = new Date(supersetting[i].startdate).toDateString();
+                        var settingstarttime = supersetting[i].starttime;
+                        var settingendday = new Date(supersetting[i].enddate).toDateString();
+                        var settingendtime = supersetting[i].endtime;
+
+                        var stringstring1 = settingstartday + " " + settingstarttime;
+                        var stringstring2 = settingendday + " " + settingendtime;
+                        var startdday = new Date(stringstring1);
+                        presentstartday = startdday
+                        presentendday = new Date(stringstring2);
+                        console.log(today + "\n" + startdday)
+                        console.log(today > startdday)
+                        if (today > startdday) {
+                            msg += supersetting[i].typeofsetting + "&"
+                            checking = 1;
+                        }
+                    }
+
+
+                }
+                if (checking > 0) {
+                    warning = 401;
+                    //console.log(msg + "@@@@@")
+                }
+
+                thisistheline = "";
+                
+                return res.view("user/schduledesign", { havedraft: "N", warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday });
+
+
+            } catch (err) {
+                console.log("sth happened here");
+
+            }
+
+
+        });
+
+    },
+
     checksetting: async function (req, res) {
         let thisistheline = " select draft from supervisor where tid=\"" + req.session.userid + "\" ";
 
@@ -89,79 +166,11 @@ module.exports = {
             var json = JSON.parse(string);
             var havedraft = json[0].draft;
             console.log('>> json: ', havedraft); 
-            if(havedraft == "Y"){return res.status(200).json("redirect");}
-            let thisistheline2 = " select * from allsupersetting where creator=\"" + req.session.userid + "\" order by typeofsetting asc";
-            var supersetting;
-            db.query(thisistheline2, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
-                    var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
-                    supersetting = json;
-
-                    var today = new Date();
-                    var checking = -1;
-                    var msg = "";
-                    var realreleaseday;
-                    var presentstartday;
-                    var presentendday;
-                    var warning = 200;
-                    for (var i = 0; i < supersetting.length; i++) {
-
-                        if (supersetting[i].deadlinedate != null) {
-                            /** this is for setting 1/2/4 */
-                            var settingday = new Date(supersetting[i].deadlinedate).toDateString();
-                            var settingtime = supersetting[i].deadlinetime;
-                            var stringstring = settingday + " " + settingtime;
-                            var dday = new Date(stringstring);
-                            if (supersetting[i].typeofsetting == 4) {
-                                realreleaseday = dday
-                            }
-                            console.log(today + "\n" + dday)
-                            console.log(today < dday)
-                            if (today < dday) {
-                                msg += supersetting[i].typeofsetting + "&"
-                                checking = 1;
-                            }
-                        } else {
-                            /** this is for setting 3 */
-                            var settingstartday = new Date(supersetting[i].startdate).toDateString();
-                            var settingstarttime = supersetting[i].starttime;
-                            var settingendday = new Date(supersetting[i].enddate).toDateString();
-                            var settingendtime = supersetting[i].endtime;
-
-                            var stringstring1 = settingstartday + " " + settingstarttime;
-                            var stringstring2 = settingendday + " " + settingendtime;
-                            var startdday = new Date(stringstring1);
-                            presentstartday = startdday
-                            presentendday = new Date(stringstring2);
-                            console.log(today + "\n" + startdday)
-                            console.log(today > startdday)
-                            if (today > startdday) {
-                                msg += supersetting[i].typeofsetting + "&"
-                                checking = 1;
-                            }
-                        }
-
-
-                    }
-                    if (checking > 0) {
-                        warning = 401;
-                        console.log(msg + "@@@@@")
-                    }
-
-                    thisistheline = "";
-                    return res.view("user/schduledesign", { havedraft: havedraft, warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday })
-
-
-                } catch (err) {
-                    console.log("sth happened here");
-
-                }
-
-
-            });
+            if(havedraft == "Y"){return res.status(200).json("redirect");
+        }else{
+            return res.status(200).json("go")
+        }
+            
         });
 
     },

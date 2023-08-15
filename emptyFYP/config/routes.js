@@ -30,8 +30,8 @@ module.exports.routes = {
   'GET /user/logout': 'UserController.logout',
 
   'GET /home': { view: 'user/home' },
-
-  'GET /schduledesign': "SettingController.checksetting",
+  'GET /schduledesign': "SettingController.nodraft",
+  'GET /checkdraft': "SettingController.checksetting",
   "GET /checkschdule": "SchduleController.viewfinalschdule",
   //'GET /createdraft': "SchduleController.getallneededinfo",
   'GET /createdraft/:Page': "SchduleController.getallneededinfo",

@@ -90,8 +90,8 @@ module.exports = {
                         if (req.params.Page > 1) {
 
                             adddate = (8 - parseInt(startstart.getDay())) + ((parseInt(req.params.Page) - 2) * 7);
-                        //    console.log(8 - parseInt(startstart.getDay()))
-                        //    console.log((parseInt(req.params.Page) - 2) * 7)
+                            //    console.log(8 - parseInt(startstart.getDay()))
+                            //    console.log((parseInt(req.params.Page) - 2) * 7)
                             startstart = new Date(startstart.getTime() + (adddate) * 24 * 60 * 60 * 1000)
                         } else {
                             startstart = new Date(startstart.getTime() + (req.params.Page - 1) * 24 * 60 * 60 * 1000)
@@ -122,7 +122,7 @@ module.exports = {
                             var personalttb = json
                             //console.log('>> personalttb: ', personalttb);
                             var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
-                           // console.log(thisistheline3)
+                            // console.log(thisistheline3)
                             /** Get supervisior's requests */
                             /** whole schdule is designed base on supervisor's schdule first */
                             db.query(thisistheline3, (err, results) => {
@@ -144,14 +144,36 @@ module.exports = {
                                         var json = JSON.parse(string);
                                         var classroomtimeslotlist = json;
                                         //     console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                        return res.view("user/createdraft", {
-                                            pagenum: req.params.Page,
-                                            orgstart: orgstart,
-                                            startdate: ansstartdate, enddate: ansenddate,
+                                        var thisistheline6 = "select * from classroom";
+                                        db.query(thisistheline6, (err, results) => {
+                                            var string = JSON.stringify(results);
+                                            var json = JSON.parse(string);
+                                            var classroomlist = json;
+                                            var thisistheline7 = "select * from supervisorpairstudent";
+                                            db.query(thisistheline7, (err, results) => {
+                                                var string = JSON.stringify(results);
+                                                var json = JSON.parse(string);
+                                                var studentlist = json;
+                                                var thisistheline8 = "select * from allrequestfromstudent where sid in (select sid from supervisorpairstudent where tid = \""+req.session.userid+"\")";
+                                            db.query(thisistheline8, (err, results) => {
+                                                var string = JSON.stringify(results);
+                                                var json = JSON.parse(string);
+                                                var studenttimeslotlist = json;
+                                            return res.view("user/createdraft", {
+                                                    pagenum: req.params.Page,
+                                                    orgstart: orgstart,
+                                                    startdate: ansstartdate, enddate: ansenddate,
+                                                    classroomlist: classroomlist, studentlist: studentlist,
+                                                    studenttimeslotlist:studenttimeslotlist,
+                                                    personalrequestlist: personalrequestlist, personalttb: personalttb,
+                                                    classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
+                                                });
+                                            });
+                                                
+                                            })
 
-                                            personalrequestlist: personalrequestlist, personalttb: personalttb,
-                                            classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
-                                        });
+                                        })
+
                                     });
                                 });
 
