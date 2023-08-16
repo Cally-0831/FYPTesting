@@ -30,7 +30,9 @@
             <%arraylist[y].push("EMPTY")%>
         <%}%>
     <%}%>
-   
+    <%var printstudentlist;%>
+    <%var todaycampus;%>
+    <%var thissessioncampus;%>
 
     
 
@@ -156,16 +158,18 @@
                     
                     <%for(var b = 0 ; b < arraylist[a].length;b++){%>
                         <!--loop week day array-->
-                        
+                        <%todaycampus = arraylist[a][b].Campus%>
                         <%if(arraylist[a][b].CID != undefined && arraylist[a][b].CID != "SKIP"){%>
                             <!---type == lesson -->
                             
                             <%var arrayliststarttime = arraylist[a][b].startTime.split(":");%>
                             <%var arraylistendtime = arraylist[a][b].endTime.split(":");%>
                             
+                            
                             <%if(arrayliststarttime[0]+":"+arrayliststarttime[1] === timetime){%>
                                 <%type = 1;%>
                                  <%thisboxstring = ""+arraylist[a][b].CID+"\n"+arraylist[a][b].rid+""%>
+                                 
                                  <%var nextsession = parseInt(arrayliststarttime[0])%>
                                  <%if(arrayliststarttime[1]=="30"){%>
                                     <% nextsession++; %>
@@ -260,14 +264,67 @@
                                             <%}%>
                                         <%}%>
                                         <%if(printthis >0 && checkthis >= 0){%>
+                                            <%if(studentlist.length >0 ){%> 
+                                        <div style="font-weight: bold;">Stu :</div>
+
+                                        <div>
+                                          
+                                                <%var index = Math.floor(Math.random()*studentlist.length)%>
+                                                <%console.log(index +"     "+studentlist.length)%>
+                                                
+                                                <%var thisstucheck = -1;%>
+                                                <%for (var q = 0 ; q < studenttimeslotlist.length;q++){%>
+                                                    <%if(studenttimeslotlist[q].SID == studentlist[index].SID){%>
+                                                        <%thisstucheck = 1;%>
+                                                        <%var requestdate = new Date(studenttimeslotlist[q].RequestDate);%>
+                                                        <%var requeststarttime = studenttimeslotlist[q].RequestStartTime.split(":");%>
+                                                        <%var requestendtime = studenttimeslotlist[q].RequestEndTime.split(":");%>
+                                                       <%console.log(today.toLocaleDateString() +"   "+ requestdate.toLocaleDateString())%>
+                                                       <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
+                                                        <!--have requ but not today-->
+                                                            <%=studentlist[index].SID%>
+                                                            <%studentlist.splice(index,1)%>
+                                                            <%var reqstart = requeststarttime[0]+":"+requeststarttime[1];%>
+                                                            <%var reqend = requestendtime[0]+":"+requestendtime[1];%>
+                                                        <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (reqstart != "00:00" && reqend != "23:59")){%>
+                                                            <!--have requ and it is today but not full day-->
+                                                            <%if(reqend < currenttime){%>
+                                                                <%=studentlist[index].SID%>
+                                                                <%studentlist.splice(index,1)%>
+                                                                <%}else if(currentendtime < reqstart){%>
+                                                                    <%=studentlist[index].SID%>
+                                                                <%studentlist.splice(index,1)%>
+                                                                    <%}%>
+
+                                                            <%}%>
+                                                        
+
+                                                    <%}%>
+                                            <%}%>
+                                            <%if(thisstucheck < 0){%>
+                                                <%=studentlist[index].SID%>
+                                                <%studentlist.splice(index,1)%>
+                                                <%}%>
+                                           
+                                        </div>    
                                             
-                                        <div style="font-weight: bold;">Stu</div>
+
+                                            
+                                        
                                         <div style="font-weight: bold;">Obs</div>
-                                        <div style="font-weight: bold;">Campus
-                                            
+                                        <div style="font-weight: bold;">Campus</div>
+                                        <div>
+                                            <%for(var w = 0; w < Campuslist.length;w++){%>
+                                                <%if(Campuslist[w].Campus == todaycampus){%>
+                                                    <%=Campuslist[w].Campus%>
+                                                    <%thissessioncampus = Campuslist[w].Campus%>
+                                                <%}%>
+                                                
+                                            <%}%>
                                         </div>
                                         <div style="font-weight: bold;">RID</div>
-                                            
+                                        
+                                            <%}%>
                                     <%}%>
                               
                                 

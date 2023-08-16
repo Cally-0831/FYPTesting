@@ -114,7 +114,7 @@ module.exports = {
 
 
                         //console.log(startstart + "    " + endend)
-                        var thisistheline2 = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc, weekdays asc";
+                        var thisistheline2 = "select allclass.CID, allclass.Campus ,allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc, weekdays asc";
                         /** Get supervisior's ttb */
                         db.query(thisistheline2, (err, results) => {
                             var string = JSON.stringify(results);
@@ -136,7 +136,7 @@ module.exports = {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     var classroomusagelist = json;
-                                    console.log('>> classroomusagelist: ', classroomusagelist);
+                                    //console.log('>> classroomusagelist: ', classroomusagelist);
                                     var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\"))";
                                     /** Get classroom's unavailble timeslot */
                                     db.query(thisistheline5, (err, results) => {
@@ -144,26 +144,29 @@ module.exports = {
                                         var json = JSON.parse(string);
                                         var classroomtimeslotlist = json;
                                         //     console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                        var thisistheline6 = "select * from classroom";
+                                        var thisistheline6 = "select distinct(Campus) from classroom";
                                         db.query(thisistheline6, (err, results) => {
                                             var string = JSON.stringify(results);
                                             var json = JSON.parse(string);
-                                            var classroomlist = json;
+                                            var Campuslist = json;
                                             var thisistheline7 = "select * from supervisorpairstudent";
                                             db.query(thisistheline7, (err, results) => {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var studentlist = json;
+                                                console.log('>> studentlist: ', studentlist);
+                                                console.log('\n\n\n\n\n\n');
                                                 var thisistheline8 = "select * from allrequestfromstudent where sid in (select sid from supervisorpairstudent where tid = \""+req.session.userid+"\")";
                                             db.query(thisistheline8, (err, results) => {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var studenttimeslotlist = json;
+                                                console.log('>> studenttimeslotlist: ', studenttimeslotlist);
                                             return res.view("user/createdraft", {
                                                     pagenum: req.params.Page,
                                                     orgstart: orgstart,
                                                     startdate: ansstartdate, enddate: ansenddate,
-                                                    classroomlist: classroomlist, studentlist: studentlist,
+                                                    Campuslist: Campuslist, studentlist: studentlist,
                                                     studenttimeslotlist:studenttimeslotlist,
                                                     personalrequestlist: personalrequestlist, personalttb: personalttb,
                                                     classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
