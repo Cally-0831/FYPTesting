@@ -155,7 +155,7 @@ primary key (SID)
 
 
 create table allclassroomtimeslot(
-ReqID	varchar(20) not null,
+ReqID	varchar(30) not null,
 Campus varchar(10) not null,
 RID		varchar(10) Not null,
 StartDate DATE not null,

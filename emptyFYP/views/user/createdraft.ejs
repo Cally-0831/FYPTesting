@@ -284,14 +284,15 @@
                                    
                                     
                                     <%if (today.toLocaleDateString() == startstartstart.toLocaleDateString()){%>
-                                         <%if(currenttime <= startstartstart.toLocaleTimeString("en-GB")){%>
+                                         <%if(currenttime+":00" < startstartstart.toLocaleTimeString("en-GB")){%>
                                             <%printthis=-1;%>
                                             <%}%>                                        
                                         <%}else if(today.toLocaleDateString() == endday.toLocaleDateString()){%>
-                                            <%if(currentendtime > endday.toLocaleTimeString("en-GB")){%>
+                                            <%if(currentendtime+":00" > endday.toLocaleTimeString("en-GB")){%>
                                                 <%printthis = -1;%>
                                             <%}%>
                                         <%}%>
+                                        <%=printthis%> <%=checkthis%>
                                         <%if(printthis >0 && checkthis >= 0){%>
                                             <%if(studentlist.length >0 ){%> 
                                         <div style="font-weight: bold;">Stu :</div>

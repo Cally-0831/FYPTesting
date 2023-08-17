@@ -169,7 +169,7 @@ module.exports = {
                 if (json.length == 0) {
                     db.query(thisistheline, function (err, result) {
                         if (err) {
-                            return res.status(401).json("Error happened when excuting : " + thisistheline);
+                            return res.status(401).json("Error happened when excuting : " + err);
                         } else {
                             console.log("1 record inserted");
                             return res.status(200).json(req.params.campus + "&" + req.params.rid);
