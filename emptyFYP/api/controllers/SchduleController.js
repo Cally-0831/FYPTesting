@@ -130,20 +130,20 @@ module.exports = {
                                 var json = JSON.parse(string);
                                 var personalrequestlist = json;
                                 //console.log('>> personalrequestlist: ', personalrequestlist);
-                                var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID";
+                                var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
                                 /** Get classroom's ttb */
                                 db.query(thisistheline4, (err, results) => {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     var classroomusagelist = json;
-                                    //console.log('>> classroomusagelist: ', classroomusagelist);
-                                    var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\"))";
+                                    console.log('>> classroomusagelist: ', classroomusagelist);
+                                    var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
                                     /** Get classroom's unavailble timeslot */
                                     db.query(thisistheline5, (err, results) => {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var classroomtimeslotlist = json;
-                                        //     console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
+                                             console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
                                         var thisistheline6 = "select distinct(Campus) from classroom";
                                         db.query(thisistheline6, (err, results) => {
                                             var string = JSON.stringify(results);
@@ -154,14 +154,14 @@ module.exports = {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var studentlist = json;
-                                                console.log('>> studentlist: ', studentlist);
+                                            //    console.log('>> studentlist: ', studentlist);
                                                 console.log('\n\n\n\n\n\n');
                                                 var thisistheline8 = "select * from allrequestfromstudent where sid in (select sid from supervisorpairstudent where tid = \""+req.session.userid+"\")";
                                             db.query(thisistheline8, (err, results) => {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var studenttimeslotlist = json;
-                                                console.log('>> studenttimeslotlist: ', studenttimeslotlist);
+                                            //    console.log('>> studenttimeslotlist: ', studenttimeslotlist);
                                             return res.view("user/createdraft", {
                                                     pagenum: req.params.Page,
                                                     orgstart: orgstart,

@@ -32,6 +32,10 @@
     <%}%>
     <%var printstudentlist;%>
     <%var todaycampus;%>
+    <%var donerandom =0;%>
+    <%var moncam,tuecam,wedcam,thucam,fricam%>
+    <%var thecamlistfortheweek = [moncam,tuecam,wedcam,thucam,fricam]%>
+    
     <%var thissessioncampus;%>
 
     
@@ -115,6 +119,7 @@
      <%var currenttime="";%>
      <%var currentendtime="";%>
         <%for(var i = 0 ; i < 22;i++){%>
+            
             <tr>
             <!--loop week-->
                 <td>
@@ -158,7 +163,31 @@
                     
                     <%for(var b = 0 ; b < arraylist[a].length;b++){%>
                         <!--loop week day array-->
-                        <%todaycampus = arraylist[a][b].Campus%>
+                        <%console.log("*****    "+today.toLocaleDateString()+"    "+todaycampus)%>
+                        
+                        <%if(arraylist[a][b] == "EMPTY"){%>
+                            <%if(donerandom == 0){%>
+                                <%var index = Math.floor(Math.random()*Campuslist.length)%>
+                                <%todaycampus = Campuslist[index].Campus%>
+                                <%thecamlistfortheweek[a]= todaycampus%>
+                                <%donerandom = 1;%>
+                                <%console.log(arraylist[a])%>
+                             <%}else{todaycampus = thecamlistfortheweek[a];console.log(today.toLocaleDateString()+"    "+todaycampus)}%>
+                            
+                           
+                            <%}else{%>
+                                
+                                <%todaycampus = arraylist[a][b].Campus%>
+                                <%thecamlistfortheweek[a] = todaycampus;%>
+                          
+                            <%}%>  
+                           
+                            <%if(todaycampus == "" || todaycampus == undefined){%>
+                             <%todaycampus = thecamlistfortheweek[a]%>
+                            <%}%>
+                            
+                            
+                        
                         <%if(arraylist[a][b].CID != undefined && arraylist[a][b].CID != "SKIP"){%>
                             <!---type == lesson -->
                             
@@ -302,7 +331,7 @@
                                                     <%}%>
                                             <%}%>
                                             <%if(thisstucheck < 0){%>
-                                                <%=studentlist[index].SID%>
+                                                <%=studentlist[index].SID%> 
                                                 <%studentlist.splice(index,1)%>
                                                 <%}%>
                                            
@@ -314,16 +343,40 @@
                                         <div style="font-weight: bold;">Obs</div>
                                         <div style="font-weight: bold;">Campus</div>
                                         <div>
-                                            <%for(var w = 0; w < Campuslist.length;w++){%>
-                                                <%if(Campuslist[w].Campus == todaycampus){%>
-                                                    <%=Campuslist[w].Campus%>
-                                                    <%thissessioncampus = Campuslist[w].Campus%>
+                                            
+                                            <%var canuseCampus = todaycampus%>
+                                            
+                                            <%var canuseRID;%>
+                                            <%while(canuseRID == undefined){%>
+                                                <%for(var q = 0 ; q < classroomusagelist.length;q++){%>
+                                                   
+                                                <%if(canuseCampus == classroomusagelist[q].Campus && !((classroomusagelist[q].startTime < currentendtime && currentendtime < classroomusagelist[q].endTime) || (classroomusagelist[q].startTime< currenttime && currenttime < classroomusagelist[q].endTime)|| (classroomusagelist[q].startTime < currenttime && currentendtime < classroomusagelist[q].endTime) )){%>
+                                                   
+                                                    <%canuseRID = classroomusagelist[q].RID%>
+                                                    
+                                                    <%}%>
                                                 <%}%>
+
+                                                <%if(canuseRID == undefined){%>
+                                                    <%for(var w = 0 ;w < Campuslist.length ; w++){%>
+                                                        
+                                                        <%if(Campuslist[w] != "" && Campuslist[w] != todaycampus){%>
+                                                            <%console.log("!!     "+today.toLocaleDateString()+"    "+canuseCampus)%>
+                                                            <%canuseCampus = Campuslist[w].Campus;%>
+                                                            <%console.log("changeto     "+today.toLocaleDateString()+"    "+canuseCampus)%>
+                                                            <%}%>
+                                                        <%}%>
+                                                    <%}%>
+                                                    
                                                 
                                             <%}%>
+                                           <%=canuseCampus%>
+
+                                            
                                         </div>
                                         <div style="font-weight: bold;">RID</div>
-                                        
+                                        <div><%=canuseRID%></div>
+                                        <%canuseRID = undefined%>
                                             <%}%>
                                     <%}%>
                               
