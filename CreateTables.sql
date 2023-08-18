@@ -463,9 +463,25 @@ CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent
 declare alltopic varchar(100);
 declare countcount integer;
 declare countcountcount integer;
+declare ttbdeadlinedate date;
+declare ttbdeadlinetime time;
+declare ttbtimetstamp timestamp;
+declare ttbdeadlineannounced timestamp;
+declare requestdeadlinedate date;
+
+declare requestdeadlinetime time;
+declare requestdeadlineannounced timestamp;
+declare requesttimetstamp timestamp;
+
 set countcountcount =0;
 set countcount = 0;
+
+select deadlinedate, deadlinetime,Announcetime into ttbdeadlinedate, ttbdeadlinetime,ttbdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 1;
+select deadlinedate, deadlinetime,Announcetime into requestdeadlinedate, requestdeadlinetime,requestdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 2;
+
 select count(*) into countcountcount from supervisorpairstudent where tid=new.tid and sid=new.sid;
+
+
 if countcountcount =0 then
 
 select count(*) into  countcount from supervisorpairstudent where Topic like new.Topic and tid = new.tid;
@@ -476,6 +492,18 @@ update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.ti
 end if;
 
 end if;
+if requestdeadlineannounced is not null then
+select TIMESTAMP(requestdeadlinedate,requestdeadlinetime) into requesttimetstamp into requesttimestamp;
+update student set requestdeadline = requesttimestamp where sid = new.sid;
+end if;
+
+
+if ttbdeadlineannounced is not null then
+select TIMESTAMP(ttbdeadlinedate,ttbdeadlinetime) into ttbtimestamp into ttbtimestamp;
+
+update student set ttbdeadline =  ttbtimestamp where sid = new.sid;
+end if;
+
    END;
   |
 delimiter ;
