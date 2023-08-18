@@ -163,7 +163,6 @@
                     
                     <%for(var b = 0 ; b < arraylist[a].length;b++){%>
                         <!--loop week day array-->
-                        <%console.log("*****    "+today.toLocaleDateString()+"    "+todaycampus)%>
                         
                         <%if(arraylist[a][b] == "EMPTY"){%>
                             <%if(donerandom == 0){%>
@@ -171,8 +170,7 @@
                                 <%todaycampus = Campuslist[index].Campus%>
                                 <%thecamlistfortheweek[a]= todaycampus%>
                                 <%donerandom = 1;%>
-                                <%console.log(arraylist[a])%>
-                             <%}else{todaycampus = thecamlistfortheweek[a];console.log(today.toLocaleDateString()+"    "+todaycampus)}%>
+                             <%}else{todaycampus = thecamlistfortheweek[a];}%>
                             
                            
                             <%}else{%>
@@ -300,7 +298,6 @@
                                         <div>
                                           
                                                 <%var index = Math.floor(Math.random()*studentlist.length)%>
-                                                <%console.log(index +"     "+studentlist.length)%>
                                                 
                                                 <%var thisstucheck = -1;%>
                                                 <%for (var q = 0 ; q < studenttimeslotlist.length;q++){%>
@@ -309,8 +306,7 @@
                                                         <%var requestdate = new Date(studenttimeslotlist[q].RequestDate);%>
                                                         <%var requeststarttime = studenttimeslotlist[q].RequestStartTime.split(":");%>
                                                         <%var requestendtime = studenttimeslotlist[q].RequestEndTime.split(":");%>
-                                                       <%console.log(today.toLocaleDateString() +"   "+ requestdate.toLocaleDateString())%>
-                                                       <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
+                                                        <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
                                                         <!--have requ but not today-->
                                                             <%=studentlist[index].SID%>
                                                             <%studentlist.splice(index,1)%>
@@ -352,7 +348,43 @@
                                                 <%for(var q = 0 ; q < classroomusagelist.length;q++){%>
                                                    
                                                 <%if(canuseCampus == classroomusagelist[q].Campus && !((classroomusagelist[q].startTime < currentendtime && currentendtime < classroomusagelist[q].endTime) || (classroomusagelist[q].startTime< currenttime && currenttime < classroomusagelist[q].endTime)|| (classroomusagelist[q].startTime < currenttime && currentendtime < classroomusagelist[q].endTime) )){%>
-                                                   
+                                                   <%for(var w = 0 ; w < classroomtimeslotlist.length ; w ++){%>
+                                                        <%if(canuseCampus == classroomtimeslotlist[w].Campus && classroomusagelist[q].RID == classroomtimeslotlist[w].RID ){%>
+                                                            <%var thisclassrmreqstdate  = (new Date(classroomtimeslotlist[w].StartDate).toLocaleDateString()).split("/") ;%>
+                                                            <%var thisclassrmreqsttime  = classroomtimeslotlist[w].StartTime;%>
+                                                            <%var thisclassrmreqenddate  = (new Date(classroomtimeslotlist[w].EndDate).toLocaleDateString()).split("/");%>
+                                                            <%var thisclassrmreqendtime  = classroomtimeslotlist[w].EndTime;%>
+
+                                                            <%if(thisclassrmreqstdate[0].length == 1){ thisclassrmreqstdate[0] = "0"+thisclassrmreqstdate[0]}%>
+                                                            <%if(thisclassrmreqstdate[1].length == 1){ thisclassrmreqstdate[1] = "0"+thisclassrmreqstdate[1]}%>
+                                                            <%if(thisclassrmreqenddate[0].length == 1){ thisclassrmreqenddate[0] = "0"+thisclassrmreqenddate[0]}%>
+                                                            <%if(thisclassrmreqenddate[1].length == 1){ thisclassrmreqenddate[1] = "0"+thisclassrmreqenddate[1]}%>
+                                                           <%var finalreqstdate = thisclassrmreqstdate[0]+"/"+thisclassrmreqstdate[1]+"/"+thisclassrmreqstdate[2]%>
+                                                           <%var finalreqenddate = thisclassrmreqenddate[0]+"/"+thisclassrmreqenddate[1]+"/"+thisclassrmreqenddate[2]%>
+
+                                                           <%var todaydate = today.toLocaleDateString().split("/")%>
+                                                           <%if(todaydate[0].length == 1){ todaydate[0] = "0"+todaydate[0]}%>
+                                                           <%if(todaydate[1].length == 1){ todaydate[1] = "0"+todaydate[1]}%>
+                                                           <%var finaltodaydate = todaydate[0]+"/"+todaydate[1]+"/"+todaydate[2]%>
+                                                          
+                                                           <%console.log(finalreqstdate +"   "+finaltodaydate)%>
+                                                           <!--case 1 : whole day-->
+                                                           <%if(finalreqstdate == finalreqenddate && finalreqstdate == finaltodaydate && thisclassrmreqsttime == "00:00:00" && thisclassrmreqendtime == "23:59:00"){%>
+                                                             <%canuseRID = undefined%>
+                                                             <%console.log("case1")%>
+                                                             <%}else if (finalreqstdate == finalreqenddate && finalreqstdate == finaltodaydate && !(currentendtime < thisclassrmreqsttime || currenttime > thisclassrmreqendtime) ){%>
+                                                                <!--case 2 : this day timeslot-->
+                                                                <%canuseRID = undefined%>
+                                                                <%console.log("case2")%>
+                                                                <%}else if( (finalreqstdate < finaltodaydate )  ){%>
+                                                                    <%console.log("case3")%>
+                                                                <%}%>
+                                                           
+                                                           <!--case 3 : timeperiod -->
+                                                            
+                                                            
+                                                            <%}%>
+                                                    <%}%>
                                                     <%canuseRID = classroomusagelist[q].RID%>
                                                     
                                                     <%}%>
@@ -362,9 +394,7 @@
                                                     <%for(var w = 0 ;w < Campuslist.length ; w++){%>
                                                         
                                                         <%if(Campuslist[w] != "" && Campuslist[w] != todaycampus){%>
-                                                            <%console.log("!!     "+today.toLocaleDateString()+"    "+canuseCampus)%>
-                                                            <%canuseCampus = Campuslist[w].Campus;%>
-                                                            <%console.log("changeto     "+today.toLocaleDateString()+"    "+canuseCampus)%>
+                                                             <%canuseCampus = Campuslist[w].Campus;%>
                                                             <%}%>
                                                         <%}%>
                                                     <%}%>
