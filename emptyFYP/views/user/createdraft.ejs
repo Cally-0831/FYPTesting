@@ -493,30 +493,56 @@ async function submitform(startday,endday,userid){
     var start = new Date(startday);
     var end = new Date(endday);
     var today = start;
-    
+    var finalbody=[];
     if(parseInt(currenthour)<10){currenthour = "0"+parseInt(currenthour)}
     for(var a = 0 ; a < 6; a++){
-        console.log(today)
-        var followingDay = new Date(today.getTime() + a *60*60*1000);
-        today = followingDay;
-        var today2 = today.toLocaleDateString().split("/");
+       
+        var followingDay = new Date(parseInt(start.getTime()) + a *24*60*60*1000);
+        var today2 = followingDay.toLocaleDateString().split("/");
        
         if(parseInt(today2[1])<10){today2[1] = "0"+today2[1]};
         if(parseInt(today2[2])<10){today2[2] = "0"+today2[2]};
         var currenthour = 8;
-        var currentmin = 30;
-        if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
+        var currentmin = "30";
+        
 
         for(var b = 0 ; b < 22; b++){
-        var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid
-        console.log(boxid)
+            if(b%2 == 0 && b!=0 ){
+                currentmin = "00"
+                currenthour++;
+            }else{
+                currentmin = "30"
+            };
+            console.log(currenthour+":"+currentmin)
+            if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
+        var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid;
+       
+        if(document.getElementById(""+boxid+"_Stu") != null){
+            
+            console.log(document.getElementById(""+boxid+"_Stu").innerText);
+            console.log(document.getElementById(""+boxid+"_Campus").innerText);
+            console.log(document.getElementById(""+boxid+"_RID").innerText);
+           
+            var thisbox = {
+                'boxid':boxid,
+                'stu':document.getElementById(""+boxid+"_Stu").innerText,
+                'Campus' :document.getElementById(""+boxid+"_Campus").innerText,
+                'RID':document.getElementById(""+boxid+"_RID").innerText
+            
+            
+            
+            }
+            
+            finalbody.push(thisbox)
+        }
+        
 
         }
         
        
     }
     
-    
+    console.log(finalbody)
     
     
 
