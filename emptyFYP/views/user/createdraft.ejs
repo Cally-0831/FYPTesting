@@ -3,15 +3,28 @@
     <div class="Pagetitle">
         Schdule Draft
     </div>
-    <div class="buttons">
-        <div class="button buttonlogout is-left" onclick="backback()">
+    <div class = "columns is-mobile">
+        <div class = "column is-half">
+            <button class="button buttonlogout is-left" onclick="backback()">
             Back
+            </button>
         </div>
+        <div class = "column is-half">
+            <div class="buttons is-right">
+                <%var startday = new Date(startdate);%>
+    <%var endday = new Date(enddate);%>
+    <%var finalsubmitbody =[];%>
     
+            <button class="button buttonlogout" onclick ="submitform('<%=startday%>',' <%=endday%>','<%=req.session.userid%>')">
+                Save Changes
+            </button></div>
+        </div>
+
     </div>
     
-    <%var startday = new Date(startdate);%>
-    <%var endday = new Date(enddate);%>
+        
+       
+
     
     <%=startday%>  
     <br>
@@ -37,6 +50,7 @@
     <%var thecamlistfortheweek = [moncam,tuecam,wedcam,thucam,fricam]%>
     
     <%var thissessioncampus;%>
+
 
     
 
@@ -119,7 +133,6 @@
      <%var currenttime="";%>
      <%var currentendtime="";%>
         <%for(var i = 0 ; i < 22;i++){%>
-            
             <tr>
             <!--loop week-->
                 <td>
@@ -272,6 +285,7 @@
                                     <%var startstartstart = new Date(startdate);%>
                                     <%var printthis=1;%>
                                     <%var checkthis=1;%>
+                                    <%var boxid;%>
                                     <%if(parseInt(today.getMonth())+1 > parseInt(endday.getMonth())+1){%>
                                         <%checkthis = -1;%>
                                         <%}else if(parseInt(today.getMonth())+1 == parseInt(endday.getMonth())+1){%>
@@ -293,13 +307,22 @@
                                         <%=printthis%> <%=checkthis%>
                                         <%if(printthis >0 && checkthis >= 0){%>
                                             <%if(studentlist.length >0 ){%> 
+                                                     <%var monthmonthmonth =parseInt(today.getMonth())+1%>
+                                                     <%if(monthmonthmonth < 10){monthmonthmonth = "0"+monthmonthmonth}%>
+                                                    <%var daydayday = today.getDate()%>
+                                                    <%if(daydayday < 10){daydayday="0"+daydayday}%>
+                                                    <%var yearyearyear = today.getFullYear()%>
+                                                    <% boxid = yearyearyear+""+monthmonthmonth+""+daydayday+"_"+currenttime+"_"+req.session.userid%>
+                                                   
+                                                    <div id = "<%=boxid%>">
                                         <div style="font-weight: bold;">Stu :</div>
 
-                                        <div>
+                                        
                                           
                                                 <%var index = Math.floor(Math.random()*studentlist.length)%>
                                                 
                                                 <%var thisstucheck = -1;%>
+                                                <%var student;%>
                                                 <%for (var q = 0 ; q < studenttimeslotlist.length;q++){%>
                                                     <%if(studenttimeslotlist[q].SID == studentlist[index].SID){%>
                                                         <%thisstucheck = 1;%>
@@ -315,10 +338,10 @@
                                                         <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (reqstart != "00:00" && reqend != "23:59")){%>
                                                             <!--have requ and it is today but not full day-->
                                                             <%if(reqend < currenttime){%>
-                                                                <%=studentlist[index].SID%>
+                                                                 <%student =studentlist[index].SID %>
                                                                 <%studentlist.splice(index,1)%>
                                                                 <%}else if(currentendtime < reqstart){%>
-                                                                    <%=studentlist[index].SID%>
+                                                                     <%student =studentlist[index].SID %>
                                                                 <%studentlist.splice(index,1)%>
                                                                     <%}%>
 
@@ -328,19 +351,21 @@
                                                     <%}%>
                                             <%}%>
                                             <%if(thisstucheck < 0){%>
-                                                <%=studentlist[index].SID%> 
+                                                
+                                                <%student =studentlist[index].SID %>
                                                 <%studentlist.splice(index,1)%>
                                                 <%}%>
-                                           
+                                                <div id = "<%=boxid%>_Stu" value = "<%=student%>">
+                                                    <%=student%>
                                         </div>    
                                             
 
                                             
                                         
                                         <div style="font-weight: bold;">Obs</div>
+                                        <div id="Obs"></div>
                                         <div style="font-weight: bold;">Campus</div>
-                                        <div>
-                                            
+                                           
                                             <%var canuseCampus = todaycampus%>
                                             
                                             <%var canuseRID;%>
@@ -367,7 +392,7 @@
                                                            <%if(todaydate[1].length == 1){ todaydate[1] = "0"+todaydate[1]}%>
                                                            <%var finaltodaydate = todaydate[0]+"/"+todaydate[1]+"/"+todaydate[2]%>
                                                           
-                                                           <%console.log(finalreqstdate +"   "+finaltodaydate)%>
+                                                           <%console.log(finalreqstdate +" -- "+finalreqenddate+"       "+finaltodaydate)%>
                                                            <!--case 1 : whole day-->
                                                            <%if(finalreqstdate == finalreqenddate && finalreqstdate == finaltodaydate && thisclassrmreqsttime == "00:00:00" && thisclassrmreqendtime == "23:59:00"){%>
                                                              <%canuseRID = undefined%>
@@ -376,16 +401,37 @@
                                                                 <!--case 2 : this day timeslot-->
                                                                 <%canuseRID = undefined%>
                                                                 <%console.log("case2")%>
-                                                                <%}else if( (finalreqstdate < finaltodaydate )  ){%>
+                                                                <%}else if( finalreqstdate != finalreqenddate && (finalreqstdate < finaltodaydate && finaltodaydate < finalreqenddate )  ){%>
+                                                                    <!--case 3 : timeperiod within-->
                                                                     <%console.log("case3")%>
-                                                                <%}%>
+                                                                    <%canuseRID = undefined%>
+
+                                                                <%}else if (finalreqstdate != finalreqenddate && finalreqstdate == finaltodaydate ){%>
+                                                                    <!--case 4 : timeperiod starttoday-->
+                                                                    <%console.log("case4")%>
+                                                                    <%if( !(currentendtime+":00" < thisclassrmreqsttime) ){%>
+                                                                        <%canuseRID = undefined%>
+                                                                        <%}%>
+                                                                    
+                                                                    <%}else if(finalreqstdate != finalreqenddate && finalreqenddate == finaltodaydate ){%>
+                                                                        <!--case 5 : timeperiod endtoday-->
+                                                                    <%console.log("case5     "+thisclassrmreqendtime+"       "+currenttime)%>
+                                                                    <%if( !(thisclassrmreqendtime < (currenttime+":00")) ){%>
+                                                                        <%canuseRID = undefined%>
+                                                                        <%}%>
+                                                                        <%}else{%>
+                                                                            
+                                                                            <%canuseRID = classroomusagelist[q].RID%>
+                                                                            
+                                                                            <%}%>
                                                            
-                                                           <!--case 3 : timeperiod -->
+                                                         
                                                             
-                                                            
-                                                            <%}%>
+                                                            <%}else{%>
+                                                                <%canuseRID = classroomusagelist[q].RID%>
+                                                                <%}%>
                                                     <%}%>
-                                                    <%canuseRID = classroomusagelist[q].RID%>
+                                                    
                                                     
                                                     <%}%>
                                                 <%}%>
@@ -401,12 +447,21 @@
                                                     
                                                 
                                             <%}%>
+                                            <div id = "<%=boxid%>_Campus" value="<%=canuseCampus%>">
                                            <%=canuseCampus%>
+                                          
 
                                             
                                         </div>
                                         <div style="font-weight: bold;">RID</div>
-                                        <div><%=canuseRID%></div>
+                                        <div id = "<%=boxid%>_RID" value="<%=canuseRID%>">
+                                            <%=canuseRID%> 
+                                            <%console.log(boxid)%>
+                                           <%finalsubmitbody.push({'boxid':boxid})%>
+                                           <%console.log(finalsubmitbody.length)%>
+                                        </div>
+                                        </div>
+                                        
                                         <%canuseRID = undefined%>
                                             <%}%>
                                     <%}%>
@@ -427,26 +482,75 @@
                
             <%}%>
     </table>    
+
 </div>
 
+
+
 <script>
-    function backback(){
+
+async function submitform(startday,endday,userid){
+    var start = new Date(startday);
+    var end = new Date(endday);
+    var today = start;
     
-        var r = confirm("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.\n\nConfirm to move toward next page?");
+    if(parseInt(currenthour)<10){currenthour = "0"+parseInt(currenthour)}
+    for(var a = 0 ; a < 6; a++){
+        console.log(today)
+        var followingDay = new Date(today.getTime() + a *60*60*1000);
+        today = followingDay;
+        var today2 = today.toLocaleDateString().split("/");
+       
+        if(parseInt(today2[1])<10){today2[1] = "0"+today2[1]};
+        if(parseInt(today2[2])<10){today2[2] = "0"+today2[2]};
+        var currenthour = 8;
+        var currentmin = 30;
+        if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
+
+        for(var b = 0 ; b < 22; b++){
+        var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid
+        console.log(boxid)
+
+        }
+        
+       
+    }
+    
+    
+    
+    
+
+}
+
+    function backback(){
+        
+        alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
+        var r = confirm("Save all changes?");
         if(r){
+            location.assign("/home");
+        }else{
             location.assign("/home");
         }
         
     }
     async function changepage(pagenum,dir){
-        var r = confirm("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.\n\nConfirm to move toward next page?");
-         if(dir == "back"){
+        alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
+        var r = confirm("Save all changes?");
+        
+        if(r){
+            var response = await fetch("/savebox", {
+            method: "POST",
+           
+            });
+
+
+
+
+        if(dir == "back"){
             pagenum = parseInt(pagenum)-1;
         }else{
             pagenum = parseInt(pagenum)+1;
         }
-        if(r){
-        
             var response = await fetch("/createdraft/"+pagenum, {
             method: "GET",
         });
