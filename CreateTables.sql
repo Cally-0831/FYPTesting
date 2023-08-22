@@ -194,6 +194,8 @@ primary key (STID)
 
 create table allschedulebox(
 boxID varchar(30)not null,
+boxdate date,
+boxtime time,
 TID varchar(10) not null,
 SID varchar(10)not null,
 OID varchar(10)not null,
@@ -465,7 +467,7 @@ declare countcount integer;
 declare countcountcount integer;
 declare ttbdeadlinedate date;
 declare ttbdeadlinetime time;
-declare ttbtimetstamp timestamp;
+declare ttbtimestamp timestamp;
 declare ttbdeadlineannounced timestamp;
 declare requestdeadlinedate date;
 
@@ -493,13 +495,13 @@ end if;
 
 end if;
 if requestdeadlineannounced is not null then
-select TIMESTAMP(requestdeadlinedate,requestdeadlinetime) into requesttimetstamp into requesttimestamp;
+select TIMESTAMP(requestdeadlinedate,requestdeadlinetime) into requesttimetstamp ;
 update student set requestdeadline = requesttimestamp where sid = new.sid;
 end if;
 
 
 if ttbdeadlineannounced is not null then
-select TIMESTAMP(ttbdeadlinedate,ttbdeadlinetime) into ttbtimestamp into ttbtimestamp;
+select TIMESTAMP(ttbdeadlinedate,ttbdeadlinetime) into ttbtimestamp;
 
 update student set ttbdeadline =  ttbtimestamp where sid = new.sid;
 end if;
@@ -616,4 +618,6 @@ CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass
    END;
   |
 delimiter ;
+
+
 

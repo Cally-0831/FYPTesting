@@ -35,6 +35,7 @@ module.exports.routes = {
   "GET /checkschdule": "SchduleController.viewfinalschdule",
   //'GET /createdraft': "SchduleController.getallneededinfo",
   'GET /createdraft/:Page': "SchduleController.getallneededinfo",
+  "POST /savebox":"SchduleController.savebox",
 
   "GET /uploadlesson":{view:"user/admin/uploadlesson"},
   "POST /uploadlesson":"LessonController.uploadlesson",

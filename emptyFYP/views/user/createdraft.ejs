@@ -3,19 +3,20 @@
     <div class="Pagetitle">
         Schdule Draft
     </div>
+    <%var startday = new Date(startdate);%>
+    <%var endday = new Date(enddate);%>
     <div class = "columns is-mobile">
         <div class = "column is-half">
-            <button class="button buttonlogout is-left" onclick="backback()">
+            <button class="button buttonlogout is-left" onclick="backback('<%=startday%>','<%=endday%>','<%=req.session.userid%>')">
             Back
             </button>
         </div>
         <div class = "column is-half">
             <div class="buttons is-right">
-                <%var startday = new Date(startdate);%>
-    <%var endday = new Date(enddate);%>
+                
     <%var finalsubmitbody =[];%>
     
-            <button class="button buttonlogout" onclick ="submitform('<%=startday%>',' <%=endday%>','<%=req.session.userid%>')">
+            <button class="button buttonlogout" onclick ="submitform('<%=startday%>',' <%=endday%>','<%=req.session.userid%>',1)">
                 Save Changes
             </button></div>
         </div>
@@ -50,9 +51,21 @@
     <%var thecamlistfortheweek = [moncam,tuecam,wedcam,thucam,fricam]%>
     
     <%var thissessioncampus;%>
-
-
     
+    <%var delstulist;%>
+    <%console.log(studentlist.length)%>
+    <%console.log(savedbox.length)%>
+    <%for(var a = 0 ; a < savedbox.length;a++){%>
+        
+        <%for(var b = 0 ; b < studentlist.length;b++){%>
+            <%if(savedbox[a].SID == studentlist[b].SID){%>
+                <%delstulist=b;%>
+                <%}%>
+        <%}%>
+        <%studentlist.splice(delstulist,1)%>
+    <%}%>
+    
+        
 
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
     <tr>
@@ -61,7 +74,7 @@
           
 
             <div class="buttons is-centered">
-                <button class="button  is-small is-warning" onclick="changepage('<%=pagenum%>','back')"> < </button>
+                <button class="button  is-small is-warning" onclick="changepage('<%=pagenum%>','back','<%=startday%>','<%=endday%>','<%=req.session.userid%>')"> < </button>
              </div>
 
             <%}%>
@@ -304,7 +317,46 @@
                                                 <%printthis = -1;%>
                                             <%}%>
                                         <%}%>
+                                        
+
+                                        <!--have savedbox-->
+                                        <%console.log(today)%>
+                                        <%for(var r =0 ; r < savedbox.length;r ++){%>
+                                            <%var boxdate = new Date (savedbox[r].boxdate).toLocaleDateString();%>
+                                            
+                                            
+                                            
+                                            <%var boxtime = savedbox[r].boxtime%>
+                                            <%console.log(boxdate == today.toLocaleDateString() && (currenttime+":00")== boxtime)%>
+                                            <%if(boxdate == today.toLocaleDateString() && (currenttime+":00") == boxtime){%>
+                                                
+                                                <div id = "<%=savedbox[r].boxID%>">
+                                                    <div style="font-weight: bold;">Stu :</div>
+                                                        <div id = "<%=savedbox[r].boxID%>_Stu" value = "<%=savedbox[r].stu%>">
+                                                            <%=savedbox[r].SID%>
+                                                        </div>    
+                                                    <div style="font-weight: bold;">Obs</div>
+                                                        <div id="Obs">
+                                                            
+                                                        </div>
+                                                    <div style="font-weight: bold;">Campus</div>
+                                                        <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
+                                                            <%=savedbox[r].Campus%>
+                                                        </div>
+                                                    <div style="font-weight: bold;">RID</div>
+                                                        <div id = "<%=savedbox[r].boxID%>_RID" value="<%=savedbox[r].RID%>">
+                                                            <%=savedbox[r].RID%> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%printthis=0;%>
+                                                <%checkthis = 0;%>
+                                             <%}%>
+
+                                        <%}%>
                                         <%=printthis%> <%=checkthis%>
+
+                                        <!--don't have saved box-->
                                         <%if(printthis >0 && checkthis >= 0){%>
                                             <%if(studentlist.length >0 ){%> 
                                                      <%var monthmonthmonth =parseInt(today.getMonth())+1%>
@@ -316,9 +368,6 @@
                                                    
                                                     <div id = "<%=boxid%>">
                                         <div style="font-weight: bold;">Stu :</div>
-
-                                        
-                                          
                                                 <%var index = Math.floor(Math.random()*studentlist.length)%>
                                                 
                                                 <%var thisstucheck = -1;%>
@@ -373,7 +422,8 @@
                                                 <%for(var q = 0 ; q < classroomusagelist.length;q++){%>
                                                    
                                                 <%if(canuseCampus == classroomusagelist[q].Campus && !((classroomusagelist[q].startTime < currentendtime && currentendtime < classroomusagelist[q].endTime) || (classroomusagelist[q].startTime< currenttime && currenttime < classroomusagelist[q].endTime)|| (classroomusagelist[q].startTime < currenttime && currentendtime < classroomusagelist[q].endTime) )){%>
-                                                   <%for(var w = 0 ; w < classroomtimeslotlist.length ; w ++){%>
+                                                    
+                                                    <%for(var w = 0 ; w < classroomtimeslotlist.length ; w ++){%>
                                                         <%if(canuseCampus == classroomtimeslotlist[w].Campus && classroomusagelist[q].RID == classroomtimeslotlist[w].RID ){%>
                                                             <%var thisclassrmreqstdate  = (new Date(classroomtimeslotlist[w].StartDate).toLocaleDateString()).split("/") ;%>
                                                             <%var thisclassrmreqsttime  = classroomtimeslotlist[w].StartTime;%>
@@ -427,10 +477,8 @@
                                                            
                                                          
                                                             
-                                                            <%}else{%>
-                                                                <%canuseRID = classroomusagelist[q].RID%>
-                                                                <%}%>
-                                                    <%}%>
+                                                            <%}%>
+                                                    <%}%><%canuseRID = classroomusagelist[q].RID%>
                                                     
                                                     
                                                     <%}%>
@@ -456,9 +504,9 @@
                                         <div style="font-weight: bold;">RID</div>
                                         <div id = "<%=boxid%>_RID" value="<%=canuseRID%>">
                                             <%=canuseRID%> 
-                                            <%console.log(boxid)%>
+                                            
                                            <%finalsubmitbody.push({'boxid':boxid})%>
-                                           <%console.log(finalsubmitbody.length)%>
+                                          
                                         </div>
                                         </div>
                                         
@@ -489,7 +537,7 @@
 
 <script>
 
-async function submitform(startday,endday,userid){
+async function submitform(startday,endday,userid,type){
     var start = new Date(startday);
     var end = new Date(endday);
     var today = start;
@@ -513,19 +561,16 @@ async function submitform(startday,endday,userid){
             }else{
                 currentmin = "30"
             };
-            console.log(currenthour+":"+currentmin)
             if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
         var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid;
        
         if(document.getElementById(""+boxid+"_Stu") != null){
-            
-            console.log(document.getElementById(""+boxid+"_Stu").innerText);
-            console.log(document.getElementById(""+boxid+"_Campus").innerText);
-            console.log(document.getElementById(""+boxid+"_RID").innerText);
-           
-            var thisbox = {
+                var thisbox = {
                 'boxid':boxid,
+                'boxdate':today2[0]+""+today2[1]+""+today2[2],
+                'boxtime':currenthour+":"+currentmin+":00",
                 'stu':document.getElementById(""+boxid+"_Stu").innerText,
+                'obs':"",
                 'Campus' :document.getElementById(""+boxid+"_Campus").innerText,
                 'RID':document.getElementById(""+boxid+"_RID").innerText
             
@@ -543,46 +588,57 @@ async function submitform(startday,endday,userid){
     }
     
     console.log(finalbody)
-    
+    var response = await fetch("/savebox", {
+            method: "POST",
+            body : JSON.stringify(finalbody)
+    });
+
+    if(response.ok){
+        if(type ==1){
+            location.reload();
+        }else if(type ==2){
+            location.assign("/home");
+        }else if (type ==3){
+            
+            return "ok";
+        }
+        
+    }
     
 
 }
 
-    function backback(){
+    function backback(startday,endday,userid){
         
         alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
         var r = confirm("Save all changes?");
         if(r){
-            location.assign("/home");
+            submitform(startday,endday,userid,2)
         }else{
             location.assign("/home");
         }
         
     }
-    async function changepage(pagenum,dir){
+    async function changepage(pagenum,dir,startday,endday,userid){
         alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
         var r = confirm("Save all changes?");
         
         if(r){
-            var response = await fetch("/savebox", {
-            method: "POST",
-           
-            });
+            var response = await submitform(startday,endday,userid,3)
 
+            if(response == "ok"){
+                if(dir == "back"){
+                    pagenum = parseInt(pagenum)-1;
+                }else{
+                    pagenum = parseInt(pagenum)+1;
+                }
+                    var response = await fetch("/createdraft/"+pagenum, {
+                    method: "GET",
+                });
 
-
-
-        if(dir == "back"){
-            pagenum = parseInt(pagenum)-1;
-        }else{
-            pagenum = parseInt(pagenum)+1;
-        }
-            var response = await fetch("/createdraft/"+pagenum, {
-            method: "GET",
-        });
-
-            if (response.ok) {
-                location.assign(response.url);
+                if (response.ok) {
+                    location.assign(response.url);
+                }
             }
         }
     }
