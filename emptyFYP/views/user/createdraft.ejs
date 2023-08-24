@@ -191,12 +191,17 @@
                         <!--loop week day array-->
                         
                         <%if(arraylist[a][b] == "EMPTY"){%>
-                            <%if(donerandom == 0){%>
-                                <%var index = Math.floor(Math.random()*Campuslist.length)%>
-                                <%todaycampus = Campuslist[index].Campus%>
+                            <%if(thecamlistfortheweek[a] == ""){%>
+                                 <%while (todaycampus == undefined || todaycampus==""){%>
+                                    <%var index = Math.floor(Math.random()*Campuslist.length)%>
+                                    <%console.log(Campuslist[index].Campus)%>
+                                    <%todaycampus = Campuslist[index].Campus%>
+                                    <%}%>
                                 <%thecamlistfortheweek[a]= todaycampus%>
-                                <%donerandom = 1;%>
-                             <%}else{todaycampus = thecamlistfortheweek[a];}%>
+                                <%}else{todaycampus = thecamlistfortheweek[a]}%>
+                            
+                               
+                                
                             
                            
                             <%}else{%>
@@ -205,9 +210,16 @@
                                 <%thecamlistfortheweek[a] = todaycampus;%>
                           
                             <%}%>  
-                           
+                            
                             <%if(todaycampus == "" || todaycampus == undefined){%>
+                                
                              <%todaycampus = thecamlistfortheweek[a]%>
+                             <%while (todaycampus == undefined || todaycampus==""){%>
+                                <%var index = Math.floor(Math.random()*Campuslist.length)%>
+                                <%console.log(Campuslist[index].Campus)%>
+                                <%todaycampus = Campuslist[index].Campus%>
+                                <%}%>
+                                <%thecamlistfortheweek[a]= todaycampus%>
                             <%}%>
                             
                             
@@ -249,40 +261,24 @@
                          <%}else if(arraylist[a][b].ReqID != undefined && arraylist[a][b].ReqID != "SKIP"){%>
                             <!---type == req timeslot -->
                             
+                            
                             <%var thisreqdate = new Date(arraylist[a][b].RequestDate);%>
-                            <%var arrayliststarttime = arraylist[a][b].RequestStartTime.split(":");%>
-                            <%var arraylistendtime = arraylist[a][b].RequestEndTime.split(":");%>
+                            <%var arrayliststarttime = arraylist[a][b].RequestStartTime;%>
+                            <%var arraylistendtime = arraylist[a][b].RequestEndTime;%>
                            
-                                <%if((arrayliststarttime[0]+":"+arrayliststarttime[1]) >= currenttime && (arrayliststarttime[0]+":"+arrayliststarttime[1]) <= currentendtime){%>
-                                    <%thisboxstring =arraylist[a][b].ReqID%>
-                                    <%type = 2;%>
-                                    <%var nextsession = parseInt(arrayliststarttime[0])%>
-                                    <%if(parseInt(arrayliststarttime[1]) >= 30){%>
-                                        <% nextsession++; %>
-                                     <%}%>
-                                     <% if(nextsession < 10 ){
-                                        if(parseInt(arrayliststarttime[1]) >= 30){
-                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"00";
-                                        }else{
-                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"30";
-                                        }
-                                        
-                                    }else{
-                                        if(parseInt(arrayliststarttime[1]) >= 30){
-                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"00";
-                                        }else{
-                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"30";
-                                        }
-                                    }%>
-
-                                    <%if ( arraylist[a][b].RequestStartTime >  arraylist[a][b].RequestEndTime){%>
-                                        <%  arraylist[a][b].ReqID = "SKIP";%>
-                                        <%}%>
-
-                                    <%}%>
-
+                            <%if(thisreqdate.toLocaleDateString() == today.toLocaleDateString()){%>
                                 
-                            <%}%>
+                               
+                                <%if((arrayliststarttime=="00:00:00" && arraylistendtime =="23:59:00")|| !(arraylistendtime <= currenttime+":00" || arrayliststarttime > currentendtime+":00")){%>
+                                    <%if (thisboxstring == ""){%>
+                                         <%type = 2%>
+                                    <%thisboxstring = arraylist[a][b].ReqID%>
+                                        <%}%>
+                                   
+                                    <%}%>
+                           
+                                <%}%>
+                             <%}%>
                             
                         <%}%>
                         
@@ -320,14 +316,12 @@
                                         
 
                                         <!--have savedbox-->
-                                        <%console.log(today)%>
                                         <%for(var r =0 ; r < savedbox.length;r ++){%>
                                             <%var boxdate = new Date (savedbox[r].boxdate).toLocaleDateString();%>
                                             
                                             
                                             
                                             <%var boxtime = savedbox[r].boxtime%>
-                                            <%console.log(boxdate == today.toLocaleDateString() && (currenttime+":00")== boxtime)%>
                                             <%if(boxdate == today.toLocaleDateString() && (currenttime+":00") == boxtime){%>
                                                 
                                                 <div id = "<%=savedbox[r].boxID%>">
@@ -380,18 +374,12 @@
                                                         <%var requestendtime = studenttimeslotlist[q].RequestEndTime.split(":");%>
                                                         <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
                                                         <!--have requ but not today-->
-                                                            <%=studentlist[index].SID%>
-                                                            <%studentlist.splice(index,1)%>
-                                                            <%var reqstart = requeststarttime[0]+":"+requeststarttime[1];%>
-                                                            <%var reqend = requestendtime[0]+":"+requestendtime[1];%>
+                                                           <%thisstucheck = -1;%>
                                                         <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (reqstart != "00:00" && reqend != "23:59")){%>
                                                             <!--have requ and it is today but not full day-->
-                                                            <%if(reqend < currenttime){%>
-                                                                 <%student =studentlist[index].SID %>
-                                                                <%studentlist.splice(index,1)%>
-                                                                <%}else if(currentendtime < reqstart){%>
-                                                                     <%student =studentlist[index].SID %>
-                                                                <%studentlist.splice(index,1)%>
+                                                            
+                                                            <%if(reqend < currenttime || currentendtime < reqstart){%>
+                                                                    <%thisstucheck = -1;%>
                                                                     <%}%>
 
                                                             <%}%>
@@ -418,6 +406,8 @@
                                             <%var canuseCampus = todaycampus%>
                                             
                                             <%var canuseRID;%>
+                                            
+                                            <%console.log("before       "+student+"    "+canuseCampus+"     "+canuseRID)%>
                                             <%while(canuseRID == undefined){%>
                                                 <%for(var q = 0 ; q < classroomusagelist.length;q++){%>
                                                    
@@ -492,7 +482,7 @@
                                                             <%}%>
                                                         <%}%>
                                                     <%}%>
-                                                    
+                                                    <%console.log("after       "+student+"    "+canuseCampus+"     "+canuseRID)%>
                                                 
                                             <%}%>
                                             <div id = "<%=boxid%>_Campus" value="<%=canuseCampus%>">

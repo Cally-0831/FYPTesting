@@ -1,2 +1,27 @@
-&&  ((classroomlist[q].startTime < currentendtime && currentendtime < classroomlist[q].endTime) || (classroomlist[q].startTime< currenttime && currenttime < classroomlist[q].endTime)||
-                                                    (classroomusagelist[q].startTime < currenttime && currentendtime < classroomusagelist[q].endTime))
+<%if((arrayliststarttime[0]+":"+arrayliststarttime[1]) >= currenttime && (arrayliststarttime[0]+":"+arrayliststarttime[1]) <= currentendtime){%>
+                                    <%thisboxstring =arraylist[a][b].ReqID%>
+                                    <%type = 2;%>
+                                    <%var nextsession = parseInt(arrayliststarttime[0])%>
+                                    <%if(parseInt(arrayliststarttime[1]) >= 30){%>
+                                        <% nextsession++; %>
+                                     <%}%>
+                                     <% if(nextsession < 10 ){
+                                        if(parseInt(arrayliststarttime[1]) >= 30){
+                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"00";
+                                        }else{
+                                            arraylist[a][b].RequestStartTime = "0"+nextsession+":"+"30";
+                                        }
+                                        
+                                    }else{
+                                        if(parseInt(arrayliststarttime[1]) >= 30){
+                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"00";
+                                        }else{
+                                            arraylist[a][b].RequestStartTime = ""+nextsession+":"+"30";
+                                        }
+                                    }%>
+
+                                    <%if ( arraylist[a][b].RequestStartTime >  arraylist[a][b].RequestEndTime){%>
+                                        <%  arraylist[a][b].ReqID = "SKIP";%>
+                                        <%}%>
+
+                                    <%}%>

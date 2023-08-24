@@ -496,7 +496,7 @@ end if;
 end if;
 if requestdeadlineannounced is not null then
 select TIMESTAMP(requestdeadlinedate,requestdeadlinetime) into requesttimetstamp ;
-update student set requestdeadline = requesttimestamp where sid = new.sid;
+update student set requestdeadline = requesttimetstamp where sid = new.sid;
 end if;
 
 
@@ -619,5 +619,18 @@ CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass
   |
 delimiter ;
 
-
+delimiter |
+CREATE TRIGGER checkschboxtocorrdraft after delete ON allschedulebox
+  FOR EACH ROW
+  BEGIN
+  declare countcount integer;
+  select count(*) into countcount from allschedulebox where tid = old.tid;
+  
+  if(countcount =0) then
+  update supervisor set draft = "N" where tid = old.tid;
+  end if;
+  
+   END;
+  |
+delimiter ;
 
