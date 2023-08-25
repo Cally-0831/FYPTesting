@@ -53,8 +53,7 @@
     <%var thissessioncampus;%>
     
     <%var delstulist;%>
-    <%console.log(studentlist.length)%>
-    <%console.log(savedbox.length)%>
+   
     <%for(var a = 0 ; a < savedbox.length;a++){%>
         
         <%for(var b = 0 ; b < studentlist.length;b++){%>
@@ -65,6 +64,7 @@
         <%studentlist.splice(delstulist,1)%>
     <%}%>
     
+    <%console.log(obstimeslotlist)%>
         
 
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
@@ -194,7 +194,6 @@
                             <%if(thecamlistfortheweek[a] == ""){%>
                                  <%while (todaycampus == undefined || todaycampus==""){%>
                                     <%var index = Math.floor(Math.random()*Campuslist.length)%>
-                                    <%console.log(Campuslist[index].Campus)%>
                                     <%todaycampus = Campuslist[index].Campus%>
                                     <%}%>
                                 <%thecamlistfortheweek[a]= todaycampus%>
@@ -216,7 +215,7 @@
                              <%todaycampus = thecamlistfortheweek[a]%>
                              <%while (todaycampus == undefined || todaycampus==""){%>
                                 <%var index = Math.floor(Math.random()*Campuslist.length)%>
-                                <%console.log(Campuslist[index].Campus)%>
+                                
                                 <%todaycampus = Campuslist[index].Campus%>
                                 <%}%>
                                 <%thecamlistfortheweek[a]= todaycampus%>
@@ -329,10 +328,40 @@
                                                         <div id = "<%=savedbox[r].boxID%>_Stu" value = "<%=savedbox[r].stu%>">
                                                             <%=savedbox[r].SID%>
                                                         </div>    
-                                                    <div style="font-weight: bold;">Obs</div>
-                                                        <div id="Obs">
-                                                            
-                                                        </div>
+                                                    <div style="font-weight: bold;">Obs <button style="background-color: blanchedalmond;" onclick = "showselectobs('<%=savedbox[r].boxID%>_ObsSelect')"> + </button></div>
+                                                    <div class = "obsID" id = "<%=savedbox[r].boxID%>_Obs" value = "<%=savedbox[r].obs%>">
+                                                        <%=savedbox[r].OID%>
+                                                    </div>   
+                                                    <div id="<%=savedbox[r].boxID%>_ObsSelect" hidden="true">
+                                                        <select id="<%=savedbox[r].boxID%>_ObsSelectbox" class = "obsID" style="width:80px" value="">
+                                                            <%var optionlist=[];%>
+                                                            <%var checkcheck =0;%>
+                                                            <%for(var z = 0 ; z < obslist.length ;z++){%>
+                                                                
+                                                                <%if(obslist[z].oid != savedbox[r].OID){%>
+                                                                    <%if (optionlist.length ==0){%>
+                                                                        <%optionlist.push(obslist[z].oid)%>
+                                                                        <%}else{%>
+                                                                            <%for(var x = 0 ; x < optionlist.length;x++){%>
+                                                                                <%if(optionlist[x] == obslist[z].oid){%>
+                                                                                        <%checkcheck = 1;%>
+                                                                                    <%}%>
+                                                                            <%}%>
+                                                                            <%if(checkcheck == 0){%>
+                                                                                <%optionlist.push(obslist[z].oid)%>
+                                                                                <%}%>
+                                                                            <%}%>
+                                                                    
+                                                                    <%}%>
+                                                                
+                                                                <%}%>
+                                                                <%for(var z = 0 ; z < optionlist.length ;z++){%> 
+                                                                    <option style="width:80px" value ='<%=optionlist[z]%>'> <%=optionlist[z]%></option> 
+                                                                    <%}%>
+                                                        
+                                                        </select>
+                                                        <button style="background-color: blanchedalmond;" onclick = "addobs('<%=savedbox[r].boxID%>_Obs','<%=savedbox[r].boxID%>_ObsSelect','<%=savedbox[r].boxID%>_ObsSelectbox')"> + </button>
+                                                    </div>
                                                     <div style="font-weight: bold;">Campus</div>
                                                         <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
                                                             <%=savedbox[r].Campus%>
@@ -363,23 +392,27 @@
                                                     <div id = "<%=boxid%>">
                                         <div style="font-weight: bold;">Stu :</div>
                                                 <%var index = Math.floor(Math.random()*studentlist.length)%>
-                                                
+                                                <%var thisobscheck = -1;%>
+                                                <%var obsindex%>
                                                 <%var thisstucheck = -1;%>
                                                 <%var student;%>
+                                                <%var observer;%>
                                                 <%for (var q = 0 ; q < studenttimeslotlist.length;q++){%>
                                                     <%if(studenttimeslotlist[q].SID == studentlist[index].SID){%>
                                                         <%thisstucheck = 1;%>
                                                         <%var requestdate = new Date(studenttimeslotlist[q].RequestDate);%>
-                                                        <%var requeststarttime = studenttimeslotlist[q].RequestStartTime.split(":");%>
+                                                        <%var requeststarttime = studenttimeslotlist[q].RequestStartTime;%>
                                                         <%var requestendtime = studenttimeslotlist[q].RequestEndTime.split(":");%>
                                                         <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
                                                         <!--have requ but not today-->
                                                            <%thisstucheck = -1;%>
-                                                        <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (reqstart != "00:00" && reqend != "23:59")){%>
+                                                           <%console.log(requeststarttime)%>
+                                                        <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (requeststarttime != "00:00:00" && requestendtime!= "23:59:00")){%>
                                                             <!--have requ and it is today but not full day-->
                                                             
-                                                            <%if(reqend < currenttime || currentendtime < reqstart){%>
+                                                            <%if(requestendtime < (currenttime+":00") || (currentendtime+":00") < requeststarttime){%>
                                                                     <%thisstucheck = -1;%>
+                                                                    
                                                                     <%}%>
 
                                                             <%}%>
@@ -390,24 +423,53 @@
                                             <%if(thisstucheck < 0){%>
                                                 
                                                 <%student =studentlist[index].SID %>
-                                                <%studentlist.splice(index,1)%>
+                                                <%for (var w = 0 ; w < obslist.length;w++){%>
+                                                    <%if(obslist[w].SID == student){%>
+                                                        <%obsindex = w%>
+                                                        <%for (var e = 0 ; e < obstimeslotlist.length;e++){%>
+                                                            <%if(obstimeslotlist[e].OID == obslist[w].oid){%>
+                                                                <%var obsrequestdate = new Date(obstimeslotlist[e].RequestDate);%>
+                                                                <%var obsrequeststarttime = obstimeslotlist[e].RequestStartTime;%>
+                                                                <%var obsrequestendtime = obstimeslotlist[e].RequestEndTime;%>
+                                                                <%if(today.toLocaleDateString()!= obsrequestdate.toLocaleDateString()){%>
+                                                                    <!--have requ but not today-->
+                                                                       <%thisobscheck = -1;%>
+                                                                       <%console.log(requeststarttime)%>
+                                                                    <%}else if(today.toLocaleDateString()== obsrequestdate.toLocaleDateString() && (obsrequeststarttime != "00:00:00" && obsrequestendtime  != "23:59:00")){%>
+                                                                        <%if(obsrequestendtime < (currenttime+":00") || (currentendtime+":00") < obsrequeststarttime){%>
+                                                                            <%thisobscheck = -1;%>
+                                                                        <%}%>
+                                                                        <%}%>
+                                                            <%}%>
+                                                        <%}%>
+                                                        <%}%>
+                                                    
+                                                    <%}%>
+                                                    <%if(thisobscheck < 0){%>
+                                                        <%student =studentlist[index].SID %>
+                                                        <%observer = obslist[obsindex].oid %>
+                                                        <%studentlist.splice(index,1)%>
+                                                        <%}%>
+                                                
                                                 <%}%>
                                                 <div id = "<%=boxid%>_Stu" value = "<%=student%>">
                                                     <%=student%>
-                                        </div>    
+                                                </div>    
                                             
 
                                             
                                         
                                         <div style="font-weight: bold;">Obs</div>
-                                        <div id="Obs"></div>
+                                        <div id = "<%=boxid%>_Obs" value = "<%=observer%>">
+                                            <%=observer%>
+                                            
+                                        </div>
                                         <div style="font-weight: bold;">Campus</div>
                                            
                                             <%var canuseCampus = todaycampus%>
                                             
                                             <%var canuseRID;%>
                                             
-                                            <%console.log("before       "+student+"    "+canuseCampus+"     "+canuseRID)%>
                                             <%while(canuseRID == undefined){%>
                                                 <%for(var q = 0 ; q < classroomusagelist.length;q++){%>
                                                    
@@ -432,8 +494,7 @@
                                                            <%if(todaydate[1].length == 1){ todaydate[1] = "0"+todaydate[1]}%>
                                                            <%var finaltodaydate = todaydate[0]+"/"+todaydate[1]+"/"+todaydate[2]%>
                                                           
-                                                           <%console.log(finalreqstdate +" -- "+finalreqenddate+"       "+finaltodaydate)%>
-                                                           <!--case 1 : whole day-->
+                                                          <!--case 1 : whole day-->
                                                            <%if(finalreqstdate == finalreqenddate && finalreqstdate == finaltodaydate && thisclassrmreqsttime == "00:00:00" && thisclassrmreqendtime == "23:59:00"){%>
                                                              <%canuseRID = undefined%>
                                                              <%console.log("case1")%>
@@ -482,8 +543,7 @@
                                                             <%}%>
                                                         <%}%>
                                                     <%}%>
-                                                    <%console.log("after       "+student+"    "+canuseCampus+"     "+canuseRID)%>
-                                                
+                                                 
                                             <%}%>
                                             <div id = "<%=boxid%>_Campus" value="<%=canuseCampus%>">
                                            <%=canuseCampus%>
@@ -553,14 +613,13 @@ async function submitform(startday,endday,userid,type){
             };
             if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
         var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid;
-       
         if(document.getElementById(""+boxid+"_Stu") != null){
                 var thisbox = {
                 'boxid':boxid,
                 'boxdate':today2[0]+""+today2[1]+""+today2[2],
                 'boxtime':currenthour+":"+currentmin+":00",
                 'stu':document.getElementById(""+boxid+"_Stu").innerText,
-                'obs':"",
+                'obs':document.getElementById(""+boxid+"_Obs").innerText,
                 'Campus' :document.getElementById(""+boxid+"_Campus").innerText,
                 'RID':document.getElementById(""+boxid+"_RID").innerText
             
@@ -578,6 +637,7 @@ async function submitform(startday,endday,userid,type){
     }
     
     console.log(finalbody)
+   
     var response = await fetch("/savebox", {
             method: "POST",
             body : JSON.stringify(finalbody)
@@ -585,6 +645,7 @@ async function submitform(startday,endday,userid,type){
 
     if(response.ok){
         if(type ==1){
+            alert("done saving")
             location.reload();
         }else if(type ==2){
             location.assign("/home");
@@ -594,6 +655,7 @@ async function submitform(startday,endday,userid,type){
         }
         
     }
+    
     
 
 }
@@ -609,6 +671,7 @@ async function submitform(startday,endday,userid,type){
         }
         
     }
+   
     async function changepage(pagenum,dir,startday,endday,userid){
         alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
         var r = confirm("Save all changes?");
@@ -633,4 +696,58 @@ async function submitform(startday,endday,userid,type){
         }
     }
 
+
+    function showselectobs(boxid){
+        console.log(document.getElementById(boxid).hidden)
+        document.getElementById(boxid).hidden=false;
+    }
+
+    function addobs(boxid,selectdiv,selectboxid){
+        console.log(document.getElementById(boxid).innerHTML)
+        var stringstring = document.getElementById(boxid).innerHTML.split("<br>"); 
+        var checkindex =-1;
+        for(var a = 0 ; a < stringstring.length;a++){
+            console.log(stringstring[a])
+            console.log(stringstring[a].includes(document.getElementById(selectboxid).value))
+            if(stringstring[a].includes(document.getElementById(selectboxid).value)) {
+                checkindex = a;
+            }
+
+        }
+        if(checkindex == -1){
+            document.getElementById(boxid).innerHTML+="<br>"+document.getElementById(selectboxid).value+"  <button style=\"background-color: blanchedalmond;\" onclick = \"delectobs(\'"+boxid+"\',\'"+document.getElementById(selectboxid).value+"\')\"> - </button>"
+            document.getElementById(selectdiv).hidden=true;
+        }else {
+            alert("this observer has been added already");
+        }
+        
+    }
+
+    function delectobs(boxid , value){
+        console.log(document.getElementById(boxid).innerHTML)
+        var stringstring = document.getElementById(boxid).innerHTML.split("<br>");
+        console.log(stringstring)
+        var checkindex;
+        for(var a = 0 ; a < stringstring.length;a++){
+            console.log(stringstring[a])
+            console.log(stringstring[a].includes(value))
+            if(stringstring[a].includes(value)) {
+                checkindex = a;
+            }
+
+        }
+        stringstring.splice(checkindex,1);
+        var finalstring ="";
+        for(var a = 0 ; a < stringstring.length;a++){
+
+           finalstring+= stringstring[a];
+           if(a != stringstring.length-1){
+            finalstring +="<br>"
+           }
+
+        }
+        console.log(finalstring)
+        document.getElementById(boxid).innerHTML = finalstring;
+
+    }
 </script>

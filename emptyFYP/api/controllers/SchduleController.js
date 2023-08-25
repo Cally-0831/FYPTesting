@@ -122,7 +122,7 @@ module.exports = {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             var personalrequestlist = json;
-                           // console.log('>> personalrequestlist: ', personalrequestlist);
+                            // console.log('>> personalrequestlist: ', personalrequestlist);
                             var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
                             /** Get classroom's ttb */
                             db.query(thisistheline4, (err, results) => {
@@ -166,23 +166,30 @@ module.exports = {
                                                         var string = JSON.stringify(results);
                                                         var json = JSON.parse(string);
                                                         var obsttb = json;
-                                                       // console.log('>> obsttb: ', obsttb);
+                                                        // console.log('>> obsttb: ', obsttb);
                                                         var thisistheline11 = "select * from allrequestfromobserver where oid in (select oid from supervisorpairobserver where tid =  \"" + req.session.userid + "\") order by RequestDate asc, RequestStartTime asc;";
                                                         db.query(thisistheline11, (err, results) => {
                                                             var string = JSON.stringify(results);
                                                             var json = JSON.parse(string);
                                                             var obstimeslotlist = json;
                                                             //console.log('>> obstimeslotlist: ', obstimeslotlist);
-                                                            return res.view("user/createdraft", {
-                                                                savedbox: savedbox,
-                                                                pagenum: req.params.Page,
-                                                                orgstart: orgstart,
-                                                                startdate: ansstartdate, enddate: ansenddate,
-                                                                Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
-                                                                studenttimeslotlist: studenttimeslotlist,
-                                                                obsttb: obsttb, obstimeslotlist: obstimeslotlist,
-                                                                personalrequestlist: personalrequestlist, personalttb: personalttb,
-                                                                classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
+                                                            var thisistheline12 = "select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent ,supervisorpairobserver where observer.oid = observerpairstudent.OID and observer.oid = supervisorpairobserver.OID and supervisorpairobserver.tid = \""+req.session.userid+"\"";
+                                                            db.query(thisistheline12, (err, results) => {
+                                                                var string = JSON.stringify(results);
+                                                                var json = JSON.parse(string);
+                                                                var obslist = json;
+                                                                //console.log('>>obslist: ', obslist);
+                                                                return res.view("user/createdraft", {
+                                                                    savedbox: savedbox,
+                                                                    pagenum: req.params.Page,
+                                                                    orgstart: orgstart,
+                                                                    startdate: ansstartdate, enddate: ansenddate,
+                                                                    Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
+                                                                    studenttimeslotlist: studenttimeslotlist,
+                                                                    obsttb: obsttb, obstimeslotlist: obstimeslotlist,obslist:obslist,
+                                                                    personalrequestlist: personalrequestlist, personalttb: personalttb,
+                                                                    classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
+                                                                });
                                                             });
                                                         });
                                                     });
