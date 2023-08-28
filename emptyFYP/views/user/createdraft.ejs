@@ -70,7 +70,7 @@
         <%studentlist.splice(delstulist,1)%>
     <%}%>
     
-    <%console.log(obstimeslotlist)%>
+   
         
 
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
@@ -424,75 +424,117 @@
                                                 <%var index = Math.floor(Math.random()*range)%>
                                                 <%var thisobscheck = -1;%>
                                                 <%var obsindex%>
-                                                <%var thisstucheck = -1;%>
+                                                <%var thisstucheck = 0;%>
+                                                <%var studentchecker = 0;%>
+                                                <%var obschecker = 0;%>
                                                 <%var student;%>
                                                 <%var observer;%>
-
-                                                <%for (var stu = 0 ; stu < studenttimeslotlist.length ; stu++){%>
-                                                    <%if(studenttimeslotlist[stu].SID == studentlist[index].SID){%>
-                                                        
-                                                        <%var requestdate = new Date(studenttimeslotlist[stu].RequestDate);%>
-                                                        <%if(requestdate.toLocaleDateString() != today.toLocaleDateString()){%>
-                                                            <%thisstucheck =1;%>
-                                                            <%console.log("stu not today")%>
+                                                
+                                                
+                                                <%for(var l1 = 0 ; l1< studenttimeslotlist.length;l1++){%>
+                                                    <%if(studenttimeslotlist[l1].SID == studentlist[index].SID){%>
+                                                        <%var requestdate = new Date(studenttimeslotlist[l1].RequestDate);%>
+                                                        <%if (requestdate.toLocaleDateString() != today.toLocaleDateString()){%>
+                                                            <!--not requesting today-->
+                                                            <%studentchecker =1;%>
+                                                            <%break;%>
                                                             <%}else{%>
-                                                                <%console.log("stu is today")%>
-                                                                <%var requeststarttime = studenttimeslotlist[stu].RequestStartTime%>
-                                                                <%var requestendtime = studenttimeslotlist[stu].RequestEndTime%>
-                                                                
-                                                                <%if(requestendtime < currenttime || requeststarttime > currentendtime){%>
-                                                                    <%thisstucheck =1;%>
-                                                                    <%console.log("stu is today but time ok")%>
-                                                                <%}else{%>
-                                                                    <%thisstucheck =-1;%>
-                                                                    <%console.log("stu is today and time not ok")%>
+                                                                <!--requesting today-->
+                                                                <%var requeststarttime = studenttimeslotlist[l1].RequestStartTime%>
+                                                                <%var requestendtime = studenttimeslotlist[l1].RequestEndTime%>
+                                                               
+                                                                <%if (requeststarttime != "00:00:00" && requestendtime != "23:59:00"){%>
+                                                                    <!--not fullday-->
+                                                                    <%if( requeststarttime> (currentendtime+":00") || requestendtime < (currenttime+":00")){%>
+                                                                       <!--today no timecrash-->
+                                                                        <%studentchecker =1%>
+                                                                        <%}else{studentchecker =0;}%>
+                                                                    <%}else{studentchecker = 0;break;}%>
                                                                 <%}%>
-                                                                
-                                                            <%}%>
-
-                                                        <!--done check stu-->
-                                                       
-                                                            <%for (var obs = 0 ; obs < obslist.length ; obs++){%>
-                                                                <%if(obslist[obs].SID == studentlist[index].SID){%>
-                                                                    <%console.log(obslist)%>
-                                                                    <%obsindex = obs%>
-                                                                    <%break;%>
-                                                                <%}%>
-                                                            <%}%>
-                                                            
-                                                            <%console.log("obsindex      "+ obsindex)%>
-                                                            
-                                                            <%for (var checkobstimeslot = 0 ; checkobstimeslot < obstimeslotlist.length;checkobstimeslot ++){%>
-                                                                <%if(obslist[obsindex].oid == obstimeslotlist[checkobstimeslot].OID){%>
-                                                                    <%var requestdate = new Date(obstimeslotlist[checkobstimeslot].RequestDate);%>
-                                                                    <%if(requestdate.toLocaleDateString() != today.toLocaleDateString()){%>
-                                                                        <%thisobscheck =1;%>
-                                                                        <%console.log("obs not today")%>
-                                                                        <%break;%>
-                                                                    <%}else{%>
-                                                                        <%console.log("obs is today")%>
-                                                                        <%var requeststarttime = obstimeslotlist[checkobstimeslot].RequestStartTime%>
-                                                                        <%var requestendtime = obstimeslotlist[checkobstimeslot].RequestEndTime%>
-
-                                                                        <%if(requestendtime < currenttime || requeststarttime > currentendtime){%>
-                                                                            <%thisobscheck =1;%>
-                                                                            <%console.log("obs is today but time ok")%>
-                                                                        <%}else{%>
-                                                                            <%thisobscheck =-1;%>
-                                                                            <%console.log("obs is today and time not ok")%>
-                                                                        <%}%>
-
-                                                                    <%}%>
-                                                                <%}else{thisobscheck = 0;}%>    
-                                                            <%}%>
-
-                                                        
-                                                                
-
-                                                        <%}else{thisstucheck = 0;}%>   
-                                                        
-                                                        
+                                                        <%}else{studentchecker =1;}%>
                                                     <%}%>
+                                                    
+                                                   
+                                                    <%if(studentchecker == 1){%>
+                                                        <!--pass request search-->
+                                                        <%for(var l2 = 0 ; l2< studentttb.length;l2++){%>
+                                                            <!--find stu and crash day-->
+                                                            <%if(studentlist[index].SID == studentttb[l2].PID && today.getDay() == studentttb[l2].weekdays){%>
+                                                                <%var lessonstarttime = studentttb[l2].startTime%>
+                                                                <%var lessonendtime = studentttb[l2].endTime%>
+                                                                <%if(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00")){%>
+                                                                    <%studentchecker =2;%>
+                                                                    <%}else{studentchecker=1;}%>
+                                                                <%}else{studentchecker = 2;}%>
+                                                        <%}%>
+                                                                    
+                                                    <%}%>
+                                                    
+
+                                                    <%if(studentchecker == 2){%>
+                                                    <!--pass stu search-->
+                                                        <%for(var l3 = 0 ; l3< obslist.length;l3++){%>
+                                                            <%if(obslist[l3].SID == studentlist[index].SID){%>
+                                                                <%obsindex = l3%>
+
+                                                                <%break;%>    
+                                                            <%}%>    
+                                                        <%}%>
+                                                        
+                                                        <%for(var l4 = 0 ; l4< obstimeslotlist.length;l4++){%>
+                                                            <%if(obstimeslotlist[l4].OID == obslist[obsindex].oid){%>
+                                                                
+                                                                <%var requestdate = new Date(obstimeslotlist[l4].RequestDate);%>
+                                                                <%if (requestdate.toLocaleDateString() != today.toLocaleDateString()){%>
+                                                                    <%obschecker =1;%>
+                                                                    <%break;%>
+                                                                <%}else{%>
+                                                                    <%var requeststarttime = obstimeslotlist[l4].RequestStartTime%>
+                                                                    <%var requestendtime = obstimeslotlist[l4].RequestEndTime%>
+                                                               
+                                                                    <%if (requeststarttime == "00:00:00" && requestendtime == "23:59:00"){%>
+                                                                        <!-- fullday-->
+                                                                        <%obschecker = 0;break;}%>
+                                                                        <%}%>
+                                                                    <%if( !(requeststarttime> (currentendtime+":00") || requestendtime < (currenttime+":00"))){%>
+                                                                        <!--today timecrash-->
+                                                                        <%obschecker =0;break;%>
+                                                                    <%}%>
+                                                                    
+                                                                <%}else{obschecker = 1;}%>    
+                                                        <%}%>
+                                                        <%=obschecker%> <%=obslist[obsindex].oid%>
+                                                        
+                                                        <%if(obschecker ==1){%>
+                                                            <!--pass request search-->
+                                                            
+                                                            <%for(var l5 = 0 ; l5< obsttb.length;l5++){%>
+                                                                <!--find stu and crash day-->
+                                                                <%if(obslist[obsindex].oid == obsttb[l5].PID && today.getDay() == obsttb[l5].weekdays){%>
+                                                                    <%var lessonstarttime = obsttb[l5].startTime%>
+                                                                    <%var lessonendtime = obsttb[l5].endTime%>
+                                                                    <%if(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00")){%>
+                                                                        <%obschecker =2;%>
+                                                                        <%}else{obschecker=1;}%>
+                                                                    <%}else{obschecker = 2;}%>
+                                                            <%}%>
+                                                        <%}%>
+
+                                                    <%}%>
+
+                                                    <%if(studentchecker ==2 && obschecker ==2){%>
+                                                        <%student = studentlist[index].SID%>
+                                                        <%observer = obslist[obsindex].oid%> 
+                                                        <%studentlist.splice(index,1)%>
+                                                        <%obslist.splice(obsindex,1)%>   
+                                                    <%}%>
+                                                    
+                                                   
+                                                    
+                                                    
+                                                        
+
+                                                    
                                                 
                                                 <div id = "<%=boxid%>_Stu" value = "<%=student%>">
                                                     <%=student%>
