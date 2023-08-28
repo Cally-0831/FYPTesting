@@ -444,3 +444,7 @@ img{
 .tablenothover tbody tr:hover td, .tablenothover tbody tr:hover th {
   background-color: transparent;
 }
+
+.selectobs {
+  width: 80px;
+}
