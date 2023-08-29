@@ -322,6 +322,7 @@
 
                                         <!--have savedbox-->
                                         <%for(var r =0 ; r < savedbox.length;r ++){%>
+                                            
                                             <%var boxdate = new Date (savedbox[r].boxdate).toLocaleDateString();%>
                                             
                                             
@@ -389,9 +390,11 @@
                                                         <button style="background-color: blanchedalmond;" onclick = "addobs('<%=savedbox[r].boxID%>_Obs','<%=savedbox[r].boxID%>_ObsSelect','<%=savedbox[r].boxID%>_ObsSelectbox')"> + </button>
                                                         <button style="background-color: rgb(255, 103, 103);" onclick = "delhtml('<%=savedbox[r].boxID%>_ObsSelect')"> X </button>
                                                     </div>
+                                                    <!---ToDo : Need to check Classroom still available-->
                                                     <div style="font-weight: bold;">Campus</div>
                                                         <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
                                                             <%=savedbox[r].Campus%>
+                                                            
                                                         </div>
                                                     <div style="font-weight: bold;">RID</div>
                                                         <div id = "<%=savedbox[r].boxID%>_RID" value="<%=savedbox[r].RID%>">
@@ -404,7 +407,7 @@
                                              <%}%>
 
                                         <%}%>
-                                        <%=printthis%> <%=checkthis%>
+                                        
 
                                         <!--don't have saved box-->
                                         <%if(printthis >0 && checkthis >= 0){%>
@@ -417,19 +420,24 @@
                                                     <% boxid = yearyearyear+""+monthmonthmonth+""+daydayday+"_"+currenttime+"_"+req.session.userid%>
                                                    
                                                     <div id = "<%=boxid%>">
-                                        <div style="font-weight: bold;">Stu :</div>
-                                                <%var range = studentlist.length%>
+                                                        <%var range = studentlist.length%>
                                                 
                                                    
-                                                <%var index = Math.floor(Math.random()*range)%>
+                                                
+                                                
                                                 <%var thisobscheck = -1;%>
                                                 <%var obsindex%>
                                                 <%var thisstucheck = 0;%>
                                                 <%var studentchecker = 0;%>
                                                 <%var obschecker = 0;%>
-                                                <%var student;%>
-                                                <%var observer;%>
+                                                <%var student = null;%>
+                                                <%var observer = null;%>
+                                                <%var nopairs = false;%>
+
                                                 
+                                                
+                                            <%while((student  == null && observer == null)){%>
+                                                <%var index = Math.floor(Math.random()*range)%>
                                                 
                                                 <%for(var l1 = 0 ; l1< studenttimeslotlist.length;l1++){%>
                                                     <%if(studenttimeslotlist[l1].SID == studentlist[index].SID){%>
@@ -462,21 +470,22 @@
                                                             <%if(studentlist[index].SID == studentttb[l2].PID && today.getDay() == studentttb[l2].weekdays){%>
                                                                 <%var lessonstarttime = studentttb[l2].startTime%>
                                                                 <%var lessonendtime = studentttb[l2].endTime%>
-                                                                <%if(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00")){%>
-                                                                    <%studentchecker =2;%>
-                                                                    <%}else{studentchecker=1;}%>
+                                                                <%if(!(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00"))){%>
+                                                                    <%studentchecker =1;%>
+                                                                    <%break;%>
+                                                                    <%}else{studentchecker=2;}%>
                                                                 <%}else{studentchecker = 2;}%>
                                                         <%}%>
+                                                        
                                                                     
                                                     <%}%>
-                                                    
 
+                                                     
                                                     <%if(studentchecker == 2){%>
                                                     <!--pass stu search-->
                                                         <%for(var l3 = 0 ; l3< obslist.length;l3++){%>
                                                             <%if(obslist[l3].SID == studentlist[index].SID){%>
                                                                 <%obsindex = l3%>
-
                                                                 <%break;%>    
                                                             <%}%>    
                                                         <%}%>
@@ -503,7 +512,7 @@
                                                                     
                                                                 <%}else{obschecker = 1;}%>    
                                                         <%}%>
-                                                        <%=obschecker%> <%=obslist[obsindex].oid%>
+                                                        
                                                         
                                                         <%if(obschecker ==1){%>
                                                             <!--pass request search-->
@@ -513,30 +522,62 @@
                                                                 <%if(obslist[obsindex].oid == obsttb[l5].PID && today.getDay() == obsttb[l5].weekdays){%>
                                                                     <%var lessonstarttime = obsttb[l5].startTime%>
                                                                     <%var lessonendtime = obsttb[l5].endTime%>
-                                                                    <%if(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00")){%>
-                                                                        <%obschecker =2;%>
-                                                                        <%}else{obschecker=1;}%>
+                                                                    <%if(!(lessonendtime < (currenttime+":00") || lessonstarttime > (currentendtime+":00"))){%>
+                                                                        <%obschecker =1;%>
+                                                                        <%break;%>
+                                                                        <%}else{obschecker=2;}%>
                                                                     <%}else{obschecker = 2;}%>
                                                             <%}%>
                                                         <%}%>
 
                                                     <%}%>
+                                                    
+                                                    
+                                                    
+                                                    <%if(studentchecker != 2 || obschecker != 2){%>
+                                                        <%if(studentchecker ==1){%>
+                                                            <%student = studentlist[index]%>
+                                                            <%studentlist.splice(index,1)%>
+                                                            <%studentlist.push(student)%>
+                                                            <%range = range -1;%>
+                                                            <%student = null;%>
+                                                        <%}else{%>
+                                                             <%student = studentlist[index]%>
+                                                            <%observer = obslist[obsindex]%> 
+                                                            <%studentlist.splice(index,1)%>
+                                                            <%obslist.splice(obsindex,1)%>  
+                                                            <%studentlist.push(student)%>
+                                                            <%obslist.push(observer)%>
+                                                            <%range = range -1;%>
+                                                            <%student = null;%>
+                                                            <%observer = null%>   
+                                                                
+                                                        <%}%>
+                                                        
+                                                        
 
-                                                    <%if(studentchecker ==2 && obschecker ==2){%>
+                                                    <%}else if(studentchecker ==2 && obschecker ==2){%>
+                                                        
                                                         <%student = studentlist[index].SID%>
                                                         <%observer = obslist[obsindex].oid%> 
                                                         <%studentlist.splice(index,1)%>
-                                                        <%obslist.splice(obsindex,1)%>   
+                                                        <%obslist.splice(obsindex,1)%>
+                                                         
+                                                        <%break;%>
                                                     <%}%>
-                                                    
+
+                                                    <%if(range ==0){%>
+                                                        <%nopairs =true;%>
+                                                        <%break;%>
+                                                    <%}%>
+                                            <%}%>         
                                                    
                                                     
-                                                    
-                                                        
-
-                                                    
+                                            <%if(range !=0){%>
                                                 
-                                                <div id = "<%=boxid%>_Stu" value = "<%=student%>">
+                                        <div style="font-weight: bold;">Stu :</div>
+                                            <div id = "<%=boxid%>_Stu" value = "<%=student%>">
+
                                                     <%=student%>
                                                 </div>    
                                             
@@ -650,8 +691,9 @@
                               
                                 
                             <%}%>
-                            
+                            <%}%>
                             <%=thisboxstring%></td>
+                            
                             <%today = new Date(today.getTime() + 1*24*60*60*1000)%>
                     <%}%>
                 
