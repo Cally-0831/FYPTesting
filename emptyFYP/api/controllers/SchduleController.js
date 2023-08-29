@@ -129,19 +129,20 @@ module.exports = {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var classroomusagelist = json;
-                                //     console.log('>> classroomusagelist: ', classroomusagelist);
+                                console.log('>> classroomusagelist: ', classroomusagelist);
                                 var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
                                 /** Get classroom's unavailble timeslot */
                                 db.query(thisistheline5, (err, results) => {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     var classroomtimeslotlist = json;
-                                    //console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
+                                    console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
                                     var thisistheline6 = "select distinct(Campus) from classroom";
                                     db.query(thisistheline6, (err, results) => {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var Campuslist = json;
+                                        console.log('>> Campuslist: ', Campuslist);
                                         var thisistheline7 = "select * from supervisorpairstudent";
                                         db.query(thisistheline7, (err, results) => {
                                             var string = JSON.stringify(results);
@@ -160,7 +161,7 @@ module.exports = {
                                                     var string = JSON.stringify(results);
                                                     var json = JSON.parse(string);
                                                     var studentttb = json;
-                                                    console.log('>> studentttb: ', studentttb);
+                                                    //console.log('>> studentttb: ', studentttb);
                                                     var thisistheline10 = "select allobstakecourse.CID, allobstakecourse.PID, allclass.weekdays, allclass.startTime,allclass.endTime from allobstakecourse inner join allclass on allclass.cid = allobstakecourse.cid where allobstakecourse.pid in (select supervisorpairobserver.oid from supervisorpairobserver where supervisorpairobserver.tid = \"" + req.session.userid + "\") order by weekdays asc, startTime asc;";
                                                     db.query(thisistheline10, (err, results) => {
                                                         var string = JSON.stringify(results);

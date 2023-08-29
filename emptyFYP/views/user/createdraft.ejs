@@ -329,7 +329,64 @@
                                             
                                             <%var boxtime = savedbox[r].boxtime%>
                                             <%if(boxdate == today.toLocaleDateString() && (currenttime+":00") == boxtime){%>
-                                                
+                                                <!---ToDo : Need to check Classroom still available-->
+                                                <%var campuschecker%>
+                                                <%var roomchecker%>  
+
+                                                <%for( var l1 =0;l1 < classroomtimeslotlist.length;l1++){%>
+                                                    <%if(classroomtimeslotlist[l1].Campus == savedbox[r].Campus && classroomtimeslotlist[l1].RID== savedbox[r].RID){%>
+                                                        <%var requeststartdate = new Date(classroomtimeslotlist[l1].StartDate)%>
+                                                        <%var requestenddate = new Date(classroomtimeslotlist[l1].EndDate)%>
+                                                        <%var requeststarttime = classroomtimeslotlist[l1].StartTime%>
+                                                        <%var requestendtime = classroomtimeslotlist[l1].EndTime%>
+                                                        <!--single day not ok classroom-->
+                                                        <%if(requeststartdate.toLocaleDateString() == requestenddate.toLocaleDateString() && requestenddate.toLocaleDateString() == today.toLocaleDateString()){%>
+                                                            <%if(!(requestendtime < (currenttime+":00") || (requeststarttime > currentendtime+":00"))){%>
+                                                                <%campuschecker = -1;%>
+                                                                <%roomchecker = -1;%>
+                                                                <%break;%>
+                                                                <%}%>
+                                                        <%}else if(requeststartdate.toLocaleDateString() != requestenddate.toLocaleDateString()){%>
+                                                            <%var startdatestr = requeststartdate.toLocaleDateString().split("/"); %>
+                                                            <%if(parseInt(startdatestr[0])< 10){startdatestr[0] = "0"+startdatestr[0];}%>    
+                                                            <%if(parseInt(startdatestr[1])< 10){startdatestr[1] = "0"+startdatestr[1];}%>
+                                                            <%var startdatestrstr = startdatestr[0]+"/"+startdatestr[1]+"/"+startdatestr[2] %>   
+
+                                                            <%var enddatestr = requestenddate.toLocaleDateString().split("/"); %>
+                                                            <%if(parseInt(enddatestr[0])< 10){enddatestr[0] = "0"+enddatestr[0];}%>    
+                                                            <%if(parseInt(enddatestr[1])< 10){enddatestr[1] = "0"+enddatestr[1];}%>
+                                                            <%var enddatestrstr = enddatestr[0]+"/"+enddatestr[1]+"/"+enddatestr[2] %> 
+
+                                                            <%var todaystr = today.toLocaleDateString().split("/"); %>
+                                                            <%if(parseInt(todaystr[0])< 10){todaystr[0] = "0"+todaystr[0];}%>    
+                                                            <%if(parseInt(todaystr[1])< 10){todaystr[1] = "0"+todaystr[1];}%>
+                                                            <%var todaystrstr = todaystr[0]+"/"+todaystr[1]+"/"+todaystr[2] %> 
+
+                                                            <%console.log(startdatestrstr+"    "+enddatestrstr+"    "+todaystrstr)%>
+
+                                                            <%if(!(todaystrstr < startdatestrstr || todaystrstr > enddatestrstr)){%>
+                                                                <%if(!(requestendtime<(currenttime+":00")|| requeststarttime > (currentendtime+":00"))){%>
+                                                                    <%console.log("this day have 2 problem")%>
+                                                                    <%campuschecker = -1;%>
+                                                                    <%roomchecker = -1;%>
+                                                                    <%break;%>
+                                                                <%}%>
+                                                            <%}%>
+
+
+                                                        <%}%>
+                                                    <%}%>
+                                                <%}%>
+
+                                                <!--ToDo: find classroom is not ok-->
+                                                    <%if(campuschecker ==-1 && roomchecker ==-1){%>
+                                                        
+                                                        <%}%>
+
+
+
+
+
                                                 <div id = "<%=savedbox[r].boxID%>">
                                                     <div style="font-weight: bold;">Stu :</div>
                                                         <div id = "<%=savedbox[r].boxID%>_Stu" value = "<%=savedbox[r].stu%>">
@@ -355,7 +412,8 @@
                                                         <%}else{%>
                                                             <%=savedbox[r].OID%>
                                                         <%}%>
-                                                        
+
+                                                          
                                                         
                                                     </div>   
                                                     <div id="<%=savedbox[r].boxID%>_ObsSelect" hidden="true">
@@ -390,11 +448,12 @@
                                                         <button style="background-color: blanchedalmond;" onclick = "addobs('<%=savedbox[r].boxID%>_Obs','<%=savedbox[r].boxID%>_ObsSelect','<%=savedbox[r].boxID%>_ObsSelectbox')"> + </button>
                                                         <button style="background-color: rgb(255, 103, 103);" onclick = "delhtml('<%=savedbox[r].boxID%>_ObsSelect')"> X </button>
                                                     </div>
-                                                    <!---ToDo : Need to check Classroom still available-->
+                                                    
                                                     <div style="font-weight: bold;">Campus</div>
-                                                        <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
+                                                    <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
+                                                            <%=campuschecker%> <%=roomchecker%>
                                                             <%=savedbox[r].Campus%>
-                                                            
+                                                                                                              
                                                         </div>
                                                     <div style="font-weight: bold;">RID</div>
                                                         <div id = "<%=savedbox[r].boxID%>_RID" value="<%=savedbox[r].RID%>">
@@ -404,6 +463,9 @@
                                                 </div>
                                                 <%printthis=0;%>
                                                 <%checkthis = 0;%>
+                                                <%campuschecker = null;%>
+                                                <%roomchecker = null%>
+                                                <%break;%>
                                              <%}%>
 
                                         <%}%>
