@@ -123,7 +123,7 @@ module.exports = {
                             var json = JSON.parse(string);
                             var personalrequestlist = json;
                             // console.log('>> personalrequestlist: ', personalrequestlist);
-                            var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
+                            var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
                             /** Get classroom's ttb */
                             db.query(thisistheline4, (err, results) => {
                                 var string = JSON.stringify(results);
@@ -137,7 +137,7 @@ module.exports = {
                                     var json = JSON.parse(string);
                                     var classroomtimeslotlist = json;
                                     console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                    var thisistheline6 = "select distinct(Campus) from classroom";
+                                    var thisistheline6 = "select distinct(Campus) from classroom where Campus != \"\"";
                                     db.query(thisistheline6, (err, results) => {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
@@ -174,22 +174,31 @@ module.exports = {
                                                             var json = JSON.parse(string);
                                                             var obstimeslotlist = json;
                                                             //console.log('>> obstimeslotlist: ', obstimeslotlist);
-                                                            var thisistheline12 = "select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent ,supervisorpairobserver where observer.oid = observerpairstudent.OID and observer.oid = supervisorpairobserver.OID and supervisorpairobserver.tid = \""+req.session.userid+"\"";
+                                                            var thisistheline12 = "select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent ,supervisorpairobserver where observer.oid = observerpairstudent.OID and observer.oid = supervisorpairobserver.OID and supervisorpairobserver.tid = \"" + req.session.userid + "\"";
                                                             db.query(thisistheline12, (err, results) => {
                                                                 var string = JSON.stringify(results);
                                                                 var json = JSON.parse(string);
                                                                 var obslist = json;
                                                                 //console.log('>>obslist: ', obslist);
-                                                                return res.view("user/createdraft", {
-                                                                    savedbox: savedbox,
-                                                                    pagenum: req.params.Page,
-                                                                    orgstart: orgstart,
-                                                                    startdate: ansstartdate, enddate: ansenddate,
-                                                                    Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
-                                                                    studenttimeslotlist: studenttimeslotlist,
-                                                                    obsttb: obsttb, obstimeslotlist: obstimeslotlist,obslist:obslist,
-                                                                    personalrequestlist: personalrequestlist, personalttb: personalttb,
-                                                                    classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist
+                                                                var thisistheline13 = "select * from classroom where Campus!=\"\"";
+                                                                db.query(thisistheline13, (err, results) => {
+                                                                    var string = JSON.stringify(results);
+                                                                    var json = JSON.parse(string);
+                                                                    var allclassroomlist = json;
+                                                                    console.log('>>allclassroomlist: ', allclassroomlist);
+                                                                    return res.view("user/createdraft", {
+                                                                        savedbox: savedbox,
+                                                                        pagenum: req.params.Page,
+                                                                        orgstart: orgstart,
+                                                                        startdate: ansstartdate, enddate: ansenddate,
+                                                                        Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
+                                                                        studenttimeslotlist: studenttimeslotlist,
+                                                                        obsttb: obsttb, obstimeslotlist: obstimeslotlist, obslist: obslist,
+                                                                        personalrequestlist: personalrequestlist, personalttb: personalttb,
+                                                                        classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist,
+                                                                        allclassroomlist:allclassroomlist,
+
+                                                                    });
                                                                 });
                                                             });
                                                         });
@@ -272,5 +281,22 @@ module.exports = {
         }
 
         return res.status(statuscode).json(errstring);
+    },
+
+    getrequestroomlist: async function (req, res) {
+        console.log("enter here"+"     "+req.query.Campus+"  "+req.query.Time);
+        var thisistheline = "select * from classroom where Campus = \""+req.query.Campus+"\" and RID not in ((select RID from allclass where Campus = \""+req.query.Campus+"\" and weekdays = \""+req.query.Weekday+"\"and !(startTime > Time(\""+req.query.Time+"\") || endTime < Time(\""+req.query.Time+"\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \""+req.query.Campus+"\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\""+req.query.Date+" "+req.query.Time+"\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\""+req.query.Date+" "+req.query.Time+"\") ) )";
+        console.log(thisistheline)
+
+        db.query(thisistheline, (err, result) => {
+            if (err) { return res.status(401).json("Error happened when updating") }else{
+                var string = JSON.stringify(result);
+                var roomlist = JSON.parse(string);
+                return res.json(roomlist);
+            }
+        });
+
+
+        
     },
 }

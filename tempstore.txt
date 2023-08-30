@@ -1,66 +1,10 @@
-<%for (var q = 0 ; q < studenttimeslotlist.length;q++){%>
-                                                    <%if(studenttimeslotlist[q].SID == studentlist[index].SID){%>
-                                                        <%thisstucheck = 1;%>
-                                                        <%var requestdate = new Date(studenttimeslotlist[q].RequestDate);%>
-                                                        <%var requeststarttime = studenttimeslotlist[q].RequestStartTime;%>
-                                                        <%var requestendtime = studenttimeslotlist[q].RequestEndTime.split(":");%>
-                                                        <%if(today.toLocaleDateString()!=requestdate.toLocaleDateString()){%>
-                                                        <!--have requ but not today-->
-                                                           <%thisstucheck = -1;%>
-                                                           <%console.log(requeststarttime)%>
-                                                        <%}else if(today.toLocaleDateString()==requestdate.toLocaleDateString() && (requeststarttime != "00:00:00" && requestendtime!= "23:59:00")){%>
-                                                            <!--have requ and it is today but not full day-->
-                                                            
-                                                            <%if(requestendtime < (currenttime+":00") || (currentendtime+":00") < requeststarttime){%>
-                                                                    <%thisstucheck = -1;%>
-                                                                    
-                                                                    <%}%>
-
-                                                            <%}%>
-                                                        
-
-                                                    <%}%>
-                                            <%}%>
-                                            <%="thisstucheck"%><%=thisstucheck%>
-                                            <%if(thisstucheck < 0){%>
-                                                
-                                                <%student =studentlist[index].SID %>
-                                                <%for (var w = 0 ; w < obslist.length;w++){%>
-                                                    <%if(obslist[w].SID == student){%>
-                                                        <%obsindex = w%>
-                                                        <%for (var e = 0 ; e < obstimeslotlist.length;e++){%>
-                                                            <%if(obstimeslotlist[e].OID == obslist[w].oid){%>
-                                                                <%var obsrequestdate = new Date(obstimeslotlist[e].RequestDate);%>
-                                                                <%var obsrequeststarttime = obstimeslotlist[e].RequestStartTime;%>
-                                                                <%var obsrequestendtime = obstimeslotlist[e].RequestEndTime;%>
-                                                                <%if(today.toLocaleDateString()!= obsrequestdate.toLocaleDateString()){%>
-                                                                    <!--have requ but not today-->
-                                                                       <%thisobscheck = -1;%>
-                                                                       <%console.log(requeststarttime)%>
-                                                                    <%}else if(today.toLocaleDateString()== obsrequestdate.toLocaleDateString() && (obsrequeststarttime != "00:00:00" && obsrequestendtime  != "23:59:00")){%>
-                                                                        <%if(obsrequestendtime < (currenttime+":00") || (currentendtime+":00") < obsrequeststarttime){%>
-                                                                            <%thisobscheck = -1;%>
-                                                                        <%}%>
-                                                                        <%}%>
-                                                            <%}%>
-                                                        <%}%>
-                                                        <%}%>
-                                                    
-                                                    <%}%>
-                                                    <%="thisobscheck"%><%=thisobscheck%>
-                                                    <%if(thisobscheck < 0){%>
-                                                        <%student =studentlist[index].SID %>
-                                                        <%observer = obslist[obsindex].oid %>
-                                                        <%studentlist.splice(index,1)%>
-                                                        <%}%>
-                                                
-                                                <%}%>
 
 
-                                                <%if(thisstucheck >0 && thisobscheck >0){%>
-                                                            <%student = studentlist[index].SID%>
-                                                            <%observer = obslist[obsindex].oid%>
-                                                            <%studentlist.splice[index,1];%>
-                                                            <%obslist.splice[obsindex,1]%>
-                                                            <%break;%>
-                                                            <%}%>
+for(var a = 0; a< roomlist.length;a++){
+    html += "<option value = \""+roomlist[a].RID+"\">"+roomlist[a].RID+"</option>"
+}
+
+select * from allclassroomtimeslot 
+where Campus = "AAB" 
+and RID = "AAB610" 
+and (timestamp(concat(StartDate," ",startTime)) > timestamp("2024-04-05 08:30:00")  || timestamp(concat(EndDate," ",endTime)) < timestamp("2024-04-05 08:30:00") ) 

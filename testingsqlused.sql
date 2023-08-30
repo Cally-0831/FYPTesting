@@ -1,1 +1,1 @@
-select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent where observer.oid = observerpairstudent.OID
+select RID from allclass where Campus = "AAB" and !(startTime > Time("11:30:00") || endTime < Time("11:30:00"))

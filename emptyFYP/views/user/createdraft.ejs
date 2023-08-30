@@ -300,6 +300,8 @@
                                     <%var printthis=1;%>
                                     <%var checkthis=1;%>
                                     <%var boxid;%>
+                                    <%var newclassroomlist%>
+                                    <%var newcampuslist%>
                                     <%if(parseInt(today.getMonth())+1 > parseInt(endday.getMonth())+1){%>
                                         <%checkthis = -1;%>
                                         <%}else if(parseInt(today.getMonth())+1 == parseInt(endday.getMonth())+1){%>
@@ -378,15 +380,6 @@
                                                     <%}%>
                                                 <%}%>
 
-                                                <!--ToDo: find classroom is not ok-->
-                                                    <%if(campuschecker ==-1 && roomchecker ==-1){%>
-                                                        
-                                                        <%}%>
-
-
-
-
-
                                                 <div id = "<%=savedbox[r].boxID%>">
                                                     <div style="font-weight: bold;">Stu :</div>
                                                         <div id = "<%=savedbox[r].boxID%>_Stu" value = "<%=savedbox[r].stu%>">
@@ -448,18 +441,34 @@
                                                         <button style="background-color: blanchedalmond;" onclick = "addobs('<%=savedbox[r].boxID%>_Obs','<%=savedbox[r].boxID%>_ObsSelect','<%=savedbox[r].boxID%>_ObsSelectbox')"> + </button>
                                                         <button style="background-color: rgb(255, 103, 103);" onclick = "delhtml('<%=savedbox[r].boxID%>_ObsSelect')"> X </button>
                                                     </div>
+                                                    <!--ToDo: find classroom is not ok-->
+                                                    <%if(campuschecker == -1 && roomchecker == -1){%>
+                                                        <div style="font-weight: bold;">Campus</div>
+                                                        <%var weekday = today.getDay()%>
+                                                        <select id="<%=savedbox[r].boxID%>_CampusSelectbox" style = "width :50%; padding :0px" onchange="findroom('<%=weekday%>','<%=savedbox[r].boxID%>',value)">
+                                                            <option>--Please Select--</option>
+                                                            <%for(var l1 = 0 ; l1 < Campuslist.length ; l1++){%>
+                                                                <option value='<%=Campuslist[l1].Campus%>' style = "width :50%; padding :0px" ><%=Campuslist[l1].Campus%></option>    
+                                                            <%}%>
+                                                        </select>
+                                                        <div id="<%=savedbox[r].boxID%>_showroomlist"></div>
+
+                                                        
+
                                                     
-                                                    <div style="font-weight: bold;">Campus</div>
-                                                    <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
+                                                    <%}else{%>
+                                                        <div style="font-weight: bold;">Campus</div>
+                                                        <div id = "<%=savedbox[r].boxID%>_Campus" value="<%=savedbox[r].Campus%>">
                                                             <%=campuschecker%> <%=roomchecker%>
                                                             <%=savedbox[r].Campus%>
-                                                                                                              
                                                         </div>
                                                     <div style="font-weight: bold;">RID</div>
                                                         <div id = "<%=savedbox[r].boxID%>_RID" value="<%=savedbox[r].RID%>">
                                                             <%=savedbox[r].RID%> 
                                                         </div>
-                                                    </div>
+                                                    <%}%>
+                                                    
+                                                    
                                                 </div>
                                                 <%printthis=0;%>
                                                 <%checkthis = 0;%>
@@ -957,5 +966,50 @@
         console.log(document.getElementById(boxid).innerHTML)
         document.getElementById(boxid).hidden = true;;
         
+    }
+
+    async function findroom(weekday,boxid,value){
+        if(value == "--Please Select--"){return;}
+
+        var stringstring = boxid.split("_");
+        stringstring[1] = stringstring[1]+":00"
+        var stringyear="";
+        var stringmonth="";
+        var stringdate="";
+        for(var a = 0 ; a < stringstring[0].length;a++){
+            if(a<4){
+                stringyear += stringstring[0][a];
+            }else if(a<6){
+                stringmonth += stringstring[0][a];
+            }else{
+                stringdate += stringstring[0][a];
+            }
+        }
+        var datestring = stringyear+"-"+stringmonth+"-"+stringdate;
+
+        
+
+        var response = await fetch("/savebox/get_roomlist_bycampus?Weekday="+weekday+"&Campus="+value+"&Time="+stringstring[1]+"&Date="+datestring, {
+            method: "GET",
+            
+        });
+
+        var roomlist = await response.json();
+
+        console.log(roomlist.length);
+        if(roomlist.length >0){
+            
+            var html ="<div style=\"font-weight: bold;\">RID</div>"+" <select id=\""+boxid+"_RoomSelectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
+            for(var a = 0; a< roomlist.length;a++){
+                html += "<option value = \""+roomlist[a].RID+"\">"+roomlist[a].RID+"</option>"
+            }
+
+                                            
+
+            html += "</select\>";
+            document.getElementById(boxid+"_showroomlist").innerHTML = html;
+
+       
+        }
     }
 </script>
