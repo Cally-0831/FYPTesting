@@ -324,11 +324,8 @@
 
                                         <!--have savedbox-->
                                         <%for(var r =0 ; r < savedbox.length;r ++){%>
-                                            
+                                                                               
                                             <%var boxdate = new Date (savedbox[r].boxdate).toLocaleDateString();%>
-                                            
-                                            
-                                            
                                             <%var boxtime = savedbox[r].boxtime%>
                                             <%if(boxdate == today.toLocaleDateString() && (currenttime+":00") == boxtime){%>
                                                 <!---ToDo : Need to check Classroom still available-->
@@ -337,6 +334,7 @@
 
                                                 <%for( var l1 =0;l1 < classroomtimeslotlist.length;l1++){%>
                                                     <%if(classroomtimeslotlist[l1].Campus == savedbox[r].Campus && classroomtimeslotlist[l1].RID== savedbox[r].RID){%>
+                                                        
                                                         <%var requeststartdate = new Date(classroomtimeslotlist[l1].StartDate)%>
                                                         <%var requestenddate = new Date(classroomtimeslotlist[l1].EndDate)%>
                                                         <%var requeststarttime = classroomtimeslotlist[l1].StartTime%>
@@ -377,16 +375,17 @@
 
 
                                                         <%}%>
+                                                        
                                                     <%}%>
                                                 <%}%>
 
                                                 <div id = "<%=savedbox[r].boxID%>">
                                                     <div style="font-weight: bold;">Stu :</div>
-                                                        <div id = "<%=savedbox[r].boxID%>_Stu" value = "<%=savedbox[r].stu%>">
+                                                        <div id = "<%=savedbox[r].boxID%>_Stu">
                                                             <%=savedbox[r].SID%>
                                                         </div>    
                                                     <div style="font-weight: bold;">Obs <button style="background-color: blanchedalmond;" onclick = "showselectobs('<%=savedbox[r].boxID%>_ObsSelect')"> + </button></div>
-                                                    <div class = "obsID" id = "<%=savedbox[r].boxID%>_Obs" value = "<%=savedbox[r].obs%>">
+                                                    <div class = "obsID" id = "<%=savedbox[r].boxID%>_Obs">
                                                         
                                                         <%var splitobs = savedbox[r].OID.split("/");%>
                                                         <%if(splitobs.length>1){%>
@@ -445,12 +444,14 @@
                                                     <%if(campuschecker == -1 && roomchecker == -1){%>
                                                         <div style="font-weight: bold;">Campus</div>
                                                         <%var weekday = today.getDay()%>
-                                                        <select id="<%=savedbox[r].boxID%>_CampusSelectbox" style = "width :50%; padding :0px" onchange="findroom('<%=weekday%>','<%=savedbox[r].boxID%>',value)">
-                                                            <option>--Please Select--</option>
-                                                            <%for(var l1 = 0 ; l1 < Campuslist.length ; l1++){%>
-                                                                <option value='<%=Campuslist[l1].Campus%>' style = "width :50%; padding :0px" ><%=Campuslist[l1].Campus%></option>    
-                                                            <%}%>
-                                                        </select>
+                                                        
+                                                            <select id="<%=savedbox[r].boxID%>_CampusSelectbox" style = "width :50%; padding :0px" onchange="findroom('<%=weekday%>','<%=savedbox[r].boxID%>',value)">
+                                                                <option>--Please Select--</option>
+                                                                <%for(var l1 = 0 ; l1 < Campuslist.length ; l1++){%>
+                                                                    <option value='<%=Campuslist[l1].Campus%>' style = "width :50%; padding :0px" ><%=Campuslist[l1].Campus%></option>    
+                                                                <%}%>
+                                                            </select>
+                                                        
                                                         <div id="<%=savedbox[r].boxID%>_showroomlist"></div>
 
                                                         
@@ -789,11 +790,13 @@
     var end = new Date(endday);
     var today = start;
     var finalbody=[];
+    
     if(parseInt(currenthour)<10){currenthour = "0"+parseInt(currenthour)}
     for(var a = 0 ; a < 6; a++){
        
         var followingDay = new Date(parseInt(start.getTime()) + a *24*60*60*1000);
         var today2 = followingDay.toLocaleDateString().split("/");
+        
        
         if(parseInt(today2[1])<10){today2[1] = "0"+today2[1]};
         if(parseInt(today2[2])<10){today2[2] = "0"+today2[2]};
@@ -801,7 +804,9 @@
         var currentmin = "30";
         var ans ="";
 
-        for(var b = 0 ; b < 22; b++){
+        for(var b = 1 ; b < 22; b++){
+            var newCampus;
+            var newRID;
             if(b%2 == 0 && b!=0 ){
                 currentmin = "00"
                 currenthour++;
@@ -810,6 +815,7 @@
             };
             if(parseInt(currenthour)<10){currenthour="0"+parseInt(currenthour)};
         var boxid = today2[0]+""+today2[1]+""+today2[2]+"_"+currenthour+":"+currentmin+"_"+userid;
+        
         if(document.getElementById(""+boxid+"_Obs") != null){
             var stringstring = document.getElementById(""+boxid+"_Obs").innerText.split("\n");
             ans ="";
@@ -825,28 +831,55 @@
             }
 
         }
+
+
+       
+
+
         if(document.getElementById(""+boxid+"_Stu") != null){
-                var thisbox = {
+            
+            if(document.getElementById(""+boxid+"_Campus") != null){
+                newCampus = document.getElementById(""+boxid+"_Campus").innerText;
+                newRID = document.getElementById(""+boxid+"_RID").innerText;
+            }else{
+                console.log(boxid+"    "+document.getElementById(""+boxid+"_CampusSelectbox").value)
+                if(document.getElementById(""+boxid+"_CampusSelectbox").value == "--Please Select--"){
+                    return alert("Please Select A Room For "+today2[0]+"/"+today2[1]+"/"+today2[2]+" "+currenthour+":"+currentmin);
+                }else{
+                    newCampus = document.getElementById(""+boxid+"_CampusSelectbox").value;
+                    if(document.getElementById(""+boxid+"_RIDSelectbox").value == "--Please Select--"){
+                        return alert("Please Select A Room For "+today2[0]+"/"+today2[1]+"/"+today2[2]+" "+currenthour+":"+currentmin);
+                    }else{
+                        newRID = document.getElementById(""+boxid+"_RIDSelectbox").value;
+                    }
+                }
+            }
+
+            
+            
+       
+            var thisbox = {
                 'boxid':boxid,
                 'boxdate':today2[0]+""+today2[1]+""+today2[2],
                 'boxtime':currenthour+":"+currentmin+":00",
                 'stu':document.getElementById(""+boxid+"_Stu").innerText,
                 'obs':ans,
-                'Campus' :document.getElementById(""+boxid+"_Campus").innerText,
-                'RID':document.getElementById(""+boxid+"_RID").innerText
+                'Campus' : newCampus,
+                'RID':newRID
             
             
             
             }
             
             finalbody.push(thisbox)
-        }
+         }
         
 
-        }
+        
         
        
     }
+}
     
     console.log(finalbody)
   
@@ -870,8 +903,8 @@
     
   
 
-}
-
+    }
+   
     function backback(startday,endday,userid){
         
         alert("Please make sure you have SAVED all the choices,\nChanges without saving will not be saved when moving to the next page.");
@@ -999,7 +1032,7 @@
         console.log(roomlist.length);
         if(roomlist.length >0){
             
-            var html ="<div style=\"font-weight: bold;\">RID</div>"+" <select id=\""+boxid+"_RoomSelectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
+            var html ="<div style=\"font-weight: bold;\">RID</div>"+" <select id=\""+boxid+"_RIDSelectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
             for(var a = 0; a< roomlist.length;a++){
                 html += "<option value = \""+roomlist[a].RID+"\">"+roomlist[a].RID+"</option>"
             }

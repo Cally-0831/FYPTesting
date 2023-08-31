@@ -1,8 +1,22 @@
 
 
-for(var a = 0; a< roomlist.length;a++){
-    html += "<option value = \""+roomlist[a].RID+"\">"+roomlist[a].RID+"</option>"
-}
+if(document.getElementById(""+boxid+"_Campus")==null){
+                console.log(boxid +"    "+document.getElementById(""+boxid+"_CampusSelectBox"))
+                if(document.getElementById(""+boxid+"_CampusSelectBox") != null){
+                    if(document.getElementById(""+boxid+"_CampusSelectBox").value == "--Please Select--"){
+                        return alert("Please Select A Room For "+today2[0]+""+today2[1]+""+today2[2]+" "+currenthour+":"+currentmin);
+                   }else{
+                        newCampus = document.getElementById(""+boxid+"_CampusSelectBox").value;
+                        if(document.getElementById(""+boxid+"_RIDSelectBox").value == "--Please Select--"){
+                            return alert("Please Select A Room For "+today2[0]+""+today2[1]+""+today2[2]+" "+currenthour+":"+currentmin);
+                        }else{
+                            newRID = document.getElementById(""+boxid+"_RIDSelectBox").value;
+                   }
+                    
+                }else{
+                    newCampus=document.getElementById(""+boxid+"_Campus").innerText,
+                    newRID = document.getElementById(""+boxid+"_RID").innerText
+            }
 
 select * from allclassroomtimeslot 
 where Campus = "AAB" 
