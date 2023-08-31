@@ -299,4 +299,20 @@ module.exports = {
 
         
     },
+
+    getrequestobslist: async function (req, res) {
+        console.log("enter here"+"     "+req.query.Weekday+"  "+req.query.Time+"   "+req.query.Date);
+        var thisistheline ="select * from supervisorpairobserver where tid = \""+req.session.userid+"\" and OID not in (select OID from allrequestfromobserver where (timestamp(\""+req.query.Date+" "+req.query.Time+"\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\""+req.query.Date+" "+req.query.Time+"\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays ="+req.query.Weekday+" and  (time(\""+req.query.Time+"\")>= allclass.startTime and time(\""+req.query.Time+"\")< allclass.endTime))"
+        console.log(thisistheline);
+
+        db.query(thisistheline, (err, result) => {
+            if (err) { return res.status(401).json("Error happened when updating") }else{
+                var string = JSON.stringify(result);
+                var okobslist = JSON.parse(string);
+                return res.json(okobslist);
+            }
+        });
+
+
+       },
 }

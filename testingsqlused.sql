@@ -1,1 +1,1 @@
-select RID from allclass where Campus = "AAB" and !(startTime > Time("11:30:00") || endTime < Time("11:30:00"))
+select * from allrequestfromobserver where (timestamp("2024-04-05 08:30:00")>= timestamp(concat(RequestDate," ",RequestStartTime)) and timestamp("2024-04-05 08:30:00")< timestamp(concat(RequestDate," ",RequestEndTime)))

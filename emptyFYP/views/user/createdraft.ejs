@@ -378,13 +378,15 @@
                                                         
                                                     <%}%>
                                                 <%}%>
+                                                <%var weekday = today.getDay()%>
+                                                        
 
                                                 <div id = "<%=savedbox[r].boxID%>">
                                                     <div style="font-weight: bold;">Stu :</div>
                                                         <div id = "<%=savedbox[r].boxID%>_Stu">
                                                             <%=savedbox[r].SID%>
                                                         </div>    
-                                                    <div style="font-weight: bold;">Obs <button style="background-color: blanchedalmond;" onclick = "showselectobs('<%=savedbox[r].boxID%>_ObsSelect')"> + </button></div>
+                                                    <div style="font-weight: bold;">Obs <button style="background-color: blanchedalmond;" onclick = "findobs('<%=weekday%>','<%=savedbox[r].boxID%>_Obs')"> + </button></div>
                                                     <div class = "obsID" id = "<%=savedbox[r].boxID%>_Obs">
                                                         
                                                         <%var splitobs = savedbox[r].OID.split("/");%>
@@ -408,42 +410,12 @@
                                                           
                                                         
                                                     </div>   
-                                                    <div id="<%=savedbox[r].boxID%>_ObsSelect" hidden="true">
-                                                        <select class = "selectobs" id="<%=savedbox[r].boxID%>_ObsSelectbox" class = "obsID" value="">
-                                                            <%var optionlist=[];%>
-                                                            <%var checkcheck =0;%>
-                                                            <%var currentobsselected =[]%>
-                                                            <%for(var z = 0 ; z < obslist.length ;z++){%>
-                                                                
-                                                                <%if(obslist[z].oid != savedbox[r].OID){%>
-                                                                    <%if (optionlist.length ==0){%>
-                                                                        <%optionlist.push(obslist[z].oid)%>
-                                                                        <%}else{%>
-                                                                            <%for(var x = 0 ; x < optionlist.length;x++){%>
-                                                                                <%if(optionlist[x] == obslist[z].oid){%>
-                                                                                        <%checkcheck = 1;%>
-                                                                                    <%}%>
-                                                                            <%}%>
-                                                                            <%if(checkcheck == 0){%>
-                                                                                <%optionlist.push(obslist[z].oid)%>
-                                                                                <%}%>
-                                                                            <%}%>
-                                                                    
-                                                                    <%}%>
-                                                                
-                                                                <%}%>
-                                                                <%for(var z = 0 ; z < optionlist.length ;z++){%> 
-                                                                    <option class = "option selectobs" value ='<%=optionlist[z]%>'><%=optionlist[z]%></option> 
-                                                                    <%}%>
+                                                    <div id="<%=savedbox[r].boxID%>_ObsSelect"></div>
                                                         
-                                                        </select>
-                                                        <button style="background-color: blanchedalmond;" onclick = "addobs('<%=savedbox[r].boxID%>_Obs','<%=savedbox[r].boxID%>_ObsSelect','<%=savedbox[r].boxID%>_ObsSelectbox')"> + </button>
-                                                        <button style="background-color: rgb(255, 103, 103);" onclick = "delhtml('<%=savedbox[r].boxID%>_ObsSelect')"> X </button>
-                                                    </div>
+                                                        
                                                     <!--ToDo: find classroom is not ok-->
                                                     <%if(campuschecker == -1 && roomchecker == -1){%>
                                                         <div style="font-weight: bold;">Campus</div>
-                                                        <%var weekday = today.getDay()%>
                                                         
                                                             <select id="<%=savedbox[r].boxID%>_CampusSelectbox" style = "width :50%; padding :0px" onchange="findroom('<%=weekday%>','<%=savedbox[r].boxID%>',value)">
                                                                 <option>--Please Select--</option>
@@ -941,7 +913,6 @@
         }
     }
 
-
     function showselectobs(boxid){
         console.log(document.getElementById(boxid).hidden)
         document.getElementById(boxid).hidden=false;
@@ -996,8 +967,8 @@
     }
 
     function delhtml(boxid){
-        console.log(document.getElementById(boxid).innerHTML)
-        document.getElementById(boxid).hidden = true;;
+        
+        document.getElementById(boxid).innerHTML = "";
         
     }
 
@@ -1029,7 +1000,7 @@
 
         var roomlist = await response.json();
 
-        console.log(roomlist.length);
+        
         if(roomlist.length >0){
             
             var html ="<div style=\"font-weight: bold;\">RID</div>"+" <select id=\""+boxid+"_RIDSelectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
@@ -1045,4 +1016,70 @@
        
         }
     }
+
+    async function findobs(weekday,boxid){
+        
+
+        var stringstring = boxid.split("_");
+        stringstring[1] = stringstring[1]+":00"
+        var stringyear="";
+        var stringmonth="";
+        var stringdate="";
+        for(var a = 0 ; a < stringstring[0].length;a++){
+            if(a<4){
+                stringyear += stringstring[0][a];
+            }else if(a<6){
+                stringmonth += stringstring[0][a];
+            }else{
+                stringdate += stringstring[0][a];
+            }
+        }
+        var datestring = stringyear+"-"+stringmonth+"-"+stringdate;
+        
+        
+        var response = await fetch("/savebox/get_okobslist?Weekday="+weekday+"&Time="+stringstring[1]+"&Date="+datestring, {
+            method: "GET",
+        });
+
+        var okobslist = await response.json();
+
+        if(okobslist.length >0){
+            var currentobslist = document.getElementById(boxid).innerText.split("\n");
+            
+            for(var a = 0 ; a < currentobslist.length;a++){
+                currentobslist[a] = currentobslist[a].split("-")[0].trim();
+            }
+            
+            
+            
+            var html =" <select id=\""+boxid+"Selectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
+            for(var b = 0 ; b< currentobslist.length;b++){
+                
+                for(var a = 0; a< okobslist.length;a++){
+                   
+                    if(currentobslist[b] == okobslist[a].OID){
+                        okobslist.splice(a,1);
+                        break;
+                    }
+                }
+               
+            }
+           
+            for(var a = 0; a< okobslist.length;a++){
+                html += "<option value = \""+okobslist[a].OID+"\">"+okobslist[a].OID+"</option>"
+             
+            }
+            
+                                           
+
+            html += "</select\>";
+            html += " <button style=\"background-color: blanchedalmond;\" onclick = \"addobs('"+boxid+"','"+boxid+"Select','"+boxid+"Selectbox')\"> + </button>"
+            html +="<button style=\"background-color: rgb(255, 103, 103);\" onclick = \"delhtml(\'"+boxid+"Select\')\"> X </button>"
+            document.getElementById(boxid+"Select").innerHTML = html;
+
+       
+        }
+        
+    }
+
 </script>

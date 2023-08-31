@@ -37,6 +37,7 @@ module.exports.routes = {
   'GET /createdraft/:Page': "SchduleController.getallneededinfo",
   "POST /savebox":"SchduleController.savebox",
   "GET /savebox/get_roomlist_bycampus":"SchduleController.getrequestroomlist",
+  "GET /savebox/get_okobslist":"SchduleController.getrequestobslist",
 
   "GET /uploadlesson":{view:"user/admin/uploadlesson"},
   "POST /uploadlesson":"LessonController.uploadlesson",
