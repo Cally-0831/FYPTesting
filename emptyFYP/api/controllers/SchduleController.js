@@ -21,13 +21,19 @@ module.exports = {
     },
     viewfinalschdule: async function (req, res) {
         var thisistheline;
+        var thisistheline2;
+        var thisistheline3;
         var releasedate;
         var releasetime;
 
         if (req.session.role == "obs") {
-            thisistheline = "select * from allsupersetting inner join supervisorpairobserver on allsupersetting.Creator = supervisorpairobserver.tid  where supervisorpairobserver.oid = \"" + req.session.userid + "\" and typeofsetting = \"4\""
+            thisistheline = "select * from allsupersetting where creator = (select tid from supervisorpairobserver where oid = \"" + req.session.userid + "\") and typeofsetting=4";
+            thisistheline2 = "select * from allschedulebox where tid = (select tid from supervisorpairobserver where oid = \"" + req.session.userid + "\")"
+            thisistheline3 = "select * from allschedulebox where oid = \"" + req.session.userid + "\""
         } else if (req.session.role == "stu") {
-            thisistheline = "select * from allsupersetting inner join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.tid  where supervisorpairstudent.sid = \"" + req.session.userid + "\" and typeofsetting = \"4\""
+            thisistheline = "select * from allsupersetting where creator = (select tid from supervisorpairstudent where sid = \"" + req.session.userid + "\") and typeofsetting=4"
+            thisistheline2 = "select * from allschedulebox where tid =  (select tid from supervisorpairstudent where sid = \"" + req.session.userid + "\")"
+            thisistheline3 = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
         }
 
         db.query(thisistheline, (err, results) => {
@@ -42,15 +48,34 @@ module.exports = {
                     releasedate = json[0].deadlinedate;
                     releasetime = json[0].deadlinetime;
                 }
+                //console.log('>> checkschdeulerelease: ', json);
 
-                //console.log('>> stdlist: ', stdlist);  
-                return res.view('user/checkschdule', { releasedate: releasedate, releasetime: releasetime });
+                db.query(thisistheline2, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var allschedulebox = json;
+                        console.log('>>  allschedulebox: ',  allschedulebox);
+                        db.query(thisistheline3, (err, results) => {
+                            try {
+                                var string = JSON.stringify(results);
+                                var json = JSON.parse(string);
+                                var personalschedulebox = json;
+                                console.log('>> personalschedulebox: ', personalschedulebox);
+                                return res.view('user/checkschdule', { 
+                                    releasedate: releasedate, releasetime: releasetime, 
+                                    allschedulebox: allschedulebox, personalschedulebox:personalschedulebox });
+                            } catch (err) {
+                                console.log("sth happened here");
+                            }
+                        });
+                    } catch (err) {
+                        console.log("sth happened here");
+                    }
+                });
             } catch (err) {
                 console.log("sth happened here");
-
             }
-
-
         });
     },
 
@@ -117,7 +142,7 @@ module.exports = {
                         var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
                         // console.log(thisistheline3)
                         /** Get supervisior's requests */
-                        /** whole schdule is designed base on supervisor's schdule first */
+                        /** whole schedule is designed base on supervisor's schedule first */
                         db.query(thisistheline3, (err, results) => {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
@@ -196,7 +221,7 @@ module.exports = {
                                                                         obsttb: obsttb, obstimeslotlist: obstimeslotlist, obslist: obslist,
                                                                         personalrequestlist: personalrequestlist, personalttb: personalttb,
                                                                         classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist,
-                                                                        allclassroomlist:allclassroomlist,
+                                                                        allclassroomlist: allclassroomlist,
 
                                                                     });
                                                                 });
@@ -284,12 +309,12 @@ module.exports = {
     },
 
     getrequestroomlist: async function (req, res) {
-        console.log("enter here"+"     "+req.query.Campus+"  "+req.query.Time);
-        var thisistheline = "select * from classroom where Campus = \""+req.query.Campus+"\" and RID not in ((select RID from allclass where Campus = \""+req.query.Campus+"\" and weekdays = \""+req.query.Weekday+"\"and !(startTime > Time(\""+req.query.Time+"\") || endTime < Time(\""+req.query.Time+"\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \""+req.query.Campus+"\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\""+req.query.Date+" "+req.query.Time+"\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\""+req.query.Date+" "+req.query.Time+"\") ) )";
+        console.log("enter here" + "     " + req.query.Campus + "  " + req.query.Time);
+        var thisistheline = "select * from classroom where Campus = \"" + req.query.Campus + "\" and RID not in ((select RID from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + req.query.Weekday + "\"and !(startTime > Time(\"" + req.query.Time + "\") || endTime < Time(\"" + req.query.Time + "\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\"" + req.query.Date + " " + req.query.Time + "\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\"" + req.query.Date + " " + req.query.Time + "\") ) )";
         console.log(thisistheline)
 
         db.query(thisistheline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") }else{
+            if (err) { return res.status(401).json("Error happened when updating") } else {
                 var string = JSON.stringify(result);
                 var roomlist = JSON.parse(string);
                 return res.json(roomlist);
@@ -297,16 +322,16 @@ module.exports = {
         });
 
 
-        
+
     },
 
     getrequestobslist: async function (req, res) {
-        console.log("enter here"+"     "+req.query.Weekday+"  "+req.query.Time+"   "+req.query.Date);
-        var thisistheline ="select * from supervisorpairobserver where tid = \""+req.session.userid+"\" and OID not in (select OID from allrequestfromobserver where (timestamp(\""+req.query.Date+" "+req.query.Time+"\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\""+req.query.Date+" "+req.query.Time+"\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays ="+req.query.Weekday+" and  (time(\""+req.query.Time+"\")>= allclass.startTime and time(\""+req.query.Time+"\")< allclass.endTime))"
+        console.log("enter here" + "     " + req.query.Weekday + "  " + req.query.Time + "   " + req.query.Date);
+        var thisistheline = "select * from supervisorpairobserver where tid = \"" + req.session.userid + "\" and OID not in (select OID from allrequestfromobserver where (timestamp(\"" + req.query.Date + " " + req.query.Time + "\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\"" + req.query.Date + " " + req.query.Time + "\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays =" + req.query.Weekday + " and  (time(\"" + req.query.Time + "\")>= allclass.startTime and time(\"" + req.query.Time + "\")< allclass.endTime))"
         console.log(thisistheline);
 
         db.query(thisistheline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") }else{
+            if (err) { return res.status(401).json("Error happened when updating") } else {
                 var string = JSON.stringify(result);
                 var okobslist = JSON.parse(string);
                 return res.json(okobslist);
@@ -314,5 +339,5 @@ module.exports = {
         });
 
 
-       },
+    },
 }

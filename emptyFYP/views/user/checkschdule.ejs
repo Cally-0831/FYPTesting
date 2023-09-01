@@ -1,3 +1,11 @@
+<div class = "Pagetitle">Presentation Schedule</div>
+<div class = "columns is-mobile">
+    <div class = "column is-half">
+        <button class="button buttonlogout is-left" onclick="backback()">
+        Back
+        </button>
+    </div>
+</div>
 <% if(releasedate != null){%>
     <% var today = new Date();
         var releasedday = new Date(releasedate).toDateString();
@@ -6,9 +14,66 @@
     console.log(releasedday);
     %>
     <%if(releasedday < today){%>
-        <div> The Time has come</div>
+        
+
+        <div id = "personalschdule">
+            <table class="table is-bordered is-striped  center" style="width:80%">
+                <thead >
+                    <tr>
+                        <th colspan="6" style ="text-align: center; font-size: large;vertical-align:middle;background-color: rgb(216, 152, 33);">
+                            Personal Schedule
+                        </th>
+                    </tr>
+                
+                <tr>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        Date
+                    </th>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        Time
+                    </th>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        Student
+                    </th>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        Observer
+                    </th>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        Campus
+                    </th>
+                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                        RID
+                    </th>
+                    
+                </tr>
+            </thead>
+            <%for(var a = 0 ; a < personalschedulebox.length;a++){%>
+                <tr>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%var boxdate = new Date(personalschedulebox[a].boxdate)%>
+                        <%=boxdate.toLocaleDateString()%>
+                    </td>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%=personalschedulebox[a].boxtime%>
+                    </td>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%=personalschedulebox[a].SID%>
+                    </td>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%=personalschedulebox[a].OID%>
+                    </td>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%=personalschedulebox[a].Campus%>
+                    </td>
+                    <td style ="text-align: center;vertical-align:middle;">
+                        <%=personalschedulebox[a].RID%>
+                    </td>
+                </tr>
+                <%}%>
+            </table>
+        </div>
         <%}else{%>
-            <div> So Sorry the day is yet to come, the schdule will not be disclose until the date</div>
+            <div> So Sorry the day is yet to come, the schedule will not be disclose until the date</div>
             <br><br>
             <div>Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></div>
             <%}%>
@@ -17,3 +82,10 @@
     <%}else{%>
         <div>Your Supervisior havent set releasedate</div>
         <%}%>
+
+
+<script>
+    function backback(){
+        location.assign("home")
+    }
+</script>

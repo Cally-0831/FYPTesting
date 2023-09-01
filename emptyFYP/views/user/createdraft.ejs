@@ -1,7 +1,7 @@
 
 <div>
     <div class="Pagetitle">
-        Schdule Draft
+        Schedule Draft
     </div>
     <%if(savedbox.length != 0){%>
         <div style = "text-align: center; color: gray; font-size: smaller;">
@@ -919,6 +919,7 @@
     }
 
     function addobs(boxid,selectdiv,selectboxid){
+        if(document.getElementById(selectboxid).value == "--Please Select--"){return;}
      
         var stringstring = document.getElementById(boxid).innerHTML.split("<br>"); 
         var checkindex =-1;
@@ -1053,16 +1054,14 @@
             
             
             var html =" <select id=\""+boxid+"Selectbox\" style = \"width :50%; padding :0px\">"+"<option>--Please Select--</option>";
+            
             for(var b = 0 ; b< currentobslist.length;b++){
-                
                 for(var a = 0; a< okobslist.length;a++){
-                   
                     if(currentobslist[b] == okobslist[a].OID){
                         okobslist.splice(a,1);
                         break;
                     }
-                }
-               
+                }  
             }
            
             for(var a = 0; a< okobslist.length;a++){
@@ -1070,15 +1069,11 @@
              
             }
             
-                                           
-
             html += "</select\>";
             html += " <button style=\"background-color: blanchedalmond;\" onclick = \"addobs('"+boxid+"','"+boxid+"Select','"+boxid+"Selectbox')\"> + </button>"
             html +="<button style=\"background-color: rgb(255, 103, 103);\" onclick = \"delhtml(\'"+boxid+"Select\')\"> X </button>"
             document.getElementById(boxid+"Select").innerHTML = html;
-
-       
-        }
+}
         
     }
 
