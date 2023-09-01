@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="buttons is-right">
 
-                    <button class="buttonlogout" onclick="submitform('<%=id%>')">Submit</button>
+                    <button class="buttonlogout" onclick="submitform('<%=id%>','<%=oldid%>')">Submit</button>
 
 
                 </div>
@@ -65,7 +65,7 @@
 </div>
 
 <script>
-    async function submitform(id) {
+    async function submitform(id,oldid) {
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
@@ -73,7 +73,8 @@
         var requestBody = JSON.stringify({
             title: document.getElementById("title").value,
             content: stringstring,
-            id: id
+            id: id,
+            oldid : oldid
         });
         if (r) {
             var response = await fetch("/notice/createnewnotice", {

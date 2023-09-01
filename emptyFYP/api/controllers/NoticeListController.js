@@ -101,7 +101,9 @@ module.exports = {
     addnotice: async function (req, res) {
         console.log(req.body);
         let nid = 'nid';
+        var thisistheline;
         if (req.body.id == "") {
+            // not setting related notices
 
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             const charactersLength = characters.length;
@@ -111,11 +113,15 @@ module.exports = {
                 counter += 1;
             }
 
-        } else if (req.body.id != "") {
-            nid +=req.body.id;
+        } else if (req.body.oldid != "") {
+            // setting related notice and is an update
+            nid +=req.body.oldid;
+        }else{
+            //setting related but the first notice of this type
+            nid += req.body.id;
         }
-        console.log(nid)
-        let thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+               
+        thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
            console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
@@ -128,6 +134,7 @@ module.exports = {
 
 
         });
+        
     },
 
     viewnoticepage: async function (req, res) {
@@ -176,7 +183,7 @@ module.exports = {
         }
         console.log(req.query)
 
-        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID });
+        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID,oldid: req.query.oldSTID });
 
 
 

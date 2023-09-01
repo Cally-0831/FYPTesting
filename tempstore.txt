@@ -1,24 +1,24 @@
+ <%if(hv1anoun >= 0 ){ var updatedate=new Date(thissupersetting[hv1anoun].LastUpdate);%>
+                        <%var theupdatedate=updatedate.toLocaleDateString(); %>
+                            <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
+                                <% var datedate=new Date(thissupersetting[hv1anoun].deadlinedate).toLocaleDateString(); %>
+                                    <div class="row" style="font-size: 10px;">
+
+                                        Updated At:&emsp;&emsp;<%=theupdatedate%>
+                                            <%=updatetime%>
+                                                <br>
+                                                Setting Details:&emsp;<%=datedate%>
+                                                    <%=thissupersetting[hv1anoun].deadlinetime%>
+                                                        <br>
+                                                        <%if (thissupersetting[hv1anoun].Announcetime !=null){%>
+                                                            <%var announced=new Date(thissupersetting[hv1anoun].Announcetime);%>
+                                                                <%var theannounced=announced.toLocaleDateString(); %>
+                                                                    <%var
+                                                                        announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
+                                                                        Notice Created:&emsp;<%=theannounced%>
+                                                                            <%=announcedtime%>
+                                                                                <%}%>
 
 
-if(document.getElementById(""+boxid+"_Campus")==null){
-                console.log(boxid +"    "+document.getElementById(""+boxid+"_CampusSelectBox"))
-                if(document.getElementById(""+boxid+"_CampusSelectBox") != null){
-                    if(document.getElementById(""+boxid+"_CampusSelectBox").value == "--Please Select--"){
-                        return alert("Please Select A Room For "+today2[0]+""+today2[1]+""+today2[2]+" "+currenthour+":"+currentmin);
-                   }else{
-                        newCampus = document.getElementById(""+boxid+"_CampusSelectBox").value;
-                        if(document.getElementById(""+boxid+"_RIDSelectBox").value == "--Please Select--"){
-                            return alert("Please Select A Room For "+today2[0]+""+today2[1]+""+today2[2]+" "+currenthour+":"+currentmin);
-                        }else{
-                            newRID = document.getElementById(""+boxid+"_RIDSelectBox").value;
-                   }
-                    
-                }else{
-                    newCampus=document.getElementById(""+boxid+"_Campus").innerText,
-                    newRID = document.getElementById(""+boxid+"_RID").innerText
-            }
-
-select * from allclassroomtimeslot 
-where Campus = "AAB" 
-and RID = "AAB610" 
-and (timestamp(concat(StartDate," ",startTime)) > timestamp("2024-04-05 08:30:00")  || timestamp(concat(EndDate," ",endTime)) < timestamp("2024-04-05 08:30:00") ) 
+                                    </div>
+                                    <%}%>

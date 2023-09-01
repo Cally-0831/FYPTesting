@@ -13,18 +13,37 @@
     </div>
 </div>
 <br><br>
+<%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;%>
 <%var hv1 = -1;var hv2 = -1;var hv3 = -1;var hv4 = -1;%>
 
 <%for(var i = 0 ; i < thissupersetting.length;i++){
     console.log("\n\n\n"+thissupersetting[i].typeofsetting)
     if(thissupersetting[i].typeofsetting ==1){
-        hv1 = i;
+        if(thissupersetting[i].Announcetime != null){
+            hv1anoun = i;
+        }else{
+            hv1=i;
+        }
+        
     }else if(thissupersetting[i].typeofsetting ==2){
-        hv2 = i;
+        if(thissupersetting[i].Announcetime != null){
+            hv2anoun = i;
+        }else{
+            hv2=i
+        }
     }else if(thissupersetting[i].typeofsetting ==3){
-        hv3 = i;
+        if(thissupersetting[i].Announcetime != null){
+            hv3anoun = i;
+        }else{
+            hv3=i;
+        }
+        
     }if(thissupersetting[i].typeofsetting ==4){
-        hv4 = i;
+        if(thissupersetting[i].Announcetime != null){
+            hv4anoun =i;
+        }else{
+            hv4=i;
+        }
     }
 }%>
 
@@ -38,31 +57,31 @@
                             Submission Deadline</div>
                     </div>
                     <br>
-                    <%if(hv1 >= 0 ){ var updatedate=new Date(thissupersetting[hv1].LastUpdate);%>
-                        <%var theupdatedate=updatedate.toLocaleDateString(); %>
-                            <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
-                                <% var datedate=new Date(thissupersetting[hv1].deadlinedate).toLocaleDateString(); %>
-                                    <div class="row" style="font-size: 10px;">
+                    <%if(hv1anoun>=0){%> 
+                        <%var announcetime = new Date(thissupersetting[hv1anoun].Announcetime)%>
+                        <%var announceddate = new Date(thissupersetting[hv1anoun].deadlinedate)%>
+                        <%var announcedtimetime = thissupersetting[hv1anoun].deadlinetime%>
+                        <div class="row" style="font-size: 10px;">
+                            Setting Info: <%=announceddate.toLocaleDateString()%> <%=announcedtimetime%> 
+                            <br>
+                            Announced At: <=%announcetime.toLocaleString()%>
+                        </div>
+                        
+                        <%}%>
+                    <%if(hv1 >=0){%> 
+                        <%var updatedate=new Date(thissupersetting[hv1].LastUpdate)%>
+                        <%var updatetothisdate = new Date(thissupersetting[hv1].deadlinedate)%>
+                        <%var updatetothistime = thissupersetting[hv1].deadlinetime%>
+                        <div class="row" style="font-size: 10px;">
+                            Updated Info&ensp;&ensp;: <%=updatetothisdate.toLocaleDateString("en-GB")%>, <%=updatetothistime%> 
+                            <br>
+                            Updated At&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
+                        </div>
+                        <%}%>
+                   
+                    
 
-                                        Updated At:&emsp;&emsp;<%=theupdatedate%>
-                                            <%=updatetime%>
-                                                <br>
-                                                Setting Details:&emsp;<%=datedate%>
-                                                    <%=thissupersetting[hv1].deadlinetime%>
-                                                        <br>
-                                                        <%if (thissupersetting[hv1].Announcetime !=null){%>
-                                                            <%var announced=new
-                                                                Date(thissupersetting[hv1].Announcetime);%>
-                                                                <%var theannounced=announced.toLocaleDateString(); %>
-                                                                    <%var
-                                                                        announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
-                                                                        Notice Created:&emsp;<%=theannounced%>
-                                                                            <%=announcedtime%>
-                                                                                <%}%>
-
-
-                                    </div>
-                                    <%}%>
+                   
                                         <br>
                                         <div class="row" style="text-align: center;">
                                             <input type="Date" id="deadlineforttb"
@@ -74,11 +93,15 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 <% if(hv1 >=0){%>
-                                                    <% if(thissupersetting[hv1].Announcetime==null){%>
+                                                    <% if(hv1anoun >=0){%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="CreateNotice(0,'<%=datedate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null)">Create
+                                                            Notice</button>
+                                                    <%}else{%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(0,'<%=datedate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>',null,null)">Create
                                                             Notice</button>
-                                                        <%}%>
+                                                        <%}%>    
 
 
                                                             <button class="button buttonlogout"
@@ -101,20 +124,20 @@
                         <div id="handleRequest" style="font-size : 23px" class="title">Request Submission Deadline</div>
                     </div>
                     <br>
-                    <%if(hv2 >=0){ var updatedate=new Date(thissupersetting[hv2].LastUpdate);%>
+                    <%if(hv2anoun >=0){ var updatedate=new Date(thissupersetting[hv2anoun].LastUpdate);%>
                         <%var theupdatedate=updatedate.toLocaleDateString(); %>
                             <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
-                                <% var datedate=new Date(thissupersetting[hv2].deadlinedate).toLocaleDateString(); %>
+                                <% var datedate=new Date(thissupersetting[hv2anoun].deadlinedate).toLocaleDateString(); %>
                                     <div class="row" style="font-size: 10px;">
                                         Updated At:&emsp;&emsp;<%=theupdatedate%>
                                             <%=updatetime%>
                                                 <br>
                                                 Setting Details:&emsp;<%=datedate%>
-                                                    <%=thissupersetting[hv2].deadlinetime%>
+                                                    <%=thissupersetting[hv2anoun].deadlinetime%>
                                                         <br>
-                                                        <%if (thissupersetting[hv2].Announcetime !=null){%>
+                                                        <%if (thissupersetting[hv2anoun].Announcetime !=null){%>
                                                             <%var announced=new
-                                                                Date(thissupersetting[hv2].Announcetime);%>
+                                                                Date(thissupersetting[hv2anoun].Announcetime);%>
                                                                 <%var theannounced=announced.toLocaleDateString(); %>
                                                                     <%var
                                                                         announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
@@ -133,10 +156,10 @@
                                         <br>
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv2>=0){%>
-                                                    <% if(thissupersetting[hv2].Announcetime==null){%>
+                                                <% if(hv2anoun>=0){%>
+                                                    <% if(thissupersetting[hv2anoun].Announcetime==null){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(1,'<%=datedate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>',null,null)">Create
+                                                            onclick="CreateNotice(1,'<%=datedate%>','<%=thissupersetting[hv2anoun].deadlinetime%>','<%=thissupersetting[hv2anoun].STID%>',null,null)">Create
                                                             Notice</button>
                                                         <%}%>
                                                             <button class="button buttonlogout"
@@ -165,22 +188,22 @@
                             Period</div>
                     </div>
                     <br>
-                    <%if(hv3>=0){ var updatedate=new Date(thissupersetting[hv3].LastUpdate);%>
+                    <%if(hv3anoun>=0){ var updatedate=new Date(thissupersetting[hv3anoun].LastUpdate);%>
                         <%var theupdatedate=updatedate.toLocaleDateString(); %>
                             <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
-                                <% var startdatedate=new Date(thissupersetting[hv3].startdate).toLocaleDateString(); %>
-                                <% var enddatedate=new Date(thissupersetting[hv3].enddate).toLocaleDateString(); %>
+                                <% var startdatedate=new Date(thissupersetting[hv3anoun].startdate).toLocaleDateString(); %>
+                                <% var enddatedate=new Date(thissupersetting[hv3anoun].enddate).toLocaleDateString(); %>
                                 
                                     <div class="row" style="font-size: 10px;">
 
                                         Updated At:&emsp;&emsp;<%=theupdatedate%>
                                             <%=updatetime%>
                                                 <br>
-                                                Setting Details:&emsp;From <%=startdatedate%> <%=thissupersetting[hv3].starttime%> to <%=enddatedate%> <%=thissupersetting[hv3].endtime%>
+                                                Setting Details:&emsp;From <%=startdatedate%> <%=thissupersetting[hv3anoun].starttime%> to <%=enddatedate%> <%=thissupersetting[hv3anoun].endtime%>
                                                         <br>
-                                                        <%if (thissupersetting[hv3].Announcetime !=null){%>
+                                                        <%if (thissupersetting[hv3anoun].Announcetime !=null){%>
                                                             <%var announced=new
-                                                                Date(thissupersetting[hv3].Announcetime);%>
+                                                                Date(thissupersetting[hv3anoun].Announcetime);%>
                                                                 <%var theannounced=announced.toLocaleDateString(); %>
                                                                     <%var
                                                                         announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
@@ -228,10 +251,10 @@
                                         <br>
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv3>=0){%>
-                                                    <% if(thissupersetting[hv3].Announcetime==null){%>
+                                                <% if(hv3anoun>=0){%>
+                                                    <% if(thissupersetting[hv3anoun].Announcetime==null){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(2,'<%=startdatedate%>','<%=thissupersetting[hv3].starttime%>','<%=thissupersetting[hv3].STID%>','<%=enddatedate%>','<%=thissupersetting[hv3].endtime%>',)">Create
+                                                            onclick="CreateNotice(2,'<%=startdatedate%>','<%=thissupersetting[hv3anoun].starttime%>','<%=thissupersetting[hv3anoun].STID%>','<%=enddatedate%>','<%=thissupersetting[hv3anoun].endtime%>',)">Create
                                                             Notice</button>
                                                         <%}%>
 
@@ -255,20 +278,20 @@
                         <div id="Handleschdule" style="font-size : 23px" class="title">Release Schdeule Date</div>
                     </div>
                     <br>
-                    <%if(hv4>=0){ var updatedate=new Date(thissupersetting[hv4].LastUpdate);%>
+                    <%if(hv4anoun>=0){ var updatedate=new Date(thissupersetting[hv4anoun].LastUpdate);%>
                         <%var theupdatedate=updatedate.toLocaleDateString(); %>
                             <%var updatetime=updatedate.toLocaleTimeString('en-US',{hour12: false})%>
-                                <% var datedate=new Date(thissupersetting[hv4].deadlinedate).toLocaleDateString(); %>
+                                <% var datedate=new Date(thissupersetting[hv4anoun].deadlinedate).toLocaleDateString(); %>
                                     <div class="row" style="font-size: 10px;">
                                         Updated At:&emsp;&emsp;<%=theupdatedate%>
                                             <%=updatetime%>
                                                 <br>
                                                 Setting Details:&emsp;<%=datedate%>
-                                                    <%=thissupersetting[hv4].deadlinetime%>
+                                                    <%=thissupersetting[hv4anoun].deadlinetime%>
                                                         <br>
-                                                        <%if (thissupersetting[hv4].Announcetime !=null){%>
+                                                        <%if (thissupersetting[hv4anoun].Announcetime !=null){%>
                                                             <%var announced=new
-                                                                Date(thissupersetting[hv4].Announcetime);%>
+                                                                Date(thissupersetting[hv4anoun].Announcetime);%>
                                                                 <%var theannounced=announced.toLocaleDateString(); %>
                                                                     <%var
                                                                         announcedtime=announced.toLocaleTimeString('en-US',{hour12:false})%>
@@ -288,10 +311,10 @@
                                         <br>
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv4>=0){%>
-                                                    <% if(thissupersetting[hv4].Announcetime==null){%>
+                                                <% if(hv4anoun>=0){%>
+                                                    <% if(thissupersetting[hv4anoun].Announcetime==null){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(3,'<%=datedate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>',null,null)">Create
+                                                            onclick="CreateNotice(3,'<%=datedate%>','<%=thissupersetting[hv4anoun].deadlinetime%>','<%=thissupersetting[hv4anoun].STID%>',null,null)">Create
                                                             Notice</button>
                                                         <%}%>
 
@@ -323,20 +346,39 @@
     }
 
 
-    async function CreateNotice(command, startdatedate,starttime, id, enddatedate,endtime) {
+    async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime) {
 
         if(command != 2){
-            var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id;
-        var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
-            method: "GET",
-        });
+            if(oldid ==null){
+                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id;
+                var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
+                    method: "GET",
+                });
+
+            }else{
+                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id+"&oldSTID="+oldid;
+                var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
+                    method: "GET",
+                });
+            }
+
+            
        
         location.assign(response.url)
         }else{
-            var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+ "&enddate=" + enddatedate + "&endtime=" + endtime ;
-        var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
-            method: "GET",
-        });
+            if(oldid ==null){
+                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+ "&enddate=" + enddatedate + "&endtime=" + endtime ;
+                var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
+                    method: "GET",
+                });
+
+            }else{
+                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+"&oldSTID="+oldid+ "&enddate=" + enddatedate + "&endtime=" + endtime ;
+                var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
+                    method: "GET",
+                });
+            }
+            
        
         location.assign(response.url)
         }
