@@ -276,14 +276,16 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
   
   set idid = SUBSTRING_INDEX(new.nid, "nid", -1);
   
-select typeofsetting,deadlinedate,deadlinetime into thesetting,deaddate,deadtime from allsupersetting where stid = idid;
+	select typeofsetting,deadlinedate,deadlinetime into thesetting,deaddate,deadtime from allsupersetting where stid = idid;
    set timetime = STR_TO_DATE(CONCAT(deaddate, ' ', deadtime), '%Y-%m-%d %H:%i:%s');
   update allsupersetting set Announcetime = now() where stid = idid;
   
   
   if(thesetting =1)then
   update student set student.ttbdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
-  elseif(thesetting =2)then
+  end if;
+  
+  if(thesetting =2)then
   update student set student.requestdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
   end if;
   
