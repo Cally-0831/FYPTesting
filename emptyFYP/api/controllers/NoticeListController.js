@@ -58,7 +58,7 @@ module.exports = {
                     console.log("sth happened here");
                 }
             });
-        } else if(req.session.role == "obs"){
+        } else if (req.session.role == "obs") {
             let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairobserver on supervisorpairobserver.oid=\"" + req.session.userid + "\" "
                 + "and  allnotice.Creator =supervisorpairobserver.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
@@ -76,7 +76,7 @@ module.exports = {
                     console.log("sth happened here");
                 }
             });
-        }else {
+        } else {
             let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
                 + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
@@ -112,29 +112,169 @@ module.exports = {
                 nid += characters.charAt(Math.floor(Math.random() * charactersLength));
                 counter += 1;
             }
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                try {
+                    console.log("insert new notice");
+                    return res.json("ok");
+                } catch (err) {
+                    console.log("sth happened here");
 
+                }
+
+
+            });
         } else if (req.body.oldid != "") {
             // setting related notice and is an update
-            nid +=req.body.oldid;
-        }else{
+
+            thisistheline = "select * from allsupersetting where stid=\"" + req.body.oldid + "\"";
+            console.log(thisistheline)
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    var oldinfo = json;
+                    console.log('>> oldinfo: ', oldinfo);
+
+                    thisistheline = "select * from allsupersetting where stid=\"" + req.body.id + "\"";
+                    console.log(thisistheline)
+
+                    db.query(thisistheline, (err, results) => {
+                        try {
+                            var string = JSON.stringify(results);
+                            var json = JSON.parse(string);
+                            var newinfo = json;
+                            console.log('>> newinfo: ', newinfo);
+                            if (oldinfo[0].typeofsetting != 3) {
+                                var updatedate = (new Date(newinfo[0].deadlinedate)).toLocaleDateString("en-GB").split("/");
+                                console.log(updatedate)
+
+
+                                thisistheline = "update allsupersetting set deadlinedate = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + "\" ,deadlinetime= \"" + newinfo[0].deadlinetime + "\" where stid=\"" + req.body.oldid + "\"";
+                                console.log(thisistheline)
+
+                                db.query(thisistheline, (err, results) => {
+                                    try {
+
+                                        console.log('done update');
+                                        thisistheline = "delete from allsupersetting where stid=\"" + req.body.id + "\"";
+                                        console.log(thisistheline)
+                                        db.query(thisistheline, (err, results) => {
+                                            try {
+
+                                                console.log('done delete');
+                                                nid += req.body.id;
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                console.log(thisistheline);
+                                                db.query(thisistheline, (err, results) => {
+                                                    try {
+                                                        console.log("insert new notice");
+                                                        return res.json("ok");
+                                                    } catch (err) {
+                                                        console.log("sth happened here");
+
+                                                    }
+
+
+                                                });
+                                            } catch (err) {
+                                                console.log("sth happened here");
+
+                                            }
+
+
+                                        });
+                                    } catch (err) {
+                                        console.log("sth happened here");
+
+                                    }
+
+
+                                });
+
+                            }else{
+                                var updatestartdate = (new Date(newinfo[0].startdate)).toLocaleDateString("en-GB").split("/");
+                                var updateenddate = (new Date(newinfo[0].enddate)).toLocaleDateString("en-GB").split("/");
+                                thisistheline = "update allsupersetting set startdate = \"" + updatestartdate [2] + "-" + updatestartdate [1] + "-" + updatestartdate [0] + "\" , starttime= \"" + newinfo[0].starttime + "\", enddate = \"" + updateenddate [2] + "-" + updateenddate [1] + "-" + updateenddate [0] + "\", endtime = \""+ newinfo[0].endtime+"\" where stid=\"" + req.body.oldid + "\"";
+                                console.log(thisistheline)
+
+                                db.query(thisistheline, (err, results) => {
+                                    try {
+
+                                        console.log('done update');
+                                        thisistheline = "delete from allsupersetting where stid=\"" + req.body.id + "\"";
+                                        console.log(thisistheline)
+                                        db.query(thisistheline, (err, results) => {
+                                            try {
+
+                                                console.log('done delete');
+                                                nid += req.body.id;
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                console.log(thisistheline);
+                                                db.query(thisistheline, (err, results) => {
+                                                    try {
+                                                        console.log("insert new notice");
+                                                        return res.json("ok");
+                                                    } catch (err) {
+                                                        console.log("sth happened here");
+
+                                                    }
+
+
+                                                });
+                                            } catch (err) {
+                                                console.log("sth happened here");
+
+                                            }
+
+
+                                        });
+                                    } catch (err) {
+                                        console.log("sth happened here");
+
+                                    }
+
+
+                                });
+                            }
+
+                        } catch (err) {
+                            console.log("sth happened here");
+
+                        }
+
+
+                    });
+                } catch (err) {
+                    console.log("sth happened here");
+
+                }
+
+
+            });
+
+
+        } else {
             //setting related but the first notice of this type
             nid += req.body.id;
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                try {
+                    console.log("insert new notice");
+                    return res.json("ok");
+                } catch (err) {
+                    console.log("sth happened here");
+
+                }
+
+
+            });
         }
-               
-        thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
-           console.log(thisistheline);
-        db.query(thisistheline, (err, results) => {
-            try {
-                console.log("insert new notice");
-                return res.json("ok");
-            } catch (err) {
-                console.log("sth happened here");
-
-            }
 
 
-        });
-        
+
     },
 
     viewnoticepage: async function (req, res) {
@@ -166,14 +306,14 @@ module.exports = {
         } else if (req.query.type == 2) {
             title = "Presentation Period Date";
             content = "The presentation period date has been set as follows:\n"
-                + "From : " + req.query.startdate+" , " + req.query.starttime+"\n"
-                + "To   : " + req.query.enddate+" , " + req.query.endtime
+                + "From : " + req.query.startdate + " , " + req.query.starttime + "\n"
+                + "To   : " + req.query.enddate + " , " + req.query.endtime
                 + "\n\nStudents should start applying their unavaliable timeslots for the presentation period."
                 + "\nReasons like parttime job will not be acceptable."
                 + "\n\nPlease be reminded that to provide valid proof to your supervisor when submitting the request,"
                 + "\nor else the request will not be consider."
 
-        }else if (req.query.type == 3) {
+        } else if (req.query.type == 3) {
             title = "Presentation Schdeule Release Date";
             content = "The release date for presentation schdeule has been set as follows:\n"
                 + "Date: " + req.query.date
@@ -183,7 +323,7 @@ module.exports = {
         }
         console.log(req.query)
 
-        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID,oldid: req.query.oldSTID });
+        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID, oldid: req.query.oldSTID });
 
 
 
