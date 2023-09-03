@@ -483,8 +483,8 @@ declare requesttimetstamp timestamp;
 set countcountcount =0;
 set countcount = 0;
 
-select deadlinedate, deadlinetime,Announcetime into ttbdeadlinedate, ttbdeadlinetime,ttbdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 1;
-select deadlinedate, deadlinetime,Announcetime into requestdeadlinedate, requestdeadlinetime,requestdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 2;
+select deadlinedate, deadlinetime,Announcetime into ttbdeadlinedate, ttbdeadlinetime,ttbdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 1 and Announcetime is not null;
+select deadlinedate, deadlinetime,Announcetime into requestdeadlinedate, requestdeadlinetime,requestdeadlineannounced from allsupersetting where Creator = new.tid and typeofsetting = 2 and Announcetime is not null;
 
 select count(*) into countcountcount from supervisorpairstudent where tid=new.tid and sid=new.sid;
 
@@ -499,6 +499,7 @@ update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.ti
 end if;
 
 end if;
+
 if requestdeadlineannounced is not null then
 select TIMESTAMP(requestdeadlinedate,requestdeadlinetime) into requesttimetstamp ;
 update student set requestdeadline = requesttimetstamp where sid = new.sid;
