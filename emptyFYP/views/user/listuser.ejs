@@ -109,7 +109,7 @@
     
     </table>
     <%}else{%>
-        <div class="Pagetitle">Supervisior List</div>
+        <div class="Pagetitle">Supervisor List</div>
         <div class="rows">
             <div class="columns">
                 <div class="column is-left">
@@ -314,7 +314,7 @@
 
         if (r) {
 
-            var response = await fetch("/liststudent/" + id, {
+            var response = await fetch("/listuser/" + id, {
                 method: "DELETE",
 
             });
@@ -324,7 +324,7 @@
                 // alert(html);
 
                 alert("Supoervisor deleted.");
-                location.assign("liststudent");
+                location.assign("listuser");
             } else {
                 alert(response.status + ": " + response.statusText);
             }

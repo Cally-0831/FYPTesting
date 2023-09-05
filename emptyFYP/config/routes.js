@@ -110,16 +110,17 @@ module.exports.routes = {
   'POST /uploadsupervisorlist': "StudentListController.uploadsupervisorlist",
   'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
-  'GET /liststudent': "StudentListController.liststudent",
-  'POST /liststudent': "StudentListController.liststudent",
-  'DELETE /liststudent/:id': "StudentListController.deletestudent",
+  
+  'GET /listuser': "StudentListController.liststudent",
+  'POST /listuser': "StudentListController.liststudent",
+  'DELETE /listuser/:id': "StudentListController.deletestudent",
 
   'GET /createnewstudent': "StudentListController.gettopic",
   'POST /createnewstudent': "StudentListController.createnewstudent",
   'GET /createnewsup': { view: 'user/createnewsup' },
   'POST /createnewsup': "StudentListController.createnewsup",
 
-  'GET /read/:id': "StudentListController.readsinglestudent",
+  'GET /read/:id': "StudentListController.readsingleppl",
   'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
  

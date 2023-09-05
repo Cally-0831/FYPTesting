@@ -33,7 +33,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     var stdlist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    return res.view('user/liststudent', { allstdlist: stdlist ,allsuplist : null});
+                    return res.view('user/listuser', { allstdlist: stdlist ,allsuplist : null});
                 } catch (err) {
                     console.log("sth happened here");
 
@@ -51,7 +51,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     suplist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    return res.view('user/liststudent', { allsuplist: suplist });
+                    return res.view('user/listuser', { allsuplist: suplist });
                 } catch (err) {
                     console.log("sth happened here");
 
@@ -100,35 +100,62 @@ module.exports = {
         });
     },
 
-    readsinglestudent: async function (req, res) {
+    readsingleppl: async function (req, res) {
         var studentresult;
         var type;
         var obslist;
 
-            type = "stu";
+        if(req.params.id.charAt(0)== "s"){
+             type = "stu";
             thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where student.sid = \"" + req.params.id + "\"\;";
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    //console.log('>> string: ', string );
+                    var json = JSON.parse(string);
+                    //console.log('>> json: ', json);  
+                    studentresult = json;
+                    //console.log('>> stdlist: ',studentresult); 
+                    
+                        return res.view('user/read', { type: type, thatppl: studentresult});
+    
+                    
+    
+                } catch (err) {
+                    console.log("sth happened here");
+    
+                }
+    
+    
+            });
+        }else if(req.params.id.charAt(0)== "t"){
+            type = "sup";
+            thisistheline = "select supervisor.tid, supervisor.supname ,student.stdname , student.sid from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \""+req.params.id+"\";";
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    //console.log('>> string: ', string );
+                    var json = JSON.parse(string);
+                    //console.log('>> json: ', json);  
+                    supervisorresult = json;
+                    //console.log('>> suplist: ',supervisorresult); 
+                    
+                        return res.view('user/read', { type: type, thatppl: supervisorresult ,obslist:obslist});
+    
+                    
+    
+                } catch (err) {
+                    console.log("sth happened here");
+    
+                }
+    
+    
+            });
+        }
+
+           
+
         
-
-        db.query(thisistheline, (err, results) => {
-            try {
-                var string = JSON.stringify(results);
-                //console.log('>> string: ', string );
-                var json = JSON.parse(string);
-                //console.log('>> json: ', json);  
-                studentresult = json;
-                //console.log('>> stdlist: ',studentresult); 
-                
-                    return res.view('user/read', { type: type, thatstudent: studentresult ,obslist:obslist});
-
-                
-
-            } catch (err) {
-                console.log("sth happened here");
-
-            }
-
-
-        });
 
     },
 

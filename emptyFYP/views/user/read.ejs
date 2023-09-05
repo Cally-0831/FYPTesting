@@ -1,4 +1,5 @@
-<div class = "Pagetitle"> Details for <%=thatstudent[0].sid%></div>
+<%if (type == "stu"){%>
+    <div class = "Pagetitle"> Details for <%=thatppl[0].sid%></div>
 
 
 <div class="buttons">
@@ -22,34 +23,34 @@
 
             <%}%>
 
-                <% thatstudent.forEach( function(thatstudent) { %>
+                <% thatppl.forEach( function(thatppl) { %>
 
                     <tr>
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%= thatstudent.sid %>
+                            <%= thatppl.sid %>
                         </td>
 
 
 
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%= thatstudent.stdname %>
+                            <%= thatppl.stdname %>
                         </td>
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%= thatstudent.Topic%>
-                        </td>
-
-                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%= thatstudent.OID %>
+                            <%= thatppl.Topic%>
                         </td>
 
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%= thatstudent.obsname%>
+                            <%= thatppl.OID %>
+                        </td>
+
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatppl.obsname%>
                         </td>
                         <%if(req.session.role=="sup" ){%>
                             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                                 <div class="buttons is-centered">
                                     <div class="button buttonlogout" type="button"
-                                        onclick="deletestudent('<%= thatstudent.sid %>')">
+                                        onclick="deletestudent('<%= thatppl.sid %>')">
                                         Delete
                                     </div>
                                 </div>
@@ -63,6 +64,21 @@
     </table>
 
 </div>
+    <%}else if(type == "sup"){%>
+        <div class = "Pagetitle"> Details for <%=thatppl[0].tid%></div>
+
+
+<div class="buttons">
+    <div class="button buttonlogout is-left" onclick="back()">
+        Back
+    </div>
+
+</div>
+<div>
+<br><br>
+        
+        <%}%>
+
 
 
 <script>
@@ -119,7 +135,7 @@
     }
     
     function back() {
-        location.assign("/liststudent");
+        location.assign("/listuser");
     }
     
     async function deletestudent(id) {
@@ -137,7 +153,7 @@
                 // alert(html);
 
                 alert("student deleted.");
-                location.assign("/liststudent");
+                location.assign("/listuser");
             } else {
                 alert(response.status + ": " + response.statusText);
             }

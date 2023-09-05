@@ -72,7 +72,7 @@ if(!changeradioother()){return alert("Please input the topic for the student");}
       });
       if (response.ok) {
         alert("student created");
-        location.assign("/liststudent");
+        location.assign("/listuser");
 
       } else if (response.status == 401) {
         var msg = await response.json();

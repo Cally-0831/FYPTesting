@@ -696,7 +696,7 @@ console.log("just check      "+ thisclassinfo[0])
             try {
 
 
-                return res.redirect("../liststudent");
+                return res.redirect("../listuser");
             } catch (err) {
                 console.log(' judgettb MySQL Problem' + "    " + error);
             }
