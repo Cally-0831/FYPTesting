@@ -79,6 +79,8 @@ module.exports.routes = {
   "POST /requestdetail/proof/:ReqID": "RequestController.upload",
 
   'GET /classroommanagement': "ClassroomListController.getinfobycampus",
+  'GET /Mainclassroommanagement': { view: 'user/admin/Mainclassroommanagement' },
+  'GET /classmanagement': { view: 'user/admin/classmanagement' },
 
   'GET /createnewclassroom': "ClassroomListController.getcampus",
   'POST /createnewclassroom': "ClassroomListController.createnewclassroom",

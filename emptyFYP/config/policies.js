@@ -45,6 +45,10 @@ module.exports.policies = {
   },
   SchduleController:{
     viewfinalschdule :"isLUser"
+  },
+
+  LessonListController:{
+    '*': "isAdmin"
   }
 
   

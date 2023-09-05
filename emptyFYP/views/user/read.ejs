@@ -1,28 +1,51 @@
-<%if (type == "stu"){%>
-    <div class = "Pagetitle"> Details for <%=thatppl[0].sid%></div>
-
-
-<div class="buttons">
-    <div class="button buttonlogout is-left" onclick="back()">
-        Back
-    </div>
-
-</div>
 <div>
-<br><br>
+    <%if (type=="stu" ){%>
+        <div class="Pagetitle"> Details for <%=thatppl[0].sid%>
+        </div>
 
-    <table class="table is-bordered is-striped is-fullwidth">
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Observer</th>
-        <%if(req.session.role=="sup" ){%>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action</th>
 
-            <%}%>
+        <div class="buttons">
+            <div class="button buttonlogout is-left" onclick="back()">
+                Back
+            </div>
 
+        </div>
+        <div>
+            <br><br>
+
+            <table class="table is-bordered is-striped is-fullwidth">
+                <tr>
+                    <%if(req.session.role=="sup" ){%>
+                        <th colspan="6"
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: rgb(227, 167, 15);">
+                            Personal Info</th>
+                        <%}else{%>
+                            <th colspan="5"
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: rgb(217, 160, 17);">
+                                Personal Info</th>
+                            <%}%>
+                </tr>
+                <tr>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID
+                    </th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Student
+                        Name
+                    </th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic
+                    </th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID
+                    </th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Observer
+                    </th>
+                    <%if(req.session.role=="sup" ){%>
+                        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            Action
+                        </th>
+
+                        <%}%>
+                </tr>
                 <% thatppl.forEach( function(thatppl) { %>
 
                     <tr>
@@ -61,112 +84,285 @@
 
                     <% }); %>
 
-    </table>
+            </table>
 
-</div>
-    <%}else if(type == "sup"){%>
-        <div class = "Pagetitle"> Details for <%=thatppl[0].tid%></div>
+            <table class="table is-bordered is-striped is-fullwidth">
+                <tr>
+                    <th colspan="6"
+                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                        <%=thatppl[0].stdname%>'s Request List
+                    </th>
+                </tr>
+                <tr>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        ReqID
+                    </th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Request Date</th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Request Time</th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Reason</th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Status</th>
+                    <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                        Proof</th>
+
+                </tr>
+                <%for (var i=0 ; i < requestlist.length;i++){%>
+                    <tr>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=requestlist[i].ReqID%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%var reqdate=new Date(requestlist[i].RequestDate).toLocaleDateString("en-GB")%>
+                                <%=reqdate%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=requestlist[i].RequestStartTime%> - <%=requestlist[i].RequestEndTime%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=requestlist[i].reason%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=requestlist[i].status%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%var base64obj=Buffer.from(requestlist[i].picdata)%>
+                                <a href="data:image/jpeg;base64,<%=base64obj%>" download>Link</a>
+                        </td>
+                    </tr>
+
+                    <%}%>
 
 
-<div class="buttons">
-    <div class="button buttonlogout is-left" onclick="back()">
-        Back
-    </div>
+            </table>
 
-</div>
-<div>
-<br><br>
-        
-        <%}%>
+        </div>
+        <%}else if(type=="sup" ){%>
+            <div class="Pagetitle"> Details for <%=thatppl[0].tid%>
+            </div>
 
 
+            <div class="buttons">
+                <div class="button buttonlogout is-left" onclick="back()">
+                    Back
+                </div>
 
-<script>
+            </div>
+            <div>
+                <br><br>
+                <table class="table is-bordered is-striped is-fullwidth">
+                    <tr>
+                        <th colspan="3"
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                            Peronal Info</th>
 
-    async function addpair(sid) {
-        var obs = document.getElementById("selectedobs").innerText;
-        var oid = document.getElementById("selectedoid").innerText;
-        console.log(oid != "")
-        if (oid != "") {
-            var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
-            if (r) {
-                var response = await fetch("/read/" + sid + "&" + oid, {
-                    method: "POST"
-                })
-                if (response.ok) {
-                    // var html = await response.text();
-                    // alert(html);
+                    </tr>
+                    <tr>
+                        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            TID
+                        </th>
+                        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            Supervisor Name</th>
+                        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            TTB Submission</th>
+                    </tr>
+                    <tr>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=thatppl[0].tid%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=thatppl[0].supname%>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%=thatppl[0].submission%>
+                        </td>
+                    </tr>
 
-                    alert("Pairing { " + sid + "  &  " + oid + " } has been added");
-                    location.reload();
-                } else {
-                    alert(response.status + ": " + response.statusText);
+                </table>
+
+                <%if(thatppl[0].sid !=null){%>
+                    <table class="table is-bordered is-striped is-fullwidth">
+                        <tr>
+                            <th colspan="5"
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                                Student List</th>
+
+                        </tr>
+                        <tr>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                SID
+                            </th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                Student Name</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                Topic</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                OID
+                            </th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                Observer
+                            </th>
+                        </tr>
+                        <%for (var i=0 ; i < thatppl.length;i++){%>
+                            <tr>
+                                <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                    <%=thatppl[i].sid%>
+                                </td>
+                                <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                    <%=thatppl[i].stdname%>
+                                </td>
+                                <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                    <%=thatppl[i].Topic%>
+                                </td>
+                                <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                    <%=thatppl[i].oid%>
+                                </td>
+                                <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                    <%=thatppl[i].obsname%>
+                                </td>
+                            </tr>
+                            <%}%>
+
+
+                    </table>
+                    <%}%>
+
+
+                        <table class="table is-bordered is-striped is-fullwidth">
+                            <tr>
+                                <th colspan="3"
+                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                                    <%=thatppl[0].supname%>'s Request List
+                                </th>
+                            </tr>
+                            <tr>
+                                <th
+                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                    ReqID
+                                </th>
+                                <th
+                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                    Request Date</th>
+                                <th
+                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                    Request Time</th>
+
+                            </tr>
+                            <%for (var i=0 ; i < requestlist.length;i++){%>
+                                <tr>
+                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                        <%=requestlist[i].ReqID%>
+                                    </td>
+                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                        <%var reqdate=new Date(requestlist[i].RequestDate).toLocaleDateString("en-GB")%>
+                                            <%=reqdate%>
+                                    </td>
+                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                        <%=requestlist[i].RequestStartTime%> - <%=requestlist[i].RequestEndTime%>
+                                    </td>
+                                </tr>
+
+                                <%}%>
+
+
+                        </table>
+                        <%}%>
+            </div>
+
+
+            <script>
+
+                async function addpair(sid) {
+                    var obs = document.getElementById("selectedobs").innerText;
+                    var oid = document.getElementById("selectedoid").innerText;
+                    console.log(oid != "")
+                    if (oid != "") {
+                        var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
+                        if (r) {
+                            var response = await fetch("/read/" + sid + "&" + oid, {
+                                method: "POST"
+                            })
+                            if (response.ok) {
+                                // var html = await response.text();
+                                // alert(html);
+
+                                alert("Pairing { " + sid + "  &  " + oid + " } has been added");
+                                location.reload();
+                            } else {
+                                alert(response.status + ": " + response.statusText);
+                            }
+                        }
+                    } else {
+                        alert("Please Select An Observer")
+                    }
+                    //  var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
                 }
-            }
-        } else {
-            alert("Please Select An Observer")
-        }
-        //  var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
-    }
 
-    async function breakpair(sid, oid) {
+                async function breakpair(sid, oid) {
 
-        var r = confirm("Confirm remove pairing  {" + sid + "  &  " + oid + "} ?");
-        if (r) {
+                    var r = confirm("Confirm remove pairing  {" + sid + "  &  " + oid + "} ?");
+                    if (r) {
 
-            var response = await fetch("/read/" + sid + "&" + oid, {
-                method: "DELETE",
-            });
+                        var response = await fetch("/read/" + sid + "&" + oid, {
+                            method: "DELETE",
+                        });
 
-            if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
+                        if (response.ok) {
+                            // var html = await response.text();
+                            // alert(html);
 
-                alert("Pairing { " + sid + "  &  " + oid + " } has been removed");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
+                            alert("Pairing { " + sid + "  &  " + oid + " } has been removed");
+                            location.reload();
+                        } else {
+                            alert(response.status + ": " + response.statusText);
+                        }
 
-        } else {
-            alert("cancelled");
-        }
+                    } else {
+                        alert("cancelled");
+                    }
 
-    }
-    
-    function back() {
-        location.assign("/listuser");
-    }
-    
-    async function deletestudent(id) {
-        var r = confirm("Confirm Delete?" + id);
+                }
 
-        if (r) {
+                function back() {
+                    location.assign("/listuser");
+                }
 
-            var response = await fetch("/read/" + id, {
-                method: "DELETE",
+                async function deletestudent(id) {
+                    var r = confirm("Confirm Delete?" + id);
 
-            });
+                    if (r) {
 
-            if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
+                        var response = await fetch("/read/" + id, {
+                            method: "DELETE",
 
-                alert("student deleted.");
-                location.assign("/listuser");
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
+                        });
 
-        } else {
-            alert("cancelled");
-        }
-    };
-    
-    function selectthisobs(obs, oid) {
-        document.getElementById("selectedobs").innerText = obs;
-        document.getElementById("selectedoid").innerText = oid;
+                        if (response.ok) {
+                            // var html = await response.text();
+                            // alert(html);
 
-    }
+                            alert("student deleted.");
+                            location.assign("/listuser");
+                        } else {
+                            alert(response.status + ": " + response.statusText);
+                        }
 
-</script>
+                    } else {
+                        alert("cancelled");
+                    }
+                };
+
+                function selectthisobs(obs, oid) {
+                    document.getElementById("selectedobs").innerText = obs;
+                    document.getElementById("selectedoid").innerText = oid;
+
+                }
+
+            </script>

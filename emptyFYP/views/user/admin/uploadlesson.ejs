@@ -33,7 +33,7 @@
 </div>
 <script>
     function backback() {
-        location.assign("/home");
+        location.assign("/classmanagement");
     }
 
     document.getElementById('lessonupload').addEventListener('change', handlelesson, false);
@@ -102,7 +102,8 @@
             body: lessonjsonobj
         });
         if (response.ok) {
-            alert("ok")
+            alert("Class Created")
+            location.reload()
         } else {
             alert("strange things happened")
         }

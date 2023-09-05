@@ -33,7 +33,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     var stdlist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    return res.view('user/listuser', { allstdlist: stdlist ,allsuplist : null});
+                    return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null });
                 } catch (err) {
                     console.log("sth happened here");
 
@@ -59,7 +59,7 @@ module.exports = {
 
 
             });
-        
+
         }
 
 
@@ -105,8 +105,9 @@ module.exports = {
         var type;
         var obslist;
 
-        if(req.params.id.charAt(0)== "s"){
-             type = "stu";
+
+        if (req.params.id.charAt(0) == "s") {
+            type = "stu";
             thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where student.sid = \"" + req.params.id + "\"\;";
             db.query(thisistheline, (err, results) => {
                 try {
@@ -116,21 +117,34 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     studentresult = json;
                     //console.log('>> stdlist: ',studentresult); 
-                    
-                        return res.view('user/read', { type: type, thatppl: studentresult});
-    
-                    
-    
+                    thisistheline = "select * from allrequestfromstudent where sid = \"" + req.params.id + "\"\;";
+                    db.query(thisistheline, (err, results) => {
+                        try {
+                            var string = JSON.stringify(results);
+                            //console.log('>> string: ', string );
+                            var json = JSON.parse(string);
+                            studentrequestlist = json;
+
+                            return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist });
+                        } catch (err) {
+                            console.log("sth happened here");
+                        }
+                    })
+
+
+
+
                 } catch (err) {
                     console.log("sth happened here");
-    
+
                 }
-    
-    
+
+
             });
-        }else if(req.params.id.charAt(0)== "t"){
+        } else if (req.params.id.charAt(0) == "t") {
             type = "sup";
-            thisistheline = "select supervisor.tid, supervisor.supname ,student.stdname , student.sid from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \""+req.params.id+"\";";
+            thisistheline = "select supervisor.submission,supervisor.tid, supervisor.supname ,student.stdname , student.sid,observerpairstudent.obsname, observerpairstudent.oid ,supervisorpairstudent.Topic from supervisor left join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid left join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.params.id + "\";";
+            console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -139,99 +153,112 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     supervisorresult = json;
                     //console.log('>> suplist: ',supervisorresult); 
-                    
-                        return res.view('user/read', { type: type, thatppl: supervisorresult ,obslist:obslist});
-    
-                    
-    
+                    thisistheline = "select * from allrequestfromsupervisor where tid  = \"" + req.params.id + "\";";
+                    db.query(thisistheline, (err, results) => {
+                        try {
+                            var string = JSON.stringify(results);
+                            //console.log('>> string: ', string );
+                            var json = JSON.parse(string);
+                            //console.log('>> json: ', json);  
+                            supervisorrequestlist = json;
+                            return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
+                        } catch (err) {
+                            console.log("sth happened here");
+                        }
+
+                    })
+
+
+
+
                 } catch (err) {
                     console.log("sth happened here");
-    
+
                 }
-    
-    
+
+
             });
         }
 
-           
 
-        
+
+
 
     },
 
 
     deletestudent: async function (req, res) {
         var studentresult;
-       
-            //remove single ppl
-            console.log(String(req.params.id).charAt(0))
-            if (String(req.params.id).charAt(0) == "s") {
-                let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
-                console.log('delete excution');
-                console.log(thisistheline);
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
 
-                thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+        //remove single ppl
+        console.log(String(req.params.id).charAt(0))
+        if (String(req.params.id).charAt(0) == "s") {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
-                thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
-                thisistheline = "DELETE FROM allstudenttakecourse WHERE sid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM allrequestfromstudent WHERE sid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+            thisistheline = "DELETE FROM allstudenttakecourse WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-            } else {
-                let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
-                console.log('delete excution');
-                console.log(thisistheline);
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM allrequestfromstudent WHERE sid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+        } else {
+            let thisistheline = "DELETE FROM allusers WHERE pid= \"" + req.params.id + "\"\n";
+            console.log('delete excution');
+            console.log(thisistheline);
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+
+            thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
 
-                thisistheline = "DELETE FROM supervisor WHERE tid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM supervisor WHERE tid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM supervisorpairstudent WHERE tid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM supervisorpairstudent WHERE tid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
+            thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
 
-                thisistheline = "DELETE FROM allrequestfromsupervisor WHERE tid= \"" + req.params.id + "\"\n";
-                db.query(thisistheline, (err, results) => {
-                    if (err) { console.log("sth happened here"); }
-                });
-            }
+            thisistheline = "DELETE FROM allrequestfromsupervisor WHERE tid= \"" + req.params.id + "\"\n";
+            db.query(thisistheline, (err, results) => {
+                if (err) { console.log("sth happened here"); }
+            });
+        }
 
-        
+
 
 
         return res.ok("Deleted");
@@ -318,7 +345,7 @@ module.exports = {
 
 
 
-        
+
     },
 
     addpairing: async function (req, res) {
