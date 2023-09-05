@@ -239,13 +239,20 @@
                                                                                                                         ||
                                                                                                                         allpersonallist[0].confirmation=="0"
                                                                                                                         ){%>
-                                                                                                                        <div
+                                                                                                                            <%if (today < date){%>
+                                                                                                                                <div
                                                                                                                             class="buttons is-right">
                                                                                                                             <button
                                                                                                                                 class="button buttonlogout"
                                                                                                                                 onclick="submitttb('<%=allpersonallist.length%>')">Submit
                                                                                                                                 Timetable</button>
-                                                                                                                        </div>
+                                                                                                                        </div><%}else{%>
+                                                                                                                                <div class="box"
+                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                        No Submission will be Accepted
+                                                                                    </div>
+                                                                                                                                <%}%>
+                                                                                                                        
                                                                                                                         <%}%>
 
                                                                                                                             <%}%>
