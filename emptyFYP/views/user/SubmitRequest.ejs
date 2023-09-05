@@ -13,9 +13,9 @@
             <% if (req.session.role=="stu" ){%>
                 <%var today=new Date();%>
                     <% today=today.toLocaleString()%>
-                        <% var date=new Date(theday[0].requestdeadline)%>
+                        <% var date=new Date(theday)%>
                             <form name="therequest" action="/submitrequest" method="post"
-                                onsubmit="submitstudetrequest(this,'<%=theday[0].requestdeadline%>');return false;">
+                                onsubmit="submitstudetrequest(this,'<%=theday%>');return false;">
 
 
                                 <article class="message is-warning">
@@ -23,7 +23,7 @@
                                         <p>Submission Deadline for Request Submission
                                             <br>
 
-                                            <%if(theday[0].requestdeadline!=null){%>
+                                            <%if(theday!=null){%>
                                                 <%=date.toLocaleDateString()%> <%=date.toLocaleTimeString('en-US')%>
                                                         <%}%>
 
@@ -77,9 +77,9 @@
                                 <br><br>
 
                                 <%var today=new Date().toJSON()%>
-                                    <%console.log("\n\n\n\n"+today+"\n"+theday[0].requestdeadline)%>
-                                        <%if ((theday[0].requestdeadline==null) || (theday[0].requestdeadline!=null&&
-                                            today < theday[0].requestdeadline)){%>
+                                    <%console.log("\n\n\n\n"+today+"\n"+theday)%>
+                                        <%if ((theday==null) || (theday!=null&&
+                                            today < theday)){%>
 
                                             <div id="orgformbutton " class="buttons is-right">
                                                 <button class="button buttonlogout"

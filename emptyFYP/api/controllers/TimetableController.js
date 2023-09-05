@@ -413,7 +413,7 @@ console.log("just check      "+ thisclassinfo[0])
                 personallist = json;
                 console.log(personallist.length)
 
-                thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\"";
+                thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
                 db.query(thisistheline, function (err, result) {
                     try {
                         var string = JSON.stringify(result);
@@ -709,14 +709,18 @@ console.log("just check      "+ thisclassinfo[0])
         let today = new Date();
 
 
-        thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\"";
+        thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
         console.log("timetable checkdeadline    " + thisistheline);
         db.query(thisistheline, function (error, result) {
             try {
 
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
-                deadline = new Date(json[0].deadlinedate + " " + json[0].deadlinetime);
+                var deadline = new Date(json[0].deadlinedate);
+                        var deadlinetime = json[0].deadlinetime.split(":");
+                        deadline.setHours(deadlinetime[0]);
+                        deadline.setMinutes(deadlinetime[1]);
+                        deadline.setSeconds(deadlinetime[2]);
 
                 if (json[0].ttbdeadline != null) {
                     if (today > deadline) {

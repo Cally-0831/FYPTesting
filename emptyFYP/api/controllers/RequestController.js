@@ -17,7 +17,7 @@ db.connect(async (err) => {
 module.exports = {
 
     getview: async function (req, res) {
-        let thisistheline = "Select requestdeadline from student where sid = \"" + req.session.userid + "\"";
+        let thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"2\" and Announcetime is not null";
         db.query(thisistheline, (err, results) => {
             try {
 
@@ -26,10 +26,19 @@ module.exports = {
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
-                deadline = json;
-                console.log('>> stdlist: ', deadline);
+                if(json[0]!=null){
+                    var deadline = new Date(json[0].deadlinedate);
+                    var deadlinetime = json[0].deadlinetime.split(":");
+                    deadline.setHours(deadlinetime[0]);
+                    deadline.setMinutes(deadlinetime[1]);
+                    deadline.setSeconds(deadlinetime[2]);
+                    
+                    console.log('>> request deadline: ', deadline);
+                }
+                 return res.view('user/submitrequest', { theday: deadline });
+                
 
-                return res.view('user/submitrequest', { theday: deadline });
+               
             } catch (err) {
                 console.log("sth happened here");
 
