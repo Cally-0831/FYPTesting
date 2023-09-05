@@ -1,11 +1,11 @@
 <div>
-    <%console.log(date +" %%%%%% "+allpersonallist)%>
+    <%console.log(date +" %%%%%% ")%>
     <!---Empty case / init case == no any class inputted-->
     <%if (date != null || date != undefined){
         var datedate=new Date(date)
     }%>
     
-    <%var today=new Date().toJSON()%>
+    <%var today=new Date()%>
     <% if(allpersonallist.length==0 || allpersonallist[0].confirmation==" 0" ){%>
         <div class="Pagetitle">
             <%=req.session.username%>'s TimeTable
@@ -79,6 +79,7 @@
                                     <%if(allpersonallist.length==0){%>
 
                                         <%if (date !=null && today> date){%>
+                                            
                                             <div class="box"
                                                 style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                 No Submission will be Accepted</div>

@@ -28,7 +28,7 @@ module.exports.policies = {
     "*": "isSuser"
   },
   SettingController: {
-    "*": "isSuper"
+    "*": "isAdmin"
   },
   RequestController: {
     liststudentrequest: "isSuper",

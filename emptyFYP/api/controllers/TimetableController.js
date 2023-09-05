@@ -162,7 +162,7 @@ module.exports = {
                 } else if (req.session.role == "obs") {
                     thisistheline2 = "select * from allobstakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
 
-                } else{
+                } else {
                     thisistheline2 = "select * from allstudenttakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[0].CID + "\"";
                 }
 
@@ -412,24 +412,45 @@ console.log("just check      "+ thisclassinfo[0])
                 var json = JSON.parse(string);
                 personallist = json;
                 console.log(personallist.length)
-                if (personallist.length == 0 && req.session.role != "stu") {
-                    date = undefined;
-                    personallist = [];
 
-                } else {
-                    date = personallist[0].ttbdeadline;
-                    if (personallist[0].CID == null) {
-                        date = personallist[0].ttbdeadline;
-                        personallist = [];
+                thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\"";
+                db.query(thisistheline, function (err, result) {
+                    try {
+                        var string = JSON.stringify(result);
+                        var json = JSON.parse(string)
+                        var deadline = new Date(json[0].deadlinedate);
+                        var deadlinetime = json[0].deadlinetime.split(":");
+                        deadline.setHours(deadlinetime[0]);
+                        deadline.setMinutes(deadlinetime[1]);
+                        deadline.setSeconds(deadlinetime[2]);
+
+                        if (personallist.length == 0 && req.session.role != "stu") {
+                            date = undefined;
+                            personallist = [];
+
+                        } else {
+
+
+                            date = deadline;
+                            if (personallist[0].CID == null) {
+                                date = deadline;
+                                personallist = [];
+                            }
+                        }
+
+
+                        return res.view('user/timetable', {
+                            date: date,
+                            allpersonallist: personallist,
+
+                        });
+                    } catch (err) {
+
                     }
-                }
+
+                })
 
 
-                return res.view('user/timetable', {
-                    date: date,
-                    allpersonallist: personallist,
-
-                });
 
             } catch (err) {
                 // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
@@ -444,7 +465,7 @@ console.log("just check      "+ thisclassinfo[0])
         if (req.session.role == "sup") {
             thisistheline = "DELETE from allsupertakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
 
-        }else if (req.session.role == "obs") {
+        } else if (req.session.role == "obs") {
             thisistheline = "DELETE from allobstakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
 
         } else {
@@ -688,14 +709,14 @@ console.log("just check      "+ thisclassinfo[0])
         let today = new Date();
 
 
-        thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
-        console.log(thisistheline);
+        thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\"";
+        console.log("timetable checkdeadline    " + thisistheline);
         db.query(thisistheline, function (error, result) {
             try {
 
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
-                deadline = new Date(json[0].ttbdeadline);
+                deadline = new Date(json[0].deadlinedate + " " + json[0].deadlinetime);
 
                 if (json[0].ttbdeadline != null) {
                     if (today > deadline) {
