@@ -1,203 +1,231 @@
-<div class="Pagetitle">Student & Observer List</div>
-<br>
-<div class="rows">
-    <div class="columns">
-        <div class="column is-left">
-            <div class="buttons">
-                <div class="button buttonlogout is-left" onclick="back()">
-                    Back
+<%if (req.session.role == "sup"){%>
+    <div class="Pagetitle">Student List</div>
+    <div class="rows">
+        <div class="columns">
+            <div class="column is-left">
+                <div class="buttons">
+                    <div class="button buttonlogout is-left" onclick="back()">
+                        Back
+                    </div>
+    
                 </div>
-
             </div>
-        </div>
-        <div class="column ">
-            <div class="buttons is-right">
-                <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
+            <div class="column ">
+                <div class="buttons is-right">
+                    <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
 <br><br>
-
-<table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <tr>
-        <th colspan="7"
-            style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-            Student List</th>
-    </tr>
-    <tr>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a>
-            Student Name
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a>
-            Topic
-        </th>
-
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerstudoid' onclick="sorting('sorting','mytable','headerstudoid',3);">&#8593;</a>
-            OID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerstudobs' onclick="sorting('sorting','mytable','headerstudobs',4);">&#8593;</a>
-            Observer
-        </th>
-
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerTTBstatus'
-                onclick="sorting('sorting','mytable','headerTTBstatus',5);">&#8593;</a> TTB status
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',6);">&#8593;</a>
-            Submission of TTB
-        </th>
-    </tr>
-
-
-
-    <% allstdlist.forEach( function(allstdlist) { %>
-
-        <tr onclick="redirectplease('<%= allstdlist.sid%>')">
-            <td id="sid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= allstdlist.sid %>
-            </td>
-
-            <td id="studentname" style="font-size:20px;text-align: center;vertical-align:middle;">
-
-                <%= allstdlist.stdname %>
-
-            </td>
-
-            <td id="studenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= allstdlist.Topic%>
-            </td>
-            <td id="studentoid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= allstdlist.oid%>
-            </td>
-            <td id="studentobsname" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= allstdlist.obsname%>
-            </td>
-            <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
-                    <div style="font-weight: bold;color: red;">Require Proof</div>
-                    <%}else if (allstdlist.ttbsubmission=="Pending" ){%>
-                        <div style="font-weight: bold;color: blueviolet;">Pending</div>
-                        <%}else if (allstdlist.ttbsubmission=="Approved" ){%>
-                            <div style="font-weight: bold;color: green;">Approved</div>
-                            <%}else if (allstdlist.ttbsubmission=="Rejected" ){%>
-                                <div style="font-weight: bold;color: orange;">Rejected</div>
-                                <%}else{%>
-                                    <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
-                                    <%}%>
-            </td>
-            <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% if (allstdlist.ttbsubmission !=null ){%>
-                    <div class="buttons is-centered">
-                        <a href="/readttb/<%= allstdlist.sid%>">
-                            <button class="button buttonlogout">View Submission</button>
-                        </a>
-                    </div>
-                    <%}%>
-            </td>
-
+    <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <tr>
+            <th colspan="7"
+                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                Student List</th>
         </tr>
-
-        <% }); %>
-
-</table>
-<br><br>
-<div class="buttons is-right">
-    <button class="buttonlogout" id="createnewobs" onclick="gotocreateobs()">Create new Observer</button>
-</div>
-<br><br>
-<table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
-
-    <tr>
-        <th colspan="5"
-            style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-            Observer List</th>
-    </tr>
-    <tr>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerOID' onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a> OID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerobsname'
-                onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            SID
-        </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            Student Name
-        </th>
-
-        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-            <a class="sorting2" id='headerobsTTBview'
-                onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
-        </th>
-    </tr>
-    <%var obslist =[] ;%>
-<% for(var j = 0 ; j < allobslist.length ; j++){
+        <tr>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a>
+                Student Name
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a>
+                Topic
+            </th>
     
-    if(obslist.length ==0 || (obslist.length >0 && obslist[obslist.length-1].oid != allobslist[j].oid)){
-        
-        var thisobs=allobslist[j].oid; var obssidlist=[]; var obsstunamelist=[]; var oid = allobslist[j].oid;
-        var obsname = allobslist[j].obsname; var submission = allobslist[j].submission;
-    for(var i=0 ; i < allobslist.length;i++){
-      
-        if( allobslist[i].oid==thisobs){ 
-            obssidlist.push(allobslist[i].sid)
-            obsstunamelist.push(allobslist[i].stdname) 
-           
-        }
-    }
-    var currentobs = {oid:oid ,obsname:obsname,submission:submission, obssidlist:obssidlist , obsstunamelist:obsstunamelist}
-    obslist.push(currentobs) 
-    }
-}%>
-
-    <% obslist.forEach( function(list) { %>
-
-        <tr  onclick="redirectplease('<%=list.oid%>')">
-            <td id="oid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <%= list.oid %>
-            </td>
-
-
-            <td id="obsname" style="font-size:20px;text-align: center;vertical-align:middle;">
-
-                <%= list.obsname %>
-
-            </td>
-            <td id="obssid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% for(var j = 0 ; j < list.obssidlist.length ; j++){%>
-                    <a href="/read/<%= list.obssidlist[j]%>"><%=list.obssidlist[j]%></a><br>
-                <%}%>
-                   
-
-
-            </td>
-            <td id=" obsstuname" style="font-size:20px;text-align: center;vertical-align:middle;">
-                <% for(var j = 0 ; j < list.obsstunamelist.length ; j++){%>
-                    <a href="/read/<%= list.obssidlist[j]%>"><%= list.obsstunamelist[j]%></a> <br>
-                                    <%}%>
-            </td>
-            <td id="obssubmission" style="font-size:20px;text-align: center;vertical-align:middle;">
-
-                <%= list.submission %>
-
-            </td>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerstudtid' onclick="sorting('sorting','mytable','headerstudtid',3);">&#8593;</a>
+                OID
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerstudsup' onclick="sorting('sorting','mytable','headerstudsup',4);">&#8593;</a>
+                Supervisior
+            </th>
+    
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerTTBstatus'
+                    onclick="sorting('sorting','mytable','headerTTBstatus',5);">&#8593;</a> TTB status
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',6);">&#8593;</a>
+                Submission of TTB
+            </th>
         </tr>
+    
+    
+    
+        <% allstdlist.forEach( function(allstdlist) { %>
+    
+            <tr onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="sid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= allstdlist.sid %>
+                </td>
+    
+                <td id="studentname" style="font-size:20px;text-align: center;vertical-align:middle;">
+    
+                    <%= allstdlist.stdname %>
+    
+                </td>
+    
+                <td id="studenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= allstdlist.Topic%>
+                </td>
+                <td id="studenttid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= allstdlist.tid%>
+                </td>
+                <td id="studentsupname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= allstdlist.supname%>
+                </td>
+                <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
+                        <div style="font-weight: bold;color: red;">Require Proof</div>
+                        <%}else if (allstdlist.ttbsubmission=="Pending" ){%>
+                            <div style="font-weight: bold;color: blueviolet;">Pending</div>
+                            <%}else if (allstdlist.ttbsubmission=="Approved" ){%>
+                                <div style="font-weight: bold;color: green;">Approved</div>
+                                <%}else if (allstdlist.ttbsubmission=="Rejected" ){%>
+                                    <div style="font-weight: bold;color: orange;">Rejected</div>
+                                    <%}else{%>
+                                        <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
+                                        <%}%>
+                </td>
+                <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <% if (allstdlist.ttbsubmission !=null ){%>
+                        <div class="buttons is-centered">
+                            <a href="/readttb/<%= allstdlist.sid%>">
+                                <button class="button buttonlogout">View Submission</button>
+                            </a>
+                        </div>
+                        <%}%>
+                </td>
+    
+            </tr>
+    
+            <% }); %>
+    
+    </table>
+    <%}else{%>
+        <div class="Pagetitle">Supervisior List</div>
+        <div class="rows">
+            <div class="columns">
+                <div class="column is-left">
+                    <div class="buttons">
+                        <div class="button buttonlogout is-left" onclick="back()">
+                            Back
+                        </div>
+        
+                    </div>
+                </div>
+                <div class="column ">
+                    <div class="buttons is-right">
+                        <button class="buttonlogout" id="createnewsup" onclick="gotocreatesup()">Create new Supervisior</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<br><br>
+        <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
 
-        <%})%>
-</table>
+            <tr>
+                <th colspan="6"
+                    style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    Supervisior List</th>
+            </tr>
+            <tr>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headerTID' onclick="sorting('sorting2','mytable2','headerTID',0);">&#8593;</a> OID
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headersupname'
+                        onclick="sorting('sorting2','mytable2','headersupname',1);">&#8593;</a> Oberserver Name
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    SID
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    Student Name
+                </th>
+        
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    <a class="sorting2" id='headersupTTBview'
+                        onclick="sorting('sorting2','mytable2','headersupTTBview',2);">&#8593;</a> Submission of TTB
+                </th>
+                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                    Delete
+                </th>
+            </tr>
+            <%var suplist =[] ;%>
+            <%console.log(allsuplist)%>
+        <% for(var j = 0 ; j < allsuplist.length ; j++){
+            
+            if(suplist.length ==0 || (suplist.length >0 && suplist[suplist.length-1].tid != allsuplist[j].tid)){
+                
+                var thissup=allsuplist[j].tid; var supsidlist=[]; var supstunamelist=[]; var tid = allsuplist[j].tid;
+                var supname = allsuplist[j].supname; var submission = allsuplist[j].submission;
+            for(var i=0 ; i < allsuplist.length;i++){
+              
+                if( allsuplist[i].tid==thissup){ 
+                    supsidlist.push(allsuplist[i].sid)
+                    supstunamelist.push(allsuplist[i].stdname) 
+                   
+                }
+            }
+            var currentsup = {tid:tid ,supname:supname,submission:submission, supsidlist:supsidlist , supstunamelist:supstunamelist}
+            suplist.push(currentsup) 
+            }
+        }%>
+        
+            <% suplist.forEach( function(list) { %>
+        
+                <tr  onclick="redirectplease('<%=list.tid%>')">
+                    <td id="tid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <%= list.tid %>
+                    </td>
+        
+        
+                    <td id="supname" style="font-size:20px;text-align: center;vertical-align:middle;">
+        
+                        <%= list.supname %>
+        
+                    </td>
+                    <td id="supsid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <% for(var j = 0 ; j < list.supsidlist.length ; j++){%>
+                            <a href="/read/<%= list.supsidlist[j]%>"><%=list.supsidlist[j]%></a><br>
+                        <%}%>
+                           
+        
+        
+                    </td>
+                    <td id=" supstuname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <% for(var j = 0 ; j < list.supstunamelist.length ; j++){%>
+                            <a href="/read/<%= list.supsidlist[j]%>"><%= list.supstunamelist[j]%></a> <br>
+                                            <%}%>
+                    </td>
+                    <td id="supsubmission" style="font-size:20px;text-align: center;vertical-align:middle;">
+        
+                        <%= list.submission %>
+        
+                    </td>
+                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                        <div class="buttons is-centered">
+                            <div class="button buttonlogout" type="button"
+                                onclick="deletesupervisor('<%=list.tid%>')">
+                                Delete
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+        
+                <%})%>
+        </table>
+        
+   <%}%>
+
+
 
 
 
@@ -268,8 +296,8 @@
         location.assign("/createnewstudent");
     }
 
-    function gotocreateobs() {
-        location.assign("/createnewobs");
+    function gotocreatesup() {
+        location.assign("/createnewsup");
     }
 
     function redirectplease(path) {
@@ -280,4 +308,30 @@
         location.assign("/home")
     }
 
+
+    async function deletesupervisor(id) {
+        var r = confirm("Confirm Delete?" + id);
+
+        if (r) {
+
+            var response = await fetch("/liststudent/" + id, {
+                method: "DELETE",
+
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Supoervisor deleted.");
+                location.assign("liststudent");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } else {
+            alert("cancelled");
+        }
+    };
+    
 </script>

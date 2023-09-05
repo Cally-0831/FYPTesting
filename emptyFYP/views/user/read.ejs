@@ -1,3 +1,6 @@
+<div class = "Pagetitle"> Details for <%=thatstudent[0].sid%></div>
+
+
 <div class="buttons">
     <div class="button buttonlogout is-left" onclick="back()">
         Back
@@ -5,174 +8,59 @@
 
 </div>
 <div>
-    <%if (type=="stu" ){%>
-        <table class="table is-bordered is-striped is-fullwidth">
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name
-            </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID</th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Observer</th>
+<br><br>
+
+    <table class="table is-bordered is-striped is-fullwidth">
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">SID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Student Name
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Topic</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">OID</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Observer</th>
+        <%if(req.session.role=="sup" ){%>
             <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action</th>
 
-            <% thatstudent.forEach( function(thatstudent) { %>
-
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent.sid %>
-                    </td>
-
-
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent.stdname %>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent.Topic%>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%if (thatstudent.oid !=null){%>
-                            <a href="/read/<%=thatstudent.oid%>">
-                                <%= thatstudent.oid %>
-                            </a>
-                            <%}else{%>
-                                <div class="dropdown is-hoverable">
-                                    <div class="dropdown-trigger">
-                                        <button class="button buttonlogout">
-                                            <div id="selectedoid">
-
-                                            </div>
-                                        </button>
-                                    </div>
-                                    
-                                </div>
-                                <%}%>
-
-                    </td>
-
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%if (thatstudent.oid !=null){%>
-                            <a href="/read/<%=thatstudent.oid%>">
-                                <%= thatstudent.obsname%>
-                            </a>
-                            <%}else{%>
-                                <div class="dropdown is-hoverable">
-                                    <div class="dropdown-trigger">
-                                        <button class="button buttonlogout" aria-haspopup="true"
-                                            aria-controls="dropdown-menu4">
-                                            <div id = "selectedobs">--Please Select--</div>
-                                            <span class="icon is-small">
-                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-                                        <div class="dropdown-content" id="dropdownoptions" value="">
-                                            
-                                            <% obslist.forEach( function(obs) { %>
-                                                <div class="dropdown-item" value="<%=obs.obsname%>" onclick="selectthisobs('<%=obs.obsname%>','<%=obs.oid%>')">
-                                                    <p>
-                                                        <%=obs.obsname%>
-                                                    </p>
-                                                </div>
-                                                <%})%>
-                                        </div>
-                                    </div>
-                                </div>
-                                <%}%>
-
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <div class="buttons is-centered">
-                            <div class="button buttonlogout" type="button"
-                                onclick="deletestudent('<%= thatstudent.sid %>')">
-                                Delete</div>
-                            <%if (thatstudent.oid==null){%>
-                                <div class="button buttonlogout" type="button"
-                                    onclick="addpair('<%= thatstudent.sid %>')">
-                                    Add Pairing</div>
-                                <%}else{%>
-                                    <div class="button buttonlogout" type="button"
-                                        onclick="breakpair('<%= thatstudent.sid %>','<%=thatstudent.oid%>')">
-                                        Remove Pairing</div>
-                                    <%}%>
-
-                        </div>
-
-                    </td>
-                </tr>
-
-                <% }); %>
-
-        </table>
-
-        <%}else{%>
-
-
-            <table class="table is-bordered is-striped  is-fullwidth">
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    <a class="sorting2" id='headerOID'
-                        onclick="sorting('sorting2','mytable2','headerOID',0);">&#8593;</a>
-                    OID
-                </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    <a class="sorting2" id='headerobsname'
-                        onclick="sorting('sorting2','mytable2','headerobsname',1);">&#8593;</a> Observer Name
-                </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    SID
-                </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    Student Name
-                </th>
-
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    <a class="sorting2" id='headerobsTTBview'
-                        onclick="sorting('sorting2','mytable2','headerobsTTBview',2);">&#8593;</a> Submission of TTB
-                </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">Action
-                </th>
-
-                <tr>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent[0].oid %>
-                    </td>
-
-
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent[0].obsname %>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <% thatstudent.forEach( function(thatstudent) { %>
-                            <a href="/read/<%=thatstudent.sid%>">
-                                <%=thatstudent.sid%>
-                            </a><br>
-                            <%})%>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <% thatstudent.forEach( function(thatstudent) { %>
-                            <a href="/read/<%=thatstudent.sid%>">
-                                <%=thatstudent.stdname%>
-                            </a><br>
-                            <%})%>
-                    </td>
-
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <%= thatstudent[0].submission %>
-                    </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                        <div class="buttons is-centered">
-                            <div class="button buttonlogout" type="button"
-                                onclick="deletestudent('<%=thatstudent[0].oid%>')">
-                                Delete</div>
-                        </div>
-
-                    </td>
-                </tr>
-
-            </table>
-
-
             <%}%>
+
+                <% thatstudent.forEach( function(thatstudent) { %>
+
+                    <tr>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatstudent.sid %>
+                        </td>
+
+
+
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatstudent.stdname %>
+                        </td>
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatstudent.Topic%>
+                        </td>
+
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatstudent.OID %>
+                        </td>
+
+                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                            <%= thatstudent.obsname%>
+                        </td>
+                        <%if(req.session.role=="sup" ){%>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <div class="buttons is-centered">
+                                    <div class="button buttonlogout" type="button"
+                                        onclick="deletestudent('<%= thatstudent.sid %>')">
+                                        Delete
+                                    </div>
+                                </div>
+
+                            </td>
+                            <%}%>
+                    </tr>
+
+                    <% }); %>
+
+    </table>
 
 </div>
 
@@ -182,26 +70,27 @@
     async function addpair(sid) {
         var obs = document.getElementById("selectedobs").innerText;
         var oid = document.getElementById("selectedoid").innerText;
-        console.log(oid!="")
-        if(oid!=""){
+        console.log(oid != "")
+        if (oid != "") {
             var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
-            if(r){
+            if (r) {
                 var response = await fetch("/read/" + sid + "&" + oid, {
-                method: "POST"})
+                    method: "POST"
+                })
                 if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
+                    // var html = await response.text();
+                    // alert(html);
 
-                alert("Pairing { " + sid + "  &  " + oid + " } has been added");
-                location.reload();
-            } else {
-                alert(response.status + ": " + response.statusText);
+                    alert("Pairing { " + sid + "  &  " + oid + " } has been added");
+                    location.reload();
+                } else {
+                    alert(response.status + ": " + response.statusText);
+                }
             }
-            }
-        }else{
+        } else {
             alert("Please Select An Observer")
         }
-      //  var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
+        //  var r = confirm("Confirm add pairing  {" + sid + "  &  " + oid + "} ?");
     }
 
     async function breakpair(sid, oid) {
@@ -228,9 +117,11 @@
         }
 
     }
+    
     function back() {
         location.assign("/liststudent");
     }
+    
     async function deletestudent(id) {
         var r = confirm("Confirm Delete?" + id);
 
@@ -255,10 +146,11 @@
             alert("cancelled");
         }
     };
-    function selectthisobs(obs,oid){
+    
+    function selectthisobs(obs, oid) {
         document.getElementById("selectedobs").innerText = obs;
         document.getElementById("selectedoid").innerText = oid;
-        
+
     }
 
 </script>

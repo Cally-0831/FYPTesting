@@ -17,7 +17,7 @@ module.exports.policies = {
   UserController: {
     login: true,
     uploadstudentlist: "isSuper",
-    uploadobserverlist:"isSuper",
+    uploadsupervisorlist:"isAdmin",
   },
   TimetableController: {
     "*":"isLoggedin",
@@ -25,7 +25,7 @@ module.exports.policies = {
     readsinglestudentttb: "isSuper"
   },
   StudentListController: {
-    "*": "isSuper"
+    "*": "isSuser"
   },
   SettingController: {
     "*": "isSuper"

@@ -29,6 +29,8 @@ module.exports.routes = {
 
   'GET /user/logout': 'UserController.logout',
 
+  "GET /usermanagement":{ view: 'user/admin/usermanagement' },
+
   'GET /home': { view: 'user/home' },
   'GET /schduledesign': "SettingController.nodraft",
   'GET /checkdraft': "SettingController.checksetting",
@@ -103,20 +105,22 @@ module.exports.routes = {
 
   'GET /uploadstudentlist': "StudentListController.uploadstudentlist",
   'POST /uploadstudentlist': "StudentListController.uploadstudentlist",
-  'POST /uploadobserverlist': "StudentListController.uploadobserverlist",
+  'POST /uploadsupervisorlist': "StudentListController.uploadsupervisorlist",
   'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
   'GET /liststudent': "StudentListController.liststudent",
   'POST /liststudent': "StudentListController.liststudent",
+  'DELETE /liststudent/:id': "StudentListController.deletestudent",
 
   'GET /createnewstudent': "StudentListController.gettopic",
   'POST /createnewstudent': "StudentListController.createnewstudent",
-  'GET /createnewobs': { view: 'user/createnewobs' },
-  'POST /createnewobs': "StudentListController.createnewobs",
+  'GET /createnewsup': { view: 'user/createnewsup' },
+  'POST /createnewsup': "StudentListController.createnewsup",
 
   'GET /read/:id': "StudentListController.readsinglestudent",
   'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
+ 
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",

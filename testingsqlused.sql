@@ -1,1 +1,1 @@
-select * from allrequestfromobserver where (timestamp("2024-04-05 08:30:00")>= timestamp(concat(RequestDate," ",RequestStartTime)) and timestamp("2024-04-05 08:30:00")< timestamp(concat(RequestDate," ",RequestEndTime)))
+select student.sid, student.stdname, student.Topic,observerpairstudent.TID,observerpairstudent.supname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid 
