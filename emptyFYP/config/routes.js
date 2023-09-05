@@ -71,6 +71,8 @@ module.exports.routes = {
   'POST /timetable/pic': "TimetableController.upload",
   'POST /timetable/deadline': "TimetableController.checkdeadline",
 
+  
+  'GET /readsupervisorrequestlist': "RequestController.listsupervisorrequest",
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",

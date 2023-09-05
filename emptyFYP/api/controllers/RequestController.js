@@ -127,23 +127,41 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 studentrequestlist = json;
                 //console.log('>> stdlist: ', studentrequestlist);
-                thisistheline = "select * from allrequestfromobserver inner join supervisorpairobserver "
-                    + "on allrequestfromobserver.oid = supervisorpairobserver.oid and supervisorpairobserver.tid = \"" + req.session.userid + "\" ;";
+               
+                        return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist});
 
-                db.query(thisistheline, (err, results) => {
-                    try {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        observerrequestlist = json;
-                        return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist, thisobserverrequestlist: observerrequestlist });
-
-                    } catch (err) {
-                        return res.status(401).json("error happened when getting observsers' request list");
-                    }
-
-                })
             } catch (err) {
                 return res.status(401).json("error happened when getting students' request list");
+
+            }
+
+
+        });
+
+
+
+
+    },
+
+    listsupervisorrequest: async function (req, res) {
+        var supervisorrequestlist;
+      
+
+        let thisistheline = "select * from allrequestfromsupervisor";
+        //console.log(thisistheline)
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                //console.log('>> string: ', string );
+                var json = JSON.parse(string);
+                //console.log('>> json: ', json);  
+                supervisorrequestlist = json;
+                console.log('>> supreqlist: ', supervisorrequestlist);
+               
+                return res.view('user/admin/readsupervisorrequestlist', { thissupervisorrequestlist: supervisorrequestlist});
+
+            } catch (err) {
+                return res.status(401).json("error happened when getting supervisor' request list");
 
             }
 
