@@ -58,28 +58,10 @@ module.exports = {
                     console.log("sth happened here");
                 }
             });
-        } else if (req.session.role == "obs") {
-            let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
-                + "inner join  supervisorpairobserver on supervisorpairobserver.oid=\"" + req.session.userid + "\" "
-                + "and  allnotice.Creator =supervisorpairobserver.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
-            console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
-                    var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
-                    noticelist = json;
-                    //       console.log('>> noticelist: ', noticelist);
-                    return res.view('user/notice', { thisusernoticetlist: noticelist });
-                } catch (err) {
-                    console.log("sth happened here");
-                }
-            });
         } else {
             let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
                 + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
-                + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.Creator = \"admin\" order by allnotice.CreateDate DESC;"
+                + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.type= \"1\" order by allnotice.CreateDate DESC;"
             console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
@@ -102,7 +84,8 @@ module.exports = {
         console.log(req.body);
         let nid = 'nid';
         var thisistheline;
-        if (req.body.id == "") {
+        
+        if (req.body.id == undefined) {
             // not setting related notices
 
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -112,7 +95,7 @@ module.exports = {
                 nid += characters.charAt(Math.floor(Math.random() * charactersLength));
                 counter += 1;
             }
-            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(), \""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
                 try {
@@ -165,7 +148,7 @@ module.exports = {
 
                                                 console.log('done delete');
                                                 nid += req.body.id;
-                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\",\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
                                                 console.log(thisistheline);
                                                 db.query(thisistheline, (err, results) => {
                                                     try {
@@ -223,7 +206,7 @@ module.exports = {
 
                                                 console.log('done delete');
                                                 nid += req.body.id;
-                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\",\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
                                                 console.log(thisistheline);
                                                 db.query(thisistheline, (err, results) => {
                                                     try {
@@ -271,7 +254,7 @@ module.exports = {
         } else {
             //setting related but the first notice of this type
             nid += req.body.id;
-            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
                 try {
@@ -331,12 +314,19 @@ module.exports = {
             content = "The release date for presentation schdeule has been set as follows:\n"
                 + "Date: " + req.query.date
                 + "\nTime: " + req.query.time
-                + "\n\nStudents should check and follow their personal timeslots after the release of the schdeule."
+                + "\n\nAll users can check and their personal timeslots after the release of the schdeule."
+
+        }else if (req.query.type == 4) {
+            title = "Deadline for Student List Upload";
+            content = "The deadline of uploading student list has been set as follows:\n"
+                + "Date: " + req.query.date
+                + "\nTime: " + req.query.time
+                + "\n\n After gathering all the student list from supervisors, observer for students will be arranged."
 
         }
         console.log(req.query)
 
-        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID, oldid: req.query.oldSTID });
+        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID, oldid: req.query.oldSTID ,level: req.query.level});
 
 
 

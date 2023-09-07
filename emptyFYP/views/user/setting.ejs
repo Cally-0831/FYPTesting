@@ -13,8 +13,8 @@
     </div>
 </div>
 <br><br>
-<%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;%>
-<%var hv1 = -1;var hv2 = -1;var hv3 = -1;var hv4 = -1;%>
+<%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;var hv5anoun = -1;%>
+<%var hv1 = -1;var hv2 = -1;var hv3 = -1;var hv4 = -1;var hv5 = -1;%>
 
 <%for(var i = 0 ; i < thissupersetting.length;i++){
     console.log("\n\n\n"+thissupersetting[i].typeofsetting)
@@ -38,18 +38,24 @@
             hv3=i;
         }
         
-    }if(thissupersetting[i].typeofsetting ==4){
+    }else if(thissupersetting[i].typeofsetting ==4){
         if(thissupersetting[i].Announcetime != null){
             hv4anoun =i;
         }else{
             hv4=i;
+        }
+    }else if(thissupersetting[i].typeofsetting ==5){
+        if(thissupersetting[i].Announcetime != null){
+            hv5anoun =i;
+        }else{
+            hv5=i;
         }
     }
 }%>
 
 <div class="rows">
     <div class="row">
-        <div class="columns ">
+        <div class="columns is-centered">
             <div class="column is-half">
                 <div id="ttbdealine" class="setttbdeadline">
                     <div class="row">
@@ -98,11 +104,11 @@
                                                 <% if(hv1 >=0){%>
                                                     <% if(hv1anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null)">Create
+                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null,'<%=thissupersetting[hv1anoun].type%>')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>',null,null,null)">Create
+                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
@@ -166,11 +172,11 @@
                                                 <% if(hv2 >=0){%>
                                                     <% if(hv2anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null)">Create
+                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null,'<%=thissupersetting[hv2anoun].type%>')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>',null,null,null)">Create
+                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
@@ -192,7 +198,7 @@
 
     </div>
     <div class="row">
-        <div class="columns">
+        <div class="columns is-centered">
             <div class="column is-half">
                 <div id="presentationperiod" class="setpresentationperiod">
                     <div class="row">
@@ -269,11 +275,11 @@
                                                     <% if(hv3anoun >=0){%>
                                                         
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>')">Create
+                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>','<%=thissupersetting[hv3anoun].type%>')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>',null,'<%=updatetothisenddate%>','<%=updatetothisendtime%>')">Create
+                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>',null,'<%=updatetothisenddate%>','<%=updatetothisendtime%>','1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
@@ -334,11 +340,11 @@
                                                 <% if(hv4 >=0){%>
                                                     <% if(hv4anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null)">Create
+                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null,'<%=thissupersetting[hv4anoun].type%>')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>',null,null,null)">Create
+                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
@@ -358,6 +364,74 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div id="uploadstudentlist" class="setpresentationperiod">
+                    <div class="row">
+                        <div id="handleuploadstulist" style="font-size : 23px;padding-top: 10px;" class="title">Upload Student List</div>
+                        <%if(hv5anoun>=0){%> 
+                            <%console.log(thissupersetting[hv5anoun])%>
+                            <%var announcetime = new Date(thissupersetting[hv5anoun].Announcetime)%>
+                            <%var announceddate = new Date(thissupersetting[hv5anoun].deadlinedate)%>
+                            <%var announcedtimetime = thissupersetting[hv5anoun].deadlinetime%>
+                            <div class="row" style="font-size: 10px;">
+                                Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
+                                <br>
+                                Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
+                            </div>
+                            <br>
+                            <%}%>
+                            <%if(hv5 >=0){%> 
+                                <%console.log(thissupersetting[hv5])%>
+                               <%var updatedate=new Date(thissupersetting[hv5].LastUpdate)%>
+                               <%var updatetothisdate = (new Date(thissupersetting[hv5].deadlinedate)).toLocaleDateString("en-GB")%>
+                               <%var updatetothistime = thissupersetting[hv5].deadlinetime%>
+                               <div class="row" style="font-size: 10px;">
+                                   Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
+                                   <br>
+                                   Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
+                               </div>
+                               <%}%>
+                               <br>
+                               <div class="row" style="text-align: center;">
+                                   <input type="Date" id="deadlineforuploadstulist"
+                                       style="width: 150px; font-size:20px;text-align: center;" required>
+                                   <input type="time" id="deadlineforuploadstulisttime"
+                                       name="deadlineforuploadstulisttime"
+                                       style="width: 150px; font-size:20px; text-align: center;" required>
+                               </div>
+                               <br>
+                               
+                                        <div class="row">
+                                            <div class="buttons is-right">
+                                                <% if(hv5 >=0){%>
+                                                    <% if(hv5anoun >=0){%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>','<%=thissupersetting[hv5anoun].STID%>',null,null,'<%=thissupersetting[hv5anoun].type%>')">Create
+                                                            Notice</button>
+                                                    <%}else{%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>',null,null,null,'3')">Create
+                                                            Notice</button>
+                                                        <%}%>    
+
+
+                                                        <button class="button buttonlogout"
+                                                        onclick="submitdeadlineforuploadstulist('update')">Update</button>
+                                                            <%}else{%>
+                                                                <button class="button buttonlogout"
+                                                                    onclick="submitdeadlineforuploadstulist('insert')">Submit</button>
+                                                                <%}%>
+                                            </div>
+                                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+                    
+    </div>
+
 </div>
 
 
@@ -371,17 +445,17 @@
     }
 
 
-    async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime) {
+    async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime,type) {
         if(oidid == null){console.log("old is null")}
         if(command != 2){
             if(oidid == null){
-                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id;
+                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id+"&level="+type;
                 var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
                     method: "GET",
                 });
 
             }else{
-                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id+"&oldSTID="+oidid;
+                var requestbody = "type=" + command + "&date=" + startdatedate + "&time=" + starttime + "&STID=" + id+"&oldSTID="+oidid+"&level="+type;
                 var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
                     method: "GET",
                 });
@@ -393,14 +467,14 @@
         }else{
             
             if(oidid == null){
-                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+ "&enddate=" + enddatedate + "&endtime=" + endtime ;
+                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+ "&enddate=" + enddatedate + "&endtime=" + endtime +"&level="+type;
                 var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
                     method: "GET",
                 });
 
             }else{
                 console.log(oidid)
-                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+"&oldSTID="+ oidid + "&enddate=" + enddatedate + "&endtime=" + endtime ;
+                var requestbody = "type=" + command + "&startdate=" + startdatedate + "&starttime=" + starttime + "&STID=" + id+"&oldSTID="+ oidid + "&enddate=" + enddatedate + "&endtime=" + endtime +"&level="+type;
 
                 var response = await fetch("/notice/createnewnotice/auto?" + requestbody, {
                     method: "GET",
@@ -441,6 +515,7 @@
                     command: command,
                     date: document.getElementById("deadlineforttb").value,
                     time: document.getElementById("deadlineforttbtime").value,
+                    level:"1"
                 });
                 var response = await fetch("/setting", {
                     method: "POST",
@@ -478,7 +553,7 @@
         var settledate = new Date(deadlinedate + " " + deadlinetime);
 
         if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlier than today.") }
-        var r = confirm("Please Confirm Your Setting for Timetable Submission\n\n"
+        var r = confirm("Please Confirm Your Setting for Request Submission\n\n"
             + "Deadline :       " + document.getElementById("deadlineforrequest").value + "\n"
             + "Time         :      " + document.getElementById("deadlineforrequesttime").value)
         if (r) {
@@ -488,6 +563,7 @@
                     command: command,
                     date: document.getElementById("deadlineforrequest").value,
                     time: document.getElementById("deadlineforrequesttime").value,
+                    level:"1"
                 });
                 var response = await fetch("/setting", {
                     method: "POST",
@@ -535,6 +611,7 @@
                     command: command,
                     date: document.getElementById("deadlineforreleaseschdule").value,
                     time: document.getElementById("deadlineforreleaseschduletime").value,
+                    level:"1"
                 });
                 var response = await fetch("/setting", {
                     method: "POST",
@@ -589,6 +666,7 @@
                     starttime: document.getElementById("startpresenttime").value,
                     enddate: document.getElementById("endpresent").value,
                     endtime: document.getElementById("endpresenttime").value,
+                    level:"1"
                 });
                 var response = await fetch("/setting", {
                     method: "POST",
@@ -613,4 +691,53 @@
             }
         }
     }
+
+    async function submitdeadlineforuploadstulist(command) {
+        var deadlinedate = document.getElementById("deadlineforuploadstulist").value;
+        var deadlinetime = document.getElementById("deadlineforuploadstulisttime").value;
+
+        if (deadlinedate == null || deadlinedate == "" || deadlinetime == null || deadlinetime == "") {
+            return alert("Please input BOTH deadline date and time");
+        }
+
+        var today = new Date();
+        //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
+        var settledate = new Date(deadlinedate + " " + deadlinetime);
+
+        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlier than today.") }
+        var r = confirm("Please Confirm Your Setting for Student List Upload\n\n"
+            + "Deadline :       " + document.getElementById("deadlineforuploadstulist").value + "\n"
+            + "Time         :      " + document.getElementById("deadlineforuploadstulisttime").value)
+        if (r) {
+            try {
+                var requestbody = JSON.stringify({
+                    type: "5",
+                    command: command,
+                    date: document.getElementById("deadlineforuploadstulist").value,
+                    time: document.getElementById("deadlineforuploadstulisttime").value,
+                    level:"3"
+                });
+                var response = await fetch("/setting", {
+                    method: "POST",
+                    body: requestbody,
+                });
+                if (response.ok) {
+
+
+                    alert("Student List Upload Deadline has been settle as\n" + document.getElementById("deadlineforuploadstulist").value + " , " + document.getElementById("deadlineforuploadstulisttime").value);
+                    location.assign("/setting");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
 </script>

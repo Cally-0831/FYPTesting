@@ -24,9 +24,9 @@ insert into classroom 	values("Campus B","RM103","Open");
 insert into classroom 	values("Campus A","RM103","Open");
 insert into classroom 	values("Campus B","RM101","Open");
 insert into allclassroomtimeslot values("Campus_B_RM102_0sdf1","Campus B","RM102","2023-07-13","2023-07-13","00:00","23:59","remarks");
-insert into allnotice values("nid0001","admin","","2023-07-07 11:21:42","title1","Testing");
-insert into allnotice values("nid0002","tid00001","",now(),"title2","Testing2");
-insert into allnotice values("nid0003","tid00002","",now(),"title3","Testing3");
+insert into allnotice values("nid0001","admin","","2023-07-07 11:21:42","1","title1","Testing");
+insert into allnotice values("nid0002","tid00001","",now(),"2","title2","Testing2");
+insert into allnotice values("nid0003","tid00002","",now(),"3","title3","Testing3");
 
 insert into allclass values("COMP","1005","00001","","Campus A","RM101","1","08:30","09:20","0");
 insert into allclass values("COMP","1005","00002","","Campus B","RM101","1","08:30","09:20","0");
@@ -37,7 +37,7 @@ insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
 insert into allclass values("COMP","2005","00001","","Campus A","RM101","5","08:30","09:20","0");
 insert into allclass values("PHYS","2005","00001","","Campus B","RM101","2","10:30","12:20","0");
 insert into allclass values("COMP","2005","00002","","Campus B","RM103","3","08:30","09:20","0");
-insert into allclass values("MATH","2005","00003","","Campus A","RM101","4","09:30","10:20","0");
+insert into allclass values("MATH","2005","00003","","Campus A","RM103","4","09:30","10:20","0");
 
 #Yr3S2 ttb
 insert into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","1","10:30","12:20","0");

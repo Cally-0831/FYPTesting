@@ -398,10 +398,7 @@ console.log("just check      "+ thisclassinfo[0])
         if (req.session.role == "sup") {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
-        } else if (req.session.role == "obs") {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allobstakecourse.confirmation,allobstakecourse.Submissiontime from allobstakecourse inner join allclass on allclass.cid = allobstakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
-
-        } else {
+        }else {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments, student.ttbdeadline from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid right join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
@@ -418,14 +415,24 @@ console.log("just check      "+ thisclassinfo[0])
                     try {
                         var string = JSON.stringify(result);
                         var json = JSON.parse(string)
-                        var deadline = new Date(json[0].deadlinedate);
-                        var deadlinetime = json[0].deadlinetime.split(":");
-                        deadline.setHours(deadlinetime[0]);
-                        deadline.setMinutes(deadlinetime[1]);
-                        deadline.setSeconds(deadlinetime[2]);
+                        var deadline;
+                        var deadlinetime;
+                        if(json.length >0){
+                            deadline = new Date(json[0].deadlinedate);
+                            deadlinetime = json[0].deadlinetime.split(":");
+                            deadline.setHours(deadlinetime[0]);
+                            deadline.setMinutes(deadlinetime[1]);
+                            deadline.setSeconds(deadlinetime[2]);
+                            date = deadline
+
+
+                        }else{
+                            date = undefined;
+                        }
+                        
 
                         if (personallist.length == 0 && req.session.role != "stu") {
-                            date = undefined;
+                            date = deadline;
                             personallist = [];
 
                         } else {
@@ -437,7 +444,8 @@ console.log("just check      "+ thisclassinfo[0])
                                 personallist = [];
                             }
                         }
-
+                        console.log(date)
+                        console.log(personallist)
 
                         return res.view('user/timetable', {
                             date: date,

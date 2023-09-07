@@ -107,8 +107,9 @@ module.exports.routes = {
   'POST /submitrequest': "RequestController.submitrequest",
   'POST /submitrequest/pic': "RequestController.upload",
 
-  'GET /uploadstudentlist': "StudentListController.uploadstudentlist",
+  'GET /uploadstudentlist': "StudentListController.checkuploadstudentlistdeadline",
   'POST /uploadstudentlist': "StudentListController.uploadstudentlist",
+  'GET /uploadsupervisorlist': { view: 'user/admin/uploadsupervisorlist' },
   'POST /uploadsupervisorlist': "StudentListController.uploadsupervisorlist",
   'POST /uploadpairlist': "StudentListController.uploadpairlist",
 

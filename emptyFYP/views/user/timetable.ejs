@@ -1,16 +1,27 @@
 <div>
-    <%console.log(date +" %%%%%% ")%>
+    
     <!---Empty case / init case == no any class inputted-->
-    <%if (date != null || date != undefined){
-        var datedate=new Date(date)
+    <%if (date != undefined){
+        var datedate=new Date(date);
+
     }%>
     
     <%var today=new Date()%>
-    <% if(allpersonallist.length==0 || allpersonallist[0].confirmation==" 0" ){%>
+    <% if(allpersonallist.length ==0){%>
         <div class="Pagetitle">
             <%=req.session.username%>'s TimeTable
         </div>
-        <%}else if(allpersonallist[0].confirmation !="0" ){%>
+        
+        <%}else if (allpersonallist.length >0 && allpersonallist[0].confirmation =="0"){%>
+            <div class="Pagetitle">
+                <%=req.session.username%>'s TimeTable
+            </div>
+            <div style="text-align: center;">
+                Please be reminded that the current record inputted <strong style="color:red">HAVE NOT BEEN SUBMITTED</strong> to the system
+                <br>
+                Click <strong><u><i>Submit Timetable </i></u></strong>for submittion
+            </div>
+            <%}else if(allpersonallist[0].confirmation !="0" ){%>
             <div class="Pagetitle">
                 <%=req.session.username%>'s Submitted TimeTable
             </div>
@@ -38,7 +49,8 @@
                             <div class="column is-onethird">
                                 <% if (allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
                                     &&allpersonallist[0].confirmation !="2" )){%>
-                                    <%if ((date==null) || (date !=null && today < date)){%>
+                                        
+                                    <%if ((date== undefined) || (date != undefined && today < date)){%>
                                         <div class="buttons">
                                             <a href="timetable/submitttb">
                                                 <button class="button buttonlogout" id="addclass"
@@ -53,7 +65,7 @@
                                 <%if(req.session.role=="stu" ){%>
                                     <%if(allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
                                         &&allpersonallist[0].confirmation !="2" )){%>
-                                        <%if ((date==null) || (date !=null && today < date)){%>
+                                        <%if ((date== undefined) || (date != undefined && today < date)){%>
                                             <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
                                                 <div class="columns is-mobile">
                                                     <div class="column is-onethird">
@@ -78,7 +90,7 @@
 
                                     <%if(allpersonallist.length==0){%>
 
-                                        <%if (date !=null && today> date){%>
+                                        <%if (date != undefined && today> date){%>
                                             
                                             <div class="box"
                                                 style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
@@ -99,7 +111,7 @@
                                                         <!--this is 0 & 3 case-->
 
                                                         <%if(allpersonallist[0].confirmation=="0" ){%>
-                                                            <%if (date==null || today < date){%>
+                                                            <%if (date== undefined || today < date){%>
                                                                 <div class="buttons is-right">
                                                                     <button class="button buttonlogout"
                                                                         onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Submit
@@ -134,7 +146,7 @@
                                                                                         <%}else
                                                                                             if(allpersonallist[0].confirmation=="3"
                                                                                             ){%>
-                                                                                            <%if (date==null || today <
+                                                                                            <%if (date== undefined|| today <
                                                                                                 date){%>
                                                                                                 <div
                                                                                                     class="buttons is-right">
@@ -235,11 +247,13 @@
                                                                                                             </div>
                                                                                                             <%}%>
                                                                                                                 <%}else{%>
+                                                                                                                    
                                                                                                                     <%if(allpersonallist.length==0
                                                                                                                         ||
                                                                                                                         allpersonallist[0].confirmation=="0"
                                                                                                                         ){%>
-                                                                                                                            <%if (today < date){%>
+                                                                                                                            
+                                                                                                                            <%if (today < date || date == undefined){%>
                                                                                                                                 <div
                                                                                                                             class="buttons is-right">
                                                                                                                             <button
@@ -294,7 +308,7 @@
                                                     style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                                                     Class
                                                     Section</th>
-                                                <%if(allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3"){%>
+                                                <%if((allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3") &&(date ==undefined || today < date)){%>
                                                     <th
                                                         style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
 
@@ -322,8 +336,9 @@
                                                                             <%}%>
                                                                                 <%=stringstring[1]%>
                                                                     </td>
-                                                                    <%if(allpersonallist[0].confirmation=="0" ||
-                                                                        allpersonallist[0].confirmation=="3" ){%>
+                                                                    
+                                                                    <%if((allpersonallist[0].confirmation=="0" ||
+                                                                        allpersonallist[0].confirmation=="3") && (date == undefined || today < date) ){%>
                                                                         <td
                                                                             style="font-size:20px;text-align: center;vertical-align:middle;">
                                                                             <button class="button" type="button"
@@ -356,8 +371,8 @@
                                         <article class="message is-large">
                                             <div class="message-header">
                                                 <p>Submission Deadline for Timetable<br>
-
-                                                    <%if(date !=null){%>
+                                                    
+                                                    <%if(date != undefined){%>
                                                         <%=datedate.toLocaleDateString()%>
                                                             <%=datedate.toLocaleTimeString('en-US')%>
                                                                 <%}%>

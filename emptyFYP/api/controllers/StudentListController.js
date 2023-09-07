@@ -35,7 +35,7 @@ module.exports = {
                     //console.log('>> stdlist: ', stdlist); 
                     return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null });
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("error happened in StudentListController: liststudent");
 
                 }
 
@@ -53,7 +53,7 @@ module.exports = {
                     //console.log('>> stdlist: ', stdlist); 
                     return res.view('user/listuser', { allsuplist: suplist });
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("error happened in StudentListController: liststudent");
 
                 }
 
@@ -92,8 +92,7 @@ module.exports = {
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
             } catch (err) {
 
-                console.log("sth happened here" + err);
-
+                console.log("error happened in StudentListController: gettopic");
             }
 
 
@@ -127,7 +126,7 @@ module.exports = {
 
                             return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist });
                         } catch (err) {
-                            console.log("sth happened here");
+                            console.log("error happened in StudentListController: readsingleppl");
                         }
                     })
 
@@ -135,7 +134,7 @@ module.exports = {
 
 
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("error happened in StudentListController: readsingleppl");
 
                 }
 
@@ -163,7 +162,7 @@ module.exports = {
                             supervisorrequestlist = json;
                             return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
                         } catch (err) {
-                            console.log("sth happened here");
+                            console.log("error happened in StudentListController: readsingleppl");
                         }
 
                     })
@@ -172,7 +171,7 @@ module.exports = {
 
 
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("error happened in StudentListController: readsingleppl");
 
                 }
 
@@ -197,30 +196,30 @@ module.exports = {
             console.log('delete excution');
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM student WHERE sid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM supervisorpairstudent WHERE sid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
             thisistheline = "DELETE FROM observerpairstudent WHERE sid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
             thisistheline = "DELETE FROM allstudenttakecourse WHERE sid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM allrequestfromstudent WHERE sid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
         } else {
@@ -228,33 +227,33 @@ module.exports = {
             console.log('delete excution');
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM observer WHERE oid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
 
             thisistheline = "DELETE FROM supervisor WHERE tid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM supervisorpairstudent WHERE tid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM observerpairstudent WHERE oid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
 
             thisistheline = "DELETE FROM allrequestfromsupervisor WHERE tid= \"" + req.params.id + "\"\n";
             db.query(thisistheline, (err, results) => {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened in StudentListController: deletestudent"); }
             });
         }
 
@@ -285,6 +284,7 @@ module.exports = {
         //  console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             if (err) {
+                console.log("error happened at StudentListContorller: createnewstudent");
                 res.status(401).json("Error happened when excuting : " + thisistheline);
             };
             console.log("1 record inserted");
@@ -337,6 +337,7 @@ module.exports = {
         //  console.log(thisistheline);
         db.query(thisistheline, function (err, result) {
             if (err) {
+                console.log("error happened at StudentListContorller: createnewsup");
                 res.status(401).json("Error happened when excuting : " + thisistheline);
             };
             console.log("1 record inserted");
@@ -356,6 +357,7 @@ module.exports = {
 
         db.query(thisistheline, function (err, result) {
             if (err) {
+                console.log("error happened at StudentListContorller: addpair");
                 res.status(401).json("Error happened when excuting : " + thisistheline);
             };
             console.log("1 record inserted");
@@ -366,9 +368,6 @@ module.exports = {
     },
 
     uploadstudentlist: async function (req, res) {
-
-
-        if (req.method == "GET") return res.view('user/uploadstudentlist');
 
         console.log(req.body);
 
@@ -384,7 +383,7 @@ module.exports = {
             var db = await sails.helpers.database();
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadstudentlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 record inserted");
@@ -423,7 +422,7 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
 
         var db = await sails.helpers.database();
-        if (req.method == "GET") return res.view('user/uploadstudentlist');
+       
 
 
 
@@ -438,7 +437,7 @@ module.exports = {
 
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadsupervisorlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 record inserted");
@@ -464,7 +463,7 @@ module.exports = {
             console.log(thisistheline);
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadpairlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 stu record inserted");
@@ -477,7 +476,7 @@ module.exports = {
                 req.body[i].topic + "\"\);";
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadpairlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
 
                 };
@@ -501,7 +500,7 @@ module.exports = {
             db.query(thisistheline, function (err, result) {
                 console.log(thisistheline);
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadpairlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
                 };
                 console.log("1 obs record inserted");
@@ -511,7 +510,7 @@ module.exports = {
                 + req.body[i].oid + "\"\);";
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadpairlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
 
                 };
@@ -528,7 +527,7 @@ module.exports = {
                 + req.body[i].sid + "\"\);";
             db.query(thisistheline, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    console.log("error happened at StudentListContorller: uploadpairlist");
                     res.status(401).json("Error happened when excuting : " + thisistheline);
 
                 };
@@ -540,8 +539,36 @@ module.exports = {
         return res.ok();
 
 
-    }
+    },
 
+    checkuploadstudentlistdeadline: async function (req, res) {
+        var thisistheline ="select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
+        var db = await sails.helpers.database();
+        db.query(thisistheline, function (err, result) {
+            try{
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                var deadlinedate;
+                var deadlinetime;
+                var finaldate;
+
+                if(json.length >0){
+                    deadlinedate = new Date(json[0].deadlinedate);
+                    deadlinetime = json[0].deadlinetime.split(":");
+                    deadlinedate.setHours(deadlinetime[0]);
+                    deadlinedate.setMinutes(deadlinetime[1]);
+                    deadlinedate.setSeconds(deadlinetime[2]);
+                    finaldate = deadlinedate;
+                }else{
+                    finaldate = undefined
+                }
+                console.log(json);
+                return res.view('user/uploadstudentlist', { checkdate: finaldate });
+            }catch(err){
+                console.log("error happened at StudentListContorller: checkuploadstudentlistdeadline");
+            }
+        })
+    },
 
 
 }

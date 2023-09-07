@@ -52,9 +52,16 @@
             <br><br>
             <div class="row">
                 <div class="buttons is-right">
+                    
+                    <%if( id == null){%>
+                       
+                        <button class="buttonlogout" onclick="submitplainform()">Submit</button>
 
-                    <button class="buttonlogout" onclick="submitform('<%=id%>','<%=oldid%>')">Submit</button>
+                        <%}else{%>
+                            <button class="buttonlogout" onclick="submitform('<%=id%>','<%=oldid%>','<%=level%>')">Submit</button>
 
+                            <%}%>
+                    
 
                 </div>
             </div>
@@ -65,16 +72,51 @@
 </div>
 
 <script>
-    async function submitform(id,oldid) {
+    async function submitplainform() {
+        
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
-        console.log("!@#$!@#$!@#$!               " + stringstring)
+        
+        var requestBody = JSON.stringify({
+            title: document.getElementById("title").value,
+            content: stringstring,
+            id: null,
+            oldid : null,
+            level : 1 
+        });
+        
+        if (r) {
+            var response = await fetch("/notice/createnewnotice", {
+                method: "POST",
+                body: requestBody,
+
+            });
+
+            if (response.ok) {
+
+                // var html = await response.text();
+                // alert(html);
+                alert("Notice Created");
+                location.assign("/notice");
+            } else {
+
+                alert(response.status + ": " + response.statusText);
+            }
+        }
+    }
+
+    async function submitform(id,oldid,level) {
+        const r = confirm("Confirm to create this notice?");
+        var stringstring = document.getElementById("content").value;
+        stringstring = stringstring.replace(/\n/g, " newline ");
+        
         var requestBody = JSON.stringify({
             title: document.getElementById("title").value,
             content: stringstring,
             id: id,
-            oldid : oldid
+            oldid : oldid,
+            level : level 
         });
         if (r) {
             var response = await fetch("/notice/createnewnotice", {

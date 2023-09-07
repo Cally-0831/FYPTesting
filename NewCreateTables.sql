@@ -146,6 +146,7 @@ NID	varchar(20) not null,
 Creator		varchar(10) Not null,
 Creatorname		varchar(10),
 CreateDate  timestamp not null,
+type int default 1,
 title varchar(50) not null,
 content varchar(1000),
 primary key (NID)
