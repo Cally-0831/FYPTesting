@@ -116,6 +116,7 @@ module.exports.routes = {
   
   'GET /listuser': "StudentListController.liststudent",
   'POST /listuser': "StudentListController.liststudent",
+  'POST /listuser/genobs': "StudentListController.generateobs",
   'DELETE /listuser/:id': "StudentListController.deletestudent",
 
   'GET /createnewstudent': "StudentListController.gettopic",

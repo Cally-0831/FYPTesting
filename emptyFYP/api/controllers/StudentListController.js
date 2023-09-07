@@ -33,7 +33,7 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     var stdlist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null });
+                    return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null, checkdate: null });
                 } catch (err) {
                     console.log("error happened in StudentListController: liststudent");
 
@@ -51,7 +51,32 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     suplist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    return res.view('user/listuser', { allsuplist: suplist });
+
+                    var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
+                    db.query(thisistheline, function (err, result) {
+                        try {
+                            var string = JSON.stringify(result);
+                            var json = JSON.parse(string);
+                            var deadlinedate;
+                            var deadlinetime;
+                            var finaldate;
+
+                            if (json.length > 0) {
+                                deadlinedate = new Date(json[0].deadlinedate);
+                                deadlinetime = json[0].deadlinetime.split(":");
+                                deadlinedate.setHours(deadlinetime[0]);
+                                deadlinedate.setMinutes(deadlinetime[1]);
+                                deadlinedate.setSeconds(deadlinetime[2]);
+                                finaldate = deadlinedate;
+                            } else {
+                                finaldate = undefined
+                            }
+                            console.log(json);
+                            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate });
+                        } catch (err) {
+                            console.log("error happened at StudentListContorller: liststudent");
+                        }
+                    })
                 } catch (err) {
                     console.log("error happened in StudentListController: liststudent");
 
@@ -422,7 +447,7 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
 
         var db = await sails.helpers.database();
-       
+
 
 
 
@@ -542,33 +567,100 @@ module.exports = {
     },
 
     checkuploadstudentlistdeadline: async function (req, res) {
-        var thisistheline ="select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
+        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
         var db = await sails.helpers.database();
         db.query(thisistheline, function (err, result) {
-            try{
+            try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 var deadlinedate;
                 var deadlinetime;
                 var finaldate;
 
-                if(json.length >0){
+                if (json.length > 0) {
                     deadlinedate = new Date(json[0].deadlinedate);
                     deadlinetime = json[0].deadlinetime.split(":");
                     deadlinedate.setHours(deadlinetime[0]);
                     deadlinedate.setMinutes(deadlinetime[1]);
                     deadlinedate.setSeconds(deadlinetime[2]);
                     finaldate = deadlinedate;
-                }else{
+                } else {
                     finaldate = undefined
                 }
                 console.log(json);
                 return res.view('user/uploadstudentlist', { checkdate: finaldate });
-            }catch(err){
+            } catch (err) {
                 console.log("error happened at StudentListContorller: checkuploadstudentlistdeadline");
             }
         })
     },
 
+    generateobs: async function (req, res) {
+        var thisistheline = "select supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
+        db.query(thisistheline, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                var supstdnumlist = json;
+
+
+                thisistheline = "SELECT supervisorpairstudent.tid,supervisorpairstudent.sid,observerpairstudent.OID FROM supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid"
+                db.query(thisistheline, function (err, result) {
+                    try {
+                        var string = JSON.stringify(result);
+                        var json = JSON.parse(string);
+                        var pairinglist = json;
+
+                        var hvstdSUPER = [];
+                        var nostdSUPER = [];
+
+
+                        for (var a = 0; a < supstdnumlist.length; a++) {
+                            if (parseInt(supstdnumlist[a].stdnum) > 0) {
+                                hvstdSUPER.push(supstdnumlist[a])
+                            } else {
+                                nostdSUPER.push(supstdnumlist[a])
+                            }
+                        }
+
+                        var checkallstdhvobs = 0;
+                        for (var a = 0; a < pairinglist.length; a++) {
+                            
+                            for (var b = 0; b < hvstdSUPER.length; b++) {
+                                  if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
+                                    hvstdSUPER[b].stdnum = parseInt(hvstdSUPER[b].stdnum) - 1;
+                                    pairinglist[a].OID = hvstdSUPER[b].tid;
+                                    checkallstdhvobs++;
+                                }
+                            }
+                        }
+                        if (checkallstdhvobs != pairinglist.length) {
+                            for (var a = 0; a < pairinglist.length; a++) {
+                                if(pairinglist[a].OID == null){
+                                    var index =  Math.floor(Math.random() * nostdSUPER.length);
+                                    pairinglist[a].OID = nostdSUPER[index].tid
+                                }
+                            }
+                        }
+
+                        for (var a = 0; a < pairinglist.length; a++) {
+                           thisistheline = "insert into observerpairstudent values(\""+pairinglist[a].OID+"\",\""+pairinglist[a].sid+"\")"
+                           console.log(thisistheline)
+                           db.query(thisistheline, function (err, result) {if(err){console.log("error happened at StudentListContorller: generateobs");}})
+                        }
+
+                        console.log(pairinglist)
+                        return res.url = "/listuser";
+
+                    } catch (err) {
+                        console.log("error happened at StudentListContorller: generateobs");
+                    }
+                });
+            } catch (err) {
+                console.log("error happened at StudentListContorller: generateobs");
+            }
+        });
+
+    },
 
 }

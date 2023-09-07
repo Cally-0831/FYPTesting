@@ -114,6 +114,7 @@
             <div class="columns">
                 <div class="column is-left">
                     <div class="buttons">
+                        
                         <div class="button buttonlogout is-left" onclick="backback()">
                             Back
                         </div>
@@ -122,7 +123,15 @@
                 </div>
                 <div class="column ">
                     <div class="buttons is-right">
+                        <%var datedate = new Date(checkdate);%>
+                        <%var today = new Date();%>
+                        <%if(checkdate != undefined && today > datedate){%>
+                             <button class="buttonlogout" id="generateobs" onclick="gotogenobs()">Arrange Observer</button>&ensp;
+                       
+                            <%}%>
                         <button class="buttonlogout" id="createnewsup" onclick="gotocreatesup()">Create new Supervisior</button>
+                    
+                       
                     </div>
                 </div>
             </div>
@@ -311,8 +320,7 @@
     function backback(){
         location.assign("/usermanagement")
     }
-
-
+    
     async function deletesupervisor(id) {
         var r = confirm("Confirm Delete?" + id);
 
@@ -338,4 +346,19 @@
         }
     };
     
+    async function gotogenobs(){
+
+        var r = confirm("Sure to arrange observers?");
+        if(r){ 
+            var response = await fetch("/listuser/genobs", {
+                method: "POST",
+            });
+
+            if(response.ok){
+                location.assign(response.url);
+            }
+        }
+        
+    }
+
 </script>
