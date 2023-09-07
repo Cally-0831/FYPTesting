@@ -33,6 +33,8 @@ module.exports = {
                     //console.log('>> json: ', json);  
                     var stdlist = json;
                     //console.log('>> stdlist: ', stdlist); 
+                    thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
+
                     return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null, checkdate: null });
                 } catch (err) {
                     console.log("error happened in StudentListController: liststudent");
@@ -596,7 +598,7 @@ module.exports = {
     },
 
     generateobs: async function (req, res) {
-        var thisistheline = "select supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
+        var thisistheline = "select supervisor.supname, supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
@@ -624,12 +626,15 @@ module.exports = {
                         }
 
                         var checkallstdhvobs = 0;
+                        console.log(hvstdSUPER)
+                        console.log(pairinglist)
                         for (var a = 0; a < pairinglist.length; a++) {
                             
                             for (var b = 0; b < hvstdSUPER.length; b++) {
                                   if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
                                     hvstdSUPER[b].stdnum = parseInt(hvstdSUPER[b].stdnum) - 1;
                                     pairinglist[a].OID = hvstdSUPER[b].tid;
+                                    pairinglist[a].obsname = hvstdSUPER[b].supname
                                     checkallstdhvobs++;
                                 }
                             }
@@ -639,14 +644,15 @@ module.exports = {
                                 if(pairinglist[a].OID == null){
                                     var index =  Math.floor(Math.random() * nostdSUPER.length);
                                     pairinglist[a].OID = nostdSUPER[index].tid
+                                    pairinglist[a].obsname = nostdSUPER[index].supname
                                 }
                             }
                         }
 
                         for (var a = 0; a < pairinglist.length; a++) {
-                           thisistheline = "insert into observerpairstudent values(\""+pairinglist[a].OID+"\",\""+pairinglist[a].sid+"\")"
+                           thisistheline = "insert ignore into observerpairstudent values(\""+pairinglist[a].obsname+"\",\""+pairinglist[a].OID+"\",\""+pairinglist[a].sid+"\")"
                            console.log(thisistheline)
-                           db.query(thisistheline, function (err, result) {if(err){console.log("error happened at StudentListContorller: generateobs");}})
+                          db.query(thisistheline, function (err, result) {if(err){console.log("error happened at StudentListContorller: generateobs");}})
                         }
 
                         console.log(pairinglist)
