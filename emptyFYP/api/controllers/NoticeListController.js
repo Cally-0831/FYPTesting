@@ -232,6 +232,16 @@ module.exports = {
                     return res.status(200).json({type:req.body.level,sendemaillist:sendemaillist});
                 } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
             });
+        } else if (req.body.level == 2) {
+            thisistheline = "select sid as emailadd from supervisorpairstudent where supervisorpairstudent.tid = \""+req.session.userid+"\""
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    sendemaillist = json;
+                    return res.status(200).json({type:req.body.level,sendemaillist:sendemaillist});
+                } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
+            });
         } else if (req.body.level == 3) {
             thisistheline = "select tid as emailadd from supervisor"
             db.query(thisistheline, (err, results) => {
