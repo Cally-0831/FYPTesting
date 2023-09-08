@@ -39,7 +39,9 @@
                     <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                         Observer
                     </th>
-                    <%if(req.session.role=="sup" ){%>
+                    <%var today = new Date();%>
+                    <%var checkdate = new Date(checkdate)%>
+                    <%if(req.session.role=="sup" && today < checkdate){%>
                         <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                             Action
                         </th>
@@ -69,7 +71,7 @@
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
                             <%= thatppl.obsname%>
                         </td>
-                        <%if(req.session.role=="sup" ){%>
+                        <%if(req.session.role=="sup" && today < checkdate){%>
                             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                                 <div class="buttons is-centered">
                                     <div class="button buttonlogout" type="button"

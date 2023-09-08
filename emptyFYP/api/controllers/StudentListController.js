@@ -33,21 +33,21 @@ module.exports = {
                     //console.log('>> stdlist: ', stdlist); 
                     thisistheline = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
                     db.query(thisistheline, (err, results) => {
-                        try{
+                        try {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
-                            var observinglist=null;
-                            if(json.length >0){
+                            var observinglist = null;
+                            if (json.length > 0) {
                                 observinglist = json;
                             }
-                            return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null, checkdate: null ,observinglist:observinglist});
-                
-                        }catch(err){ 
+                            return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null, checkdate: null, observinglist: observinglist });
+
+                        } catch (err) {
                             console.log("error happened in StudentListController: liststudent");
                         }
                         //console.log('>> observinglist: ', observinglist); 
                     })
-                   } catch (err) {
+                } catch (err) {
                     console.log("error happened in StudentListController: liststudent");
 
                 }
@@ -85,7 +85,7 @@ module.exports = {
                                 finaldate = undefined
                             }
                             console.log(json);
-                            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate ,observinglist: null});
+                            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
                         } catch (err) {
                             console.log("error happened at StudentListContorller: liststudent");
                         }
@@ -149,20 +149,36 @@ module.exports = {
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
                     var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
                     studentresult = json;
                     //console.log('>> stdlist: ',studentresult); 
                     thisistheline = "select * from allrequestfromstudent where sid = \"" + req.params.id + "\"\;";
                     db.query(thisistheline, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
-                            //console.log('>> string: ', string );
                             var json = JSON.parse(string);
                             studentrequestlist = json;
+                            thisistheline = "select * from allsupersetting where typeofsetting=\"" + 5 + "\" and Announcetime is not null";
+                            db.query(thisistheline, (err, results) => {
+                                try {
+                                    var string = JSON.stringify(results);
+                                    var json = JSON.parse(string);
+                                    var checkdate = null;
+                                    if (json.length > 0) {
+                                        var deadlinedate = new Date(json[0].deadlinedate);
+                                        var deadlinetime = json[0].deadlinetime.split(":");
+                                        deadlinedate.setHours(deadlinetime[0]);
+                                        deadlinedate.setMinutes(deadlinetime[1]);
+                                        deadlinedate.setSeconds(deadlinetime[2]);
+                                        checkdate = deadlinedate;
 
-                            return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist });
+                                    }
+                                } catch (err) {
+                                    console.log("error happened in StudentListController: readsingleppl");
+                                }
+                            })
+
+                            return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist,checkdate : checkdate });
                         } catch (err) {
                             console.log("error happened in StudentListController: readsingleppl");
                         }
@@ -640,9 +656,9 @@ module.exports = {
                         console.log(hvstdSUPER)
                         console.log(pairinglist)
                         for (var a = 0; a < pairinglist.length; a++) {
-                            
+
                             for (var b = 0; b < hvstdSUPER.length; b++) {
-                                  if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
+                                if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
                                     hvstdSUPER[b].stdnum = parseInt(hvstdSUPER[b].stdnum) - 1;
                                     pairinglist[a].OID = hvstdSUPER[b].tid;
                                     pairinglist[a].obsname = hvstdSUPER[b].supname
@@ -652,8 +668,8 @@ module.exports = {
                         }
                         if (checkallstdhvobs != pairinglist.length) {
                             for (var a = 0; a < pairinglist.length; a++) {
-                                if(pairinglist[a].OID == null){
-                                    var index =  Math.floor(Math.random() * nostdSUPER.length);
+                                if (pairinglist[a].OID == null) {
+                                    var index = Math.floor(Math.random() * nostdSUPER.length);
                                     pairinglist[a].OID = nostdSUPER[index].tid
                                     pairinglist[a].obsname = nostdSUPER[index].supname
                                 }
@@ -661,9 +677,9 @@ module.exports = {
                         }
 
                         for (var a = 0; a < pairinglist.length; a++) {
-                           thisistheline = "insert ignore into observerpairstudent values(\""+pairinglist[a].obsname+"\",\""+pairinglist[a].OID+"\",\""+pairinglist[a].sid+"\")"
-                           console.log(thisistheline)
-                          db.query(thisistheline, function (err, result) {if(err){console.log("error happened at StudentListContorller: generateobs");}})
+                            thisistheline = "insert ignore into observerpairstudent values(\"" + pairinglist[a].obsname + "\",\"" + pairinglist[a].OID + "\",\"" + pairinglist[a].sid + "\")"
+                            console.log(thisistheline)
+                            db.query(thisistheline, function (err, result) { if (err) { console.log("error happened at StudentListContorller: generateobs"); } })
                         }
 
                         console.log(pairinglist)
