@@ -104,7 +104,7 @@
                                                 <% if(hv1 >=0){%>
                                                     <% if(hv1anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null,'<%=thissupersetting[hv1anoun].type%>')">Create
+                                                            onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
@@ -172,7 +172,7 @@
                                                 <% if(hv2 >=0){%>
                                                     <% if(hv2anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null,'<%=thissupersetting[hv2anoun].type%>')">Create
+                                                            onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
@@ -275,7 +275,7 @@
                                                     <% if(hv3anoun >=0){%>
                                                         
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>','<%=thissupersetting[hv3anoun].type%>')">Create
+                                                            onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>','1')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
@@ -340,7 +340,7 @@
                                                 <% if(hv4 >=0){%>
                                                     <% if(hv4anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null,'<%=thissupersetting[hv4anoun].type%>')">Create
+                                                            onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
@@ -408,7 +408,7 @@
                                                 <% if(hv5 >=0){%>
                                                     <% if(hv5anoun >=0){%>
                                                         <button class="button buttonlogout"
-                                                            onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>','<%=thissupersetting[hv5anoun].STID%>',null,null,'<%=thissupersetting[hv5anoun].type%>')">Create
+                                                            onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>','<%=thissupersetting[hv5anoun].STID%>',null,null,'3')">Create
                                                             Notice</button>
                                                     <%}else{%>
                                                         <button class="button buttonlogout"
@@ -446,6 +446,7 @@
 
 
     async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime,type) {
+        console.log(type)
         if(oidid == null){console.log("old is null")}
         if(command != 2){
             if(oidid == null){

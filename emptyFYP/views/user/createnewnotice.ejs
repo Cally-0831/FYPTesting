@@ -17,9 +17,10 @@
 
 </div>
 <br>
-<div class="columns is-onethird">
-    <div class="column"></div>
-    <div class="column column-big is-centered ">
+
+<div class="columns is-mobile is-centered">
+   
+    <div class="column column-big is-half ">
         <br>
         <div class="rows">
             <div class="row">
@@ -68,8 +69,9 @@
             <br><br>
         </div>
     </div>
-    <div class="column"></div>
+    
 </div>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
 
 <script>
     async function submitplainform() {
@@ -77,9 +79,10 @@
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
+        var titlestr = document.getElementById("title").value;
         
         var requestBody = JSON.stringify({
-            title: document.getElementById("title").value,
+            title: titlestr,
             content: stringstring,
             id: null,
             oldid : null,
@@ -93,11 +96,42 @@
 
             });
 
-            if (response.ok) {
+            if (response.status == 200) {
 
                 // var html = await response.text();
                 // alert(html);
                 alert("Notice Created");
+                var emaillist = await response.json();
+                type = emaillist.type;
+                emaillist = emaillist.sendemaillist;
+                
+                var content = "";
+
+                for(var a = 0 ; a < emaillist.length;a++){
+                    content += emaillist[a].emailadd+"\n"
+                }
+                content = stringstring +"\n\n\n"+ content
+                console.log(type)
+                console.log(typeof type)
+                
+                if(type == 1){
+                    Email.send({
+                        SecureToken : "3d8a50cf-7bc3-4e86-950c-7d8381f6a6e3",
+                        To : 's2013f0105@gmail.com',
+                        From : "19222068fypcoordinator@gmail.com",
+                        Subject : titlestr,
+                        Body : content
+                    })
+                }else if(type == 3){
+                    Email.send({
+                        SecureToken : "3d8a50cf-7bc3-4e86-950c-7d8381f6a6e3",
+                        To : '19222068fypcoordinator@gmail.com',
+                        From : "19222068fypcoordinator@gmail.com",
+                        Subject : titlestr,
+                        Body : content
+                    })
+                }
+                
                 location.assign("/notice");
             } else {
 
@@ -110,9 +144,11 @@
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
+        var titlestr = document.getElementById("title").value;
+        
         
         var requestBody = JSON.stringify({
-            title: document.getElementById("title").value,
+            title: titlestr,
             content: stringstring,
             id: id,
             oldid : oldid,
@@ -130,6 +166,38 @@
                 // var html = await response.text();
                 // alert(html);
                 alert("Notice Created");
+                alert("Notice Created");
+                var emaillist = await response.json();
+                type = emaillist.type;
+                emaillist = emaillist.sendemaillist;
+                
+                var content = "";
+
+                for(var a = 0 ; a < emaillist.length;a++){
+                    content += emaillist[a].emailadd+"\n"
+                }
+                content = stringstring +"\n\n\n"+ content
+                console.log(type)
+                console.log(typeof type)
+                
+                if(type == 1){
+                    Email.send({
+                        SecureToken : "3d8a50cf-7bc3-4e86-950c-7d8381f6a6e3",
+                        To : 's2013f0105@gmail.com',
+                        From : "19222068fypcoordinator@gmail.com",
+                        Subject : titlestr,
+                        Body : content
+                    })
+                }else if(type == 3){
+                    Email.send({
+                        SecureToken : "3d8a50cf-7bc3-4e86-950c-7d8381f6a6e3",
+                        To : '19222068fypcoordinator@gmail.com',
+                        From : "19222068fypcoordinator@gmail.com",
+                        Subject : titlestr,
+                        Body : content
+                    })
+                }
+
                 location.assign("/notice");
             } else {
 

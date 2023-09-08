@@ -26,9 +26,7 @@ module.exports = {
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
                     var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
                     noticelist = json;
                     //         console.log('>> noticelist: ', noticelist);
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
@@ -84,7 +82,7 @@ module.exports = {
         console.log(req.body);
         let nid = 'nid';
         var thisistheline;
-        
+
         if (req.body.id == undefined) {
             // not setting related notices
 
@@ -95,15 +93,13 @@ module.exports = {
                 nid += characters.charAt(Math.floor(Math.random() * charactersLength));
                 counter += 1;
             }
-            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(), \""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(), \"" + req.body.level + "\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
                 try {
                     console.log("insert new notice");
-                    return res.json("ok");
                 } catch (err) {
-                    console.log("sth happened here");
-
+                    console.log("error happened when excuteing NoticeListController: addnotice");
                 }
 
 
@@ -133,7 +129,6 @@ module.exports = {
                                 var updatedate = (new Date(newinfo[0].deadlinedate)).toLocaleDateString("en-GB").split("/");
                                 console.log(updatedate)
 
-
                                 thisistheline = "update allsupersetting set deadlinedate = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + "\" ,deadlinetime= \"" + newinfo[0].deadlinetime + "\", LastUpdate = now(), Announcetime = now() where stid=\"" + req.body.oldid + "\"";
                                 console.log(thisistheline)
 
@@ -148,45 +143,35 @@ module.exports = {
 
                                                 console.log('done delete');
                                                 nid += req.body.id;
-                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\",\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.level + "\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
                                                 console.log(thisistheline);
                                                 db.query(thisistheline, (err, results) => {
                                                     try {
                                                         console.log("insert new notice");
                                                         if (oldinfo[0].typeofsetting == 1) {
-                                                            thisistheline = "update student set student.ttbdeadline = \""+ updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0]+" "+newinfo[0].deadlinetime+"\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \""+req.session.userid+"\");";
+                                                            thisistheline = "update student set student.ttbdeadline = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + " " + newinfo[0].deadlinetime + "\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \"" + req.session.userid + "\");";
                                                             console.log(thisistheline)
                                                             db.query(thisistheline, (err, results) => {
-                                                                if(err){console.log(err)}else{return res.json("ok");}
+                                                                if (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                                             })
                                                         } else {
-                                                            thisistheline = "update student set student.requestdeadline = \""+ updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0]+" "+newinfo[0].deadlinetime+"\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \""+req.session.userid+"\");";
+                                                            thisistheline = "update student set student.requestdeadline = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + " " + newinfo[0].deadlinetime + "\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \"" + req.session.userid + "\");";
                                                             console.log(thisistheline)
                                                             db.query(thisistheline, (err, results) => {
-                                                                if(err){console.log(err)}else{return res.json("ok");}
+                                                                if (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                                             })
                                                         }
-                                                        
                                                     } catch (err) {
-                                                        console.log("sth happened here");
-
+                                                        console.log("error happened when excuteing NoticeListController: addnotice");
                                                     }
-
-
                                                 });
                                             } catch (err) {
-                                                console.log("sth happened here");
-
+                                                console.log("error happened when excuteing NoticeListController: addnotice");
                                             }
-
-
                                         });
                                     } catch (err) {
-                                        console.log("sth happened here");
-
+                                        console.log("error happened when excuteing NoticeListController: addnotice");
                                     }
-
-
                                 });
 
                             } else {
@@ -206,69 +191,58 @@ module.exports = {
 
                                                 console.log('done delete');
                                                 nid += req.body.id;
-                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\",\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+                                                thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.level + "\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
                                                 console.log(thisistheline);
                                                 db.query(thisistheline, (err, results) => {
                                                     try {
                                                         console.log("insert new notice");
-                                                        return res.json("ok");
                                                     } catch (err) {
-                                                        console.log("sth happened here");
-
+                                                        console.log("error happened when excuteing NoticeListController: addnotice");
                                                     }
-
-
                                                 });
-                                            } catch (err) {
-                                                console.log("sth happened here");
-
-                                            }
-
-
+                                            } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                         });
-                                    } catch (err) {
-                                        console.log("sth happened here");
-
-                                    }
-
-
+                                    } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                 });
                             }
-
-                        } catch (err) {
-                            console.log("sth happened here");
-
-                        }
-
-
+                        } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                     });
-                } catch (err) {
-                    console.log("sth happened here");
-
-                }
-
-
+                } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
             });
-
-
         } else {
             //setting related but the first notice of this type
             nid += req.body.id;
-            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\""+req.body.level+"\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
+            thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.level + "\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
             console.log(thisistheline);
             db.query(thisistheline, (err, results) => {
                 try {
                     console.log("insert new notice");
-                    return res.json("ok");
-                } catch (err) {
-                    console.log("sth happened here");
-
-                }
-
-
+                } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
             });
         }
+        var sendemaillist;
+        if (req.body.level == 1) {
+            thisistheline = "select pid as emailadd from allusers"
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    sendemaillist = json;
 
+                    return res.status(200).json({type:req.body.level,sendemaillist:sendemaillist});
+                } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
+            });
+        } else if (req.body.level == 3) {
+            thisistheline = "select tid as emailadd from supervisor"
+            db.query(thisistheline, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    sendemaillist = json;
+                    return res.status(200).json({type:req.body.level,sendemaillist:sendemaillist});
+                } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
+            });
+        }
 
 
     },
@@ -316,7 +290,7 @@ module.exports = {
                 + "\nTime: " + req.query.time
                 + "\n\nAll users can check and their personal timeslots after the release of the schdeule."
 
-        }else if (req.query.type == 4) {
+        } else if (req.query.type == 4) {
             title = "Deadline for Student List Upload";
             content = "The deadline of uploading student list has been set as follows:\n"
                 + "Date: " + req.query.date
@@ -326,7 +300,7 @@ module.exports = {
         }
         console.log(req.query)
 
-        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID, oldid: req.query.oldSTID ,level: req.query.level});
+        return res.view('user/createnewnotice', { title: title, content: content, id: req.query.STID, oldid: req.query.oldSTID, level: req.query.level });
 
 
 
