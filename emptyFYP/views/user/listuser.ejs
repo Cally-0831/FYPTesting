@@ -43,7 +43,7 @@
             </th>
             <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerstudsup' onclick="sorting('sorting','mytable','headerstudsup',4);">&#8593;</a>
-                Supervisior
+                Observer
             </th>
     
             <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
@@ -55,9 +55,6 @@
                 Submission of TTB
             </th>
         </tr>
-    
-    
-    
         <% allstdlist.forEach( function(allstdlist) { %>
     
             <tr onclick="redirectplease('<%= allstdlist.sid%>')">
@@ -75,10 +72,10 @@
                     <%= allstdlist.Topic%>
                 </td>
                 <td id="studenttid" style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <%= allstdlist.tid%>
+                    <%= allstdlist.OID%>
                 </td>
                 <td id="studentsupname" style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <%= allstdlist.supname%>
+                    <%= allstdlist.obsname%>
                 </td>
                 <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
                     <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
@@ -108,6 +105,65 @@
             <% }); %>
     
     </table>
+
+    <%if(observinglist != null){%>
+    <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <tr>
+            <th colspan="7"
+                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                Observing List</th>
+        </tr>
+        <tr>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerobservingSID' onclick="sorting('sorting2','mytable2','headerobservingSID',0);">&#8593;</a> SID
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerobservingstuname' onclick="sorting('sorting2','mytable2','headerobservingstuname',1);">&#8593;</a>
+                Student Name
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerobservingtopic' onclick="sorting('sorting2','mytable2','headerobservingtopic',2);">&#8593;</a>
+                Topic
+            </th>
+    
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerobservingstudtid' onclick="sorting('sorting2','mytable2','headerobservingstudtid',3);">&#8593;</a>
+                TID
+            </th>
+            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <a class="sorting" id='headerobservingstdsup' onclick="sorting('sorting2','mytable2','headerobservingstdsup',4);">&#8593;</a>
+                Supervisor
+            </th>
+        </tr>
+
+        <% observinglist.forEach( function(observingstd) { %>
+            <tr>
+                <td id="observingsid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= observingstd.sid %>
+                </td>
+
+                <td id="observingstudentname" style="font-size:20px;text-align: center;vertical-align:middle;">
+
+                    <%= observingstd.stdname %>
+
+                </td>
+                <td id="observingstudenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= observingstd.Topic%>
+                </td>
+                <td id="observingstudenttid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= observingstd.tid%>
+                </td>
+                <td id="observingstudentsupname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <%= observingstd.supname%>
+                </td>
+            </tr>
+            
+            
+            <%})%>
+        </table>
+        <%}%>
+
+
     <%}else{%>
         <div class="Pagetitle">Supervisor List</div>
         <div class="rows">
@@ -242,15 +298,12 @@
 
 <script>
     function sorting(thissortingclass, thistable, idlocation, tablelocation) {
-
-        for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
+       for (var i = 0; i < document.getElementsByClassName(thissortingclass).length; i++) {
 
             if (i != tablelocation) {
-
                 document.getElementsByClassName(thissortingclass)[i].innerHTML = '↑'
             }
         }
-
         if (document.getElementById(idlocation).innerHTML == '↑') {
             document.getElementById(idlocation).innerHTML = '\&\#8595;';
             sortingtable(thistable, "dsc", tablelocation);
@@ -258,6 +311,7 @@
             document.getElementById(idlocation).innerHTML = '\&\#8593;'
             sortingtable(thistable, "asc", tablelocation);
         }
+        
 
     }
 
@@ -273,7 +327,7 @@
                 shouldSwitch = false;
                 x = rows[i].getElementsByTagName("TD")[tablelocation];
                 y = rows[i + 1].getElementsByTagName("TD")[tablelocation];
-
+               
                 if (ordering == "asc") {
                     if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
                         shouldSwitch = true;
@@ -286,9 +340,8 @@
                     }
                 }
             }
-
+            
             if (shouldSwitch) {
-
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
                 switchcount++;
