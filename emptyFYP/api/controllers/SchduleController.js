@@ -55,16 +55,17 @@ module.exports = {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var allschedulebox = json;
-                        console.log('>>  allschedulebox: ',  allschedulebox);
+                        console.log('>>  allschedulebox: ', allschedulebox);
                         db.query(thisistheline3, (err, results) => {
                             try {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var personalschedulebox = json;
                                 console.log('>> personalschedulebox: ', personalschedulebox);
-                                return res.view('user/checkschdule', { 
-                                    releasedate: releasedate, releasetime: releasetime, 
-                                    allschedulebox: allschedulebox, personalschedulebox:personalschedulebox });
+                                return res.view('user/checkschdule', {
+                                    releasedate: releasedate, releasetime: releasetime,
+                                    allschedulebox: allschedulebox, personalschedulebox: personalschedulebox
+                                });
                             } catch (err) {
                                 console.log("sth happened here");
                             }
@@ -80,20 +81,21 @@ module.exports = {
     },
 
     getallneededinfo: async function (req, res) {
-        checkline = "select * from allschedulebox where tid = \"" + req.session.userid + "\"";
-        db.query(checkline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") } else {
-                var string = JSON.stringify(result);
+        var thisistheline = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid"
+        //get the pairs
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
                 var json = JSON.parse(string);
-                var savedbox = json;
-
-                thisistheline = "select startdate, starttime,enddate,endtime from allsupersetting where creator = \"" + req.session.userid + "\" and typeofsetting = \"3\" ";
+                var threepartylist = json;
+                //console.log(threepartylist)
+                thisistheline2 = "select startdate, starttime,enddate,endtime from allsupersetting where typeofsetting = \"3\""
                 /** Get present time */
-                db.query(thisistheline, (err, results) => {
+                db.query(thisistheline2, (err, results) => {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     var presentdate = json
-                    //console.log('>> presentdate: ', presentdate);
+
                     var startstart = new Date(presentdate[0].startdate);
                     var endend = new Date(presentdate[0].enddate);
                     var strstarttime = presentdate[0].starttime.split(":");
@@ -102,14 +104,11 @@ module.exports = {
                     var ansstartdate;
                     var ansenddate;
                     var adddate;
-                    //startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
                     endend.setHours(strendtime[0], strendtime[1], strendtime[2]);
 
                     if (req.params.Page > 1) {
 
                         adddate = (8 - parseInt(startstart.getDay())) + ((parseInt(req.params.Page) - 2) * 7);
-                        //    console.log(8 - parseInt(startstart.getDay()))
-                        //    console.log((parseInt(req.params.Page) - 2) * 7)
                         startstart = new Date(startstart.getTime() + (adddate) * 24 * 60 * 60 * 1000)
                     } else {
                         startstart = new Date(startstart.getTime() + (req.params.Page - 1) * 24 * 60 * 60 * 1000)
@@ -125,126 +124,51 @@ module.exports = {
                     ansstartdate = startstart;
                     ansenddate = endend;
 
-                    //console.log(ansstartdate + "  " + ansenddate)
-
                     startstart = startstart.getFullYear() + "-" + (startstart.getMonth() + 1) + "-" + startstart.getDate();
                     endend = endend.getFullYear() + "-" + (endend.getMonth() + 1) + "-" + endend.getDate();
 
+                    console.log(startstart + "    " + endend)
+                    console.log(ansstartdate + "  " + ansenddate)
 
-                    //console.log(startstart + "    " + endend)
-                    var thisistheline2 = "select allclass.CID, allclass.Campus ,allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" and confirmation = 1 ORDER BY  startTime asc, weekdays asc";
-                    /** Get supervisior's ttb */
-                    db.query(thisistheline2, (err, results) => {
+                    var thisistheline3 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
+                    /** Get classroom's ttb */
+                    db.query(thisistheline3, (err, results) => {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        var personalttb = json
-                        //console.log('>> personalttb: ', personalttb);
-                        var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
-                        // console.log(thisistheline3)
-                        /** Get supervisior's requests */
-                        /** whole schedule is designed base on supervisor's schedule first */
-                        db.query(thisistheline3, (err, results) => {
+                        var classroomusagelist = json;
+                        console.log('>> classroomusagelist: ', classroomusagelist);
+                        var thisistheline4 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
+                        /** Get classroom's unavailble timeslot */
+                        db.query(thisistheline4, (err, results) => {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
-                            var personalrequestlist = json;
-                            // console.log('>> personalrequestlist: ', personalrequestlist);
-                            var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
-                            /** Get classroom's ttb */
-                            db.query(thisistheline4, (err, results) => {
+                            var classroomtimeslotlist = json;
+                            console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
+                            var thisistheline5 = "select distinct(Campus) from classroom where Campus != \"\"";
+                            db.query(thisistheline5, (err, results) => {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
-                                var classroomusagelist = json;
-                                console.log('>> classroomusagelist: ', classroomusagelist);
-                                var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
-                                /** Get classroom's unavailble timeslot */
-                                db.query(thisistheline5, (err, results) => {
+                                var Campuslist = json;
+                                console.log('>> Campuslist: ', Campuslist);
+                                var thisistheline6 = "select * from classroom where Campus!=\"\"";
+                                db.query(thisistheline6, (err, results) => {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
-                                    var classroomtimeslotlist = json;
-                                    console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                    var thisistheline6 = "select distinct(Campus) from classroom where Campus != \"\"";
-                                    db.query(thisistheline6, (err, results) => {
-                                        var string = JSON.stringify(results);
-                                        var json = JSON.parse(string);
-                                        var Campuslist = json;
-                                        console.log('>> Campuslist: ', Campuslist);
-                                        var thisistheline7 = "select * from supervisorpairstudent";
-                                        db.query(thisistheline7, (err, results) => {
-                                            var string = JSON.stringify(results);
-                                            var json = JSON.parse(string);
-                                            var studentlist = json;
-                                            //    console.log('>> studentlist: ', studentlist);
-                                            //console.log('\n\n\n\n\n\n');
-                                            var thisistheline8 = "select * from allrequestfromstudent where sid in (select sid from supervisorpairstudent where tid = \"" + req.session.userid + "\") and status = \"Approved\" ";
-                                            db.query(thisistheline8, (err, results) => {
-                                                var string = JSON.stringify(results);
-                                                var json = JSON.parse(string);
-                                                var studenttimeslotlist = json;
-                                                //    console.log('>> studenttimeslotlist: ', studenttimeslotlist);
-                                                var thisistheline9 = "select allstudenttakecourse.CID, allstudenttakecourse.PID, allclass.weekdays, allclass.startTime,allclass.endTime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid where allstudenttakecourse.pid in (select supervisorpairstudent.sid from supervisorpairstudent where supervisorpairstudent.tid = \"" + req.session.userid + "\") and allstudenttakecourse.confirmation =2 order by weekdays asc, startTime asc;";
-                                                db.query(thisistheline9, (err, results) => {
-                                                    var string = JSON.stringify(results);
-                                                    var json = JSON.parse(string);
-                                                    var studentttb = json;
-                                                    //console.log('>> studentttb: ', studentttb);
-                                                    var thisistheline10 = "select allobstakecourse.CID, allobstakecourse.PID, allclass.weekdays, allclass.startTime,allclass.endTime from allobstakecourse inner join allclass on allclass.cid = allobstakecourse.cid where allobstakecourse.pid in (select supervisorpairobserver.oid from supervisorpairobserver where supervisorpairobserver.tid = \"" + req.session.userid + "\") order by weekdays asc, startTime asc;";
-                                                    db.query(thisistheline10, (err, results) => {
-                                                        var string = JSON.stringify(results);
-                                                        var json = JSON.parse(string);
-                                                        var obsttb = json;
-                                                        // console.log('>> obsttb: ', obsttb);
-                                                        var thisistheline11 = "select * from allrequestfromobserver where oid in (select oid from supervisorpairobserver where tid =  \"" + req.session.userid + "\") order by RequestDate asc, RequestStartTime asc;";
-                                                        db.query(thisistheline11, (err, results) => {
-                                                            var string = JSON.stringify(results);
-                                                            var json = JSON.parse(string);
-                                                            var obstimeslotlist = json;
-                                                            //console.log('>> obstimeslotlist: ', obstimeslotlist);
-                                                            var thisistheline12 = "select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent ,supervisorpairobserver where observer.oid = observerpairstudent.OID and observer.oid = supervisorpairobserver.OID and supervisorpairobserver.tid = \"" + req.session.userid + "\"";
-                                                            db.query(thisistheline12, (err, results) => {
-                                                                var string = JSON.stringify(results);
-                                                                var json = JSON.parse(string);
-                                                                var obslist = json;
-                                                                //console.log('>>obslist: ', obslist);
-                                                                var thisistheline13 = "select * from classroom where Campus!=\"\"";
-                                                                db.query(thisistheline13, (err, results) => {
-                                                                    var string = JSON.stringify(results);
-                                                                    var json = JSON.parse(string);
-                                                                    var allclassroomlist = json;
-                                                                    console.log('>>allclassroomlist: ', allclassroomlist);
-                                                                    return res.view("user/createdraft", {
-                                                                        savedbox: savedbox,
-                                                                        pagenum: req.params.Page,
-                                                                        orgstart: orgstart,
-                                                                        startdate: ansstartdate, enddate: ansenddate,
-                                                                        Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
-                                                                        studenttimeslotlist: studenttimeslotlist,
-                                                                        obsttb: obsttb, obstimeslotlist: obstimeslotlist, obslist: obslist,
-                                                                        personalrequestlist: personalrequestlist, personalttb: personalttb,
-                                                                        classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist,
-                                                                        allclassroomlist: allclassroomlist,
-
-                                                                    });
-                                                                });
-                                                            });
-                                                        });
-                                                    });
-                                                });
-                                            });
-
-                                        })
-
-                                    })
-
-                                });
-                            });
-
-                        });
+                                    var allclassroomlist = json;
+                                    console.log('>>allclassroomlist: ', allclassroomlist);
+                                    for(var a = 0 ; a < threepartylist.length;a++){
+                                        
+                                    }
+                                })
+                            })
+                        })
                     })
 
-                });
-
+                })
+            } catch (err) {
+                console.log("error happened when excuting SchduleController.getallneededinfo")
             }
-        });
+        })
     },
 
     savebox: async function (req, res) {

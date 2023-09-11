@@ -130,6 +130,10 @@ module.exports.routes = {
  
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
+
+"GET /preference": "RequestController.getpreference",
+"POST /preference": "RequestController.submitpreference"
+
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   /***************************************************************************

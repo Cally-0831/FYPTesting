@@ -181,6 +181,13 @@ LastUpdate timestamp not null,
 primary key (boxID)
 );
 
+create table allpreffromsup(
+
+TID varchar(10) not null,
+Prefno varchar(20),
+LastUpdate timestamp not null,
+primary key (TID)
+);
 
 delimiter |
 

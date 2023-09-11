@@ -13,8 +13,8 @@
     </div>
 </div>
 <br><br>
-<%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;var hv5anoun = -1;%>
-<%var hv1 = -1;var hv2 = -1;var hv3 = -1;var hv4 = -1;var hv5 = -1;%>
+<%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;var hv5anoun = -1;var hv6anoun = -1;%>
+<%var hv1 = -1;var hv2 = -1;var hv3 = -1;var hv4 = -1;var hv5 = -1; var hv6 = -1;%>
 
 <%for(var i = 0 ; i < thissupersetting.length;i++){
     console.log("\n\n\n"+thissupersetting[i].typeofsetting)
@@ -49,6 +49,12 @@
             hv5anoun =i;
         }else{
             hv5=i;
+        }
+    }else if(thissupersetting[i].typeofsetting ==6){
+        if(thissupersetting[i].Announcetime != null){
+            hv6anoun =i;
+        }else{
+            hv6=i;
         }
     }
 }%>
@@ -428,6 +434,68 @@
                     </div>
                 </div>
              </div>
+             <div class="column is-half">
+                <div id="uploadsuperpreference" class="setpresentationperiod">
+                    <div class="row">
+                        <div id="handleuploadsuperpreference" style="font-size : 23px;padding-top: 10px;" class="title">Upload Supervisior Perference</div>
+                        <%if(hv6anoun>=0){%> 
+                            <%console.log(thissupersetting[hv6anoun])%>
+                            <%var announcetime = new Date(thissupersetting[hv6anoun].Announcetime)%>
+                            <%var announceddate = new Date(thissupersetting[hv6anoun].deadlinedate)%>
+                            <%var announcedtimetime = thissupersetting[hv6anoun].deadlinetime%>
+                            <div class="row" style="font-size: 10px;">
+                                Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
+                                <br>
+                                Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
+                            </div>
+                            <br>
+                            <%}%>
+                            <%if(hv6 >=0){%> 
+                                <%console.log(thissupersetting[hv6])%>
+                               <%var updatedate=new Date(thissupersetting[hv6].LastUpdate)%>
+                               <%var updatetothisdate = (new Date(thissupersetting[hv6].deadlinedate)).toLocaleDateString("en-GB")%>
+                               <%var updatetothistime = thissupersetting[hv6].deadlinetime%>
+                               <div class="row" style="font-size: 10px;">
+                                   Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
+                                   <br>
+                                   Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
+                               </div>
+                               <%}%>
+                               <br>
+                               <div class="row" style="text-align: center;">
+                                   <input type="Date" id="deadlineforuploadsuperpreference"
+                                       style="width: 150px; font-size:20px;text-align: center;" required>
+                                   <input type="time" id="deadlineforuploadsuperpreferencetime"
+                                       name="deadlineforuploadsuperpreferencetime"
+                                       style="width: 150px; font-size:20px; text-align: center;" required>
+                               </div>
+                               <br>
+                               
+                                        <div class="row">
+                                            <div class="buttons is-right">
+                                                <% if(hv6 >=0){%>
+                                                    <% if(hv6anoun >=0){%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="CreateNotice(5,'<%=updatetothisdate%>','<%=thissupersetting[hv6].deadlinetime%>','<%=thissupersetting[hv6].STID%>','<%=thissupersetting[hv6anoun].STID%>',null,null,'3')">Create
+                                                            Notice</button>
+                                                    <%}else{%>
+                                                        <button class="button buttonlogout"
+                                                            onclick="CreateNotice(5,'<%=updatetothisdate%>','<%=thissupersetting[hv6].deadlinetime%>','<%=thissupersetting[hv6].STID%>',null,null,null,'3')">Create
+                                                            Notice</button>
+                                                        <%}%>    
+
+
+                                                        <button class="button buttonlogout"
+                                                        onclick="submitdeadlineforuploadsuperpreference('update')">Update</button>
+                                                            <%}else{%>
+                                                                <button class="button buttonlogout"
+                                                                    onclick="submitdeadlineforuploadsuperpreference('insert')">Submit</button>
+                                                                <%}%>
+                                            </div>
+                                        </div>
+                    </div>
+                </div>
+             </div>
         </div>
                     
     </div>
@@ -726,6 +794,54 @@
 
 
                     alert("Student List Upload Deadline has been settle as\n" + document.getElementById("deadlineforuploadstulist").value + " , " + document.getElementById("deadlineforuploadstulisttime").value);
+                    location.assign("/setting");
+
+                } else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                } else {
+                    alert(response.statusTest);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    async function submitdeadlineforuploadsuperpreference(command){
+        var deadlinedate = document.getElementById("deadlineforuploadsuperpreference").value;
+        var deadlinetime = document.getElementById("deadlineforuploadsuperpreferencetime").value;
+
+        if (deadlinedate == null || deadlinedate == "" || deadlinetime == null || deadlinetime == "") {
+            return alert("Please input BOTH deadline date and time");
+        }
+
+        var today = new Date();
+        //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
+        var settledate = new Date(deadlinedate + " " + deadlinetime);
+
+        if (today >= settledate) { return alert("Please Review Your Setting \nYou cannot set a date earlier than today.") }
+        var r = confirm("Please Confirm Your Setting for Supervisor Preference Request Upload\n\n"
+            + "Deadline :       " + document.getElementById("deadlineforuploadsuperpreference").value + "\n"
+            + "Time         :      " + document.getElementById("deadlineforuploadsuperpreferencetime").value)
+        if (r) {
+            try {
+                var requestbody = JSON.stringify({
+                    type: "6",
+                    command: command,
+                    date: document.getElementById("deadlineforuploadsuperpreference").value,
+                    time: document.getElementById("deadlineforuploadsuperpreferencetime").value,
+                    level:"3"
+                });
+                var response = await fetch("/setting", {
+                    method: "POST",
+                    body: requestbody,
+                });
+                if (response.ok) {
+
+
+                    alert("Preference Request Deadline has been settle as\n" + document.getElementById("deadlineforuploadsuperpreference").value + " , " + document.getElementById("deadlineforuploadsuperpreferencetime").value);
                     location.assign("/setting");
 
                 } else if (response.status == 401) {

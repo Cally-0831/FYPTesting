@@ -307,6 +307,13 @@ module.exports = {
                 + "\nTime: " + req.query.time
                 + "\n\n After gathering all the student list from supervisors, observer for students will be arranged."
 
+        }else if (req.query.type == 5) {
+            title = "Deadline for Upload Supervisor Preference";
+            content = "The deadline of uploading supervisor preference has been set as follows:\n"
+                + "Date: " + req.query.date
+                + "\nTime: " + req.query.time
+                + "\n\n Please be aware that the final schdule may not be able to fullfill all supervisor's preferences."
+
         }
         console.log(req.query)
 

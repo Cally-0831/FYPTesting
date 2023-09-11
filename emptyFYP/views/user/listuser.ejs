@@ -202,11 +202,11 @@
             </tr>
             <tr>
                 <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                    <a class="sorting2" id='headerTID' onclick="sorting('sorting2','mytable2','headerTID',0);">&#8593;</a> OID
+                    <a class="sorting2" id='headerTID' onclick="sorting('sorting2','mytable2','headerTID',0);">&#8593;</a> TID
                 </th>
                 <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting2" id='headersupname'
-                        onclick="sorting('sorting2','mytable2','headersupname',1);">&#8593;</a> Oberserver Name
+                        onclick="sorting('sorting2','mytable2','headersupname',1);">&#8593;</a> Supervisor Name
                 </th>
                 <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
                     SID
@@ -408,6 +408,7 @@
             });
 
             if(response.ok){
+                alert("Successfully Paired")
                 location.assign(response.url);
             }
         }

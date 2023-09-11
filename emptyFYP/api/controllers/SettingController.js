@@ -15,6 +15,7 @@ db.connect(async (err) => {
 });
 
 module.exports = {
+
     submitsetting: async function (req, res) {
         let stid = 'stid';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -25,6 +26,7 @@ module.exports = {
             counter += 1;
         }
         let thisistheline = "";
+        var delthisline = "";
 
         if (req.body.command == "insert") {
             if (req.body.type == 3) {
@@ -38,11 +40,12 @@ module.exports = {
         } else if (req.body.command == "update") {
             if (req.body.type == 3) {
                 thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,startdate,starttime,enddate,endtime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.startdate + "\",\"" + req.body.starttime + "\",\"" + req.body.enddate + "\",\"" + req.body.endtime + "\")"
-            
+                delthisline = "DELETE FROM allsupersetting WHERE typeofsetting = \"" + req.body.type + "\" and Announcetime is null"
                 //thisistheline = "update allsupersetting set lastUpdate = now(), startdate =\"" + req.body.startdate + "\" , starttime=\"" + req.body.starttime + "\", enddate =\"" + req.body.enddate + "\" , endtime=\"" + req.body.endtime + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
 
             } else {
                 thisistheline = "Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values(\"" + stid + "\",\"" + req.session.userid + "\",\"" + req.body.type + "\",\"" + req.body.date + "\",\"" + req.body.time + "\")"
+                delthisline = "DELETE FROM allsupersetting WHERE typeofsetting = \"" + req.body.type + "\" and Announcetime is null"
 
                 //thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\"" + req.body.date + "\" , deadlinetime=\"" + req.body.time + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
 
@@ -50,6 +53,15 @@ module.exports = {
             console.log(thisistheline);
         }
 
+        if (delthisline != "") {
+            db.query(delthisline, (err, results) => {
+                try {
+                    console.log("del empty done")
+                } catch (err) {
+                    console.log("sth happened here");
+                }
+            });
+        }
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("setting done")
@@ -84,8 +96,8 @@ module.exports = {
         });
     },
 
-    nodraft :async function (req, res) {
-        let thisistheline2 = " select * from allsupersetting where creator=\"" + req.session.userid + "\" order by typeofsetting asc";
+    nodraft: async function (req, res) {
+        let thisistheline2 = " select * from allsupersetting where creator=\"admin\" order by typeofsetting asc";
         var supersetting;
         db.query(thisistheline2, (err, results) => {
             try {
@@ -147,7 +159,7 @@ module.exports = {
                 }
 
                 thisistheline = "";
-                
+
                 return res.view("user/schduledesign", { havedraft: "N", warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday });
 
 
@@ -162,19 +174,20 @@ module.exports = {
     },
 
     checksetting: async function (req, res) {
-        let thisistheline = " select draft from supervisor where tid=\"" + req.session.userid + "\" ";
+        let thisistheline = " select draft from supervisor";
 
         db.query(thisistheline, (err, results) => {
             var string = JSON.stringify(results);
             //console.log('>> string: ', string );
             var json = JSON.parse(string);
             var havedraft = json[0].draft;
-            console.log('>> json: ', havedraft); 
-            if(havedraft == "Y"){return res.status(200).json("redirect");
-        }else{
-            return res.status(200).json("go")
-        }
-            
+            console.log('>> json: ', havedraft);
+            if (havedraft == "Y") {
+                return res.status(200).json("redirect");
+            } else {
+                return res.status(200).json("go")
+            }
+
         });
 
     },

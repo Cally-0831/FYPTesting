@@ -1,0 +1,70 @@
+<div class="Pagetitle">Preference</div>
+<div class="rows">
+    <div class="row">
+        <div class="columns">
+            <div class="column">
+                <div class="buttons is-left">
+                    <div class="button buttonlogout " onclick="back()">
+                        Back
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+<%if (presentperiodstartdate!= undefined){%>
+    
+    
+<div class = "columns is-mobile is-centered">
+    <div class = "column column-big is-half">
+        <div style="font-size : 25px;padding-top: 10px;" class="title">Preference Form</div>
+        <div style="font-size : 18px;padding-top: 10px; color:gray; text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 0px;">Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
+        <br>
+            You can input your prefered presentation number for the presentation date
+    </div>
+    <form action="/preference" method="post" onsubmit="submitform(this);return false;">
+        <%var presentperiodenddate =new Date(presentperiodenddate)%>
+        <%var presentperiodstartdate =new Date(presentperiodstartdate)%>
+        
+        <%var printend = false%>
+        <%var startdate = presentperiodstartdate%>
+        <%while(!printend){%>
+            <div id="pref_<%=startdate.toLocaleDateString('en-GB')%>" style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%>&ensp;&ensp;<input type="number" style="text-align: center; width: 80px" min="0" max ="10"></div>
+            
+            <%startdate.setDate(startdate.getDate()+1); %>
+            <%if(startdate.toLocaleDateString() == presentperiodenddate.toLocaleDateString()){%>
+                <div id="pref_<%=startdate.toLocaleDateString('en-GB')%>" style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%>&ensp;&ensp;<input type="number" style="text-align: center; width: 80px" min="0" max ="10"></div>
+            
+                <%printend = true;}%>
+        <%}%>
+        
+        <div class = "buttons is-right">
+            <button class="button buttonlogout" type="submit is-success">Summit</button>
+        </div>
+    </form>
+    </div>
+</div>
+<%}else{%>
+    <div class = "columns is-mobile is-centered">
+        <div class="column is-half">
+            <article class="message is-link">
+                <div class="message-header">
+                    <p style="font-size : 25px;" >Cannot Submit Preference Form Now</p>
+                </div>
+                <div class="message-body"  style="font-size : 20px;">
+                    The Presentation Period have not been set by the admin, Supervisor cannot submit their preference at the moment.
+                    <br><br>
+                    There will be email and notice once the admin set the presentation period informations.
+                </div>
+            </article>
+        </div>
+    </div>
+    
+    
+    <%}%>
+<script>
+    function back(){
+        location.assign("/home")
+    }
+</script>

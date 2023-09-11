@@ -26,19 +26,19 @@ module.exports = {
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
-                if(json[0]!=null){
+                if (json[0] != null) {
                     var deadline = new Date(json[0].deadlinedate);
                     var deadlinetime = json[0].deadlinetime.split(":");
                     deadline.setHours(deadlinetime[0]);
                     deadline.setMinutes(deadlinetime[1]);
                     deadline.setSeconds(deadlinetime[2]);
-                    
+
                     console.log('>> request deadline: ', deadline);
                 }
-                 return res.view('user/submitrequest', { theday: deadline });
-                
+                return res.view('user/submitrequest', { theday: deadline });
 
-               
+
+
             } catch (err) {
                 console.log("sth happened here");
 
@@ -127,8 +127,8 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 studentrequestlist = json;
                 //console.log('>> stdlist: ', studentrequestlist);
-               
-                        return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist});
+
+                return res.view('user/readstudentrequestlist', { thisstudentrequestlist: studentrequestlist });
 
             } catch (err) {
                 return res.status(401).json("error happened when getting students' request list");
@@ -145,7 +145,7 @@ module.exports = {
 
     listsupervisorrequest: async function (req, res) {
         var supervisorrequestlist;
-      
+
 
         let thisistheline = "select * from allrequestfromsupervisor";
         //console.log(thisistheline)
@@ -157,8 +157,8 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 supervisorrequestlist = json;
                 console.log('>> supreqlist: ', supervisorrequestlist);
-               
-                return res.view('user/admin/readsupervisorrequestlist', { thissupervisorrequestlist: supervisorrequestlist});
+
+                return res.view('user/admin/readsupervisorrequestlist', { thissupervisorrequestlist: supervisorrequestlist });
 
             } catch (err) {
                 return res.status(401).json("error happened when getting supervisor' request list");
@@ -368,6 +368,65 @@ module.exports = {
             });
         });
 
-    }
+    },
 
+    getpreference: async function (req, res) {
+        thisistheline = "select * from allpreffromsup where tid = \"" + req.session.userid + "\"";
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var preference = json;
+                thisistheline = "select * from allsupersetting where typeofsetting = \"6\"  and announcetime is not null";
+                db.query(thisistheline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var deadlinedate;
+                        var deadlinetime;
+                        if (json.length > 0) {
+                            deadlinedate = new Date(json[0].deadlinedate);
+                            deadlinetime = json[0].deadlinetime.split(":");
+                            deadlinedate.setHours(deadlinetime[0]);
+                            deadlinedate.setMinutes(deadlinetime[1]);
+                            deadlinedate.setMinutes(deadlinetime[2]);
+                        }
+                        thisistheline = "select * from allsupersetting where typeofsetting = \"3\"  and announcetime is not null";
+                        db.query(thisistheline, (err, results) => {
+                            try {
+                                var string = JSON.stringify(results);
+                                var json = JSON.parse(string);
+                                var presentperiodstartdate;
+                                var presentperiodenddate;
+                                var presentperiodstarttime;
+                                var presentperiodendtime;
+                                if (json.length > 0) {
+                                    presentperiodstartdate = new Date(json[0].startdate);
+                                    presentperiodenddate = new Date(json[0].enddate);
+                                    presentperiodstarttime = json[0].starttime.split(":");
+                                    presentperiodendtime = json[0].endtime.split(":");
+                                    presentperiodstartdate.setHours(presentperiodstarttime[0])
+                                    presentperiodstartdate.setMinutes(presentperiodstarttime[1])
+                                    presentperiodstartdate.setSeconds(presentperiodstarttime[2])
+                                    presentperiodenddate.setHours(presentperiodendtime[0])
+                                    presentperiodenddate.setMinutes(presentperiodendtime[1])
+                                    presentperiodenddate.setSeconds(presentperiodendtime[2])
+                                }
+                                return res.view('user/preference', { preference: preference, deadlinedate: deadlinedate,
+                                    presentperiodstartdate:presentperiodstartdate,
+                                    presentperiodenddate:presentperiodenddate,
+                                   });
+                            } catch (err) {
+                                return res.stauts(401).json("Error happened when excuting");
+                            }
+                        });
+                    } catch (err) {
+                        return res.stauts(401).json("Error happened when excuting");
+                    }
+                });
+            } catch (err) {
+                return res.stauts(401).json("Error happened when excuting");
+            }
+        });
+    },
 }

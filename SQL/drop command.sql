@@ -21,6 +21,7 @@ Drop table if exists allnotice;
 Drop table if exists temptakecourse;
 Drop table if exists allsupersetting;
 Drop table if exists allschedulebox;
+Drop table if exists allpreffromsup;
 
 
 DROP trigger IF exists testref;
