@@ -111,7 +111,7 @@ module.exports.routes = {
   'POST /uploadstudentlist': "StudentListController.uploadstudentlist",
   'GET /uploadsupervisorlist': { view: 'user/admin/uploadsupervisorlist' },
   'POST /uploadsupervisorlist': "StudentListController.uploadsupervisorlist",
-  'POST /uploadpairlist': "StudentListController.uploadpairlist",
+  //'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
   
   'GET /listuser': "StudentListController.liststudent",

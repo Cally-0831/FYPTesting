@@ -171,14 +171,14 @@
                 <div class="column is-left">
                     <div class="buttons">
                         
-                        <div class="button buttonlogout is-left" onclick="backback()">
+                        <div class="button buttonlogout is-left is-mobile" onclick="backback()">
                             Back
                         </div>
         
                     </div>
                 </div>
                 <div class="column ">
-                    <div class="buttons is-right">
+                    <div class="buttons is-right is-mobile">
                         <%var datedate = new Date(checkdate);%>
                         <%var today = new Date();%>
                         <%if(checkdate != undefined && today > datedate){%>
@@ -406,10 +406,11 @@
             var response = await fetch("/listuser/genobs", {
                 method: "POST",
             });
-
-            if(response.ok){
+             
+            console.log(response)
+            if(response.status == 200){
                 alert("Successfully Paired")
-                location.assign(response.url);
+               
             }
         }
         

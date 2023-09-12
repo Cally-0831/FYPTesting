@@ -19,30 +19,54 @@
 <div class = "columns is-mobile is-centered">
     <div class = "column column-big is-half">
         <div style="font-size : 25px;padding-top: 10px;" class="title">Preference Form</div>
-        <div style="font-size : 18px;padding-top: 10px; color:gray; text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 0px;">Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
-        <br>
+        <%if(oldpref!=undefined){%>
+            <div style="text-align:center; font-size : 18px; color:gray;padding-top: 0px;">
+                <%var lastupdate = new Date(oldpref.LastUpdate)%>
+                Last Update: <%=lastupdate.toLocaleDateString("en-GB")%> , <%=lastupdate.toLocaleTimeString('en-US')%>
+            </div>
+            <%}%>
+        <div style="font-size : 18px;padding-top: 10px; color:gray; text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 10px;">
+            Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
+            <br>
             You can input your prefered presentation number for the presentation date
+            <br>
+            Your totoal presentation number: <%=studentnum%> 
     </div>
-    <form action="/preference" method="post" onsubmit="submitform(this);return false;">
-        <%var presentperiodenddate =new Date(presentperiodenddate)%>
-        <%var presentperiodstartdate =new Date(presentperiodstartdate)%>
+   
+        <%var newpresentperiodenddate =new Date(presentperiodenddate)%>
+        <%var newpresentperiodstartdate =new Date(presentperiodstartdate)%>
         
         <%var printend = false%>
-        <%var startdate = presentperiodstartdate%>
+        <%var startdate = newpresentperiodstartdate%>
+        <%var command = "Submit"%>
+        <%if(oldpref!=undefined){%>
+
+        <%var oldprefinput = oldpref.Prefno.split("/")%>
+        
+            <%var index = 0;%>
+            <%command = "Update"%>
+        <%}%>
+        
         <%while(!printend){%>
-            <div id="pref_<%=startdate.toLocaleDateString('en-GB')%>" style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%>&ensp;&ensp;<input type="number" style="text-align: center; width: 80px" min="0" max ="10"></div>
+            <div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> :&ensp;&ensp;
+                <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> ->
+                <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
+                
+            </div>
             
-            <%startdate.setDate(startdate.getDate()+1); %>
-            <%if(startdate.toLocaleDateString() == presentperiodenddate.toLocaleDateString()){%>
-                <div id="pref_<%=startdate.toLocaleDateString('en-GB')%>" style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%>&ensp;&ensp;<input type="number" style="text-align: center; width: 80px" min="0" max ="10"></div>
-            
+            <%startdate.setDate(startdate.getDate()+1);%>
+
+            <%if(startdate.toLocaleDateString() > newpresentperiodenddate.toLocaleDateString()){%>
                 <%printend = true;}%>
         <%}%>
         
         <div class = "buttons is-right">
-            <button class="button buttonlogout" type="submit is-success">Summit</button>
+            
+            <%presentationstartdate = new Date(presentperiodstartdate).toLocaleDateString("en-GB")%>
+            <%presentationenddate = new Date(presentperiodenddate).toLocaleDateString("en-GB")%>
+            <button class="button buttonlogout"  onclick="submitform('<%=command%>','<%=presentationstartdate%>','<%=presentationenddate%>','<%=studentnum%>')"><%=command%></button>
         </div>
-    </form>
+   
     </div>
 </div>
 <%}else{%>
@@ -66,5 +90,41 @@
 <script>
     function back(){
         location.assign("/home")
+    }
+
+    async function submitform(command,startdatestr,enddatestr,maxstdnum){
+        var startdate = startdatestr.split("/")
+        
+        startdate = new Date(parseInt(startdate[2]),parseInt(startdate[1])-1,parseInt(startdate[0]));
+        var enddate = enddatestr.split("/");
+        enddate = new Date(parseInt(enddate[2]),parseInt(enddate[1])-1,parseInt(enddate[0]));
+        
+        var checkdate = false;
+        var checkstudentnum=0;
+        var prefnumstr = "";
+        while(!checkdate){
+
+            checkstudentnum+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
+            if(checkstudentnum > maxstdnum){return alert("Please Review Your inputs. \n Your maximum presentation number is "+maxstdnum)}
+            prefnumstr+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value)+"/"
+            
+            startdate.setDate(startdate.getDate()+1);
+            if(startdate > enddate){checkdate = true;}
+        }
+        requestBody = JSON.stringify({command:command,prefnumstr:prefnumstr})
+        
+        var response = await fetch("/preference", {
+            method: "POST",
+            body : requestBody
+        });
+
+        if(response.status == 200){
+            alert("Successfully submitted");
+            location.reload()
+        }
+
+        
+
+       
     }
 </script>

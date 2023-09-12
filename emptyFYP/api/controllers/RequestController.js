@@ -412,21 +412,64 @@ module.exports = {
                                     presentperiodenddate.setMinutes(presentperiodendtime[1])
                                     presentperiodenddate.setSeconds(presentperiodendtime[2])
                                 }
-                                return res.view('user/preference', { preference: preference, deadlinedate: deadlinedate,
-                                    presentperiodstartdate:presentperiodstartdate,
-                                    presentperiodenddate:presentperiodenddate,
-                                   });
+
+                                thisistheline = "select count(*) as needtolisten from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid where tid = \"" + req.session.userid + "\" or oid = \"" + req.session.userid + "\""
+                                db.query(thisistheline, (err, results) => {
+                                    try {
+                                        var string = JSON.stringify(results);
+                                        var json = JSON.parse(string);
+                                        var studentnum = json[0].needtolisten;
+                                        thisistheline = "select * from allpreffromsup where tid = \"" + req.session.userid + "\""
+                                        db.query(thisistheline, (err, results) => {
+                                            try {
+                                                var string = JSON.stringify(results);
+                                                var json = JSON.parse(string);
+                                                var oldpref = json[0]
+                                                
+                                                return res.view('user/preference', {
+                                                    preference: preference, deadlinedate: deadlinedate,
+                                                    presentperiodstartdate: presentperiodstartdate,
+                                                    presentperiodenddate: presentperiodenddate,
+                                                    studentnum: studentnum,
+                                                    oldpref: oldpref
+                                                });
+                                            } catch (err) {
+                                                return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
+                                            }
+
+
+                                        })
+
+                                    } catch (err) {
+                                        return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
+                                    }
+                                })
                             } catch (err) {
-                                return res.stauts(401).json("Error happened when excuting");
+                                return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
                             }
                         });
                     } catch (err) {
-                        return res.stauts(401).json("Error happened when excuting");
+                        return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
                     }
                 });
             } catch (err) {
-                return res.stauts(401).json("Error happened when excuting");
+                return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
             }
         });
     },
+
+    submitpreference: async function (req, res) {
+        console.log(req.body.prefnumstr)
+        if (req.body.command == "Submit") {
+            thisistheline = "insert into allpreffromsup values(\"" + req.session.userid + "\",\"" + req.body.prefnumstr + "\",now());";
+        } else if (req.body.command == "Update") {
+            thisistheline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \""+req.session.userid+"\"";
+        }
+        
+        console.log(thisistheline)
+        db.query(thisistheline, (err, results) => {
+            if(err){return res.status(401).json("error exist when excueting RequestController.submitpreference")}else{return res.status(200).json("ok")}
+        })
+    },
+
 }

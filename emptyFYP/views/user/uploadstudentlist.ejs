@@ -68,29 +68,7 @@
 
   </div>
 
-  <div class="row">
-    <div class="columns is-mobile is-centered">
-      <div class="column is-four-fifths template">
-        <form enctype="multipart/form-data">
-          <div class="Pagetitle">supervisor Student Pair List</div>
-          <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
-          <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\PairingSample.xlsx"
-              download><u>Pairing Excel List</u></a></div>
-          <br>
-          <input id="pairupload" type=file name="files[]">
-
-        </form>
-
-        <br>
-        <div id="getlistpairdata" style="font-size: 20px;"></div>
-
-        <div class="control">
-          <textarea class="textarea form-control" id="pairxlx_json" style="width:90% ;height:40% ; overflow: scroll; "
-            readonly></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 </div>
 
 
@@ -112,12 +90,11 @@
 
  
   
-  document.getElementById('pairupload').addEventListener('change', handlepairFileSelect, false);
-  var allpairarray = new Array(0);
+
 
   var studentjsonobj;
   
-  var pairjsonobj;
+  
   var ExcelToJSON = function (role) {
 
     this.parseExcel = function (file) {
@@ -148,17 +125,6 @@
               + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
               + "\<\/form>";
             jQuery('#studentxlx_json').val(json_object);
-          }  else if (role == "pair") {
-            console.log("check json_object      " + json_object);
-            pairjsonobj = json_object;
-            console.log("check jsonobj      " + pairjsonobj);
-            allpairarray = JSON.parse(json_object);
-            document.getElementById("getlistpairdata").innerHTML = "Total " + allpairarray.length + " pairs,\<br\> Click confirm to create."
-              + "\<br\>"
-              + " \<form  action\=\"\/uploadpairlist\" method\=\"post\" onsubmit\=\"submitform(this,\'pair\')\;return false\;\"\>"
-              + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
-              + "\<\/form>";
-            jQuery('#pairxlx_json').val(json_object);
           }
 
 
@@ -186,19 +152,6 @@
     xl2json.parseExcel(files[0]);
   }
 
- 
-  function handlepairFileSelect(evt) {
-
-    var files = evt.target.files; // FileList object
-    console.log(files[0].name);
-    var namestring = (files[0].name).split("\.");
-    if (namestring[1] != "xlsx") {
-      alert("This is not a .xlsx file, please upload a correct format file");
-      return;
-    }
-    var xl2json = new ExcelToJSON("pair");
-    xl2json.parseExcel(files[0]);
-  }
 
 
   async function submitform(formElem, role) {
@@ -206,11 +159,7 @@
     try {
       if (role == "stu") {
         jsonobj = studentjsonobj;
-      } else if (role == "sup") {
-        jsonobj = supervisorjsonobj;
-      } else if (role == "pair") {
-        jsonobj = pairjsonobj;
-      }
+      } 
       var response = await fetch(formElem.action, {
         method: formElem.method,
         body: jsonobj
@@ -219,13 +168,7 @@
         if (role == "stu") {
           alert("Students are created");
           location.assign("/listuser");
-        } else if (role == "sup") {
-          alert("supervisors are created");
-          location.assign("/listuser");
-        } else if (role == "pair") {
-          alert("pairs are created");
-          location.assign("/listuser");
-        }
+        } 
 
 
 

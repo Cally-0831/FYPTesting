@@ -1,0 +1,17 @@
+insert ignore into classroom 	values("Shawn","WLB103","Open");
+insert ignore into classroom 	values("Shawn","WLB104","Open");
+insert ignore into classroom 	values("Shawn","WLB105","Open");
+insert ignore into classroom 	values("Sin Hang","LT1","Open");
+insert ignore into classroom 	values("Sin Hang","LMC512","Open");
+insert ignore into classroom 	values("Sin Hang","CEC801","Open");
+insert ignore into classroom 	values("Sin Hang","RRS638","Open");
+insert ignore into classroom 	values("Sin Hang","FSC801C","Open");
+insert ignore into classroom 	values("Sin Hang","FSC801D","Open");
+insert ignore into classroom 	values("Sin Hang","FSC901C","Open");
+insert ignore into classroom 	values("Sin Hang","FSC901D","Open");
+insert ignore into classroom 	values("Sin Hang","LT3","Open");
+insert ignore into classroom 	values("Sin Hang","OEE1017","Open");
+insert ignore into classroom 	values("Sin Hang","RRS735","Open");
+insert ignore into classroom 	values("Sin Hang","RRS905","Open");
+insert ignore into classroom 	values("Sin Hang","LMC514","Open");
+insert ignore into classroom 	values("Sin Hang","LMC512","Open");

@@ -151,14 +151,14 @@ module.exports = {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     studentresult = json;
-                    console.log('>> stdlist: ',studentresult); 
+                    console.log('>> stdlist: ', studentresult);
                     thisistheline = "select * from allrequestfromstudent where sid = \"" + req.params.id + "\"\;";
                     db.query(thisistheline, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             studentrequestlist = json;
-                            console.log('>> studentresult: ',studentresult)
+                            console.log('>> studentresult: ', studentresult)
                             thisistheline = "select * from allsupersetting where typeofsetting=\"" + 5 + "\" and Announcetime is not null";
                             db.query(thisistheline, (err, results) => {
                                 try {
@@ -174,13 +174,13 @@ module.exports = {
                                         checkdate = deadlinedate;
 
                                     }
-                                    return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist,checkdate : checkdate });
-                       
+                                    return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist, checkdate: checkdate });
+
                                 } catch (err) {
                                     console.log("error happened in StudentListController: readsingleppl");
                                 }
                             })
-                            } catch (err) {
+                        } catch (err) {
                             console.log("error happened in StudentListController: readsingleppl");
                         }
                     })
@@ -684,8 +684,8 @@ module.exports = {
                         }
 
                         console.log(pairinglist)
-                        return res.url = "/listuser";
-
+                        return res.status(200).json("ok");
+                        
                     } catch (err) {
                         console.log("error happened at StudentListContorller: generateobs");
                     }
