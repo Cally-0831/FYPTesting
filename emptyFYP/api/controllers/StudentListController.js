@@ -20,9 +20,11 @@ module.exports = {
     liststudent: async function (req, res) {
         var allstulist;
         var allsuplist;
+        
 
 
         if (req.session.role == "sup") {
+           
             thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
 
             db.query(thisistheline, (err, results) => {
@@ -40,8 +42,35 @@ module.exports = {
                             if (json.length > 0) {
                                 observinglist = json;
                             }
-                            return res.view('user/listuser', { allstdlist: stdlist, allsuplist: null, checkdate: null, observinglist: observinglist });
 
+                            thisistheline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
+                            db.query(thisistheline, (err, results) => {
+                                try {
+                                    var string = JSON.stringify(results);
+                                    var json = JSON.parse(string);
+                                    console.log(json)
+                                   
+                                    if (json.length > 0) {
+                                        deadlinedate = new Date(json[0].deadlinedate);
+                                        deadlinetime = json[0].deadlinetime.split(":");
+                                        deadlinedate.setHours(deadlinetime[0]);
+                                        deadlinedate.setMinutes(deadlinetime[1]);
+                                        deadlinedate.setSeconds(deadlinetime[2]);
+                                        finaldate = deadlinedate;
+                                        console.log("controller    "+finaldate)
+                                    } else {
+                                        finaldate = undefined
+                                        console.log("controller    "+finaldate)
+                                    }
+                                    console.log("controller    "+finaldate)
+                                    return res.view('user/listuser', {checkdate : finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+
+                                } catch (err) {
+                                        console.log("error happened in StudentListController: liststudent");
+                                    }
+
+                            })
+                            
                         } catch (err) {
                             console.log("error happened in StudentListController: liststudent");
                         }
@@ -84,7 +113,7 @@ module.exports = {
                             } else {
                                 finaldate = undefined
                             }
-                            console.log(json);
+                           
                             return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
                         } catch (err) {
                             console.log("error happened at StudentListContorller: liststudent");
@@ -141,6 +170,8 @@ module.exports = {
         var studentresult;
         var type;
         var obslist;
+        var requestlist;
+        var checkdate;
 
 
         if (req.params.id.charAt(0) == "s") {
@@ -153,18 +184,18 @@ module.exports = {
                     studentresult = json;
                     console.log('>> stdlist: ', studentresult);
                     thisistheline = "select * from allrequestfromstudent where sid = \"" + req.params.id + "\"\;";
+                           
                     db.query(thisistheline, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             studentrequestlist = json;
-                            console.log('>> studentresult: ', studentresult)
+                            console.log('>> studentrequestlist: ', studentrequestlist)
                             thisistheline = "select * from allsupersetting where typeofsetting=\"" + 5 + "\" and Announcetime is not null";
                             db.query(thisistheline, (err, results) => {
                                 try {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
-                                    var checkdate = null;
                                     if (json.length > 0) {
                                         var deadlinedate = new Date(json[0].deadlinedate);
                                         var deadlinetime = json[0].deadlinetime.split(":");
@@ -174,14 +205,15 @@ module.exports = {
                                         checkdate = deadlinedate;
 
                                     }
-                                    return res.view('user/read', { type: type, thatppl: studentresult, requestlist: studentrequestlist, checkdate: checkdate });
-
+                                    console.log(checkdate)
+                                    return res.view('user/read', { type: type, thatppl: studentresult, obslist: undefined, requestlist: studentrequestlist,checkdate:checkdate });
+                        
                                 } catch (err) {
-                                    console.log("error happened in StudentListController: readsingleppl");
+                                    console.log("error happened in StudentListController: readsingleppl 1");
                                 }
                             })
                         } catch (err) {
-                            console.log("error happened in StudentListController: readsingleppl");
+                            console.log("error happened in StudentListController: readsingleppl 2");
                         }
                     })
 
@@ -189,7 +221,7 @@ module.exports = {
 
 
                 } catch (err) {
-                    console.log("error happened in StudentListController: readsingleppl");
+                    console.log("error happened in StudentListController: readsingleppl3");
 
                 }
 
@@ -198,7 +230,6 @@ module.exports = {
         } else if (req.params.id.charAt(0) == "t") {
             type = "sup";
             thisistheline = "select supervisor.submission,supervisor.tid, supervisor.supname ,student.stdname , student.sid,observerpairstudent.obsname, observerpairstudent.oid ,supervisorpairstudent.Topic from supervisor left join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid left join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.params.id + "\";";
-            console.log(thisistheline)
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -215,8 +246,20 @@ module.exports = {
                             var json = JSON.parse(string);
                             //console.log('>> json: ', json);  
                             supervisorrequestlist = json;
-                            return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
-                        } catch (err) {
+                            thisistheline = "select student.sid, student.stdname,supervisor.supname,supervisor.tid,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where observerpairstudent.oid =\""+req.params.id+"\";";
+                             db.query(thisistheline, (err, results) => {
+                                try {
+                                    var string = JSON.stringify(results);
+                                    var json = JSON.parse(string);
+                                    obslist = json;
+                                    return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
+                        
+                                } catch (err) {
+                                    console.log("error happened in StudentListController: readsingleppl");
+                                }
+
+                            })
+                            } catch (err) {
                             console.log("error happened in StudentListController: readsingleppl");
                         }
 

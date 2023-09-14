@@ -36,7 +36,7 @@ module.exports.routes = {
   'GET /checkdraft': "SettingController.checksetting",
   "GET /checkschdule": "SchduleController.viewfinalschdule",
   //'GET /createdraft': "SchduleController.getallneededinfo",
-  'GET /createdraft/:Page': "SchduleController.getallneededinfo",
+  'GET /createdraft': "SchduleController.getallneededinfo",
   "POST /savebox":"SchduleController.savebox",
   "GET /savebox/get_roomlist_bycampus":"SchduleController.getrequestroomlist",
   "GET /savebox/get_okobslist":"SchduleController.getrequestobslist",

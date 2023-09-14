@@ -1,4 +1,5 @@
 <div>
+    <%console.log(obslist)%>
     <%if (type=="stu" ){%>
         <div class="Pagetitle"> Details for <%=thatppl[0].sid%>
         </div>
@@ -184,6 +185,45 @@
 
                 </table>
 
+                <table class="table is-bordered is-striped is-fullwidth">
+                    <tr>
+                        <th colspan="3"
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                            <%=thatppl[0].supname%>'s Request List
+                        </th>
+                    </tr>
+                    <tr>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            ReqID
+                        </th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            Request Date</th>
+                        <th
+                            style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                            Request Time</th>
+
+                    </tr>
+                    <%for (var i=0 ; i < requestlist.length;i++){%>
+                        <tr>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <%=requestlist[i].ReqID%>
+                            </td>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <%var reqdate=new Date(requestlist[i].RequestDate).toLocaleDateString("en-GB")%>
+                                    <%=reqdate%>
+                            </td>
+                            <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                <%=requestlist[i].RequestStartTime%> - <%=requestlist[i].RequestEndTime%>
+                            </td>
+                        </tr>
+
+                        <%}%>
+
+
+                </table>
+
                 <%if(thatppl[0].sid !=null){%>
                     <table class="table is-bordered is-striped is-fullwidth">
                         <tr>
@@ -237,44 +277,59 @@
                     <%}%>
 
 
-                        <table class="table is-bordered is-striped is-fullwidth">
-                            <tr>
-                                <th colspan="3"
-                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
-                                    <%=thatppl[0].supname%>'s Request List
-                                </th>
-                            </tr>
-                            <tr>
-                                <th
-                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                    ReqID
-                                </th>
-                                <th
-                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                    Request Date</th>
-                                <th
-                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
-                                    Request Time</th>
-
-                            </tr>
-                            <%for (var i=0 ; i < requestlist.length;i++){%>
+                        <%if(obslist.length >0 ){%>
+                            <table class="table is-bordered is-striped is-fullwidth">
                                 <tr>
-                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                                        <%=requestlist[i].ReqID%>
-                                    </td>
-                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                                        <%var reqdate=new Date(requestlist[i].RequestDate).toLocaleDateString("en-GB")%>
-                                            <%=reqdate%>
-                                    </td>
-                                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                                        <%=requestlist[i].RequestStartTime%> - <%=requestlist[i].RequestEndTime%>
-                                    </td>
+                                    <th colspan="5"
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: orange">
+                                        Observing List</th>
+        
                                 </tr>
+                                <tr>
+                                    <th
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                        SID
+                                    </th>
+                                    <th
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                        Student Name</th>
+                                    <th
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                        Topic</th>
+                                    <th
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                        TID
+                                    </th>
+                                    <th
+                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                        Supervisor
+                                    </th>
+                                </tr>
+                                <%for (var i=0 ; i < obslist.length;i++){%>
+                                    <tr>
+                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                            <%=obslist[i].sid%>
+                                        </td>
+                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                            <%=obslist[i].stdname%>
+                                        </td>
+                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                            <%=obslist[i].Topic%>
+                                        </td>
+                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                            <%=obslist[i].tid%>
+                                        </td>
+                                        <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                                            <%=obslist[i].supname%>
+                                        </td>
+                                    </tr>
+                                    <%}%>
+        
+        
+                            </table>
+                            <%}%>
 
-                                <%}%>
 
-
-                        </table>
                         <%}%>
             </div>
 

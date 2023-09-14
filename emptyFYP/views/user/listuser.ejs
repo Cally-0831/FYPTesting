@@ -1,3 +1,4 @@
+<%console.log(checkdate)%>
 <%if (req.session.role == "sup"){%>
     <div class="Pagetitle">Student List</div>
     <div class="rows">
@@ -10,11 +11,17 @@
     
                 </div>
             </div>
-            <div class="column ">
-                <div class="buttons is-right">
-                    <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
+            <%var finaldate = new Date(checkdate)%>
+            <%var today = new Date()%>
+            
+            <%if(finaldate > today){%>
+                <div class="column ">
+                    <div class="buttons is-right">
+                        <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
+                    </div>
                 </div>
-            </div>
+                <%}%>
+            
         </div>
     </div>
 <br><br>
