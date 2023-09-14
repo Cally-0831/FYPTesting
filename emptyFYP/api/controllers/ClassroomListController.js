@@ -178,7 +178,7 @@ module.exports = {
                     });
                 } else {
                     for (var i = 0; i < json.length; i++) {
-                        question += json[i].ReqID+"\n";
+                        question += json[i].ReqID + "\n";
                     }
                     return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
 
@@ -221,7 +221,8 @@ module.exports = {
 
                     return res.ok("Deleted");
                 } catch (err) {
-                    if (err) { console.log("sth happened here"); }
+                    if (err) { console.log("error happened when excuting ClassroomlistController.deletetimeslot");
+                }
                 }
 
             });
@@ -239,7 +240,8 @@ module.exports = {
                 return res.view('user/admin/classroommanagement', { allClassroomlist: roomlist });
 
             } catch (err) {
-                if (err) { console.log("sth happened here"); }
+                if (err) { cconsole.log("error happened when excuting ClassroomlistController.getinfobycampus");
+            }
             }
 
         });
@@ -262,7 +264,8 @@ module.exports = {
                 console.log(json);
                 return res.view('user/admin/view', { roominfo: roominfo, thetimeslotlist: timeslotlist });
             } catch (err) {
-                if (err) { console.log("sth happened here"); }
+                if (err) { console.log("error happened when excuting ClassroomlistController.getsingleroomtimeslot");
+            }
             }
 
         });
@@ -281,7 +284,8 @@ module.exports = {
                 console.log(json);
                 return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo });
             } catch (err) {
-                if (err) { console.log("sth happened here"); }
+                console.log("error happened when excuting ClassroomlistController.getoneroom");
+            
             }
 
         });
@@ -292,19 +296,19 @@ module.exports = {
             "\", EndDate = \"" + req.body.newendday.split('T')[0] + "\" , StartTime = \"" + req.body.newstarttime + "\", EndTime = \"" + req.body.newendtime + "\", Remarks = \"" + req.body.newremarks + "\""
             + "where ReqID = \"" + req.body.ReqID + "\"";
 
-        let checkline = "select * from allclassroomtimeslot where Campus= \""+req.body.Campus+"\" and RID = \""+req.body.RID+"\""
+        let checkline = "select * from allclassroomtimeslot where Campus= \"" + req.body.Campus + "\" and RID = \"" + req.body.RID + "\""
             + "and (((\"" + req.body.newstartday + "\" between startdate and enddate) or (( startdate  = \"" + req.body.newendday + "\" and \"" + req.body.newstarttime + "\" >= starttime)))"
             + " or  ((\"" + req.body.newstartday + "\" between startdate and enddate) and (\"" + req.body.newstartday + "\" between startdate and enddate))"
             + "or  ((\"" + req.body.newendday + "\" between startdate and enddate) or (( enddate  = \"" + req.body.newendday + "\" and \"" + req.body.newendtime + "\" >= endtime)))"
-            + " or (\"" + req.body.newstartday + "\"< startdate and \"" + req.body.newendday + "\">enddate) ) and ReqID not like \""+req.body.ReqID+"\"";
+            + " or (\"" + req.body.newstartday + "\"< startdate and \"" + req.body.newendday + "\">enddate) ) and ReqID not like \"" + req.body.ReqID + "\"";
 
         console.log(thisistheline + "\n\n\n\n\n" + checkline)
         db.query(checkline, function (err, result) {
 
             if (err) {
-                return res.status(401).json("error happened when chekcing duplication")
-            } else { 
-                 var question ="";
+                console.log("error happened when excuting ClassroomlistController.updatetimeslot");
+            } else {
+                var question = "";
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 console.log(json.length)
@@ -312,7 +316,8 @@ module.exports = {
                 if (json.length == 0) {
                     db.query(thisistheline, function (err, result) {
                         if (err) {
-                            return res.status(401).json("Error happened when excuting : " + thisistheline);
+                            console.log("error happened when excuting ClassroomlistController.updatetimeslot");
+                            k
                         } else {
                             console.log("1 record updated");
                             return res.status(200).json();
@@ -320,9 +325,9 @@ module.exports = {
 
                     });
                 } else {
-                  
+
                     for (var i = 0; i < json.length; i++) {
-                        question +=  json[i].ReqID+"\n" ;
+                        question += json[i].ReqID + "\n";
                     }
                     return res.status(401).json("This unavailable info has already been inputed or involved submitted timeslot." + "\n\n Please Review your inputs and submitted timeslots :\n\n" + question);
 
@@ -334,6 +339,25 @@ module.exports = {
 
 
 
-    }
+    },
+
+    changestatus: async function (req, res) {
+        var thisistheline;
+        if (req.body.Status == "Open") {
+            thisistheline = "Update classroom set status = \"Close\" where Campus = \"" + req.body.Campus + "\" and rid = \"" + req.body.RID + "\""
+        } else {
+            thisistheline = "Update classroom set status = \"Open\" where Campus = \"" + req.body.Campus + "\" and rid = \"" + req.body.RID + "\""
+        }
+        console.log(thisistheline);
+        db.query(thisistheline, (err, results) => {
+            try {
+
+                return res.ok("Updated");
+            } catch (err) {
+                if (err) { console.log("error happened when excuting ClassroomlistController.changestatus"); }
+            }
+
+        });
+    },
 
 }

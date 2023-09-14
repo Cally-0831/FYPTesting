@@ -1,1 +1,0 @@
-select student.sid, student.stdname, student.Topic,observerpairstudent.TID,observerpairstudent.supname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid 

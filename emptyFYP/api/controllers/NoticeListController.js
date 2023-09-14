@@ -108,36 +108,26 @@ module.exports = {
             // setting related notice and is an update
 
             thisistheline = "select * from allsupersetting where stid=\"" + req.body.oldid + "\"";
-            console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
+           db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     var oldinfo = json;
-                    console.log('>> oldinfo: ', oldinfo);
-
+                    
                     thisistheline = "select * from allsupersetting where stid=\"" + req.body.id + "\"";
-                    console.log(thisistheline)
-
                     db.query(thisistheline, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
                             var newinfo = json;
-                            console.log('>> newinfo: ', newinfo);
                             if (oldinfo[0].typeofsetting != 3) {
                                 var updatedate = (new Date(newinfo[0].deadlinedate)).toLocaleDateString("en-GB").split("/");
-                                console.log(updatedate)
-
-                                thisistheline = "update allsupersetting set deadlinedate = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + "\" ,deadlinetime= \"" + newinfo[0].deadlinetime + "\", LastUpdate = now(), Announcetime = now() where stid=\"" + req.body.oldid + "\"";
-                                console.log(thisistheline)
-
+                               thisistheline = "update allsupersetting set deadlinedate = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + "\" ,deadlinetime= \"" + newinfo[0].deadlinetime + "\", LastUpdate = now(), Announcetime = now() where stid=\"" + req.body.oldid + "\"";
                                 db.query(thisistheline, (err, results) => {
                                     try {
 
                                         console.log('done update');
                                         thisistheline = "delete from allsupersetting where stid=\"" + req.body.id + "\"";
-                                        console.log(thisistheline)
                                         db.query(thisistheline, (err, results) => {
                                             try {
 
@@ -150,14 +140,12 @@ module.exports = {
                                                         console.log("insert new notice");
                                                         if (oldinfo[0].typeofsetting == 1) {
                                                             thisistheline = "update student set student.ttbdeadline = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + " " + newinfo[0].deadlinetime + "\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \"" + req.session.userid + "\");";
-                                                            console.log(thisistheline)
                                                             db.query(thisistheline, (err, results) => {
                                                                 if (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                                             })
                                                         } else {
                                                             thisistheline = "update student set student.requestdeadline = \"" + updatedate[2] + "-" + updatedate[1] + "-" + updatedate[0] + " " + newinfo[0].deadlinetime + "\" where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = \"" + req.session.userid + "\");";
-                                                            console.log(thisistheline)
-                                                            db.query(thisistheline, (err, results) => {
+                                                           db.query(thisistheline, (err, results) => {
                                                                 if (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
                                                             })
                                                         }
@@ -178,14 +166,11 @@ module.exports = {
                                 var updatestartdate = (new Date(newinfo[0].startdate)).toLocaleDateString("en-GB").split("/");
                                 var updateenddate = (new Date(newinfo[0].enddate)).toLocaleDateString("en-GB").split("/");
                                 thisistheline = "update allsupersetting set startdate = \"" + updatestartdate[2] + "-" + updatestartdate[1] + "-" + updatestartdate[0] + "\" , starttime= \"" + newinfo[0].starttime + "\", enddate = \"" + updateenddate[2] + "-" + updateenddate[1] + "-" + updateenddate[0] + "\", endtime = \"" + newinfo[0].endtime + "\" , LastUpdate = now(), Announcedtime = now()  where stid=\"" + req.body.oldid + "\"";
-                                console.log(thisistheline)
-
                                 db.query(thisistheline, (err, results) => {
                                     try {
 
                                         console.log('done update');
                                         thisistheline = "delete from allsupersetting where stid=\"" + req.body.id + "\"";
-                                        console.log(thisistheline)
                                         db.query(thisistheline, (err, results) => {
                                             try {
 

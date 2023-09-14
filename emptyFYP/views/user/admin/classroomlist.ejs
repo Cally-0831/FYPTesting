@@ -12,7 +12,7 @@
     </div>
     <div class="column is-half">
         <div class="buttons is-right">
-            <button class="button" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
+            <button class="button buttonlogout" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
         </div>
     </div>
 </div>
@@ -31,7 +31,8 @@
             <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',1);">&#8593;</a>
             Room Name
         </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Status</th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+            <a class="sorting" id='headerStatus' onclick="sorting('sorting','mytable','headerStatus',2);">&#8593;</a>Status</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Add timeslot</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
         <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">View</th>
@@ -42,30 +43,38 @@
 
                 <tr>
                     <td style="text-align: center;vertical-align:middle;">
-                        <%= classroom.Campus %>
+                        <%=classroom.Campus%>
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
-                        <%= classroom.RID%>
+                        <%=classroom.RID%>
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
-                        <%= classroom.status%>
+                        <div class="buttons is-centered">
+                            <%if(classroom.status == "Close"){%>
+                                <button class="button buttonlogout" style="background-color: rgb(200, 130, 60);" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
+                            <%}else{%>
+                                <button class="button buttonlogout" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
+                            <%}%>
+                        </div>
+                        
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
-                        <a href="/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>">
-                            <button class="button" type="button">Add</button>
-                        </a>
+                        <div class="buttons is-centered">
+                            <button class="button buttonlogout" type="button" onclick="redirect('/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>')">Add</button>
+                       </div>
 
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
-                        <button class="button" type="button"
-                            onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
+                        <div class="buttons is-centered">
+                        <button class="button buttonlogout"onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
                             Delete
                         </button>
+                    </div>
                     </td>
                     <td style="text-align: center;vertical-align:middle;">
-                        <a href="/view/<%= classroom.Campus%>/<%= classroom.RID%>">
-                            <button class="button" type="button">view</button>
-                        </a>
+                        <div class = "buttons is-centered">
+                            <button class="button buttonlogout" onclick="redirect('/view/<%= classroom.Campus%>/<%= classroom.RID%>')">view</button>
+                       </div>
                     </td>
                 </tr>
                 <%}%>
@@ -166,5 +175,24 @@
         }
     }
 
+    function backback(){
+        location.assign("/Mainclassroommanagement")
+    }
+
+    function redirect(path){
+        location.assign(path)
+    }
+
+    async function changestatus(campus,rid,status){
+        var requestBody = JSON.stringify({ Campus: campus, RID: rid,Status:status });
+            var response = await fetch("/classroomlist", {
+                method: "POST",
+                body: requestBody
+            });
+
+            if (response.ok) {
+                location.reload();
+            } 
+    }
 
 </script>

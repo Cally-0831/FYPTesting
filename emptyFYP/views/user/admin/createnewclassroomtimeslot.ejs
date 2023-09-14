@@ -3,9 +3,9 @@
     <button class="button buttonlogout" onclick="backback()">Back</button>
 </div>
 <br>
-<div class="columns ">
-    <div class="column is-one-fifth"> </div>
-        <div class=" column template is-three-fifths">
+<div class="columns is-centered is-mobile">
+   
+        <div class="column template is-three-fifths">
             <form action="/addtimeslot/<%=roominfo.Campus%>/<%=roominfo.RID%>" method="post"
                 onsubmit="createnewclassroomtimeslot(this);return false;">
                 <p></p>
@@ -27,6 +27,7 @@
                 <p></p>
                 <div id="showthetime"></div>
                 <br>
+                <label for="remarks">Remarks</label>
                 <textarea class="textarea" id="remarks" name="remarks"  placeholder=""></textarea>
                   
                 <br>
@@ -38,7 +39,7 @@
 
        
     </div>
-    <div class="column is-one-fifth"> </div>
+    
 </div>
 
 

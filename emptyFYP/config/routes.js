@@ -78,7 +78,7 @@ module.exports.routes = {
   'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",
   "POST /requestdetail/proof/:ReqID": "RequestController.upload",
 
-  'GET /classroommanagement': "ClassroomListController.getinfobycampus",
+ 
   'GET /Mainclassroommanagement': { view: 'user/admin/Mainclassroommanagement' },
   'GET /classmanagement': { view: 'user/admin/classmanagement' },
 
@@ -86,6 +86,7 @@ module.exports.routes = {
   'POST /createnewclassroom': "ClassroomListController.createnewclassroom",
 
   'GET /classroomlist': "ClassroomListController.listclassroom",
+  'POST /classroomlist': "ClassroomListController.changestatus",
   'DELETE /classroomlist': "ClassroomListController.deleteclassroom",
 
   'GET /view/:campus/:rid': "ClassroomListController.getsingleroomtimeslot",

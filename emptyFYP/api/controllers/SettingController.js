@@ -50,9 +50,9 @@ module.exports = {
                 //thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\"" + req.body.date + "\" , deadlinetime=\"" + req.body.time + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
 
             }
-            console.log(thisistheline);
+            
         }
-
+console.log(thisistheline);
         if (delthisline != "") {
             db.query(delthisline, (err, results) => {
                 try {
