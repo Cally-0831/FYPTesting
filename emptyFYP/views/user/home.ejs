@@ -83,41 +83,7 @@
                     </div>
                 </div>
             </div>
-            <%}else if(req.session.role=="obs" ) {%>
-                <p>this is a observer</p>
-                <div class="rows is-mobile">
-                    <div class="row">
-                        <div class="columns  is-multiline is-mobile">
-                            <div class="imgcolumn">
-                                <a href="/notice">
-                                    <img src="images\home\notice.jpg" class="gallery_img">
-                                </a>
-                            </div>
-
-                            <div class="imgcolumn">
-                                <a href="/timetable">
-                                    <img src="images\home\ttb.jpg" class="gallery_img">
-                                </a>
-                            </div>
-                            <div class="imgcolumn">
-                                <a href="/submitrequest">
-                                    <img src="images\home\question.jpg" class="gallery_img">
-                                </a>
-                            </div>
-                            <div class="imgcolumn">
-                                <a href="/checkrequest">
-                                    <img src="images\home\reply.jpg" class="gallery_img">
-                                </a>
-                            </div>
-
-                            <div class="imgcolumn">
-                                <a onclick="checktimecome()">
-                                    <img src="images\home\canlendar.jpg" class="gallery_img">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            
                 <%}else if(req.session.role=="adm" ) {%>
                     <p>this is a admin</p>
                     <div class="rows is-mobile">
@@ -165,17 +131,7 @@
                     <%}%>
 </div>
 <script>
-    /**
-    async function wanttodesign() {
-        var response = await fetch("/schduledesign", {
-            method: "GET",
-        });
-        if (response.ok) {
-console.log()
-            location.assign(response.url);
-        }
-
-    }**/
+   
     async function checkhavedraft() {
         var response = await fetch("/checkdraft", {
             method: "GET",

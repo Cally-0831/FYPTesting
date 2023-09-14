@@ -408,7 +408,7 @@ console.log("just check      "+ thisclassinfo[0])
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                console.log(personallist.length)
+                
 
                 thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
                 db.query(thisistheline, function (err, result) {
@@ -444,9 +444,7 @@ console.log("just check      "+ thisclassinfo[0])
                                 personallist = [];
                             }
                         }
-                        console.log(date)
-                        console.log(personallist)
-
+                        
                         return res.view('user/timetable', {
                             date: date,
                             allpersonallist: personallist,

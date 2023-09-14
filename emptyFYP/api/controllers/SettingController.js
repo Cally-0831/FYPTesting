@@ -160,7 +160,7 @@ module.exports = {
 
                 thisistheline = "";
 
-                return res.view("user/schduledesign", { havedraft: "N", warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday });
+                return res.view("user/admin/schduledesign", { havedraft: "N", warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday });
 
 
             } catch (err) {

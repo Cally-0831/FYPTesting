@@ -283,7 +283,6 @@
                         <%if(allpersonallist[0].picdata!= null){%>
                             <br><br>
                             <div>
-
                                 <div class="columns ">
 
                                     <div class="column is half">
@@ -447,9 +446,8 @@
                                 <%}%>
                                     <br><br>
                                     <div class="columns is-mobile">
-
-                                        <%if (allpersonallist.length>0 && allpersonallist[0].CID !=
-                                            "EMPTY_") {%>
+                                        
+                                        <%if (allpersonallist.length>0 && allpersonallist[0].CID != "EMPTY_") {%>
                                             <% var lastbox; const mon=[]; const tue=[]; const wed=[]; const thu=[];
                                                 const fri=[]; const sat=[]; const arraylist=[mon,tue,wed,thu,fri,sat];
                                                 %>
@@ -463,8 +461,18 @@
                                                                     <%arraylist[y].push("EMPTY")%>
                                                                         <%}%>
                                                                             <%}%>
-
-
+                                                                           
+                                                                            <% for (var y=0 ; y < arraylist.length;y++){%>
+                                                                                <%if(arraylist[y].length >=2){%>
+                                                                                    <%for (var x=1 ; x < arraylist[y].length;x++){%>
+                                                                                        <%if(arraylist[y][x].startTime == arraylist[y][x-1].startTime && arraylist[y][x].endTime == arraylist[y][x-1].endTime){%>
+                                                                                            <%arraylist[y][x].CID = "SKIP"%>
+                                                                                            <%}%>
+                                                                                    <%}%>
+                                                                                <%}%>
+                                                                                
+                                                                            <%}%>
+                                                                            
                                                                                 <table
                                                                                     class="table is-bordered is-striped is-hoverable is-halfwidth center">
                                                                                     <th
@@ -491,134 +499,48 @@
 
                                                                                     <!---j = timebox-->
                                                                                     <%var firstbox=0;var lastbox=6;%>
-                                                                                        <% for(var j=8 ; j < 20;j++){
-                                                                                            let currenttime=new Date();
-                                                                                            currenttime.setHours(j, 30,
-                                                                                            0, 0); let endend=new
-                                                                                            Date();
-                                                                                            endend.setHours(j+1,20,0,0)
-                                                                                            %>
+                                                                                    <%var boxstr="";%>
+                                                                                    
+                                                                                        <% for(var j=8 ; j < 20;j++){ %>
+                                                                                            <%let currenttime=new Date(); %>
+                                                                                            <%currenttime.setHours(j, 30, 0, 0); %> 
+                                                                                            <%let endend =new Date(); %>
+                                                                                            <%endend.setHours(j+1,20,0,0) %>
+                                                                                            
                                                                                             <tr>
                                                                                                 <% if(j < 10){%>
-                                                                                                    <td> 0<%=j%>:30
-                                                                                                    </td>
-                                                                                                    <%}else{%>
-                                                                                                        <td>
-                                                                                                            <%=j%>:30
-                                                                                                        </td>
+                                                                                                    <td> 0<%=j%>:30</td>
+                                                                                                <%}else{%>
+                                                                                                    <td><%=j%>:30</td>
+                                                                                                <%}%>
+                                                                                                <!---i = arraybox-->
+                                                                                                <%for(var a = 0 ; a <  arraylist.length;a++){%>
+                                                                                                    <%if(arraylist[a] == "EMPTY"){%>
+                                                                                                        <td><%=a%> no class</td>
+                                                                                                        <%}else{%>
+                                                                                                            
+                                                                                                            <%var boxstr ="";%>
+                                                                                                            <%for(var b = 0 ; b < arraylist[a].length;b++){%>
+                                                                                                               <%if(arraylist[a][b].CID != "SKIP"){%>
+                                                                                                                    <%if(arraylist[a][b].startTime == currenttime.toLocaleTimeString("en-GB")){%>
+                                                                                                                        <%boxstr = arraylist[a][b].CID%>
+                                                                                                                        <%var newstarttime = arraylist[a][b].startTime.split(":")%>
+                                                                                                                        <%if(parseInt(newstarttime[0])+1< 10){newstarttime[0] = "0"+(parseInt(newstarttime[0])+1)}else{newstarttime[0] = parseInt(newstarttime[0])+1;}%>
+                                                                                                                        <%arraylist[a][b].startTime = newstarttime[0]+":"+newstarttime[1]+":"+newstarttime[2]%>    
+                                                                                                                    <%}%>
+                                                                                                                    <%if(arraylist[a][b].endTime == endend.toLocaleTimeString("en-GB")){%>
+                                                                                                                        <%arraylist[a][b].CID = "SKIP"%>   
+                                                                                                                        
+                                                                                                                    <%}%>
+                                                                                                                <%}%>
+                                                                                                               
+                                                                                                                
+                                                                                                            <%}%>
+                                                                                                            <td><%=boxstr%></td>
                                                                                                         <%}%>
-                                                                                                            <!---i = arraybox-->
-                                                                                                            <% for(var
-                                                                                                                i=0 ; i
-                                                                                                                <
-                                                                                                                arraylist.length;i++){
-                                                                                                                %>
-
-
-                                                                                                                <% for(var
-                                                                                                                    x=0
-                                                                                                                    ; x
-                                                                                                                    <
-                                                                                                                    arraylist[i].length;x++){
-                                                                                                                    %>
-                                                                                                                    <%if (arraylist[i][x]=="EMPTY"
-                                                                                                                        ){%>
-                                                                                                                        <%firstbox++;%>
-                                                                                                                            <%}else{%>
-
-                                                                                                                                <% let
-                                                                                                                                    classend=new
-                                                                                                                                    Date();
-                                                                                                                                    %>
-                                                                                                                                    <% const
-                                                                                                                                        classendstr=(arraylist[i][x].endTime).split(":");
-                                                                                                                                        %>
-                                                                                                                                        <%classend.setHours(classendstr[0],classendstr[1],classendstr[2],0)%>
-
-
-                                                                                                                                            <% let
-                                                                                                                                                classstart=new
-                                                                                                                                                Date();
-                                                                                                                                                %>
-                                                                                                                                                <% const
-                                                                                                                                                    classstartstr=(arraylist[i][x].startTime).split(":");
-                                                                                                                                                    %>
-                                                                                                                                                    <%
-                                                                                                                                                        classstart.setHours(classstartstr[0],classstartstr[1],classstartstr[2],0)%>
-
-
-                                                                                                                                                        <%if (
-                                                                                                                                                            currenttime.toLocaleTimeString()==classstart.toLocaleTimeString()
-                                                                                                                                                            &&
-                                                                                                                                                            arraylist[i].CID
-                                                                                                                                                            !="SKIP"
-                                                                                                                                                            ){%>
-
-                                                                                                                                                            <%for(var
-                                                                                                                                                                q=0
-                                                                                                                                                                ;
-                                                                                                                                                                q
-                                                                                                                                                                <
-                                                                                                                                                                firstbox
-                                                                                                                                                                ;
-                                                                                                                                                                q++){%>
-                                                                                                                                                                <td>
-                                                                                                                                                                </td>
-                                                                                                                                                                <%}%>
-                                                                                                                                                                    <td
-                                                                                                                                                                        style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                                                                                                                        <%=arraylist[i][x].CID%>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <%firstbox=0;lastbox=6-(arraylist[i][x].weekdays);%>
-                                                                                                                                                                        <%if(classend.toLocaleTimeString()==endend.toLocaleTimeString()){%>
-                                                                                                                                                                            <%arraylist[i].shift()%>
-                                                                                                                                                                                <%if(arraylist[i].length==0){%>
-                                                                                                                                                                                    <%arraylist[i].push("EMPTY")%>
-                                                                                                                                                                                        <%}%>
-
-                                                                                                                                                                                            <%}else{%>
-                                                                                                                                                                                                <%if((j+1)
-                                                                                                                                                                                                    <
-                                                                                                                                                                                                    10){newtime="0"
-                                                                                                                                                                                                    +(j+1)+":30:00"}else{newtime=(j+1)+":30:00";}%>
-                                                                                                                                                                                                    <%arraylist[i][x].startTime=newtime;%>
-                                                                                                                                                                                                        <%}%>
-
-
-                                                                                                                                                                                                            <%}else{%>
-
-                                                                                                                                                                                                                <%if(x==0
-                                                                                                                                                                                                                    ||
-                                                                                                                                                                                                                    (x>
-                                                                                                                                                                                                                    0
-                                                                                                                                                                                                                    &&
-                                                                                                                                                                                                                    arraylist[i][x]
-                                                                                                                                                                                                                    ==
-                                                                                                                                                                                                                    "EMPTY")){%>
-                                                                                                                                                                                                                    <%firstbox=arraylist[i][x].weekdays;%>
-                                                                                                                                                                                                                        <%}%>
-
-
-
-                                                                                                                                                                                                                            <%}%>
-
-                                                                                                                                                                                                                                <%}%>
-
-                                                                                                                                                                                                                                    <%}%>
-                                                                                                                                                                                                                                        <%}%>
-                                                                                                                                                                                                                                            <%for(var
-                                                                                                                                                                                                                                                q=0
-                                                                                                                                                                                                                                                ;
-                                                                                                                                                                                                                                                q
-                                                                                                                                                                                                                                                <
-                                                                                                                                                                                                                                                lastbox
-                                                                                                                                                                                                                                                ;
-                                                                                                                                                                                                                                                q++){%>
-                                                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <%}%>
-                                                                                                                                                                                                                                                    <%firstbox=0;
-                                                                                                                                                                                                                                                        lastbox=6;%>
+                                                                                                    
+                                                                                                    <%}%>
+                                                                                                    
                                                                                             </tr>
                                                                                             <%}%>
 
