@@ -75,8 +75,8 @@
                             <br><br>
 
                             <%var today=new Date()%>
-                                <%console.log("\n\n\n\n"+today+"\n"+theday)%>
-                                    <%if ((theday==null) || (theday!=null&& today < theday)){%>
+                                <%console.log("\n\n\n\n"+today+"\n"+date)%>
+                                    <%if ((theday==null) || (theday!=null&& today < date)){%>
 
                                         <div id="orgformbutton " class="buttons is-right">
                                             <button class="button buttonlogout" type="submit is-success">Submit</button>
@@ -122,7 +122,9 @@
                                 </div>
 
                                 <br>
-                                <%if ((theday==null) || (theday!=null&& today < theday)){%>
+                                <%var today=new Date()%>
+                                <%=today%>    <%=date%>
+                                    <%if ((theday==null) || (theday!=null&& today < date)){%>
 
                                     <div class="buttons is-right">
                                         <button class="button buttonlogout" type="submit is-success">Submit</button>

@@ -73,14 +73,36 @@
             </table>
         </div>
         <%}else{%>
-            <div> So Sorry the day is yet to come, the schedule will not be disclose until the date</div>
-            <br><br>
-            <div>Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></div>
+            <div class = "columns is-centered is-mobile">
+                <div class = "column is-half">
+                    <article class="message is-primary">
+                        <div class="message-header">
+                        <p>Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></p>
+                        
+                        </div>
+                        <div class="message-body">
+                            The Presentation Schdeule has not been released.
+                            <br>
+                            The schedule will not be disclose until the date.
+                        </div>
+                    </article>
+                </div>
+            </div>
+            
+
             <%}%>
     
     
     <%}else{%>
-        <div>Your Supervisior havent set releasedate</div>
+        <article class="message is-primary">
+            <div class="message-header">
+              <p>Sorry</p>
+              
+            </div>
+            <div class="message-body">
+                The Presentation Schdeule has not been released.
+            </div>
+          </article>
         <%}%>
 
 

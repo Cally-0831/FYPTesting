@@ -26,18 +26,17 @@ module.exports = {
         var releasedate;
         var releasetime;
 
-        if (req.session.role == "obs") {
-            thisistheline = "select * from allsupersetting where creator = (select tid from supervisorpairobserver where oid = \"" + req.session.userid + "\") and typeofsetting=4";
-            thisistheline2 = "select * from allschedulebox where tid = (select tid from supervisorpairobserver where oid = \"" + req.session.userid + "\")"
-            thisistheline3 = "select * from allschedulebox where oid = \"" + req.session.userid + "\""
+        if (req.session.role == "sup") {
+            thisistheline = "select * from allsupersetting where where announcetime is not null and  typeofsetting= \"4\""
+            thisistheline2 = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\"";
         } else if (req.session.role == "stu") {
-            thisistheline = "select * from allsupersetting where creator = (select tid from supervisorpairstudent where sid = \"" + req.session.userid + "\") and typeofsetting=4"
-            thisistheline2 = "select * from allschedulebox where tid =  (select tid from supervisorpairstudent where sid = \"" + req.session.userid + "\")"
-            thisistheline3 = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
+            thisistheline = "select * from allsupersetting where announcetime is not null and  typeofsetting= \"4\"";
+            thisistheline2 = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
         }
 
         db.query(thisistheline, (err, results) => {
             try {
+                //get setting check can the system show now
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 console.log('>> json: ', json);
@@ -54,22 +53,13 @@ module.exports = {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        var allschedulebox = json;
-                        console.log('>>  allschedulebox: ', allschedulebox);
-                        db.query(thisistheline3, (err, results) => {
-                            try {
-                                var string = JSON.stringify(results);
-                                var json = JSON.parse(string);
-                                var personalschedulebox = json;
-                                console.log('>> personalschedulebox: ', personalschedulebox);
-                                return res.view('user/checkschdule', {
-                                    releasedate: releasedate, releasetime: releasetime,
-                                    allschedulebox: allschedulebox, personalschedulebox: personalschedulebox
-                                });
-                            } catch (err) {
-                                console.log("sth happened here");
-                            }
+                        var personalschedulebox = json;
+                        console.log('>> personalschedulebox: ', personalschedulebox);
+                        return res.view('user/checkschdule', {
+                            releasedate: releasedate, releasetime: releasetime,
+                            personalschedulebox: personalschedulebox
                         });
+
                     } catch (err) {
                         console.log("sth happened here");
                     }
@@ -88,56 +78,35 @@ module.exports = {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var threepartylist = json;
-                //console.log(threepartylist)
-                thisistheline2 = "select startdate, starttime,enddate,endtime from allsupersetting where typeofsetting = \"3\""
+                console.log(">>threepartylist:  ", threepartylist)
+                thisistheline2 = "select startdate, starttime,enddate,endtime from allsupersetting where typeofsetting = \"3\" and Announcetime is not null;"
                 /** Get present time */
                 db.query(thisistheline2, (err, results) => {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     var presentdate = json
-
+                    console.log(">>  presentdate:", presentdate)
                     var startstart = new Date(presentdate[0].startdate);
                     var endend = new Date(presentdate[0].enddate);
                     var strstarttime = presentdate[0].starttime.split(":");
                     var strendtime = presentdate[0].endtime.split(":");
-                    var orgstart = new Date(presentdate[0].startdate);
+
                     var ansstartdate;
                     var ansenddate;
                     var adddate;
+                    startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
                     endend.setHours(strendtime[0], strendtime[1], strendtime[2]);
+                    var strstartstart = startstart.toISOString().toString().split("T")[0];
+                    var strendend = endend.toISOString().toString().split("T")[0];
 
-                    if (req.params.Page > 1) {
-
-                        adddate = (8 - parseInt(startstart.getDay())) + ((parseInt(req.params.Page) - 2) * 7);
-                        startstart = new Date(startstart.getTime() + (adddate) * 24 * 60 * 60 * 1000)
-                    } else {
-                        startstart = new Date(startstart.getTime() + (req.params.Page - 1) * 24 * 60 * 60 * 1000)
-                    }
-
-
-                    if (req.params.Page == 1) {
-                        startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
-                    } else {
-                        startstart.setHours(0, 0, 0);
-                    }
-
-                    ansstartdate = startstart;
-                    ansenddate = endend;
-
-                    startstart = startstart.getFullYear() + "-" + (startstart.getMonth() + 1) + "-" + startstart.getDate();
-                    endend = endend.getFullYear() + "-" + (endend.getMonth() + 1) + "-" + endend.getDate();
-
-                    console.log(startstart + "    " + endend)
-                    console.log(ansstartdate + "  " + ansenddate)
-
-                    var thisistheline3 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
+                    var thisistheline3 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" and classroom.status != \"Close\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
                     /** Get classroom's ttb */
                     db.query(thisistheline3, (err, results) => {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var classroomusagelist = json;
                         console.log('>> classroomusagelist: ', classroomusagelist);
-                        var thisistheline4 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
+                        var thisistheline4 = "select  *  from allclassroomtimeslot left join classroom on classroom.campus = allclassroomtimeslot.campus and classroom.rid = allclassroomtimeslot.rid where classroom.status != \"Close\"and ((startdate between \"" + strstartstart + "\"  and \"" + strendend + "\") or (enddate between \"" + strstartstart + "\" and \"" + strendend + "\")) order by allclassroomtimeslot.Campus asc,allclassroomtimeslot.RID asc, allclassroomtimeslot.startTime asc"
                         /** Get classroom's unavailble timeslot */
                         db.query(thisistheline4, (err, results) => {
                             var string = JSON.stringify(results);
@@ -150,20 +119,44 @@ module.exports = {
                                 var json = JSON.parse(string);
                                 var Campuslist = json;
                                 console.log('>> Campuslist: ', Campuslist);
-                                var thisistheline6 = "select * from classroom where Campus!=\"\"";
+                                var thisistheline6 = "select * from classroom where Campus!=\"\" and status != \"Close\"";
                                 db.query(thisistheline6, (err, results) => {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     var allclassroomlist = json;
                                     console.log('>>allclassroomlist: ', allclassroomlist);
-                                    for(var a = 0 ; a < threepartylist.length;a++){
+                                    for (var a = 0; a < threepartylist.length; a++) {
                                         
+                                        var ans =[]
+                                        var thisistheline7 = "select * from allsupertakecourse where pid = \"" + threepartylist[a].tid + "\" and confirmation = \"1\"";
+                                        var thisistheline8 = "select * from allsupertakecourse where pid = \"" + threepartylist[a].oid + "\" and confirmation = \"1\"";
+                                        var thisistheline9 = "select * from allstudenttakecourse where pid = \"" + threepartylist[a].sid + "\" and confirmation = \"1\"";
+                                                  
+                                        db.query(thisistheline7, (err, results) => {
+                                            console.log(threepartylist[a])
+                                            var string = JSON.stringify(results);
+                                            var json = JSON.parse(string);
+                                            var superttb = json;
+                                            console.log(">> superttb:", superttb)
+                                             db.query(thisistheline8, (err, results) => {
+                                                var string = JSON.stringify(results);
+                                                var json = JSON.parse(string);
+                                                var obsttb = json;
+                                                console.log(">> obsttb:", obsttb)
+                                                 db.query(thisistheline9, (err, results) => {
+                                                    var string = JSON.stringify(results);
+                                                    var json = JSON.parse(string);
+                                                    var stuttb = json;
+                                                    console.log(">> stuttb:", stuttb)
+                                                })
+                                            })
+                                        })
                                     }
                                 })
                             })
                         })
                     })
-
+                    return res.ok()
                 })
             } catch (err) {
                 console.log("error happened when excuting SchduleController.getallneededinfo")

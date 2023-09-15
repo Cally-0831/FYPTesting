@@ -50,9 +50,10 @@ module.exports = {
                 //thisistheline = "update allsupersetting set lastUpdate = now(), deadlinedate =\"" + req.body.date + "\" , deadlinetime=\"" + req.body.time + "\",announcetime=null where creator=\"" + req.session.userid + "\" and typeofsetting=\"" + req.body.type + "\" "
 
             }
-            
+
         }
-console.log(thisistheline);
+        console.log(thisistheline);
+        console.log(delthisline)
         if (delthisline != "") {
             db.query(delthisline, (err, results) => {
                 try {
@@ -85,10 +86,10 @@ console.log(thisistheline);
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 supersetting = json;
-                console.log("getting done")
+                
                 return res.view('user/setting', { thissupersetting: supersetting });
             } catch (err) {
-                console.log("sth happened here");
+                console.log("error happened when excuting SettingController.getsetting");
 
             }
 
@@ -125,8 +126,7 @@ console.log(thisistheline);
                         if (supersetting[i].typeofsetting == 4) {
                             realreleaseday = dday
                         }
-                        console.log(today + "\n" + dday)
-                        console.log(today < dday)
+                       
                         if (today < dday) {
                             msg += supersetting[i].typeofsetting + "&"
                             checking = 1;
@@ -143,8 +143,7 @@ console.log(thisistheline);
                         var startdday = new Date(stringstring1);
                         presentstartday = startdday
                         presentendday = new Date(stringstring2);
-                        console.log(today + "\n" + startdday)
-                        console.log(today > startdday)
+                       
                         if (today > startdday) {
                             msg += supersetting[i].typeofsetting + "&"
                             checking = 1;
