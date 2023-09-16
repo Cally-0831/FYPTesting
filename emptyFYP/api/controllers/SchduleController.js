@@ -125,33 +125,21 @@ module.exports = {
                                     var json = JSON.parse(string);
                                     var allclassroomlist = json;
                                     console.log('>>allclassroomlist: ', allclassroomlist);
-                                    for (var a = 0; a < threepartylist.length; a++) {
-                                        
-                                        var ans =[]
-                                        var thisistheline7 = "select * from allsupertakecourse where pid = \"" + threepartylist[a].tid + "\" and confirmation = \"1\"";
-                                        var thisistheline8 = "select * from allsupertakecourse where pid = \"" + threepartylist[a].oid + "\" and confirmation = \"1\"";
-                                        var thisistheline9 = "select * from allstudenttakecourse where pid = \"" + threepartylist[a].sid + "\" and confirmation = \"1\"";
-                                                  
-                                        db.query(thisistheline7, (err, results) => {
-                                            console.log(threepartylist[a])
+                                    var thisistheline7 = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where confirmation = \"1\""
+                                    db.query(thisistheline7, (err, results) => {
+                                        var string = JSON.stringify(results);
+                                        var json = JSON.parse(string);
+                                        var superttb = json;
+                                        console.log('>>allsupertakecourse: ', allsupertakecourse);
+                                        var thisistheline8 = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where confirmation = \"1\""
+                                        db.query(thisistheline8, (err, results) => {
                                             var string = JSON.stringify(results);
                                             var json = JSON.parse(string);
-                                            var superttb = json;
-                                            console.log(">> superttb:", superttb)
-                                             db.query(thisistheline8, (err, results) => {
-                                                var string = JSON.stringify(results);
-                                                var json = JSON.parse(string);
-                                                var obsttb = json;
-                                                console.log(">> obsttb:", obsttb)
-                                                 db.query(thisistheline9, (err, results) => {
-                                                    var string = JSON.stringify(results);
-                                                    var json = JSON.parse(string);
-                                                    var stuttb = json;
-                                                    console.log(">> stuttb:", stuttb)
-                                                })
-                                            })
+                                            var stuttb = json;
+                                            console.log('>>allsupertakecourse: ', allsupertakecourse);
+    
                                         })
-                                    }
+                                    })
                                 })
                             })
                         })

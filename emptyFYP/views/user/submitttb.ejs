@@ -89,13 +89,13 @@
                 method: "POST",
             });
 
+
             if (response.ok) {
 
                 var response2 = await fetch(formElem.action, {
                     method: formElem.method,
                     body: requestbody
                 });
-                console.log("!@#$%!@#$%!@#$!@#$!@$            " + response2.status);
                 if (response2.ok) {
                     alert("Inserted");
                     location.assign("/timetable");
