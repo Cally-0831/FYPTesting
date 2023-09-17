@@ -1,0 +1,205 @@
+ db.query(insertsection, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                thisclassinfo = json;
+                console.log(">> thisclassinfo", thisclassinfo)
+                for (var a = 0; a < thisclassinfo.length; a++) {
+                    console.log(">> thisclassinfo ", a, "    ", thisclassinfo[a])
+                    if (req.session.role == "sup") {
+                        checkinputted = "select * from allsupertakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[a].CID + "\"";
+                        findtimecrashbygetpersonttb = "select * from allsupertakecourse join allclass on allclass.CID = allsupertakecourse.CID  where pid = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[a].weekdays + "\" and (\"" + thisclassinfo[a].startTime + "\" between startTime and endtime );"
+
+                    } else {
+                        checkinputted = "select * from allstudenttakecourse where pid = \"" + req.session.userid + "\" and CID like \"" + thisclassinfo[a].CID + "\"";
+                        findtimecrashbygetpersonttb = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[a].weekdays + "\" and (\"" + thisclassinfo[a].startTime + "\" between startTime and endtime );"
+
+                    }
+                    console.log(checkinputted)
+                    db.query(checkinputted, function (err, result) {
+                        try {
+                            var string = JSON.stringify(result);
+                            var json = JSON.parse(string);
+                            havethis = json;
+                            if (havethis.length > 0) {
+                                codecode = 401;
+                                msg = "This class has already been inputed before"
+                                return res.status(codecode).json(msg);
+                            } else {
+                                console.log("not inputted you")
+
+                                db.query(findtimecrashbygetpersonttb, function (err, result) {
+                                    try {
+                                        var string = JSON.stringify(result);
+                                        var json = JSON.parse(string);
+                                        havetimecrash = json;
+                                        if (havetimecrash.length > 0) {
+                                            codecode = 401;
+                                            msg = "Please Review your input since there was a time crash between your inputs"
+                                            return res.status(codecode).json(msg);
+                                        } else {
+                                            if (caninsertthisclasslabsection != "") {
+                                                db.query(caninsertthisclasslabsection, function (err, result) {
+                                                    try { } catch (err) {
+                                                        codecode = 401;
+                                                        msg = "Error happened when inserting ClassLabSection"
+                                                        //return res.status(codecode).json(msg);
+                                                    }
+
+                                                })
+                                            }
+
+                                            db.query(caninsertthisclasssection, function (err, result) {
+                                                try {
+                                                    codecode = 401;
+                                                    msg = "Error happened when inserting ClassSection"
+                                                    //return res.status(codecode).json(msg);
+                                                } catch (err) {
+                                                    codecode = 200;
+                                                    msg = "ok"
+                                                    return res.status(codecode).json(msg);
+                                                }
+
+                                            })
+                                        }
+                                    } catch (err) {
+                                        codecode = 401;
+                                        msg = "Error happened when finding timecrash"
+                                        return res.status(codecode).json(msg);
+                                    }
+
+                                })
+
+                            }
+                            return res.ok()
+                        } catch (err) {
+                            codecode = 401;
+                            msg = "Error happened when duplicated inputs"
+                            return res.status(codecode).json(msg);
+                        }
+
+                    })
+                }
+
+                /** 
+                
+                                db.query(checkinputted, function (err, result) {
+                                    try {
+                                        var string = JSON.stringify(result);
+                                        var json = JSON.parse(string);
+                                        havethis = json;
+                
+                                        if (havethis.length > 0) {
+                                            codecode = 401;
+                                            msg = "This class has already been inputed before"
+                                            return res.status(codecode).json(msg);
+                                        } else {
+                                            if (req.session.role == "sup") {
+                                                for (var a = 0; a < thisclassinfo.length; a++) {
+                                                    console.log(thisclassinfo[a])
+                                                    findtimecrashbygetpersonttb = "select * from allsupertakecourse join allclass on allclass.CID = allsupertakecourse.CID  where pid = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[a].weekdays + "\" and (\"" + thisclassinfo[a].startTime + "\" between startTime and endtime );"
+                                                    db.query(findtimecrashbygetpersonttb, function (err, result) {
+                                                        console.log(findtimecrashbygetpersonttb)
+                                                        if (err) throw err;
+                                                        var string = JSON.stringify(result);
+                                                        var json = JSON.parse(string);
+                                                        havetimecrash = json;
+                                                        if (havetimecrash.length > 0) {
+                                                            codecode = 401;
+                                                            msg = "Please Review your input since there was a time crash between your inputs"
+                                                            return res.status(codecode).json(msg);
+                                                        }
+                                                    })
+                                                }
+                                            } else {
+                                                for (var a = 0; a < thisclassinfo.length; a++) {
+                                                    console.log(thisclassinfo[a])
+                                                    findtimecrashbygetpersonttb = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and weekdays = \"" + thisclassinfo[a].weekdays + "\" and (\"" + thisclassinfo[a].startTime + "\" between startTime and endtime );"
+                                                    db.query(findtimecrashbygetpersonttb, function (err, result) {
+                                                        console.log(findtimecrashbygetpersonttb)
+                                                        if (err) throw err;
+                                                        var string = JSON.stringify(result);
+                                                        var json = JSON.parse(string);
+                                                        havetimecrash = json;
+                                                        if (havetimecrash.length > 0) {
+                                                            codecode = 401;
+                                                            msg = "Please Review your input since there was a time crash between your inputs"
+                                                            return res.status(codecode).json(msg);
+                
+                                                        } else {
+                
+                                                        }
+                                                    })
+                                                }
+                                            }
+                
+                
+                
+                
+                
+                
+                
+                                            console.log(findtimecrashbygetpersonttb)
+                                            
+                                                                        db.query(findtimecrashbygetpersonttb, function (err, result) {
+                                                                            try {
+                                                                                var string = JSON.stringify(result);
+                                                                                var json = JSON.parse(string);
+                                                                                timecrash = json;
+                                                                                if (timecrash.length > 0) {
+                                                                                    codecode = 401;
+                                                                                    msg = "Please Review your input since there was a time crash between your inputs"
+                                                                                    return res.status(codecode).json(msg);
+                                                                                } else {
+                                                                                    console.log(thisistheline2)
+                                            
+                                                                                    db.query(thisistheline3, function (err, result) {
+                                                                                        try {
+                                            
+                                                                                            if (req.body.noclassenrolled == "true") {
+                                                                                                thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\");\n";
+                                                                                            } else {
+                                                                                                if (req.body.classlabsection != undefined) {
+                                            
+                                                                                                    thisistheline = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+                                                                                                } else if (req.body.classsection != "") {
+                                                                                                    thisistheline = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+                                                                                                }
+                                            
+                                                                                            }
+                                                                                            console.log(thisistheline)
+                                            
+                                                                                            db.query(thisistheline, function (err, result) {
+                                                                                                if (err) {
+                                                                                                    codecode = 401;
+                                                                                                    msg = "Probelm existed when inserting."
+                                                                                                    return res.status(codecode).json(msg);
+                                                                                                } else {
+                                                                                                    return res.ok();
+                                                                                                }
+                                            
+                                                                                            })
+                                            
+                                            
+                                            
+                                                                                        } catch (err) {
+                                                                                            console.log("insert have err     " + err)
+                                                                                        }
+                                                                                    })
+                                                                                }
+                                                                            } catch (err) {
+                                                                                console.log("find time crash have err     " + err)
+                                                                            }
+                                            
+                                                                        })
+                                            
+                                        }
+                                    } catch (err) {
+                                        console.log("find class in personal list have err     " + err)
+                                    }
+                
+                                })**/
+            } catch (err) {
+                console.log("get this classinfo have err     " + err)
+            }
+        })
