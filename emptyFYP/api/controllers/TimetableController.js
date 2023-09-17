@@ -134,81 +134,63 @@ module.exports = {
 
 
 
-        if (req.body.classlabsection == undefined) {
-            insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\"";
+        if (req.body.classlabsection == undefined || req.body.classlabsection == "") {
             caninsertthisclasssection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
         }
         if (req.body.classsection != undefined && req.body.classlabsection != undefined) {
             if (req.body.classlabsection == "all") {
-                insertsection = "SELECT * FROM allclass WHERE CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_1%\" or CID like \"" + req.body.classdep + req.body.classcode + "_2%\"";
+                caninsertthisclasslabsection = "all";
             } else {
-                insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\""
                 caninsertthisclasslabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
             }
             caninsertthisclasssection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
             //"select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
         }
-        console.log(">>insertsection  ", insertsection)
 
-        db.query(insertsection, function (err, result) {
-            try {
-                var string = JSON.stringify(result);
-                var json = JSON.parse(string);
-                thisclassinfo = json;
-                console.log(">> thisclassinfo", thisclassinfo)
-                var x = 0;
-                var findtimecrashstr = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and (";
-                for (var x = 0; x < thisclassinfo.length; x++) {
-                    if (x != 0) {
-                        findtimecrashstr += "or";
-                    }
-                    findtimecrashstr += "(weekdays = \"" + thisclassinfo[x].weekdays + "\" and (\"" + thisclassinfo[x].startTime + "\" between startTime and endtime ))";
-                    if (req.body.classlabsection == "all") {
-                        caninsertthisclasslabsection += "insert ignore  into alltakecourse values(\"" +thisclassinfo[x].CID+"\",\"" + req.session.userid + "\");"
-                    }
-                }
-                findtimecrashstr += ");"
-                console.log(findtimecrashstr)
-                db.query(findtimecrashstr, function (err, result) {
-                    try {
-                        var string = JSON.stringify(result);
-                        var json = JSON.parse(string);
-                        timecrashresult = json;
-                        console.log(timecrashresult)
-                        if (timecrashresult.length > 0) {
-                            return res.status(401).json("Review Your inputs, there is a timecrash between your input and current enrolled timetable.")
-                        } else {
-                            console.log(caninsertthisclasslabsection)
-                            if (caninsertthisclasslabsection != "") {
-                                db.query(caninsertthisclasslabsection, function (err, result) {
-                                    try { } catch (err) {
-                                        return console.log("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
-                                    }
-                                })
+
+        if (caninsertthisclasslabsection != "") {
+            if (req.body.classlabsection == "all") {
+                var getalllabsection = "SELECT distinct(CSecCode) FROM allclass WHERE CID like \"" + req.body.classdep + req.body.classcode + "_1%\" or CID like \"" + req.body.classdep + req.body.classcode + "_2%\""
+                console.log("\n\n\n" + getalllabsection)
+                db.query(getalllabsection, function (err, result) {
+                    var string = JSON.stringify(result);
+                    var json = JSON.parse(string);
+                    labsectionlist = json;
+                    console.log(">>labsection", labsectionlist)
+
+
+                    for (var i = 0; i < labsectionlist.length; i++) {
+                        var insertinglabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + req.body.classcode + "_" + labsectionlist[i].CSecCode + "\",\"" + req.session.userid + "\")"
+                        console.log(insertinglabsection);
+                        db.query(insertinglabsection, function (err, result) {
+                            try { } catch (err) {
+                                return console.log("Error happened when excuting TimtableController.submitclass.insertingmultiplelabsection \n" + err)
+
                             }
+                        })
+                    }
 
-                            db.query(caninsertthisclasssection, function (err, result) {
-                                try {
-                                    return res.ok();
-                                } catch (err) {
-                                    return console.log("Error happened when excuting TimtableController.submitclass.insertingsection \n" + err)
-                                }
-                            })
-
-                        }
-                    } catch (err) {
-                        return console.log("Error happened when excuting TimtableController.submitclass.findtimecrash \n" + err)
+                })
+            } else {
+                db.query(caninsertthisclasslabsection, function (err, result) {
+                    try { } catch (err) {
+                        return console.log("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
                     }
                 })
-
-
-            } catch (err) {
-                return console.log("Error happened when excuting TimtableController.submitclass.findallclassinfo \n" + err)
             }
-            
+
+        }
+
+        db.query(caninsertthisclasssection, function (err, result) {
+            try {
+                return res.ok();
+            } catch (err) {
+                return console.log("Error happened when excuting TimtableController.submitclass.insertingsection \n" + err)
+            }
         })
+
 
     },
     submitempty: async function (req, res) {
@@ -299,6 +281,61 @@ module.exports = {
         // return res.json("ok");
     },
 
+    checkduplication: async function (req, res) {
+        var db = await sails.helpers.database();
+        if (req.body.classlabsection == undefined || req.body.classlabsection == "") {
+            insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\"";
+        }
+        if (req.body.classsection != undefined && req.body.classlabsection != undefined) {
+            if (req.body.classlabsection == "all") {
+                insertsection = "SELECT * FROM allclass WHERE CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_1%\" or CID like \"" + req.body.classdep + req.body.classcode + "_2%\"";
+            } else {
+                insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\""
+            }
+        }
+
+        db.query(insertsection, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                thisclassinfo = json;
+                console.log(">> thisclassinfo", thisclassinfo)
+                var x = 0;
+                if (req.session.role == "stu") {
+                    var findtimecrashstr = "select * from allstudenttakecourse  join allclass on allclass.CID = allstudenttakecourse.CID where allstudenttakecourse.PID = \"" + req.session.userid + "\" and (";
+                } else {
+                    var findtimecrashstr = "select * from allsupertakecourse  join allclass on allclass.CID = allsupertakecourse.CID where allsupertakecourse.PID = \"" + req.session.userid + "\" and (";
+                }
+                for (var x = 0; x < thisclassinfo.length; x++) {
+                    if (x != 0) {
+                        findtimecrashstr += "or";
+                    }
+                    findtimecrashstr += "(weekdays = \"" + thisclassinfo[x].weekdays + "\" and (\"" + thisclassinfo[x].startTime + "\" between startTime and endtime ))";
+
+                }
+                findtimecrashstr += ");"
+                console.log(findtimecrashstr)
+                db.query(findtimecrashstr, function (err, result) {
+                    try {
+                        var string = JSON.stringify(result);
+                        var json = JSON.parse(string);
+                        timecrashresult = json;
+                        console.log(timecrashresult)
+                        if (timecrashresult.length > 0) {
+                            return res.status(401).json("Review Your inputs, there is a timecrash between your input and current enrolled timetable.")
+                        } else {
+                            return res.ok();
+                        }
+                    } catch (err) {
+                        return console.log("Error happened when excuting TimtableController.submitclass.findtimecrash \n" + err)
+                    }
+                })
+            } catch (err) {
+                return console.log("Error happened when excuting TimtableController.checkduplication.findallclassinfo \n" + err)
+            }
+        })
+    },
+
     delpersonalallclass: async function (req, res) {
         var db = await sails.helpers.database();
         let thisistheline;
@@ -334,19 +371,6 @@ module.exports = {
 
         if (req.session.role == "sup") {
             thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
-            console.log(thisistheline);
-            // console.log(thisistheline);
-            db.query(thisistheline, function (err, result) {
-                try {
-                    console.log("Submitted")
-                    return res.redirect("../timetable");
-                } catch (err) {
-                    console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
-                }
-
-            });
-        } else if (req.session.role == "obs") {
-            thisistheline = "Update allobstakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
             console.log(thisistheline);
             // console.log(thisistheline);
             db.query(thisistheline, function (err, result) {

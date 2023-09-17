@@ -64,6 +64,7 @@ module.exports.routes = {
   'POST /timetable/submitttb': "TimetableController.submitclass",
   'POST /timetable/submitttb/deadline': "TimetableController.checkdeadline",
   'POST /timetable/submitempty': "TimetableController.submitempty",
+  "POST /timetable/submitttb/checkduplication" : "TimetableController.checkduplication",
 
   'GET /timetable': "TimetableController.getpersonalallclass",
   'DELETE /timetable': "TimetableController.delpersonalallclass",

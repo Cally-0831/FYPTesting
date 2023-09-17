@@ -34,14 +34,15 @@
                     </div>
                     <div id="codeinputfield">
                         <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
-                        <select name="classcode" id="classcode">
+                        <select name="classcode" id="classcode" >
                             <option value="">---Please Select---</option>
 
                         </select>
                     </div>
                     <div id="sectioninputfield">
                         <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
-                        <select name="classsection" id="classsection" onchange="findlabsection('<%=req.session.role%>')">
+                        <select name="classsection" id="classsection"
+                            onchange="findlabsection('<%=req.session.role%>')">
                             <option value="">---Please Select---</option>
                         </select>
                     </div>
@@ -81,16 +82,44 @@
             var requestbody = new FormData(formElem);
             requestbody.append(document.getElementById("enrollnotclassbox").value, true)
             //console.log(requestbody)
+
         }
 
 
+
         if (role == "stu") {
+
             var response = await fetch("/timetable/submitttb/deadline", {
                 method: "POST",
             });
 
 
             if (response.ok) {
+
+                var response2 = await fetch("/timetable/submitttb/checkduplication", {
+                    method: "POST",
+                    body: requestbody
+                });
+
+                if (response2.ok) {
+
+                    var response3 = await fetch("/timetable/submitttb/", {
+                        method: "POST",
+                        body: requestbody
+                    });
+
+                    if (response3.ok) {
+                        location.assign("/timetable");
+                    }
+
+
+                } else {
+                    var msg = await response2.json();
+                    alert(msg);
+                    location.reload();
+                }
+
+                /**
 
                 var response2 = await fetch(formElem.action, {
                     method: formElem.method,
@@ -108,11 +137,10 @@
                     alert(response2.statusTest);
                     location.reload();
                 }
-
+**/
 
             } else if (response.status == 401) {
                 var msg = await response.json();
-
                 alert(msg);
                 location.assign("../timetable");
             } else {
@@ -121,27 +149,50 @@
 
         } else {
 
-
-            var response = await fetch(formElem.action, {
-                method: formElem.method,
+            var response = await fetch("/timetable/submitttb/checkduplication", {
+                method: "POST",
                 body: requestbody
             });
-            console.log("!@#$%!@#$%!@#$!@#$!@$            " + response.status);
+
             if (response.ok) {
-                alert("Inserted");
-                location.assign("/timetable");
+                var response2 = await fetch(formElem.action, {
+                    method: formElem.method,
+                    body: requestbody
+                });
+                if (response2.ok) {
+                    location.assign("/timetable");
+                } else if (response2.status == 401) {
+                    var msg = await response2.json();
+                    alert(msg);
+                    location.assign("../timetable");
+                }
+            }else if (response.status == 401) {
+                    var msg = await response.json();
+                    alert(msg);
+                    location.reload();
+                }
 
-            } else if (response.status == 401) {
-                var msg = await response.json();
-                alert(msg);
-                location.reload();
-            } else {
-                alert(response.statusTest);
-                location.reload();
-            }
-
-
-
+            /**
+                        var response = await fetch(formElem.action, {
+                            method: formElem.method,
+                            body: requestbody
+                        });
+                        console.log("!@#$%!@#$%!@#$!@#$!@$            " + response.status);
+                        if (response.ok) {
+                            alert("Inserted");
+                            location.assign("/timetable");
+            
+                        } else if (response.status == 401) {
+                            var msg = await response.json();
+                            alert(msg);
+                            location.reload();
+                        } else {
+                            alert(response.statusTest);
+                            location.reload();
+                        }
+            
+            
+            **/
         }
 
 
@@ -172,7 +223,7 @@
         return document.getElementById(element);
     }
 
-    function fetch_data(parent_element, child_element, type,role) {
+    function fetch_data(parent_element, child_element, type, role) {
         fetch("/timetable/submitttb/get_data?type=" + type + "&parent_value=" + parent_element + "").then(function (response) {
             return response.json();
         }).then(function (responseData) {
@@ -197,10 +248,14 @@
                 html = "<label for=\"classlabsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
                     + "<select name=\"classlabsection\" id=\"classlabsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
-                        if(role =="sup"){
-                            html += "\<option value=\"all\"\>All Lab Sections</option\>"
-                        }
-                        
+                if (role == "sup") {
+                    if(responseData.length>1){
+                        html += "\<option value=\"all\"\>All Lab Sections</option\>"
+                    }
+                    
+                    html += "\<option value=\"\"\>Lecture only</option\>"
+                }
+
                 for (var i = 0; i < responseData.length; i++) {
                     html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>";
                 }
@@ -218,7 +273,7 @@
             document.getElementById("classlabsection").value = "";
         }
 
-        fetch_data(document.getElementById("classdep").value, "classcode", "load_code",null);
+        fetch_data(document.getElementById("classdep").value, "classcode", "load_code", null);
     };
 
     _("classcode").onchange = function () {
@@ -226,14 +281,14 @@
         if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section",null);
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section", null);
     };
-    
+
     function findlabsection(role) {
         if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab",role);
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab", role);
     };
 
 
