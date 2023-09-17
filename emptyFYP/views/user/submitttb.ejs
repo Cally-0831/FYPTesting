@@ -41,7 +41,7 @@
                     </div>
                     <div id="sectioninputfield">
                         <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
-                        <select name="classsection" id="classsection">
+                        <select name="classsection" id="classsection" onchange="findlabsection('<%=req.session.role%>')">
                             <option value="">---Please Select---</option>
                         </select>
                     </div>
@@ -74,7 +74,7 @@
                 return alert("Class Code cannot be empty")
             } else if (document.getElementById("classsection").value == "") {
                 return alert("Class Section Code cannot be empty")
-            } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "") {
+            } else if (document.getElementById("classlabsection") != null && document.getElementById("classlabsection").value == "" && role != "sup") {
                 return alert("Class Tutorial Section Code cannot be empty")
             }
         } else {
@@ -172,7 +172,7 @@
         return document.getElementById(element);
     }
 
-    function fetch_data(parent_element, child_element, type) {
+    function fetch_data(parent_element, child_element, type,role) {
         fetch("/timetable/submitttb/get_data?type=" + type + "&parent_value=" + parent_element + "").then(function (response) {
             return response.json();
         }).then(function (responseData) {
@@ -197,6 +197,10 @@
                 html = "<label for=\"classlabsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
                     + "<select name=\"classlabsection\" id=\"classlabsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
+                        if(role =="sup"){
+                            html += "\<option value=\"all\"\>All Lab Sections</option\>"
+                        }
+                        
                 for (var i = 0; i < responseData.length; i++) {
                     html += "<option value=\"" + responseData[i].CSecCode + "\">" + responseData[i].CSecCode + "</option>";
                 }
@@ -214,7 +218,7 @@
             document.getElementById("classlabsection").value = "";
         }
 
-        fetch_data(document.getElementById("classdep").value, "classcode", "load_code");
+        fetch_data(document.getElementById("classdep").value, "classcode", "load_code",null);
     };
 
     _("classcode").onchange = function () {
@@ -222,13 +226,14 @@
         if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section");
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value, "classsection", "load_section",null);
     };
-    _("classsection").onchange = function () {
+    
+    function findlabsection(role) {
         if (document.getElementById("classlabsection") != null) {
             document.getElementById("classlabsection").value = "";
         }
-        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab");
+        fetch_data(document.getElementById("classdep").value + "" + document.getElementById("classcode").value + "_" + document.getElementById("classsection").value, "labsectioninputfield", "load_lab",role);
     };
 
 

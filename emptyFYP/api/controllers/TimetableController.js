@@ -1,5 +1,6 @@
-
-var mysql = require('mysql');
+/**
+ 
+  mysql = require('mysql');
 const date = require('date-and-time')
 var db = mysql.createConnection({
     host: "localhost",
@@ -14,35 +15,7 @@ db.connect(async (err) => {
     }
     console.log(' getpersonalallclass MySQL Connected');
 });
-
-const fs = require('fs');
-const { get } = require('https');
-const { Console } = require('console');
-
-
-
-/**
- * const express = require('express');
-const cors = require('cors');
-const fileupload = require('express-fileupload');
-const app = express();
-app.use(fileupload(), cors())
-const jsftp = require('jsftp');
-const thisurl = new URL(sails.config.custom.URL);
-const Ftp = new jsftp({
-    host: thisurl.hostname,
-    user: thisurl.user,
-    password: thisurl.password,
-    port: thisurl.port
-});
-
-const PORT = sails.config.PORT || 8080;
-app.listen(PORT);
- * 
- */
-
-
-
+**/
 
 module.exports = {
     allDeptlist: {},
@@ -55,7 +28,7 @@ module.exports = {
 
 
     getallclass: async function (req, res) {
-
+        var db = await sails.helpers.database();
 
         thisistheline = "select distinct CDept from allclass";
 
@@ -83,7 +56,7 @@ module.exports = {
     },
 
     getotherfield: async function (req, res, next) {
-
+        var db = await sails.helpers.database();
 
         var type = req.query.type;
         var search_query = req.query.parent_value;
@@ -129,7 +102,7 @@ module.exports = {
     },
 
     submitclass: async function (req, res) {
-
+        var db = await sails.helpers.database();
 
 
         let insertsection = "";
@@ -167,9 +140,14 @@ module.exports = {
 
         }
         if (req.body.classsection != undefined && req.body.classlabsection != undefined) {
-            insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\""
-            caninsertthisclasslabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+            if (req.body.classlabsection == "all") {
+                insertsection = "SELECT * FROM allclass WHERE CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_1%\" or CID like \"" + req.body.classdep + req.body.classcode + "_2%\"";
+            } else {
+                insertsection = "select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classsection + "%\" or CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\""
+                caninsertthisclasslabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
+            }
             caninsertthisclasssection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+
             //"select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
         }
         console.log(">>insertsection  ", insertsection)
@@ -187,7 +165,9 @@ module.exports = {
                         findtimecrashstr += "or";
                     }
                     findtimecrashstr += "(weekdays = \"" + thisclassinfo[x].weekdays + "\" and (\"" + thisclassinfo[x].startTime + "\" between startTime and endtime ))";
-
+                    if (req.body.classlabsection == "all") {
+                        caninsertthisclasslabsection += "insert ignore  into alltakecourse values(\"" +thisclassinfo[x].CID+"\",\"" + req.session.userid + "\");"
+                    }
                 }
                 findtimecrashstr += ");"
                 console.log(findtimecrashstr)
@@ -199,38 +179,40 @@ module.exports = {
                         console.log(timecrashresult)
                         if (timecrashresult.length > 0) {
                             return res.status(401).json("Review Your inputs, there is a timecrash between your input and current enrolled timetable.")
-                        }else{
+                        } else {
+                            console.log(caninsertthisclasslabsection)
                             if (caninsertthisclasslabsection != "") {
                                 db.query(caninsertthisclasslabsection, function (err, result) {
                                     try { } catch (err) {
-                                        return console.log("Error happened when excuting TimtableController.submitclass.insertinglabsection \n"+err)
+                                        return console.log("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
                                     }
                                 })
                             }
-            
+
                             db.query(caninsertthisclasssection, function (err, result) {
                                 try {
                                     return res.ok();
-                                 } catch (err) {
-                                    return  console.log("Error happened when excuting TimtableController.submitclass.insertingsection \n"+err)
+                                } catch (err) {
+                                    return console.log("Error happened when excuting TimtableController.submitclass.insertingsection \n" + err)
                                 }
                             })
 
                         }
                     } catch (err) {
-                        return console.log("Error happened when excuting TimtableController.submitclass.findtimecrash \n"+err)
+                        return console.log("Error happened when excuting TimtableController.submitclass.findtimecrash \n" + err)
                     }
                 })
-                
+
 
             } catch (err) {
-                return  console.log("Error happened when excuting TimtableController.submitclass.findallclassinfo \n"+err)
-                }
+                return console.log("Error happened when excuting TimtableController.submitclass.findallclassinfo \n" + err)
+            }
+            
         })
 
     },
     submitempty: async function (req, res) {
-
+        var db = await sails.helpers.database();
         let thisistheline = "insert ignore into alltakecourse values(\"EMPTY\",\"" + req.session.userid + "\")";
 
         db.query(thisistheline, function (err, result) {
@@ -244,7 +226,7 @@ module.exports = {
 
     getpersonalallclass: async function (req, res) {
         var date;
-        console.log("\n\n\n\n\n");
+        var db = await sails.helpers.database();
         let thisistheline;
         if (req.session.role == "sup") {
             thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
@@ -318,6 +300,7 @@ module.exports = {
     },
 
     delpersonalallclass: async function (req, res) {
+        var db = await sails.helpers.database();
         let thisistheline;
         if (req.session.role == "sup") {
             thisistheline = "DELETE from allsupertakecourse where pid=\"" + req.session.userid + "\" and cid like\"" + req.body.cid + "%\"";
@@ -346,7 +329,7 @@ module.exports = {
     },
 
     submitpersonalallclass: async function (req, res) {
-
+        var db = await sails.helpers.database();
         let thisistheline;
 
         if (req.session.role == "sup") {
@@ -408,11 +391,10 @@ module.exports = {
     },
     //pageback : function (req,res){ return res.redirect("/timetable");},
 
-    upload: function (req, res) {
+    upload: async function (req, res) {
         let thisistheline;
         let today = new Date();
-
-
+        var db = await sails.helpers.database();
         thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
         console.log(thisistheline);
 
@@ -513,7 +495,7 @@ module.exports = {
     },
 
     readsinglestudentttb: async function (req, res) {
-
+        var db = await sails.helpers.database();
         let thisistheline;
 
         thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.picdata,allstudenttakecourse.confirmation,allstudenttakecourse.Submissiontime, allstudenttakecourse.ttbcomments, allstudenttakecourse.review from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid and PID=\"" + req.params.SID + "\" ORDER BY  startTime asc ,weekdays asc";
@@ -541,7 +523,7 @@ module.exports = {
     },
 
     judgettb: async function (req, res) {
-
+        var db = await sails.helpers.database();
         let thisistheline;
         if (req.body.type == "Approved") {
             thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"" + req.body.comments + "\"  where allstudenttakecourse.pid=\"" + req.params.SID + "\"";
@@ -564,7 +546,7 @@ module.exports = {
     checkdeadline: async function (req, res) {
         let thisistheline;
         let today = new Date();
-
+        var db = await sails.helpers.database();
 
         thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
         console.log("timetable checkdeadline    " + thisistheline);
