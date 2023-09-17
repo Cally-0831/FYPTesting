@@ -34,7 +34,7 @@
                     </div>
                     <div id="codeinputfield">
                         <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
-                        <select name="classcode" id="classcode" >
+                        <select name="classcode" id="classcode">
                             <option value="">---Please Select---</option>
 
                         </select>
@@ -119,25 +119,6 @@
                     location.reload();
                 }
 
-                /**
-
-                var response2 = await fetch(formElem.action, {
-                    method: formElem.method,
-                    body: requestbody
-                });
-                if (response2.ok) {
-                    alert("Inserted");
-                    location.assign("/timetable");
-
-                } else if (response2.status == 401) {
-                    var msg = await response2.json();
-                    alert(msg);
-                    location.reload();
-                } else {
-                    alert(response2.statusTest);
-                    location.reload();
-                }
-**/
 
             } else if (response.status == 401) {
                 var msg = await response.json();
@@ -166,57 +147,12 @@
                     alert(msg);
                     location.assign("../timetable");
                 }
-            }else if (response.status == 401) {
-                    var msg = await response.json();
-                    alert(msg);
-                    location.reload();
-                }
-
-            /**
-                        var response = await fetch(formElem.action, {
-                            method: formElem.method,
-                            body: requestbody
-                        });
-                        console.log("!@#$%!@#$%!@#$!@#$!@$            " + response.status);
-                        if (response.ok) {
-                            alert("Inserted");
-                            location.assign("/timetable");
-            
-                        } else if (response.status == 401) {
-                            var msg = await response.json();
-                            alert(msg);
-                            location.reload();
-                        } else {
-                            alert(response.statusTest);
-                            location.reload();
-                        }
-            
-            
-            **/
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+                location.reload();
+            }
         }
-
-
-        /**
-                try {
-                    var response = await fetch(formElem.action, {
-                        method: formElem.method,
-                        body: requestbody
-                    });
-                    if (response.ok) {
-        
-                        location.assign("/timetable");
-        
-                    } else if (response.status == 401) {
-                        var msg = await response.json();
-                        alert(msg);
-                    } else {
-                        alert(response.statusTest);
-                    }
-        
-                } catch (error) {
-                    console.log("Error happened   " + error);
-                }
-                **/
     }
 
     function _(element) {
@@ -249,10 +185,10 @@
                     + "<select name=\"classlabsection\" id=\"classlabsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
                 if (role == "sup") {
-                    if(responseData.length>1){
+                    if (responseData.length > 1) {
                         html += "\<option value=\"all\"\>All Lab Sections</option\>"
                     }
-                    
+
                     html += "\<option value=\"\"\>Lecture only</option\>"
                 }
 
