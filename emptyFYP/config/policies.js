@@ -8,7 +8,7 @@
  * https://sailsjs.com/docs/concepts/policies
  */
 
-const SchduleController = require("../api/controllers/SchduleController");
+const ScheduleController = require("../api/controllers/ScheduleController");
 
 module.exports.policies = {
   "*":"isLoggedin",
@@ -43,7 +43,7 @@ module.exports.policies = {
   ClassroomListController: {
     '*': "isAdmin"
   },
-  SchduleController:{
+  ScheduleController:{
     viewfinalschdule :"isLUser"
   },
 

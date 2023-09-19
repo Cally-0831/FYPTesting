@@ -26,7 +26,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);
+                //console.log('>> json: ', json);
                 classroomlist = json;
                 //console.log('>> stdlist: ', stdlist);  
                 return res.view('user/admin/classroomlist', { allClassroomlist: classroomlist });
@@ -44,15 +44,15 @@ module.exports = {
     deleteclassroom: async function (req, res) {
 
         let thisistheline = "DELETE FROM classroom WHERE rid= \"" + req.body.RID + "\" and campus = \"" + req.body.Campus + "\"";
-        console.log('delete excution');
-        console.log(thisistheline);
+        //console.log('delete excution');
+        //console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("Record deleted")
 
             } catch (err) {
                 if (err) {
-                    console.log("sth happened here");
+                    //console.log("sth happened here");
                     res.status(401).json("Error");
                 }
             }
@@ -69,7 +69,7 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
-                console.log('>> string: ', string);
+                //console.log('>> string: ', string);
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 campuslist = json;
@@ -203,7 +203,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 timeslotlist = json;
-                console.log(timeslotlist)
+                //console.log(timeslotlist)
                 return res.view('user/admin/managetimeslot', { thetimeslotlist: timeslotlist });
             }
 
@@ -261,7 +261,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 timeslotlist = json;
-                console.log(json);
+                //console.log(json);
                 return res.view('user/admin/view', { roominfo: roominfo, thetimeslotlist: timeslotlist });
             } catch (err) {
                 if (err) { console.log("error happened when excuting ClassroomlistController.getsingleroomtimeslot");
@@ -281,7 +281,7 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 thistimeslotinfo = json;
-                console.log(json);
+                //console.log(json);
                 return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo });
             } catch (err) {
                 console.log("error happened when excuting ClassroomlistController.getoneroom");
@@ -311,8 +311,8 @@ module.exports = {
                 var question = "";
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
-                console.log(json.length)
-                console.log(json)
+                //console.log(json.length)
+                //console.log(json)
                 if (json.length == 0) {
                     db.query(thisistheline, function (err, result) {
                         if (err) {
@@ -348,7 +348,7 @@ module.exports = {
         } else {
             thisistheline = "Update classroom set status = \"Open\" where Campus = \"" + req.body.Campus + "\" and rid = \"" + req.body.RID + "\""
         }
-        console.log(thisistheline);
+        //console.log(thisistheline);
         db.query(thisistheline, (err, results) => {
             try {
 

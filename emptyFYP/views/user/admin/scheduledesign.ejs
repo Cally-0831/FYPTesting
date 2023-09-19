@@ -1,0 +1,101 @@
+<div>
+    this is Schduling
+    <br>
+    havedraft = <%=havedraft%>
+        Waring = <%=warning%>
+            Msg = <%=msg%>
+               
+                    <br>
+                    Presentdate = <%=presentstartday%> - <%=presentendday%>
+                            <br>
+                            Releaseschduleday = <%=realreleaseday%>
+                                <div class="Pagetitle"> Schdule Design</div>
+                                <div class="row">
+                                    <div class="buttons">
+                                        <div class="button buttonlogout" onclick="backback()">Back</div>
+                                    </div>
+                                </div>
+                                <%if (warning=="401" && msg !="4&" ){%>
+                                    <div class="columns is-centered">
+                                        <div class="column is-half">
+                                            <article class="message is-danger">
+                                                <div class="message-header" style="font-size: 25px;">
+                                                    <p>Cannot Design Schdule Now</p>
+
+                                                </div>
+                                                <div class="message-body" style="font-size: 20px;">
+                                                    Cannot design the Presentation Schdule now since the settings for
+                                                    accpecting
+                                                    student's timetable and requests are still ongoing.
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                    <%}else if(warning=="200" && msg=="4&" ){%>
+                                        <div class="columns is-centered">
+                                            <div id="create" class="column is-half">
+                                                <div class="schduledesignchecking">
+                                                    <div class="row">
+                                                        <div style="font-size: 25px; font-weight: bold;">
+                                                            Schdule Design
+                                                        </div>
+
+
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div style="font-size: 20px; ">
+                                                            Present Period = <u>
+                                                                <%=presentstartday.toLocaleDateString()%>
+                                                                    <%=presentstartday.toLocaleTimeString("en-US")%>
+                                                            </u> to <u>
+                                                                <%=presentendday.toLocaleDateString()%>
+                                                                    <%=presentendday.toLocaleTimeString("en-US")%>
+                                                            </u>
+                                                        </div>
+                                                        <br>
+                                                        <div class="buttons is-right">
+                                                            
+                                                                    <div class="button buttonlogout"
+                                                                        onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
+                                                                        Create Draft
+                                                                    </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <%}%>
+
+</div>
+<script>
+    function backback() {
+        location.assign("/home");
+    }
+
+    async function confirmcreate(startday, endday) {
+        var r = confirm("Confirm to create ?");
+
+        if (r) {
+            var response = await fetch("/scheduledesign/getpairing", {
+                method: "GET"
+            });
+
+            var pairinglist = (await response.json()).pairinglist;
+            startday = (new Date(startday)).toLocaleDateString("en-GB").split("/")
+            endday = (new Date(endday)).toLocaleDateString("en-GB").split("/")
+            startday = startday[2]+"-"+startday[1]+"-"+startday[0]
+            endday = endday[2]+"-"+endday[1]+"-"+endday[0]
+                for(var a = 0 ; a < pairinglist.length ;a++){
+                    var querystring = "tid="+pairinglist[a].tid+"&sid="+pairinglist[a].sid+"&oid="+pairinglist[a].oid+"&startday="+startday+"&endday="+endday
+                    console.log("/createschedule/postfor?"+querystring);
+                    var response = await fetch("/createschedule/postfor?"+querystring, {
+                        method: "POST"
+                    });
+
+                }
+        }
+
+    }
+</script>

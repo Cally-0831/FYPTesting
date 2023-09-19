@@ -130,13 +130,13 @@ module.exports = {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var superttb = json;
-                                        console.log('>>allsupertakecourse: ', allsupertakecourse);
-                                        var thisistheline8 = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where confirmation = \"1\""
+                                        console.log('>>superttb : ',superttb );
+                                        var thisistheline8 = "select * from allstudenttakecourse left join allclass onallstudenttakecourse.CID = allclass.CID where confirmation = \"1\""
                                         db.query(thisistheline8, (err, results) => {
                                             var string = JSON.stringify(results);
                                             var json = JSON.parse(string);
                                             var stuttb = json;
-                                            console.log('>>allsupertakecourse: ', allsupertakecourse);
+                                            console.log('>>stuttb: ', stuttb);
     
                                         })
                                     })
@@ -150,6 +150,12 @@ module.exports = {
                 console.log("error happened when excuting SchduleController.getallneededinfo")
             }
         })
+    },
+
+    createschedule: async function (req,res){
+        console.log(req.query)
+        
+
     },
 
     savebox: async function (req, res) {
@@ -245,4 +251,21 @@ module.exports = {
 
 
     },
+
+    getpairing: async function (req, res) {
+        thisistheline = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid";
+        db.query(thisistheline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var pairinglist = json;
+                return res.status(200).json({ pairinglist: pairinglist })
+            } catch (err) {
+                return res.status(401).json("error happened when excuting SettingController.nodraft.getallinfo.retrievepairinglist");
+            }
+
+        })
+
+    },
+
 }

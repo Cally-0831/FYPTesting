@@ -310,7 +310,7 @@ module.exports = {
                     if (x != 0) {
                         findtimecrashstr += "or";
                     }
-                    findtimecrashstr += "(weekdays = \"" + thisclassinfo[x].weekdays + "\" and (\"" + thisclassinfo[x].startTime + "\" between startTime and endtime ))";
+                    findtimecrashstr += " (weekdays = \"" + thisclassinfo[x].weekdays + "\" and ((\""+thisclassinfo[x].startTime+"\" between startTime and endTime)|| (\""+thisclassinfo[x].endTime+"\" between startTime and endTime)||(\""+thisclassinfo[x].startTime+"\" = startTime)||(\""+thisclassinfo[x].endTime+"\"=endTime)))"
 
                 }
                 findtimecrashstr += ");"
@@ -420,7 +420,7 @@ module.exports = {
         let today = new Date();
         var db = await sails.helpers.database();
         thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
-        console.log(thisistheline);
+        
 
         db.query(thisistheline, function (error, result) {
             try {
@@ -442,8 +442,7 @@ module.exports = {
                 }
                 console.log(req);
                 req.file('avatar').upload(function (err, files) {
-                    console.log(files[0].fd);
-
+                    
                     const fs = require('fs');
 
                     fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
@@ -579,13 +578,16 @@ module.exports = {
 
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
-                var deadline = new Date(json[0].deadlinedate);
-                var deadlinetime = json[0].deadlinetime.split(":");
-                deadline.setHours(deadlinetime[0]);
-                deadline.setMinutes(deadlinetime[1]);
-                deadline.setSeconds(deadlinetime[2]);
 
-                if (json[0].ttbdeadline != null) {
+
+
+
+                if (json.length != 0) {
+                    var deadline = new Date(json[0].deadlinedate);
+                    var deadlinetime = json[0].deadlinetime.split(":");
+                    deadline.setHours(deadlinetime[0]);
+                    deadline.setMinutes(deadlinetime[1]);
+                    deadline.setSeconds(deadlinetime[2]);
                     if (today > deadline) {
                         console.log("overtime !!!!!")
                         return res.status(401).json("Submission Box was closed\n"

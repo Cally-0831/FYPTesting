@@ -86,7 +86,7 @@ module.exports = {
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 supersetting = json;
-                
+
                 return res.view('user/setting', { thissupersetting: supersetting });
             } catch (err) {
                 console.log("error happened when excuting SettingController.getsetting");
@@ -98,7 +98,7 @@ module.exports = {
     },
 
     nodraft: async function (req, res) {
-        let thisistheline2 = " select * from allsupersetting where creator=\"admin\" order by typeofsetting asc";
+        let thisistheline2 = " select * from allsupersetting where announcetime is not null order by typeofsetting asc";
         var supersetting;
         db.query(thisistheline2, (err, results) => {
             try {
@@ -126,10 +126,15 @@ module.exports = {
                         if (supersetting[i].typeofsetting == 4) {
                             realreleaseday = dday
                         }
-                       
+
                         if (today < dday) {
+                            if (i == 3) {
+                                checking = -1
+                            } else {
+                                checking = 1;
+                            }
                             msg += supersetting[i].typeofsetting + "&"
-                            checking = 1;
+
                         }
                     } else {
                         /** this is for setting 3 */
@@ -143,23 +148,32 @@ module.exports = {
                         var startdday = new Date(stringstring1);
                         presentstartday = startdday
                         presentendday = new Date(stringstring2);
-                       
+
                         if (today > startdday) {
                             msg += supersetting[i].typeofsetting + "&"
                             checking = 1;
                         }
                     }
 
-
+                    console.log(i + "     " + checking + "       " + msg)
                 }
                 if (checking > 0) {
+                    console.log(checking + "    " + msg)
                     warning = 401;
-                    //console.log(msg + "@@@@@")
+
+                } else {
+                    warning = 200;
                 }
+                return res.view("user/admin/scheduledesign", {
+                    havedraft: "N",
+                    warning: warning, msg: msg,
+                    realreleaseday: realreleaseday,
+                    presentstartday: presentstartday,
+                    presentendday: presentendday,
 
-                thisistheline = "";
+                });
 
-                return res.view("user/admin/schduledesign", { havedraft: "N", warning: warning, msg: msg, realreleaseday: realreleaseday, presentstartday: presentstartday, presentendday: presentendday });
+
 
 
             } catch (err) {
@@ -190,5 +204,7 @@ module.exports = {
         });
 
     },
+
+    
 
 }
