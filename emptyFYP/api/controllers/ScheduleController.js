@@ -130,14 +130,14 @@ module.exports = {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var superttb = json;
-                                        console.log('>>superttb : ',superttb );
+                                        console.log('>>superttb : ', superttb);
                                         var thisistheline8 = "select * from allstudenttakecourse left join allclass onallstudenttakecourse.CID = allclass.CID where confirmation = \"1\""
                                         db.query(thisistheline8, (err, results) => {
                                             var string = JSON.stringify(results);
                                             var json = JSON.parse(string);
                                             var stuttb = json;
                                             console.log('>>stuttb: ', stuttb);
-    
+
                                         })
                                     })
                                 })
@@ -152,31 +152,79 @@ module.exports = {
         })
     },
 
-    createschedule: async function (req,res){
+    fixedgetclassinfo: async function (req, res) {
+        var getclassinfo = "select * from allclass"
+        console.log(getclassinfo + "\n\n")
+        db.query(getclassinfo, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var classttb = json;
+                //console.log(">>classttb :", classttb)
+                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\""+req.query.endday+"\") or enddate < DATE(\""+req.query.startday+"\"))"
+               // console.log(getclasstimeslot + "\n\n")
+                db.query(getclasstimeslot, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var classtimeslot = json;
+                       // console.log(">>classtimeslot :", classtimeslot)
+                        return res.status(200).json({classttb:classttb,classtimeslot:classtimeslot});
+                    } catch (err) {
+                        return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot")
+                    }
+                })
+            } catch (err) {
+                return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.classttb")
+            }
+        })
+    },
+
+    createschedule: async function (req, res) {
         console.log(req.query)
-        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where tid = \""+req.query.tid+"\" and confirmation = \"1\""
+        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.tid + "\" and confirmation = \"1\""
+        console.log(getsupttb + "\n\n")
         db.query(getsupttb, (err, results) => {
-            try{var string = JSON.stringify(results);
+            try {
+                var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var superttb = json;
-                console.log(">>superttb :",superttb)
-                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where tid = \""+req.query.oid+"\" and confirmation = \"1\""
-                db.query(getsupttb, (err, results) => {
-                    try{var string = JSON.stringify(results);
+                //console.log(">>superttb :", superttb)
+                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.oid + "\" and confirmation = \"1\""
+                console.log(getobsttb + "\n\n")
+                db.query(getobsttb, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        var superttb = json;
-                        console.log(">>superttb :",superttb)}catch(err){}
-                })        
-            }catch(err){
+                        var obsttb = json;
+                       console.log(">>obsttb :", obsttb)
+                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.query.sid + "\" and confirmation = \"1\""
+                        console.log(getstdttb + "\n\n")
+                        db.query(getstdttb, (err, results) => {
+                            try {
+                                var string = JSON.stringify(results);
+                                var json = JSON.parse(string);
+                                var stdttb = json;
+                               // console.log(">>stdttb :", stdttb)
+                                return res.status(200).json({superttb:superttb,obsttb:obsttb,stdttb:stdttb});
+                            } catch (err) {
+                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb")
+                            }
+                        })
+                    } catch (err) {
+                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.obsttb")
+                    }
+                })
+            } catch (err) {
                 return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
             }
             var string = JSON.stringify(results);
             var json = JSON.parse(string);
             var superttb = json;
-        
+
         })
 
-        
+
 
     },
 
