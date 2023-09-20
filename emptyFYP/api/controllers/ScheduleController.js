@@ -228,6 +228,17 @@ module.exports = {
 
     },
 
+    createdraft : async function(req,res){
+        var campusfortoday;
+        var mon, tue,wed,thu,fri,sat;
+        var weeklist = [mon,tue,wed,thu,fri,sat];
+        var startday = req.body.startday;
+        var endday = req.body.endday;
+        
+        
+        
+    },
+
     savebox: async function (req, res) {
         console.log(req.body);
         var errstring = "ok";
