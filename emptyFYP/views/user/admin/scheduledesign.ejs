@@ -54,6 +54,16 @@
                                                         </u>
                                                     </div>
                                                     <br>
+                                                    <div class="control" id="typeofpresentation">
+                                                        <label class="radio">
+                                                          <input type="radio" name="typeofpresent" value = "midterm">
+                                                          Midterm Present
+                                                        </label>
+                                                        <label class="radio">
+                                                          <input type="radio" name="typeofpresent" value ="final" checked>
+                                                          Final Present
+                                                        </label>
+                                                      </div>
                                                     <div class="buttons is-right">
 
                                                         <div class="button buttonlogout"
@@ -87,6 +97,8 @@
             endday = (new Date(endday)).toLocaleDateString("en-GB").split("/")
             startday = startday[2] + "-" + startday[1] + "-" + startday[0]
             endday = endday[2] + "-" + endday[1] + "-" + endday[0]
+            var typeofpresent = document.getElementById("type");
+            console.log(typeofpresent);
 
             var response = await fetch("/createschedule/getclassinfo?startday=" + startday + "&endday=" + endday, {
                 method: "POST"

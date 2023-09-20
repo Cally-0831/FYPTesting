@@ -234,8 +234,10 @@ module.exports = {
         var weeklist = [mon,tue,wed,thu,fri,sat];
         var startday = req.body.startday;
         var endday = req.body.endday;
+
         
         
+
         
     },
 
