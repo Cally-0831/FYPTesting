@@ -154,6 +154,28 @@ module.exports = {
 
     createschedule: async function (req,res){
         console.log(req.query)
+        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where tid = \""+req.query.tid+"\" and confirmation = \"1\""
+        db.query(getsupttb, (err, results) => {
+            try{var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var superttb = json;
+                console.log(">>superttb :",superttb)
+                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where tid = \""+req.query.oid+"\" and confirmation = \"1\""
+                db.query(getsupttb, (err, results) => {
+                    try{var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var superttb = json;
+                        console.log(">>superttb :",superttb)}catch(err){}
+                })        
+            }catch(err){
+                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
+            }
+            var string = JSON.stringify(results);
+            var json = JSON.parse(string);
+            var superttb = json;
+        
+        })
+
         
 
     },

@@ -155,10 +155,10 @@ module.exports = {
                         }
                     }
 
-                    console.log(i + "     " + checking + "       " + msg)
+                  //  console.log(i + "     " + checking + "       " + msg)
                 }
                 if (checking > 0) {
-                    console.log(checking + "    " + msg)
+                 //   console.log(checking + "    " + msg)
                     warning = 401;
 
                 } else {
@@ -194,7 +194,7 @@ module.exports = {
             //console.log('>> string: ', string );
             var json = JSON.parse(string);
             var havedraft = json[0].draft;
-            console.log('>> json: ', havedraft);
+            //console.log('>> havedraft: ', havedraft);
             if (havedraft == "Y") {
                 return res.status(200).json("redirect");
             } else {
