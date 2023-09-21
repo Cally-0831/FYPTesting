@@ -16,30 +16,29 @@ db.connect(async (err) => {
 
 module.exports = {
 
-    viewschdulepage: async function (req, res) {
+    viewschedulepage: async function (req, res) {
 
     },
-    viewfinalschdule: async function (req, res) {
-        var thisistheline;
-        var thisistheline2;
+    viewfinalschedule: async function (req, res) {
+        var getsettinginfo;
+        var getschedulebox;
         var thisistheline3;
         var releasedate;
         var releasetime;
 
         if (req.session.role == "sup") {
-            thisistheline = "select * from allsupersetting where where announcetime is not null and  typeofsetting= \"4\""
-            thisistheline2 = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\"";
+            getsettinginfo = "select * from allsupersetting where where announcetime is not null and  typeofsetting= \"4\""
+            getschedulebox = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\"";
         } else if (req.session.role == "stu") {
-            thisistheline = "select * from allsupersetting where announcetime is not null and  typeofsetting= \"4\"";
-            thisistheline2 = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
+            getsettinginfo = "select * from allsupersetting where announcetime is not null and  typeofsetting= \"4\"";
+            getschedulebox = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
         }
 
-        db.query(thisistheline, (err, results) => {
+        db.query(getsettinginfo, (err, results) => {
             try {
                 //get setting check can the system show now
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);
                 if (json.length == 0) {
                     releasedate = null
                     releasetime = null
@@ -47,15 +46,14 @@ module.exports = {
                     releasedate = json[0].deadlinedate;
                     releasetime = json[0].deadlinetime;
                 }
-                //console.log('>> checkschdeulerelease: ', json);
+                //console.log('>> checkschedeulerelease: ', json);
 
-                db.query(thisistheline2, (err, results) => {
+                db.query(getschedulebox, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var personalschedulebox = json;
-                        console.log('>> personalschedulebox: ', personalschedulebox);
-                        return res.view('user/checkschdule', {
+                        return res.view('user/checkschedule', {
                             releasedate: releasedate, releasetime: releasetime,
                             personalschedulebox: personalschedulebox
                         });
@@ -71,14 +69,13 @@ module.exports = {
     },
 
     getallneededinfo: async function (req, res) {
-        var thisistheline = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid"
+        var getpairing = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid"
         //get the pairs
-        db.query(thisistheline, (err, results) => {
+        db.query(getpairing, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var threepartylist = json;
-                console.log(">>threepartylist:  ", threepartylist)
                 thisistheline2 = "select startdate, starttime,enddate,endtime from allsupersetting where typeofsetting = \"3\" and Announcetime is not null;"
                 /** Get present time */
                 db.query(thisistheline2, (err, results) => {
@@ -154,22 +151,18 @@ module.exports = {
 
     fixedgetclassinfo: async function (req, res) {
         var getclassinfo = "select * from allclass"
-        console.log(getclassinfo + "\n\n")
         db.query(getclassinfo, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var classttb = json;
-                //console.log(">>classttb :", classttb)
-                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\""+req.query.endday+"\") or enddate < DATE(\""+req.query.startday+"\"))"
-               // console.log(getclasstimeslot + "\n\n")
+                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\"" + req.query.endday + "\") or enddate < DATE(\"" + req.query.startday + "\"))"
                 db.query(getclasstimeslot, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var classtimeslot = json;
-                       // console.log(">>classtimeslot :", classtimeslot)
-                        return res.status(200).json({classttb:classttb,classtimeslot:classtimeslot});
+                        return res.status(200).json({ classttb: classttb, classtimeslot: classtimeslot });
                     } catch (err) {
                         return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot")
                     }
@@ -181,34 +174,32 @@ module.exports = {
     },
 
     createschedule: async function (req, res) {
-        console.log(req.query)
         var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.tid + "\" and confirmation = \"1\""
-        console.log(getsupttb + "\n\n")
+        console.log(getsupttb)
         db.query(getsupttb, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var superttb = json;
-                //console.log(">>superttb :", superttb)
+
                 var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.oid + "\" and confirmation = \"1\""
-                console.log(getobsttb + "\n\n")
+                console.log(getobsttb)
                 db.query(getobsttb, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var obsttb = json;
-                       console.log(">>obsttb :", obsttb)
-                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.query.sid + "\" and confirmation = \"1\""
-                        console.log(getstdttb + "\n\n")
+                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.query.sid + "\" and confirmation = \"2\""
+                        console.log(getstdttb)
                         db.query(getstdttb, (err, results) => {
                             try {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var stdttb = json;
-                               // console.log(">>stdttb :", stdttb)
-                                return res.status(200).json({superttb:superttb,obsttb:obsttb,stdttb:stdttb});
+
+                                return res.status(200).json({ superttb: superttb, obsttb: obsttb, stdttb: stdttb });
                             } catch (err) {
-                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb")
+                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb    " + getstdttb)
                             }
                         })
                     } catch (err) {
@@ -218,9 +209,6 @@ module.exports = {
             } catch (err) {
                 return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
             }
-            var string = JSON.stringify(results);
-            var json = JSON.parse(string);
-            var superttb = json;
 
         })
 
@@ -228,17 +216,34 @@ module.exports = {
 
     },
 
-    createdraft : async function(req,res){
+    createdraft: async function (req, res) {
         var campusfortoday;
-        var mon, tue,wed,thu,fri,sat;
-        var weeklist = [mon,tue,wed,thu,fri,sat];
+        var mon = [], tue = [], wed = [], thu = [], fri = [], sat = [];
+        var weeklist = [mon, tue, wed, thu, fri, sat];
         var startday = req.body.startday;
         var endday = req.body.endday;
+        var typeofpresent = req.body.typeofpresent;
 
-        
-        
+        if (req.body.superttb != undefined) {
+            console.log(req.body.tid + "    " + req.body.sid + "    " + req.body.oid)
+            for (var a = 0; a < req.body.superttb.length; a++) {
 
-        
+                weeklist[parseInt(req.body.superttb[a].weekdays) - 1].push(req.body.superttb[a]);
+
+
+            }
+
+            console.log(weeklist[0].length + "    " + weeklist[1].length + "    " + weeklist[2].length + "    " + weeklist[3].length + "    " + weeklist[4].length + "    " + weeklist[5].length);
+
+        } else {
+            console.log(req.body.tid)
+        }
+
+
+
+
+
+        return res.ok();
     },
 
     savebox: async function (req, res) {
@@ -303,9 +308,7 @@ module.exports = {
     },
 
     getrequestroomlist: async function (req, res) {
-        console.log("enter here" + "     " + req.query.Campus + "  " + req.query.Time);
         var thisistheline = "select * from classroom where Campus = \"" + req.query.Campus + "\" and RID not in ((select RID from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + req.query.Weekday + "\"and !(startTime > Time(\"" + req.query.Time + "\") || endTime < Time(\"" + req.query.Time + "\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\"" + req.query.Date + " " + req.query.Time + "\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\"" + req.query.Date + " " + req.query.Time + "\") ) )";
-        console.log(thisistheline)
 
         db.query(thisistheline, (err, result) => {
             if (err) { return res.status(401).json("Error happened when updating") } else {
@@ -320,9 +323,7 @@ module.exports = {
     },
 
     getrequestobslist: async function (req, res) {
-        console.log("enter here" + "     " + req.query.Weekday + "  " + req.query.Time + "   " + req.query.Date);
         var thisistheline = "select * from supervisorpairobserver where tid = \"" + req.session.userid + "\" and OID not in (select OID from allrequestfromobserver where (timestamp(\"" + req.query.Date + " " + req.query.Time + "\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\"" + req.query.Date + " " + req.query.Time + "\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays =" + req.query.Weekday + " and  (time(\"" + req.query.Time + "\")>= allclass.startTime and time(\"" + req.query.Time + "\")< allclass.endTime))"
-        console.log(thisistheline);
 
         db.query(thisistheline, (err, result) => {
             if (err) { return res.status(401).json("Error happened when updating") } else {
@@ -342,6 +343,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var pairinglist = json;
+                console.log(pairinglist)
                 return res.status(200).json({ pairinglist: pairinglist })
             } catch (err) {
                 return res.status(401).json("error happened when excuting SettingController.nodraft.getallinfo.retrievepairinglist");

@@ -310,7 +310,7 @@ module.exports = {
                     if (x != 0) {
                         findtimecrashstr += "or";
                     }
-                    findtimecrashstr += " (weekdays = \"" + thisclassinfo[x].weekdays + "\" and ((\""+thisclassinfo[x].startTime+"\" between startTime and endTime)|| (\""+thisclassinfo[x].endTime+"\" between startTime and endTime)||(\""+thisclassinfo[x].startTime+"\" = startTime)||(\""+thisclassinfo[x].endTime+"\"=endTime)))"
+                    findtimecrashstr += " (weekdays = \"" + thisclassinfo[x].weekdays + "\" and ((\"" + thisclassinfo[x].startTime + "\" between startTime and endTime)|| (\"" + thisclassinfo[x].endTime + "\" between startTime and endTime)||(\"" + thisclassinfo[x].startTime + "\" = startTime)||(\"" + thisclassinfo[x].endTime + "\"=endTime)))"
 
                 }
                 findtimecrashstr += ");"
@@ -420,7 +420,7 @@ module.exports = {
         let today = new Date();
         var db = await sails.helpers.database();
         thisistheline = "select ttbdeadline from student where sid = \"" + req.session.userid + "\"";
-        
+
 
         db.query(thisistheline, function (error, result) {
             try {
@@ -442,7 +442,7 @@ module.exports = {
                 }
                 console.log(req);
                 req.file('avatar').upload(function (err, files) {
-                    
+
                     const fs = require('fs');
 
                     fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
@@ -529,16 +529,13 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
-                // console.log(personallist)
-
                 return res.view("user/readttb", {
-                    date: date,
                     allpersonallist: personallist,
                     SID: req.params.SID
                 })
 
             } catch (err) {
-                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
+                console.log(' getpersonalallclass MySQL Problem' + "    " + err);
             }
 
         });

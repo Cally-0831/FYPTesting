@@ -34,7 +34,7 @@ module.exports.routes = {
   'GET /home': { view: 'user/home' },
   'GET /scheduledesign': "SettingController.nodraft",
   'GET /checkdraft': "SettingController.checksetting",
-  "GET /checkschdule": "ScheduleController.viewfinalschdule",
+  "GET /checkschedule": "ScheduleController.viewfinalschedule",
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   "GET /scheduledesign/getpairing" : "ScheduleController.getpairing",
