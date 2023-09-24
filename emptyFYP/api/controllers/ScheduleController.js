@@ -149,72 +149,6 @@ module.exports = {
         })
     },
 
-    fixedgetclassinfo: async function (req, res) {
-        var getclassinfo = "select * from allclass"
-        db.query(getclassinfo, (err, results) => {
-            try {
-                var string = JSON.stringify(results);
-                var json = JSON.parse(string);
-                var classttb = json;
-                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\"" + req.query.endday + "\") or enddate < DATE(\"" + req.query.startday + "\"))"
-                db.query(getclasstimeslot, (err, results) => {
-                    try {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        var classtimeslot = json;
-                        return res.status(200).json({ classttb: classttb, classtimeslot: classtimeslot });
-                    } catch (err) {
-                        return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot")
-                    }
-                })
-            } catch (err) {
-                return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.classttb")
-            }
-        })
-    },
-
-    createschedule: async function (req, res) {
-        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.tid + "\" and confirmation = \"1\""
-        console.log(getsupttb)
-        db.query(getsupttb, (err, results) => {
-            try {
-                var string = JSON.stringify(results);
-                var json = JSON.parse(string);
-                var superttb = json;
-
-                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.query.oid + "\" and confirmation = \"1\""
-                console.log(getobsttb)
-                db.query(getobsttb, (err, results) => {
-                    try {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        var obsttb = json;
-                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.query.sid + "\" and confirmation = \"2\""
-                        console.log(getstdttb)
-                        db.query(getstdttb, (err, results) => {
-                            try {
-                                var string = JSON.stringify(results);
-                                var json = JSON.parse(string);
-                                var stdttb = json;
-
-                                return res.status(200).json({ superttb: superttb, obsttb: obsttb, stdttb: stdttb });
-                            } catch (err) {
-                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb    " + getstdttb)
-                            }
-                        })
-                    } catch (err) {
-                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.obsttb")
-                    }
-                })
-            } catch (err) {
-                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
-            }
-
-        })
-
-
-
-    },
 
     createdraft: async function (req, res) {
         var campusfortoday;
@@ -224,26 +158,69 @@ module.exports = {
         var endday = req.body.endday;
         var typeofpresent = req.body.typeofpresent;
 
-        if (req.body.superttb != undefined) {
-            console.log(req.body.tid + "    " + req.body.sid + "    " + req.body.oid)
-            for (var a = 0; a < req.body.superttb.length; a++) {
+        
 
-                weeklist[parseInt(req.body.superttb[a].weekdays) - 1].push(req.body.superttb[a]);
+        var getclassinfo = "select * from allclass"
+        db.query(getclassinfo, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var classttb = json;
+                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\"" + req.body.fullendday + "\") or enddate < DATE(\"" + req.body.fullstartday + "\"))"
+                db.query(getclasstimeslot, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var classtimeslot = json;
+                        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\""
+                        //console.log(getsupttb)
+                        db.query(getsupttb, (err, results) => {
+                            try {
+                                var string = JSON.stringify(results);
+                                var json = JSON.parse(string);
+                                var superttb = json;
 
+                                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\""
+                                //console.log(getobsttb)
+                                db.query(getobsttb, (err, results) => {
+                                    try {
+                                        var string = JSON.stringify(results);
+                                        var json = JSON.parse(string);
+                                        var obsttb = json;
+                                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\""
+                                        //console.log(getstdttb)
+                                        db.query(getstdttb, (err, results) => {
+                                            try {
+                                                var string = JSON.stringify(results);
+                                                var json = JSON.parse(string);
+                                                var stdttb = json;
+                                                console.log(classtimeslot.length + "   " + classttb.length + "    " + superttb.length + "     " + stdttb.length + "    " + obsttb.length)
+                                                return res.ok();
+                                            } catch (err) {
+                                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb    " + getstdttb)
+                                            }
+                                        })
+                                    } catch (err) {
+                                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.obsttb")
+                                    }
+                                })
+                            } catch (err) {
+                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
+                            }
 
+                        })
+                    } catch (err) {
+                        return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot")
+                    }
+                })
+            } catch (err) {
+                return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.classttb")
             }
-
-            console.log(weeklist[0].length + "    " + weeklist[1].length + "    " + weeklist[2].length + "    " + weeklist[3].length + "    " + weeklist[4].length + "    " + weeklist[5].length);
-
-        } else {
-            console.log(req.body.tid)
-        }
+        })
 
 
 
-
-
-        return res.ok();
+        //console.log(weeklist[0].length + "    " + weeklist[1].length + "    " + weeklist[2].length + "    " + weeklist[3].length + "    " + weeklist[4].length + "    " + weeklist[5].length);
     },
 
     savebox: async function (req, res) {

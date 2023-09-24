@@ -38,8 +38,7 @@ module.exports.routes = {
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   "GET /scheduledesign/getpairing" : "ScheduleController.getpairing",
-  "POST /createschedule/postfor":"ScheduleController.createschedule",
-  "POST /createschedule/getclassinfo":"ScheduleController.fixedgetclassinfo",
+
   "POST /createschedule/createdraft":"ScheduleController.createdraft",
   "POST /savebox":"ScheduleController.savebox",
   "GET /savebox/get_roomlist_bycampus":"ScheduleController.getrequestroomlist",

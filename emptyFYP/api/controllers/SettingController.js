@@ -105,7 +105,7 @@ module.exports = {
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                //console.log('>> json: ', json);  
+                //console.log('>> json: ', json);
                 supersetting = json;
 
                 var today = new Date();
@@ -126,8 +126,9 @@ module.exports = {
                         if (supersetting[i].typeofsetting == 4) {
                             realreleaseday = dday
                         }
-
+                       
                         if (today < dday) {
+
                             if (i == 3) {
                                 checking = -1
                             } else {
@@ -155,10 +156,10 @@ module.exports = {
                         }
                     }
 
-                  //  console.log(i + "     " + checking + "       " + msg)
+                    //  console.log(i + "     " + checking + "       " + msg)
                 }
                 if (checking > 0) {
-                 //   console.log(checking + "    " + msg)
+                    //   console.log(checking + "    " + msg)
                     warning = 401;
 
                 } else {
@@ -205,6 +206,6 @@ module.exports = {
 
     },
 
-    
+
 
 }

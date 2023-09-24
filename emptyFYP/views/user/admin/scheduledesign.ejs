@@ -84,7 +84,7 @@
         location.assign("/home");
     }
 
-    async function confirmcreate(startday, endday) {
+    async function confirmcreate(startdaydatetype, enddaydatetype) {
         var r = confirm("Confirm to create ?");
 
         if (r) {
@@ -93,78 +93,54 @@
             });
 
             var pairinglist = (await response.json()).pairinglist;
-            console.log(pairinglist)
-            startday = (new Date(startday)).toLocaleDateString("en-GB").split("/")
-            endday = (new Date(endday)).toLocaleDateString("en-GB").split("/")
+            var startday = (new Date(startdaydatetype)).toLocaleDateString("en-GB").split("/")
+            var endday = (new Date(enddaydatetype)).toLocaleDateString("en-GB").split("/")
             startday = startday[2] + "-" + startday[1] + "-" + startday[0]
             endday = endday[2] + "-" + endday[1] + "-" + endday[0]
             var typeofpresentlist = document.getElementsByName("typeofpresent");
             var typeofpresent;
+
             for(var i = 0 ; i < typeofpresentlist.length;i++){
                 if(typeofpresentlist[i].checked){
                     typeofpresent = typeofpresentlist[i].value;
                 }
             }
             
-            var response = await fetch("/createschedule/getclassinfo?startday=" + startday + "&endday=" + endday, {
-                method: "POST"
-            });
-
-            if (response.ok) {
-                var responsejson = await response.json();
-                var classttb = responsejson.classttb;
-                var classtimeslot = responsejson.classtimeslot;
-                // console.log(classttb)
-                // console.log(classtimeslot)
-                //for (var a = 0; a < pairinglist.length; a++) {
-                    for (var a = 0; a < 5; a++) {
-                    console.log(pairinglist[a])
-                    var querystring = "tid=" + pairinglist[a].tid + "&sid=" + pairinglist[a].sid + "&oid=" + pairinglist[a].oid + "&startday=" + startday + "&endday=" + endday
-                    console.log("/createschedule/postfor?" + querystring);
-                    var response2 = await fetch("/createschedule/postfor?" + querystring, {
-                        method: "POST"
-                    });
-                    console.log(response2)
-                    if (response2.ok) {
-                        var response2json = await response2.json();
-                        console.log(response2json)
-                        var superttb = response2json.superttb;
-                        var obsttb = response2json.obsttb;
-                        var stdttb = response2json.stdttb;
-                        
-                        
-                        
-                        var requestbody = JSON.stringify({
-                            sid: pairinglist[a].sid,
-                            oid: pairinglist[a].oid,
-                            tid: pairinglist[a].tid,
-                            superttb: superttb,
-                            obsttb: obsttb,
-                            stdttb: stdttb,
-                            //classtimeslot: classtimeslot,
-                            //classttb: classttb,
-                            startday : startday,
-                            endday:endday,
+                for (var a = 0; a < pairinglist.length; a++) {
+                //    for (var a = 3; a < 4; a++) {
+                         var requestbody = JSON.stringify({
+                            tid : pairinglist[a].tid,
+                            sid : pairinglist[a].sid,
+                            oid : pairinglist[a].oid,
+                            startdaydate : startday,
+                            enddaydate:endday,
+                            fullstartday : startdaydatetype,
+                            fullendday : enddaydatetype,
                             typeofpresent : typeofpresent
                         })
                         
+                        
 
-                        var response3 = await fetch("/createschedule/createdraft", {
+                        var response2 = await fetch("/createschedule/createdraft", {
                             method: "POST",
                             body : requestbody,
                         });
+                        
+
+                        if(response2.ok){
+
+                        }else{
+                            var response2json = await response2.json();
+                        console.log(response2json)
+                        }
 
 
 
-
-                    }else{
-                        var response2json = await response2.json();
-                        console.log(response2)
-                    }
+                    
                 }
 
 
-            }
+            
 
 
         }
