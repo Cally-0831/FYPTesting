@@ -152,13 +152,25 @@ module.exports = {
 
     createdraft: async function (req, res) {
         var campusfortoday;
-        var mon = [], tue = [], wed = [], thu = [], fri = [], sat = [];
-        var weeklist = [mon, tue, wed, thu, fri, sat];
+
+        var supweeklist = [], obsweeklist = [], stdweeklist = [];
+
+        for (var a = 0; a < 6; a++) {
+            supweeklist.push([]);
+            obsweeklist.push([]);
+            stdweeklist.push([]);
+        }
+
         var startday = req.body.startday;
         var endday = req.body.endday;
         var typeofpresent = req.body.typeofpresent;
+        if(typeofpresent == "midterm"){
 
-        
+        }else{
+            
+        }
+
+
 
         var getclassinfo = "select * from allclass"
         db.query(getclassinfo, (err, results) => {
@@ -166,12 +178,12 @@ module.exports = {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var classttb = json;
-                var getclasstimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\"" + req.body.fullendday + "\") or enddate < DATE(\"" + req.body.fullstartday + "\"))"
-                db.query(getclasstimeslot, (err, results) => {
+                var getclassroomtimeslot = "select * from allclassroomtimeslot where !(startdate >DATE(\"" + req.body.fullendday + "\") or enddate < DATE(\"" + req.body.fullstartday + "\"))"
+                db.query(getclassroomtimeslot, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        var classtimeslot = json;
+                        var classroomtimeslot = json;
                         var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\""
                         //console.log(getsupttb)
                         db.query(getsupttb, (err, results) => {
@@ -179,6 +191,9 @@ module.exports = {
                                 var string = JSON.stringify(results);
                                 var json = JSON.parse(string);
                                 var superttb = json;
+                                for (var a = 0; a < superttb.length; a++) {
+                                    supweeklist[parseInt(superttb[a].weekdays) - 1].push(superttb[a]);
+                                }
 
                                 var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\""
                                 //console.log(getobsttb)
@@ -187,6 +202,9 @@ module.exports = {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var obsttb = json;
+                                        for (var a = 0; a < obsttb.length; a++) {
+                                            obsweeklist[parseInt(obsttb[a].weekdays)-1].push(obsttb[a]);
+                                        }
                                         var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\""
                                         //console.log(getstdttb)
                                         db.query(getstdttb, (err, results) => {
@@ -194,7 +212,24 @@ module.exports = {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var stdttb = json;
-                                                console.log(classtimeslot.length + "   " + classttb.length + "    " + superttb.length + "     " + stdttb.length + "    " + obsttb.length)
+
+                                                for (var a = 0; a < stdttb.length; a++) {
+                                                    stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]);
+                                                }
+                                                for (var a = 0; a < stdweeklist.length; a++) {
+                                                    if (stdweeklist[a].length == 0) {
+                                                        stdweeklist[a].push("EMPTY")
+                                                    }
+                                                    if (obsweeklist[a].length == 0) {
+                                                        obsweeklist[a].push("EMPTY")
+                                                    }
+                                                    if (supweeklist[a].length == 0) {
+                                                        supweeklist[a].push("EMPTY")
+                                                    }
+
+                                                }
+
+
                                                 return res.ok();
                                             } catch (err) {
                                                 return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb    " + getstdttb)

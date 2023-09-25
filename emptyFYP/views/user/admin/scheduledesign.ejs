@@ -106,16 +106,16 @@
                 }
             }
             
-                for (var a = 0; a < pairinglist.length; a++) {
-                //    for (var a = 3; a < 4; a++) {
+                //for (var a = 0; a < pairinglist.length; a++) {
+                    for (var a = 11; a < 12; a++) {
                          var requestbody = JSON.stringify({
                             tid : pairinglist[a].tid,
                             sid : pairinglist[a].sid,
                             oid : pairinglist[a].oid,
                             startdaydate : startday,
                             enddaydate:endday,
-                            fullstartday : startdaydatetype,
-                            fullendday : enddaydatetype,
+                            fullstartday : new Date(startdaydatetype),
+                            fullendday : new Date(enddaydatetype),
                             typeofpresent : typeofpresent
                         })
                         

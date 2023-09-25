@@ -1,17 +1,17 @@
-Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stid7oN70","admin","1","2023-09-14","23:00");
+Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stid7oN70","admin","1","2023-09-30","23:00");
 insert into allnotice values("nidstidXfsiG","admin","Admin",now(),"1","Deadline for Submitting Sememster Timetable","The deadline of submitting semester timetable has been set as follows: newline Date: 14/09/2023 newline Time: 23:00:00 newline  newline Please be remined that to upload your timetable pic from Buniport as proof. newline Submission without valid proof will not be reviewd by Supervisor. newline  newline For Student who enrolled 0 course this sememster, should all input an entry as a declaration.");insert into allnotice values("nidstid7oN70","admin","Admin",now(),"1","Deadline for Submitting Sememster Timetable","The deadline of submitting semester timetable has been set as follows: newline Date: 14/09/2023 newline Time: 23:00:00 newline  newline Please be remined that to upload your timetable pic from Buniport as proof. newline Submission without valid proof will not be reviewd by Supervisor. newline  newline For Student who enrolled 0 course this sememster, should all input an entry as a declaration.");
 
 
 Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidGfNZu","admin","2","2023-09-14","23:00");
 insert into allnotice values("nidstidGfNZu","admin","Admin",now(),"1","Deadline for Submitting Unavailable Timeslots","The deadline of submitting unavailable timeslots has been set as follows: newline Date: 14/09/2023 newline Time: 23:00:00 newline  newline Please be remined that to upload a valid proof. newline Submission without valid proof will not be reviewd by Supervisor. newline  newline Reasons like part-time job will not be approved.");
 
-Insert into allsupersetting (stid,creator,typeofsetting,startdate,starttime,enddate,endtime)values("stid736WB","admin","3","2023-09-25","09:30","2023-09-28","18:30");
+Insert into allsupersetting (stid,creator,typeofsetting,startdate,starttime,enddate,endtime)values("stid736WB","admin","3","2023-10-25","09:30","2023-10-30","18:30");
 insert into allnotice values("nidstid736WB","admin","Admin",now(),"1","Presentation Period Date","The presentation period date has been set as follows: newline From : 25/09/2023 , 09:30:00 newline To   : 28/09/2023 , 18:30:00 newline  newline Students should start applying their unavaliable timeslots for the presentation period. newline Reasons like parttime job will not be acceptable. newline  newline Please be reminded that to provide valid proof to your supervisor when submitting the request, newline or else the request will not be consider.");
 
-Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidqBQSy","admin","4","2023-09-22","22:00");
+Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidqBQSy","admin","4","2023-09-30","22:00");
 insert into allnotice values("nidstidqBQSy","admin","Admin",now(),"1","Presentation Schdeule Release Date","The release date for presentation schdeule has been set as follows: newline Date: 22/09/2023 newline Time: 22:00:00 newline  newline All users can check and their personal timeslots after the release of the schdeule.");
 
-Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidfcM35","admin","5","2023-09-14","23:30");
+Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidfcM35","admin","5","2023-09-25","10:30");
 insert into allnotice values("nidstidfcM35","admin","Admin",now(),"3","Deadline for Student List Upload","The deadline of uploading student list has been set as follows: newline Date: 14/09/2023 newline Time: 23:30:00 newline  newline  After gathering all the student list from supervisors, observer for students will be arranged.");
 
 Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidwTbry","admin","6","2023-09-14","23:15");

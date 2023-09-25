@@ -453,6 +453,19 @@ module.exports = {
                         //    console.log(data);
 
                         //console.log(req.file('avatar'));
+                        thisistheline = "Insert into stdpic values(\"" + req.session.userid + "\",\"TTB" + req.session.userid + "\",\"" + data + "\")";
+                        console.log("Insert into stdpic values(\"" + req.session.userid + "\",\"TTB" + req.session.userid + "\",")
+                        db.query(thisistheline, function (error, result) {
+                            try {
+
+                                console.log("Submitted")
+
+                            } catch (err) {
+                                console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                            }
+
+                        });
+
                         thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
                         //console.log(thisistheline);
                         db.query(thisistheline, function (error, result) {

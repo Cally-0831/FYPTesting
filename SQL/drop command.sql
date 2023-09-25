@@ -22,7 +22,7 @@ Drop table if exists temptakecourse;
 Drop table if exists allsupersetting;
 Drop table if exists allschedulebox;
 Drop table if exists allpreffromsup;
-
+Drop table if exists stdpic;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;

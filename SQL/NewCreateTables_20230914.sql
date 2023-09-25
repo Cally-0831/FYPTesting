@@ -189,6 +189,15 @@ LastUpdate timestamp not null,
 primary key (TID)
 );
 
+create table stdpic(
+
+SID varchar(10) not null,
+RefrID varchar(20) not null,
+picdata LONGBLOB default null,
+primary key (SID,RefrID)
+);
+
+
 delimiter |
 
 CREATE TRIGGER testref BEFORE INSERT ON allclass
