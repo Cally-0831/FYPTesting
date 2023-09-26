@@ -221,12 +221,13 @@ module.exports = {
                                                     if (obsweeklist[a].length == 0) { obsweeklist[a].push("EMPTY") }
                                                     if (supweeklist[a].length == 0) { supweeklist[a].push("EMPTY") }
                                                 }
-                                                var getsuppreference = "select * from allpreffromsup where tid = \"" + req.body.tid + "\" or tid = \"" + req.body.oid + "\""
+                                                var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + req.body.tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\""
                                                 db.query(getsuppreference, (err, results) => {
                                                     try { 
                                                         var string = JSON.stringify(results);
                                                         var json = JSON.parse(string);
                                                         var suppref = json;
+                                                        console.log(suppref)
                                                     } catch (err) {
                                                         return res.status(401).json("Error happened when excuting ScheduleController.createschedule.getsuppref")
 
