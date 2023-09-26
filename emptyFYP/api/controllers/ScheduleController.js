@@ -161,13 +161,18 @@ module.exports = {
             stdweeklist.push([]);
         }
 
-        var startday = req.body.startday;
-        var endday = req.body.endday;
+        var startday = new Date(req.body.fullstartday);
+        var startime = startday.toLocaleTimeString("en-GB");
+        var endday =  new Date(req.body.fullendday);
+        var endtime = endday.toLocaleTimeString("en-GB");
+        console.log((endday - startday)/1000/60/60/24)
+        var sessionduration=0;
         var typeofpresent = req.body.typeofpresent;
+        
         if (typeofpresent == "midterm") {
-
+sessionduration = 20;
         } else {
-
+sessionduration = 60;
         }
 
 
@@ -184,7 +189,7 @@ module.exports = {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var classroomtimeslot = json;
-                        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\""
+                        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
                         //console.log(getsupttb)
                         db.query(getsupttb, (err, results) => {
                             try {
@@ -195,17 +200,15 @@ module.exports = {
                                     supweeklist[parseInt(superttb[a].weekdays) - 1].push(superttb[a]);
                                 }
 
-                                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\""
+                                var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
                                 //console.log(getobsttb)
                                 db.query(getobsttb, (err, results) => {
                                     try {
                                         var string = JSON.stringify(results);
                                         var json = JSON.parse(string);
                                         var obsttb = json;
-                                        for (var a = 0; a < obsttb.length; a++) {
-                                            obsweeklist[parseInt(obsttb[a].weekdays) - 1].push(obsttb[a]);
-                                        }
-                                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\""
+                                        for (var a = 0; a < obsttb.length; a++) {obsweeklist[parseInt(obsttb[a].weekdays) - 1].push(obsttb[a]);}
+                                        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\" order by weekdays asc, startTime asc"
                                         //console.log(getstdttb)
                                         db.query(getstdttb, (err, results) => {
                                             try {
@@ -213,56 +216,56 @@ module.exports = {
                                                 var json = JSON.parse(string);
                                                 var stdttb = json;
 
-                                                for (var a = 0; a < stdttb.length; a++) {
-                                                    stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]);
-                                                }
+                                                for (var a = 0; a < stdttb.length; a++) {stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]);}
                                                 for (var a = 0; a < stdweeklist.length; a++) {
                                                     if (stdweeklist[a].length == 0) { stdweeklist[a].push("EMPTY") }
                                                     if (obsweeklist[a].length == 0) { obsweeklist[a].push("EMPTY") }
                                                     if (supweeklist[a].length == 0) { supweeklist[a].push("EMPTY") }
                                                 }
-                                                var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + req.body.tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\""
+                                                var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + req.body.tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\" order by priority asc"
                                                 db.query(getsuppreference, (err, results) => {
-                                                    try { 
+                                                    try {
                                                         var string = JSON.stringify(results);
                                                         var json = JSON.parse(string);
                                                         var suppref = json;
                                                         console.log(suppref)
-                                                    } catch (err) {
-                                                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.getsuppref")
 
-                                                    }
+                                                        var startindex = startday.getDay();
+
+                                                        for(var daynum = 0 ; daynum < Math.floor((endday - startday)/1000/60/60/24);a++){
+                                                            var presentday = new Date(startday.getTime() + (daynum*86400000)); 
+                                                            var currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
+                                                            var currentsessionendtimeinpresentday = presentday.getTime()+(1000*60*sessionduration)
+                                                            for(var timebox = 0 ;timebox < 20 ; timebox++){
+
+                                                            }
+                                                            for(var a = 0 ;a < superttb.length;a++){
+                                                                if(!(superttb[a].weekdays == presentday.getDay() && !(superttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= superttb[a].endtime))){
+                                                                    
+                                                                }else{
+                                                                    console.log(currentsessionendtimeinpresentday,superttb[a])
+                                                                }
+                                                            }
+                                                            
+                                                        }
+                                                        
+
+
+
+
+                                                        return res.ok();
+                                                    } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createschedule.getsuppref") }
                                                 })
-
-
-
-
-                                                return res.ok();
-                                            } catch (err) {
-                                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb")
-                                            }
+                                            } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb") }
                                         })
-                                    } catch (err) {
-                                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.obsttb")
-                                    }
+                                    } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createschedule.obsttb") }
                                 })
-                            } catch (err) {
-                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb")
-                            }
-
+                            } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createschedule.supttb") }
                         })
-                    } catch (err) {
-                        return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot")
-                    }
+                    } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.timeslot") }
                 })
-            } catch (err) {
-                return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.classttb")
-            }
+            } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.fixedgetclassinfo.classttb") }
         })
-
-
-
-        //console.log(weeklist[0].length + "    " + weeklist[1].length + "    " + weeklist[2].length + "    " + weeklist[3].length + "    " + weeklist[4].length + "    " + weeklist[5].length);
     },
 
     savebox: async function (req, res) {

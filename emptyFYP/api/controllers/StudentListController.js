@@ -25,16 +25,16 @@ module.exports = {
 
         if (req.session.role == "sup") {
 
-            thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
+            var getsupstdlist = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
 
-            db.query(thisistheline, (err, results) => {
+            db.query(getsupstdlist, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     var stdlist = json;
                     //console.log('>> stdlist: ', stdlist); 
-                    thisistheline = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
-                    db.query(thisistheline, (err, results) => {
+                    var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
+                    db.query(getsupbeobslist, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
                             var json = JSON.parse(string);
@@ -43,12 +43,11 @@ module.exports = {
                                 observinglist = json;
                             }
 
-                            thisistheline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
-                            db.query(thisistheline, (err, results) => {
+                            var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
+                            db.query(checkdeadline, (err, results) => {
                                 try {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
-                                    console.log(json)
 
                                     if (json.length > 0) {
                                         deadlinedate = new Date(json[0].deadlinedate);
@@ -57,43 +56,30 @@ module.exports = {
                                         deadlinedate.setMinutes(deadlinetime[1]);
                                         deadlinedate.setSeconds(deadlinetime[2]);
                                         finaldate = deadlinedate;
-                                        console.log("controller    " + finaldate)
                                     } else {
                                         finaldate = undefined
-                                        console.log("controller    " + finaldate)
                                     }
                                     console.log("controller    " + finaldate)
                                     return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
-
                                 } catch (err) {
-                                    console.log("error happened in StudentListController: liststudent");
+                                    return res.status(400).json("Error happened in StudentListController.liststudent.checkdeadline");
                                 }
-
                             })
-
                         } catch (err) {
-                            console.log("error happened in StudentListController: liststudent");
+                            return res.status(400).json("Error happened in StudentListController.liststudent.getsupbeobslist");
                         }
-                        //console.log('>> observinglist: ', observinglist); 
                     })
                 } catch (err) {
-                    console.log("error happened in StudentListController: liststudent");
-
+                    return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
                 }
-
-
             });
         } else {
             thisistheline = "select supervisor.tid,supervisor.supname,student.sid,student.stdname,supervisor.submission from supervisor left join supervisorpairstudent on  supervisorpairstudent.tid = supervisor.tid left join student on supervisorpairstudent.sid = student.sid";
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
                     var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
                     suplist = json;
-                    //console.log('>> stdlist: ', stdlist); 
-
                     var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
                     db.query(thisistheline, function (err, result) {
                         try {
@@ -533,20 +519,20 @@ module.exports = {
             console.log(insertline);
 
             db.query(insertline, function (err, result) {
-                try{
-                   
-                }catch(err){
-                    return  res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.insertline");
+                try {
+
+                } catch (err) {
+                    return res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.insertline");
                 }
             });
-            var updateline = "update supervisor set priority = \""+req.body[i].priority+"\" where tid = \""+req.body[i].tid+"\""
-            console.log(updateline );
+            var updateline = "update supervisor set priority = \"" + req.body[i].priority + "\" where tid = \"" + req.body[i].tid + "\""
+            console.log(updateline);
             db.query(updateline, function (err, result) {
-                try{
-                    
-                }catch(err){
-                    return  res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.updateline");
-         
+                try {
+
+                } catch (err) {
+                    return res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.updateline");
+
                 }
             })
         }
