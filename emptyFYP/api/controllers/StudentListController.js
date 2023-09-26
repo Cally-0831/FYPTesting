@@ -20,11 +20,11 @@ module.exports = {
     liststudent: async function (req, res) {
         var allstulist;
         var allsuplist;
-        
+
 
 
         if (req.session.role == "sup") {
-           
+
             thisistheline = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
 
             db.query(thisistheline, (err, results) => {
@@ -49,7 +49,7 @@ module.exports = {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     console.log(json)
-                                   
+
                                     if (json.length > 0) {
                                         deadlinedate = new Date(json[0].deadlinedate);
                                         deadlinetime = json[0].deadlinetime.split(":");
@@ -57,20 +57,20 @@ module.exports = {
                                         deadlinedate.setMinutes(deadlinetime[1]);
                                         deadlinedate.setSeconds(deadlinetime[2]);
                                         finaldate = deadlinedate;
-                                        console.log("controller    "+finaldate)
+                                        console.log("controller    " + finaldate)
                                     } else {
                                         finaldate = undefined
-                                        console.log("controller    "+finaldate)
+                                        console.log("controller    " + finaldate)
                                     }
-                                    console.log("controller    "+finaldate)
-                                    return res.view('user/listuser', {checkdate : finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+                                    console.log("controller    " + finaldate)
+                                    return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
 
                                 } catch (err) {
-                                        console.log("error happened in StudentListController: liststudent");
-                                    }
+                                    console.log("error happened in StudentListController: liststudent");
+                                }
 
                             })
-                            
+
                         } catch (err) {
                             console.log("error happened in StudentListController: liststudent");
                         }
@@ -113,7 +113,7 @@ module.exports = {
                             } else {
                                 finaldate = undefined
                             }
-                           
+
                             return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
                         } catch (err) {
                             console.log("error happened at StudentListContorller: liststudent");
@@ -184,7 +184,7 @@ module.exports = {
                     studentresult = json;
                     console.log('>> stdlist: ', studentresult);
                     thisistheline = "select * from allrequestfromstudent where sid = \"" + req.params.id + "\"\;";
-                           
+
                     db.query(thisistheline, (err, results) => {
                         try {
                             var string = JSON.stringify(results);
@@ -206,8 +206,8 @@ module.exports = {
 
                                     }
                                     console.log(checkdate)
-                                    return res.view('user/read', { type: type, thatppl: studentresult, obslist: undefined, requestlist: studentrequestlist,checkdate:checkdate });
-                        
+                                    return res.view('user/read', { type: type, thatppl: studentresult, obslist: undefined, requestlist: studentrequestlist, checkdate: checkdate });
+
                                 } catch (err) {
                                     console.log("error happened in StudentListController: readsingleppl 1");
                                 }
@@ -246,20 +246,20 @@ module.exports = {
                             var json = JSON.parse(string);
                             //console.log('>> json: ', json);  
                             supervisorrequestlist = json;
-                            thisistheline = "select student.sid, student.stdname,supervisor.supname,supervisor.tid,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where observerpairstudent.oid =\""+req.params.id+"\";";
-                             db.query(thisistheline, (err, results) => {
+                            thisistheline = "select student.sid, student.stdname,supervisor.supname,supervisor.tid,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where observerpairstudent.oid =\"" + req.params.id + "\";";
+                            db.query(thisistheline, (err, results) => {
                                 try {
                                     var string = JSON.stringify(results);
                                     var json = JSON.parse(string);
                                     obslist = json;
                                     return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
-                        
+
                                 } catch (err) {
                                     console.log("error happened in StudentListController: readsingleppl");
                                 }
 
                             })
-                            } catch (err) {
+                        } catch (err) {
                             console.log("error happened in StudentListController: readsingleppl");
                         }
 
@@ -428,18 +428,20 @@ module.exports = {
 
 
         //console.log(pw);
-        thisistheline = "insert IGNORE into allusers values(\"" +
+        insertline = "insert IGNORE into allusers values(\"" +
             req.body.supervisorname + "\"\,\""
             + req.body.tid + "\"\,\"" +
             pw + "\"\,\"ACTIVE\"\,\"0\"\,\"sup\"\)\;\n";
         //  console.log(thisistheline);
-        db.query(thisistheline, function (err, result) {
-            if (err) {
-                console.log("error happened at StudentListContorller: createnewsup");
-                res.status(401).json("Error happened when excuting : " + thisistheline);
-            };
-            console.log("1 record inserted");
-            return res.ok("created");
+        db.query(insertline, function (err, result) {
+            try {
+                console.log("1 record inserted");
+                return res.ok("created");
+            } catch (err) {
+                return res.status(401).json("Error exists when excuting StudentlistController.createnewsup.insertline");
+            }
+
+
         });
 
 
@@ -521,30 +523,34 @@ module.exports = {
 
         var db = await sails.helpers.database();
 
-
-
-
         for (var i = 0; i < req.body.length; i++) {
+            console.log(req.body)
 
-
-            thisistheline = "insert IGNORE into allusers values(\"" +
+            insertline = "insert IGNORE into allusers values(\"" +
                 req.body[i].supervisorname + "\"\,\""
                 + req.body[i].tid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"sup\"\)\;\n";
-            console.log(thisistheline);
+            console.log(insertline);
 
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadsupervisorlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-                };
-                console.log("1 record inserted");
+            db.query(insertline, function (err, result) {
+                try{
+                   
+                }catch(err){
+                    return  res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.insertline");
+                }
             });
-
+            var updateline = "update supervisor set priority = \""+req.body[i].priority+"\" where tid = \""+req.body[i].tid+"\""
+            console.log(updateline );
+            db.query(updateline, function (err, result) {
+                try{
+                    
+                }catch(err){
+                    return  res.status(401).json("Error happened when excuting StudentListContorller.uploadsupervisorlist.updateline");
+         
+                }
+            })
         }
-
-        return res.json();
-
+        return res.ok();
     },
 
     uploadpairlist: async function (req, res) {
@@ -728,7 +734,7 @@ module.exports = {
 
                         console.log(pairinglist)
                         return res.status(200).json("ok");
-                        
+
                     } catch (err) {
                         console.log("error happened at StudentListContorller: generateobs");
                     }

@@ -98,9 +98,9 @@ module.exports = {
     },
 
     nodraft: async function (req, res) {
-        let thisistheline2 = " select * from allsupersetting where announcetime is not null order by typeofsetting asc";
+        let getallsetting = " select * from allsupersetting where announcetime is not null order by typeofsetting asc";
         var supersetting;
-        db.query(thisistheline2, (err, results) => {
+        db.query(getallsetting, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 //console.log('>> string: ', string );
@@ -118,7 +118,7 @@ module.exports = {
                 for (var i = 0; i < supersetting.length; i++) {
 
                     if (supersetting[i].deadlinedate != null) {
-                        /** this is for setting 1/2/4 */
+                        /** this is for setting 1/2/4/5/6 */
                         var settingday = new Date(supersetting[i].deadlinedate).toDateString();
                         var settingtime = supersetting[i].deadlinetime;
                         var stringstring = settingday + " " + settingtime;
@@ -126,7 +126,7 @@ module.exports = {
                         if (supersetting[i].typeofsetting == 4) {
                             realreleaseday = dday
                         }
-                       
+
                         if (today < dday) {
 
                             if (i == 3) {
@@ -158,12 +158,10 @@ module.exports = {
 
                     //  console.log(i + "     " + checking + "       " + msg)
                 }
-                if (checking > 0) {
-                    //   console.log(checking + "    " + msg)
-                    warning = 401;
-
-                } else {
+                if (checking && msg == "4&") {
                     warning = 200;
+                }else{
+                    warning = 401;
                 }
                 return res.view("user/admin/scheduledesign", {
                     havedraft: "N",
@@ -178,7 +176,7 @@ module.exports = {
 
 
             } catch (err) {
-                console.log("sth happened here");
+                return res.status(400).json("Erro exist when excuting SettingController.nodraft.getsetting")
 
             }
 
@@ -188,10 +186,10 @@ module.exports = {
     },
 
     checksetting: async function (req, res) {
-        let thisistheline = " select draft from supervisor";
+        let checkdraftexist = " select draft from supervisor";
 
-        db.query(thisistheline, (err, results) => {
-            var string = JSON.stringify(results);
+        db.query(checkdraftexist, (err, results) => {
+            try{var string = JSON.stringify(results);
             //console.log('>> string: ', string );
             var json = JSON.parse(string);
             var havedraft = json[0].draft;
@@ -200,7 +198,10 @@ module.exports = {
                 return res.status(200).json("redirect");
             } else {
                 return res.status(200).json("go")
+            }}catch(err){
+                return res.status(400).json("Error happened when excuting SettingController.checksetting")
             }
+            
 
         });
 

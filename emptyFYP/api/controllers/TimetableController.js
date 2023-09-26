@@ -209,24 +209,24 @@ module.exports = {
     getpersonalallclass: async function (req, res) {
         var date;
         var db = await sails.helpers.database();
-        let thisistheline;
+        let getclassinput;
         if (req.session.role == "sup") {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
+            getclassinput = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" ORDER BY  startTime asc ,weekdays asc";
 
         } else {
-            thisistheline = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments, student.ttbdeadline from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid right join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
+            getclassinput = "select allclass.CID, allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allstudenttakecourse.confirmation, allstudenttakecourse.Submissiontime, allstudenttakecourse.picdata, allstudenttakecourse.review , allstudenttakecourse.ttbcomments, student.ttbdeadline from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid right join student on allstudenttakecourse.pid = student.sid where student.sid = \"" + req.session.userid + "\"order BY  startTime asc ,weekdays asc";
 
         }
-        // console.log(thisistheline);
-        db.query(thisistheline, function (err, result) {
+        // console.log(getclassinput);
+        db.query(getclassinput, function (err, result) {
             try {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
 
 
-                thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
-                db.query(thisistheline, function (err, result) {
+                checksetting = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
+                db.query(checksetting, function (err, result) {
                     try {
                         var string = JSON.stringify(result);
                         var json = JSON.parse(string)
@@ -266,16 +266,16 @@ module.exports = {
 
                         });
                     } catch (err) {
-
-                    }
+                        return res.status(400).json('Error exist when excuting TimeTableController.getallpersonalclass.checksetting')
+                        }
 
                 })
 
 
 
             } catch (err) {
-                // console.log(' getpersonalallclass MySQL Problem' + "    " + err);
-            }
+                return res.status(400).json('Error exist when excuting TimeTableController.getallpersonalclass.getclassinput');
+                 }
 
         });
         // return res.json("ok");
@@ -453,19 +453,7 @@ module.exports = {
                         //    console.log(data);
 
                         //console.log(req.file('avatar'));
-                        thisistheline = "Insert into stdpic values(\"" + req.session.userid + "\",\"TTB" + req.session.userid + "\",\"" + data + "\")";
-                        console.log("Insert into stdpic values(\"" + req.session.userid + "\",\"TTB" + req.session.userid + "\",")
-                        db.query(thisistheline, function (error, result) {
-                            try {
-
-                                console.log("Submitted")
-
-                            } catch (err) {
-                                console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
-                            }
-
-                        });
-
+                       
                         thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
                         //console.log(thisistheline);
                         db.query(thisistheline, function (error, result) {
@@ -491,43 +479,6 @@ module.exports = {
             }
 
         });
-
-
-        /**
-                console.log(req);
-                req.file('avatar').upload(function (err, files) {
-                    console.log(files[0].fd);
-        
-                    const fs = require('fs');
-        
-                    fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
-                        if (err) {
-                            console.error(err);
-                            return;
-                        }
-                        //    console.log(data);
-        
-                        //console.log(req.file('avatar'));
-                        thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
-                        //console.log(thisistheline);
-                        db.query(thisistheline, function (error, result) {
-                            try {
-        
-                                console.log("Submitted")
-                                return res.redirect("../timetable");
-                            } catch (err) {
-                                console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
-                            }
-        
-                        });
-                    });
-                    fs.unlink(files[0].fd, function (err) {
-                        if (err) return console.log(err); // handle error as you wish
-                        // file deleted... continue your logic
-                    });
-                });
-                **/
-
     },
 
     readsinglestudentttb: async function (req, res) {

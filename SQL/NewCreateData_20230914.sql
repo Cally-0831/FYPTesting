@@ -5,10 +5,10 @@
 insert into allusers values("Apple","sid11111","spw11111","active","0","stu");
 insert into allusers values("Betty","sid22222","spw22222","active","0","stu");
 
-INSERT INTO  allusers VALUES ("Prof Chan","tid00001","tpw00001","Active",0,"sup");
-INSERT INTO  allusers VALUES ("Prof Lam","tid00002","tpw00002","Active",0,"sup");
-INSERT INTO  allusers VALUES ("Dr Amantha","tid00003","tpw00003","Active",0,"sup");
-INSERT INTO  allusers VALUES ("Dr Banana","tid00004","tpw00004","Active",0,"sup");
+#INSERT INTO  allusers VALUES ("Prof Chan","tid00001","tpw00001","Active",0,"sup");
+#INSERT INTO  allusers VALUES ("Prof Lam","tid00002","tpw00002","Active",0,"sup");
+#INSERT INTO  allusers VALUES ("Dr Amantha","tid00003","tpw00003","Active",0,"sup");
+#INSERT INTO  allusers VALUES ("Dr Banana","tid00004","tpw00004","Active",0,"sup");
 
 INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 #sample data
@@ -49,12 +49,7 @@ insert into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","4","0
 insert into allclass values("COMP","4096","00001","","Sin Hang","LMC509","5","14:30","17:20","0");
 insert into allclass values("COMP","4097","00001","","AAB","AAB509","5","14:30","17:20","0");
 
-insert into alltakecourse values("COMP4107_00001","tid00001");
-insert into alltakecourse values("COMP4096_00001","tid00001");
-insert into alltakecourse values("COMP4057_00001","tid00001");
-insert into alltakecourse values("COMP4025_00001","tid00001");
-insert into alltakecourse values("COMP4025_10001","tid00001");
-insert into alltakecourse values("GCAP3205_00001","tid00001");
+
 
 insert into alltakecourse values("COMP4107_00001","sid11111");
 insert into alltakecourse values("COMP4096_00001","sid11111");
@@ -65,9 +60,3 @@ insert into alltakecourse values("GCAP3205_00001","sid11111");
 
 insert into alltakecourse values("COMP4107_00001","sid22222");
 
-insert into alltakecourse values("COMP4107_00001","tid00003");
-insert into alltakecourse values("COMP4096_00001","tid00003");
-insert into alltakecourse values("COMP4057_00001","tid00003");
-insert into alltakecourse values("COMP4025_00001","tid00003");
-insert into alltakecourse values("COMP4025_10001","tid00003");
-insert into alltakecourse values("GCAP3205_00001","tid00003");

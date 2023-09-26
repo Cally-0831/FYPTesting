@@ -164,10 +164,10 @@ module.exports = {
         var startday = req.body.startday;
         var endday = req.body.endday;
         var typeofpresent = req.body.typeofpresent;
-        if(typeofpresent == "midterm"){
+        if (typeofpresent == "midterm") {
 
-        }else{
-            
+        } else {
+
         }
 
 
@@ -203,7 +203,7 @@ module.exports = {
                                         var json = JSON.parse(string);
                                         var obsttb = json;
                                         for (var a = 0; a < obsttb.length; a++) {
-                                            obsweeklist[parseInt(obsttb[a].weekdays)-1].push(obsttb[a]);
+                                            obsweeklist[parseInt(obsttb[a].weekdays) - 1].push(obsttb[a]);
                                         }
                                         var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\""
                                         //console.log(getstdttb)
@@ -217,22 +217,28 @@ module.exports = {
                                                     stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]);
                                                 }
                                                 for (var a = 0; a < stdweeklist.length; a++) {
-                                                    if (stdweeklist[a].length == 0) {
-                                                        stdweeklist[a].push("EMPTY")
-                                                    }
-                                                    if (obsweeklist[a].length == 0) {
-                                                        obsweeklist[a].push("EMPTY")
-                                                    }
-                                                    if (supweeklist[a].length == 0) {
-                                                        supweeklist[a].push("EMPTY")
-                                                    }
-
+                                                    if (stdweeklist[a].length == 0) { stdweeklist[a].push("EMPTY") }
+                                                    if (obsweeklist[a].length == 0) { obsweeklist[a].push("EMPTY") }
+                                                    if (supweeklist[a].length == 0) { supweeklist[a].push("EMPTY") }
                                                 }
+                                                var getsuppreference = "select * from allpreffromsup where tid = \"" + req.body.tid + "\" or tid = \"" + req.body.oid + "\""
+                                                db.query(getsuppreference, (err, results) => {
+                                                    try { 
+                                                        var string = JSON.stringify(results);
+                                                        var json = JSON.parse(string);
+                                                        var suppref = json;
+                                                    } catch (err) {
+                                                        return res.status(401).json("Error happened when excuting ScheduleController.createschedule.getsuppref")
+
+                                                    }
+                                                })
+
+
 
 
                                                 return res.ok();
                                             } catch (err) {
-                                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb    " + getstdttb)
+                                                return res.status(401).json("Error happened when excuting ScheduleController.createschedule.stdttb")
                                             }
                                         })
                                     } catch (err) {

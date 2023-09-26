@@ -31,6 +31,7 @@ errortime	int,
 topics		varchar(100) Not null,
 submission  varchar(10) default "N", 
 draft 		varchar(10) default "N", 
+priority	int default 0,
 PRIMARY key (tid));
 
 
@@ -189,13 +190,6 @@ LastUpdate timestamp not null,
 primary key (TID)
 );
 
-create table stdpic(
-
-SID varchar(10) not null,
-RefrID varchar(20) not null,
-picdata LONGBLOB default null,
-primary key (SID,RefrID)
-);
 
 
 delimiter |
@@ -245,7 +239,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers
   if new.role = "stu" then
     insert into student(stdname,sid,password) values(new.allusersname,new.pid,new.password);
 	elseif new.role = "sup" then
-    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N","N");
+    insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N","N",0);
 
     END IF;
     end if;
@@ -587,6 +581,17 @@ CREATE TRIGGER checkschboxtocorrdraft after delete ON allschedulebox
   if(countcount =0) then
   update supervisor set draft = "N" where tid = old.tid;
   end if;
+  
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER delsupervisor after delete ON supervisor
+  FOR EACH ROW
+  BEGIN
+  
+  delete from alluser where pid = tid;
   
    END;
   |

@@ -592,7 +592,7 @@
 
                         var file = myFile.files[0];
                         var filetype = (file.name.split("."))[1]
-
+                        filetype = filetype.toLowerCase(); 
                         if (filetype != "png" && filetype != "jpg" && filetype != "jpeg") {
                             alert("Please Upload .png / .jpg / .jpeg format of image")
                             document.getElementById("uploadfileinput") = "";
