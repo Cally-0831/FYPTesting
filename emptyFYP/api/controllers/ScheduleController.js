@@ -175,15 +175,13 @@ module.exports = {
             sessionduration = 60;
         }
 
-
-
         var getallclassinfo = "select * from allclass"
         db.query(getallclassinfo, (err, results) => {
             try {
                 var string = JSON.stringify(results);
                 var json = JSON.parse(string);
                 var classttb = json;
-                var getallclassroominschool = "select * from classroom where status != \"Closed\"order by campus asc, rid asc"
+                var getallclassroominschool = "select * from classroom where status != \"Closed\" and rid != \"\" order by Campus asc, rid asc"
                 db.query(getallclassroominschool, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
@@ -276,14 +274,21 @@ module.exports = {
                                                                                         }
 
                                                                                         if (checker >= 0) {
+                                                                                            console.log("enter to here")
+
                                                                                             for (var a = 0; a < superttb.length; a++) {
+
                                                                                                 if ((superttb[a].weekdays == presentday.getDay() && (superttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= superttb[a].endtime))) {
                                                                                                     checker = -1;
                                                                                                     break;
                                                                                                 } else {
-                                                                                                    campus = superttb[a].Campus
+                                                                                                    campus = superttb[a].Campus;
+                                                                                                    console.log(superttb[a].Campus);
                                                                                                     checker = 1;
                                                                                                 }
+                                                                                            }
+                                                                                            if (campus == undefined || campus == null) {
+                                                                                                campus = classroomlist[a].Campus;
                                                                                             }
                                                                                         }
 
@@ -308,9 +313,35 @@ module.exports = {
                                                                                             }
                                                                                         }
                                                                                         if (checker >= 0) {
-                                                                                            console.log("this is a good timeslot");
-                                                                                            console.log(presentday.toLocaleString());
+                                                                                            var finalcampus = undefined;
+                                                                                            var finalrid = undefined;
 
+                                                                                            while (finalcampus == undefined || finalrid == undefined) {
+                                                                                                for (var a = 0; a < classroomlist.length; a++) {
+                                                                                                    console.log(classroomlist[a].Campus, "     ", campus)
+                                                                                                    if (classroomlist[a].Campus == campus) {
+                                                                                                        var currentcheckingroom = classroomlist[a].RID;
+                                                                                                        console.log(currentcheckingroom)
+                                                                                                        for (var b = 0; b < classroomtimeslot.length; b++) {
+
+                                                                                                            var unavailblestarttime = new Date(classroomtimeslot[b].StartDate, " ", classroomtimeslot[b].StartTime);
+                                                                                                            console.log(classroomtimeslot[b].StartDate, " ", classroomtimeslot[b].StartTime);
+                                                                                                            if (classroomtimeslot[a].Campus == campus && classroomtimeslot[a].rid == currentcheckingroom
+                                                                                                                // check time
+                                                                                                            ) {
+                                                                                                                checker = -1; break;
+                                                                                                            } else {
+                                                                                                                checker = 1;
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    if(checker >= 0){
+                                                                                                        //next step check classroomttb
+                                                                                                    }
+                                                                                                }
+                                                                                                finalcampus = "hello";
+                                                                                                finalrid = "byebye";
+                                                                                            }
 
 
                                                                                         }
@@ -321,10 +352,6 @@ module.exports = {
 
 
                                                                                 }
-
-
-
-
 
                                                                                 return res.ok();
                                                                             } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }

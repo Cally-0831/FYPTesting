@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  
+
   <!--
   <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css">
@@ -63,7 +63,7 @@
 
   <header>
 
-    <div class="navbar ">
+    <div class="navbar">
       <div class="navbar-start">
         <div class="navbar-item">
           <% if (req.session.username!=null) { %>
@@ -71,12 +71,12 @@
             <% }else{ %>
               <a href="/"><img src="\images\login\compbg.png" width=100px height=80px></a>
               <% } %>
-
         </div>
       </div>
       <div class="navbar-end">
         <% if (req.session.username!=null) { %>
-          <div class="navbar-item">
+
+          <div class="buttons is-right">
             <div class="button buttonlogout">
               <%= req.session.username %>
             </div>
@@ -84,6 +84,8 @@
             <a class="active" href="/user/logout">
               <div class="button buttonlogout">Logout</div>
             </a>
+
+
           </div>
           <% } %>
 
