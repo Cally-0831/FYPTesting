@@ -213,7 +213,7 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass
    select count(*) into  findcampusroom from classroom where campus = new.campus and rid = new.rid;
     
     if findcampusroom = 0 then
-		insert into classroom values (new.campus,new.rid,"open");
+		insert into classroom values (new.campus,new.rid,"Open");
     End if;
     
   if countcount >0 then
