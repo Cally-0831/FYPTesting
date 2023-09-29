@@ -45,9 +45,10 @@
 
 
                             <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
-                            <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30" required
-                                style="font-size: 15px;">
+                            <!-- min="2024-04-01" max="2024-04-30" -->
+                            <input type="date" id="notokday" name="notokday"style="font-size: 15px;" required>
                             &nbsp;
+                            
                             <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
                                 onclick="dontshowtime()">
                             <label for="notokday_wholeday">Whole Day</label>
@@ -75,7 +76,6 @@
                             <br><br>
 
                             <%var today=new Date()%>
-                                <%console.log("\n\n\n\n"+today+"\n"+date)%>
                                     <%if ((theday==null) || (theday!=null&& today < date)){%>
 
                                         <div id="orgformbutton " class="buttons is-right">
@@ -103,8 +103,8 @@
                                 onsubmit="submitrequest(this);return false;">
 
                                 <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
-                                <input type="date" id="notokday" name="notokday" min="2024-04-01" max="2024-04-30"
-                                    style="font-size: 15px;" required>
+                                <!--min="2024-04-01" max="2024-04-30"-->
+                                <input type="date" id="notokday" name="notokday" style="font-size: 15px;" required>
                                 &nbsp;
                                 <input type="checkbox" id="notokday_wholeday" value="wholeday" onclick="dontshowtime()">
                                 <label for="notokday_wholeday">Whole Day</label>
@@ -123,8 +123,7 @@
 
                                 <br>
                                 <%var today=new Date()%>
-                                <%=today%>    <%=date%>
-                                    <%if ((theday==null) || (theday!=null&& today < date)){%>
+                                   <%if ((theday==null) || (theday!=null&& today < date)){%>
 
                                     <div class="buttons is-right">
                                         <button class="button buttonlogout" type="submit is-success">Submit</button>

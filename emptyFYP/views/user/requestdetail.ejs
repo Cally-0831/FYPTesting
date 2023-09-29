@@ -209,7 +209,8 @@
     function savefile(myFile) {
 
         var file = myFile.files[0];
-        var filetype = (file.name.split("."))[1]
+        var filetype = file.name.split(".")
+        filetype = filetype[filetype.length - 1].toLowerCase();
 
         if (filetype != "png" && filetype != "jpg" && filetype != "jpeg") {
             alert("Please Upload .png / .jpg / .jpeg format of image")
@@ -269,7 +270,7 @@
 
     }
 
-    function backback(){
+    function backback() {
         location.assign("/checkrequest")
     }
 </script>
