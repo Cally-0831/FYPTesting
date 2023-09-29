@@ -247,16 +247,16 @@ module.exports = {
                                                                                 //console.log(suppref)
 
                                                                                 var startindex = startday.getDay();
-
+                                                                                console.log(classttb)
                                                                                 for (var daynum = 0; daynum < Math.floor((endday - startday) / 1000 / 60 / 60 / 24); daynum++) {
                                                                                     var presentday = new Date(startday.getTime() + (daynum * 86400000));
                                                                                     var currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
                                                                                     var currentsessionendtimeinpresentday = (new Date(presentday.getTime() + (1000 * 60 * sessionduration))).toLocaleTimeString("en-GB");
-
+                                                                                    var checker = 0;
                                                                                     for (var timebox = 0; timebox < 12; timebox++) {
                                                                                         var fitcase;
                                                                                         var campus;
-                                                                                        var checker = 0;
+                                                                                        //var checker = 0;
                                                                                         for (var a = 0; a < superschedulebox.length; a++) {
                                                                                             if (superschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && superschedulebox[a].boxtime == currentsessiontimeinpresentday) {
                                                                                                 checker = -1;
@@ -274,7 +274,6 @@ module.exports = {
                                                                                         }
 
                                                                                         if (checker >= 0) {
-                                                                                            console.log("enter to here")
 
                                                                                             for (var a = 0; a < superttb.length; a++) {
 
@@ -283,7 +282,6 @@ module.exports = {
                                                                                                     break;
                                                                                                 } else {
                                                                                                     campus = superttb[a].Campus;
-                                                                                                    console.log(superttb[a].Campus);
                                                                                                     checker = 1;
                                                                                                 }
                                                                                             }
@@ -318,40 +316,71 @@ module.exports = {
 
                                                                                             while (finalcampus == undefined || finalrid == undefined) {
                                                                                                 for (var a = 0; a < classroomlist.length; a++) {
-                                                                                                    console.log(classroomlist[a].Campus, "     ", campus)
                                                                                                     if (classroomlist[a].Campus == campus) {
                                                                                                         var currentcheckingroom = classroomlist[a].RID;
-                                                                                                        console.log(currentcheckingroom)
                                                                                                         for (var b = 0; b < classroomtimeslot.length; b++) {
 
-                                                                                                            var unavailblestarttime = new Date(classroomtimeslot[b].StartDate, " ", classroomtimeslot[b].StartTime);
-                                                                                                            console.log(classroomtimeslot[b].StartDate, " ", classroomtimeslot[b].StartTime);
+                                                                                                            var unavailblestarttime = new Date(classroomtimeslot[b].StartDate);
+                                                                                                            var unavailblestarttimetr = classroomtimeslot[b].StartTime.split(":")
+                                                                                                            unavailblestarttime.setHours(unavailblestarttimetr[0])
+                                                                                                            unavailblestarttime.setMinutes(unavailblestarttimetr[1])
+                                                                                                            var unavailbleendtime = new Date(classroomtimeslot[b].EndDate);
+                                                                                                            var unavailbleendtimetr = classroomtimeslot[b].EndTime.split(":")
+                                                                                                            unavailbleendtime.setHours(unavailbleendtimetr[0])
+                                                                                                            unavailbleendtime.setMinutes(unavailbleendtimetr[1])
                                                                                                             if (classroomtimeslot[a].Campus == campus && classroomtimeslot[a].rid == currentcheckingroom
-                                                                                                                // check time
+                                                                                                                && (unavailblestarttime.toLocaleDateString() == presentday.toLocaleDateString()
+                                                                                                                    && !(unavailblestarttime.toLocaleTimeString("en-GB") >= currentsessionendtimeinpresentday
+                                                                                                                        || unavailbleendtime.toLocaleTimeString("en-GB") <= currentsessiontimeinpresentday)
+                                                                                                                )
                                                                                                             ) {
                                                                                                                 checker = -1; break;
+                                                                                                            } else {
+                                                                                                                finalcampus = classroomlist[a].Campus;
+                                                                                                                finalrid = currentcheckingroom;
+                                                                                                                checker = 1;
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    if (checker >= 0) {
+                                                                                                        //next step check classroomttb
+
+                                                                                                        for (var b = 0; b < classttb.length; b++) {
+                                                                                                            if (classttb[b].Campus == finalcampus && classttb[b].RID == finalrid && presentday.getDay() == classttb[b].weekdays
+                                                                                                                && !(classttb[b].startTime >= currentsessionendtimeinpresentday || classttb[b].endTime <= currentsessiontimeinpresentday)) {
+                                                                                                                checker = -1;
+                                                                                                                finalcampus = undefined;
+                                                                                                                finalrid = undefined;
+                                                                                                                break;
                                                                                                             } else {
                                                                                                                 checker = 1;
                                                                                                             }
                                                                                                         }
                                                                                                     }
-                                                                                                    if(checker >= 0){
-                                                                                                        //next step check classroomttb
-                                                                                                    }
+
+                                                                                                    console.log(finalcampus, " ", finalrid)
                                                                                                 }
-                                                                                                finalcampus = "hello";
-                                                                                                finalrid = "byebye";
+
                                                                                             }
 
 
                                                                                         }
-                                                                                        presentday.setHours(presentday.getHours() + 1);
-                                                                                        currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
-                                                                                        currentsessionendtimeinpresentday = (new Date(presentday.getTime() + (1000 * 60 * sessionduration))).toLocaleTimeString("en-GB");
+                                                                                        if (checker >= 0) {
+                                                                                            break;
+                                                                                        } else {
+                                                                                            presentday.setHours(presentday.getHours() + 1);
+                                                                                            currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
+                                                                                            currentsessionendtimeinpresentday = (new Date(presentday.getTime() + (1000 * 60 * sessionduration))).toLocaleTimeString("en-GB");
+
+                                                                                        }
+                                                                                    }
+                                                                                    if (checker >= 0) {
+                                                                                        
+                                                                                        break;
                                                                                     }
 
-
                                                                                 }
+                                                                                console.log(req.body.tid, " ", req.body.sid, " ", req.body.oid, " ", finalcampus, " ", finalrid, " ", presentday, " ", currentsessiontimeinpresentday)
 
                                                                                 return res.ok();
                                                                             } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }
