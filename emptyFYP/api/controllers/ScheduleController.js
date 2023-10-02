@@ -268,13 +268,7 @@ module.exports = {
                                                                                                 var string = JSON.stringify(results);
                                                                                                 var json = JSON.parse(string);
                                                                                                 var stdrequest = json;
-                                                                                                var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + req.body.tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\" order by priority asc"
-                                                                                                //# console.log(getsuppreference)
-                                                                                                db.query(getsuppreference, (err, results) => {
-                                                                                                    try {
-                                                                                                        var string = JSON.stringify(results);
-                                                                                                        var json = JSON.parse(string);
-                                                                                                        var suppref = json;
+                                                                                                
 
                                                                                                         console.log("\n\n\n")
 
@@ -617,8 +611,7 @@ module.exports = {
                                                                                                             presentendTime: currentsessionendtimeinpresentday.toLocaleTimeString("en-GB")
                                                                                                         })
                                                                                                         //return res.ok();
-                                                                                                    } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }
-                                                                                                })
+                                                                                                    
                                                                                             } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.stdrequest") }
                                                                                         })
                                                                                     } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.stdttb") }
@@ -640,6 +633,38 @@ module.exports = {
                     } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getcampuslist") }
                 })
             } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.classttb") }
+        })
+    },
+
+    checkpref: async function (req, res){
+        var boxlist = req.body.boxlist;
+        console.log(">>checkpref       ",boxlist)
+
+        let distinctoidlist = (boxlist) => {
+            let unique_values = boxlist
+                .map((item) => item.oid)
+                .filter(
+                    (value, index, current_value) => current_value.indexOf(value) === index
+                );
+            return unique_values;
+        };
+
+        var oidlist = distinctoidlist(boxlist);
+        console.log(oidlist)
+        
+        var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + boxlist[0].tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\" order by priority asc"
+        //# console.log(getsuppreference)
+        db.query(getsuppreference, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                var json = JSON.parse(string);
+                var suppref = json;
+                console.log(suppref);
+
+
+
+              
+            } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }
         })
     },
 

@@ -36,6 +36,7 @@ module.exports.routes = {
   'GET /scheduledesign': "SettingController.nodraft",
   'GET /checkdraft': "SettingController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
+  
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   //'GET /createdraft': "ScheduleController.getallneededinfo",
   "GET /scheduledesign/getpairing" : "ScheduleController.getpairing",
@@ -45,6 +46,7 @@ module.exports.routes = {
   //"POST /savebox":"ScheduleController.savebox",
   "GET /savebox/get_roomlist_bycampus":"ScheduleController.getrequestroomlist",
   "GET /savebox/get_okobslist":"ScheduleController.getrequestobslist",
+  "POST /createschedule/createdraft/checkpref":"ScheduleController.checkpref",
 
   "GET /uploadlesson":{view:"user/admin/uploadlesson"},
   "POST /uploadlesson":"LessonController.uploadlesson",

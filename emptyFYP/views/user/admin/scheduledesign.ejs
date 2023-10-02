@@ -119,8 +119,8 @@
                 }
             }
 
-             //for (var a = 0; a < pairinglist.length; a++) {
-            for (var a = pairinglist.length-3; a < pairinglist.length; a++) {
+            for (var a = 0; a < pairinglist.length; a++) {
+            //for (var a = pairinglist.length - 3; a < pairinglist.length; a++) {
                 var requestbody = JSON.stringify({
                     tid: pairinglist[a].tid,
                     sid: pairinglist[a].sid,
@@ -143,9 +143,9 @@
 
                 if (response2.ok) {
                     var response2json = await response2.json();
-                    console.log(response2json)
+                    
                     if (pairinglist[a].tid != suplist[indexofdistinctsuplist] || a == pairinglist.length - 1) {
-                        if (a == pairinglist.length - 1) { boxlist.push(response2json); }
+                        if (a == pairinglist.length - 1) {boxlist.push(response2json); }
                         var requestbody = JSON.stringify({
                             boxlist: boxlist,
                         })
@@ -156,14 +156,23 @@
                             body: requestbody,
                         });
                         **/
+                       
+                        var response3 = await fetch("/createschedule/createdraft/checkpref", {
+                            method: "POST",
+                            body: requestbody,
+                        });
                         boxlist = [];
                         indexofdistinctsuplist++;
+
+
                     }
                     boxlist.push(response2json);
                 } else {
                     var response2json = await response2.json();
                     console.log(response2json)
                 }
+
+
             }
         }
 
