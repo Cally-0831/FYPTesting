@@ -46,7 +46,7 @@ module.exports = {
                     releasedate = json[0].deadlinedate;
                     releasetime = json[0].deadlinetime;
                 }
-                //console.log('>> checkschedeulerelease: ', json);
+                console.log('>> checkschedeulerelease: ', json);
 
                 db.query(getschedulebox, (err, results) => {
                     try {
@@ -165,12 +165,12 @@ module.exports = {
         var startime = startday.toLocaleTimeString("en-GB");
         var endday = new Date(req.body.fullendday);
         var endtime = endday.toLocaleTimeString("en-GB");
-        //console.log((endday - startday) / 1000 / 60 / 60 / 24)
+        //#   console.log((endday - startday) / 1000 / 60 / 60 / 24)
         var sessionduration = 0;
         var typeofpresent = req.body.typeofpresent;
 
         if (typeofpresent == "midterm") {
-            sessionduration = 20;
+            sessionduration = 30;
         } else {
             sessionduration = 60;
         }
@@ -205,7 +205,7 @@ module.exports = {
                                 var json = JSON.parse(string);
                                 var classroomtimeslot = json;
                                 var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
-                                //console.log(getsupttb)
+                                //#            console.log(getsupttb)
                                 db.query(getsupttb, (err, results) => {
                                     try {
                                         var string = JSON.stringify(results);
@@ -228,7 +228,7 @@ module.exports = {
                                                         var json = JSON.parse(string);
                                                         var superschedulebox = json;
                                                         var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
-                                                        //console.log(getobsttb)
+                                                        //# console.log(getobsttb)
                                                         db.query(getobsttb, (err, results) => {
                                                             try {
                                                                 var string = JSON.stringify(results);
@@ -262,416 +262,349 @@ module.exports = {
                                                                                         }
 
                                                                                         var getstdrequest = "select * from allrequestfromstudent where sid =\"" + req.body.sid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) and status = \"Approved\" order by RequestDate asc, requeststarttime asc "
-                                                                                        // console.log(getstdrequest)
+                                                                                        //# console.log(getstdrequest)
                                                                                         db.query(getstdrequest, (err, results) => {
                                                                                             try {
                                                                                                 var string = JSON.stringify(results);
                                                                                                 var json = JSON.parse(string);
                                                                                                 var stdrequest = json;
                                                                                                 var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + req.body.tid + "\" or allpreffromsup.tid = \"" + req.body.oid + "\" order by priority asc"
-                                                                                                //console.log(getsuppreference)
+                                                                                                //# console.log(getsuppreference)
                                                                                                 db.query(getsuppreference, (err, results) => {
                                                                                                     try {
                                                                                                         var string = JSON.stringify(results);
                                                                                                         var json = JSON.parse(string);
                                                                                                         var suppref = json;
 
-                                                                                                        // console.log("\n\n\n")
+                                                                                                        console.log("\n\n\n")
 
                                                                                                         var startindex = startday.getDay();
-                                                                                                        for (var daynum = 0; daynum <= Math.floor((endday - startday) / 1000 / 60 / 60 / 24); daynum++) {
-                                                                                                            var presentday = new Date(startday.getTime() + (daynum * 86400000));
-                                                                                                            var currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
-                                                                                                            var currentsessionendtimeinpresentday = (new Date(presentday.getTime() + (1000 * 60 * sessionduration))).toLocaleTimeString("en-GB");
-                                                                                                            var checker = 0;
-                                                                                                            console.log("\n\n\n\n", presentday.toDateString("en-GB"), "      ", presentday.getDay(), "     ", currentsessiontimeinpresentday)
 
-                                                                                                            if (presentday.getDay() != 0) {
+                                                                                                        console.log(startday)
+                                                                                                        var currentsessiontimeinpresentday = startday;
+                                                                                                        currentsessiontimeinpresentday.setHours(8, 30, 0);
+                                                                                                        var currentsessionendtimeinpresentday = (new Date(currentsessiontimeinpresentday.getTime() + (1000 * 60 * sessionduration)));
 
-                                                                                                                for (var timebox = 0; timebox < 12; timebox++) {
-                                                                                                                    var fitcase;
-                                                                                                                    var campus;
-                                                                                                                    //var checker = 0;
 
-                                                                                                                    for (var a = 0; a < superschedulebox.length; a++) {
-                                                                                                                        if (superschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && superschedulebox[a].boxtime == currentsessiontimeinpresentday) {
-                                                                                                                            checker = -1;
-                                                                                                                            console.log("superschedule skip")
-                                                                                                                            break;
-                                                                                                                        } else {
-                                                                                                                            console.log("superschedule @@@@@@@@")
-                                                                                                                            checker = 1;
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var b = 0; b < req.body.boxlist.length; b++) {
-                                                                                                                            req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
-                                                                                                                            if ((req.body.boxlist[b].tid == req.body.tid || req.body.boxlist[b].oid == req.body.tid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday) {
+                                                                                                        for (var timebox = 0; timebox <= 13 * 60 / sessionduration; timebox++) {
+                                                                                                            //loop each time
+                                                                                                            var checker = -1;
+
+                                                                                                            if (currentsessiontimeinpresentday.toLocaleTimeString("en-GB") >= startday.toLocaleTimeString("en-GB")) {
+                                                                                                                for (var daynum = 0; daynum <= Math.floor((endday - startday) / 1000 / 60 / 60 / 24); daynum++) {
+                                                                                                                    //loop days
+                                                                                                                    var presentday = new Date(startday.getTime() + (daynum * 86400000));
+                                                                                                                    checker = 0;
+                                                                                                                    if (presentday.getDay() != 0 && presentday.getDay() != 6) {
+                                                                                                                        for (var a = 0; a < superschedulebox.length; a++) {
+                                                                                                                            if (superschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && superschedulebox[a].boxtime == currentsessiontimeinpresentday) {
                                                                                                                                 checker = -1;
-                                                                                                                                console.log("superboxlist skip")
+                                                                                                                                console.log("superschedule skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                 break;
                                                                                                                             } else {
-                                                                                                                                console.log("superboxlist @@@@@@@")
+                                                                                                                                console.log("superschedule @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                 checker = 1;
                                                                                                                             }
                                                                                                                         }
-
-                                                                                                                    }
-
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var b = 0; b < superrequest.length; b++) {
-                                                                                                                            superrequest[b].RequestDate = new Date(superrequest[b].RequestDate);
-                                                                                                                            if (superrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                                                                                                                !(currentsessiontimeinpresentday >= superrequest[b].RequestEndTime
-                                                                                                                                    && currentsessionendtimeinpresentday <= superrequest[b].RequestStartTime)) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("superrequest skip")
-                                                                                                                                break;
-
-                                                                                                                            } else {
-                                                                                                                                console.log("superrequest @@@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-
-                                                                                                                    }
-
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        var b = presentday.getDay() - 1;
-                                                                                                                        console.log(b)
-                                                                                                                        if (supweeklist[b] == "EMPTY") {
-                                                                                                                            campus = campuslist[0];
-                                                                                                                            console.log("supweeklist[b][c] @@@@@@@@@ 1  ", campus);
-                                                                                                                            checker = 1;
-                                                                                                                        } else {
-                                                                                                                            for (var c = 0; c < supweeklist[b].length; c++) {
-                                                                                                                                if ((supweeklist[b][c].weekdays == presentday.getDay() && (supweeklist[b][c].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= supweeklist[b][c].endtime))) {
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var b = 0; b < req.body.boxlist.length; b++) {
+                                                                                                                                req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
+                                                                                                                                if ((req.body.boxlist[b].tid == req.body.tid || req.body.boxlist[b].oid == req.body.tid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday.toLocaleTimeString("en-GB")) {
                                                                                                                                     checker = -1;
-                                                                                                                                    console.log("supweeklist[b][c] skip")
+                                                                                                                                    console.log("superboxlist skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                     break;
                                                                                                                                 } else {
-                                                                                                                                    console.log("supweeklist[b][c] @@@@", supweeklist[b][c].Campus.trim(), "@@@@@ 2")
-                                                                                                                                    campus = supweeklist[b][c].Campus.trim();
+                                                                                                                                    console.log("superboxlist @@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                     checker = 1;
                                                                                                                                 }
                                                                                                                             }
+
                                                                                                                         }
-
-
-
-                                                                                                                    }
-
-
-
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var a = 0; a < obsschedulebox.length; a++) {
-                                                                                                                            if (obsschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && obsschedulebox[a].boxtime == currentsessiontimeinpresentday) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("obsschedule skip")
-                                                                                                                                break;
-                                                                                                                            } else {
-                                                                                                                                console.log("obsschedule @@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var b = 0; b < req.body.boxlist.length; b++) {
-                                                                                                                            req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
-                                                                                                                            if ((req.body.boxlist[b].tid == req.body.oid || req.body.boxlist[b].oid == req.body.oid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("obsboxlist skip")
-                                                                                                                                break;
-                                                                                                                            } else {
-                                                                                                                                console.log("obsboxlist @@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var b = 0; b < obsrequest.length; b++) {
-                                                                                                                            obsrequest[b].RequestDate = new Date(obsrequest[b].RequestDate);
-                                                                                                                            if (obsrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                                                                                                                !(currentsessiontimeinpresentday >= obsrequest[b].RequestEndTime
-                                                                                                                                    && currentsessionendtimeinpresentday <= obsrequest[b].RequestStartTime)) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("obsrequest skip")
-                                                                                                                                break;
-
-                                                                                                                            } else {
-                                                                                                                                console.log("obsrequest @@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var a = 0; a < obsttb.length; a++) {
-                                                                                                                            if ((obsttb[a].weekdays == presentday.getDay() && (obsttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= obsttb[a].endtime))) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("obsttb skip")
-                                                                                                                                break;
-                                                                                                                            } else {
-                                                                                                                                console.log("obsttb @@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                        //console.log("check obschedule ", checker)
-                                                                                                                    }
-
-
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var b = 0; b < stdrequest.length; b++) {
-                                                                                                                            stdrequest[b].RequestDate = new Date(stdrequest[b].RequestDate);
-                                                                                                                            if (stdrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                                                                                                                !(currentsessiontimeinpresentday >= stdrequest[b].RequestEndTime
-                                                                                                                                    && currentsessionendtimeinpresentday <= stdrequest[b].RequestStartTime)) {
-                                                                                                                                console.log("stdsrequest skip")
-                                                                                                                                checker = -1;
-                                                                                                                                break;
-
-                                                                                                                            } else {
-                                                                                                                                console.log("stdsrequest @@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        for (var a = 0; a < stdttb.length; a++) {
-                                                                                                                            if ((stdttb[a].weekdays == presentday.getDay() && (stdttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= stdxttb[a].endtime))) {
-                                                                                                                                checker = -1;
-                                                                                                                                console.log("stdsttd skip")
-                                                                                                                                break;
-                                                                                                                            } else {
-                                                                                                                                console.log("stdttb @@@@@@")
-                                                                                                                                checker = 1;
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                        //  console.log("check stdttb ", checker)
-                                                                                                                    }
-                                                                                                                    console.log(campus)
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        var finalcampus = undefined;
-                                                                                                                        var finalrid = undefined;
-                                                                                                                        var indexforcampusinlist = 0;
-                                                                                                                        //console.log(campuslist, "    \n", classroomlist, "     \n", classroomtimeslot, "      \n", classttb)
-                                                                                                                        let gettargetroomlistbycampus = (classroomlist, targetcampusclassroom) => {
-                                                                                                                            var classroomforcampus = { start: -1, end: 0 }
-                                                                                                                            for (var b = 0; b < classroomlist.length; b++) {
-                                                                                                                                if (classroomlist[b].Campus == targetcampusclassroom) {
-                                                                                                                                    if (classroomforcampus.start == -1) {
-                                                                                                                                        classroomforcampus.start = b;
-                                                                                                                                    }
-
-                                                                                                                                    classroomforcampus.end = b;
-                                                                                                                                }
-                                                                                                                                if ((classroomlist[b].Campus != targetcampusclassroom && classroomforcampus.end + 1 == b) || b == classroomlist.length - 1) {
-
-                                                                                                                                    return classroomforcampus;
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        };
-                                                                                                                        let gettargetrrequestlistbycampus = (classroomtimeslot, targetcampus, targetrid) => {
-                                                                                                                            var requestlistforclassroom = { start: -1, end: 0 }
-                                                                                                                            for (var b = 0; b < classroomtimeslot.length; b++) {
-                                                                                                                                if (classroomtimeslot[b].Campus == targetcampus && classroomtimeslot[b].RID == targetrid) {
-                                                                                                                                    if (requestlistforclassroom.start == -1) {
-                                                                                                                                        requestlistforclassroom.start = b;
-                                                                                                                                    }
-
-                                                                                                                                    requestlistforclassroom.end = b;
-                                                                                                                                }
-                                                                                                                                if (((classroomtimeslot[b].RID != targetrid || classroomtimeslot[b].Campus != targetcampus) && requestlistforclassroom.end + 1 == b) || b == classroomtimeslot.length - 1) {
-
-                                                                                                                                    return requestlistforclassroom;
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        };
-                                                                                                                        let gettargetclassroomttb = (classttb, targetcampus, targetrid) => {
-                                                                                                                            var ttbforclassroom = { start: -1, end: 0 }
-                                                                                                                            for (var b = 0; b < classttb.length; b++) {
-                                                                                                                                if (classttb[b].Campus == targetcampus && classttb[b].RID == targetrid) {
-                                                                                                                                    if (ttbforclassroom.start == -1) {
-                                                                                                                                        ttbforclassroom.start = b;
-                                                                                                                                    }
-
-                                                                                                                                    ttbforclassroom.end = b;
-                                                                                                                                }
-                                                                                                                                if (((classttb[b].RID != targetrid || classttb[b].Campus != targetcampus) && ttbforclassroom.end + 1 == b) || b == classttb.length - 1) {
-
-                                                                                                                                    return ttbforclassroom;
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        };
-
-                                                                                                                        let checkrequestlist = (requestlistforthisroom) => {
-                                                                                                                            var checker = 0;
-                                                                                                                            for (var c = requestlistforthisroom.start; c < requestlistforthisroom.end; c++) {
-                                                                                                                                var unavailblestarttime = new Date(classroomtimeslot[c].StartDate);
-                                                                                                                                var unavailblestarttimetr = classroomtimeslot[c].StartTime.split(":")
-                                                                                                                                unavailblestarttime.setHours(unavailblestarttimetr[0])
-                                                                                                                                unavailblestarttime.setMinutes(unavailblestarttimetr[1])
-                                                                                                                                var unavailbleendtime = new Date(classroomtimeslot[c].EndDate);
-                                                                                                                                var unavailbleendtimetr = classroomtimeslot[c].EndTime.split(":")
-                                                                                                                                unavailbleendtime.setHours(unavailbleendtimetr[0])
-                                                                                                                                unavailbleendtime.setMinutes(unavailbleendtimetr[1])
-                                                                                                                                console.log(unavailblestarttime, "    ", unavailbleendtime)
-                                                                                                                                if ((unavailblestarttime.toLocaleDateString() == presentday.toLocaleDateString()
-                                                                                                                                    && !(unavailblestarttime.toLocaleTimeString("en-GB") >= currentsessionendtimeinpresentday
-                                                                                                                                        || unavailbleendtime.toLocaleTimeString("en-GB") <= currentsessiontimeinpresentday)
-                                                                                                                                )
-                                                                                                                                ) {
-                                                                                                                                    console.log("classroomtimeslot skip")
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var b = 0; b < superrequest.length; b++) {
+                                                                                                                                superrequest[b].RequestDate = new Date(superrequest[b].RequestDate);
+                                                                                                                                if (superrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
+                                                                                                                                    !(currentsessiontimeinpresentday >= superrequest[b].RequestEndTime
+                                                                                                                                        && currentsessionendtimeinpresentday <= superrequest[b].RequestStartTime)) {
                                                                                                                                     checker = -1;
+                                                                                                                                    console.log("superrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                     break;
+
                                                                                                                                 } else {
-                                                                                                                                    console.log("classroomtimeslot @@@@@@@@")
+                                                                                                                                    console.log("superrequest @@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                     checker = 1;
                                                                                                                                 }
                                                                                                                             }
-                                                                                                                            return checker;
-
-                                                                                                                        };
-                                                                                                                        let checkttb = (ttbforthisroom) => {
-                                                                                                                            var checker = 0;
-                                                                                                                            for (var c = ttbforthisroom.start; c < ttbforthisroom.end; c++) {
-
-
-                                                                                                                                var classstarttime = classttb[c].startTime;
-                                                                                                                                var classendtime = classttb[c].endTime;
-
-
-                                                                                                                                if ((classttbp[c].weekdays == presentday.getDay()
-                                                                                                                                    && !(classstarttime >= currentsessionendtimeinpresentday
-                                                                                                                                        || classendtime <= currentsessiontimeinpresentday)
-                                                                                                                                )
-                                                                                                                                ) {
-                                                                                                                                    console.log("classttb skip")
-                                                                                                                                    checker = -1;
-                                                                                                                                    break;
-                                                                                                                                } else {
-                                                                                                                                    console.log("classttb @@@@@@@@")
-                                                                                                                                    checker = 1;
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            return checker;
-
-                                                                                                                        };
-
-
-
-
-
-
-                                                                                                                        while (finalcampus == undefined || finalrid == undefined) {
-                                                                                                                            // step 1 : check sup's in which campus
-                                                                                                                            // step 2 : if supcampus no suitable >> loop from the beginning of all campus
-
-                                                                                                                            var classroomlistforcampus = gettargetroomlistbycampus(classroomlist, campus);
-                                                                                                                            console.log("classroomlistforcampus   @",campus,"@    ", classroomlistforcampus)
-                                                                                                                            for (var b = classroomlistforcampus.start; b < classroomlistforcampus.end; b++) {
-                                                                                                                                var requestlistforthisroom = gettargetrrequestlistbycampus(classroomtimeslot, campus, classroomlist[b].RID)
-                                                                                                                                console.log("requsetlistforthisroom    ", requestlistforthisroom)
-
-                                                                                                                                if (requestlistforthisroom.start == -1) {
-                                                                                                                                    checker = 1;
-                                                                                                                                } else {
-                                                                                                                                    checker = checkrequestlist(requestlistforthisroom);
-                                                                                                                                }
-                                                                                                                                if (checker >= 0) {
-                                                                                                                                    var ttbforthisroom = gettargetclassroomttb(classttb, campus, classroomlist[b].RID)
-                                                                                                                                    console.log("ttbforthisroom    ", ttbforthisroom)
-                                                                                                                                    if (ttbforthisroom.start == -1) {
-                                                                                                                                        checker = 1;
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            var b = presentday.getDay() - 1;
+                                                                                                                            console.log(b)
+                                                                                                                            if (supweeklist[b] == "EMPTY") {
+                                                                                                                                campus = campuslist[0];
+                                                                                                                                console.log("supweeklist[b][c] @@@@@@@@@ 1  ", campus);
+                                                                                                                                checker = 1;
+                                                                                                                            } else {
+                                                                                                                                for (var c = 0; c < supweeklist[b].length; c++) {
+                                                                                                                                    if ((supweeklist[b][c].weekdays == presentday.getDay() && (supweeklist[b][c].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= supweeklist[b][c].endtime))) {
+                                                                                                                                        checker = -1;
+                                                                                                                                        console.log("supweeklist[b][c] skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                         break;
                                                                                                                                     } else {
-                                                                                                                                        checker = checkttb(ttbforthisroom);
-
+                                                                                                                                        campus = supweeklist[b][c].Campus.trim();
+                                                                                                                                        console.log("@" + campus + "@")
+                                                                                                                                        console.log("supweeklist[b][c] @@@@" + campus + "@@@@@ 2")
+                                                                                                                                        checker = 1;
                                                                                                                                     }
                                                                                                                                 }
-
-                                                                                                                                if (checker >= 0) {
-                                                                                                                                    finalcampus = campus;
-                                                                                                                                    finalrid = classroomlist[b].RID;
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var a = 0; a < obsschedulebox.length; a++) {
+                                                                                                                                if (obsschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && obsschedulebox[a].boxtime == currentsessiontimeinpresentday) {
+                                                                                                                                    checker = -1;
+                                                                                                                                    console.log("obsschedule skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
                                                                                                                                     break;
+                                                                                                                                } else {
+                                                                                                                                    console.log("obsschedule @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
                                                                                                                                 }
                                                                                                                             }
-                                                                                                                            campus = campuslist[indexforcampusinlist];
-                                                                                                                            indexforcampusinlist++;
-                                                                                                                            //    finalcampus = "hello"; finalrid = "byebye"
                                                                                                                         }
-                                                                                                                        /** 
-                                                                                                                                                                                                                                                while (finalcampus == undefined || finalrid == undefined) {
-                                                                                                                        
-                                                                                                                                                                                                                                                    for (var a = 0; a < classroomlist.length; a++) {
-                                                                                                                                                                                                                                                        if (campus == undefined) { campus = campuslist[indexforcampusinlist]; }
-                                                                                                                                                                                                                                                        if (classroomlist[a].Campus == campus) {
-                                                                                                                                                                                                                                                            var currentcheckingroom = classroomlist[a].RID;
-                                                                                                                        
-                                                                                                                                                                                                                                                            for (var b = 0; b < classroomtimeslot.length; b++) {
-                                                                                                                                                                                                                                                                var unavailblestarttime = new Date(classroomtimeslot[b].StartDate);
-                                                                                                                                                                                                                                                                var unavailblestarttimetr = classroomtimeslot[b].StartTime.split(":")
-                                                                                                                                                                                                                                                                unavailblestarttime.setHours(unavailblestarttimetr[0])
-                                                                                                                                                                                                                                                                unavailblestarttime.setMinutes(unavailblestarttimetr[1])
-                                                                                                                                                                                                                                                                var unavailbleendtime = new Date(classroomtimeslot[b].EndDate);
-                                                                                                                                                                                                                                                                var unavailbleendtimetr = classroomtimeslot[b].EndTime.split(":")
-                                                                                                                                                                                                                                                                unavailbleendtime.setHours(unavailbleendtimetr[0])
-                                                                                                                                                                                                                                                                unavailbleendtime.setMinutes(unavailbleendtimetr[1])
-                                                                                                                                                                                                                                                                //console.log(classroomtimeslot)
-                                                                                                                                                                                                                                                                if (classroomtimeslot[b].Campus == campus && classroomtimeslot[b].rid == currentcheckingroom
-                                                                                                                                                                                                                                                                    && (unavailblestarttime.toLocaleDateString() == presentday.toLocaleDateString()
-                                                                                                                                                                                                                                                                        && !(unavailblestarttime.toLocaleTimeString("en-GB") >= currentsessionendtimeinpresentday
-                                                                                                                                                                                                                                                                            || unavailbleendtime.toLocaleTimeString("en-GB") <= currentsessiontimeinpresentday)
-                                                                                                                                                                                                                                                                    )
-                                                                                                                                                                                                                                                                ) {
-                                                                                                                                                                                                                                                                    console.log("classroomtimeslot skip")
-                                                                                                                                                                                                                                                                    checker = -1; break;
-                                                                                                                                                                                                                                                                } else {
-                                                                                                                                                                                                                                                                    console.log("classroomtimeslot @@@@@@@@")
-                                                                                                                                                                                                                                                                    finalcampus = classroomlist[a].Campus;
-                                                                                                                                                                                                                                                                    finalrid = currentcheckingroom;
-                                                                                                                                                                                                                                                                    checker = 1;
-                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                        if (checker >= 0) {
-                                                                                                                                                                                                                                                            //next step check classroomttb
-                                                                                                                        
-                                                                                                                                                                                                                                                            for (var b = 0; b < classttb.length; b++) {
-                                                                                                                                                                                                                                                                if (classttb[b].Campus == finalcampus && classttb[b].RID == finalrid && presentday.getDay() == classttb[b].weekdays
-                                                                                                                                                                                                                                                                    && !(classttb[b].startTime >= currentsessionendtimeinpresentday || classttb[b].endTime <= currentsessiontimeinpresentday)) {
-                                                                                                                                                                                                                                                                    checker = -1;
-                                                                                                                                                                                                                                                                    console.log("classroomttb skip")
-                                                                                                                                                                                                                                                                    finalcampus = undefined;
-                                                                                                                                                                                                                                                                    finalrid = undefined;
-                                                                                                                                                                                                                                                                    break;
-                                                                                                                                                                                                                                                                } else {
-                                                                                                                                                                                                                                                                    console.log("classroomttb @@@@@@@")
-                                                                                                                                                                                                                                                                    checker = 1;
-                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        } else {
-                                                                                                                                                                                                                                                            campus = campuslist[indexforcampusinlist]
-                                                                                                                                                                                                                                                            indexforcampusinlist++;
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                    //    console.log("get location ", finalcampus, " ", finalrid)
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                **/
-                                                                                                                    }
-                                                                                                                    if (checker >= 0) {
-                                                                                                                        break;
-                                                                                                                    } else {
-                                                                                                                        presentday.setHours(presentday.getHours() + 1);
-                                                                                                                        currentsessiontimeinpresentday = presentday.toLocaleTimeString("en-GB");
-                                                                                                                        currentsessionendtimeinpresentday = (new Date(presentday.getTime() + (1000 * 60 * sessionduration))).toLocaleTimeString("en-GB");
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var b = 0; b < req.body.boxlist.length; b++) {
+                                                                                                                                req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
+                                                                                                                                if ((req.body.boxlist[b].tid == req.body.oid || req.body.boxlist[b].oid == req.body.oid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday.toLocaleTimeString("en-GB")) {
+                                                                                                                                    checker = -1;
+                                                                                                                                    console.log("obsboxlist skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    break;
+                                                                                                                                } else {
+                                                                                                                                    console.log("obsboxlist @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var b = 0; b < obsrequest.length; b++) {
+                                                                                                                                obsrequest[b].RequestDate = new Date(obsrequest[b].RequestDate);
+                                                                                                                                if (obsrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
+                                                                                                                                    !(currentsessiontimeinpresentday >= obsrequest[b].RequestEndTime
+                                                                                                                                        && currentsessionendtimeinpresentday <= obsrequest[b].RequestStartTime)) {
+                                                                                                                                    checker = -1;
+                                                                                                                                    console.log("obsrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    break;
+
+                                                                                                                                } else {
+                                                                                                                                    console.log("obsrequest @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var a = 0; a < obsttb.length; a++) {
+                                                                                                                                if ((obsttb[a].weekdays == presentday.getDay() && (obsttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= obsttb[a].endtime))) {
+                                                                                                                                    checker = -1;
+                                                                                                                                    console.log("obsttb skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    break;
+                                                                                                                                } else {
+                                                                                                                                    console.log("obsttb @@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            console.log("check obschedule ", checker)
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var b = 0; b < stdrequest.length; b++) {
+                                                                                                                                stdrequest[b].RequestDate = new Date(stdrequest[b].RequestDate);
+                                                                                                                                if (stdrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
+                                                                                                                                    !(currentsessiontimeinpresentday >= stdrequest[b].RequestEndTime
+                                                                                                                                        && currentsessionendtimeinpresentday <= stdrequest[b].RequestStartTime)) {
+                                                                                                                                    console.log("stdsrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = -1;
+                                                                                                                                    break;
+
+                                                                                                                                } else {
+                                                                                                                                    console.log("stdsrequest @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            for (var a = 0; a < stdttb.length; a++) {
+                                                                                                                                if ((stdttb[a].weekdays == presentday.getDay() && (stdttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= stdxttb[a].endtime))) {
+                                                                                                                                    checker = -1;
+                                                                                                                                    console.log("stdsttd skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    break;
+                                                                                                                                } else {
+                                                                                                                                    console.log("stdttb @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                    checker = 1;
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            //  console.log("check stdttb ", checker)
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) {
+                                                                                                                            var finalcampus = undefined;
+                                                                                                                            var finalrid = undefined;
+                                                                                                                            var indexforcampusinlist = 0;
+                                                                                                                            //#    console.log(campuslist, "    \n", classroomlist, "     \n", classroomtimeslot, "      \n", classttb)
+                                                                                                                            let gettargetroomlistbycampus = (classroomlist, targetcampusclassroom) => {
+                                                                                                                                var classroomforcampus = { start: -1, end: -2 }
+                                                                                                                                for (var b = 0; b < classroomlist.length; b++) {
+                                                                                                                                    console.log(classroomlist[b].Campus + "    " + targetcampusclassroom)
+                                                                                                                                    if (classroomlist[b].Campus == targetcampusclassroom) {
+                                                                                                                                        if (classroomforcampus.start == -1) {
+                                                                                                                                            classroomforcampus.start = b;
+                                                                                                                                        }
+                                                                                                                                        classroomforcampus.end = b;
+                                                                                                                                    }
+                                                                                                                                    if ((classroomlist[b].Campus != targetcampusclassroom && classroomforcampus.end + 1 == b) || b == classroomlist.length - 1) {
+                                                                                                                                        return classroomforcampus;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            };
+                                                                                                                            let gettargetrrequestlistbycampus = (classroomtimeslot, targetcampus, targetrid) => {
+                                                                                                                                var requestlistforclassroom = { start: -1, end: 0 }
+                                                                                                                                for (var b = 0; b < classroomtimeslot.length; b++) {
+                                                                                                                                    if (classroomtimeslot[b].Campus == targetcampus && classroomtimeslot[b].RID == targetrid) {
+                                                                                                                                        if (requestlistforclassroom.start == -1) {
+                                                                                                                                            requestlistforclassroom.start = b;
+                                                                                                                                        }
+
+                                                                                                                                        requestlistforclassroom.end = b;
+                                                                                                                                    }
+                                                                                                                                    if (((classroomtimeslot[b].RID != targetrid || classroomtimeslot[b].Campus != targetcampus) && requestlistforclassroom.end + 1 == b) || b == classroomtimeslot.length - 1) {
+
+                                                                                                                                        return requestlistforclassroom;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            };
+                                                                                                                            let gettargetclassroomttb = (classttb, targetcampus, targetrid) => {
+                                                                                                                                var ttbforclassroom = { start: -1, end: -2 }
+                                                                                                                                for (var b = 0; b < classttb.length; b++) {
+                                                                                                                                    if (classttb[b].Campus == targetcampus && classttb[b].RID == targetrid) {
+                                                                                                                                        if (ttbforclassroom.start == -1) {
+                                                                                                                                            ttbforclassroom.start = b;
+                                                                                                                                        }
+                                                                                                                                        ttbforclassroom.end = b;
+                                                                                                                                    }
+                                                                                                                                    if (((classttb[b].RID != targetrid || classttb[b].Campus != targetcampus) && ttbforclassroom.end + 1 == b) || b == classttb.length - 1) {
+                                                                                                                                        return ttbforclassroom;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            };
+
+                                                                                                                            let checkrequestlist = (requestlistforthisroom) => {
+                                                                                                                                var checker = 0;
+                                                                                                                                for (var c = requestlistforthisroom.start; c < requestlistforthisroom.end; c++) {
+                                                                                                                                    var unavailblestarttime = new Date(classroomtimeslot[c].StartDate);
+                                                                                                                                    var unavailblestarttimetr = classroomtimeslot[c].StartTime.split(":")
+                                                                                                                                    unavailblestarttime.setHours(unavailblestarttimetr[0])
+                                                                                                                                    unavailblestarttime.setMinutes(unavailblestarttimetr[1])
+                                                                                                                                    var unavailbleendtime = new Date(classroomtimeslot[c].EndDate);
+                                                                                                                                    var unavailbleendtimetr = classroomtimeslot[c].EndTime.split(":")
+                                                                                                                                    unavailbleendtime.setHours(unavailbleendtimetr[0])
+                                                                                                                                    unavailbleendtime.setMinutes(unavailbleendtimetr[1])
+                                                                                                                                    //#    console.log(unavailblestarttime, "    ", unavailbleendtime)
+                                                                                                                                    if ((unavailblestarttime.toLocaleDateString() == presentday.toLocaleDateString()
+                                                                                                                                        && !(unavailblestarttime.toLocaleTimeString("en-GB") >= currentsessionendtimeinpresentday
+                                                                                                                                            || unavailbleendtime.toLocaleTimeString("en-GB") <= currentsessiontimeinpresentday)
+                                                                                                                                    )
+                                                                                                                                    ) {
+                                                                                                                                        console.log("classroomtimeslot skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                        checker = -1;
+                                                                                                                                        break;
+                                                                                                                                    } else {
+                                                                                                                                        console.log("classroomtimeslot @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                        checker = 1;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                return checker;
+
+                                                                                                                            };
+                                                                                                                            let checkttb = (ttbforthisroom) => {
+                                                                                                                                var checker = 0;
+                                                                                                                                for (var c = ttbforthisroom.start; c < ttbforthisroom.end; c++) {
+                                                                                                                                    var classstarttime = classttb[c].startTime;
+                                                                                                                                    var classendtime = classttb[c].endTime;
+
+
+                                                                                                                                    if ((classttbp[c].weekdays == presentday.getDay() && !(classstarttime >= currentsessionendtimeinpresentday || classendtime <= currentsessiontimeinpresentday))) {
+                                                                                                                                        console.log("classttb skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                        checker = -1;
+                                                                                                                                        break;
+                                                                                                                                    } else {
+                                                                                                                                        console.log("classttb @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
+                                                                                                                                        checker = 1;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                return checker;
+
+                                                                                                                            };
+                                                                                                                            while (finalcampus == undefined || finalrid == undefined) {
+                                                                                                                                // step 1 : check sup's in which campus
+                                                                                                                                // step 2 : if supcampus no suitable >> loop from the beginning of all campus
+
+
+                                                                                                                                var classroomlistforcampus = gettargetroomlistbycampus(classroomlist, campus);
+                                                                                                                                //#    console.log("classroomlistforcampus   @" + campus + "@    ", classroomlistforcampus)
+                                                                                                                                for (var b = classroomlistforcampus.start; b < classroomlistforcampus.end; b++) {
+                                                                                                                                    var requestlistforthisroom = gettargetrrequestlistbycampus(classroomtimeslot, campus, classroomlist[b].RID)
+                                                                                                                                    //#    console.log("requsetlistforthisroom    ", requestlistforthisroom)
+
+                                                                                                                                    if (requestlistforthisroom.start == -1) {
+                                                                                                                                        checker = 1;
+                                                                                                                                    } else {
+                                                                                                                                        checker = checkrequestlist(requestlistforthisroom);
+                                                                                                                                    }
+                                                                                                                                    if (checker >= 0) {
+                                                                                                                                        var ttbforthisroom = gettargetclassroomttb(classttb, campus, classroomlist[b].RID)
+                                                                                                                                        if (ttbforthisroom.start == -1) {
+                                                                                                                                            checker = 1;
+                                                                                                                                            break;
+                                                                                                                                        } else {
+                                                                                                                                            checker = checkttb(ttbforthisroom);
+
+                                                                                                                                        }
+                                                                                                                                    }
+
+                                                                                                                                    if (checker >= 0) {
+                                                                                                                                        finalcampus = campus;
+                                                                                                                                        finalrid = classroomlist[b].RID;
+                                                                                                                                        break;
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                campus = campuslist[indexforcampusinlist];
+                                                                                                                                indexforcampusinlist++;
+                                                                                                                                //    finalcampus = "hello"; finalrid = "byebye"
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (checker >= 0) { break; }
+
+                                                                                                                        // console.log(req.body.tid, " ", req.body.sid, " ", req.body.oid, " ", finalcampus, " ", finalrid, " ", presentday, " ", currentsessiontimeinpresentday)
                                                                                                                     }
                                                                                                                 }
-                                                                                                                // console.log(req.body.tid, " ", req.body.sid, " ", req.body.oid, " ", finalcampus, " ", finalrid, " ", presentday, " ", currentsessiontimeinpresentday)
-
-                                                                                                                if (checker >= 0) { break; }
-
                                                                                                             }
+
+
+                                                                                                            if (checker >= 0) {
+                                                                                                                console.log("break with ", presentday.toLocaleDateString(), currentsessiontimeinpresentday.toLocaleTimeString(), currentsessionendtimeinpresentday.toLocaleTimeString());
+                                                                                                                break;
+                                                                                                            } else {
+                                                                                                                if (req.body.typeofpresent == "final") {
+                                                                                                                    currentsessiontimeinpresentday.setHours((8 + timebox), 30, 0);
+                                                                                                                    currentsessionendtimeinpresentday.setHours((8 + 1 + timebox), 30, 0)
+                                                                                                                } else {
+                                                                                                                    if (timebox % 2 == 0) {
+                                                                                                                        currentsessiontimeinpresentday.setHours((8 + timebox / sessionduration), 30, 0);
+                                                                                                                        currentsessionendtimeinpresentday.setHours((8 + timebox / sessionduration) + 1, 0, 0)
+                                                                                                                    } else {
+                                                                                                                        currentsessiontimeinpresentday.setHours((8 + timebox / sessionduration), 0, 0);
+                                                                                                                        currentsessionendtimeinpresentday.setHours((8 + timebox / sessionduration), 30, 0)
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                            //    console.log("end    ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), currentsessionendtimeinpresentday.toLocaleTimeString("en-GB"))
                                                                                                         }
+
                                                                                                         console.log(req.body.tid, " ", req.body.sid, " ", req.body.oid, " ", finalcampus, " ", finalrid, " ", presentday, " ", currentsessiontimeinpresentday)
                                                                                                         return res.status(200).json({
                                                                                                             tid: req.body.tid,
@@ -680,11 +613,11 @@ module.exports = {
                                                                                                             finalcampus: finalcampus,
                                                                                                             finalrid: finalrid,
                                                                                                             presentday: presentday,
-                                                                                                            presentstartTime: currentsessiontimeinpresentday,
-                                                                                                            presentendTime: currentsessionendtimeinpresentday
+                                                                                                            presentstartTime: currentsessiontimeinpresentday.toLocaleTimeString("en-GB"),
+                                                                                                            presentendTime: currentsessionendtimeinpresentday.toLocaleTimeString("en-GB")
                                                                                                         })
                                                                                                         //return res.ok();
-                                                                                                    } catch (err) { console.log(err); return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }
+                                                                                                    } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref") }
                                                                                                 })
                                                                                             } catch (err) { return res.status(401).json("Error happened when excuting ScheduleController.createdraft.stdrequest") }
                                                                                         })

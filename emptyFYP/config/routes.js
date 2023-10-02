@@ -31,7 +31,8 @@ module.exports.routes = {
 
   "GET /usermanagement":{ view: 'user/admin/usermanagement' },
 
-  'GET /home': { view: 'user/home' },
+  //'GET /home': { view: 'user/home' },
+  'GET /home':'UserController.home',
   'GET /scheduledesign': "SettingController.nodraft",
   'GET /checkdraft': "SettingController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",

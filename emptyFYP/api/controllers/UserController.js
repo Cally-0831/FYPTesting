@@ -164,5 +164,13 @@ module.exports = {
 
     },
 
+    home: async function (req,res){
+        if(req.session.userid == "" || req.session.userid == null || req.session.userid == undefined){
+            return res.view('user/login')
+        }else{
+            return res.view('user/home')
+        }
+    }
+
   
 }
