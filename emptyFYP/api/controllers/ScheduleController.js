@@ -14,7 +14,7 @@ db.connect(async (err) => {
     }
     console.log('MySQL Connected');
 });
-*/
+
 
 const { createPool } = require("mysql")
 
@@ -25,7 +25,7 @@ const pool = createPool({
     database: "fyptesting",
     connectionLimit:10
 })
-
+*/
 
 module.exports = {
 
@@ -654,6 +654,7 @@ module.exports = {
 
     checkpref: async function (req, res) {
         var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var boxlist = req.body.boxlist;
         console.log(">>checkpref       ", boxlist)
 
