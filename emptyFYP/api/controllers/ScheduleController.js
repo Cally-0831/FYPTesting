@@ -1,3 +1,4 @@
+/** 
 var mysql = require('mysql');
 
 var db = mysql.createConnection({
@@ -13,6 +14,18 @@ db.connect(async (err) => {
     }
     console.log('MySQL Connected');
 });
+*/
+
+const { createPool } = require("mysql")
+
+const pool = createPool({
+    host:"localhost",
+    user: "root",
+    password: "Psycho.K0831",
+    database: "fyptesting",
+    connectionLimit:10
+})
+
 
 module.exports = {
 
@@ -20,6 +33,7 @@ module.exports = {
 
     },
     viewfinalschedule: async function (req, res) {
+        var db = await sails.helpers.database();
         var getsettinginfo;
         var getschedulebox;
         var thisistheline3;
@@ -69,6 +83,7 @@ module.exports = {
     },
 
     getallneededinfo: async function (req, res) {
+        var db = await sails.helpers.database();
         var getpairing = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid"
         //get the pairs
         db.query(getpairing, (err, results) => {
@@ -151,8 +166,9 @@ module.exports = {
 
 
     createdraft: async function (req, res) {
+        var db = await sails.helpers.database();
         var campusfortoday;
-
+        
         var supweeklist = [], obsweeklist = [], stdweeklist = [];
 
         for (var a = 0; a < 6; a++) {
@@ -637,6 +653,7 @@ module.exports = {
     },
 
     checkpref: async function (req, res) {
+        var db = await sails.helpers.database();
         var boxlist = req.body.boxlist;
         console.log(">>checkpref       ", boxlist)
 
@@ -657,33 +674,51 @@ module.exports = {
             getsuppreference += "or allpreffromsup.tid = \"" + oidlist[a] + "\" "
         }
         getsuppreference += " order by priority asc , tid asc"
+        /**
+        let getdbresult = (query) => {
+            return db.query(getsuppreference, (err, results) => {
+                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") }
+                else{
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    return ans;
+                };
+            });
 
-
-        console.log(getsuppreference)
-        getpreflist = function (getsuppreference) {
-            return new Promise(function (resolve, reject) {
-                db.query(getsuppreference, function (err, results) {
-                    if (results === undefined) {
-                        reject(new Error("Error happened when excuting ScheduleController.createdraft.getsuppref"));
-                    } else {
-                        resolve(results);
-                    }
-                }
-                )
-            }
-            )
         }
-        render = function (results) { for (var i in results) console.log(results[i]) }
-        var preflist = getpreflist(getsuppreference).then(function (results) {
-            render(results)
-        }).catch(function (err) {
-            return res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppref")
-        })
-        
-       
+        var results = getdbresult(getsuppreference)
+        console.log(results)
+ */
+
+        const h = await new Promise((resolve) => {
+            pool.query(getsuppreference, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+              resolve(ans)
+            })
+          })
+          
+          console.log(h)
+
+
+
+
     },
 
+
+
+
+
+
+
+
+
+
+
     savebox: async function (req, res) {
+        var db = await sails.helpers.database();
         // console.log(req.body.boxlist);
         var boxlist = req.body.boxlist;
         updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
@@ -770,6 +805,7 @@ module.exports = {
     },
 
     getrequestroomlist: async function (req, res) {
+        var db = await sails.helpers.database();
         var thisistheline = "select * from classroom where Campus = \"" + req.query.Campus + "\" and RID not in ((select RID from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + req.query.Weekday + "\"and !(startTime > Time(\"" + req.query.Time + "\") || endTime < Time(\"" + req.query.Time + "\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\"" + req.query.Date + " " + req.query.Time + "\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\"" + req.query.Date + " " + req.query.Time + "\") ) )";
 
         db.query(thisistheline, (err, result) => {
@@ -785,6 +821,7 @@ module.exports = {
     },
 
     getrequestobslist: async function (req, res) {
+        var db = await sails.helpers.database();
         var thisistheline = "select * from supervisorpairobserver where tid = \"" + req.session.userid + "\" and OID not in (select OID from allrequestfromobserver where (timestamp(\"" + req.query.Date + " " + req.query.Time + "\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\"" + req.query.Date + " " + req.query.Time + "\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays =" + req.query.Weekday + " and  (time(\"" + req.query.Time + "\")>= allclass.startTime and time(\"" + req.query.Time + "\")< allclass.endTime))"
 
         db.query(thisistheline, (err, result) => {
@@ -799,6 +836,7 @@ module.exports = {
     },
 
     getpairing: async function (req, res) {
+        var db = await sails.helpers.database();
         thisistheline = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid";
         db.query(thisistheline, (err, results) => {
             try {
