@@ -693,8 +693,18 @@ module.exports = {
                  })
                 var presentday = new Date(boxlist[a].presentday)
                 var daycount = Math.floor((presentday - startday)/1000/60/60/24)
-                
-                console.log(">> prefsplit",prefsplitstr[daycount])
+
+                var chktotalpresentforthissup = "select (select count(*) from supervisorpairstudent where tid = \""+suppreflistforthisbox[b].tid+"\") super, (select count(*) from observerpairstudent where oid = \""+suppreflistforthisbox[b].tid+"\") observer from dual;"
+                var totalpresentforthissup = await new Promise((resolve) => {
+                    pool.query(chktotalpresentforthissup, (err, res) => {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
+                })
+
+                console.log(">> totalpresentforthissup    ",(parseInt(totalpresentforthissup[0].super)+parseInt(totalpresentforthissup[0].observer)))
 
                     var checkthissupchedule = "select count(*) as checkcount from allschedulebox where tid = \""+suppreflistforthisbox[b].tid+"\" and boxdate = \""+presentday.toLocaleDateString()+"\""
                     var currentschedulenum = await new Promise((resolve) => {
@@ -706,6 +716,10 @@ module.exports = {
                         })
                     })
                     console.log(currentschedulenum[0].checkcount >= prefsplitstr[daycount]) 
+                    // 如果佢已經係計好咗total = fulfill >> 可以直接check 佢滿未
+                    
+                    // 如果佢未滿 >> currentnum vs prefnum
+                    // checker for proving the sup is done
             }
 
         
