@@ -185,7 +185,7 @@ primary key (boxID)
 create table allpreffromsup(
 
 TID varchar(10) not null,
-Prefno varchar(20),
+Prefno varchar(50),
 LastUpdate timestamp not null,
 primary key (TID)
 );
@@ -267,11 +267,11 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
   
   
   if(thesetting =1)then
-  update student set student.ttbdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
+  update student set student.ttbdeadline = timetime where student.sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
   end if;
   
   if(thesetting =2)then
-  update student set student.requestdeadline = timetime where student .sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
+  update student set student.requestdeadline = timetime where student.sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
   end if;
   
   

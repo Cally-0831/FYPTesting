@@ -48,11 +48,43 @@
         <%}%>
         
         <%while(!printend){%>
-            <div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> :&ensp;&ensp;
+            <%var day = startdate.getDay()%>
+           
+            <%switch (day){
+                case 0:
+                day = "Sun"
+                break;
+                case 1:
+                day = "Mon"
+                break;
+                case 2:
+                day = "Tue"
+                break;
+                case 3:
+                day = "Wed"
+                break;
+                case 4:
+                day = "Thu"
+                break;
+                case 5:
+                day = "Fri"
+                break;
+                case 6:
+                day = "Sat"
+                break;
+                
+            }%>
+            <%if(day != "Sun"){%>
+<div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :&ensp;&ensp;
                 <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> ->
                 <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
                 
             </div>
+            
+            <%}else{%>
+                <br>
+           <%}%>
+            
             
             <%startdate.setDate(startdate.getDate()+1);%>
 
@@ -103,15 +135,20 @@
         var checkstudentnum=0;
         var prefnumstr = "";
         while(!checkdate){
-
-            checkstudentnum+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
+            console.log("here")
+            if(startdate.getDay() != 0){
+                checkstudentnum+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
             if(checkstudentnum > maxstdnum){return alert("Please Review Your inputs. \n Your maximum presentation number is "+maxstdnum)}
             prefnumstr+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value)+"/"
             
-            startdate.setDate(startdate.getDate()+1);
+           
+            }
+
+             startdate.setDate(startdate.getDate()+1);
             if(startdate > enddate){checkdate = true;}
         }
         requestBody = JSON.stringify({command:command,prefnumstr:prefnumstr})
+        console.log("hello")
         
         var response = await fetch("/preference", {
             method: "POST",
@@ -121,6 +158,8 @@
         if(response.status == 200){
             alert("Successfully submitted");
             location.reload()
+        }else {
+            alert("error here")
         }
 
         

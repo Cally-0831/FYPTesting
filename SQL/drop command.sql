@@ -42,3 +42,4 @@ Drop trigger if exists concatcomments_student;
 Drop trigger if exists clearnoticeforthesetting;
 Drop trigger if exists cancellessonwhendeletelesson;
 Drop trigger if exists checkschboxtocorrdraft;
+Drop trigger if exists delsupervisor;

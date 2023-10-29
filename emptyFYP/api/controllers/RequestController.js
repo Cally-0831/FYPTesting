@@ -461,16 +461,20 @@ module.exports = {
     },
 
     submitpreference: async function (req, res) {
-        console.log(req.body.prefnumstr)
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+       
+        var queryline ="";
         if (req.body.command == "Submit") {
-            thisistheline = "insert into allpreffromsup values(\"" + req.session.userid + "\",\"" + req.body.prefnumstr + "\",now());";
+            queryline = "insert into allpreffromsup values(\"" + req.session.userid + "\",\"" + req.body.prefnumstr + "\",now());";
         } else if (req.body.command == "Update") {
-            thisistheline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \""+req.session.userid+"\"";
+            queryline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \""+req.session.userid+"\"";
         }
-        
-        console.log(thisistheline)
-        db.query(thisistheline, (err, results) => {
-            if(err){return res.status(401).json("error exist when excueting RequestController.submitpreference")}else{return res.status(200).json("ok")}
+
+      console.log(queryline)
+        db.query(queryline, (err, results) => {
+            if(err){console.log(err);return res.status(401).json("error exist when excueting RequestController.submitpreference")}else{return res.status(200).json("ok")}
         })
     },
 
