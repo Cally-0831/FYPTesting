@@ -98,9 +98,12 @@
 
                         </td>
                         <td style="text-align: center;vertical-align:middle;font-size:20px;">
-                            <button class="button" type="button"
+                            <%if(request.status != "Approved" && request.status != "Rejected"){%>
+                                <button class="button" type="button"
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
-                        </td>
+                        
+                                <%}%>
+                            </td>
                         <td style="text-align: center;vertical-align:middle;font-size:20px;">
                             
                                 <button class="button" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>

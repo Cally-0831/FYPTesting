@@ -13,7 +13,7 @@
     </div>
 </div>
 <br><br>
-<%if (presentperiodstartdate!= undefined){%>
+<%if (presentperiodstartdate!= undefined ){%>
     
     
 <div class = "columns is-mobile is-centered">
@@ -21,11 +21,16 @@
         <div style="font-size : 25px;padding-top: 10px;" class="title">Preference Form</div>
         <%if(oldpref!=undefined){%>
             <div style="text-align:center; font-size : 18px; color:gray;padding-top: 0px;">
+                <%if(deadlinedate != undefined){%>
+                    <%var deadlinedate = new Date(deadlinedate)%>
+                    Submittion Deadline: <%=deadlinedate.toLocaleDateString("en-GB")%> , <%=deadlinedate.toLocaleTimeString('en-US')%>
+                    <%}%>
+                    <br>
                 <%var lastupdate = new Date(oldpref.LastUpdate)%>
                 Last Update: <%=lastupdate.toLocaleDateString("en-GB")%> , <%=lastupdate.toLocaleTimeString('en-US')%>
             </div>
             <%}%>
-        <div style="font-size : 18px;padding-top: 10px; color:gray; text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 10px;">
+        <div style="background-color: blanchedalmond; font-size : 18px;padding-top: 10px;color:gray;  text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 10px;">
             Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
             <br>
             You can input your prefered presentation number for the presentation date
@@ -76,14 +81,15 @@
             }%>
             <%if(day != "Sun"){%>
 <div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :&ensp;&ensp;
-                <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> ->
-                <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
+                <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> <%if(deadlinedate > new Date()){%> ->
+                   
+                    <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
+                
+                    <%}%>
                 
             </div>
             
-            <%}else{%>
-                <br>
-           <%}%>
+            <%}%>
             
             
             <%startdate.setDate(startdate.getDate()+1);%>
@@ -92,12 +98,21 @@
                 <%printend = true;}%>
         <%}%>
         
-        <div class = "buttons is-right">
+        <%if(deadlinedate > new Date()){%>
+            <div class = "buttons is-right">
             
             <%presentationstartdate = new Date(presentperiodstartdate).toLocaleDateString("en-GB")%>
             <%presentationenddate = new Date(presentperiodenddate).toLocaleDateString("en-GB")%>
             <button class="button buttonlogout"  onclick="submitform('<%=command%>','<%=presentationstartdate%>','<%=presentationenddate%>','<%=studentnum%>')"><%=command%></button>
         </div>
+            <%}else{%>
+            <div style="padding: 10px;">
+                    <p style=" font-size : 23px; background-color: orange" >Cannot Submit Preference Form Now</p>
+                </div>
+                
+                
+                <%}%>
+        
    
     </div>
 </div>

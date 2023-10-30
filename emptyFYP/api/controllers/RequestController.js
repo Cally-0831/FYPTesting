@@ -349,7 +349,7 @@ module.exports = {
                 //    console.log(data);
 
                 //console.log(req.file('avatar'));
-               
+
 
                 thisistheline = "Update allrequestfromstudent set picdata= \"" + data + "\", status = \"Pending\" ,submission = now() where sid=\"" + req.session.userid + "\" and reqid = \"" + req.params.ReqID + "\"";
                 //console.log(thisistheline);
@@ -373,6 +373,115 @@ module.exports = {
     },
 
     getpreference: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+
+        getpreferencere = "select * from allpreffromsup where tid = \"" + req.session.userid + "\"";
+        var preference = await new Promise((resolve, reject) => {
+            pool.query(getpreferencere, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting RequestController.getpreference")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        })
+        getsetting6 = "select * from allsupersetting where typeofsetting = \"6\"  and announcetime is not null";
+        var setting6 = await new Promise((resolve, reject) => {
+            pool.query(getsetting6, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting RequestController.getpreference.getsetting6")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var deadlinedate;
+                var deadlinetime;
+                var ans;
+                if (json.length > 0) {
+                    deadlinedate = new Date(json[0].deadlinedate);
+                    deadlinetime = json[0].deadlinetime.split(":");
+                    console.log(deadlinedate)
+                    deadlinedate.setHours(deadlinetime[0]);
+                    deadlinedate.setMinutes(deadlinetime[1]);
+                    deadlinedate.setMinutes(deadlinetime[2]);
+                }
+                ans = JSON.stringify({ deadlinedate: deadlinedate, deadlinetime: deadlinetime })
+                ans = JSON.parse(ans);
+
+                resolve(ans)
+            })
+        })
+        console.log(setting6.deadlinedate + "     ");
+
+        getsetting3 = "select * from allsupersetting where typeofsetting = \"3\"  and announcetime is not null";
+        var setting3 = await new Promise((resolve, reject) => {
+            pool.query(getsetting3, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting RequestController.getpreference.getsetting3")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans;
+                var presentperiodstartdate;
+                var presentperiodenddate;
+                var presentperiodstarttime;
+                var presentperiodendtime;
+                if (json.length > 0) {
+                    presentperiodstartdate = new Date(json[0].startdate);
+                    presentperiodenddate = new Date(json[0].enddate);
+                    presentperiodstarttime = json[0].starttime.split(":");
+                    presentperiodendtime = json[0].endtime.split(":");
+                    presentperiodstartdate.setHours(presentperiodstarttime[0])
+                    presentperiodstartdate.setMinutes(presentperiodstarttime[1])
+                    presentperiodstartdate.setSeconds(presentperiodstarttime[2])
+                    presentperiodenddate.setHours(presentperiodendtime[0])
+                    presentperiodenddate.setMinutes(presentperiodendtime[1])
+                    presentperiodenddate.setSeconds(presentperiodendtime[2])
+                }
+                ans = JSON.stringify({
+                    presentperiodstartdate: presentperiodstartdate
+                    , presentperiodenddate: presentperiodenddate
+                    , presentperiodstarttime: presentperiodstarttime
+                    , presentperiodendtime: presentperiodendtime
+                })
+                ans = JSON.parse(ans);
+
+                resolve(ans)
+            })
+        })
+        console.log(setting3.presentperiodstartdate + "     ");
+
+        gettotalpresent = "select count(*) as needtolisten from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid where tid = \"" + req.session.userid + "\" or oid = \"" + req.session.userid + "\""                       
+        var studentnum  = await new Promise((resolve, reject) => {
+            pool.query(gettotalpresent, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting RequestController.getpreference.gettotalpresent")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans= json[0].needtolisten;
+                resolve(ans)
+            })
+        })
+        console.log(studentnum + "     ");
+
+        getpreviouepref = "select * from allpreffromsup where tid = \"" + req.session.userid + "\""
+                                        
+        var oldpref = await new Promise((resolve, reject) => {
+            pool.query(getpreviouepref, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting RequestController.getpreference.getpreviouepref")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans= json[0];
+                resolve(ans)
+            })
+        })
+
+        return res.view('user/preference', {
+            preference: preference, deadlinedate: setting6.deadlinedate,
+            presentperiodstartdate: setting3.presentperiodstartdate,
+            presentperiodenddate: setting3.presentperiodenddate,
+            studentnum: studentnum,
+            oldpref: oldpref
+        });
+
+/** 
+
         thisistheline = "select * from allpreffromsup where tid = \"" + req.session.userid + "\"";
         db.query(thisistheline, (err, results) => {
             try {
@@ -386,6 +495,7 @@ module.exports = {
                         var json = JSON.parse(string);
                         var deadlinedate;
                         var deadlinetime;
+
                         if (json.length > 0) {
                             deadlinedate = new Date(json[0].deadlinedate);
                             deadlinetime = json[0].deadlinetime.split(":");
@@ -427,7 +537,7 @@ module.exports = {
                                                 var string = JSON.stringify(results);
                                                 var json = JSON.parse(string);
                                                 var oldpref = json[0]
-                                                
+
                                                 return res.view('user/preference', {
                                                     preference: preference, deadlinedate: deadlinedate,
                                                     presentperiodstartdate: presentperiodstartdate,
@@ -458,23 +568,24 @@ module.exports = {
                 return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
             }
         });
+        */
     },
 
     submitpreference: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
-       
-        var queryline ="";
+
+        var queryline = "";
         if (req.body.command == "Submit") {
             queryline = "insert into allpreffromsup values(\"" + req.session.userid + "\",\"" + req.body.prefnumstr + "\",now());";
         } else if (req.body.command == "Update") {
-            queryline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \""+req.session.userid+"\"";
+            queryline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \"" + req.session.userid + "\"";
         }
 
-      console.log(queryline)
+        console.log(queryline)
         db.query(queryline, (err, results) => {
-            if(err){console.log(err);return res.status(401).json("error exist when excueting RequestController.submitpreference")}else{return res.status(200).json("ok")}
+            if (err) { console.log(err); return res.status(401).json("error exist when excueting RequestController.submitpreference") } else { return res.status(200).json("ok") }
         })
     },
 
