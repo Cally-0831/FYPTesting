@@ -402,7 +402,8 @@ module.exports = {
                     console.log(deadlinedate)
                     deadlinedate.setHours(deadlinetime[0]);
                     deadlinedate.setMinutes(deadlinetime[1]);
-                    deadlinedate.setMinutes(deadlinetime[2]);
+                    deadlinedate.setSeconds(deadlinetime[2]);
+                    console.log(deadlinedate)
                 }
                 ans = JSON.stringify({ deadlinedate: deadlinedate, deadlinetime: deadlinetime })
                 ans = JSON.parse(ans);
@@ -471,9 +472,10 @@ module.exports = {
                 resolve(ans)
             })
         })
+        
 
         return res.view('user/preference', {
-            preference: preference, deadlinedate: setting6.deadlinedate,
+            preference: preference, deadlinedate: setting6.deadlinedate, deadlinetime: setting6.deadlinetime,
             presentperiodstartdate: setting3.presentperiodstartdate,
             presentperiodenddate: setting3.presentperiodenddate,
             studentnum: studentnum,

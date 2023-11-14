@@ -90,11 +90,27 @@
         var boxlist = [];
 
         if (r) {
+            var typeofpresentlist = document.getElementsByName("typeofpresent");
+            var typeofpresent;
+
+            for (var i = 0; i < typeofpresentlist.length; i++) {
+                if (typeofpresentlist[i].checked) {
+                    typeofpresent = typeofpresentlist[i].value;
+                }
+            }
+            var requestbody = JSON.stringify({typeofpresent: typeofpresent})
+            console.log(requestbody)
+            var response = await fetch("/scheduledesign/genavailable", {
+                method: "POST",
+                body: requestbody
+            });
+
             var response = await fetch("/scheduledesign/getpairing", {
                 method: "GET"
             });
 
             var pairinglist = (await response.json()).pairinglist;
+            console.log(pairinglist)
             let pairinglistdistictsup = (pairinglist) => {
                 let unique_values = pairinglist
                     .map((item) => item.tid)
@@ -110,14 +126,7 @@
             var endday = (new Date(enddaydatetype)).toLocaleDateString("en-GB").split("/")
             startday = startday[2] + "-" + startday[1] + "-" + startday[0]
             endday = endday[2] + "-" + endday[1] + "-" + endday[0]
-            var typeofpresentlist = document.getElementsByName("typeofpresent");
-            var typeofpresent;
-
-            for (var i = 0; i < typeofpresentlist.length; i++) {
-                if (typeofpresentlist[i].checked) {
-                    typeofpresent = typeofpresentlist[i].value;
-                }
-            }
+           
 
             for (var a = 0; a < pairinglist.length; a++) {
                 //for (var a = pairinglist.length - 3; a < pairinglist.length; a++) {
@@ -125,6 +134,8 @@
                     tid: pairinglist[a].tid,
                     sid: pairinglist[a].sid,
                     oid: pairinglist[a].oid,
+                    suppriority : pairinglist[a].priority,
+                    obspriority : pairinglist[a].obspriority,
                     startdaydate: startday,
                     enddaydate: endday,
                     fullstartday: new Date(startdaydatetype),
@@ -143,6 +154,7 @@
 
                 if (response2.ok) {
                     var response2json = await response2.json();
+            
 
                     if (pairinglist[a].tid != suplist[indexofdistinctsuplist] || a == pairinglist.length - 1) {
                         if (a == pairinglist.length - 1) { boxlist.push(response2json); }
@@ -151,6 +163,7 @@
                             fullendday: new Date(enddaydatetype),
                             boxlist: boxlist,
                         })
+                        console.log(requestbody.toString());
 
                         /**
                         var response3 = await fetch("/createschedule/createdraft/savebox", {

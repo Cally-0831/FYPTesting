@@ -190,6 +190,15 @@ LastUpdate timestamp not null,
 primary key (TID)
 );
 
+create table supervisoravailable(
+
+TID varchar(10) not null,
+availabledate DATE,
+availablestartTime timestamp,
+availableendTime timestamp,
+
+);
+
 
 
 delimiter |

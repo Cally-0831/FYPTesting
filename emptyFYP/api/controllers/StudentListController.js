@@ -461,18 +461,17 @@ module.exports = {
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
 
-            thisistheline = "insert IGNORE into allusers values(\"" +
+            createstudentline = "insert IGNORE into allusers values(\"" +
                 req.body[i].studentname + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-            console.log(thisistheline);
+                console.log(createstudentline);
             var db = await sails.helpers.database();
-            db.query(thisistheline, function (err, result) {
+            db.query(createstudentline, function (err, result) {
                 if (err) {
                     console.log("error happened at StudentListContorller: uploadstudentlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
+                    res.status(401).json("Error happened when excuting : " + createstudentline);
                 };
-                console.log("1 record inserted");
             });
 
         }
@@ -480,18 +479,19 @@ module.exports = {
 
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body[i].sid);
-            thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
+            pairingline = "insert IGNORE into supervisorpairstudent values(\"" +
                 req.session.userid + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].topic + "\"\);";
+                console.log(pairingline);
             var db = await sails.helpers.database();
-            db.query(thisistheline, function (err, result) {
+            db.query(pairingline, function (err, result) {
                 if (err) {
                     console.log(err);
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
+                    res.status(401).json("Error happened when excuting : " + pairingline);
 
                 };
-                console.log("1 record inserted");
+                
             });
 
         }

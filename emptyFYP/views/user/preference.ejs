@@ -13,23 +13,26 @@
     </div>
 </div>
 <br><br>
+<%deadlinedate = new Date(deadlinedate)%>
 <%if (presentperiodstartdate!= undefined ){%>
-    
+   
     
 <div class = "columns is-mobile is-centered">
     <div class = "column column-big is-half">
         <div style="font-size : 25px;padding-top: 10px;" class="title">Preference Form</div>
         <%if(oldpref!=undefined){%>
             <div style="text-align:center; font-size : 18px; color:gray;padding-top: 0px;">
+                
                 <%if(deadlinedate != undefined){%>
-                    <%var deadlinedate = new Date(deadlinedate)%>
-                    Submittion Deadline: <%=deadlinedate.toLocaleDateString("en-GB")%> , <%=deadlinedate.toLocaleTimeString('en-US')%>
+                    
+                    Submittion Deadline: <%=deadlinedate.toLocaleDateString("en-GB")%> , <%=deadlinedate.toLocaleTimeString("en-GB")%>
                     <%}%>
                     <br>
                 <%var lastupdate = new Date(oldpref.LastUpdate)%>
                 Last Update: <%=lastupdate.toLocaleDateString("en-GB")%> , <%=lastupdate.toLocaleTimeString('en-US')%>
             </div>
             <%}%>
+           
         <div style="background-color: blanchedalmond; font-size : 18px;padding-top: 10px;color:gray;  text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 10px;">
             Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
             <br>
@@ -81,6 +84,7 @@
             }%>
             <%if(day != "Sun"){%>
 <div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :&ensp;&ensp;
+
                 <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> <%if(deadlinedate > new Date()){%> ->
                    
                     <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
@@ -97,6 +101,7 @@
             <%if(startdate.toLocaleDateString() > newpresentperiodenddate.toLocaleDateString()){%>
                 <%printend = true;}%>
         <%}%>
+        <%var deadlinedate = new Date(deadlinedate)%>
         
         <%if(deadlinedate > new Date()){%>
             <div class = "buttons is-right">
@@ -154,13 +159,15 @@
             if(startdate.getDay() != 0){
                 checkstudentnum+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
             if(checkstudentnum > maxstdnum){return alert("Please Review Your inputs. \n Your maximum presentation number is "+maxstdnum)}
-            prefnumstr+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value)+"/"
+            prefnumstr+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value)
             
            
             }
 
              startdate.setDate(startdate.getDate()+1);
-            if(startdate > enddate){checkdate = true;}
+            if(startdate > enddate){checkdate = true;}else{
+                prefnumstr+="/";
+            }
         }
         requestBody = JSON.stringify({command:command,prefnumstr:prefnumstr})
         console.log("hello")

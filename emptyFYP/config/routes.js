@@ -139,6 +139,7 @@ module.exports.routes = {
  
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
+  "POST /scheduledesign/genavailable" : "ScheduleController.genavailable",
 
 "GET /preference": "RequestController.getpreference",
 "POST /preference": "RequestController.submitpreference"

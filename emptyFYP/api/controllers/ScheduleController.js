@@ -141,6 +141,7 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var campusfortoday;
+        console.log(req.body)
 
         var supweeklist = [], obsweeklist = [], stdweeklist = [];
 
@@ -175,6 +176,7 @@ module.exports = {
             })
         })
 
+
         var getallclassroominschool = "select * from classroom where status != \"Closed\" and rid != \"\" order by Campus asc, rid asc"
         var classroomlist = await new Promise((resolve, reject) => {
             pool.query(getallclassroominschool, (err, res) => {
@@ -185,7 +187,7 @@ module.exports = {
                 resolve(ans)
             })
         })
-        console.log(">> classroomlist", classroomlist[0])
+        //console.log(classroomlist)
         let distinctcampuslist = (classroomlist) => {
             let unique_values = classroomlist
                 .map((item) => item.Campus)
@@ -256,6 +258,16 @@ module.exports = {
         })
         for (var a = 0; a < obsttb.length; a++) { obsweeklist[parseInt(obsttb[a].weekdays) - 1].push(obsttb[a]); }
 
+        var getobsrequest = "select * from allrequestfromsupervisor where tid = \"" + req.body.oid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) order by RequestDate asc, requeststarttime asc "
+        var obsrequest = await new Promise((resolve, reject) => {
+            pool.query(getobsrequest, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        })
 
         var getobsschedulebox = "select * from allschedulebox where tid = \"" + req.body.oid + "\" order by boxdate asc , boxtime asc";
         var obsschedulebox = await new Promise((resolve, reject) => {
@@ -280,16 +292,7 @@ module.exports = {
             })
         })
 
-        var getobsrequest = "select * from allrequestfromsupervisor where tid = \"" + req.body.oid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) order by RequestDate asc, requeststarttime asc "
-        var obsrequest = await new Promise((resolve, reject) => {
-            pool.query(getobsrequest, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
+
         for (var a = 0; a < stdttb.length; a++) { stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]); }
         for (var a = 0; a < stdweeklist.length; a++) {
             if (stdweeklist[a].length == 0) { stdweeklist[a].push("EMPTY") }
@@ -309,12 +312,82 @@ module.exports = {
             })
         })
 
+        var getsuppreference = "select * from allpreffromsup where tid =\"" + req.body.tid + "\"";
+        var suppref = await new Promise((resolve, reject) => {
+            pool.query(getsuppreference, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsuppreference")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        })
+        if (suppref.length == 0) {
+            suppref = null;
+        } else {
+            suppref = suppref[0]
+            let splitstring = (suppref.Prefno).split("/");
+            suppref = splitstring;
+        }
+        suppref = suppref[0]
+        console.log(suppref)
+
+        var getobspreference = "select * from allpreffromsup where tid =\"" + req.body.oid + "\"";
+        var obspref = await new Promise((resolve, reject) => {
+            pool.query(getobspreference, (err, res) => {
+                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getobspreference")) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        })
+        if (obspref.length == 0) {
+            obspref = null;
+        } else {
+            obspref = obspref[0]
+            let splitstring = (obspref.Prefno).split("/");
+            obspref = splitstring;
+        }
+        console.log(obspref)
+
         var startindex = startday.getDay();
 
         console.log(startday)
         var currentsessiontimeinpresentday = startday;
         currentsessiontimeinpresentday.setHours(8, 30, 0);
         var currentsessionendtimeinpresentday = (new Date(currentsessiontimeinpresentday.getTime() + (1000 * 60 * sessionduration)));
+
+        console.log("finally working")
+
+        console.log(req.body.suppriority + "      " + req.body.obspriority)
+        if (req.body.suppriority <= req.body.obspriority) {
+            for (var a = 0; a < suppref.length; a++) {
+                console.log(currentsessiontimeinpresentday + "     asdfasdf");
+                console.log(currentsessionendtimeinpresentday + "    erqwer ")
+            }
+        } else {
+            for (var a = 0; a < obspref.length; a++) {
+                console.log(currentsessiontimeinpresentday + "     hello");
+                console.log(currentsessionendtimeinpresentday + "     heool")
+                var getcheckobsttb = "select * from allsupertakecourse left join allclass on allclass.CID = allsupertakecourse.CID where pid = \"" + req.body.oid + "\" and weekdays= \"" + currentsessiontimeinpresentday.getDay() + "\" and startTime";
+                var obsttb = await new Promise((resolve, reject) => {
+                    pool.query(getcheckobsttb, (err, res) => {
+                        if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getobspreference")) }
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
+                })
+                console.log(currentsessiontimeinpresentday + "     hello");
+                console.log(currentsessionendtimeinpresentday + "     heool")
+            }
+
+        }
+        //for(var a = 0 ; a < )
+
+
         /** 
         
                 for (var timebox = 0; timebox <= 13 * 60 / sessionduration; timebox++) {
@@ -654,91 +727,215 @@ module.exports = {
 
     },
 
-    checkpref: async function (req, res) {
-        var db = await sails.helpers.database();
+    genavailable: async function (req, res) {
         var pool = await sails.helpers.database2();
-        var boxlist = req.body.boxlist;
-        console.log(">>checkpref       ", req.body)
-        var startday = new Date(req.body.fullstartday);
-        var endday = new Date(req.body.fullendday);
-
-        let distinctoidlist = (boxlist) => {
-            let unique_values = boxlist
-                .map((item) => item.oid)
-                .filter(
-                    (value, index, current_value) => current_value.indexOf(value) === index
-                );
-            return unique_values;
-        };
-
-        var oidlist = distinctoidlist(boxlist);
-        console.log(oidlist)
-
-        for (var a = 0; a < boxlist.length; a++) {
-
-            var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + boxlist[0].tid + "\" or allpreffromsup.tid = \"" + boxlist[a].oid + "\" order by priority asc , tid asc"
-            var suppreflistforthisbox = await new Promise((resolve) => {
-                pool.query(getsuppreference, (err, res) => {
+        // get presentperiod
+        var getsetting3 = "select * from allsupersetting where typeofsetting = 3"
+        var setting3 = await new Promise((resolve) => {
+            pool.query(getsetting3, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (ans.length != 0) {
+                    var startday = new Date(ans[0].startdate);
+                    var endday = new Date(ans[0].enddate);
+                    var startTime = ans[0].starttime.split(":");
+                    var endTime = ans[0].endtime.split(":");
+                    startday.setHours(startTime[0]);
+                    startday.setMinutes(startTime[1]);
+                    startday.setSeconds(startTime[2]);
+                    endday.setHours(endTime[0]);
+                    endday.setMinutes(endTime[1]);
+                    endday.setSeconds(endTime[2]);
+                    console.log(startday + "   " + endday)
+                    ans = { startday: startday, endday: endday };
+                }
+                resolve(ans)
+            })
+        })
+        console.log(setting3)
+        // gen all supervisors
+        var getallsupervisor = "select tid,submission from supervisor order by tid asc"
+        var supervisorlist = await new Promise((resolve) => {
+            pool.query(getallsupervisor, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        })
+        // console.log(supervisorlist.length)
+        //console.log(supervisorlist)
+        for (var a = 0; a < supervisorlist.length; a++) {
+            var supervisorttblist;
+            var supervisorrequest;
+            if (supervisorlist[a].submission == "Y") {
+                var getallsupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\"order by pid asc, weekdays asc,startTime asc"
+                supervisorttblist = await new Promise((resolve) => {
+                    pool.query(getallsupervisorttb, (err, res) => {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
+                })
+            }
+            //console.log(supervisorttblist)
+            var getallsupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\""
+            supervisorrequest = await new Promise((resolve) => {
+                pool.query(getallsupervisorrequest, (err, res) => {
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
                     resolve(ans)
                 })
+                //console.log(supervisorrequest)
             })
-            console.log(">>suppreflistforthisbox", suppreflistforthisbox)
-            if (suppreflistforthisbox.length > 0) {
-                for (var b = 0; b < suppreflistforthisbox.length; b++) {
-                    var prefsplitstr = suppreflistforthisbox[b].prefno.split("/");
-                    var totalconsiderednum = 0;
-                    prefsplitstr.forEach(num => {
-                        if (num != "") {
-                            totalconsiderednum += parseInt(num);
+
+            var currentgeneratedate = new Date(setting3.startday);
+            var currentgeneratedateend = new Date(setting3.startday);
+            while (currentgeneratedate < new Date(setting3.endday)) {
+                //console.log("enter")
+                if (req.body.typeofpresent == "midterm") {
+                    console.log("midterm")
+                } else if (req.body.typeofpresent == "final") {
+                    console.log("final")
+                    currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+                    var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime >= \"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\" and endtime <= \"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\" )order by pid asc, weekdays asc,startTime asc"
+                    //console.log(getchecksupervisorttb)
+                    supervisorttblist = await new Promise((resolve) => {
+                        pool.query(getchecksupervisorttb, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    })
+                    if (supervisorttblist.length == 0) {
+                        var getchecksupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\" and requestDate = \""+currentgeneratedate.getFullYear()+"-"+currentgeneratedate.getMonth()+"-"+currentgeneratedate.getDate()+"\""
+                        supervisorrequest = await new Promise((resolve) => {
+                            pool.query(getchecksupervisorrequest, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        })
+                        if(supervisorrequest.length ==0){
+                            //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
+                            var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
+                            var insertavability = "insert into supervisoravailable value(\""+supervisorlist[a].tid+"\",Date(\""+datestring+"\"),timestamp(\""+datestring+" "+currentgeneratedate.toLocaleTimeString("en-GB")+"\"),timestamp(\""+datestring+" "+currentgeneratedateend.toLocaleTimeString("en-GB")+"\"))"
+                            //console.log(insertavability)
+                            supervisorrequest = await new Promise((resolve) => {
+                                pool.query(insertavability, (err, res) => {
+                                    resolve(res);
+                                })
+                            })
                         }
-                    })
-                    var presentday = new Date(boxlist[a].presentday)
-                    var daycount = Math.floor((presentday - startday) / 1000 / 60 / 60 / 24)
+                    }
+                    if(currentgeneratedate.toLocaleTimeString("en-GB") == "18:30:00"){
+                        currentgeneratedate.setTime(currentgeneratedate.getTime()+24*60*60*1000);
+                        currentgeneratedate = new Date(currentgeneratedate);
+                        currentgeneratedate.setHours(9);
+                        currentgeneratedate.setMinutes(30);
+                        currentgeneratedate.setSeconds(0);
+                    }else{
+                        currentgeneratedate.setHours(currentgeneratedate.getHours()+1);
+                    }
 
-                    var chktotalpresentforthissup = "select (select count(*) from supervisorpairstudent where tid = \"" + suppreflistforthisbox[b].tid + "\") super, (select count(*) from observerpairstudent where oid = \"" + suppreflistforthisbox[b].tid + "\") observer from dual;"
-                    var totalpresentforthissup = await new Promise((resolve) => {
-                        pool.query(chktotalpresentforthissup, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    })
-
-                    console.log(">> totalpresentforthissup    ", (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
-
-                    var checkthissupchedule = "select count(*) as checkcount from allschedulebox where tid = \"" + suppreflistforthisbox[b].tid + "\" and boxdate = \"" + presentday.toLocaleDateString() + "\""
-                    var currentschedulenum = await new Promise((resolve) => {
-                        pool.query(checkthissupchedule, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    })
-                    console.log(currentschedulenum[0].checkcount >= prefsplitstr[daycount])
-                    console.log(totalconsiderednum + "      " + (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
-
-
-                    // 如果佢已經係計好咗total = fulfill >> 可以直接check 佢滿未
-
-                    // 如果佢未滿 >> currentnum vs prefnum
-                    // checker for proving the sup is done
+                    //console.log(currentgeneratedate.toLocaleDateString("en-GB")+"   "+currentgeneratedate.toLocaleTimeString("en-GB"))
+                
                 }
-            } else {
-                // 無人填pref
+
+            }
+        }
+    },
+
+        checkpref: async function (req, res) {
+            var db = await sails.helpers.database();
+            var pool = await sails.helpers.database2();
+            var boxlist = req.body.boxlist;
+            console.log(">>checkpref       ", req.body)
+            var startday = new Date(req.body.fullstartday);
+            var endday = new Date(req.body.fullendday);
+
+            let distinctoidlist = (boxlist) => {
+                let unique_values = boxlist
+                    .map((item) => item.oid)
+                    .filter(
+                        (value, index, current_value) => current_value.indexOf(value) === index
+                    );
+                return unique_values;
+            };
+
+            var oidlist = distinctoidlist(boxlist);
+            console.log(oidlist)
+
+            for (var a = 0; a < boxlist.length; a++) {
+
+                var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + boxlist[0].tid + "\" or allpreffromsup.tid = \"" + boxlist[a].oid + "\" order by priority asc , tid asc"
+                var suppreflistforthisbox = await new Promise((resolve) => {
+                    pool.query(getsuppreference, (err, res) => {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
+                })
+                console.log(">>suppreflistforthisbox", suppreflistforthisbox)
+                if (suppreflistforthisbox.length > 0) {
+                    for (var b = 0; b < suppreflistforthisbox.length; b++) {
+                        var prefsplitstr = suppreflistforthisbox[b].prefno.split("/");
+                        var totalconsiderednum = 0;
+                        prefsplitstr.forEach(num => {
+                            if (num != "") {
+                                totalconsiderednum += parseInt(num);
+                            }
+                        })
+                        var presentday = new Date(boxlist[a].presentday)
+                        var daycount = Math.floor((presentday - startday) / 1000 / 60 / 60 / 24)
+
+                        var chktotalpresentforthissup = "select (select count(*) from supervisorpairstudent where tid = \"" + suppreflistforthisbox[b].tid + "\") super, (select count(*) from observerpairstudent where oid = \"" + suppreflistforthisbox[b].tid + "\") observer from dual;"
+                        var totalpresentforthissup = await new Promise((resolve) => {
+                            pool.query(chktotalpresentforthissup, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        })
+
+                        console.log(">> totalpresentforthissup    ", (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
+
+                        var checkthissupchedule = "select count(*) as checkcount from allschedulebox where tid = \"" + suppreflistforthisbox[b].tid + "\" and boxdate = \"" + presentday.toLocaleDateString() + "\""
+                        var currentschedulenum = await new Promise((resolve) => {
+                            pool.query(checkthissupchedule, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        })
+                        console.log(currentschedulenum[0].checkcount >= prefsplitstr[daycount])
+                        console.log(totalconsiderednum + "      " + (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
+
+
+                        // 如果佢已經係計好咗total = fulfill >> 可以直接check 佢滿未
+
+                        // 如果佢未滿 >> currentnum vs prefnum
+                        // checker for proving the sup is done
+                    }
+                } else {
+                    // 無人填pref
+                }
+
+
+
             }
 
 
 
-        }
-
-
-
-    },
+        },
 
 
 
@@ -750,137 +947,137 @@ module.exports = {
 
 
 
-    savebox: async function (req, res) {
-        var db = await sails.helpers.database();
-        // console.log(req.body.boxlist);
-        var boxlist = req.body.boxlist;
-        updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
-        /**
-        db.query( updatesupdraftexist, (err, results) => {
-            if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") };
-        });
- */
-        for (var a = 0; a < boxlist.length; a++) {
-            updateobsdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[a].oid + "\"";
+        savebox: async function (req, res) {
+            var db = await sails.helpers.database();
+            // console.log(req.body.boxlist);
+            var boxlist = req.body.boxlist;
+            updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
             /**
-            db.query(updateobsdraftexist, (err, results) => {
-                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updateobsdraftexist") };
+            db.query( updatesupdraftexist, (err, results) => {
+                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") };
             });
-            */
-            boxid = "" + (boxlist[a].presentday.split("T"))[0] + "_" + boxlist[a].presentstartTime;
+     */
+            for (var a = 0; a < boxlist.length; a++) {
+                updateobsdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[a].oid + "\"";
+                /**
+                db.query(updateobsdraftexist, (err, results) => {
+                    if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updateobsdraftexist") };
+                });
+                */
+                boxid = "" + (boxlist[a].presentday.split("T"))[0] + "_" + boxlist[a].presentstartTime;
 
-            insertline = "insert ignore into allschedulebox values(\"" + boxid + "\",\"" + boxlist[a].presentday + "\",\"" + boxlist[a].presentstartTime + "\",\"" + boxlist[a].tid + "\",\"" + boxlist[a].sid + "\",\"" + boxlist[a].oid + "\",\"" + boxlist[a].finalcampus + "\",\"" + boxlist[a].finalrid + "\",now())";
-            updateline = "Update allschedulebox set boxdate = \"" + boxlist[a].presentday + "\", boxtime = \"" + boxlist[a].presentstartTime + "\" ,SID =\"" + boxlist[a].sid + "\", OID = \"" + boxlist[a].oid + "\", Campus = \"" + boxlist[a].finalcampus + "\", RID = \"" + boxlist[a].finalrid + "\", LastUpdate = now() where boxid = \"" + boxid + "\"";
-            console.log(boxid)
-            console.log(insertline)
-            console.log(updateline)
-            /**
-            db.query(insertline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + insertline + "\n"
-                    statuscode = 401;
-                }
- 
-            })
-            db.query(updateline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + thisistheline + "\n"
-                    statuscode = 401;
-                }
-            })
-           */
+                insertline = "insert ignore into allschedulebox values(\"" + boxid + "\",\"" + boxlist[a].presentday + "\",\"" + boxlist[a].presentstartTime + "\",\"" + boxlist[a].tid + "\",\"" + boxlist[a].sid + "\",\"" + boxlist[a].oid + "\",\"" + boxlist[a].finalcampus + "\",\"" + boxlist[a].finalrid + "\",now())";
+                updateline = "Update allschedulebox set boxdate = \"" + boxlist[a].presentday + "\", boxtime = \"" + boxlist[a].presentstartTime + "\" ,SID =\"" + boxlist[a].sid + "\", OID = \"" + boxlist[a].oid + "\", Campus = \"" + boxlist[a].finalcampus + "\", RID = \"" + boxlist[a].finalrid + "\", LastUpdate = now() where boxid = \"" + boxid + "\"";
+                console.log(boxid)
+                console.log(insertline)
+                console.log(updateline)
+                /**
+                db.query(insertline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + insertline + "\n"
+                        statuscode = 401;
+                    }
+     
+                })
+                db.query(updateline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + thisistheline + "\n"
+                        statuscode = 401;
+                    }
+                })
+               */
 
-        }
+            }
 
-        /** 
-        var errstring = "ok";
-        var statuscode = 200;
-        var arrayint = [];
- 
-        thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
-        db.query(thisistheline, (err, results) => {
-            if (err) { return res.status(401).json("Error happened when updating") }
-        });
- 
-        for (var a = 0; a < req.body.length; a++) {
-            console.log("\n\n\n\n");
-            console.log(req.body[a].boxid);
-            console.log(req.body[a].stu);
-            console.log(req.body[a].obs);
-            console.log(req.body[a].Campus);
-            console.log(req.body[a].RID);
-            insertline = "insert ignore into allschedulebox values(\"" + req.body[a].boxid + "\",\"" + req.body[a].boxdate + "\",\"" + req.body[a].boxtime + "\",\"" + req.session.userid + "\",\"" + req.body[a].stu + "\",\"" + req.body[a].obs + "\",\"" + req.body[a].Campus + "\",\"" + req.body[a].RID + "\",now())";
- 
-            thisistheline = "Update allschedulebox set boxdate = \"" + req.body[a].boxdate + "\", boxtime = \"" + req.body[a].boxtime + "\" ,SID =\"" + req.body[a].stu + "\", OID = \"" + req.body[a].obs + "\", Campus = \"" + req.body[a].Campus + "\", RID = \"" + req.body[a].RID + "\", LastUpdate = now() where boxid = \"" + req.body[a].boxid + "\"";
- 
-            console.log(thisistheline)
-            db.query(insertline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + insertline + "\n"
-                    statuscode = 401;
-                }
- 
-            })
+            /** 
+            var errstring = "ok";
+            var statuscode = 200;
+            var arrayint = [];
+     
+            thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
+            db.query(thisistheline, (err, results) => {
+                if (err) { return res.status(401).json("Error happened when updating") }
+            });
+     
+            for (var a = 0; a < req.body.length; a++) {
+                console.log("\n\n\n\n");
+                console.log(req.body[a].boxid);
+                console.log(req.body[a].stu);
+                console.log(req.body[a].obs);
+                console.log(req.body[a].Campus);
+                console.log(req.body[a].RID);
+                insertline = "insert ignore into allschedulebox values(\"" + req.body[a].boxid + "\",\"" + req.body[a].boxdate + "\",\"" + req.body[a].boxtime + "\",\"" + req.session.userid + "\",\"" + req.body[a].stu + "\",\"" + req.body[a].obs + "\",\"" + req.body[a].Campus + "\",\"" + req.body[a].RID + "\",now())";
+     
+                thisistheline = "Update allschedulebox set boxdate = \"" + req.body[a].boxdate + "\", boxtime = \"" + req.body[a].boxtime + "\" ,SID =\"" + req.body[a].stu + "\", OID = \"" + req.body[a].obs + "\", Campus = \"" + req.body[a].Campus + "\", RID = \"" + req.body[a].RID + "\", LastUpdate = now() where boxid = \"" + req.body[a].boxid + "\"";
+     
+                console.log(thisistheline)
+                db.query(insertline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + insertline + "\n"
+                        statuscode = 401;
+                    }
+     
+                })
+                db.query(thisistheline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + thisistheline + "\n"
+                        statuscode = 401;
+                    }
+                })
+              
+            }
+    */
+            return res.ok();
+        },
+
+        getrequestroomlist: async function (req, res) {
+            var db = await sails.helpers.database();
+            var thisistheline = "select * from classroom where Campus = \"" + req.query.Campus + "\" and RID not in ((select RID from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + req.query.Weekday + "\"and !(startTime > Time(\"" + req.query.Time + "\") || endTime < Time(\"" + req.query.Time + "\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\"" + req.query.Date + " " + req.query.Time + "\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\"" + req.query.Date + " " + req.query.Time + "\") ) )";
+
+
             db.query(thisistheline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + thisistheline + "\n"
-                    statuscode = 401;
+                if (err) { return res.status(401).json("Error happened when updating") } else {
+                    var string = JSON.stringify(result);
+                    var roomlist = JSON.parse(string);
+                    return res.json(roomlist);
+                }
+            });
+
+
+
+        },
+
+        getrequestobslist: async function (req, res) {
+            var db = await sails.helpers.database();
+            var thisistheline = "select * from supervisorpairobserver where tid = \"" + req.session.userid + "\" and OID not in (select OID from allrequestfromobserver where (timestamp(\"" + req.query.Date + " " + req.query.Time + "\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\"" + req.query.Date + " " + req.query.Time + "\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays =" + req.query.Weekday + " and  (time(\"" + req.query.Time + "\")>= allclass.startTime and time(\"" + req.query.Time + "\")< allclass.endTime))"
+
+            db.query(thisistheline, (err, result) => {
+                if (err) { return res.status(401).json("Error happened when updating") } else {
+                    var string = JSON.stringify(result);
+                    var okobslist = JSON.parse(string);
+                    return res.json(okobslist);
+                }
+            });
+        },
+
+        getpairing: async function (req, res) {
+            var db = await sails.helpers.database();
+            getpairinglist = "select supervisor.tid , supervisor.priority, supervisorpairstudent.sid, observerpairstudent.oid, s2.priority as obspriority from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid left join supervisor s2 on observerpairstudent.oid = s2.tid order by supervisor.priority asc, s2.priority asc";
+            db.query(getpairinglist, (err, results) => {
+                try {
+                    var string = JSON.stringify(results);
+                    var json = JSON.parse(string);
+                    var pairinglist = json;
+                    console.log(pairinglist)
+                    return res.status(200).json({ pairinglist: pairinglist })
+                } catch (err) {
+                    return res.status(401).json("error happened when excuting SettingController.nodraft.getallinfo.retrievepairinglist");
                 }
             })
-          
-        }
-*/
-        return res.ok();
-    },
+        },
 
-    getrequestroomlist: async function (req, res) {
-        var db = await sails.helpers.database();
-        var thisistheline = "select * from classroom where Campus = \"" + req.query.Campus + "\" and RID not in ((select RID from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + req.query.Weekday + "\"and !(startTime > Time(\"" + req.query.Time + "\") || endTime < Time(\"" + req.query.Time + "\")))) and RID not in (select RID from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and !(timestamp(concat(StartDate,\" \",startTime)) > timestamp(\"" + req.query.Date + " " + req.query.Time + "\")  || timestamp(concat(EndDate,\" \",endTime)) < timestamp(\"" + req.query.Date + " " + req.query.Time + "\") ) )";
-
-
-        db.query(thisistheline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") } else {
-                var string = JSON.stringify(result);
-                var roomlist = JSON.parse(string);
-                return res.json(roomlist);
-            }
-        });
-
-
-
-    },
-
-    getrequestobslist: async function (req, res) {
-        var db = await sails.helpers.database();
-        var thisistheline = "select * from supervisorpairobserver where tid = \"" + req.session.userid + "\" and OID not in (select OID from allrequestfromobserver where (timestamp(\"" + req.query.Date + " " + req.query.Time + "\")>= timestamp(concat(RequestDate,\" \",RequestStartTime)) and timestamp(\"" + req.query.Date + " " + req.query.Time + "\")< timestamp(concat(RequestDate,\" \",RequestEndTime)))) and OID not in (select pid from allobstakecourse inner join allclass on allclass.CID = allobstakecourse.CID where weekdays =" + req.query.Weekday + " and  (time(\"" + req.query.Time + "\")>= allclass.startTime and time(\"" + req.query.Time + "\")< allclass.endTime))"
-
-        db.query(thisistheline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") } else {
-                var string = JSON.stringify(result);
-                var okobslist = JSON.parse(string);
-                return res.json(okobslist);
-            }
-        });
-    },
-
-    getpairing: async function (req, res) {
-        var db = await sails.helpers.database();
-        thisistheline = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid";
-        db.query(thisistheline, (err, results) => {
-            try {
-                var string = JSON.stringify(results);
-                var json = JSON.parse(string);
-                var pairinglist = json;
-                console.log(pairinglist)
-                return res.status(200).json({ pairinglist: pairinglist })
-            } catch (err) {
-                return res.status(401).json("error happened when excuting SettingController.nodraft.getallinfo.retrievepairinglist");
-            }
-        })
-    },
-
-}
+    }
