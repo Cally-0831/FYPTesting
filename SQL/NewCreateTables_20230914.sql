@@ -16,7 +16,7 @@ sid			varchar(20) not null,
 password	varchar(20) not null,
 states		varchar(20) default "ACTIVE",
 errortime	int default 0,
-ttbsubmission  varchar(20) default null,
+ttbsubmission  varchar(20) default "N",
 ttbcomments varchar(200) default "",
 ttbdeadline timestamp default null,
 requestdeadline timestamp default null,
@@ -196,7 +196,7 @@ TID varchar(10) not null,
 availabledate DATE,
 availablestartTime timestamp,
 availableendTime timestamp,
-
+primary key(tid,availabledate,availablestarttime)
 );
 
 
@@ -423,6 +423,19 @@ CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting
   delete from allnotice where nid = concat("nid",new.stid);
   end if;
   
+   END;
+  |
+delimiter ;
+
+delimiter |
+CREATE TRIGGER updatestudentdeadline After Update ON allsupersetting
+  FOR EACH ROW
+  BEGIN
+  
+	if (new.typeofsetting = "1") then
+	update student set ttbdeadline = timestamp(concat(Date(new.deadlinedate)," ", Time(new.deadlinetime)));
+ 
+	end if;
    END;
   |
 delimiter ;

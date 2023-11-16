@@ -44,3 +44,4 @@ Drop trigger if exists clearnoticeforthesetting;
 Drop trigger if exists cancellessonwhendeletelesson;
 Drop trigger if exists checkschboxtocorrdraft;
 Drop trigger if exists delsupervisor;
+Drop trigger if exists updatestudentdeadline ;

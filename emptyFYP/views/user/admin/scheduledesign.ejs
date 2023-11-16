@@ -109,6 +109,7 @@
                 method: "GET"
             });
 
+            /**
             var pairinglist = (await response.json()).pairinglist;
             console.log(pairinglist)
             let pairinglistdistictsup = (pairinglist) => {
@@ -134,7 +135,7 @@
                     tid: pairinglist[a].tid,
                     sid: pairinglist[a].sid,
                     oid: pairinglist[a].oid,
-                    suppriority : pairinglist[a].priority,
+                    suppriority : pairinglist[a].suppriority,
                     obspriority : pairinglist[a].obspriority,
                     startdaydate: startday,
                     enddaydate: endday,
@@ -144,7 +145,10 @@
                     boxlist: boxlist,
                 })
 
-
+                var response2 = await fetch("/createschedule/", {
+                    method: "POST",
+                    body: requestbody,
+                });
 
                 var response2 = await fetch("/createschedule/createdraft", {
                     method: "POST",
@@ -165,12 +169,12 @@
                         })
                         console.log(requestbody.toString());
 
-                        /**
+                       
                         var response3 = await fetch("/createschedule/createdraft/savebox", {
                             method: "POST",
                             body: requestbody,
                         });
-                        **/
+                       
 
                         var response3 = await fetch("/createschedule/createdraft/checkpref", {
                             method: "POST",
@@ -188,8 +192,8 @@
                 }
 
 
-            }
+            }**/
         }
-
+        
     }
 </script>
