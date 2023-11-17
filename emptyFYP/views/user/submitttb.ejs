@@ -81,10 +81,9 @@
         } else {
             var requestbody = new FormData(formElem);
             requestbody.append(document.getElementById("enrollnotclassbox").value, true)
-            //console.log(requestbody)
+            
 
         }
-
 
 
         if (role == "stu") {
@@ -96,17 +95,29 @@
 
             if (response.ok) {
 
+                if(document.getElementById("enrollnotclassbox").value != "noclassenrolled"){
+                    
+                }
                 var response2 = await fetch("/timetable/submitttb/checkduplication", {
                     method: "POST",
                     body: requestbody
                 });
-
+                
                 if (response2.ok) {
-
-                    var response3 = await fetch("/timetable/submitttb/", {
+                    var response3;
+                    if(document.getElementById("enrollnotclassbox").value != "noclassenrolled"){
+                        response3 = await fetch("/timetable/submitttb/", {
                         method: "POST",
                         body: requestbody
                     });
+                }else{
+                    response3 = await fetch("/timetable/submitempty/", {
+                        method: "POST",
+                        body: requestbody
+                    });
+                }
+
+                   
 
                     if (response3.ok) {
                         location.assign("/timetable");
@@ -153,6 +164,7 @@
                 location.reload();
             }
         }
+   
     }
 
     function _(element) {

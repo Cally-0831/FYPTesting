@@ -7,7 +7,8 @@
     }%>
     
     <%var today=new Date()%>
-    <% if(allpersonallist.length ==0){%>
+    
+    <% if(allpersonallist.length == 0){%>
         <div class="Pagetitle">
             <%=req.session.username%>'s TimeTable
         </div>
@@ -277,7 +278,7 @@
                         </div>
                     </div>
 
-                    <%if(allpersonallist.length>0 ){%>
+                    <%if( allpersonallist.length>0 ){%>
                         <!---if have input picture , display in a better view use-->
                         <%if(allpersonallist[0].picdata!= null){%>
                             <br><br>

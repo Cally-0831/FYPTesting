@@ -195,7 +195,7 @@ module.exports = {
     },
     submitempty: async function (req, res) {
         var db = await sails.helpers.database();
-        let thisistheline = "insert ignore into alltakecourse values(\"EMPTY\",\"" + req.session.userid + "\")";
+        let thisistheline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\")";
 
         db.query(thisistheline, function (err, result) {
             if (err) {
@@ -223,6 +223,8 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 personallist = json;
+                var zerocourse = false;
+                console.log(personallist)
 
 
                 checksetting = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"1\" and Announcetime is not null";
@@ -257,12 +259,14 @@ module.exports = {
                             if (personallist[0].CID == null) {
                                 date = deadline;
                                 personallist = [];
+                                zerocourse=true;
                             }
                         }
 
                         return res.view('user/timetable', {
                             date: date,
                             allpersonallist: personallist,
+                            checkzerocourse : zerocourse
 
                         });
                     } catch (err) {

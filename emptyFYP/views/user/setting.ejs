@@ -86,6 +86,8 @@
                         <%var updatedate=new Date(thissupersetting[hv1].LastUpdate)%>
                         <%var updatetothisdate = (new Date(thissupersetting[hv1].deadlinedate)).toLocaleDateString("en-GB")%>
                         <%var updatetothistime = thissupersetting[hv1].deadlinetime%>
+                        <%var checkdate = new Date(new Date(thissupersetting[hv1].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
+                      
                         <div class="row" style="font-size: 10px;">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
@@ -107,7 +109,7 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 
-                                                <% if(hv1 >=0){%>
+                                                <% if(hv1 >=0 && checkdate > new Date()){%>
                                                     <% if(hv1anoun >=0){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null,'1')">Create
@@ -121,10 +123,16 @@
 
                                                             <button class="button buttonlogout"
                                                                 onclick="submitdeadlineforttb('update')">Update</button>
-                                                            <%}else{%>
+                                                             <%}else if(hv1 >=0 && checkdate < new Date()){%>
+                                                               
                                                                 <button class="button buttonlogout"
+                                                                onclick="submitdeadlineforttb('update')">Submit</button>
+                                                                    
+                                                               
+                                                                <%}else{%>
+                                                                    <button class="button buttonlogout"
                                                                     onclick="submitdeadlineforttb('insert')">Submit</button>
-                                                                <%}%>
+                                                                    <%}%>
                                             </div>
                                         </div>
 
@@ -158,7 +166,9 @@
                         <%var updatedate=new Date(thissupersetting[hv2].LastUpdate)%>
                         <%var updatetothisdate = (new Date(thissupersetting[hv2].deadlinedate)).toLocaleDateString("en-GB")%>
                         <%var updatetothistime = thissupersetting[hv2].deadlinetime%>
-                        <div class="row" style="font-size: 10px;">
+                      <%var checkdate = new Date(new Date(thissupersetting[hv2].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
+                        
+                      <div class="row" style="font-size: 10px;">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
                             Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -174,8 +184,9 @@
                                         <br>
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                
-                                                <% if(hv2 >=0){%>
+
+                                                  <% if(hv2 >=0 && checkdate > new Date()){%>
+                                                   
                                                     <% if(hv2anoun >=0){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null,'1')">Create
@@ -187,12 +198,17 @@
                                                         <%}%>    
 
 
-                                                            <button class="button buttonlogout"
-                                                                onclick="submitdeadlineforrequest('update')">Update</button>
-                                                            <%}else{%>
+                                                            <button class="button buttonlogout" onclick="submitdeadlineforrequest('update')">Update</button>
+                                                            <%}else if(hv2 >=0 && checkdate < new Date()){%>
+                                                               
                                                                 <button class="button buttonlogout"
+                                                                onclick="submitdeadlineforrequest('update')">Submit</button>
+                                                                    
+                                                               
+                                                                <%}else{%>
+                                                                    <button class="button buttonlogout"
                                                                     onclick="submitdeadlineforrequest('insert')">Submit</button>
-                                                                <%}%>
+                                                                    <%}%>
                                             </div>
                                         </div>
 
@@ -233,6 +249,8 @@
                         <%var updatetothisstarttime = thissupersetting[hv3].starttime%>
                         <%var updatetothisenddate = (new Date(thissupersetting[hv3].enddate)).toLocaleDateString("en-GB")%>
                         <%var updatetothisendtime = thissupersetting[hv3].endtime%>
+                        <%var checkdate = new Date(new Date(thissupersetting[hv3].startdate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothisstarttime)%>
+                     
                         <div class="row" style="font-size: 10px;">
                             Updated Info&ensp;&ensp;&ensp;: From&ensp;&ensp;<%=updatetothisstartdate%>, <%=updatetothisstarttime%>&ensp;&ensp;To&ensp;&ensp;<%=updatetothisenddate%>, <%=updatetothisendtime%> 
                             <br>
@@ -277,8 +295,8 @@
                                         <div class="row">
                                             <div class="buttons is-right">
                                                 
-                                                <% if(hv3 >=0){%>
-                                                    <% if(hv3anoun >=0){%>
+                                                <% if(hv3 >=0 && checkdate > new Date()){%>
+                                                    <% if(hv3anoun >=0 ){%>
                                                         
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>','1')">Create
@@ -292,9 +310,15 @@
 
                                                         <button class="button buttonlogout"
                                                         onclick="submitpresentationperiod('update')">Update</button>
+                                                        <%}else if(hv3 >=0 && checkdate < new Date()){%>
+                                                               
+                                                            <button class="button buttonlogout"
+                                                            onclick="submitpresentationperiod('update')">Submit</button>
+                                                                
+                                                           
                                                             <%}else{%>
                                                                 <button class="button buttonlogout"
-                                                                    onclick="submitpresentationperiod('insert')">Submit</button>
+                                                                onclick="submitpresentationperiod('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
                                         </div>
@@ -326,6 +350,8 @@
                         <%var updatedate=new Date(thissupersetting[hv4].LastUpdate)%>
                         <%var updatetothisdate = (new Date(thissupersetting[hv4].deadlinedate)).toLocaleDateString("en-GB")%>
                         <%var updatetothistime = thissupersetting[hv4].deadlinetime%>
+                        <%var checkdate = new Date(new Date(thissupersetting[hv4].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
+                     
                         <div class="row" style="font-size: 10px;">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
@@ -343,7 +369,7 @@
                                         <br>
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv4 >=0){%>
+                                                <% if(hv4 >=0 && checkdate > new Date()){%>
                                                     <% if(hv4anoun >=0){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null,'1')">Create
@@ -357,9 +383,15 @@
 
                                                         <button class="button buttonlogout"
                                                         onclick="submitdeadlineforreleaseschdule('update')">Update</button>
+                                                        <%}else if(hv4 >=0 && checkdate < new Date()){%>
+                                                               
+                                                            <button class="button buttonlogout"
+                                                            onclick="submitdeadlineforreleaseschdule('update')">Submit</button>
+                                                                
+                                                           
                                                             <%}else{%>
                                                                 <button class="button buttonlogout"
-                                                                    onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
+                                                                onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
                                         </div>
@@ -393,6 +425,8 @@
                                <%var updatedate=new Date(thissupersetting[hv5].LastUpdate)%>
                                <%var updatetothisdate = (new Date(thissupersetting[hv5].deadlinedate)).toLocaleDateString("en-GB")%>
                                <%var updatetothistime = thissupersetting[hv5].deadlinetime%>
+                               <%var checkdate = new Date(new Date(thissupersetting[hv5].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
+                     
                                <div class="row" style="font-size: 10px;">
                                    Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                                    <br>
@@ -411,7 +445,7 @@
                                
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv5 >=0){%>
+                                                <% if(hv5 >=0 && checkdate > new Date()){%>
                                                     <% if(hv5anoun >=0){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>','<%=thissupersetting[hv5anoun].STID%>',null,null,'3')">Create
@@ -425,9 +459,15 @@
 
                                                         <button class="button buttonlogout"
                                                         onclick="submitdeadlineforuploadstulist('update')">Update</button>
+                                                        <%}else if(hv5 >=0 && checkdate < new Date()){%>
+                                                               
+                                                            <button class="button buttonlogout"
+                                                            onclick="submitdeadlineforuploadstulist('update')">Submit</button>
+                                                                
+                                                           
                                                             <%}else{%>
                                                                 <button class="button buttonlogout"
-                                                                    onclick="submitdeadlineforuploadstulist('insert')">Submit</button>
+                                                                onclick="submitdeadlineforuploadstulist('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
                                         </div>
@@ -455,6 +495,8 @@
                                <%var updatedate=new Date(thissupersetting[hv6].LastUpdate)%>
                                <%var updatetothisdate = (new Date(thissupersetting[hv6].deadlinedate)).toLocaleDateString("en-GB")%>
                                <%var updatetothistime = thissupersetting[hv6].deadlinetime%>
+                               <%var checkdate = new Date(new Date(thissupersetting[hv6].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
+                     
                                <div class="row" style="font-size: 10px;">
                                    Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                                    <br>
@@ -473,7 +515,7 @@
                                
                                         <div class="row">
                                             <div class="buttons is-right">
-                                                <% if(hv6 >=0){%>
+                                                <% if(hv6 >=0 && checkdate > new Date()){%>
                                                     <% if(hv6anoun >=0){%>
                                                         <button class="button buttonlogout"
                                                             onclick="CreateNotice(5,'<%=updatetothisdate%>','<%=thissupersetting[hv6].deadlinetime%>','<%=thissupersetting[hv6].STID%>','<%=thissupersetting[hv6anoun].STID%>',null,null,'3')">Create
@@ -487,9 +529,15 @@
 
                                                         <button class="button buttonlogout"
                                                         onclick="submitdeadlineforuploadsuperpreference('update')">Update</button>
+                                                        <%}else if(hv6 >=0 && checkdate < new Date()){%>
+                                                               
+                                                            <button class="button buttonlogout"
+                                                            onclick="submitdeadlineforuploadsuperpreference('update')">Submit</button>
+                                                                
+                                                           
                                                             <%}else{%>
                                                                 <button class="button buttonlogout"
-                                                                    onclick="submitdeadlineforuploadsuperpreference('insert')">Submit</button>
+                                                                onclick="submitdeadlineforuploadsuperpreference('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
                                         </div>

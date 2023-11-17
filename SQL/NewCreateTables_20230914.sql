@@ -263,28 +263,18 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice
   declare stringstring  varchar(10);
   declare timetime timestamp;
   declare idid varchar(15);
-  declare thesetting integer;
   declare deaddate date;
   declare deadtime time;
-  declare findnewsetting integer;
+
   
   set idid = SUBSTRING_INDEX(new.nid, "nid", -1);
   
-	select typeofsetting,deadlinedate,deadlinetime into thesetting,deaddate,deadtime from allsupersetting where stid = idid;
-   set timetime = STR_TO_DATE(CONCAT(deaddate, ' ', deadtime), '%Y-%m-%d %H:%i:%s');
-  update allsupersetting set Announcetime = now() where stid = idid;
   
+	select deadlinedate,deadlinetime into deaddate,deadtime from allsupersetting where stid = idid;
+	set timetime = date_format(Timestamp(concat(date_format(deaddate, "%Y-%c-%d")," ",date_format(deadtime,"%T"))),"%Y-%c-%d %T" );
+	update allsupersetting set Announcetime = now() where stid = idid;
   
-  if(thesetting =1)then
-  update student set student.ttbdeadline = timetime where student.sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
-  end if;
-  
-  if(thesetting =2)then
-  update student set student.requestdeadline = timetime where student.sid in (select distinct(supervisorpairstudent.sid) from allsupersetting join supervisorpairstudent on allsupersetting.Creator = supervisorpairstudent.TID);
-  end if;
-  
-  
-  
+
  select allusersname into stringstring from allusers 
  where new.creator = pid;
  set new.creatorname = stringstring;
@@ -382,6 +372,26 @@ CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse
   |
 delimiter ;
 
+delimiter |
+CREATE TRIGGER delrolecourse After DELETE ON alltakecourse
+  FOR EACH ROW
+  BEGIN
+  declare countcount integer;
+  declare stringstring  varchar(20);        
+  declare checkrole varchar(10);
+  set countcount =0;
+  Select role into checkrole from allusers where pid = old.pid;
+  
+  if(checkrole = "stu") then
+  DELETE from allstudenttakecourse where pid = old.pid and cid = old.cid;
+  elseif(checkrole = "sup") then
+	DELETE from allsupertakecourse where pid = old.pid and cid = old.cid;
+  end if;
+  
+  
+   END;
+  |
+delimiter ;
 
 
 
@@ -410,6 +420,7 @@ CREATE TRIGGER addintosetting before insert ON allsupersetting
   |
 delimiter ;
 
+
 delimiter |
 CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting
   FOR EACH ROW
@@ -427,14 +438,16 @@ CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting
   |
 delimiter ;
 
+
 delimiter |
 CREATE TRIGGER updatestudentdeadline After Update ON allsupersetting
   FOR EACH ROW
   BEGIN
   
 	if (new.typeofsetting = "1") then
-	update student set ttbdeadline = timestamp(concat(Date(new.deadlinedate)," ", Time(new.deadlinetime)));
- 
+	update student set ttbdeadline = timestamp(concat(new.deadlinedate," ",new.deadlinetime));
+    elseif (new.typeofsetting = "2") then
+	update student set requestdeadline = timestamp(concat(new.deadlinedate," ",new.deadlinetime));
 	end if;
    END;
   |
