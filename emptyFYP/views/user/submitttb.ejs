@@ -95,9 +95,7 @@
 
             if (response.ok) {
 
-                if(document.getElementById("enrollnotclassbox").value != "noclassenrolled"){
-                    
-                }
+              
                 var response2 = await fetch("/timetable/submitttb/checkduplication", {
                     method: "POST",
                     body: requestbody
@@ -105,7 +103,7 @@
                 
                 if (response2.ok) {
                     var response3;
-                    if(document.getElementById("enrollnotclassbox").value != "noclassenrolled"){
+                    if(document.getElementById("enrollnotclassbox").checked != true){
                         response3 = await fetch("/timetable/submitttb/", {
                         method: "POST",
                         body: requestbody

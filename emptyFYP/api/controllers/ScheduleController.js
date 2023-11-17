@@ -774,7 +774,64 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
         })
-// gen all student update those who didnot handin ttb
+
+        
+        //need to del all unpending records
+        var gethvrecordbutnosubmit = "select * from allstudenttakecourse left join student on student.sid = allstudenttakecourse.pid where ttbsubmission = \"N\""
+        var hvrecordbutnosubmitstudent = await new Promise((resolve) => {
+            pool.query(gethvrecordbutnosubmit, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
+        })
+        for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
+            var deleteline = "delete from alltakecourse where pid = \""+hvrecordbutnosubmitstudent[a].PID+"\" and confirmation = \"0\""
+            console.log(deleteline)
+            pool.query(deleteline, (err, result) => {
+              try{}catch(err){
+                    if (err) {
+                  errstring = "";
+                  errstring += "error happened for:" + deleteline + "\n"
+                  statuscode = 401;
+              }
+              }
+          
+          })
+          var insertemptyline =  "insert ignore into alltakecourse values(\"EMPTY_\",\"" + hvrecordbutnosubmitstudent[a].PID + "\")"
+            console.log(insertemptyline)
+          pool.query(insertemptyline, (err, result) => {
+            try{}catch(err){
+                  if (err) {
+                errstring = "";
+                errstring += "error happened for:" + deleteline + "\n"
+                statuscode = 401;
+            }
+            }
+        
+        })
+        var updateline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"\"  where allstudenttakecourse.pid=\""+ hvrecordbutnosubmitstudent[a].PID +"\""
+                console.log(updateline)
+                pool.query(updateline, (err, result) => {
+                  try{}catch(err){
+                        if (err) {
+                      errstring = "";
+                      errstring += "error happened for:" + update + "\n"
+                      statuscode = 401;
+                  }
+                  }
+              
+              })
+
+        }
+
+
+
+
+        // gen all student update those who didnot handin ttb
         var getallstudent = "select * from student where ttbsubmission = \"N\""
         var studentlist = await new Promise((resolve) => {
             pool.query(getallstudent, (err, res) => {
@@ -786,11 +843,39 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
         })
-
-        for(var a = 0 ;a < studentlist.length;a++){
-            
-        }
-
+        console.log(studentlist)
+        /** 
+                for(var a = 0 ;a < studentlist.length;a++){
+                  //try enroll all of them to EMPTY
+                  var insertline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\")"
+                  console.log(insertline)
+                  pool.query(insertline, (err, result) => {
+                    try{}catch(err){
+                          if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + insertline + "\n"
+                        statuscode = 401;
+                    }
+                    }
+                
+                })
+                var updateline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"\"  where allstudenttakecourse.pid=\""+studentlist[a].sid+"\""
+                console.log(updateline)
+                pool.query(updateline, (err, result) => {
+                  try{}catch(err){
+                        if (err) {
+                      errstring = "";
+                      errstring += "error happened for:" + update + "\n"
+                      statuscode = 401;
+                  }
+                  }
+              
+              })
+        
+                  //insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\")
+                  //Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = ""  where allstudenttakecourse.pid="sid44444"
+                }
+                */
         // console.log(supervisorlist.length)
         //console.log(supervisorlist)
         for (var a = 0; a < supervisorlist.length; a++) {
@@ -1156,15 +1241,18 @@ module.exports = {
             })
             console.log(presentlistforthissuper)
 
-            for (var b = 0; b < presentlistforthissuper.length; a++) {
+            for (var b = 0; b < presentlistforthissuper.length; b++) {
                 var colleage;
-                if (presentlistforthissuper[b].tid == supervisorlist[a].tid) {
+                console.log(presentlistforthissuper[b])
+                console.log(presentlistforthissuper[b].TID + "    " + supervisorlist[a].tid)
+
+                if (presentlistforthissuper[b].TID == supervisorlist[a].TID) {
                     colleage = presentlistforthissuper[b].OID;
                 } else {
                     colleage = presentlistforthissuper[b].TID;
                 }
-                
-                
+
+
 
 
             }

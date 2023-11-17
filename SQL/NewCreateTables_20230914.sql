@@ -366,7 +366,10 @@ CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse
   declare countcount integer;
   declare stringstring  varchar(20);
   set countcount =0;
-  DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+  select count(*) into countcount from alltakecourse where pid = old.pid and cid = old.cid;
+  if(countcount >0) then
+	DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+    end if;
   
    END;
   |
@@ -383,9 +386,15 @@ CREATE TRIGGER delrolecourse After DELETE ON alltakecourse
   Select role into checkrole from allusers where pid = old.pid;
   
   if(checkrole = "stu") then
+  Select count(*) into countcount from allstudenttakecourse where pid = old.pid and cid = old.cid;
+  if(countcount >0) then
   DELETE from allstudenttakecourse where pid = old.pid and cid = old.cid;
+  end if;
   elseif(checkrole = "sup") then
+   Select count(*) into countcount from allsupertakecourse where pid = old.pid and cid = old.cid;
+   if(countcount >0) then
 	DELETE from allsupertakecourse where pid = old.pid and cid = old.cid;
+    end if;
   end if;
   
   
@@ -401,8 +410,10 @@ CREATE TRIGGER delallstudenttakecourse After DELETE ON allstudenttakecourse
   BEGIN
   declare countcount integer;
   declare stringstring  varchar(20);
-  set countcount =0;
-  DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+ select count(*) into countcount from alltakecourse where pid = old.pid and cid = old.cid;
+  if(countcount >0) then
+	DELETE from alltakecourse where pid = old.pid and cid = old.cid;
+    end if;
   
    END;
   |
