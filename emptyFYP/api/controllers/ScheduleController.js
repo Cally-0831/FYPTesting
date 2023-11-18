@@ -730,11 +730,12 @@ module.exports = {
     },
 
     genavailable: async function (req, res) {
+        var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var errmsg = "";
 
         // get presentperiod
-        var getsetting3 = "select * from allsupersetting where typeofsetting = 3"
+        var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
         var setting3 = await new Promise((resolve) => {
             pool.query(getsetting3, (err, res) => {
                 var string = JSON.stringify(res);
@@ -775,9 +776,9 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
         })
 
-        
+
         //need to del all unpending records
-        var gethvrecordbutnosubmit = "select * from allstudenttakecourse left join student on student.sid = allstudenttakecourse.pid where ttbsubmission = \"N\""
+        var gethvrecordbutnosubmit = "select distinct(student.sid) from allstudenttakecourse left join student on student.sid = allstudenttakecourse.pid where ttbsubmission = \"N\" or ttbsubmission=\"Rejected\";"
         var hvrecordbutnosubmitstudent = await new Promise((resolve) => {
             pool.query(gethvrecordbutnosubmit, (err, res) => {
                 var string = JSON.stringify(res);
@@ -786,53 +787,66 @@ module.exports = {
                 resolve(ans)
             })
         }).catch((err) => {
-            errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
+            errmsg = "error happened in ScheduleController.genavailble.gethvrecordbutnosubmit"
         })
-        for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
-            var deleteline = "delete from alltakecourse where pid = \""+hvrecordbutnosubmitstudent[a].PID+"\" and confirmation = \"0\""
-            console.log(deleteline)
-            pool.query(deleteline, (err, result) => {
-              try{}catch(err){
-                    if (err) {
-                  errstring = "";
-                  errstring += "error happened for:" + deleteline + "\n"
-                  statuscode = 401;
-              }
-              }
-          
-          })
-          var insertemptyline =  "insert ignore into alltakecourse values(\"EMPTY_\",\"" + hvrecordbutnosubmitstudent[a].PID + "\")"
-            console.log(insertemptyline)
-          pool.query(insertemptyline, (err, result) => {
-            try{}catch(err){
-                  if (err) {
-                errstring = "";
-                errstring += "error happened for:" + deleteline + "\n"
-                statuscode = 401;
-            }
-            }
-        
-        })
-        var updateline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"\"  where allstudenttakecourse.pid=\""+ hvrecordbutnosubmitstudent[a].PID +"\""
-                console.log(updateline)
-                pool.query(updateline, (err, result) => {
-                  try{}catch(err){
-                        if (err) {
-                      errstring = "";
-                      errstring += "error happened for:" + update + "\n"
-                      statuscode = 401;
-                  }
-                  }
-              
-              })
+        console.log("hellooooooo")
+        console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
 
+        for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
+            var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
+            console.log(deleteline)
+            db.query(deleteline, (err, result) => {
+                try { 
+                    console.log("delete complete")
+                } catch (err) {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + deleteline + "\n"
+                        statuscode = 401;
+                    }
+                }
+
+            })
+            
+            var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + hvrecordbutnosubmitstudent[a].sid + "\");"
+            console.log(insertemptyline)
+                db.query(insertemptyline, (err, result) => {
+                    try { 
+                        console.log("insert complete")
+                    } catch (err) {
+                        if (err) {
+                            errstring = "";
+                            errstring += "error happened for:" + deleteline + "\n"
+                            statuscode = 401;
+                        }
+                    }
+
+                })
+              
+           updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + hvrecordbutnosubmitstudent[a].sid + "\";"
+            console.log(updatetakecourseline)
+            db.query(updatetakecourseline, (err, result) => {
+                try { 
+                    console.log("update complete")
+                } catch (err) {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + updatetakecourseline + "\n"
+                        statuscode = 401;
+                    }
+                }
+
+            })
+
+            
+         
         }
 
 
 
 
-        // gen all student update those who didnot handin ttb
-        var getallstudent = "select * from student where ttbsubmission = \"N\""
+        // gen all student update those who didnot even handin ttb
+        var getallstudent = "select distinct(sid) from student where ttbsubmission = \"N\";"
         var studentlist = await new Promise((resolve) => {
             pool.query(getallstudent, (err, res) => {
                 var string = JSON.stringify(res);
@@ -844,38 +858,40 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
         })
         console.log(studentlist)
-        /** 
+     
                 for(var a = 0 ;a < studentlist.length;a++){
                   //try enroll all of them to EMPTY
-                  var insertline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\")"
-                  console.log(insertline)
-                  pool.query(insertline, (err, result) => {
-                    try{}catch(err){
-                          if (err) {
+                  var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\");"
+            console.log(insertemptyline)
+                db.query(insertemptyline, (err, result) => {
+                    try { 
+                        console.log("insert complete")
+                    } catch (err) {
+                        if (err) {
+                            errstring = "";
+                            errstring += "error happened for:" + deleteline + "\n"
+                            statuscode = 401;
+                        }
+                    }
+
+                })
+              
+           updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + studentlist[a].sid + "\";"
+            console.log(updatetakecourseline)
+            db.query(updatetakecourseline, (err, result) => {
+                try { 
+                    console.log("update complete")
+                } catch (err) {
+                    if (err) {
                         errstring = "";
-                        errstring += "error happened for:" + insertline + "\n"
+                        errstring += "error happened for:" + updatetakecourseline + "\n"
                         statuscode = 401;
                     }
-                    }
-                
-                })
-                var updateline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"\"  where allstudenttakecourse.pid=\""+studentlist[a].sid+"\""
-                console.log(updateline)
-                pool.query(updateline, (err, result) => {
-                  try{}catch(err){
-                        if (err) {
-                      errstring = "";
-                      errstring += "error happened for:" + update + "\n"
-                      statuscode = 401;
-                  }
-                  }
-              
-              })
-        
-                  //insert ignore into alltakecourse values(\"EMPTY_\",\"" + req.session.userid + "\")
-                  //Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = ""  where allstudenttakecourse.pid="sid44444"
                 }
-                */
+
+            })
+}
+                
         // console.log(supervisorlist.length)
         //console.log(supervisorlist)
         for (var a = 0; a < supervisorlist.length; a++) {
@@ -890,14 +906,14 @@ module.exports = {
 
                 //console.log("enter")
                 if (req.body.typeofpresent == "midterm") {
-                    console.log("midterm")
+                    //console.log("midterm")
                 } else if (req.body.typeofpresent == "final") {
-                    console.log("final")
+                    //console.log("final")
                     var boolcheckttb = false;
                     var boolcheckreq = false;
 
                     var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime < Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime > time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-                    console.log(getchecksupervisorttb);
+                    //console.log(getchecksupervisorttb);
                     supervisorttblist = await new Promise((resolve) => {
                         pool.query(getchecksupervisorttb, (err, res) => {
                             var string = JSON.stringify(res);
@@ -932,7 +948,7 @@ module.exports = {
                     }
                     if (boolcheckreq && boolcheckttb) {
                         var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-                        console.log(insertavability)
+                        // console.log(insertavability)
                         supervisorrequest = await new Promise((resolve) => {
                             pool.query(insertavability, (err, res) => {
                                 resolve(res);
@@ -944,7 +960,7 @@ module.exports = {
 
 
 
-                    console.log(errmsg + "    !@#$!@$#")
+
                     if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                         currentgeneratedate = new Date(currentgeneratedate);
@@ -955,7 +971,7 @@ module.exports = {
                         currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
                     }
 
-                    console.log(currentgeneratedate.toLocaleDateString("en-GB") + "   " + currentgeneratedate.toLocaleTimeString("en-GB"))
+                    //  console.log(currentgeneratedate.toLocaleDateString("en-GB") + "   " + currentgeneratedate.toLocaleTimeString("en-GB"))
 
                 }
 

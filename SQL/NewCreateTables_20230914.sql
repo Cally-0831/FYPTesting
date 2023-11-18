@@ -527,9 +527,6 @@ CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse
   set newcomments = new.ttbcomments;
    select distinct(ttbcomments) into oldcomments from allstudenttakecourse where pid = new.pid Limit 1;
    
-    
-  
-
 	IF new.confirmation = "0" then
 		update student set ttbsubmission ="N"  where sid = new.pid;
 	elseif new.confirmation = "1" then
@@ -538,6 +535,8 @@ CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse
 		update student set ttbsubmission ="Approved" ,ttbcomments = oldcomments  where sid = new.pid;
 	elseif new.confirmation = "3" then
 		update student set ttbsubmission ="Rejected",ttbcomments =  oldcomments  where sid = new.pid;
+        elseif new.confirmation = "4" then
+		update student set ttbsubmission ="Enforced",ttbcomments =  oldcomments  where sid = new.pid;
 	else
 		update student set ttbsubmission = null where sid = new.pid;
 	end if;
@@ -577,6 +576,7 @@ CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allst
   |
 delimiter ;
 
+/**
 delimiter |
 CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
   FOR EACH ROW
@@ -599,7 +599,7 @@ CREATE TRIGGER concatcomments_student before update ON allstudenttakecourse
    END;
   |
 delimiter ;
-
+**/
 
 delimiter |
 CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass

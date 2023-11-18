@@ -36,7 +36,7 @@
             
             <% allpersonallist.forEach(function(list){ var stringstring=list.CID.split("_"); %>
                 <tr>
-                    <%if(stringstring.length < 3 && stringstring[0] != "EMPTY"){%>
+                    <%if(stringstring.length < 3 ){%>
                         <td style="font-size:20px;text-align: center;vertical-align:center;">
                         <%=stringstring[0]%>
                     </td>
@@ -59,10 +59,11 @@
                         <tr>
                             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                                 <% var reviewtime=new Date(allpersonallist[0].review)%>
-                                    <%=reviewtime.toLocaleDateString()%> ,
-                                        <%=reviewtime.toLocaleTimeString('en-US')%>
+                                    <%=reviewtime.toLocaleDateString()%> <br>
+                                        <%=reviewtime.toLocaleTimeString('en-GB')%>
                                      
                             </td>
+                            
                             <td style="font-size:20px;text-align: center;vertical-align:middle;">
                                 <%= stringstring[i]%>
                              </td>
@@ -85,13 +86,19 @@
 
 <br><Br><br>
     <div class = "columns is-mobile">
-        <div class="column is-half">
-<div class ="picdisplay">
-    <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
-       <img src ="data:image/jpeg;base64,<%=base64obj%>">
-</div>
+        <%if(allpersonallist[0].picdata != null){%>
+            <div class="column is-half">
+                <div class ="picdisplay">
+                    <%var base64obj = Buffer.from(allpersonallist[0].picdata)%>
+                    <img src ="data:image/jpeg;base64,<%=base64obj%>">
+                </div>
         </div>
+            
+        
         <div class="column is-half">
+            <%}else{%>
+                <div class="column">
+                <%}%>
             <table class="table is-bordered is-striped is-hoverable is-halfwidth center">
     <th class="th" ></th>
     <th class="th" style="font-size:20px;text-align: center;vertical-align:center;background-color: blanchedalmond;">MON</th>

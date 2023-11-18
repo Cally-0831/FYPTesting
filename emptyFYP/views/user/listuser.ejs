@@ -93,12 +93,14 @@
                                 <div style="font-weight: bold;color: green;">Approved</div>
                                 <%}else if (allstdlist.ttbsubmission=="Rejected" ){%>
                                     <div style="font-weight: bold;color: orange;">Rejected</div>
-                                    <%}else{%>
-                                        <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
-                                        <%}%>
+                                        <%}else if (allstdlist.ttbsubmission=="Enforced" ){%>
+                                            <div style="font-weight: bold;color: brown;">Enforced</div>
+                                            <%}else{%>
+                                                <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
+                                                <%}%>
                 </td>
                 <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
-                    <% if (allstdlist.ttbsubmission !=null ){%>
+                    <% if (allstdlist.ttbsubmission != "N" ){%>
                         <div class="buttons is-centered">
                             <a href="/readttb/<%= allstdlist.sid%>">
                                 <button class="button buttonlogout">View Submission</button>

@@ -193,7 +193,47 @@
                                                                                                                         stringstring=allpersonallist[0].ttbcomments.split("_");%>
                                                                                                                         <%=stringstring.slice(-1)%>
                                                                                                                 </div>
+                                                                                                              
+
+
+                                                                                                                <%}else
+                                                                                            if(allpersonallist[0].confirmation=="4"
+                                                                                            ){%>
+                                                                                            
+                                                                                                        <div class="box"
+                                                                                                            style="background-color: blanchedalmond; text-align: right;">
+                                                                                                            <div
+                                                                                                                style="font-size: 17px;">
+                                                                                                                Status
+                                                                                                                :<strong><u
+                                                                                                                        style="color: brown;">Enforced</u>
+                                                                                                                    after
+                                                                                                                    Supervisor
+                                                                                                                    Review
+                                                                                                                </strong>
+                                                                                                            </div>
+                                                                                                            <% var
+                                                                                                                reviewdate=new
+                                                                                                                Date(allpersonallist[0].review)%>
+                                                                                                                <div
+                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    Reviewed
+                                                                                                                    at
+                                                                                                                    <%=reviewdate.toLocaleDateString()%>
+                                                                                                                        ,
+                                                                                                                        <%=reviewdate.toLocaleTimeString('en-US')%>
+                                                                                                                </div>
+                                                                                                                <div
+                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    Comments:
+                                                                                                                    <%var
+                                                                                                                        stringstring=allpersonallist[0].ttbcomments.split("_");%>
+                                                                                                                        <%=stringstring.slice(-1)%>
+                                                                                                                </div>
                                                                                                                 <%}%>
+
+
+
                                                                                                         </div>
 
 
