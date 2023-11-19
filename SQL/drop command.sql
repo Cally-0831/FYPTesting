@@ -23,6 +23,7 @@ Drop table if exists allsupersetting;
 Drop table if exists allschedulebox;
 Drop table if exists allpreffromsup;
 Drop table if exists supervisoravailable;
+Drop table if exists studentavailable;
 
 
 DROP trigger IF exists testref;
@@ -39,7 +40,7 @@ Drop trigger if exists addsubinstudent;
 Drop trigger if exists addsubinsuper;
 Drop trigger if exists addsubinobs;
 Drop trigger if exists copypicdata_and_commentstonewentry_student;
-Drop trigger if exists concatcomments_student;
+#Drop trigger if exists concatcomments_student;
 Drop trigger if exists clearnoticeforthesetting;
 Drop trigger if exists cancellessonwhendeletelesson;
 Drop trigger if exists checkschboxtocorrdraft;

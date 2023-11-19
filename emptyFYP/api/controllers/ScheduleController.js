@@ -796,7 +796,7 @@ module.exports = {
             var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
             console.log(deleteline)
             db.query(deleteline, (err, result) => {
-                try { 
+                try {
                     console.log("delete complete")
                 } catch (err) {
                     if (err) {
@@ -807,26 +807,26 @@ module.exports = {
                 }
 
             })
-            
+
             var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + hvrecordbutnosubmitstudent[a].sid + "\");"
             console.log(insertemptyline)
-                db.query(insertemptyline, (err, result) => {
-                    try { 
-                        console.log("insert complete")
-                    } catch (err) {
-                        if (err) {
-                            errstring = "";
-                            errstring += "error happened for:" + deleteline + "\n"
-                            statuscode = 401;
-                        }
+            db.query(insertemptyline, (err, result) => {
+                try {
+                    console.log("insert complete")
+                } catch (err) {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + deleteline + "\n"
+                        statuscode = 401;
                     }
+                }
 
-                })
-              
-           updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + hvrecordbutnosubmitstudent[a].sid + "\";"
+            })
+
+            updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + hvrecordbutnosubmitstudent[a].sid + "\";"
             console.log(updatetakecourseline)
             db.query(updatetakecourseline, (err, result) => {
-                try { 
+                try {
                     console.log("update complete")
                 } catch (err) {
                     if (err) {
@@ -838,8 +838,8 @@ module.exports = {
 
             })
 
-            
-         
+
+
         }
 
 
@@ -858,28 +858,28 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
         })
         console.log(studentlist)
-     
-                for(var a = 0 ;a < studentlist.length;a++){
-                  //try enroll all of them to EMPTY
-                  var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\");"
-            console.log(insertemptyline)
-                db.query(insertemptyline, (err, result) => {
-                    try { 
-                        console.log("insert complete")
-                    } catch (err) {
-                        if (err) {
-                            errstring = "";
-                            errstring += "error happened for:" + deleteline + "\n"
-                            statuscode = 401;
-                        }
-                    }
 
-                })
-              
-           updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + studentlist[a].sid + "\";"
+        for (var a = 0; a < studentlist.length; a++) {
+            //try enroll all of them to EMPTY
+            var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\");"
+            console.log(insertemptyline)
+            db.query(insertemptyline, (err, result) => {
+                try {
+                    console.log("insert complete")
+                } catch (err) {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + deleteline + "\n"
+                        statuscode = 401;
+                    }
+                }
+
+            })
+
+            updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + studentlist[a].sid + "\";"
             console.log(updatetakecourseline)
             db.query(updatetakecourseline, (err, result) => {
-                try { 
+                try {
                     console.log("update complete")
                 } catch (err) {
                     if (err) {
@@ -890,8 +890,110 @@ module.exports = {
                 }
 
             })
-}
-                
+        }
+
+        // handle gen student availble 
+
+        // gen all students
+        var getallstudent = "select  supervisorpairstudent.tid , student.sid , observerpairstudent.oid from student join supervisorpairstudent on supervisorpairstudent.sid = student.sid  join observerpairstudent on observerpairstudent.sid = student.sid"
+        var studentlist = await new Promise((resolve) => {
+            pool.query(getallstudent, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.genavailble.getallstudent"
+        })
+
+        console.log(studentlist)
+
+        for(var a = 0 ; a < studentlist.length;a++){
+            console.log(studentlist[a]);
+            var currentgeneratedate = new Date(setting3.startday);
+            var currentgeneratedateend = new Date(setting3.startday);
+            while (currentgeneratedate < new Date(setting3.endday)) {
+                currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+                var studentttblist;
+                var studentrequest;
+                var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
+
+                //console.log("enter")
+                if (req.body.typeofpresent == "midterm") {
+                    //console.log("midterm")
+                } else if (req.body.typeofpresent == "final") {
+                    //console.log("final")
+                    var boolcheckttb = false;
+                    var boolcheckreq = false;
+
+                    var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime < Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime > time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
+                    console.log(getcheckstudentttb);
+                    studentttblist = await new Promise((resolve) => {
+                        pool.query(getcheckstudentttb, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
+                    })
+                    if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
+                        boolcheckttb = true;
+                    }
+
+                    var getcheckstudentrequest = "select * from allrequestfromstudent where status != \"Rejected\" and sid = \"" + studentlist[a].sid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
+                    studentrequest = await new Promise((resolve) => {
+                        pool.query(getcheckstudentrequest, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getcheckstudentrequest"
+                    })
+
+                    if (studentrequest.length == 0 || studentrequest == null || studentrequest == undefined) {
+                        //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
+                        //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
+                        boolcheckreq = true;
+                    }
+                    /** 
+
+                    if (boolcheckreq && boolcheckttb) {
+                        var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
+                        // console.log(insertavability)
+                        supervisorrequest = await new Promise((resolve) => {
+                            pool.query(insertavability, (err, res) => {
+                                resolve(res);
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.insertavability"
+                        })
+                    }
+
+
+**/
+
+                    if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
+                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
+                        currentgeneratedate = new Date(currentgeneratedate);
+                        currentgeneratedate.setHours(9);
+                        currentgeneratedate.setMinutes(30);
+                        currentgeneratedate.setSeconds(0);
+                    } else {
+                        currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
+                    }
+
+                    //  console.log(currentgeneratedate.toLocaleDateString("en-GB") + "   " + currentgeneratedate.toLocaleTimeString("en-GB"))
+
+                }
+
+            }
+        }
+
         // console.log(supervisorlist.length)
         //console.log(supervisorlist)
         for (var a = 0; a < supervisorlist.length; a++) {

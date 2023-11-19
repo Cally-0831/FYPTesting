@@ -199,6 +199,15 @@ availableendTime timestamp,
 primary key(tid,availabledate,availablestarttime)
 );
 
+create table supervisoravailable(
+
+SID varchar(10) not null,
+availabledate DATE,
+availablestartTime timestamp,
+availableendTime timestamp,
+primary key(sid,availabledate,availablestarttime)
+);
+
 
 
 delimiter |
