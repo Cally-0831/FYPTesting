@@ -67,7 +67,15 @@
                             <td style="text-align: center;vertical-align:middle; color: orange;  font-weight: bold;">
                                 <%= request.status%>
                             </td>
-                            <%}%>
+                            <%}else if(request.status=="Enforce Rejected" ){%>
+                                <td style="text-align: center;vertical-align:middle; color: brown;  font-weight: bold;">
+                                    <%= request.status%>
+                                </td>
+                                <%}else if(request.status=="Enforce Approved" ){%>
+                                    <td style="text-align: center;vertical-align:middle; color: yellowgreen;;  font-weight: bold;">
+                                        <%= request.status%>
+                                    </td>
+                                    <%}%>
                                 <td style="text-align: center;vertical-align:middle;">
                                     <div class="buttons is-centered">
                                         <div class="button buttonlogout" onclick="Viewqrequest('<%= request.ReqID %>')">

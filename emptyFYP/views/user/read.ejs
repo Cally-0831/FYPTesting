@@ -131,8 +131,11 @@
                             <%=requestlist[i].status%>
                         </td>
                         <td style="font-size:20px;text-align: center;vertical-align:middle;">
-                            <%var base64obj=Buffer.from(requestlist[i].picdata)%>
+                            <%if(requestlist[i].picdata != null){%>
+                                <%var base64obj=Buffer.from(requestlist[i].picdata)%>
                                 <a href="data:image/jpeg;base64,<%=base64obj%>" download>Link</a>
+                                <%}%>
+                            
                         </td>
                     </tr>
 

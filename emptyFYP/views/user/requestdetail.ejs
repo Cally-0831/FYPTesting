@@ -19,8 +19,7 @@
                     </div>
                     <br><br>
                     <div id="acceptpic">
-                        <%if(req.session.role=="stu" && (thisrequestdetails.picdata==null ||
-                            thisrequestdetails.status=="Pending" )){%>
+                        <%if(setting != null && new Date(setting.deadlinedate) > new Date() && session.role=="stu" && (thisrequestdetails.status =="Pending" || thisrequestdetails.status == "Required Proof")){%>
                             <form method="POST" action="/requestdetail/proof/<%=thisrequestdetails.ReqID %>"
                                 enctype="multipart/form-data">
                                 <div class="columns is-mobile">
@@ -105,7 +104,16 @@
                                                 style="text-align: center;vertical-align:center; color: orange;  font-weight: bold;">
                                                 <%= thisrequestdetails.status%>
                                             </td>
-                                            <%}%>
+                                            <%}else if(thisrequestdetails.status=="Enforce Rejected" ){%>
+                                                <td
+                                                    style="text-align: center;vertical-align:center; color: brown;  font-weight: bold;">
+                                                    <%= thisrequestdetails.status%>
+                                                </td>
+                                                <%}else if(thisrequestdetails.status=="Enforce Approved" ){%>
+                                                    <td style="text-align: center;vertical-align:middle; color: yellowgreen;;  font-weight: bold;">
+                                                        <%= thisrequestdetails.status%>
+                                                    </td>
+                                                    <%}%>
 
                         </tr>
 
@@ -157,7 +165,7 @@
                                             <button class="button buttonlogout" type="submit is-success"
                                                 onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
                                             <button class="button buttonlogout" type="submit is-success"
-                                                onclick="disapprovethis('<%=thisrequestdetails.ReqID%>')">Disapprove</button>
+                                                onclick="rejectthis('<%=thisrequestdetails.ReqID%>')">Reject</button>
 
                                         </div>
                                     </div>
@@ -235,7 +243,7 @@
         }
     }
 
-    function disapprovethis(reqid) {
+    function rejectthis(reqid) {
         var r = confirm("Confirm REJECT " + reqid + " ?");
         if (r) {
             reply("Rejected", reqid);

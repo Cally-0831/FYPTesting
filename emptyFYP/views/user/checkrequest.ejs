@@ -13,9 +13,9 @@
             <th style="font-size:25px;text-align: center;vertical-align:middle;background-color: #C3B091;">Unavaildable date</th>
             <th style="font-size:25px;text-align: center;vertical-align:middle;background-color: #C3B091;">Start Time</th>
             <th style="font-size:25px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
-            <th style="font-size:25px;text-align: center;vertical-align:middle;background-color: #C3B091;">
-                Action
-            </th>
+            <%if(setting == null || new Date(setting.deadlinedate) > new Date()){%>
+                <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Action</th>
+                <%}%>
 
             <% thisuserRequestlist.forEach( function(request) { const StartDay=new
                 Date(request.RequestDate).toLocaleDateString('en-CA'); %>
@@ -33,11 +33,13 @@
                     </td>
                     <td style="text-align: center;vertical-align:middle;font-size:20px;">
                         <%= request.RequestEndTime%>
-                    </td>
+                    </td>   
+                    <%if(setting == null || new Date(setting.deadlinedate) > new Date()){%>
                     <td style="text-align: center;vertical-align:middle;font-size:20px;">
-                        <button class="button" type="button"
-                            onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>
+                            <button class="button" type="button"
+                            onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>    
                     </td>
+                    <%}%>
                 </tr>
 
                 <% }); %>
@@ -50,7 +52,9 @@
                 <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Start Time</th>
                 <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">EndTime</th>
                 <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Status</th>
+                <%if(setting == null || new Date(setting.deadlinedate) > new Date()){%>
                 <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">Action</th>
+                <%}%>
                 <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: burlywood;">View Details</th>
 
                 <% thisuserRequestlist.forEach( function(request) { const StartDay=new
@@ -87,7 +91,16 @@
                                             <div style="color: orange;  font-weight: bold;">
                                                 <%= request.status%>
                                             </div>
-                                            <%}%>
+                                            <%}else if(request.status=="Enforce Rejected" ){%>
+                                                <div style="color: brown;  font-weight: bold;">
+                                                    <%= request.status%>
+                                                </div>
+                                               
+                                                <%}else if(request.status=="Enforce Approved" ){%>
+                                                    <div style="color: yellowgreen;  font-weight: bold;">
+                                                        <%= request.status%>
+                                                    </div>
+                                                    <%}%>
                                                 <br>
                                                 <%var lasttime=new Date(request.submission)%>
                                                     <div style="Padding :0px; font-size: 10px;"> Last Updated at:
@@ -96,14 +109,14 @@
                                                     </div>
 
 
-                        </td>
+                        </td>  
+                        <%if((setting == null || new Date(setting.deadlinedate) > new Date()) &&request.status != "Approved" && request.status != "Rejected" && request.status != "Enforced Reject"){%>    
                         <td style="text-align: center;vertical-align:middle;font-size:20px;">
-                            <%if(request.status != "Approved" && request.status != "Rejected"){%>
-                                <button class="button" type="button"
+                              <button class="button" type="button"
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         
-                                <%}%>
-                            </td>
+                                
+                            </td><%}%>
                         <td style="text-align: center;vertical-align:middle;font-size:20px;">
                             
                                 <button class="button" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
