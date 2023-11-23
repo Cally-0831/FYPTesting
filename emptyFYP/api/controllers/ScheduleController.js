@@ -764,7 +764,7 @@ module.exports = {
         console.log(setting3)
 
         // gen all supervisors
-        var getallsupervisor = "select tid,submission from supervisor order by tid asc"
+        var getallsupervisor = "select tid,submission from supervisor order by priority asc"
         var supervisorlist = await new Promise((resolve) => {
             pool.query(getallsupervisor, (err, res) => {
                 var string = JSON.stringify(res);
@@ -789,8 +789,8 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.gethvrecordbutnosubmit"
         })
-        
-        console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
+
+        //console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
 
         for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
             var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
@@ -862,7 +862,7 @@ module.exports = {
         for (var a = 0; a < studentlist.length; a++) {
             //try enroll all of them to EMPTY
             var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\");"
-            console.log(insertemptyline)
+            //console.log(insertemptyline)
             db.query(insertemptyline, (err, result) => {
                 try {
                     console.log("insert complete")
@@ -877,7 +877,7 @@ module.exports = {
             })
 
             updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + studentlist[a].sid + "\";"
-            console.log(updatetakecourseline)
+            //console.log(updatetakecourseline)
             db.query(updatetakecourseline, (err, result) => {
                 try {
                     console.log("update complete")
@@ -891,38 +891,38 @@ module.exports = {
 
             })
         }
-       
-            //turn Required Proof into Rejected
-            var updaterequiredproofline = "Update allrequestfromstudent set status = \"Enforce Rejected\", reply=\"Enforced to reject since didn't upload proof ontime\" where status = \"Require Proof\""
-            console.log(updaterequiredproofline)
-              db.query(updaterequiredproofline, (err, result) => {
-                try {
-                    console.log("update complete")
-                } catch (err) {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + updaterequiredproofline + "\n"
-                        statuscode = 401;
-                    }
+
+        //turn Required Proof into Rejected
+        var updaterequiredproofline = "Update allrequestfromstudent set status = \"Enforce Rejected\", reply=\"Enforced to reject since didn't upload proof ontime\" where status = \"Require Proof\""
+        //console.log(updaterequiredproofline)
+        db.query(updaterequiredproofline, (err, result) => {
+            try {
+                console.log("update complete")
+            } catch (err) {
+                if (err) {
+                    errstring = "";
+                    errstring += "error happened for:" + updaterequiredproofline + "\n"
+                    statuscode = 401;
                 }
+            }
 
-            })
+        })
 
-            //turn Pending into Approved
-            updatependingrequestline = "Update allrequestfromstudent set status = \"Enforce Approved\", reply=\"Enforced to approve since supervisor left for pending\" where status = \"Pending\";"
-            console.log(updatependingrequestline)
-            db.query(updatependingrequestline, (err, result) => {
-                try {
-                    console.log("update complete")
-                } catch (err) {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + updatependingrequestline + "\n"
-                        statuscode = 401;
-                    }
+        //turn Pending into Approved
+        updatependingrequestline = "Update allrequestfromstudent set status = \"Enforce Approved\", reply=\"Enforced to approve since supervisor left for pending\" where status = \"Pending\";"
+        //console.log(updatependingrequestline)
+        db.query(updatependingrequestline, (err, result) => {
+            try {
+                console.log("update complete")
+            } catch (err) {
+                if (err) {
+                    errstring = "";
+                    errstring += "error happened for:" + updatependingrequestline + "\n"
+                    statuscode = 401;
                 }
+            }
 
-            })
+        })
 
         // handle gen student availble 
         // gen all students
@@ -937,11 +937,9 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getallstudent"
         })
-
-        console.log(studentlist)
+        //console.log(">>studentlist", studentlist)
 
         for (var a = 0; a < studentlist.length; a++) {
-            console.log(studentlist[a]);
             var currentgeneratedate = new Date(setting3.startday);
             var currentgeneratedateend = new Date(setting3.startday);
             while (currentgeneratedate < new Date(setting3.endday)) {
@@ -992,18 +990,18 @@ module.exports = {
                         //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
                         boolcheckreq = true;
                     }
-                  
+
 
                     if (boolcheckreq && boolcheckttb) {
                         var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-                        console.log(insertavability)
+                        //console.log(insertavability)
                         var studentavailbilityinsert = await new Promise((resolve) => {
                             pool.query(insertavability, (err, res) => {
                                 resolve(res);
                             })
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.insertavability"
-                        }) 
+                        })
                     }
 
 
@@ -1111,6 +1109,73 @@ module.exports = {
 
             }
         }
+
+        console.log(">>supervisorlist", supervisorlist);
+
+        for (var a = 0; a < supervisorlist.length; a++) {
+
+            var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\")union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\")";
+            var studentlistforthissupervisor = await new Promise((resolve) => {
+                pool.query(getallstudentlistforthissuper, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.genavailble.getallstudentlistforthissuper"
+            })
+            console.log(">>studentlistforthissupervisor", studentlistforthissupervisor)
+
+            var counttimeboxlist = new Array();
+            if(studentlistforthissupervisor != 0){
+                for (var b = 0; b < studentlistforthissupervisor.length; b++) {
+                
+                var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                    + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
+                    + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
+                    + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + studentlistforthissupervisor[b].tid + "\" or sa1.tid = \"" + studentlistforthissupervisor[b].colleague + "\") "
+                    + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
+                    + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
+                    + "and (sa2.tid = \"" + studentlistforthissupervisor[b].colleague + "\" or sa2.tid = \"" + studentlistforthissupervisor[b].tid + "\");"
+                //console.log(checkavailabledup)
+                var availblelist = await new Promise((resolve) => {
+                    pool.query(checkavailabledup, (err, res) => {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
+                }).catch((err) => {
+                    errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                })
+                console.log(studentlistforthissupervisor[b].tid)
+                console.log(">>studentlistforthissupervisor   ", studentlistforthissupervisor)
+               
+                counttimeboxlist.push(JSON.parse(JSON.stringify({"sid" : studentlistforthissupervisor[b].sid , "availblelist":availblelist})));
+            }
+
+            console.log(">>counttimeboxlist", counttimeboxlist.length)
+            var minsetforstu = -1;
+           
+            for (var b = 0; b < counttimeboxlist.length; b++) {
+                console.log(">>thiscase",counttimeboxlist[b].availblelist.length)
+             
+                if (minsetforstu == -1) {
+                    minsetforstu = b;
+                }
+                if (counttimeboxlist[b].availblelist.length < minsetforstu) {
+                    minsetforstu = b
+                } 
+            }
+           console.log("minsetwehv",counttimeboxlist[minsetforstu].sid) 
+            }
+            
+           
+           
+
+        }
+
 
         return res.ok();
     },

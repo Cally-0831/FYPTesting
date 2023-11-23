@@ -122,9 +122,9 @@ primary key (TID,SID)
 
 
 create table observerpairstudent(
-obsname varchar(100) not null,
 OID		varchar(20) not null,
 SID		varchar(10) not null,
+obsname varchar(100) not null,
 primary key (SID)
 );
 
@@ -199,7 +199,7 @@ availableendTime timestamp,
 primary key(tid,availabledate,availablestarttime)
 );
 
-create table supervisoravailable(
+create table studentavailable(
 
 SID varchar(10) not null,
 availabledate DATE,

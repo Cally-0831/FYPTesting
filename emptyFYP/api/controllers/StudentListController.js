@@ -713,7 +713,7 @@ module.exports = {
                         }
 
                         for (var a = 0; a < pairinglist.length; a++) {
-                            thisistheline = "insert ignore into observerpairstudent values(\"" + pairinglist[a].obsname + "\",\"" + pairinglist[a].OID + "\",\"" + pairinglist[a].sid + "\")"
+                            thisistheline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\"" + pairinglist[a].obsname + "\",\"" + pairinglist[a].OID + "\",\"" + pairinglist[a].sid + "\")"
                             console.log(thisistheline)
                             db.query(thisistheline, function (err, result) { if (err) { console.log("error happened at StudentListContorller: generateobs"); } })
                         }
