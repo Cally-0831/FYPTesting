@@ -765,34 +765,35 @@ module.exports = {
         console.log(errmsg)
         console.log(setting3)
 
-       
+
 
         function resetschedulebox() {
             var days = 0;
             var schedulebox = new Array();
             while (true) {
                 var scheduleboxsetting = JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
-               // console.log("new schedulebox",schedulebox)
-                var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
+                // console.log("new schedulebox",schedulebox)
+                var presentday = (new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days)).toLocaleDateString("en-GB");
                 //console.log(presentday.toLocaleDateString())
                 if (setting3.startday.getDay() != 6 || setting.startday.getDay() != 0) {
-                    scheduleboxsetting.date = presentday.toLocaleDateString("en-GB");
+                    var date = presentday.split("/");
+                    scheduleboxsetting.date = date[2] + "-" + date[1] + "-" + date[0];
                     schedulebox.push(scheduleboxsetting);
                     days++;
                 }
 
-                if (presentday.toLocaleDateString() == (new Date(setting3.endday)).toLocaleDateString()) {
+                if (presentday == (new Date(setting3.endday)).toLocaleDateString("en-GB")) {
                     false;
                     break;
                 }
-                
+
             }
 
-           // console.log("resetted schedulebox",schedulebox)
+            console.log("resetted schedulebox", schedulebox)
             return schedulebox;
         }
 
-        //var thisschedulebox = resetschedulebox();
+
         // gen all supervisors
         var getallsupervisor = "select tid,submission from supervisor order by priority asc"
         var supervisorlist = await new Promise((resolve) => {
@@ -1159,19 +1160,22 @@ module.exports = {
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.genavailble.getprefofthissuper"
             })
-            console.log(">>preflist", prefofthissuper)
-            console.log(prefofthissuper.length)
+            //console.log(">>preflist", prefofthissuper)
+            //console.log(prefofthissuper.length)
             var thisschedulebox = resetschedulebox();
-           
-         if (prefofthissuper != null && prefofthissuper.length >0 ) {
-                console.log(prefofthissuper[0].Prefno)
+
+            if (prefofthissuper != null && prefofthissuper.length > 0) {
+                //console.log(prefofthissuper[0].Prefno)
                 var prefary = prefofthissuper[0].Prefno.split("/");
-                
+
                 for (var b = 0; b < prefary.length; b++) {
                     thisschedulebox[b].prefno = prefary[b];
                 }
             }
-            console.log(supervisorlist[a].tid,"   ",thisschedulebox)
+            thisschedulebox.sort((a, b) => {
+                return b.prefno - a.prefno;
+            });
+            console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\")union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\")";
             var studentlistforthissupervisor = await new Promise((resolve) => {
@@ -1190,7 +1194,7 @@ module.exports = {
             if (studentlistforthissupervisor != 0) {
                 for (var b = 0; b < studentlistforthissupervisor.length; b++) {
 
-                    var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                    var checkavailabledup = "select count(*) as boxcount from supervisorpairstudent "
                         + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
                         + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
                         + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + studentlistforthissupervisor[b].tid + "\" or sa1.tid = \"" + studentlistforthissupervisor[b].colleague + "\") "
@@ -1211,15 +1215,56 @@ module.exports = {
                     //console.log(studentlistforthissupervisor[b].tid)
                     //console.log(">>studentlistforthissupervisor   ", studentlistforthissupervisor)
 
-                    counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "availblelist": availblelist })));
+                    counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "tid": studentlistforthissupervisor[b].tid, "oid": studentlistforthissupervisor[b].colleague, "availblelist": parseInt(availblelist[0].boxcount) })));
                 }
 
                 counttimeboxlist.sort((a, b) => {
-                    return a.availblelist.length - b.availblelist.length;
+                    return a.availblelist - b.availblelist;
                 })
+                console.log(counttimeboxlist)
+
+                for (var c = 0; c < thisschedulebox.length; c++) {
+                    var presentday = thisschedulebox[c].date;
+                    var checker = thisschedulebox[c].prefno;
+                    if (checker == "") {
+                        checker = 0;
+                    } else {
+                        checker = parseInt(thisschedulebox[c].prefno);
+                    }
+                    console.log(thisschedulebox);
+
+                    for (var b = 0; b < counttimeboxlist.length; b++) {
+                        
+                        if (checker != 0 && (thisschedulebox[c].schedule.length != checker)) {
+                            var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                                + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
+                                + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
+                                + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
+                                + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
+                                + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
+                                + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\")"
+                                + "and studentavailable.availabledate =\"" + presentday + "\";"
+                            //console.log(checkavailabledup)
+                            var checkscheduleboxlist = await new Promise((resolve) => {
+                                pool.query(checkavailabledup, (err, res) => {
+                                    var string = JSON.stringify(res);
+                                    var json = JSON.parse(string);
+                                    var ans = json;
+                                    resolve(ans)
+                                })
+                            }).catch((err) => {
+                                errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                            })
+
+                            console.log(">>checkscheduleboxlist",checkscheduleboxlist)
+                            
+                        }
+                    }
+                }
+
                 //console.log(">>counttimeboxlist", counttimeboxlist)
 
-            
+
             }
         }
 
