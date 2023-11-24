@@ -733,6 +733,8 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var errmsg = "";
+        var schedulebox = new Array();
+
 
         // get presentperiod
         var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
@@ -763,6 +765,29 @@ module.exports = {
         console.log(errmsg)
         console.log(setting3)
 
+        var days = 0;
+
+        function resetschedulebox() {
+            var schedulebox = new Array();
+            while (true) {
+                var scheduleboxsetting = new JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
+                if (setting3.startday.getDay() != 6 || setting.startday.getDay() != 0) {
+                    var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
+                    scheduleboxsetting.date = presentday.toLocaleDateString("en-GB");
+                    schedulebox.push(scheduleboxsetting);
+                    days++;
+                }
+
+                if (presentday.toLocaleDateString() == (new Date(setting3.endday)).toLocaleDateString()) {
+                    false;
+                    break;
+                }
+            }
+            console.log(schedulebox)
+            return schedulebox;
+        }
+
+        //var thisschedulebox = resetschedulebox();
         // gen all supervisors
         var getallsupervisor = "select tid,submission from supervisor order by priority asc"
         var supervisorlist = await new Promise((resolve) => {
@@ -940,8 +965,10 @@ module.exports = {
         //console.log(">>studentlist", studentlist)
 
         for (var a = 0; a < studentlist.length; a++) {
+
             var currentgeneratedate = new Date(setting3.startday);
             var currentgeneratedateend = new Date(setting3.startday);
+            //console.log(currentgeneratedate)
             while (currentgeneratedate < new Date(setting3.endday)) {
                 currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
                 var studentttblist;
@@ -1013,6 +1040,8 @@ module.exports = {
                         currentgeneratedate.setHours(9);
                         currentgeneratedate.setMinutes(30);
                         currentgeneratedate.setSeconds(0);
+                        //console.log(currentgeneratedate)
+
                     } else {
                         currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
                     }
@@ -1023,6 +1052,7 @@ module.exports = {
 
             }
         }
+
 
         // console.log(supervisorlist.length)
         //console.log(supervisorlist)
@@ -1113,6 +1143,34 @@ module.exports = {
         console.log(">>supervisorlist", supervisorlist);
 
         for (var a = 0; a < supervisorlist.length; a++) {
+            var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
+            var prefofthissuper = await new Promise((resolve) => {
+                pool.query(getprefofthissuper, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.genavailble.getprefofthissuper"
+            })
+            console.log(">>preflist", prefofthissuper)
+            console.log(prefofthissuper.length)
+            var thisschedulebox = resetschedulebox();
+            console.log(thisschedulebox);
+
+
+            //thisschedulebox = resetschedulebox();
+            //console.log(prefofthissuper.length)
+            /** if (prefofthissuper != null && prefofthissuper.length >0 ) {
+                console.log(prefofthissuper[0].Prefno)
+                var prefary = prefofthissuper[0].Prefno.split("/");
+                
+                for (var b = 0; b < prefary.length; b++) {
+                    thisschedulebox[b].prefno = prefary[b];
+                }
+            }*/
+            //console.log(supervisorlist[a].tid,"   ",thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\")union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\")";
             var studentlistforthissupervisor = await new Promise((resolve) => {
@@ -1125,55 +1183,66 @@ module.exports = {
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.genavailble.getallstudentlistforthissuper"
             })
-            console.log(">>studentlistforthissupervisor", studentlistforthissupervisor)
+            //console.log(">>studentlistforthissupervisor", studentlistforthissupervisor)
 
             var counttimeboxlist = new Array();
-            if(studentlistforthissupervisor != 0){
+            if (studentlistforthissupervisor != 0) {
                 for (var b = 0; b < studentlistforthissupervisor.length; b++) {
-                
-                var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
-                    + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
-                    + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
-                    + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + studentlistforthissupervisor[b].tid + "\" or sa1.tid = \"" + studentlistforthissupervisor[b].colleague + "\") "
-                    + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
-                    + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-                    + "and (sa2.tid = \"" + studentlistforthissupervisor[b].colleague + "\" or sa2.tid = \"" + studentlistforthissupervisor[b].tid + "\");"
-                //console.log(checkavailabledup)
-                var availblelist = await new Promise((resolve) => {
-                    pool.query(checkavailabledup, (err, res) => {
+
+                    var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                        + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
+                        + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
+                        + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + studentlistforthissupervisor[b].tid + "\" or sa1.tid = \"" + studentlistforthissupervisor[b].colleague + "\") "
+                        + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
+                        + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
+                        + "and (sa2.tid = \"" + studentlistforthissupervisor[b].colleague + "\" or sa2.tid = \"" + studentlistforthissupervisor[b].tid + "\");"
+                    //console.log(checkavailabledup)
+                    var availblelist = await new Promise((resolve) => {
+                        pool.query(checkavailabledup, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                    })
+                    //console.log(studentlistforthissupervisor[b].tid)
+                    //console.log(">>studentlistforthissupervisor   ", studentlistforthissupervisor)
+
+                    counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "availblelist": availblelist })));
+                }
+
+                counttimeboxlist.sort((a, b) => {
+                    return a.availblelist.length - b.availblelist.length;
+                })
+                //console.log(">>counttimeboxlist", counttimeboxlist)
+
+                /** 
+                var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
+                var prefofthissuper = await new Promise((resolve) => {
+                    pool.query(getprefofthissuper, (err, res) => {
                         var string = JSON.stringify(res);
                         var json = JSON.parse(string);
                         var ans = json;
                         resolve(ans)
                     })
                 }).catch((err) => {
-                    errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                    errmsg = "error happened in ScheduleController.genavailble.getprefofthissuper"
                 })
-                console.log(studentlistforthissupervisor[b].tid)
-                console.log(">>studentlistforthissupervisor   ", studentlistforthissupervisor)
-               
-                counttimeboxlist.push(JSON.parse(JSON.stringify({"sid" : studentlistforthissupervisor[b].sid , "availblelist":availblelist})));
-            }
+                console.log(">>preflist", prefofthissuper)
 
-            console.log(">>counttimeboxlist", counttimeboxlist.length)
-            var minsetforstu = -1;
-           
-            for (var b = 0; b < counttimeboxlist.length; b++) {
-                console.log(">>thiscase",counttimeboxlist[b].availblelist.length)
-             
-                if (minsetforstu == -1) {
-                    minsetforstu = b;
+
+
+                if (prefofthissuper.length) {
+                    var prefary = prefofthissuper[0].Prefno.split("/");
+                    for (var b = 0; b < prefary.length; b++) {
+                        thisschedulebox[b].prefno = prefary[b];
+                    }
                 }
-                if (counttimeboxlist[b].availblelist.length < minsetforstu) {
-                    minsetforstu = b
-                } 
+                console.log(supervisorlist[a].tid,"   ",thisschedulebox)
+*/
             }
-           console.log("minsetwehv",counttimeboxlist[minsetforstu].sid) 
-            }
-            
-           
-           
-
         }
 
 

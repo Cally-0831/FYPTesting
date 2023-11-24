@@ -385,11 +385,12 @@ module.exports = {
     upload: function (req, res) {
 
         req.file('avatar').upload(function (err, files) {
+            
             console.log(files[0].fd);
 
             const fs = require('fs');
 
-            fs.readFile(files[0].fd, { encoding: 'base64' }, (err, data) => {
+            fs.readFile(files[0].fd, { encoding: 'base64' }, async (err, data) => {
                 if (err) {
                     console.error(err);
                     return;
@@ -401,6 +402,8 @@ module.exports = {
 
                 thisistheline = "Update allrequestfromstudent set picdata= \"" + data + "\", status = \"Pending\" ,submission = now() where sid=\"" + req.session.userid + "\" and reqid = \"" + req.params.ReqID + "\"";
                 //console.log(thisistheline);
+                var db = await sails.helpers.database();
+               
                 db.query(thisistheline, function (error, result) {
                     try {
 

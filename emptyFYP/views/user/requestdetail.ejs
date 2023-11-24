@@ -3,7 +3,7 @@
         <div class="Pagetitle"> Approval Page for <%=req.params.ReqID%>
         </div>
         <%} else if(req.session.role=="stu" ){%>
-            <div class="Pagetitle">Deatil Page for <%=req.params.ReqID%>
+            <div class="Pagetitle">Detail Page for <%=req.params.ReqID%>
             </div>
             <%}%>
                 <%var lasttime=new Date(thisrequestdetails.submission)%>
@@ -19,7 +19,7 @@
                     </div>
                     <br><br>
                     <div id="acceptpic">
-                        <%if(setting != null && new Date(setting.deadlinedate) > new Date() && session.role=="stu" && (thisrequestdetails.status =="Pending" || thisrequestdetails.status == "Required Proof")){%>
+                        <%if(setting != null && new Date(setting.deadlinedate) > new Date() && session.role=="stu" && (thisrequestdetails.status =="Pending" || thisrequestdetails.status == "Require Proof")){%>
                             <form method="POST" action="/requestdetail/proof/<%=thisrequestdetails.ReqID %>"
                                 enctype="multipart/form-data">
                                 <div class="columns is-mobile">
