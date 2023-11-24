@@ -733,7 +733,7 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var errmsg = "";
-        var schedulebox = new Array();
+        //var schedulebox = new Array();
 
 
         // get presentperiod
@@ -765,14 +765,17 @@ module.exports = {
         console.log(errmsg)
         console.log(setting3)
 
-        var days = 0;
+       
 
         function resetschedulebox() {
+            var days = 0;
             var schedulebox = new Array();
             while (true) {
-                var scheduleboxsetting = new JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
+                var scheduleboxsetting = JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
+               // console.log("new schedulebox",schedulebox)
+                var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
+                //console.log(presentday.toLocaleDateString())
                 if (setting3.startday.getDay() != 6 || setting.startday.getDay() != 0) {
-                    var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
                     scheduleboxsetting.date = presentday.toLocaleDateString("en-GB");
                     schedulebox.push(scheduleboxsetting);
                     days++;
@@ -782,8 +785,10 @@ module.exports = {
                     false;
                     break;
                 }
+                
             }
-            console.log(schedulebox)
+
+           // console.log("resetted schedulebox",schedulebox)
             return schedulebox;
         }
 
@@ -1157,20 +1162,16 @@ module.exports = {
             console.log(">>preflist", prefofthissuper)
             console.log(prefofthissuper.length)
             var thisschedulebox = resetschedulebox();
-            console.log(thisschedulebox);
-
-
-            //thisschedulebox = resetschedulebox();
-            //console.log(prefofthissuper.length)
-            /** if (prefofthissuper != null && prefofthissuper.length >0 ) {
+           
+         if (prefofthissuper != null && prefofthissuper.length >0 ) {
                 console.log(prefofthissuper[0].Prefno)
                 var prefary = prefofthissuper[0].Prefno.split("/");
                 
                 for (var b = 0; b < prefary.length; b++) {
                     thisschedulebox[b].prefno = prefary[b];
                 }
-            }*/
-            //console.log(supervisorlist[a].tid,"   ",thisschedulebox)
+            }
+            console.log(supervisorlist[a].tid,"   ",thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\")union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\")";
             var studentlistforthissupervisor = await new Promise((resolve) => {
@@ -1218,30 +1219,7 @@ module.exports = {
                 })
                 //console.log(">>counttimeboxlist", counttimeboxlist)
 
-                /** 
-                var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
-                var prefofthissuper = await new Promise((resolve) => {
-                    pool.query(getprefofthissuper, (err, res) => {
-                        var string = JSON.stringify(res);
-                        var json = JSON.parse(string);
-                        var ans = json;
-                        resolve(ans)
-                    })
-                }).catch((err) => {
-                    errmsg = "error happened in ScheduleController.genavailble.getprefofthissuper"
-                })
-                console.log(">>preflist", prefofthissuper)
-
-
-
-                if (prefofthissuper.length) {
-                    var prefary = prefofthissuper[0].Prefno.split("/");
-                    for (var b = 0; b < prefary.length; b++) {
-                        thisschedulebox[b].prefno = prefary[b];
-                    }
-                }
-                console.log(supervisorlist[a].tid,"   ",thisschedulebox)
-*/
+            
             }
         }
 
