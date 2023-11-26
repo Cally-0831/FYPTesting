@@ -1,47 +1,148 @@
 <div>
-    <div class="Pagetitle">Draft Schedule for <%=req.params.id%>
+    <div class="Pagetitle">Draft Schedule for <%=req.query.id%>
     </div>
     <div class="row">
         <div class="buttons">
             <div class="button buttonlogout" onclick="backback()">Back</div>
         </div>
     </div>
-<br>
+    <br>
     <div class="row">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
             <tr>
-               
-                <%var displaydate = new Date((new Date(setting.startday)).getUTCSeconds()+60*60*24);%>
-                <%= displaydate.toLocaleDateString()%>
-                <%var enddisplaydate = new Date(setting.startday);%>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
-                   <
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    SUN
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    MON
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    TUE
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    WED
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    THU
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    FRI
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
-                    SAT
-                </th>
-                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
-                    >
-                </th>
+
+                <%var displaydate=(new Date(setting.startday))%>
+                    <% var printday=new Date(displaydate.getTime()+ 60*60*24*1000*(Page-1))%>
+                        <%var enddisplaydate=new Date(setting.startday);%>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
+                                < </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                SUN
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                MON
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                TUE
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                WED
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                THU
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                FRI
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                SAT
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
+                                >
+                            </th>
             </tr>
+            <tr>
+                <td></td>
+                <%=printday.getDay()%>
+                    <%for(var a=0 ; a < displaydate.getDay();a++){%>
+                        <%printday=new Date(printday.getTime()-(displaydate.getDay()+a)*60*60*24*1000)%> 
+                        <td style="font-size:18px;text-align: center;vertical-align:middle;"><%=printday.toLocaleDateString("en-GB")%></td>
+                        <%}%>
+                        <%printday = displaydate%>
+                            <%for(var a=1 ; a <=(7- displaydate.getDay());a++){%>
+                                <td style="font-size:18px;text-align: center;vertical-align:middle;">
+                                    <%=printday.toLocaleDateString("en-GB")%>
+
+                                </td>
+                                <%printday=new Date(printday.getTime()+60*60*24*1000)%>
+                                    <%}%>
+                                        <td></td>
+            </tr>
+            <%printday = displaydate%>
+            <%printday.setHours(8);printday.setMinutes(30);%>
+            <%=printday%>
+            <%for(var a = 0 ; a < 13;a++){%>
+                <!--print line-->
+                <tr>
+                    
+                    <%for (var b = 0 ; b < 8;b++){%>
+                        <%if(b == 0){%>
+                            
+                            <td><%=printday.toLocaleDateString()%> <%=printday.toLocaleTimeString("en-GB")%></td>
+                            <%}else{%>
+                                <%if(b <= displaydate.getDay()){%>
+                                    <td>hell0</td>                                   
+                                     <%}else{%>
+                                    <!--start checking-->
+                                    <%console.log(printday.toLocaleDateString()," ",printday.toLocaleTimeString(),"   ",(new Date(boxes[0].boxdate)).toLocaleDateString()," ",(new Date(boxes[0].boxdate)).toLocaleTimeString())%>
+                                         <%if(printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                                            <%console.log("case 1")%>
+                                     
+                                            <%if(printday.toLocaleTimeString("en-GB") == (new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")){%>
+                                                <%console.log("case 1.1")%>
+                                            <td>
+                                                boxID:   <%=boxes[0].boxID%>
+                                                <br>
+                                                Time:    <%=(new Date(boxes[0].boxdate)).toLocaleDateString()%> <%=(new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")%>
+                                                <br>
+                                                SID :    <%=boxes[0].SID%>
+                                                <br>
+                                                Campus:  <%=boxes[0].Campus%>
+                                                <br>
+                                                RID:     <%=boxes[0].RID%>
+                                            </td>
+                                            <%boxes.splice(0,1)%>
+                                            <%if(boxes.length !=0){%>
+                                                <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%boxes.push(boxes.shift())%>
+                                                    <%console.log((new Date(boxes[0].boxdate)).toLocaleDateString())%>
+                                                 <%}%>
+                                               <%}%>
+                                            
+                                                <%}else{%>
+                                                    <%console.log("case 1.2")%>
+                                                   
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%boxes.push(boxes.shift())%>
+                                                    <%console.log((new Date(boxes[0].boxdate)).toLocaleDateString())%>
+                                                 <%}%>
+                                                 
+                                                    <td>77</td>
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                        <%console.log("case 2")%>
+                                       <td>88</td>
+                                       <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                        <%boxes.push(boxes.shift())%>
+                                     <%}%>
+                                        <%}%>
+                                        
+                                        
+                                        
+                                       <%printday=new Date(printday.getTime()+60*60*24*1000)%>
+                                        <%}%>
+                                
+                                <%}%>
+                                
+                        <%}%>
+                        <td></td>
+                </tr>
+                <%printday=new Date(displaydate.getTime()+(a+1)*60*60*1000)%>
+                <%}%>
+
+
         </table>
     </div>
 

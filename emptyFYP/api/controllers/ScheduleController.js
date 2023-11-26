@@ -985,7 +985,7 @@ module.exports = {
                             boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
                             counter += 1;
                         }
-                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\",\"" + timestamp.toLocaleTimeString("en-GB") + "\","
+                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\","
                             + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
                             + "\"" + campus + "\",\"" + room + "\", now()) ;"
                         console.log(insertscheduleboxquery)
@@ -1358,7 +1358,7 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         console.log(req.query)
-        var query= "select * from allschedulebox where tid = \""+req.query.id+"\" or oid =  \""+req.query.id+"\";"
+        var query= "select * from allschedulebox where tid = \""+req.query.id+"\" or oid =  \""+req.query.id+"\" order by boxdate asc;"
         var boxesforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1397,7 +1397,7 @@ module.exports = {
         
 console.log(boxesforthissupervisor)
 console.log(setting3)
-        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor,setting : setting3})
+        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor,setting : setting3,Page:req.query.Page})
        
     },
 }
