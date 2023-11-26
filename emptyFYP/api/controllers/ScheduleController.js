@@ -52,90 +52,6 @@ module.exports = {
             }
         });
     },
-    /** 
-        getallneededinfo: async function (req, res) {
-            var db = await sails.helpers.database();
-            var getpairing = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid"
-            //get the pairs
-            db.query(getpairing, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    var json = JSON.parse(string);
-                    var threepartylist = json;
-                    thisistheline2 = "select startdate, starttime,enddate,endtime from allsupersetting where typeofsetting = \"3\" and Announcetime is not null;"
-                    /** Get present time 
-                    db.query(thisistheline2, (err, results) => {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        var presentdate = json
-                        console.log(">>  presentdate:", presentdate)
-                        var startstart = new Date(presentdate[0].startdate);
-                        var endend = new Date(presentdate[0].enddate);
-                        var strstarttime = presentdate[0].starttime.split(":");
-                        var strendtime = presentdate[0].endtime.split(":");
-    
-                        var ansstartdate;
-                        var ansenddate;
-                        var adddate;
-                        startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
-                        endend.setHours(strendtime[0], strendtime[1], strendtime[2]);
-                        var strstartstart = startstart.toISOString().toString().split("T")[0];
-                        var strendend = endend.toISOString().toString().split("T")[0];
-    
-                        var thisistheline3 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" and classroom.status != \"Close\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
-                       // Get classroom's ttb 
-                        db.query(thisistheline3, (err, results) => {
-                            var string = JSON.stringify(results);
-                            var json = JSON.parse(string);
-                            var classroomusagelist = json;
-                            console.log('>> classroomusagelist: ', classroomusagelist);
-                            var thisistheline4 = "select  *  from allclassroomtimeslot left join classroom on classroom.campus = allclassroomtimeslot.campus and classroom.rid = allclassroomtimeslot.rid where classroom.status != \"Close\"and ((startdate between \"" + strstartstart + "\"  and \"" + strendend + "\") or (enddate between \"" + strstartstart + "\" and \"" + strendend + "\")) order by allclassroomtimeslot.Campus asc,allclassroomtimeslot.RID asc, allclassroomtimeslot.startTime asc"
-                            // Get classroom's unavailble timeslot 
-                            db.query(thisistheline4, (err, results) => {
-                                var string = JSON.stringify(results);
-                                var json = JSON.parse(string);
-                                var classroomtimeslotlist = json;
-                                console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                var thisistheline5 = "select distinct(Campus) from classroom where Campus != \"\"";
-                                db.query(thisistheline5, (err, results) => {
-                                    var string = JSON.stringify(results);
-                                    var json = JSON.parse(string);
-                                    var Campuslist = json;
-                                    console.log('>> Campuslist: ', Campuslist);
-                                    var thisistheline6 = "select * from classroom where Campus!=\"\" and status != \"Close\"";
-                                    db.query(thisistheline6, (err, results) => {
-                                        var string = JSON.stringify(results);
-                                        var json = JSON.parse(string);
-                                        var allclassroomlist = json;
-                                        console.log('>>allclassroomlist: ', allclassroomlist);
-                                        var thisistheline7 = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where confirmation = \"1\""
-                                        db.query(thisistheline7, (err, results) => {
-                                            var string = JSON.stringify(results);
-                                            var json = JSON.parse(string);
-                                            var superttb = json;
-                                            console.log('>>superttb : ', superttb);
-                                            var thisistheline8 = "select * from allstudenttakecourse left join allclass onallstudenttakecourse.CID = allclass.CID where confirmation = \"1\""
-                                            db.query(thisistheline8, (err, results) => {
-                                                var string = JSON.stringify(results);
-                                                var json = JSON.parse(string);
-                                                var stuttb = json;
-                                                console.log('>>stuttb: ', stuttb);
-    
-                                            })
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                        return res.ok()
-                    })
-                } catch (err) {
-                    console.log("error happened when excuting SchduleController.getallneededinfo")
-                }
-            })
-        },
-        **/
-
 
     createdraft: async function (req, res) {
         var db = await sails.helpers.database();
@@ -387,334 +303,6 @@ module.exports = {
             }
 
         }
-        //for(var a = 0 ; a < )
-
-
-        /** 
-        
-                for (var timebox = 0; timebox <= 13 * 60 / sessionduration; timebox++) {
-                    //loop each time
-                    var checker = -1;
-        
-                    if (currentsessiontimeinpresentday.toLocaleTimeString("en-GB") >= startday.toLocaleTimeString("en-GB")) {
-                        for (var daynum = 0; daynum <= Math.floor((endday - startday) / 1000 / 60 / 60 / 24); daynum++) {
-                            //loop days
-                            var presentday = new Date(startday.getTime() + (daynum * 86400000));
-                            checker = 0;
-                            if (presentday.getDay() != 0 && presentday.getDay() != 6) {
-                                for (var a = 0; a < superschedulebox.length; a++) {
-                                    if (superschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && superschedulebox[a].boxtime == currentsessiontimeinpresentday) {
-                                        checker = -1;
-                                        console.log("superschedule skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                        break;
-                                    } else {
-                                        console.log("superschedule @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                        checker = 1;
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var b = 0; b < req.body.boxlist.length; b++) {
-                                        req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
-                                        if ((req.body.boxlist[b].tid == req.body.tid || req.body.boxlist[b].oid == req.body.tid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday.toLocaleTimeString("en-GB")) {
-                                            checker = -1;
-                                            console.log("superboxlist skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-                                        } else {
-                                            console.log("superboxlist @@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-        
-                                }
-                                if (checker >= 0) {
-                                    for (var b = 0; b < superrequest.length; b++) {
-                                        superrequest[b].RequestDate = new Date(superrequest[b].RequestDate);
-                                        if (superrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                            !(currentsessiontimeinpresentday >= superrequest[b].RequestEndTime
-                                                && currentsessionendtimeinpresentday <= superrequest[b].RequestStartTime)) {
-                                            checker = -1;
-                                            console.log("superrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-        
-                                        } else {
-                                            console.log("superrequest @@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    var b = presentday.getDay() - 1;
-                                    console.log(b)
-                                    if (supweeklist[b] == "EMPTY") {
-                                        campus = campuslist[0];
-                                        console.log("supweeklist[b][c] @@@@@@@@@ 1  ", campus);
-                                        checker = 1;
-                                    } else {
-                                        for (var c = 0; c < supweeklist[b].length; c++) {
-                                            if ((supweeklist[b][c].weekdays == presentday.getDay() && (supweeklist[b][c].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= supweeklist[b][c].endtime))) {
-                                                checker = -1;
-                                                console.log("supweeklist[b][c] skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                                break;
-                                            } else {
-                                                campus = supweeklist[b][c].Campus.trim();
-                                                console.log("@" + campus + "@")
-                                                console.log("supweeklist[b][c] @@@@" + campus + "@@@@@ 2")
-                                                checker = 1;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var a = 0; a < obsschedulebox.length; a++) {
-                                        if (obsschedulebox[a].boxdate == presentday.toLocaleDateString("en-GB") && obsschedulebox[a].boxtime == currentsessiontimeinpresentday) {
-                                            checker = -1;
-                                            console.log("obsschedule skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-                                        } else {
-                                            console.log("obsschedule @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var b = 0; b < req.body.boxlist.length; b++) {
-                                        req.body.boxlist[b].presentday = new Date(req.body.boxlist[b].presentday);
-                                        if ((req.body.boxlist[b].tid == req.body.oid || req.body.boxlist[b].oid == req.body.oid) && req.body.boxlist[b].presentday.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") && req.body.boxlist[b].presentstartTime == currentsessiontimeinpresentday.toLocaleTimeString("en-GB")) {
-                                            checker = -1;
-                                            console.log("obsboxlist skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-                                        } else {
-                                            console.log("obsboxlist @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var b = 0; b < obsrequest.length; b++) {
-                                        obsrequest[b].RequestDate = new Date(obsrequest[b].RequestDate);
-                                        if (obsrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                            !(currentsessiontimeinpresentday >= obsrequest[b].RequestEndTime
-                                                && currentsessionendtimeinpresentday <= obsrequest[b].RequestStartTime)) {
-                                            checker = -1;
-                                            console.log("obsrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-        
-                                        } else {
-                                            console.log("obsrequest @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var a = 0; a < obsttb.length; a++) {
-                                        if ((obsttb[a].weekdays == presentday.getDay() && (obsttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= obsttb[a].endtime))) {
-                                            checker = -1;
-                                            console.log("obsttb skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-                                        } else {
-                                            console.log("obsttb @@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                    console.log("check obschedule ", checker)
-                                }
-                                if (checker >= 0) {
-                                    for (var b = 0; b < stdrequest.length; b++) {
-                                        stdrequest[b].RequestDate = new Date(stdrequest[b].RequestDate);
-                                        if (stdrequest[b].RequestDate.toLocaleDateString("en-GB") == presentday.toLocaleDateString("en-GB") &&
-                                            !(currentsessiontimeinpresentday >= stdrequest[b].RequestEndTime
-                                                && currentsessionendtimeinpresentday <= stdrequest[b].RequestStartTime)) {
-                                            console.log("stdsrequest skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = -1;
-                                            break;
-        
-                                        } else {
-                                            console.log("stdsrequest @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                }
-                                if (checker >= 0) {
-                                    for (var a = 0; a < stdttb.length; a++) {
-                                        if ((stdttb[a].weekdays == presentday.getDay() && (stdttb[a].startime >= currentsessionendtimeinpresentday || currentsessiontimeinpresentday >= stdxttb[a].endtime))) {
-                                            checker = -1;
-                                            console.log("stdsttd skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            break;
-                                        } else {
-                                            console.log("stdttb @@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                            checker = 1;
-                                        }
-                                    }
-                                    //  console.log("check stdttb ", checker)
-                                }
-                                if (checker >= 0) {
-                                    var finalcampus = undefined;
-                                    var finalrid = undefined;
-                                    var indexforcampusinlist = 0;
-                                    //#    console.log(campuslist, "    \n", classroomlist, "     \n", classroomtimeslot, "      \n", classttb)
-                                    let gettargetroomlistbycampus = (classroomlist, targetcampusclassroom) => {
-                                        var classroomforcampus = { start: -1, end: -2 }
-                                        for (var b = 0; b < classroomlist.length; b++) {
-                                            console.log(classroomlist[b].Campus + "    " + targetcampusclassroom)
-                                            if (classroomlist[b].Campus == targetcampusclassroom) {
-                                                if (classroomforcampus.start == -1) {
-                                                    classroomforcampus.start = b;
-                                                }
-                                                classroomforcampus.end = b;
-                                            }
-                                            if ((classroomlist[b].Campus != targetcampusclassroom && classroomforcampus.end + 1 == b) || b == classroomlist.length - 1) {
-                                                return classroomforcampus;
-                                            }
-                                        }
-                                    };
-                                    let gettargetrrequestlistbycampus = (classroomtimeslot, targetcampus, targetrid) => {
-                                        var requestlistforclassroom = { start: -1, end: 0 }
-                                        for (var b = 0; b < classroomtimeslot.length; b++) {
-                                            if (classroomtimeslot[b].Campus == targetcampus && classroomtimeslot[b].RID == targetrid) {
-                                                if (requestlistforclassroom.start == -1) {
-                                                    requestlistforclassroom.start = b;
-                                                }
-        
-                                                requestlistforclassroom.end = b;
-                                            }
-                                            if (((classroomtimeslot[b].RID != targetrid || classroomtimeslot[b].Campus != targetcampus) && requestlistforclassroom.end + 1 == b) || b == classroomtimeslot.length - 1) {
-        
-                                                return requestlistforclassroom;
-                                            }
-                                        }
-                                    };
-                                    let gettargetclassroomttb = (classttb, targetcampus, targetrid) => {
-                                        var ttbforclassroom = { start: -1, end: -2 }
-                                        for (var b = 0; b < classttb.length; b++) {
-                                            if (classttb[b].Campus == targetcampus && classttb[b].RID == targetrid) {
-                                                if (ttbforclassroom.start == -1) {
-                                                    ttbforclassroom.start = b;
-                                                }
-                                                ttbforclassroom.end = b;
-                                            }
-                                            if (((classttb[b].RID != targetrid || classttb[b].Campus != targetcampus) && ttbforclassroom.end + 1 == b) || b == classttb.length - 1) {
-                                                return ttbforclassroom;
-                                            }
-                                        }
-                                    };
-        
-                                    let checkrequestlist = (requestlistforthisroom) => {
-                                        var checker = 0;
-                                        for (var c = requestlistforthisroom.start; c < requestlistforthisroom.end; c++) {
-                                            var unavailblestarttime = new Date(classroomtimeslot[c].StartDate);
-                                            var unavailblestarttimetr = classroomtimeslot[c].StartTime.split(":")
-                                            unavailblestarttime.setHours(unavailblestarttimetr[0])
-                                            unavailblestarttime.setMinutes(unavailblestarttimetr[1])
-                                            var unavailbleendtime = new Date(classroomtimeslot[c].EndDate);
-                                            var unavailbleendtimetr = classroomtimeslot[c].EndTime.split(":")
-                                            unavailbleendtime.setHours(unavailbleendtimetr[0])
-                                            unavailbleendtime.setMinutes(unavailbleendtimetr[1])
-                                            //#    console.log(unavailblestarttime, "    ", unavailbleendtime)
-                                            if ((unavailblestarttime.toLocaleDateString() == presentday.toLocaleDateString()
-                                                && !(unavailblestarttime.toLocaleTimeString("en-GB") >= currentsessionendtimeinpresentday
-                                                    || unavailbleendtime.toLocaleTimeString("en-GB") <= currentsessiontimeinpresentday)
-                                            )
-                                            ) {
-                                                console.log("classroomtimeslot skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                                checker = -1;
-                                                break;
-                                            } else {
-                                                console.log("classroomtimeslot @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                                checker = 1;
-                                            }
-                                        }
-                                        return checker;
-        
-                                    };
-                                    let checkttb = (ttbforthisroom) => {
-                                        var checker = 0;
-                                        for (var c = ttbforthisroom.start; c < ttbforthisroom.end; c++) {
-                                            var classstarttime = classttb[c].startTime;
-                                            var classendtime = classttb[c].endTime;
-        
-        
-                                            if ((classttbp[c].weekdays == presentday.getDay() && !(classstarttime >= currentsessionendtimeinpresentday || classendtime <= currentsessiontimeinpresentday))) {
-                                                console.log("classttb skip      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                                checker = -1;
-                                                break;
-                                            } else {
-                                                console.log("classttb @@@@@@@@      ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), presentday.toLocaleDateString())
-                                                checker = 1;
-                                            }
-                                        }
-                                        return checker;
-        
-                                    };
-                                    while (finalcampus == undefined || finalrid == undefined) {
-                                        // step 1 : check sup's in which campus
-                                        // step 2 : if supcampus no suitable >> loop from the beginning of all campus
-        
-        
-                                        var classroomlistforcampus = gettargetroomlistbycampus(classroomlist, campus);
-                                        //#    console.log("classroomlistforcampus   @" + campus + "@    ", classroomlistforcampus)
-                                        for (var b = classroomlistforcampus.start; b < classroomlistforcampus.end; b++) {
-                                            var requestlistforthisroom = gettargetrrequestlistbycampus(classroomtimeslot, campus, classroomlist[b].RID)
-                                            //#    console.log("requsetlistforthisroom    ", requestlistforthisroom)
-        
-                                            if (requestlistforthisroom.start == -1) {
-                                                checker = 1;
-                                            } else {
-                                                checker = checkrequestlist(requestlistforthisroom);
-                                            }
-                                            if (checker >= 0) {
-                                                var ttbforthisroom = gettargetclassroomttb(classttb, campus, classroomlist[b].RID)
-                                                if (ttbforthisroom.start == -1) {
-                                                    checker = 1;
-                                                    break;
-                                                } else {
-                                                    checker = checkttb(ttbforthisroom);
-        
-                                                }
-                                            }
-        
-                                            if (checker >= 0) {
-                                                finalcampus = campus;
-                                                finalrid = classroomlist[b].RID;
-                                                break;
-                                            }
-                                        }
-                                        campus = campuslist[indexforcampusinlist];
-                                        indexforcampusinlist++;
-                                        //    finalcampus = "hello"; finalrid = "byebye"
-                                    }
-                                }
-                                if (checker >= 0) { break; }
-        
-                                // console.log(req.body.tid, " ", req.body.sid, " ", req.body.oid, " ", finalcampus, " ", finalrid, " ", presentday, " ", currentsessiontimeinpresentday)
-                            }
-                        }
-                    }
-        
-        
-                    if (checker >= 0) {
-                        console.log("break with ", presentday.toLocaleDateString(), currentsessiontimeinpresentday.toLocaleTimeString(), currentsessionendtimeinpresentday.toLocaleTimeString());
-                        break;
-                    } else {
-                        if (req.body.typeofpresent == "final") {
-                            currentsessiontimeinpresentday.setHours((8 + timebox), 30, 0);
-                            currentsessionendtimeinpresentday.setHours((8 + 1 + timebox), 30, 0)
-                        } else {
-                            if (timebox % 2 == 0) {
-                                currentsessiontimeinpresentday.setHours((8 + timebox / sessionduration), 30, 0);
-                                currentsessionendtimeinpresentday.setHours((8 + timebox / sessionduration) + 1, 0, 0)
-                            } else {
-                                currentsessiontimeinpresentday.setHours((8 + timebox / sessionduration), 0, 0);
-                                currentsessionendtimeinpresentday.setHours((8 + timebox / sessionduration), 30, 0)
-                            }
-                        }
-                    }
-                    //    console.log("end    ", currentsessiontimeinpresentday.toLocaleTimeString("en-GB"), currentsessionendtimeinpresentday.toLocaleTimeString("en-GB"))
-                }
-        
-        
-        */
-
-
 
         return res.status(200).json({
             tid: req.body.tid,
@@ -1148,7 +736,8 @@ module.exports = {
 
         console.log(">>supervisorlist", supervisorlist);
 
-        for (var a = 0; a < supervisorlist.length; a++) {
+        for (var a = 0; a < 3; a++) {
+            //for (var a = 0; a < supervisorlist.length; a++) {
             var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
             var prefofthissuper = await new Promise((resolve) => {
                 pool.query(getprefofthissuper, (err, res) => {
@@ -1177,7 +766,7 @@ module.exports = {
             });
             console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
-            var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\")union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\")";
+            var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
             var studentlistforthissupervisor = await new Promise((resolve) => {
                 pool.query(getallstudentlistforthissuper, (err, res) => {
                     var string = JSON.stringify(res);
@@ -1193,7 +782,6 @@ module.exports = {
             var counttimeboxlist = new Array();
             if (studentlistforthissupervisor != 0) {
                 for (var b = 0; b < studentlistforthissupervisor.length; b++) {
-
                     var checkavailabledup = "select count(*) as boxcount from supervisorpairstudent "
                         + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
                         + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
@@ -1221,48 +809,196 @@ module.exports = {
                 counttimeboxlist.sort((a, b) => {
                     return a.availblelist - b.availblelist;
                 })
-                console.log(counttimeboxlist)
+
+
+                for (var b = 0; b < counttimeboxlist.length; b++) {
+                    console.log(counttimeboxlist[b])
+                    var added = false;
+                    for (var c = 0; c < thisschedulebox.length; c++) {
+                        console.log(thisschedulebox[c])
+                        var presentday = thisschedulebox[c].date;
+                        var checker = thisschedulebox[c].prefno;
+                        if (checker == "") {
+                            checker = 0;
+                        } else {
+                            checker = parseInt(thisschedulebox[c].prefno);
+                        }
+                        //console.log(thisschedulebox);
+
+                        console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
+
+
+                        if (thisschedulebox[c].schedule.length != checker || (checker == "0")) {
+                            while (!added) {
+
+                                function appendquery(thisschedulebox) {
+                                    var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                                        + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
+                                        + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
+                                        + "and studentavailable.availabledate =\"" + presentday + "\""
+                                    for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
+                                        var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
+                                        console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
+                                        checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+                                    }
+                                    checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
+                                        + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
+                                        + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
+                                        + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\")"
+                                    // console.log(checkavailabledup);
+                                    return checkavailabledup;
+                                }
+
+                                var checkavailabledup = appendquery(thisschedulebox);
+                                //console.log(checkavailabledup)
+                                var checkscheduleboxlist = await new Promise((resolve) => {
+                                    pool.query(checkavailabledup, (err, res) => {
+                                        var string = JSON.stringify(res);
+                                        var json = JSON.parse(string);
+                                        var ans = json;
+                                        resolve(ans)
+                                    })
+                                }).catch((err) => {
+                                    errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                                })
+
+                                console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
+                                if (checkscheduleboxlist[0] == undefined) {
+                                    console.log(supervisorlist[a].tid, "  ", checkavailabledup)
+                                    console.log("this fail", counttimeboxlist[b].sid)
+                                    break;
+                                } else {
+                                    thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
+                                    //console.log(">>see see ", thisschedulebox[c].schedule)
+                                    added = true;
+                                    console.log("this pass", counttimeboxlist[b].sid)
+                                }
+
+                            }
+                        } else {
+                            if (checker == 0) {
+                                console.log("need to handle this ppl 1", counttimeboxlist[b].sid)
+                            } else if (thisschedulebox[c].schedule.length == checker) {
+                                console.log("need to handle this ppl 2", counttimeboxlist[b].sid)
+                            }
+
+                        }
+                        if (added) { break; } else {
+                            console.log("need to handle this ppl 3", counttimeboxlist[b].sid)
+                        }
+                    }
+                }
 
                 for (var c = 0; c < thisschedulebox.length; c++) {
-                    var presentday = thisschedulebox[c].date;
-                    var checker = thisschedulebox[c].prefno;
-                    if (checker == "") {
-                        checker = 0;
-                    } else {
-                        checker = parseInt(thisschedulebox[c].prefno);
-                    }
-                    console.log(thisschedulebox);
+                    for (var e = 0; e < thisschedulebox[c].schedule.length; e++) {
+                        var campus = "";
+                        var room = "";
+                        console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
+                        var timestamp = new Date(thisschedulebox[c].schedule[e].availablestartTime);
 
-                    for (var b = 0; b < counttimeboxlist.length; b++) {
-                        
-                        if (checker != 0 && (thisschedulebox[c].schedule.length != checker)) {
-                            var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
-                                + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
-                                + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
-                                + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
-                                + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
-                                + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-                                + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\")"
-                                + "and studentavailable.availabledate =\"" + presentday + "\";"
-                            //console.log(checkavailabledup)
-                            var checkscheduleboxlist = await new Promise((resolve) => {
-                                pool.query(checkavailabledup, (err, res) => {
+                        var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
+                        // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        //console.log(delavailabletimequery)
+                        db.query(delavailabletimequery, (err, result) => {
+                            try {
+                                console.log("delavailabletimequery complete")
+                            } catch (err) {
+                                if (err) {
+                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                }
+                            }
+
+                        })
+                        delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        //console.log(delavailabletimequery)
+                        db.query(delavailabletimequery, (err, result) => {
+                            try {
+                                console.log("delavailabletimequery complete")
+                            } catch (err) {
+                                if (err) {
+                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                }
+                            }
+
+                        })
+
+                        var getcampusandroomquery = "select t2.cid,pid,priority, campus,rid,startTime,endTime from (select * from (select * from allsupertakecourse where (pid = \"" + thisschedulebox[c].schedule[e].tid + "\" or pid = \"" + thisschedulebox[c].schedule[e].oid + "\")) as t1 left join supervisor on supervisor.tid = t1.pid )as t2 left join allclass on allclass.cid = t2.CID where weekdays = \"" + timestamp.getDay() + "\" order by t2.priority asc, startTime asc, Campus asc , RID asc"
+                        // console.log(getcampusandroomquery)
+                        var checkcampusandroom = await new Promise((resolve) => {
+                            pool.query(getcampusandroomquery, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+                        })
+
+                        if (checkcampusandroom.length > 0) {
+                            campus = checkcampusandroom[0].campus
+                        } else {
+
+                            getcampusandroomquery = "select * from classroom where Campus != \"\""
+                            var checkcampusandroom = await new Promise((resolve) => {
+                                pool.query(getcampusandroomquery, (err, res) => {
                                     var string = JSON.stringify(res);
                                     var json = JSON.parse(string);
                                     var ans = json;
                                     resolve(ans)
                                 })
                             }).catch((err) => {
-                                errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                                errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
                             })
-
-                            console.log(">>checkscheduleboxlist",checkscheduleboxlist)
-                            
+                            campus = checkcampusandroom[0].Campus
                         }
-                    }
-                }
+                        console.log(campus + "   hello")
 
-                //console.log(">>counttimeboxlist", counttimeboxlist)
+                        getcampusandroomquery = "select * from classroom where Campus =\"" + campus + "\" and status=\"Open\" "
+                            + " and rid not in (select rid from allclassroomtimeslot where Campus = \"" + campus + "\" and startdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
+                            + " and rid not in(select rid from allclass where Campus = \"" + campus + "\" and weekdays = \"" + timestamp.getDay() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
+                        console.log(getcampusandroomquery);
+
+                        var checkcampusandroom = await new Promise((resolve) => {
+                            pool.query(getcampusandroomquery, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+                        })
+                        console.log(checkcampusandroom)
+                        if (checkcampusandroom.length > 0) {
+                            room = checkcampusandroom[0].RID;
+                        } else {
+                            room = "ooops"
+                        }
+                        console.log(campus + "    " + room)
+                        let boxid = 'boxID';
+                        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                        const charactersLength = characters.length;
+                        let counter = 0;
+                        while (counter < 15) {
+                            boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                            counter += 1;
+                        }
+                        var insertscheduleboxquery = "insert into allschedulebox values(\""+boxid+"\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\",\""+timestamp.toLocaleTimeString("en-GB")+"\","
+                        +"\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
+                        +"\""+campus+"\",\""+room+"\", now()) ;"
+                        console.log(insertscheduleboxquery)
+                        
+                        var insertbox = await new Promise((resolve) => {
+                            pool.query(insertscheduleboxquery, (err, res) => {
+                                resolve(ans)
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
+                        })
+                    }
+
+                }
 
 
             }
