@@ -1,0 +1,66 @@
+<div class="Pagetitle">Supervisor List</div>
+<div class="rows">
+    <div class="columns">
+        <div class="column is-left">
+            <div class="buttons">
+
+                <div class="button buttonlogout is-left is-mobile" onclick="backback()">
+                    Back
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<br><br>
+<table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
+
+    <tr>
+        <th colspan="6"
+            style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+            Supervisior List</th>
+    </tr>
+    <tr>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting2" id='headerTID' onclick="sorting('sorting2','mytable2','headerTID',0);">&#8593;</a> TID
+        </th>
+        <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <a class="sorting2" id='headersupname'
+                onclick="sorting('sorting2','mytable2','headersupname',1);">&#8593;</a> Supervisor Name
+        </th>
+
+
+
+
+    </tr>
+
+
+
+
+    <% allsuplist.forEach( function(list) { %>
+
+        <tr onclick="checkpath('<%=list.tid%>')">
+            <td id="tid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <%= list.tid %>
+            </td>
+
+
+            <td id="supname" style="font-size:20px;text-align: center;vertical-align:middle;">
+
+                <%= list.supname %>
+
+            </td>
+
+
+
+        </tr>
+
+        <%})%>
+</table>
+<script>
+    async function checkpath(tid) {
+        console.log("checkthisuser have schdeule ", tid);
+        location.assign("supervisorschedulelist/modifyschedule?id="+tid+"&Page=1");
+    }
+</script>

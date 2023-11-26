@@ -1,23 +1,10 @@
-var mysql = require('mysql');
-const date = require('date-and-time')
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    console.log('MySQL Connected');
-});
-
 
 module.exports = {
+   
 
     liststudent: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var allstulist;
         var allsuplist;
 
@@ -60,7 +47,8 @@ module.exports = {
                                         finaldate = undefined
                                     }
                                     console.log("controller    " + finaldate)
-                                    return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+                                    return res.status(200).json(JSON.parse(JSON.stringify({checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist})))
+                                    //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
                                 } catch (err) {
                                     return res.status(400).json("Error happened in StudentListController.liststudent.checkdeadline");
                                 }
@@ -125,6 +113,8 @@ module.exports = {
     },
 
     gettopic: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var topiclist = new Array();
         console.log(topiclist)
         console.log(topiclist.length)
@@ -153,6 +143,8 @@ module.exports = {
     },
 
     readsingleppl: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var studentresult;
         var type;
         var obslist;
@@ -272,7 +264,8 @@ module.exports = {
 
     deletestudent: async function (req, res) {
         var studentresult;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         //remove single ppl
         console.log(String(req.params.id).charAt(0))
         if (String(req.params.id).charAt(0) == "s") {
@@ -349,7 +342,8 @@ module.exports = {
 
     createnewstudent: async function (req, res) {
         var stdlist;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let pw = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -401,6 +395,8 @@ module.exports = {
         return res.ok("created");
     },
     createnewsup: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var stdlist;
         console.log(req.body);
         let pw = '';
@@ -436,6 +432,8 @@ module.exports = {
     },
 
     addpairing: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var checktype = req.params.id.split('&');
         thisistheline = "insert IGNORE into observerpairstudent values(\"" +
             checktype[1] + "\"\,\""
@@ -454,7 +452,8 @@ module.exports = {
     },
 
     uploadstudentlist: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         console.log(req.body);
 
 
@@ -506,8 +505,9 @@ module.exports = {
     },
 
     uploadsupervisorlist: async function (req, res) {
-
         var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+       
 
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body)
@@ -541,6 +541,7 @@ module.exports = {
 
     uploadpairlist: async function (req, res) {
         var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         for (var i = 0; i < req.body.length; i++) {
             console.log("\n\n\n\n\n")
             console.log(req.body[i]);
@@ -632,8 +633,9 @@ module.exports = {
     },
 
     checkuploadstudentlistdeadline: async function (req, res) {
-        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
         var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"        
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);
@@ -661,6 +663,8 @@ module.exports = {
     },
 
     generateobs: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var thisistheline = "select supervisor.supname, supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
         db.query(thisistheline, function (err, result) {
             try {

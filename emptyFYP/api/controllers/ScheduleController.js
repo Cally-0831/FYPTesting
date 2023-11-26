@@ -53,6 +53,7 @@ module.exports = {
         });
     },
 
+    /**
     createdraft: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -316,7 +317,7 @@ module.exports = {
         })
 
     },
-
+ */
     genavailable: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -1019,6 +1020,7 @@ module.exports = {
         return res.ok();
     },
 
+    /**
     checkpref: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -1105,104 +1107,106 @@ module.exports = {
 
     },
 
-
-
-
-
-
-
-
-
-
-
-    savebox: async function (req, res) {
-        var db = await sails.helpers.database();
-        // console.log(req.body.boxlist);
-        var boxlist = req.body.boxlist;
-        updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
-        /**
-        db.query( updatesupdraftexist, (err, results) => {
-            if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") };
-        });
  */
-        for (var a = 0; a < boxlist.length; a++) {
-            updateobsdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[a].oid + "\"";
-            /**
-            db.query(updateobsdraftexist, (err, results) => {
-                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updateobsdraftexist") };
+
+
+
+
+
+
+
+
+    /**
+        savebox: async function (req, res) {
+            var db = await sails.helpers.database();
+            // console.log(req.body.boxlist);
+            var boxlist = req.body.boxlist;
+            updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
+            
+            db.query( updatesupdraftexist, (err, results) => {
+                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") };
             });
-            */
-            boxid = "" + (boxlist[a].presentday.split("T"))[0] + "_" + boxlist[a].presentstartTime;
+     
+            for (var a = 0; a < boxlist.length; a++) {
+                updateobsdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[a].oid + "\"";
+                
+                db.query(updateobsdraftexist, (err, results) => {
+                    if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updateobsdraftexist") };
+                });
+                
+                boxid = "" + (boxlist[a].presentday.split("T"))[0] + "_" + boxlist[a].presentstartTime;
+    
+                insertline = "insert ignore into allschedulebox values(\"" + boxid + "\",\"" + boxlist[a].presentday + "\",\"" + boxlist[a].presentstartTime + "\",\"" + boxlist[a].tid + "\",\"" + boxlist[a].sid + "\",\"" + boxlist[a].oid + "\",\"" + boxlist[a].finalcampus + "\",\"" + boxlist[a].finalrid + "\",now())";
+                updateline = "Update allschedulebox set boxdate = \"" + boxlist[a].presentday + "\", boxtime = \"" + boxlist[a].presentstartTime + "\" ,SID =\"" + boxlist[a].sid + "\", OID = \"" + boxlist[a].oid + "\", Campus = \"" + boxlist[a].finalcampus + "\", RID = \"" + boxlist[a].finalrid + "\", LastUpdate = now() where boxid = \"" + boxid + "\"";
+                console.log(boxid)
+                console.log(insertline)
+                console.log(updateline)
+               
+                db.query(insertline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + insertline + "\n"
+                        statuscode = 401;
+                    }
+     
+                })
+                db.query(updateline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + thisistheline + "\n"
+                        statuscode = 401;
+                    }
+                })
+             
+    
+            }
+    
+         
+            var errstring = "ok";
+            var statuscode = 200;
+            var arrayint = [];
+     
+            thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
+            db.query(thisistheline, (err, results) => {
+                if (err) { return res.status(401).json("Error happened when updating") }
+            });
+     
+            for (var a = 0; a < req.body.length; a++) {
+                console.log("\n\n\n\n");
+                console.log(req.body[a].boxid);
+                console.log(req.body[a].stu);
+                console.log(req.body[a].obs);
+                console.log(req.body[a].Campus);
+                console.log(req.body[a].RID);
+                insertline = "insert ignore into allschedulebox values(\"" + req.body[a].boxid + "\",\"" + req.body[a].boxdate + "\",\"" + req.body[a].boxtime + "\",\"" + req.session.userid + "\",\"" + req.body[a].stu + "\",\"" + req.body[a].obs + "\",\"" + req.body[a].Campus + "\",\"" + req.body[a].RID + "\",now())";
+     
+                thisistheline = "Update allschedulebox set boxdate = \"" + req.body[a].boxdate + "\", boxtime = \"" + req.body[a].boxtime + "\" ,SID =\"" + req.body[a].stu + "\", OID = \"" + req.body[a].obs + "\", Campus = \"" + req.body[a].Campus + "\", RID = \"" + req.body[a].RID + "\", LastUpdate = now() where boxid = \"" + req.body[a].boxid + "\"";
+     
+                console.log(thisistheline)
+                db.query(insertline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + insertline + "\n"
+                        statuscode = 401;
+                    }
+     
+                })
+                db.query(thisistheline, (err, result) => {
+                    if (err) {
+                        errstring = "";
+                        errstring += "error happened for:" + thisistheline + "\n"
+                        statuscode = 401;
+                    }
+                })
+              
+            }
+    
+    
+            console.log(supervisorlist)
+            return res.ok();
+        },
+     */
 
-            insertline = "insert ignore into allschedulebox values(\"" + boxid + "\",\"" + boxlist[a].presentday + "\",\"" + boxlist[a].presentstartTime + "\",\"" + boxlist[a].tid + "\",\"" + boxlist[a].sid + "\",\"" + boxlist[a].oid + "\",\"" + boxlist[a].finalcampus + "\",\"" + boxlist[a].finalrid + "\",now())";
-            updateline = "Update allschedulebox set boxdate = \"" + boxlist[a].presentday + "\", boxtime = \"" + boxlist[a].presentstartTime + "\" ,SID =\"" + boxlist[a].sid + "\", OID = \"" + boxlist[a].oid + "\", Campus = \"" + boxlist[a].finalcampus + "\", RID = \"" + boxlist[a].finalrid + "\", LastUpdate = now() where boxid = \"" + boxid + "\"";
-            console.log(boxid)
-            console.log(insertline)
-            console.log(updateline)
-            /**
-            db.query(insertline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + insertline + "\n"
-                    statuscode = 401;
-                }
- 
-            })
-            db.query(updateline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + thisistheline + "\n"
-                    statuscode = 401;
-                }
-            })
-           */
-
-        }
-
-        /** 
-        var errstring = "ok";
-        var statuscode = 200;
-        var arrayint = [];
- 
-        thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
-        db.query(thisistheline, (err, results) => {
-            if (err) { return res.status(401).json("Error happened when updating") }
-        });
- 
-        for (var a = 0; a < req.body.length; a++) {
-            console.log("\n\n\n\n");
-            console.log(req.body[a].boxid);
-            console.log(req.body[a].stu);
-            console.log(req.body[a].obs);
-            console.log(req.body[a].Campus);
-            console.log(req.body[a].RID);
-            insertline = "insert ignore into allschedulebox values(\"" + req.body[a].boxid + "\",\"" + req.body[a].boxdate + "\",\"" + req.body[a].boxtime + "\",\"" + req.session.userid + "\",\"" + req.body[a].stu + "\",\"" + req.body[a].obs + "\",\"" + req.body[a].Campus + "\",\"" + req.body[a].RID + "\",now())";
- 
-            thisistheline = "Update allschedulebox set boxdate = \"" + req.body[a].boxdate + "\", boxtime = \"" + req.body[a].boxtime + "\" ,SID =\"" + req.body[a].stu + "\", OID = \"" + req.body[a].obs + "\", Campus = \"" + req.body[a].Campus + "\", RID = \"" + req.body[a].RID + "\", LastUpdate = now() where boxid = \"" + req.body[a].boxid + "\"";
- 
-            console.log(thisistheline)
-            db.query(insertline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + insertline + "\n"
-                    statuscode = 401;
-                }
- 
-            })
-            db.query(thisistheline, (err, result) => {
-                if (err) {
-                    errstring = "";
-                    errstring += "error happened for:" + thisistheline + "\n"
-                    statuscode = 401;
-                }
-            })
-          
-        }
-*/
-
-        console.log(supervisorlist)
-        return res.ok();
-    },
 
     getrequestroomlist: async function (req, res) {
         var db = await sails.helpers.database();
@@ -1330,4 +1334,70 @@ module.exports = {
                 */
     },
 
+    supervisorschedulelist: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var query = "select *  from supervisor"
+        db.query(query, function (err, result) {
+            try {
+                var string = JSON.stringify(result);
+                var json = JSON.parse(string);
+                var ans = json;
+                //console.log(ans)
+                return res.view("user/admin/supervisorschedulelist", { allsuplist: ans })
+            } catch (err) {
+                return res.status(400).json("error happened in SchdeuleController.supervisorschedulelist.query")
+            }
+
+
+        })
+
+    },
+
+    retrievesinglesupervisorschedule: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        console.log(req.query)
+        var query= "select * from allschedulebox where tid = \""+req.query.id+"\" or oid =  \""+req.query.id+"\";"
+        var boxesforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
+        })
+        query = "select * from allsupersetting where typeofsetting = 3;"
+        var setting3 = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (ans.length != 0) {
+                    var startday = new Date(ans[0].startdate);
+                    var endday = new Date(ans[0].enddate);
+                    var startTime = ans[0].starttime.split(":");
+                    var endTime = ans[0].endtime.split(":");
+                    startday.setHours(startTime[0]);
+                    startday.setMinutes(startTime[1]);
+                    startday.setSeconds(startTime[2]);
+                    endday.setHours(endTime[0]);
+                    endday.setMinutes(endTime[1]);
+                    endday.setSeconds(endTime[2]);
+                    console.log(startday + "   " + endday)
+                    ans = { startday: startday, endday: endday };
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
+        })
+        
+console.log(boxesforthissupervisor)
+console.log(setting3)
+        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor,setting : setting3})
+       
+    },
 }

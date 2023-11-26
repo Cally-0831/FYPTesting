@@ -25,34 +25,36 @@ module.exports.routes = {
 
   'GET /login': "UserController.login",
   'POST /login': "UserController.login",
- //'POST /login': "SocketController.becomesocket",
+  //'POST /login': "SocketController.becomesocket",
 
   'GET /user/logout': 'UserController.logout',
 
-  "GET /usermanagement":{ view: 'user/admin/usermanagement' },
+  "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
   //'GET /home': { view: 'user/home' },
-  'GET /home':'UserController.home',
+  'GET /home': 'UserController.home',
   'GET /scheduledesign': "SettingController.nodraft",
   'GET /checkdraft': "SettingController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
+
+
+  "GET /scheduledesign/getpairing": "ScheduleController.getpairing",
+
   
-
-  "GET /scheduledesign/getpairing" : "ScheduleController.getpairing",
-
-  "POST /createschedule/createdraft":"ScheduleController.createdraft",
-  "POST /createschedule/createdraft/savebox":"ScheduleController.savebox",
+  //"POST /createschedule/createdraft": "ScheduleController.createdraft",
+  //"POST /createschedule/createdraft/savebox": "ScheduleController.savebox",
   //"POST /savebox":"ScheduleController.savebox",
-  "GET /savebox/get_roomlist_bycampus":"ScheduleController.getrequestroomlist",
-  "GET /savebox/get_okobslist":"ScheduleController.getrequestobslist",
-  "POST /createschedule/createdraft/checkpref":"ScheduleController.checkpref",
-  
 
-  "GET /uploadlesson":{view:"user/admin/uploadlesson"},
-  "POST /uploadlesson":"LessonController.uploadlesson",
-  "GET /lessonlist":"LessonController.listlesson",
-  "DELETE /lessonlist":"LessonController.deletelesson",
-  "GET /lessonlist/:CID":"LessonController.viewlesson",
+  "GET /savebox/get_roomlist_bycampus": "ScheduleController.getrequestroomlist",
+  "GET /savebox/get_okobslist": "ScheduleController.getrequestobslist",
+  //"POST /createschedule/createdraft/checkpref": "ScheduleController.checkpref",
+
+
+  "GET /uploadlesson": { view: "user/admin/uploadlesson" },
+  "POST /uploadlesson": "LessonController.uploadlesson",
+  "GET /lessonlist": "LessonController.listlesson",
+  "DELETE /lessonlist": "LessonController.deletelesson",
+  "GET /lessonlist/:CID": "LessonController.viewlesson",
 
 
   "GET /readttb/:SID": "TimetableController.readsinglestudentttb",
@@ -71,7 +73,7 @@ module.exports.routes = {
   'POST /timetable/submitttb': "TimetableController.submitclass",
   'POST /timetable/submitttb/deadline': "TimetableController.checkdeadline",
   'POST /timetable/submitempty': "TimetableController.submitempty",
-  "POST /timetable/submitttb/checkduplication" : "TimetableController.checkduplication",
+  "POST /timetable/submitttb/checkduplication": "TimetableController.checkduplication",
 
   'GET /timetable': "TimetableController.getpersonalallclass",
   'DELETE /timetable': "TimetableController.delpersonalallclass",
@@ -79,14 +81,14 @@ module.exports.routes = {
   'POST /timetable/pic': "TimetableController.upload",
   'POST /timetable/deadline': "TimetableController.checkdeadline",
 
-  
+
   'GET /readsupervisorrequestlist': "RequestController.listsupervisorrequest",
   'GET /readstudentrequestlist': "RequestController.liststudentrequest",
   'GET /requestdetail/:ReqID': "RequestController.viewstudentrequestdeatils",
   'POST /requestdetail/:ReqID': "RequestController.replystudentrequest",
   "POST /requestdetail/proof/:ReqID": "RequestController.upload",
 
- 
+
   'GET /Mainclassroommanagement': { view: 'user/admin/Mainclassroommanagement' },
   'GET /classmanagement': { view: 'user/admin/classmanagement' },
 
@@ -122,7 +124,7 @@ module.exports.routes = {
   'POST /uploadsupervisorlist': "StudentListController.uploadsupervisorlist",
   //'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
-  
+
   'GET /listuser': "StudentListController.liststudent",
   'POST /listuser': "StudentListController.liststudent",
   'POST /listuser/genobs': "StudentListController.generateobs",
@@ -136,14 +138,16 @@ module.exports.routes = {
   'GET /read/:id': "StudentListController.readsingleppl",
   'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
- 
+
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
-  "POST /scheduledesign/genavailable" : "ScheduleController.genavailable",
+  "POST /scheduledesign/genavailable": "ScheduleController.genavailable",
 
-"GET /preference": "RequestController.getpreference",
-"POST /preference": "RequestController.submitpreference"
+  "GET /preference": "RequestController.getpreference",
+  "POST /preference": "RequestController.submitpreference",
 
+  "GET /supervisorschedulelist":"ScheduleController.supervisorschedulelist",
+  "GET /supervisorschedulelist/modifyschedule":"ScheduleController.retrievesinglesupervisorschedule",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   /***************************************************************************

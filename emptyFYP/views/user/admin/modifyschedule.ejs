@@ -1,0 +1,53 @@
+<div>
+    <div class="Pagetitle">Draft Schedule for <%=req.params.id%>
+    </div>
+    <div class="row">
+        <div class="buttons">
+            <div class="button buttonlogout" onclick="backback()">Back</div>
+        </div>
+    </div>
+<br>
+    <div class="row">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <tr>
+               
+                <%var displaydate = new Date((new Date(setting.startday)).getUTCSeconds()+60*60*24);%>
+                <%= displaydate.toLocaleDateString()%>
+                <%var enddisplaydate = new Date(setting.startday);%>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
+                   <
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    SUN
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    MON
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    TUE
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    WED
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    THU
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    FRI
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    SAT
+                </th>
+                <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
+                    >
+                </th>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<script>
+    function backback() {
+        location.assign("/supervisorschedulelist")
+    }
+</script>
