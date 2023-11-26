@@ -736,8 +736,8 @@ module.exports = {
 
         console.log(">>supervisorlist", supervisorlist);
 
-        for (var a = 0; a < 3; a++) {
-            //for (var a = 0; a < supervisorlist.length; a++) {
+        //  for (var a = 0; a < 3; a++) {
+        for (var a = 0; a < supervisorlist.length; a++) {
             var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
             var prefofthissuper = await new Promise((resolve) => {
                 pool.query(getprefofthissuper, (err, res) => {
@@ -984,18 +984,29 @@ module.exports = {
                             boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
                             counter += 1;
                         }
-                        var insertscheduleboxquery = "insert into allschedulebox values(\""+boxid+"\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\",\""+timestamp.toLocaleTimeString("en-GB")+"\","
-                        +"\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
-                        +"\""+campus+"\",\""+room+"\", now()) ;"
+                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\",\"" + timestamp.toLocaleTimeString("en-GB") + "\","
+                            + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
+                            + "\"" + campus + "\",\"" + room + "\", now()) ;"
                         console.log(insertscheduleboxquery)
-                        
+
                         var insertbox = await new Promise((resolve) => {
                             pool.query(insertscheduleboxquery, (err, res) => {
-                                resolve(ans)
+                                resolve(res)
                             })
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
                         })
+
+                        var updatesupervisordraft = "update supervisor set draft = \"Y\" where tid = \"" + thisschedulebox[c].schedule[e].tid + "\""
+                        console.log(updatesupervisordraft)
+                        insertbox = await new Promise((resolve) => {
+                            pool.query(updatesupervisordraft, (err, res) => {
+                                resolve(res)
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.updatesupervisordraft"
+                        })
+
                     }
 
                 }
