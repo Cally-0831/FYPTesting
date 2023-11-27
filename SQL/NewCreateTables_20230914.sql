@@ -172,6 +172,7 @@ primary key (STID)
 create table allschedulebox(
 boxID varchar(30)not null,
 boxdate Timestamp not null,
+TYPE varchar(10) not null,
 TID varchar(10) not null,
 SID varchar(10)not null,
 OID varchar(50)not null,

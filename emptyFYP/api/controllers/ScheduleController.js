@@ -985,7 +985,7 @@ module.exports = {
                             boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
                             counter += 1;
                         }
-                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\","
+                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\""+req.body.typeofpresent+"\","
                             + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
                             + "\"" + campus + "\",\"" + room + "\", now()) ;"
                         console.log(insertscheduleboxquery)
@@ -1369,6 +1369,31 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
         })
+
+        query= "select * from allrequestfromsupervisor where tid = \""+req.query.id+"\" order by requestdate asc, requeststarttime asc";
+        var requestforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
+        })
+
+        query= "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \""+req.query.id+"\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
+        var ttbforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
+        })
+
         query = "select * from allsupersetting where typeofsetting = 3;"
         var setting3 = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1394,10 +1419,13 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
         })
+
+        
         
 console.log(boxesforthissupervisor)
 console.log(setting3)
-        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor,setting : setting3,Page:req.query.Page})
+        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor, ttb:ttbforthissupervisor,
+            requestes : requestforthissupervisor,setting : setting3,Page:req.query.Page})
        
     },
 }

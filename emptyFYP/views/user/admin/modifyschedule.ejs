@@ -7,14 +7,22 @@
         </div>
     </div>
     <br>
-    <div class="row">
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    
+        <div class = "columns is-centered is-mobile">
+            <div class = "column ">
+        <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
             <tr>
 
                 <%var displaydate=(new Date(setting.startday))%>
                     <% var printday=new Date(displaydate.getTime()+ 60*60*24*1000*(Page-1))%>
-                        <%var enddisplaydate=new Date(setting.startday);%>
-                            <th
+                        <%var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay()));%>
+                        <%=enddisplaydate%>
+                        <%boxes = boxes.filter((boxes)=> new Date(boxes.boxdate)<= enddisplaydate)%>
+                        <%boxes = boxes.filter((boxes)=> new Date(boxes.boxdate) >= displaydate)%>
+                        <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() <= enddisplaydate.toLocaleDateString())%>
+                        <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() >= displaydate.toLocaleDateString())%>
+                         <%console.log(">>requestes",requestes)%>   
+                        <th
                                 style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
                                 < </th>
                             <th
@@ -51,8 +59,8 @@
                             </th>
             </tr>
             <tr>
-                <td></td>
-                <%=printday.getDay()%>
+                <td style="font-size : 14px"></td>
+                
                     <%for(var a=0 ; a < displaydate.getDay();a++){%>
                         <%printday=new Date(printday.getTime()-(displaydate.getDay()+a)*60*60*24*1000)%> 
                         <td style="font-size:18px;text-align: center;vertical-align:middle;"><%=printday.toLocaleDateString("en-GB")%></td>
@@ -65,7 +73,7 @@
                                 </td>
                                 <%printday=new Date(printday.getTime()+60*60*24*1000)%>
                                     <%}%>
-                                        <td></td>
+                                        <td style="font-size : 14px"></td>
             </tr>
             <%printday = displaydate%>
             <%printday.setHours(8);printday.setMinutes(30);%>
@@ -77,67 +85,91 @@
                     <%for (var b = 0 ; b < 8;b++){%>
                         <%if(b == 0){%>
                             
-                            <td><%=printday.toLocaleDateString()%> <%=printday.toLocaleTimeString("en-GB")%></td>
+                            <td style="font-size : 14px"><%=printday.toLocaleTimeString("en-GB")%></td>
                             <%}else{%>
                                 <%if(b <= displaydate.getDay()){%>
-                                    <td>hell0</td>                                   
+                                    <td style="font-size : 14px">hell0</td>                                   
                                      <%}else{%>
                                     <!--start checking-->
-                                    <%console.log(printday.toLocaleDateString()," ",printday.toLocaleTimeString(),"   ",(new Date(boxes[0].boxdate)).toLocaleDateString()," ",(new Date(boxes[0].boxdate)).toLocaleTimeString())%>
-                                         <%if(printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                                    
+                                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
                                             <%console.log("case 1")%>
                                      
                                             <%if(printday.toLocaleTimeString("en-GB") == (new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")){%>
                                                 <%console.log("case 1.1")%>
-                                            <td>
-                                                boxID:   <%=boxes[0].boxID%>
-                                                <br>
-                                                Time:    <%=(new Date(boxes[0].boxdate)).toLocaleDateString()%> <%=(new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")%>
-                                                <br>
-                                                SID :    <%=boxes[0].SID%>
-                                                <br>
-                                                Campus:  <%=boxes[0].Campus%>
-                                                <br>
-                                                RID:     <%=boxes[0].RID%>
+                                            <td style="font-size : 14px">
+                                                <table class="table" style="margin-left: auto; margin-right: auto;">
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                                    <tr><td><%=boxes[0].boxID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                                    <tr><td><%=boxes[0].SID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                                    <tr><td><%=boxes[0].Campus%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                                    <tr><td><%=boxes[0].RID%></td></tr>
+                                                </table>
+                                               
                                             </td>
                                             <%boxes.splice(0,1)%>
-                                            <%if(boxes.length !=0){%>
-                                                <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
-                                                    <%boxes.push(boxes.shift())%>
-                                                    <%console.log((new Date(boxes[0].boxdate)).toLocaleDateString())%>
-                                                 <%}%>
-                                               <%}%>
+                                            <%console.log("now boxes  ",boxes.length,"  ",boxes)%>
+                                            <%if(boxes.length>1){%>
+                                                <%var checkdate = new Date(boxes[0].boxdate)%>
+                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%var element = (boxes.shift())%>
+                                                    <%boxes.push(element);%>
+                                                <%if (boxes[0] == undefined){console.log("here problem",boxes[0])}%>
+                                                    <%checkdate = new Date(boxes[0].boxdate)%>
+                                                    <%}%>
+                                                <%}%>
+                                           
+                                            
+                                               
                                             
                                                 <%}else{%>
                                                     <%console.log("case 1.2")%>
                                                    
                                                  <!--not correct time but we need to move on to next day-->
                                                  <!--push all today to the back of the list-->
+                                                 <%if(boxes.length>1){%>
                                                  <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
                                                     <%boxes.push(boxes.shift())%>
                                                     <%console.log((new Date(boxes[0].boxdate)).toLocaleDateString())%>
                                                  <%}%>
-                                                 
-                                                    <td>77</td>
+                                                 <%}%>
+                                                    <td style="font-size : 14px">77</td>
                                                  <%}%>
                                                  
                                        <%}else{%>
                                         <%console.log("case 2")%>
-                                       <td>88</td>
-                                       <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+
+                                       <td style="font-size : 14px">88</td>
+                                       <%if(boxes.length>1){%>
+                                       <%while(boxes.length >1 && (new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
                                         <%boxes.push(boxes.shift())%>
                                      <%}%>
-                                        <%}%>
+                                     <%}%>
+                                        <%}%>  
+                                        <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
+                                            
+                                            <%console.log("case request 1")%>
+                                     
+                                            <%if(printday.toLocaleTimeString("en-GB") < (requestes[0].RequestStartTime)  ){%>
+                                                <%console.log("case request 1.1")%>
+                                                <%}%>
+                                            <%}%>
                                         
-                                        
-                                        
+
+
+
+
+
                                        <%printday=new Date(printday.getTime()+60*60*24*1000)%>
                                         <%}%>
                                 
                                 <%}%>
                                 
                         <%}%>
-                        <td></td>
+                        <td style="font-size : 14px"></td>
                 </tr>
                 <%printday=new Date(displaydate.getTime()+(a+1)*60*60*1000)%>
                 <%}%>
@@ -145,6 +177,8 @@
 
         </table>
     </div>
+        </div>
+   
 
 </div>
 <script>
