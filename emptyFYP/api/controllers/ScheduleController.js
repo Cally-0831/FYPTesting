@@ -985,7 +985,7 @@ module.exports = {
                             boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
                             counter += 1;
                         }
-                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\""+req.body.typeofpresent+"\","
+                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\"" + req.body.typeofpresent + "\","
                             + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
                             + "\"" + campus + "\",\"" + room + "\", now()) ;"
                         console.log(insertscheduleboxquery)
@@ -1358,7 +1358,7 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         console.log(req.query)
-        var query= "select * from allschedulebox where tid = \""+req.query.id+"\" or oid =  \""+req.query.id+"\" order by boxdate asc;"
+        var query = "select * from allschedulebox where tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" order by boxdate asc;"
         var boxesforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1370,7 +1370,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
         })
 
-        query= "select * from allrequestfromsupervisor where tid = \""+req.query.id+"\" order by requestdate asc, requeststarttime asc";
+        query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\" order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1382,7 +1382,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
         })
 
-        query= "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \""+req.query.id+"\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
+        query = "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \"" + req.query.id + "\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
         var ttbforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1393,7 +1393,7 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
         })
-
+       
         query = "select * from allsupersetting where typeofsetting = 3;"
         var setting3 = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1420,12 +1420,23 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
         })
 
-        
-        
-console.log(boxesforthissupervisor)
-console.log(setting3)
-        return res.view("user/admin/modifyschedule",{boxes:boxesforthissupervisor, ttb:ttbforthissupervisor,
-            requestes : requestforthissupervisor,setting : setting3,Page:req.query.Page})
-       
+
+        /** 
+ttbforthissupervisor.concat(appendlist);
+console.log(">>after concat",appendlist)
+
+ttbforthissupervisor.sort((a, b) => {
+    return a.weekdays - b.weekdays || a.starttime - b.starttime;
+})
+
+console.log(ttbforthissupervisor)
+ */
+
+
+        return res.view("user/admin/modifyschedule", {
+            boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
+            requestes: requestforthissupervisor, setting: setting3, Page: req.query.Page
+        })
+
     },
 }

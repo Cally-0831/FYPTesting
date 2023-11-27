@@ -21,7 +21,42 @@
                         <%boxes = boxes.filter((boxes)=> new Date(boxes.boxdate) >= displaydate)%>
                         <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() <= enddisplaydate.toLocaleDateString())%>
                         <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() >= displaydate.toLocaleDateString())%>
-                         <%console.log(">>requestes",requestes)%>   
+                        <%
+                        var appendlist = [];
+                        for (var a = 0; a < ttb.length; a++) {
+                            var starttimeay = ttb[a].starttime.split(":");
+                            var endtimeay = ttb[a].endtime.split(":");
+                          
+                            if (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+                              
+                                var index = 1;
+                                while (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+                                    
+                                    var element = JSON.parse(JSON.stringify(ttb[a]))
+                                    element.starttime = (parseInt(starttimeay[0]) + index) + ":" + "30:00"
+                                    element.endtime = (parseInt(starttimeay[0]) + index + 1) + ":" + "30:00"
+                                    appendlist.push(element);
+                                    endtimeay = element.starttime.split(":");
+                                   
+                                    index++;
+                                   
+                                }
+                            } 
+                            ttb[a].endtime = (parseInt(starttimeay[0])+1) + ":30:00";
+                            
+                        }
+                       appendlist.forEach((element)=> ttb.push(element))
+                        
+
+                       ttb.sort((a, b) => {
+                        if (a.weekdays < b.weekdays) return -1;
+                        if (a.weekdays > b.weekdays) return 1;
+                       if (a.starttime < b.starttime) return -1;
+                        if (a.starttime > b.starttime) return 1;
+                        })
+                        console.log(ttb)
+                    %>
+                     
                         <th
                                 style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
                                 < </th>
@@ -91,14 +126,16 @@
                                     <td style="font-size : 14px">hell0</td>                                   
                                      <%}else{%>
                                     <!--start checking-->
-                                    
+                                    <%var printed = false;%>
+                                    <!--check schedule box-->
                                          <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
-                                            <%console.log("case 1")%>
+                                        
                                      
                                             <%if(printday.toLocaleTimeString("en-GB") == (new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")){%>
-                                                <%console.log("case 1.1")%>
+                                                
+                                                <%printed = true;%>
                                             <td style="font-size : 14px">
-                                                <table class="table" style="margin-left: auto; margin-right: auto;">
+                                                <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
                                                     <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
                                                     <tr><td><%=boxes[0].boxID%></td></tr>
                                                     <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
@@ -111,13 +148,13 @@
                                                
                                             </td>
                                             <%boxes.splice(0,1)%>
-                                            <%console.log("now boxes  ",boxes.length,"  ",boxes)%>
+                                            
                                             <%if(boxes.length>1){%>
                                                 <%var checkdate = new Date(boxes[0].boxdate)%>
                                                  <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
                                                     <%var element = (boxes.shift())%>
                                                     <%boxes.push(element);%>
-                                                <%if (boxes[0] == undefined){console.log("here problem",boxes[0])}%>
+                                                
                                                     <%checkdate = new Date(boxes[0].boxdate)%>
                                                     <%}%>
                                                 <%}%>
@@ -126,40 +163,152 @@
                                                
                                             
                                                 <%}else{%>
-                                                    <%console.log("case 1.2")%>
+                                                  
                                                    
                                                  <!--not correct time but we need to move on to next day-->
                                                  <!--push all today to the back of the list-->
                                                  <%if(boxes.length>1){%>
                                                  <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
                                                     <%boxes.push(boxes.shift())%>
-                                                    <%console.log((new Date(boxes[0].boxdate)).toLocaleDateString())%>
+                                                   
                                                  <%}%>
                                                  <%}%>
-                                                    <td style="font-size : 14px">77</td>
+                                                    
                                                  <%}%>
                                                  
                                        <%}else{%>
-                                        <%console.log("case 2")%>
-
-                                       <td style="font-size : 14px">88</td>
+                                       
                                        <%if(boxes.length>1){%>
                                        <%while(boxes.length >1 && (new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
                                         <%boxes.push(boxes.shift())%>
                                      <%}%>
                                      <%}%>
                                         <%}%>  
+
+                                        <!--check requestdate-->
                                         <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
                                             
-                                            <%console.log("case request 1")%>
+                                          
                                      
                                             <%if(printday.toLocaleTimeString("en-GB") < (requestes[0].RequestStartTime)  ){%>
-                                                <%console.log("case request 1.1")%>
+                                             
+                                                <%printed = true;%>
+                                                <td style="font-size : 14px">
+                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
+                                                        <tr><td><%=requestes[0].ReqID%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Start Time :</th></tr>
+                                                        <tr><td><%=requestes[0].RequestStartTime%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">End Time :</th></tr>
+                                                        <tr><td><%=requestes[0].RequestEndTime%></td></tr>
+                                                        
+                                                    </table>
+                                                   
+                                                </td>
+                                                <%requestes.splice(0,1)%>
+                                           
+                                            <%if(requestes.length>1){%>
+                                                <%var checkdate = new Date(requestes[0].RequestDate)%>
+                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%var element = (requestes.shift())%>
+                                                    <%requestes.push(element);%>
+                                               
+                                                    <%checkdate = new Date(requestes[0].RequestDate)%>
+                                                    <%}%>
                                                 <%}%>
-                                            <%}%>
+                                                
+                                                <%}else{%>
+                                                  
+                                                   
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%if(requestes.length>1){%>
+                                                 <%while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%requestes.push(requestes.shift())%>
+                                                   
+                                                 <%}%>
+                                                 <%}%>
+                                                    
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                     
+
+                                      
+                                       <%if(requestes.length>1){%>
+                                       <%while(requestes.length >1 && (new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                        <%requestes.push(requestes.shift())%>
+                                     <%}%>
+                                     <%}%>
+                                        <%}%>  
                                         
 
 
+
+
+                                        <!--check ttb-->
+                                        <!--check requestdate-->
+                                        
+                                        <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>  
+                                            <%var printdaysessiontime = new Date(printday.getTime()+60*60*1000)%>
+                                            <%console.log((printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)),"   ",(ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")))%>
+                                            
+                                          
+                                            <%if(printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)  &&  ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")){%>
+                                                <%console.log("case 1")%>
+                                                <%printed = true;%>
+                                                <td style="font-size : 14px">
+                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
+                                                        <tr><td><%=ttb[0].cid%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
+                                                        <tr><td><%=ttb[0].campus%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
+                                                        <tr><td><%=ttb[0].rid%></td></tr>
+                                                        
+                                                    </table>
+                                                   
+                                                </td>
+                                                <%ttb.splice(0,1)%>
+                                            <%if(ttb.length>1){%>
+                                                <%var checkdate = ttb[0].weekdays%>
+                                                 <%while(checkdate == printday.getDay()){%>
+                                                    <%ttb.push(ttb.shift())%>
+                                                   
+                                                    <%checkdate = ttb[0].weekdays%>
+                                                    <%}%>
+                                                <%}%>
+                                                
+                                                <%}else{%>
+                                                   <%console.log("case2")%>
+                                                   
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%if(ttb.length>1){%>
+                                                    <%var checkweek = ttb[0].weekdays%>
+                                                    
+                                                    <%while(ttb.length >1 && checkweek == printday.getDay()){%>
+                                                        <%ttb.push(ttb.shift())%>
+                                                        <%checkweek = ttb[0].weekdays%>
+                                                        <%console.log("qweq",ttb)%>
+                                                        <%break;%>
+                                                        <%}%>
+                                                 <%}%>
+                                                 
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                       
+                                      
+                                       <%if(ttb.length>1){%>
+                                    <%var checkdate = ttb[0].weekdays%>
+                                       <%while(ttb.length >1 && (ttb[0].weekdays == printday.getDay())){%>
+                                        <%ttb.push(ttb.shift())%>
+                                            <%checkdate = ttb[0].weekdays%>
+                                     <%}%>
+                                     <%}%>
+                                        <%}%>  
+<%if(!printed){%><td style="font-size : 14px">111</td><%}%>
 
 
 
@@ -169,7 +318,7 @@
                                 <%}%>
                                 
                         <%}%>
-                        <td style="font-size : 14px"></td>
+                        <td style="font-size : 14px">222</td>
                 </tr>
                 <%printday=new Date(displaydate.getTime()+(a+1)*60*60*1000)%>
                 <%}%>
