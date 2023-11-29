@@ -21,6 +21,8 @@ db.connect(async (err) => {
 module.exports = {
 
     login: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         const user = {
             allusersname: "",
             pid: "",
@@ -34,18 +36,13 @@ module.exports = {
         if (req.method == "GET") return res.view('user/login');
 
         if (!req.body.username || !req.body.pw) return res.status(401).json("Please enter both username and password");
-        var db = await sails.helpers.database();
-
-
-
-
         var searchingname = req.body.username;
         var searchingpw = req.body.pw;
 
         //  console.log(searchingname + "  " + searchingpw);
 
         let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\'";
-        //  console.log(thisistheline);
+          console.log(thisistheline);
 
         // Start a new session for the new login user
 
@@ -98,7 +95,8 @@ module.exports = {
     },
 
     logout: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         req.session.destroy(function (err) {
 
             if (err) return res.serverError(err);
@@ -108,7 +106,8 @@ module.exports = {
     },
 
     submitrequest: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         console.log(req.body);
         console.log(typeof req.body.avatar);
         console.log(req.body.avatar);
@@ -165,6 +164,8 @@ module.exports = {
     },
 
     home: async function (req,res){
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         if(req.session.userid == "" || req.session.userid == null || req.session.userid == undefined){
             return res.view('user/login')
         }else{
