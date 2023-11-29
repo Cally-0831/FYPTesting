@@ -1,3 +1,4 @@
+insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
 insert ignore into allclass values("COMP","1006","00001","","Sin Hang","LT1","4","17:30","18:20","0");
 insert ignore into allclass values("COMP","1006","20001","","Sin Hang","LMC512","2","10:30","12:20","0");
 insert ignore into allclass values("COMP","1006","20002","","Sin Hang","CEC801","3","8:30","10:20","0");

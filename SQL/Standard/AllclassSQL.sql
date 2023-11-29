@@ -59,3 +59,11 @@ insert ignore into allclass values("COMP","3075","00001","","Sin Hang","LT3","2"
 insert ignore into allclass values("COMP","3075","00001","","Sin Hang","FSC801C","3","15:30","16:20","0");
 insert ignore into allclass values("COMP","3075","00001","","Sin Hang","FSC801D","3","15:30","16:20","0");
 insert ignore into allclass values("COMP","3075","00001","","Sin Hang","LMC512","3","15:30","16:20","0");
+insert ignore into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","1","10:30","12:20","0");
+insert ignore into allclass values("COMP","4107","00001","","Sin Hang","FSC901C","3","08:30","09:20","0");
+insert ignore into allclass values("COMP","4025","00001","","Sin Hang","CEC911","5","11:30","13:20","0");
+insert ignore into allclass values("COMP","4025","10001","","Sin Hang","FSC901C","1","12:30","14:20","0");
+insert ignore into allclass values("GCAP","3205","00001","","AAB","AAB610","2","09:30","12:20","0");
+insert ignore into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","4","08:30","11:20","0");
+insert ignore into allclass values("COMP","4096","00001","","Sin Hang","LMC509","5","14:30","17:20","0");
+insert ignore into allclass values("COMP","4097","00001","","AAB","AAB509","5","14:30","17:20","0");
