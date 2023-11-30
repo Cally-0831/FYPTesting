@@ -52,7 +52,7 @@ PRIMARY key (CID));
 
 create table classroom(
 Campus varchar(10) not null,
-RID		varchar(10) Not null,
+RID		varchar(10),
 status varchar(10) not null,
 PRIMARY key (Campus,RID));
 
@@ -654,3 +654,4 @@ delimiter ;
 
 INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
+

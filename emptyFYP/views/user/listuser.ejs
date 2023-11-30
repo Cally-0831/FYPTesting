@@ -62,6 +62,7 @@
                 Submission of TTB
             </th>
         </tr>
+        <%if(allstdlist != null){%>
         <% allstdlist.forEach( function(allstdlist) { %>
     
             <tr onclick="redirectplease('<%= allstdlist.sid%>')">
@@ -112,6 +113,7 @@
             </tr>
     
             <% }); %>
+            <%}%>
     
     </table>
 

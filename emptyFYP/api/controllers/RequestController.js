@@ -55,18 +55,16 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var getsetting2 = "select * from allsupersetting where typeofsetting = \"2\";"
+        console.log(getsetting2)
         var setting2 = await new Promise((resolve) => {
             pool.query(getsetting2, (err, res) => {
+                
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
-                console.log(ans)
-
                 if (ans.length != 0) {
                     var deadlinedate = new Date(ans[0].deadlinedate);
-
                     var deadlinetime = ans[0].deadlinetime.split(":");
-
                     deadlinedate.setHours(deadlinetime[0]);
                     deadlinedate.setMinutes(deadlinetime[1]);
                     deadlinedate.setSeconds(deadlinetime[2]);
@@ -342,18 +340,9 @@ module.exports = {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\");";
             }
-        } else if (req.session.role == "obs") {
-            console.log("enter obs");
-            if (req.body.starttime == undefined) {
-                thisistheline = "insert into allrequestfromobserver values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
-                    + "\",\"00:00\", \"23:59\");";
-            } else {
-                thisistheline = "insert into allrequestfromobserver values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
-                    req.body.starttime + "\", \"" + req.body.endtime + "\");";
-            }
         } else if (req.session.role == "stu") {
             console.log("enter stu");
-
+console.log(req.body)
             if (req.body.starttime == undefined) {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
                     + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
@@ -368,11 +357,11 @@ module.exports = {
 
         db.query(thisistheline, (err, results) => {
             try {
-                return res.json("ok");
-                //console.log("1 row added");
+                return  res.status(200).json("ok");
+                console.log("1 row added");
 
             } catch (err) {
-                return res.stauts(401).json("Error happened when excuting");
+                return res.status(401).json("Error happened when excuting RequestController.submitrequest");
             }
 
 

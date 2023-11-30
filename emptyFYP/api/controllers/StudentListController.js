@@ -1,6 +1,6 @@
 
 module.exports = {
-   
+
 
     liststudent: async function (req, res) {
         var db = await sails.helpers.database();
@@ -19,7 +19,8 @@ module.exports = {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
                     var stdlist = json;
-                    //console.log('>> stdlist: ', stdlist); 
+                    console.log('>> stdlist: ', stdlist); 
+                    if(stdlist.length ==0){stdlist = null;}
                     var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
                     db.query(getsupbeobslist, (err, results) => {
                         try {
@@ -47,6 +48,9 @@ module.exports = {
                                         finaldate = undefined
                                     }
                                     console.log("controller    " + finaldate)
+                                    
+                                    return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+                       
                                     return res.status(200).json(JSON.parse(JSON.stringify({checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist})))
                                     //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
                                 } catch (err) {
@@ -90,11 +94,11 @@ module.exports = {
 
                             return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
                         } catch (err) {
-                            console.log("error happened at StudentListContorller: liststudent");
+                            return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
                         }
                     })
                 } catch (err) {
-                    console.log("error happened in StudentListController: liststudent");
+                    return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
 
                 }
 
@@ -111,7 +115,6 @@ module.exports = {
 
 
     },
-
     gettopic: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -464,7 +467,7 @@ module.exports = {
                 req.body[i].studentname + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].password + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-                console.log(createstudentline);
+            console.log(createstudentline);
             var db = await sails.helpers.database();
             db.query(createstudentline, function (err, result) {
                 if (err) {
@@ -482,7 +485,7 @@ module.exports = {
                 req.session.userid + "\"\,\""
                 + req.body[i].sid + "\"\,\"" +
                 req.body[i].topic + "\"\);";
-                console.log(pairingline);
+            console.log(pairingline);
             var db = await sails.helpers.database();
             db.query(pairingline, function (err, result) {
                 if (err) {
@@ -490,7 +493,7 @@ module.exports = {
                     res.status(401).json("Error happened when excuting : " + pairingline);
 
                 };
-                
+
             });
 
         }
@@ -507,7 +510,7 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-       
+
 
         for (var i = 0; i < req.body.length; i++) {
             console.log(req.body)
@@ -635,7 +638,7 @@ module.exports = {
     checkuploadstudentlistdeadline: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"        
+        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
         db.query(thisistheline, function (err, result) {
             try {
                 var string = JSON.stringify(result);

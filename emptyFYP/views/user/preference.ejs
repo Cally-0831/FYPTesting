@@ -155,22 +155,31 @@
         var checkstudentnum=0;
         var prefnumstr = "";
         while(!checkdate){
-            console.log("here")
-            if(startdate.getDay() != 0){
-                checkstudentnum+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
+             if(startdate.getDay() != 0){
+                var ans =document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value;
+                
+         
+                if(ans == ""){ 
+                     ans = 0;
+                }else{
+                     ans = parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
+                }
+                console.log("@@"+ans+"@@");
+                
+                checkstudentnum+=ans;
             if(checkstudentnum > maxstdnum){return alert("Please Review Your inputs. \n Your maximum presentation number is "+maxstdnum)}
-            prefnumstr+=parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value)
             
+            prefnumstr+= ans+"/";
+            }
            
-            }
-
-             startdate.setDate(startdate.getDate()+1);
-            if(startdate > enddate){checkdate = true;}else{
-                prefnumstr+="/";
-            }
-        }
+            
+ startdate = new Date(startdate.getTime()+60*60*24*1000);
+ if(startdate > enddate){checkdate = true;}
+            
+            console.log(prefnumstr)
+    }
         requestBody = JSON.stringify({command:command,prefnumstr:prefnumstr})
-        console.log("hello")
+        console.log(requestBody)
         
         var response = await fetch("/preference", {
             method: "POST",
