@@ -565,15 +565,114 @@ module.exports = {
             var currentgeneratedateend = new Date(setting3.startday);
             //console.log(currentgeneratedate)
             while (currentgeneratedate < new Date(setting3.endday)) {
-                currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-                var studentttblist;
-                var studentrequest;
-                var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-
-                //console.log("enter")
+                var supervisorttblist;
+                var supervisorrequest;
                 if (req.body.typeofpresent == "midterm") {
                     //console.log("midterm")
+                    if (currentgeneratedate.getMinutes() == 30) {
+                        currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+                        currentgeneratedateend.setMinutes(0)
+                    } else {
+                        currentgeneratedateend.setMinutes(30);
+                    }
+                    //console.log(currentgeneratedate.toLocaleTimeString("en-GB"), "    ", currentgeneratedateend.toLocaleTimeString("en-GB"))
+
+
+                    var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
+                    var boolcheckttb = false;
+                    var boolcheckreq = false;
+
+                    var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
+                    //console.log(getcheckstudentttb);
+
+                    studentttblist = await new Promise((resolve) => {
+                        pool.query(getcheckstudentttb, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
+                    })
+                    if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
+                        boolcheckttb = true;
+                    }
+
+
+                    var getcheckstudentrequest = "select * from allrequestfromstudent where (status = \"Approved\" or status = \"Enforce Approved\") and sid = \"" + studentlist[a].sid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
+                    //console.log(getcheckstudentrequest)
+
+                    studentrequest = await new Promise((resolve) => {
+                        pool.query(getcheckstudentrequest, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getcheckstudentrequest"
+                    })
+
+                    if (studentrequest.length == 0 || studentrequest == null || studentrequest == undefined) {
+                        //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
+                        //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
+                        boolcheckreq = true;
+                    }
+
+
+
+
+                    if (boolcheckreq && boolcheckttb) {
+                        var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
+                        //console.log(insertavability)
+                        var studentavailbilityinsert = await new Promise((resolve) => {
+                            pool.query(insertavability, (err, res) => {
+                                resolve(res);
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.insertavability"
+                        })
+
+                    }
+
+                    if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
+                        if (currentgeneratedate.getDay() != 6) {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        } else {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        }
+
+
+
+                    } else {
+                        if (currentgeneratedate.getMinutes() == 30) {
+                            currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
+                            currentgeneratedate.setMinutes(0)
+                        } else {
+                            currentgeneratedate.setMinutes(30)
+                        }
+
+                    }
+
+
+
+
+
                 } else if (req.body.typeofpresent == "final") {
+                    currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+
+                    var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
+
+                    console.log(datestring)
                     //console.log("final")
                     var boolcheckttb = false;
                     var boolcheckreq = false;
@@ -630,6 +729,7 @@ module.exports = {
 
 
                     if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
+                        console.log(currentgeneratedate.getDay())
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                             currentgeneratedate = new Date(currentgeneratedate);
@@ -665,16 +765,110 @@ module.exports = {
             var currentgeneratedate = new Date(setting3.startday);
             var currentgeneratedateend = new Date(setting3.startday);
             while (currentgeneratedate < new Date(setting3.endday)) {
-                currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+                //console.log("enter")
                 var supervisorttblist;
                 var supervisorrequest;
-                var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-
-                //console.log("enter")
                 if (req.body.typeofpresent == "midterm") {
                     //console.log("midterm")
+                    if (currentgeneratedate.getMinutes() == 30) {
+                        currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+                        currentgeneratedateend.setMinutes(0)
+                    } else {
+                        currentgeneratedateend.setMinutes(30);
+                    }
+                    var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
+
+                    var boolcheckttb = false;
+                    var boolcheckreq = false;
+
+                    var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
+                   // console.log(getchecksupervisorttb);
+
+
+                    supervisorttblist = await new Promise((resolve) => {
+                        pool.query(getchecksupervisorttb, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getsupervisorttblist"
+                    })
+                    if (supervisorttblist.length == 0 || supervisorttblist == null || supervisorttblist == undefined) {
+                        boolcheckttb = true;
+                    }
+
+                    var getchecksupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
+                    //console.log(getchecksupervisorrequest)
+                    supervisorrequest = await new Promise((resolve) => {
+                        pool.query(getchecksupervisorrequest, (err, res) => {
+                            var string = JSON.stringify(res);
+                            var json = JSON.parse(string);
+                            var ans = json;
+                            resolve(ans)
+                        })
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.genavailble.getchecksupervisorrequest"
+                    })
+
+                    if (supervisorrequest.length == 0 || supervisorrequest == null || supervisorrequest == undefined) {
+                        //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
+                        //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
+                        boolcheckreq = true;
+                    }
+                    if (boolcheckreq && boolcheckttb) {
+                        var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
+                        //console.log(insertavability)
+                        
+                        var supervisoravailbilityinsert = await new Promise((resolve) => {
+                            pool.query(insertavability, (err, res) => {
+                                resolve(res);
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.insertavability"
+                        })
+                    }
+
+
+
+
+
+
+                    if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
+                        //console.log(currentgeneratedate.getDay())
+                        if (currentgeneratedate.getDay() != 6) {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        } else {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        }
+
+
+
+                    } else {
+                        if (currentgeneratedate.getMinutes() == 30) {
+                            currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
+                            currentgeneratedate.setMinutes(0)
+                        } else {
+                            currentgeneratedate.setMinutes(30)
+                        }
+
+                    }
+
+
                 } else if (req.body.typeofpresent == "final") {
                     //console.log("final")
+                    currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
+
+                    var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
                     var boolcheckttb = false;
                     var boolcheckreq = false;
 
@@ -747,6 +941,10 @@ module.exports = {
         console.log(">>supervisorlist", supervisorlist);
 
         //  for (var a = 0; a < 3; a++) {
+
+
+
+        
         for (var a = 0; a < supervisorlist.length; a++) {
             var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
             var prefofthissuper = await new Promise((resolve) => {
@@ -1028,101 +1226,6 @@ module.exports = {
 
         return res.ok();
     },
-
-    /**
-    checkpref: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        var boxlist = req.body.boxlist;
-        console.log(">>checkpref       ", req.body)
-        var startday = new Date(req.body.fullstartday);
-        var endday = new Date(req.body.fullendday);
-
-        let distinctoidlist = (boxlist) => {
-            let unique_values = boxlist
-                .map((item) => item.oid)
-                .filter(
-                    (value, index, current_value) => current_value.indexOf(value) === index
-                );
-            return unique_values;
-        };
-
-        var oidlist = distinctoidlist(boxlist);
-        console.log(oidlist)
-
-        for (var a = 0; a < boxlist.length; a++) {
-
-            var getsuppreference = "select allpreffromsup.tid , priority, prefno  from allpreffromsup  left join supervisor on supervisor.tid = allpreffromsup.tid where allpreffromsup.tid = \"" + boxlist[0].tid + "\" or allpreffromsup.tid = \"" + boxlist[a].oid + "\" order by priority asc , tid asc"
-            var suppreflistforthisbox = await new Promise((resolve) => {
-                pool.query(getsuppreference, (err, res) => {
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    var ans = json;
-                    resolve(ans)
-                })
-            })
-            console.log(">>suppreflistforthisbox", suppreflistforthisbox)
-            if (suppreflistforthisbox.length > 0) {
-                for (var b = 0; b < suppreflistforthisbox.length; b++) {
-                    var prefsplitstr = suppreflistforthisbox[b].prefno.split("/");
-                    var totalconsiderednum = 0;
-                    prefsplitstr.forEach(num => {
-                        if (num != "") {
-                            totalconsiderednum += parseInt(num);
-                        }
-                    })
-                    var presentday = new Date(boxlist[a].presentday)
-                    var daycount = Math.floor((presentday - startday) / 1000 / 60 / 60 / 24)
-
-                    var chktotalpresentforthissup = "select (select count(*) from supervisorpairstudent where tid = \"" + suppreflistforthisbox[b].tid + "\") super, (select count(*) from observerpairstudent where oid = \"" + suppreflistforthisbox[b].tid + "\") observer from dual;"
-                    var totalpresentforthissup = await new Promise((resolve) => {
-                        pool.query(chktotalpresentforthissup, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    })
-
-                    console.log(">> totalpresentforthissup    ", (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
-
-                    var checkthissupchedule = "select count(*) as checkcount from allschedulebox where tid = \"" + suppreflistforthisbox[b].tid + "\" and boxdate = \"" + presentday.toLocaleDateString() + "\""
-                    var currentschedulenum = await new Promise((resolve) => {
-                        pool.query(checkthissupchedule, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    })
-                    console.log(currentschedulenum[0].checkcount >= prefsplitstr[daycount])
-                    console.log(totalconsiderednum + "      " + (parseInt(totalpresentforthissup[0].super) + parseInt(totalpresentforthissup[0].observer)))
-
-
-                    // 如果佢已經係計好咗total = fulfill >> 可以直接check 佢滿未
-
-                    // 如果佢未滿 >> currentnum vs prefnum
-                    // checker for proving the sup is done
-                }
-            } else {
-                // 無人填pref
-            }
-
-
-
-        }
-
-
-
-    },
-
- */
-
-
-
-
-
-
 
 
     /**
@@ -1409,7 +1512,22 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
         })
-
+        if(boxesforthissupervisor.length ==0){
+            query = "select distinct(type) from allschedulebox;"
+            type = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.gettype"
+        })
+        }else{
+            type = boxesforthissupervisor[0].TYPE;
+        }
+        
         query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1434,11 +1552,11 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
         })
 
-console.log(boxesforthissupervisor,"\n\n",requestforthissupervisor,"\n\n",ttbforthissupervisor)
+        console.log(boxesforthissupervisor, "\n\n", requestforthissupervisor, "\n\n", ttbforthissupervisor)
         return res.view("user/admin/modifyschedule", {
             boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
             requestes: requestforthissupervisor, setting: setting3,
-            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page
+            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page, type:type
         })
 
     },

@@ -633,7 +633,7 @@ CREATE TRIGGER checkschboxtocorrdraft after delete ON allschedulebox
   declare countcount integer;
   select count(*) into countcount from allschedulebox where tid = old.tid;
   
-  if(countcount =0) then
+  if(countcount = 0) then
   update supervisor set draft = "N" where tid = old.tid;
   end if;
   
@@ -651,6 +651,9 @@ CREATE TRIGGER delsupervisor after delete ON supervisor
    END;
   |
 delimiter ;
+
+
+
 
 INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");

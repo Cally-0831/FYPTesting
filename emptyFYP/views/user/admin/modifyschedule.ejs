@@ -181,10 +181,14 @@
             <tr>
                 <%var printday = new Date(displaystartday)%>
                 <%printday.setHours(8);printday.setMinutes(30)%>
-                <%for(var a = 0 ;a < 13;a++){%>
+                <%var linenum = 0;%>
+                <%if(type == "final"){linenum = 13}else{linenum = 13*2}%>
+                
+                <%for(var a = 0 ;a < linenum;a++){%>
                 <tr>
-                    <td><%=printday.toLocaleTimeString("en-GB")%></td>
+                     <td><%=printday.toLocaleTimeString("en-GB")%></td>
                     <%for(var b = 0 ; b < 7;b++){%>
+                        
                         <%var printed = false;%>
 
                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
@@ -305,9 +309,7 @@
 
 
                                 <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>
-                                    
-                                    <%console.log("ttb checking  ",printday.getDay() , "   ", ttb[0].weekdays,"   " ,printday.toLocaleTimeString("en-GB"),"    ",ttb[0].starttime,"\n\n")%>
-                                    <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime ){%>
+                                    <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime || (type == "midterm" && ttb[0].starttime == (new Date(printday.getTime() - 30*60*1000)).toLocaleTimeString("en-GB")) ){%>
                                        hello
                                         <%printed = true;%>
                                         <td style="font-size : 14px">
@@ -322,7 +324,16 @@
                                             </table>
                                            
                                         </td>
-                                        <%ttb.splice(0,1)%>
+                                        <%var thissessionendtime ; 
+                                        if(type == "final"){
+                                             thissessionendtime =new Date(printday.getTime()+60*60*1000); 
+                                            }else{
+                                                thissessionendtime =new Date(printday.getTime()+30*60*1000); 
+                                            }%>
+                                        <%console.log(ttb[0].endtime , " ttb checking ",thissessionendtime.toLocaleTimeString("en-GB"))%>
+                                        
+                                        <%if(ttb[0].endtime == thissessionendtime.toLocaleTimeString("en-GB")){%>
+                                            <%ttb.splice(0,1)%>
                                         <%if(ttb.length >0){
                                             var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
                                            
@@ -333,6 +344,20 @@
                                                 }
                                             
                                             }%>
+                                            <%}else{%>
+                                                
+                                        <%if(ttb.length >0){
+                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                           
+                                            if(index != -1){
+                                                while(ttb[0].weekdays == printday.getDay()){
+                                                    ttb.push(ttb.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+                                                <%}%>
+                                        
         
         
                                            <%}else{%>
@@ -369,7 +394,6 @@
     <td><%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString("en-GB")%></td>
     <%}%>
                         
-<%console.log("boxes",boxes)%>
 
 
 
@@ -383,16 +407,27 @@
 
 
 
-                        <%if(printday.getDay() ==6){
-                            printday = new Date(displaystartday);
-                            printday.setHours(8+a);
-                            printday.setMinutes(30)
+
+                        <%if(printday.getDay() ==6){ 
+                             printday = new Date(displaystartday);
+                            if(type =="final"){
+                                printday.setHours(8+a);
+                                printday.setMinutes(30)
+                            }else{
+                                printday = new Date(printday.getTime()+(60*60*1000)*0.5*(a-1))
+                            }
+                             
                         }else{
-                            printday =new Date(printday.getTime()+60*60*24*1000)}%>
+                              
+                                   printday =new Date(printday.getTime()+60*60*24*1000)
+                        }%>
                         <%}%>
                         <td></td>
                 </tr>
-                <%printday = new Date(printday.getTime()+60*60*1000)%>
+                 
+                <%if(type == "final"){
+                    printday = new Date(printday.getTime()+60*60*1000)
+                }%>
                 <%}%>
             </tr>
 
