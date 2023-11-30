@@ -444,7 +444,7 @@ module.exports = {
                         return res.redirect("../timetable");
                     }
                 }
-                console.log(req);
+                //console.log(req);
                 req.file('avatar').upload(function (err, files) {
 
                     const fs = require('fs');

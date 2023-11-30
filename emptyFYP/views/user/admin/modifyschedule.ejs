@@ -12,15 +12,79 @@
             <div class = "column ">
         <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
             <tr>
-
-                <%var displaydate=(new Date(setting.startday))%>
-                    <% var printday=new Date(displaydate.getTime()+ 60*60*24*1000*(Page-1))%>
+                <%var realpresentday = new Date(setting.startday)%>
+                <%=displaystartday%>   <%=displayendday%>
+                <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
+                    <% var printday=new Date(displaydate.getTime())%>
+                    <%console.log(printday.toLocaleDateString())%>
                         <%var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay()));%>
-                        <%=enddisplaydate%>
-                        <%boxes = boxes.filter((boxes)=> new Date(boxes.boxdate)<= enddisplaydate)%>
-                        <%boxes = boxes.filter((boxes)=> new Date(boxes.boxdate) >= displaydate)%>
-                        <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() <= enddisplaydate.toLocaleDateString())%>
-                        <%requestes = requestes.filter((requestes) => (new Date(requestes.RequestDate)).toLocaleDateString() >= displaydate.toLocaleDateString())%>
+                        <br><%="enddisplay date"%> <%=enddisplaydate%><br>
+                        <%
+                        var appendlist = [];
+                        var removelist = [];
+                        for (var a = 0; a < requestes.length; a++) {
+                           if(requestes[a].RequestStartTime=="00:00:00" && requestes[a].RequestEndTime=="23:59:00"){
+                            removelist.push(a);
+                            var starttime = 8;
+                            var endtime = 18;
+                            while(starttime < endtime){
+                                var element = JSON.parse(JSON.stringify(requestes[a]))
+                                if(starttime < 10){
+                                   element.RequestStartTime = "0"+starttime+":"+"30:00"
+                                }else{
+                                   element.RequestStartTime = starttime+":"+"30:00"
+                                }
+                                if((starttime+1) < 10){
+                                   element.RequestEndTime = "0"+(starttime+1)+":"+"30:00"
+                                }else{
+                                   element.RequestEndTime = (starttime+1)+":"+"30:00"
+                                }
+                                starttime = starttime+1;
+                                appendlist.push(element)
+                            }
+                          
+                           
+                           
+
+                          }else{
+                            var starttime = requestes[a].RequestStartTime.split(":");
+                            var endtime = requestes[a].RequestEndTime.split(":");
+                            if(parseInt(starttime[1])>30){
+                                starttime[1] = "30";
+                            }else{
+                                starttime[1] = "00"
+                            }
+                            if(parseInt(endtime[1])>30){
+                                endtime[0] = parseInt(endtime[0])+1;
+                                if(endtime[0] >10){endtime[0] = "0"+endtime[0]}else{endtime[0] = endtime[0]+""};
+                               endtime[1] = "00";
+                            }else{
+                                endtime[1] = "30"
+                            }
+                          }
+                          requestes[a].RequestStartTime = starttime[0]+":"+starttime[1]+":00";
+                          requestes[a].RequestEndTime = endtime[0]+":"+endtime[1]+":00"
+                         }
+                        
+                        removelist.forEach((element)=> requestes.pop(a));
+                         appendlist.forEach((element)=> requestes.push(element));
+
+                       requestes.sort((a, b) => {
+                        if (new Date(a.RequestDate) < new Date(b.RequestDate)) return -1;
+                        if (new Date(a.RequestDate) > new Date(b.RequestDate)) return 1;
+                       if (a.starttime < b.starttime) return -1;
+                        if (a.starttime > b.starttime) return 1;
+                        })
+                       
+                    %>
+
+
+
+                        
+                        
+                        
+                        
+                        
                         <%
                         var appendlist = [];
                         for (var a = 0; a < ttb.length; a++) {
@@ -54,12 +118,17 @@
                        if (a.starttime < b.starttime) return -1;
                         if (a.starttime > b.starttime) return 1;
                         })
-                        console.log(ttb)
+                       
                     %>
-                     
-                        <th
-                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
-                                < </th>
+                     <%console.log(">>boxes",boxes,"\n\n\n\n");console.log(">>requestes",requestes,"\n\n\n\n");console.log(">>ttb",ttb,"\n\n\n\n")%>
+                      
+                        <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" >
+                            <%if(Page != 1){%>
+                                 <a onclick="backpage('<%=req.query.id%>','<%=req.query.Page%>')"> < </a> 
+                                <%}else{%>
+                                    <
+                                    <%}%>
+                             </th> 
                             <th
                                 style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
                                 SUN
@@ -90,239 +159,242 @@
                             </th>
                             <th
                                 style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
-                                >
-                            </th>
+                                <%if(enddisplaydate < new Date(setting.endday)){%>
+                                     <a onclick="nextpage('<%=req.query.id%>','<%=req.query.Page%>')"> > </a> 
+                                    <%}else{%>
+                                        >
+                                        <%}%>
+                               </th> 
+                            
             </tr>
             <tr>
                 <td style="font-size : 14px"></td>
-                
-                    <%for(var a=0 ; a < displaydate.getDay();a++){%>
-                        <%printday=new Date(printday.getTime()-(displaydate.getDay()+a)*60*60*24*1000)%> 
-                        <td style="font-size:18px;text-align: center;vertical-align:middle;"><%=printday.toLocaleDateString("en-GB")%></td>
-                        <%}%>
-                        <%printday = displaydate%>
-                            <%for(var a=1 ; a <=(7- displaydate.getDay());a++){%>
-                                <td style="font-size:18px;text-align: center;vertical-align:middle;">
-                                    <%=printday.toLocaleDateString("en-GB")%>
-
-                                </td>
-                                <%printday=new Date(printday.getTime()+60*60*24*1000)%>
-                                    <%}%>
+                <%var printing = new Date(displaystartday.getTime())%>
+                <%=printing%> <%=new Date(displayendday.getTime())%> 
+                 
+                <%for(var a = 0 ;a < 7;a++){%>                   
+                    <td style="font-size : 14px"><%=printing.toLocaleDateString("en-GB")%></td>
+                        <%printing = new Date(printing.getTime()+60*60*1000*24)%>
+                    <%}%>
                                         <td style="font-size : 14px"></td>
             </tr>
-            <%printday = displaydate%>
-            <%printday.setHours(8);printday.setMinutes(30);%>
-            <%=printday%>
-            <%for(var a = 0 ; a < 13;a++){%>
-                <!--print line-->
+            <tr>
+                <%var printday = new Date(displaystartday)%>
+                <%printday.setHours(8);printday.setMinutes(30)%>
+                <%for(var a = 0 ;a < 13;a++){%>
                 <tr>
-                    
-                    <%for (var b = 0 ; b < 8;b++){%>
-                        <%if(b == 0){%>
-                            
-                            <td style="font-size : 14px"><%=printday.toLocaleTimeString("en-GB")%></td>
+                    <td><%=printday.toLocaleTimeString("en-GB")%></td>
+                    <%for(var b = 0 ; b < 7;b++){%>
+                        <%var printed = false;%>
+
+                        <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                            <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
+                                <%printed = true;%>
+                                <td style="font-size : 14px">
+                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                        <tr><td><%=boxes[0].boxID%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                        <tr><td><%=boxes[0].SID%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                        <tr><td><%=boxes[0].Campus%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                        <tr><td><%=boxes[0].RID%></td></tr>
+                                    </table>
+                                </td>
+                                <%boxes.splice(0,1)%>
+                                <%if(boxes.length >0){
+                                    var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                     if(index != -1){
+                                        while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                            boxes.push(boxes.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+
+
+                                   <%}else{%>
+                                    <%if(boxes.length >0){
+                                        var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                         if(index != -1){
+                                            while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                boxes.push(boxes.shift());
+                                                }
+                                            }
+                                        
+                                        }%>
+                                    
+                                    <%}%>
                             <%}else{%>
-                                <%if(b <= displaydate.getDay()){%>
-                                    <td style="font-size : 14px">hell0</td>                                   
-                                     <%}else{%>
-                                    <!--start checking-->
-                                    <%var printed = false;%>
-                                    <!--check schedule box-->
-                                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
-                                        
-                                     
-                                            <%if(printday.toLocaleTimeString("en-GB") == (new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")){%>
-                                                
-                                                <%printed = true;%>
-                                            <td style="font-size : 14px">
-                                                <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
-                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
-                                                    <tr><td><%=boxes[0].boxID%></td></tr>
-                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
-                                                    <tr><td><%=boxes[0].SID%></td></tr>
-                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
-                                                    <tr><td><%=boxes[0].Campus%></td></tr>
-                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
-                                                    <tr><td><%=boxes[0].RID%></td></tr>
-                                                </table>
-                                               
-                                            </td>
-                                            <%boxes.splice(0,1)%>
+                                <%if(boxes.length >0){
+                                    var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                     if(index != -1){
+                                        while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                            boxes.push(boxes.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+                                    <%}%>
+                            
+                            <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
+                                <%var requestdaytime = new Date(requestes[0].RequestDate)%>
+                                <%var requestdayendtime = new Date(requestes[0].RequestDate)%>
+                                <%requestdaytime.setHours(parseInt(requestes[0].RequestStartTime.split(":")[0]))%>
+                                <%requestdaytime.setMinutes(parseInt(requestes[0].RequestStartTime.split(":")[1]))%>
+                                <%requestdayendtime.setHours(parseInt(requestes[0].RequestEndTime.split(":")[0]))%>
+                                <%requestdayendtime.setMinutes(parseInt(requestes[0].RequestEndTime.split(":")[1]))%>
+
+                                <%if(    !(requestdayendtime.toLocaleTimeString() < printday.toLocaleTimeString() && requestdaytime.toLocaleDateString >  ( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()) ){%>
+                                    <%printed = true;%>
+                                    <td style="font-size : 14px">
+                                        <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
+                                            <tr><td><%=requestes[0].ReqID%></td></tr>
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Start Time :</th></tr>
+                                            <tr><td><%=requestes[0].RequestStartTime%></td></tr>
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">End Time :</th></tr>
+                                            <tr><td><%=requestes[0].RequestEndTime%></td></tr>
                                             
-                                            <%if(boxes.length>1){%>
-                                                <%var checkdate = new Date(boxes[0].boxdate)%>
-                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
-                                                    <%var element = (boxes.shift())%>
-                                                    <%boxes.push(element);%>
-                                                
-                                                    <%checkdate = new Date(boxes[0].boxdate)%>
-                                                    <%}%>
-                                                <%}%>
-                                           
-                                            
-                                               
-                                            
-                                                <%}else{%>
-                                                  
-                                                   
-                                                 <!--not correct time but we need to move on to next day-->
-                                                 <!--push all today to the back of the list-->
-                                                 <%if(boxes.length>1){%>
-                                                 <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
-                                                    <%boxes.push(boxes.shift())%>
-                                                   
-                                                 <%}%>
-                                                 <%}%>
-                                                    
-                                                 <%}%>
-                                                 
-                                       <%}else{%>
+                                        </table>
                                        
-                                       <%if(boxes.length>1){%>
-                                       <%while(boxes.length >1 && (new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
-                                        <%boxes.push(boxes.shift())%>
-                                     <%}%>
-                                     <%}%>
-                                        <%}%>  
+                                    </td>
 
-                                        <!--check requestdate-->
-                                        <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
-                                            
-                                          
-                                     
-                                            <%if(printday.toLocaleTimeString("en-GB") < (requestes[0].RequestStartTime)  ){%>
-                                             
-                                                <%printed = true;%>
-                                                <td style="font-size : 14px">
-                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
-                                                        <tr><td><%=requestes[0].ReqID%></td></tr>
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Start Time :</th></tr>
-                                                        <tr><td><%=requestes[0].RequestStartTime%></td></tr>
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">End Time :</th></tr>
-                                                        <tr><td><%=requestes[0].RequestEndTime%></td></tr>
-                                                        
-                                                    </table>
-                                                   
-                                                </td>
-                                                <%requestes.splice(0,1)%>
-                                           
-                                            <%if(requestes.length>1){%>
-                                                <%var checkdate = new Date(requestes[0].RequestDate)%>
-                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
-                                                    <%var element = (requestes.shift())%>
-                                                    <%requestes.push(element);%>
-                                               
-                                                    <%checkdate = new Date(requestes[0].RequestDate)%>
-                                                    <%}%>
-                                                <%}%>
-                                                
-                                                <%}else{%>
-                                                  
-                                                   
-                                                 <!--not correct time but we need to move on to next day-->
-                                                 <!--push all today to the back of the list-->
-                                                 <%if(requestes.length>1){%>
-                                                 <%while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
-                                                    <%requestes.push(requestes.shift())%>
-                                                   
-                                                 <%}%>
-                                                 <%}%>
-                                                    
-                                                 <%}%>
-                                                 
-                                       <%}else{%>
-                                     
-
-                                      
-                                       <%if(requestes.length>1){%>
-                                       <%while(requestes.length >1 && (new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
-                                        <%requestes.push(requestes.shift())%>
-                                     <%}%>
-                                     <%}%>
-                                        <%}%>  
+                                    <%if(requestdayendtime.toLocaleTimeString() <=( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()){%>
+                                        <%requestes.splice(0,1)%>
+                                    <%if(requestes.length >0){
+                                        var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                        if(index != -1){
+                                            while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                               requestes.push(requestes.shift());
+                                                }
+                                            }
                                         
-
-
-
-
-                                        <!--check ttb-->
-                                        <!--check requestdate-->
+                                        }%>
+    
                                         
-                                        <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>  
-                                            <%var printdaysessiontime = new Date(printday.getTime()+60*60*1000)%>
-                                            <%console.log((printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)),"   ",(ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")))%>
-                                            
-                                          
-                                            <%if(printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)  &&  ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")){%>
-                                                <%console.log("case 1")%>
-                                                <%printed = true;%>
-                                                <td style="font-size : 14px">
-                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
-                                                        <tr><td><%=ttb[0].cid%></td></tr>
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
-                                                        <tr><td><%=ttb[0].campus%></td></tr>
-                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
-                                                        <tr><td><%=ttb[0].rid%></td></tr>
-                                                        
-                                                    </table>
-                                                   
-                                                </td>
-                                                <%ttb.splice(0,1)%>
-                                            <%if(ttb.length>1){%>
-                                                <%var checkdate = ttb[0].weekdays%>
-                                                 <%while(checkdate == printday.getDay()){%>
-                                                    <%ttb.push(ttb.shift())%>
-                                                   
-                                                    <%checkdate = ttb[0].weekdays%>
-                                                    <%}%>
-                                                <%}%>
-                                                
-                                                <%}else{%>
-                                                   <%console.log("case2")%>
-                                                   
-                                                 <!--not correct time but we need to move on to next day-->
-                                                 <!--push all today to the back of the list-->
-                                                 <%if(ttb.length>1){%>
-                                                    <%var checkweek = ttb[0].weekdays%>
-                                                    
-                                                    <%while(ttb.length >1 && checkweek == printday.getDay()){%>
-                                                        <%ttb.push(ttb.shift())%>
-                                                        <%checkweek = ttb[0].weekdays%>
-                                                        <%console.log("qweq",ttb)%>
-                                                        <%break;%>
-                                                        <%}%>
-                                                 <%}%>
-                                                 
-                                                 <%}%>
-                                                 
-                                       <%}else{%>
-                                       
-                                      
-                                       <%if(ttb.length>1){%>
-                                    <%var checkdate = ttb[0].weekdays%>
-                                       <%while(ttb.length >1 && (ttb[0].weekdays == printday.getDay())){%>
-                                        <%ttb.push(ttb.shift())%>
-                                            <%checkdate = ttb[0].weekdays%>
-                                     <%}%>
-                                     <%}%>
-                                        <%}%>  
-<%if(!printed){%><td style="font-size : 14px">111</td><%}%>
-
-
-
-                                       <%printday=new Date(printday.getTime()+60*60*24*1000)%>
                                         <%}%>
-                                
-                                <%}%>
-                                
-                        <%}%>
-                        <td style="font-size : 14px">222</td>
-                </tr>
-                <%printday=new Date(displaydate.getTime()+(a+1)*60*60*1000)%>
-                <%}%>
+                                    
+    
+                                       <%}else{%>
+                                        <%if(requestes.length >0){
+                                            var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                            if(index != -1){
+                                                while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                   requestes.push(requestes.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+                                        <%}%>
+                                <%}else{%>
+                                    <%if(requestes.length >0){
+                                        var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                        if(index != -1){
+                                            while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                               requestes.push(requestes.shift());
+                                                }
+                                            }
+                                        
+                                        }%>
+                                    
+                                    <%}%>
 
+
+
+
+                                <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>
+                                    
+                                    <%console.log("ttb checking  ",printday.getDay() , "   ", ttb[0].weekdays,"   " ,printday.toLocaleTimeString("en-GB"),"    ",ttb[0].starttime,"\n\n")%>
+                                    <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime ){%>
+                                       hello
+                                        <%printed = true;%>
+                                        <td style="font-size : 14px">
+                                            <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
+                                                <tr><td><%=ttb[0].cid%></td></tr>
+                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
+                                                <tr><td><%=ttb[0].campus%></td></tr>
+                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
+                                                <tr><td><%=ttb[0].rid%></td></tr>
+                                                
+                                            </table>
+                                           
+                                        </td>
+                                        <%ttb.splice(0,1)%>
+                                        <%if(ttb.length >0){
+                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                           
+                                            if(index != -1){
+                                                while(ttb[0].weekdays == printday.getDay()){
+                                                    ttb.push(ttb.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+        
+        
+                                           <%}else{%>
+                                            <%if(ttb.length >0){
+                                                var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                               
+                                                if(index != -1){
+                                                    while(ttb[0].weekdays == printday.getDay()){
+                                                        ttb.push(ttb.shift());
+                                                        }
+                                                    }
+                                               
+                                                }%>
+            
+                                            <%}%>
+                                    <%}else{%>
+                                        <%if(ttb.length >0){
+                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                            
+                                            if(index != -1){
+                                                while(ttb[0].weekdays == printday.getDay()){
+                                                    ttb.push(ttb.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+        
+                                        
+                                        <%}%>
+
+
+
+<%if(!printed){%>
+    <td><%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString("en-GB")%></td>
+    <%}%>
+                        
+<%console.log("boxes",boxes)%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <%if(printday.getDay() ==6){
+                            printday = new Date(displaystartday);
+                            printday.setHours(8+a);
+                            printday.setMinutes(30)
+                        }else{
+                            printday =new Date(printday.getTime()+60*60*24*1000)}%>
+                        <%}%>
+                        <td></td>
+                </tr>
+                <%printday = new Date(printday.getTime()+60*60*1000)%>
+                <%}%>
+            </tr>
 
         </table>
     </div>
@@ -330,8 +402,19 @@
    
 
 </div>
+
 <script>
     function backback() {
         location.assign("/supervisorschedulelist")
+    }
+    function backpage(id,Pagecount){
+        
+        location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)-1))
+      
+    }
+    function nextpage(id,Pagecount){
+        
+        location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)+1))
+      
     }
 </script>

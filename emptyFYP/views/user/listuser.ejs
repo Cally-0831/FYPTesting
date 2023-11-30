@@ -192,7 +192,7 @@
                     <div class="buttons is-right is-mobile">
                         <%var datedate = new Date(checkdate);%>
                         <%var today = new Date();%>
-                        <%if(checkdate != undefined && today > datedate){%>
+                        <%if(checkdate != undefined && today > datedate && !arranged){%>
                              <button class="buttonlogout" id="generateobs" onclick="gotogenobs()">Arrange Observer</button>&ensp;
                        
                             <%}%>

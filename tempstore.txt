@@ -1,166 +1,299 @@
+ <!--check requestdate-->
+                                        <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
+                                            
+                                          
+                                     
+                                            <%if(printday.toLocaleTimeString("en-GB") < (requestes[0].RequestStartTime)  ){%>
+                                             
+                                                <%printed = true;%>
+                                                <td style="font-size : 14px">
+                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
+                                                        <tr><td><%=requestes[0].ReqID%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Start Time :</th></tr>
+                                                        <tr><td><%=requestes[0].RequestStartTime%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">End Time :</th></tr>
+                                                        <tr><td><%=requestes[0].RequestEndTime%></td></tr>
+                                                        
+                                                    </table>
+                                                   
+                                                </td>
+                                                <%requestes.splice(0,1)%>
+                                           
+                                            <%if(requestes.length>1){%>
+                                                <%var checkdate = new Date(requestes[0].RequestDate)%>
+                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%var element = (requestes.shift())%>
+                                                    <%requestes.push(element);%>
+                                               
+                                                    <%checkdate = new Date(requestes[0].RequestDate)%>
+                                                    <%}%>
+                                                <%}%>
+                                                
+                                                <%}else{%>
+                                                  
+                                                   
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%if(requestes.length>1){%>
+                                                 <%while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%requestes.push(requestes.shift())%>
+                                                   
+                                                 <%}%>
+                                                 <%}%>
+                                                    
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                     
 
-        checkline = "select * from allschedulebox where tid = \"" + req.session.userid + "\"";
-        db.query(checkline, (err, result) => {
-            if (err) { return res.status(401).json("Error happened when updating") } else {
-                var string = JSON.stringify(result);
-                var json = JSON.parse(string);
-                var savedbox = json;
+                                      
+                                       <%if(requestes.length>1){%>
+                                       <%while(requestes.length >1 && (new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                        <%requestes.push(requestes.shift())%>
+                                     <%}%>
+                                     <%}%>
+                                        <%}%>  
+                                        
+ 
+ 
+  <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>  
+                                            <%var printdaysessiontime = new Date(printday.getTime()+60*60*1000)%>
+                                            <%console.log((printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)),"   ",(ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")))%>
+                                            
+                                          
+                                            <%if(printday.toLocaleTimeString("en-GB") == (ttb[0].starttime)  &&  ttb[0].endtime == printdaysessiontime.toLocaleTimeString("en-GB")){%>
+                                                <%console.log("case 1")%>
+                                                <%printed = true;%>
+                                                <td style="font-size : 14px">
+                                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
+                                                        <tr><td><%=ttb[0].cid%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
+                                                        <tr><td><%=ttb[0].campus%></td></tr>
+                                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
+                                                        <tr><td><%=ttb[0].rid%></td></tr>
+                                                        
+                                                    </table>
+                                                   
+                                                </td>
+                                                <%ttb.splice(0,1)%>
+                                            <%if(ttb.length>1){%>
+                                                <%var checkdate = ttb[0].weekdays%>
+                                                 <%while(checkdate == printday.getDay()){%>
+                                                    <%ttb.push(ttb.shift())%>
+                                                   
+                                                    <%checkdate = ttb[0].weekdays%>
+                                                    <%}%>
+                                                <%}%>
+                                                
+                                                <%}else{%>
+                                                   <%console.log("case2")%>
+                                                   
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%if(ttb.length>1){%>
+                                                    <%var checkweek = ttb[0].weekdays%>
+                                                    
+                                                    <%while(ttb.length >1 && checkweek == printday.getDay()){%>
+                                                        <%ttb.push(ttb.shift())%>
+                                                        <%checkweek = ttb[0].weekdays%>
+                                                        <%console.log("qweq",ttb)%>
+                                                        <%break;%>
+                                                        <%}%>
+                                                 <%}%>
+                                                 
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                       
+                                      
+                                       <%if(ttb.length>1){%>
+                                    <%var checkdate = ttb[0].weekdays%>
+                                       <%while(ttb.length >1 && (ttb[0].weekdays == printday.getDay())){%>
+                                        <%ttb.push(ttb.shift())%>
+                                            <%checkdate = ttb[0].weekdays%>
+                                     <%}%>
+                                     <%}%>
+                                        <%}%>  
+<%if(!printed){%><td style="font-size : 14px">111</td><%}%>
 
-                thisistheline = "select startdate, starttime,enddate,endtime from allsupersetting where creator = \"" + req.session.userid + "\" and typeofsetting = \"3\" ";
-                /** Get present time */
-                db.query(thisistheline, (err, results) => {
-                    var string = JSON.stringify(results);
-                    var json = JSON.parse(string);
-                    var presentdate = json
-                    //console.log('>> presentdate: ', presentdate);
-                    var startstart = new Date(presentdate[0].startdate);
-                    var endend = new Date(presentdate[0].enddate);
-                    var strstarttime = presentdate[0].starttime.split(":");
-                    var strendtime = presentdate[0].endtime.split(":");
-                    var orgstart = new Date(presentdate[0].startdate);
-                    var ansstartdate;
-                    var ansenddate;
-                    var adddate;
-                    //startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
-                    endend.setHours(strendtime[0], strendtime[1], strendtime[2]);
-
-                    if (req.params.Page > 1) {
-
-                        adddate = (8 - parseInt(startstart.getDay())) + ((parseInt(req.params.Page) - 2) * 7);
-                        //    console.log(8 - parseInt(startstart.getDay()))
-                        //    console.log((parseInt(req.params.Page) - 2) * 7)
-                        startstart = new Date(startstart.getTime() + (adddate) * 24 * 60 * 60 * 1000)
-                    } else {
-                        startstart = new Date(startstart.getTime() + (req.params.Page - 1) * 24 * 60 * 60 * 1000)
-                    }
 
 
-                    if (req.params.Page == 1) {
-                        startstart.setHours(strstarttime[0], strstarttime[1], strstarttime[2]);
-                    } else {
-                        startstart.setHours(0, 0, 0);
-                    }
-
-                    ansstartdate = startstart;
-                    ansenddate = endend;
-
-                    //console.log(ansstartdate + "  " + ansenddate)
-
-                    startstart = startstart.getFullYear() + "-" + (startstart.getMonth() + 1) + "-" + startstart.getDate();
-                    endend = endend.getFullYear() + "-" + (endend.getMonth() + 1) + "-" + endend.getDate();
+                                       <%printday=new Date(printday.getTime()+60*60*24*1000)%>
+                                        <%}%>
+                                
+                                <%}%>
+                                
+                        <%}%>
+                        <td style="font-size : 14px">222</td>
 
 
-                    //console.log(startstart + "    " + endend)
-                    var thisistheline2 = "select allclass.CID, allclass.Campus ,allclass.rid, allclass.weekdays,allclass.startTime,allclass.endTime,allsupertakecourse.confirmation,allsupertakecourse.Submissiontime from allsupertakecourse inner join allclass on allclass.cid = allsupertakecourse.cid and PID=\"" + req.session.userid + "\" and confirmation = 1 ORDER BY  startTime asc, weekdays asc";
-                    /** Get supervisior's ttb */
-                    db.query(thisistheline2, (err, results) => {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        var personalttb = json
-                        //console.log('>> personalttb: ', personalttb);
-                        var thisistheline3 = "select * from allrequestfromsupervisor where TID = \"" + req.session.userid + "\" and requestdate between \"" + startstart + "\" and \"" + endend + "\" order by requestdate asc, requeststarttime asc";
-                        // console.log(thisistheline3)
-                        /** Get supervisior's requests */
-                        /** whole schedule is designed base on supervisor's schedule first */
-                        db.query(thisistheline3, (err, results) => {
-                            var string = JSON.stringify(results);
-                            var json = JSON.parse(string);
-                            var personalrequestlist = json;
-                            // console.log('>> personalrequestlist: ', personalrequestlist);
-                            var thisistheline4 = "select *  from classroom inner join allclass where classroom.Campus = allclass.Campus and classroom.RID = allclass.RID and allclass.Campus != \"\" order by classroom.Campus asc ,classroom.RID asc, weekdays asc,startTime asc";
-                            /** Get classroom's ttb */
-                            db.query(thisistheline4, (err, results) => {
-                                var string = JSON.stringify(results);
-                                var json = JSON.parse(string);
-                                var classroomusagelist = json;
-                                console.log('>> classroomusagelist: ', classroomusagelist);
-                                var thisistheline5 = "select *  from allclassroomtimeslot where ((startdate between \"" + startstart + "\" and \"" + endend + "\") or (enddate between \"" + startstart + "\" and \"" + endend + "\")) order by Campus asc,RID asc, startTime asc";
-                                /** Get classroom's unavailble timeslot */
-                                db.query(thisistheline5, (err, results) => {
-                                    var string = JSON.stringify(results);
-                                    var json = JSON.parse(string);
-                                    var classroomtimeslotlist = json;
-                                    console.log('>> classroomtimeslotlist: ', classroomtimeslotlist);
-                                    var thisistheline6 = "select distinct(Campus) from classroom where Campus != \"\"";
-                                    db.query(thisistheline6, (err, results) => {
-                                        var string = JSON.stringify(results);
-                                        var json = JSON.parse(string);
-                                        var Campuslist = json;
-                                        console.log('>> Campuslist: ', Campuslist);
-                                        var thisistheline7 = "select * from supervisorpairstudent";
-                                        db.query(thisistheline7, (err, results) => {
-                                            var string = JSON.stringify(results);
-                                            var json = JSON.parse(string);
-                                            var studentlist = json;
-                                            //    console.log('>> studentlist: ', studentlist);
-                                            //console.log('\n\n\n\n\n\n');
-                                            var thisistheline8 = "select * from allrequestfromstudent where sid in (select sid from supervisorpairstudent where tid = \"" + req.session.userid + "\") and status = \"Approved\" ";
-                                            db.query(thisistheline8, (err, results) => {
-                                                var string = JSON.stringify(results);
-                                                var json = JSON.parse(string);
-                                                var studenttimeslotlist = json;
-                                                //    console.log('>> studenttimeslotlist: ', studenttimeslotlist);
-                                                var thisistheline9 = "select allstudenttakecourse.CID, allstudenttakecourse.PID, allclass.weekdays, allclass.startTime,allclass.endTime from allstudenttakecourse inner join allclass on allclass.cid = allstudenttakecourse.cid where allstudenttakecourse.pid in (select supervisorpairstudent.sid from supervisorpairstudent where supervisorpairstudent.tid = \"" + req.session.userid + "\") and allstudenttakecourse.confirmation =2 order by weekdays asc, startTime asc;";
-                                                db.query(thisistheline9, (err, results) => {
-                                                    var string = JSON.stringify(results);
-                                                    var json = JSON.parse(string);
-                                                    var studentttb = json;
-                                                    //console.log('>> studentttb: ', studentttb);
-                                                    var thisistheline10 = "select allobstakecourse.CID, allobstakecourse.PID, allclass.weekdays, allclass.startTime,allclass.endTime from allobstakecourse inner join allclass on allclass.cid = allobstakecourse.cid where allobstakecourse.pid in (select supervisorpairobserver.oid from supervisorpairobserver where supervisorpairobserver.tid = \"" + req.session.userid + "\") order by weekdays asc, startTime asc;";
-                                                    db.query(thisistheline10, (err, results) => {
-                                                        var string = JSON.stringify(results);
-                                                        var json = JSON.parse(string);
-                                                        var obsttb = json;
-                                                        // console.log('>> obsttb: ', obsttb);
-                                                        var thisistheline11 = "select * from allrequestfromobserver where oid in (select oid from supervisorpairobserver where tid =  \"" + req.session.userid + "\") order by RequestDate asc, RequestStartTime asc;";
-                                                        db.query(thisistheline11, (err, results) => {
-                                                            var string = JSON.stringify(results);
-                                                            var json = JSON.parse(string);
-                                                            var obstimeslotlist = json;
-                                                            //console.log('>> obstimeslotlist: ', obstimeslotlist);
-                                                            var thisistheline12 = "select observer.obsname , observer.oid , observerpairstudent.SID from observer inner join observerpairstudent ,supervisorpairobserver where observer.oid = observerpairstudent.OID and observer.oid = supervisorpairobserver.OID and supervisorpairobserver.tid = \"" + req.session.userid + "\"";
-                                                            db.query(thisistheline12, (err, results) => {
-                                                                var string = JSON.stringify(results);
-                                                                var json = JSON.parse(string);
-                                                                var obslist = json;
-                                                                //console.log('>>obslist: ', obslist);
-                                                                var thisistheline13 = "select * from classroom where Campus!=\"\"";
-                                                                db.query(thisistheline13, (err, results) => {
-                                                                    var string = JSON.stringify(results);
-                                                                    var json = JSON.parse(string);
-                                                                    var allclassroomlist = json;
-                                                                    console.log('>>allclassroomlist: ', allclassroomlist);
-                                                                    return res.view("user/createdraft", {
-                                                                        savedbox: savedbox,
-                                                                        pagenum: req.params.Page,
-                                                                        orgstart: orgstart,
-                                                                        startdate: ansstartdate, enddate: ansenddate,
-                                                                        Campuslist: Campuslist, studentlist: studentlist, studentttb: studentttb,
-                                                                        studenttimeslotlist: studenttimeslotlist,
-                                                                        obsttb: obsttb, obstimeslotlist: obstimeslotlist, obslist: obslist,
-                                                                        personalrequestlist: personalrequestlist, personalttb: personalttb,
-                                                                        classroomusagelist: classroomusagelist, classroomtimeslotlist: classroomtimeslotlist,
-                                                                        allclassroomlist: allclassroomlist,
 
-                                                                    });
-                                                                });
-                                                            });
-                                                        });
-                                                    });
-                                                });
-                                            });
+<!--print line-->
+                <tr>
+                    
+                    <%for (var b = 0 ; b < 8;b++){%>
+                        <%if(b == 0){%>
+                            
+                            <td style="font-size : 14px"><%=printday.toLocaleTimeString("en-GB")%></td>
+                            <%}else{%>
+                                <%if(b <= displaydate.getDay()){%>
+                                    <td style="font-size : 14px">hell0</td>                                   
+                                     <%}else{%>
 
-                                        })
+                                    <!--start checking-->
+                                    <%var printed = false;%>
+                                    <!--check schedule box-->
+                                    <%console.log(printday.toLocaleDateString(), " 3452345  ",new Date(boxes[0].boxdate).toLocaleDateString())%>
+                                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                                            <%console.log(printday.toLocaleTimeString(), " 1231  ",new Date(boxes[0].boxdate).toLocaleTimeString())%>
+                                     
+                                            <%if(printday.toLocaleTimeString("en-GB") == (new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")){%>
+                                                
+                                                <%printed = true;%>
+                                            <td style="font-size : 14px">
+                                                <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                                    <tr><td><%=boxes[0].boxID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                                    <tr><td><%=boxes[0].SID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                                    <tr><td><%=boxes[0].Campus%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                                    <tr><td><%=boxes[0].RID%></td></tr>
+                                                </table>
+                                               
+                                            </td>
+                                            <%boxes.splice(0,1)%>
+                                            
+                                            <%if(boxes.length>1){%>
+                                                <%var checkdate = new Date(boxes[0].boxdate)%>
+                                                 <%while(checkdate.toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%var element = (boxes.shift())%>
+                                                    <%boxes.push(element);%>
+                                                
+                                                    <%checkdate = new Date(boxes[0].boxdate)%>
+                                                    <%}%>
+                                                <%}%>
+                                           
+                                            
+                                               
+                                            
+                                                <%}else{%>
+                                                  <!--is today but not this time-->
+                                                    <td>222 <%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString()%></td>
+                                                 <!--not correct time but we need to move on to next day-->
+                                                 <!--push all today to the back of the list-->
+                                                 <%if(boxes.length>1){%>
+                                                 <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%boxes.push(boxes.shift())%>
+                                                   
+                                                 <%}%>
+                                                 <%}%>
+                                                    <%console.log(">>hello",boxes)%>   
+                                                 <%}%>
+                                                 
+                                       <%}else{%>
+                                       <td>111 <%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString()%></td>
+                                       <%if(boxes.length>1){%>
+                                       <%while(boxes.length >1 && (new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                        <%boxes.push(boxes.shift())%>
+                                     <%}%>
+                                     <%}%>
+                                        <%}%>  
+                                        
+                                       
+                                    <%}%>
+                                    
+                            <%}%>  
+                            <%console.log(printday.toLocaleDateString(),"   ",printday.getDay())%>
+           
+                            <%if(printday.getDay()==6){%>
+                                <%printday=new Date(displaydate.getTime())%>
+                                <%console.log(a," !^&*%^& ",printday.toLocaleDateString("en-GB")," ",printday.toLocaleTimeString()," ",displaydate.toLocaleDateString("en-GB"),"  ",displaydate.toLocaleTimeString())%>
+           
+                                <%}else{%> 
+                                    <%printday=new Date(printday.getTime()+60*60*24*1000)%>
+                                   
+                                <%console.log(a," !@#!@ ",printday.toLocaleDateString("en-GB")," ",printday.toLocaleTimeString()," ",displaydate.toLocaleDateString("en-GB"),"  ",displaydate.toLocaleTimeString())%>
+           
+                                    <%}%>                       
+                    <%}%>
+<td></td>
 
-                                    })
 
-                                });
-                            });
+                            
+                                        
+                                      
+                </tr>
 
-                        });
-                    })
 
-                });
 
-            }
-        });
+
+
+
+
+
+
+
+                <%if(b > displaydate.getDay()){%>
+                                <!--check schedule box--> 
+                                <%console.log(printday.toLocaleDateString("en-GB"),"   ",(new Date(boxes[0].boxdate)).toLocaleDateString("en-GB"))%>
+                                   
+                                <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                                    <%console.log(printday.toLocaleTimeString(),"   ",(new Date(boxes[0].boxdate)).toLocaleTimeString())%>
+                                    <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
+                                       
+                                        <%printed = true;%>
+                                            <td style="font-size : 14px">
+                                                <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                                    <tr><td><%=boxes[0].boxID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                                    <tr><td><%=boxes[0].SID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                                    <tr><td><%=boxes[0].Campus%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                                    <tr><td><%=boxes[0].RID%></td></tr>
+                                                </table>
+                                               
+                                            </td>
+                                            <%boxes.splice(0,1)%>
+                                            <%if(boxes.length > 0){%>
+                                                <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                    <%console.log("check box shift 1",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString())%>
+                                                    <%boxes.push(boxes.shift())%>
+                                                    <%}%>
+                                                <%}%>
+                                        
+                                        <%}else{%>
+                                            <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                <%console.log("check box shift 2",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString())%>
+                                                   
+                                                <%boxes.push(boxes.shift())%>
+                                                <%}%>
+                                            <%}%> 
+                                    <%}else{%>
+                                        <%if(boxes.length > 0){%>
+                                            <%while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){%>
+                                                <%console.log("check box shift 3",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString())%>
+                                                   
+                                                <%boxes.push(boxes.shift())%>
+                                                <%}%>
+                                            <%}%>
+                                            
+                                        <%}%>
+                                          
+
+
+
+
+
+
+<%printday=new Date(displaydate.getTime()-(6-a-displaydate.getDay())*60*60*24*1000)%> 
+                       
+
+                                                <%if(!printed){%> 
+                                                    <td><%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString()%></td>
+                                                    <%}%>

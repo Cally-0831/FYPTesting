@@ -1,0 +1,97 @@
+  
+
+  
+
+
+            <%for(var a = 0 ; a < 13;a++){%>
+                <tr>
+                    <%for(var b = 0 ; b < 8;b++){%>
+                        <%var printed = false;%>
+                       <%if(b==0){%>
+                            <td><%=printday.toLocaleTimeString("en-GB")%></td>
+                        <%}else{%>
+                            <%if(b > displaydate.getDay()){%>
+                                <!--check schedule box--> 
+                                   
+                                <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                                   <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
+                                        <%printed = true;%>
+                                            <td style="font-size : 14px">
+                                                <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                                    <tr><td><%=boxes[0].boxID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                                    <tr><td><%=boxes[0].SID%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                                    <tr><td><%=boxes[0].Campus%></td></tr>
+                                                    <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                                    <tr><td><%=boxes[0].RID%></td></tr>
+                                                </table>
+                                               
+                                            </td>
+                                            <%boxes.splice(0,1)%>
+                                            <%if(boxes.length >0){
+                                                var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                                console.log("index ",index)
+                                                if(index != -1){
+                                                    while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                        console.log("check box shift 2",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString());
+                                                        boxes.push(boxes.shift());
+                                                        }
+                                                    }
+                                                
+                                                }%>
+                                            
+                                            
+            
+                                        <%}else{%>
+                                            <%if(boxes.length >0){
+                                                var index = boxes.find((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                                if(index != -1){
+                                                    while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                        console.log("check box shift 2",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString());
+                                                        boxes.push(boxes.shift());
+                                                        }
+                                                    }
+                                                }%>
+                                            <%}%> 
+                                    <%}else{%>
+                                        <%if(boxes.length >0){
+                                            var index = boxes.find((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                           if(index != -1){
+                                                while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                    console.log("check box shift 3",(new Date(boxes[0].boxdate)).toLocaleDateString() , "   ",printday.toLocaleDateString());
+                                                    boxes.push(boxes.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+                                            
+                                        <%}%>
+                                          
+
+
+
+
+
+
+
+
+                                                <%if(!printed){%> 
+                                                    <td><%=printday.toLocaleDateString("en-GB")%> <%=printday.toLocaleTimeString()%></td>
+                                                    <%}%>
+                               
+                                    <%if(printday.getDay() == 6){%>
+                                        <%printday = new Date(displaydate.getTime()+60*60*1000*a)%>                                        
+                                    <%}else{%>
+                                        <%printday = new Date(printday.getTime()+60*60*24*1000)%>
+                                    <%}%> 
+                           <%}else{%>
+                            <td>111</td>                     
+                            <%}%>                          
+                <%}%>                   
+                    <%}%><td></td>
+
+                </tr>
+                <%printday = new Date(printday.getTime()+60*60*1000)%>
+            <%}%>

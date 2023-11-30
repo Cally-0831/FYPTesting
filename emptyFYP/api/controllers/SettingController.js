@@ -1,22 +1,9 @@
-var mysql = require('mysql');
-
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    console.log('MySQL Connected');
-});
 
 module.exports = {
 
     submitsetting: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let stid = 'stid';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -77,6 +64,8 @@ module.exports = {
     },
 
     getsetting: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let thisistheline = " select * from allsupersetting where creator=\"" + req.session.userid + "\" order by typeofsetting asc";
         var supersetting;
         db.query(thisistheline, (err, results) => {
@@ -100,6 +89,146 @@ module.exports = {
     nodraft: async function (req, res) {
         let getallsetting = " select * from allsupersetting where announcetime is not null order by typeofsetting asc";
         var supersetting;
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var checking = false;
+
+        var checkarrangedobs = "select * from student where sid not in (select sid from observerpairstudent)";
+            var arranged = await new Promise((resolve) => {
+                pool.query(checkarrangedobs, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if (ans.length > 0) {
+                       ans = false
+                    } else {
+                        ans = true
+                    }
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in SettingController.nodraft.checkarrangedobs"
+            })  
+
+        var checkdeadline = "select deadlinedate , deadlinetime,typeofsetting from allsupersetting where typeofsetting != 3 and Announcetime is not null order by typeofsetting asc";
+        var setting1 = await new Promise((resolve) => {
+            pool.query(checkdeadline, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (ans.length > 0) {
+                    for(var a =0 ;a < ans.length;a++){
+                        var deadlinedate = new Date(ans[a].deadlinedate);
+                    var deadlinetime = ans[a].deadlinetime.split(":");
+                    deadlinedate.setHours(deadlinetime[0]);
+                    deadlinedate.setMinutes(deadlinetime[1]);
+                    deadlinedate.setSeconds(deadlinetime[2]);
+                    ans[a].deadlinedate = deadlinedate;
+                    }
+                    
+                   
+                } else {
+                    ans = undefined
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "Error happened in SettingController. nodraft.setting1"
+        })    
+
+       
+
+        checkdeadline = "select startdate , starttime,enddate,endtime from allsupersetting where typeofsetting = 3 and Announcetime is not null";
+        var setting3 = await new Promise((resolve) => {
+            pool.query(checkdeadline, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                console.log(ans)
+                if (ans.length > 0) {
+
+                    var settingstartday = new Date(ans[0].startdate).toDateString();
+                    var settingstarttime = ans[0].starttime;
+                    var settingendday = new Date(ans[0].enddate).toDateString();
+                    var settingendtime = ans[0].endtime;
+
+                    var stringstring1 = settingstartday + " " + settingstarttime;
+                    var stringstring2 = settingendday + " " + settingendtime;
+                    var startdday = new Date(stringstring1);
+                    presentstartday = startdday
+                    presentendday = new Date(stringstring2);
+                    ans = JSON.parse(JSON.stringify({"presentstartday":presentstartday,"presentendday":presentendday}))
+                } else {
+                    ans = undefined
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "Error happened in SettingController. nodraft.setting3"
+        })   
+        
+        console.log(">>setting1",setting1)
+        console.log(">>setting3",setting3)
+
+                var today = new Date();
+        var errormsg=""
+        for(var a = 0 ; a < setting1.length;a++){
+            console.log("handling   "+setting1[a].typeofsetting)
+            if(setting1[a].typeofsetting ==4 && a != setting1.length-1){
+                setting1.push(setting1.splice(a,1)[0])
+            }else if(setting1[a].typeofsetting == 4 && a == setting1.length-1){
+                if(new Date(setting3.presentstartday) >today){
+                    checking = true;
+                }else{
+                    checking = false;
+                    errormsg += "3&"
+                }
+
+
+                if(setting1[a].deadlinedate > today){
+                    checking = true;
+                }else{
+                    checking = false;
+                    errormsg += setting1[a].typeofsetting+"&" ;
+                   
+                }
+
+
+            }
+            console.log("handling now  "+setting1[a].typeofsetting)
+            if(setting1[a].typeofsetting != 4 && setting1[a].deadlinedate < today){
+                checking = true
+            }else if(setting1[a].typeofsetting != 4 && setting1[a].deadlinedate > today){
+                checking = false;
+                errormsg += setting1[a].typeofsetting+"&"
+              
+            }
+
+        }
+        var warning;
+        if(arranged && errormsg==""){
+            warning="200";
+        }else if(!arranged || errormsg != ""){
+            warning = "401"
+           
+        }
+        if(!arranged){
+            warning="401"
+            errormsg+= "A&"
+        }
+
+        return res.view("user/admin/scheduledesign", {
+            havedraft: "N",
+            warning: warning, msg: errormsg,
+            realreleaseday: setting1.find((element) => element.typeofsetting == 4).deadlinedate,
+            presentstartday: new Date(setting3.presentstartday),
+            presentendday: new Date(setting3.presentendday),
+
+        });
+
+          
+
+/** 
         db.query(getallsetting, (err, results) => {
             try {
                 var string = JSON.stringify(results);
@@ -118,7 +247,7 @@ module.exports = {
                 for (var i = 0; i < supersetting.length; i++) {
 
                     if (supersetting[i].deadlinedate != null) {
-                        /** this is for setting 1/2/4/5/6 */
+                        // this is for setting 1/2/4/5/6 
                         var settingday = new Date(supersetting[i].deadlinedate).toDateString();
                         var settingtime = supersetting[i].deadlinetime;
                         var stringstring = settingday + " " + settingtime;
@@ -138,7 +267,7 @@ module.exports = {
 
                         }
                     } else {
-                        /** this is for setting 3 */
+                        // this is for setting 3 
                         var settingstartday = new Date(supersetting[i].startdate).toDateString();
                         var settingstarttime = supersetting[i].starttime;
                         var settingendday = new Date(supersetting[i].enddate).toDateString();
@@ -163,6 +292,8 @@ module.exports = {
                 }else{
                     warning = 401;
                 }
+
+                
                 return res.view("user/admin/scheduledesign", {
                     havedraft: "N",
                     warning: warning, msg: msg,
@@ -182,10 +313,12 @@ module.exports = {
 
 
         });
-
+        */
     },
 
     checksetting: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let checkdraftexist = " select draft from supervisor";
 
         db.query(checkdraftexist, (err, results) => {

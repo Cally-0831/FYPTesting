@@ -13,7 +13,56 @@ module.exports = {
         if (req.session.role == "sup") {
 
             var getsupstdlist = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
+            var stdlist = await new Promise((resolve) => {
+                pool.query(getsupstdlist, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if(ans.length ==0){ans = null;}
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.getsupstdlist"
+            })
 
+            var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
+            var observinglist = await new Promise((resolve) => {
+                pool.query(getsupbeobslist, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if(ans.length ==0){ans = null;}
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.getsupstdlist"
+            })
+
+
+            var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
+            var finaldate = await new Promise((resolve) => {
+                pool.query(checkdeadline, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if (ans.length > 0) {
+                        var deadlinedate = new Date(json[0].deadlinedate);
+                        var deadlinetime = json[0].deadlinetime.split(":");
+                        deadlinedate.setHours(deadlinetime[0]);
+                        deadlinedate.setMinutes(deadlinetime[1]);
+                        deadlinedate.setSeconds(deadlinetime[2]);
+                        ans = deadlinedate;
+                    } else {
+                        ans = undefined
+                    }
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.checkdeadline"
+            })          
+
+            return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist ,arranged : null});
+                       /** 
             db.query(getsupstdlist, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -51,8 +100,7 @@ module.exports = {
                                     
                                     return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
                        
-                                    return res.status(200).json(JSON.parse(JSON.stringify({checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist})))
-                                    //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+                                   //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
                                 } catch (err) {
                                     return res.status(400).json("Error happened in StudentListController.liststudent.checkdeadline");
                                 }
@@ -65,8 +113,62 @@ module.exports = {
                     return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
                 }
             });
+            */
         } else {
-            thisistheline = "select supervisor.tid,supervisor.supname,student.sid,student.stdname,supervisor.submission from supervisor left join supervisorpairstudent on  supervisorpairstudent.tid = supervisor.tid left join student on supervisorpairstudent.sid = student.sid";
+            getsuplist = "select supervisor.tid,supervisor.supname,student.sid,student.stdname,supervisor.submission from supervisor left join supervisorpairstudent on  supervisorpairstudent.tid = supervisor.tid left join student on supervisorpairstudent.sid = student.sid";
+            var suplist = await new Promise((resolve) => {
+                pool.query(getsuplist, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.suplist"
+            })          
+
+
+            var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
+            var finaldate = await new Promise((resolve) => {
+                pool.query(checkdeadline, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if (ans.length > 0) {
+                        var deadlinedate = new Date(json[0].deadlinedate);
+                        var deadlinetime = json[0].deadlinetime.split(":");
+                        deadlinedate.setHours(deadlinetime[0]);
+                        deadlinedate.setMinutes(deadlinetime[1]);
+                        deadlinedate.setSeconds(deadlinetime[2]);
+                        ans = deadlinedate;
+                    } else {
+                        ans = undefined
+                    }
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.checkdeadline"
+            })          
+
+            var checkarrangedobs = "select * from student where sid not in (select sid from observerpairstudent)";
+            var arranged = await new Promise((resolve) => {
+                pool.query(checkarrangedobs, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    if (ans.length > 0) {
+                       ans = false
+                    } else {
+                        ans = true
+                    }
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "Error happened in StudentListController.liststudent.checkarrangedobs"
+            })          
+            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null , arranged: arranged});
+                      
+/** 
             db.query(thisistheline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -104,7 +206,7 @@ module.exports = {
 
 
             });
-
+            */
         }
 
 

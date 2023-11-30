@@ -630,11 +630,20 @@ module.exports = {
 
 
                     if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
-                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
-                        currentgeneratedate = new Date(currentgeneratedate);
-                        currentgeneratedate.setHours(9);
-                        currentgeneratedate.setMinutes(30);
-                        currentgeneratedate.setSeconds(0);
+                        if (currentgeneratedate.getDay() != 6) {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        } else {
+                            currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
+                            currentgeneratedate = new Date(currentgeneratedate);
+                            currentgeneratedate.setHours(9);
+                            currentgeneratedate.setMinutes(30);
+                            currentgeneratedate.setSeconds(0);
+                        }
+
                         //console.log(currentgeneratedate)
 
                     } else {
@@ -1358,42 +1367,6 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         console.log(req.query)
-        var query = "select * from allschedulebox where tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" order by boxdate asc;"
-        var boxesforthissupervisor = await new Promise((resolve) => {
-            pool.query(query, (err, res) => {
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
-        })
-
-        query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\" order by requestdate asc, requeststarttime asc";
-        var requestforthissupervisor = await new Promise((resolve) => {
-            pool.query(query, (err, res) => {
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
-        })
-
-        query = "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \"" + req.query.id + "\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
-        var ttbforthissupervisor = await new Promise((resolve) => {
-            pool.query(query, (err, res) => {
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
-        })
-       
         query = "select * from allsupersetting where typeofsetting = 3;"
         var setting3 = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1419,23 +1392,53 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
         })
+        var displaystartday = new Date(setting3.startday.getTime() - 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
+        var displayendday = new Date(setting3.startday.getTime() + 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
+        var startday = displaystartday.toLocaleDateString('en-GB').split('/').reverse().join('-');
+        var endday = new Date((displayendday.getTime() + 60 * 60 * 24 * 1000)).toLocaleDateString('en-GB').split('/').reverse().join('-');
 
 
-        /** 
-ttbforthissupervisor.concat(appendlist);
-console.log(">>after concat",appendlist)
+        var query = "select * from allschedulebox where (tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" ) and (boxdate >= date(\"" + startday + "\") and boxdate <= date(\"" + endday + "\") ) order by boxdate asc;"
+        var boxesforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
+        })
 
-ttbforthissupervisor.sort((a, b) => {
-    return a.weekdays - b.weekdays || a.starttime - b.starttime;
-})
+        query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
+        var requestforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
+        })
 
-console.log(ttbforthissupervisor)
- */
+        query = "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \"" + req.query.id + "\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
+        var ttbforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
+        })
 
-
+console.log(boxesforthissupervisor,"\n\n",requestforthissupervisor,"\n\n",ttbforthissupervisor)
         return res.view("user/admin/modifyschedule", {
             boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
-            requestes: requestforthissupervisor, setting: setting3, Page: req.query.Page
+            requestes: requestforthissupervisor, setting: setting3,
+            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page
         })
 
     },
