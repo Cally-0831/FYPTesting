@@ -34,7 +34,7 @@ module.exports.routes = {
   //'GET /home': { view: 'user/home' },
   'GET /home': 'UserController.home',
   'GET /scheduledesign': "SettingController.nodraft",
-  'GET /checkdraft': "SettingController.checksetting",
+  'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
 
 
@@ -149,6 +149,8 @@ module.exports.routes = {
   "GET /supervisorschedulelist":"ScheduleController.supervisorschedulelist",
   "GET /supervisorschedulelist/modifyschedule":"ScheduleController.retrievesinglesupervisorschedule",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
+
+  "GET /viewFinalSchedule":"ScheduleController.viewFinalSchedule"
 
   /***************************************************************************
   *                                                                          *

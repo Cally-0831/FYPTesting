@@ -3,54 +3,66 @@ module.exports = {
     viewschedulepage: async function (req, res) {
 
     },
-    viewfinalschedule: async function (req, res) {
+    viewFinalSchedule: async function (req, res) {
         var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var getsettinginfo;
         var getschedulebox;
         var thisistheline3;
         var releasedate;
         var releasetime;
 
-        if (req.session.role == "sup") {
-            getsettinginfo = "select * from allsupersetting where where announcetime is not null and  typeofsetting= \"4\""
-            getschedulebox = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\"";
-        } else if (req.session.role == "stu") {
-            getsettinginfo = "select * from allsupersetting where announcetime is not null and  typeofsetting= \"4\"";
-            getschedulebox = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
-        }
+        // check the displaytime has come
+        checkdisplaydate = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = 4 and Announcetime is not null;"
 
-        db.query(getsettinginfo, (err, results) => {
-            try {
-                //get setting check can the system show now
-                var string = JSON.stringify(results);
+        setting = await new Promise((resolve) => {
+            pool.query(checkdisplaydate, (err, res) => {
+                var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                if (json.length == 0) {
-                    releasedate = null
-                    releasetime = null
+                var ans;
+                if (err == undefined && json.length > 0) {
+                    ans = json[0];
+                    resolve(ans)
                 } else {
-                    releasedate = json[0].deadlinedate;
-                    releasetime = json[0].deadlinetime;
+                    var errmsg = JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.viewFinalSchedule.checkdisplaydate" }));
+                    err = errmsg;
+                    resolve(err)
                 }
-                console.log('>> checkschedeulerelease: ', json);
+            })
+        })
+        console.log(setting)
 
+        if (setting.errmsg == undefined) {
+            var settingdate = new Date(setting.deadlinedate);
+            settingdate.setHours(setting.deadlinetime.split(":")[0]);
+            settingdate.setMinutes(setting.deadlinetime.split(":")[1]);
+            console.log(settingdate)
+            if (settingdate > new Date()) {
+
+                if (req.session.role == "sup") {
+                    getschedulebox = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\" order by boxdate";
+                } else if (req.session.role == "stu") {
+                    getschedulebox = "select * from allschedulebox where sid = \"" + req.session.userid + "\""
+                }
                 db.query(getschedulebox, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
                         var personalschedulebox = json;
-                        return res.view('user/checkschedule', {
-                            releasedate: releasedate, releasetime: releasetime,
+                        return res.view('user/viewFinalSchedule.ejs', {
+                            releasedate: settingdate,
                             personalschedulebox: personalschedulebox
                         });
 
                     } catch (err) {
-                        console.log("sth happened here");
+                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
                     }
                 });
-            } catch (err) {
-                console.log("sth happened here");
             }
-        });
+        } else {
+            console.log(setting.errmsg)
+        }
+
     },
 
     /**
@@ -351,8 +363,8 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getsetting3"
         })
-        console.log(errmsg)
-        console.log(setting3)
+        //console.log(errmsg)
+        //console.log(setting3)
 
 
 
@@ -378,7 +390,7 @@ module.exports = {
 
             }
 
-            console.log("resetted schedulebox", schedulebox)
+            //console.log("resetted schedulebox", schedulebox)
             return schedulebox;
         }
 
@@ -672,7 +684,7 @@ module.exports = {
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
 
-                    console.log(datestring)
+                    // console.log(datestring)
                     //console.log("final")
                     var boolcheckttb = false;
                     var boolcheckreq = false;
@@ -782,7 +794,7 @@ module.exports = {
                     var boolcheckreq = false;
 
                     var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-                   // console.log(getchecksupervisorttb);
+                    // console.log(getchecksupervisorttb);
 
 
                     supervisorttblist = await new Promise((resolve) => {
@@ -820,7 +832,7 @@ module.exports = {
                     if (boolcheckreq && boolcheckttb) {
                         var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
                         //console.log(insertavability)
-                        
+
                         var supervisoravailbilityinsert = await new Promise((resolve) => {
                             pool.query(insertavability, (err, res) => {
                                 resolve(res);
@@ -938,13 +950,13 @@ module.exports = {
             }
         }
 
-        console.log(">>supervisorlist", supervisorlist);
+        //console.log(">>supervisorlist", supervisorlist);
 
         //  for (var a = 0; a < 3; a++) {
 
 
 
-        
+
         for (var a = 0; a < supervisorlist.length; a++) {
             var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
             var prefofthissuper = await new Promise((resolve) => {
@@ -972,9 +984,10 @@ module.exports = {
             thisschedulebox.sort((a, b) => {
                 return b.prefno - a.prefno;
             });
-            console.log(supervisorlist[a].tid, "   ", thisschedulebox)
+            // console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
+            console.log(getallstudentlistforthissuper)
             var studentlistforthissupervisor = await new Promise((resolve) => {
                 pool.query(getallstudentlistforthissuper, (err, res) => {
                     var string = JSON.stringify(res);
@@ -1017,13 +1030,15 @@ module.exports = {
                 counttimeboxlist.sort((a, b) => {
                     return a.availblelist - b.availblelist;
                 })
+                console.log(counttimeboxlist)
 
 
                 for (var b = 0; b < counttimeboxlist.length; b++) {
                     console.log(counttimeboxlist[b])
                     var added = false;
+
                     for (var c = 0; c < thisschedulebox.length; c++) {
-                        console.log(thisschedulebox[c])
+                        // console.log(thisschedulebox[c])
                         var presentday = thisschedulebox[c].date;
                         var checker = thisschedulebox[c].prefno;
                         if (checker == "") {
@@ -1046,7 +1061,7 @@ module.exports = {
                                         + "and studentavailable.availabledate =\"" + presentday + "\""
                                     for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
                                         var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
-                                        console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
+                                        //     console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
                                         checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
                                     }
                                     checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
@@ -1074,6 +1089,16 @@ module.exports = {
                                 if (checkscheduleboxlist[0] == undefined) {
                                     console.log(supervisorlist[a].tid, "  ", checkavailabledup)
                                     console.log("this fail", counttimeboxlist[b].sid)
+
+                                    var manualhandleline = "insert into manualhandlecase values(\""+counttimeboxlist[b].sid+"\",\""+counttimeboxlist[b].tid+"\",\""+counttimeboxlist[b].oid+"\")"
+
+                                    db.query(manualhandleline, (err, res) => {
+                                        try { console.log("inserted manual handlecase") } catch (err) {
+                                            console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
+                                        }
+                                    })
+
+
                                     break;
                                 } else {
                                     thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
@@ -1084,15 +1109,15 @@ module.exports = {
 
                             }
                         } else {
-                            if (checker == 0) {
+                            if (checker == "0") {
                                 console.log("need to handle this ppl 1", counttimeboxlist[b].sid)
-                            } else if (thisschedulebox[c].schedule.length == checker) {
+                            } else if (thisschedulebox[c].schedule.length == parseInt(checker)) {
                                 console.log("need to handle this ppl 2", counttimeboxlist[b].sid)
                             }
 
                         }
-                        if (added) { break; } else {
-                            console.log("need to handle this ppl 3", counttimeboxlist[b].sid)
+                        if (added) { checker++; break; } else {
+                            console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
                         }
                     }
                 }
@@ -1101,7 +1126,7 @@ module.exports = {
                     for (var e = 0; e < thisschedulebox[c].schedule.length; e++) {
                         var campus = "";
                         var room = "";
-                        console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
+                        //  console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
                         var timestamp = new Date(thisschedulebox[c].schedule[e].availablestartTime);
 
                         var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
@@ -1160,12 +1185,12 @@ module.exports = {
                             })
                             campus = checkcampusandroom[0].Campus
                         }
-                        console.log(campus + "   hello")
+                        // console.log(campus + "   hello")
 
                         getcampusandroomquery = "select * from classroom where Campus =\"" + campus + "\" and status=\"Open\" "
                             + " and rid not in (select rid from allclassroomtimeslot where Campus = \"" + campus + "\" and startdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
                             + " and rid not in(select rid from allclass where Campus = \"" + campus + "\" and weekdays = \"" + timestamp.getDay() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
-                        console.log(getcampusandroomquery);
+                        // console.log(getcampusandroomquery);
 
                         var checkcampusandroom = await new Promise((resolve) => {
                             pool.query(getcampusandroomquery, (err, res) => {
@@ -1177,13 +1202,13 @@ module.exports = {
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
                         })
-                        console.log(checkcampusandroom)
+                        // console.log(checkcampusandroom)
                         if (checkcampusandroom.length > 0) {
                             room = checkcampusandroom[0].RID;
                         } else {
                             room = "ooops"
                         }
-                        console.log(campus + "    " + room)
+                        // console.log(campus + "    " + room)
                         let boxid = 'boxID';
                         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                         const charactersLength = characters.length;
@@ -1206,7 +1231,7 @@ module.exports = {
                         })
 
                         var updatesupervisordraft = "update supervisor set draft = \"Y\" where tid = \"" + thisschedulebox[c].schedule[e].tid + "\""
-                        console.log(updatesupervisordraft)
+                        //console.log(updatesupervisordraft)
                         insertbox = await new Promise((resolve) => {
                             pool.query(updatesupervisordraft, (err, res) => {
                                 resolve(res)
@@ -1460,10 +1485,7 @@ module.exports = {
             } catch (err) {
                 return res.status(400).json("error happened in SchdeuleController.supervisorschedulelist.query")
             }
-
-
         })
-
     },
 
     retrievesinglesupervisorschedule: async function (req, res) {
@@ -1502,6 +1524,7 @@ module.exports = {
 
 
         var query = "select * from allschedulebox where (tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" ) and (boxdate >= date(\"" + startday + "\") and boxdate <= date(\"" + endday + "\") ) order by boxdate asc;"
+        console.log(query)
         var boxesforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1512,22 +1535,22 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getboxforthissupervisor"
         })
-        if(boxesforthissupervisor.length ==0){
+        if (boxesforthissupervisor.length == 0) {
             query = "select distinct(type) from allschedulebox;"
             type = await new Promise((resolve) => {
-            pool.query(query, (err, res) => {
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
+                pool.query(query, (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.gettype"
             })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.gettype"
-        })
-        }else{
+        } else {
             type = boxesforthissupervisor[0].TYPE;
         }
-        
+
         query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1552,12 +1575,52 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
         })
 
+        query = "select * from manualhandlecase where tid = \""+req.query.id +"\" or oid = \""+req.query.id +"\"";
+        var manualhandlecaseforthissupervisor = await new Promise((resolve) => {
+            pool.query(query, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.manualhandlecaseforthissupervisor"
+        })
+        
+
+
+
         console.log(boxesforthissupervisor, "\n\n", requestforthissupervisor, "\n\n", ttbforthissupervisor)
         return res.view("user/admin/modifyschedule", {
             boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
             requestes: requestforthissupervisor, setting: setting3,
-            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page, type:type
+            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page, type: type,
+            manualhandlecase : manualhandlecaseforthissupervisor
         })
+
+    },
+
+    checksetting: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        let checkdraftexist = " select * from allschedulebox";
+
+        db.query(checkdraftexist, (err, results) => {
+            try{var string = JSON.stringify(results);
+            //console.log('>> string: ', string );
+            var json = JSON.parse(string);
+            var havedraft = json;
+            //console.log('>> havedraft: ', havedraft);
+            if (havedraft.length >0) {
+                return res.status(200).json("redirect");
+            } else {
+                return res.status(200).json("go")
+            }}catch(err){
+                return res.status(400).json("Error happened when excuting SettingController.checksetting")
+            }
+            
+
+        });
 
     },
 }

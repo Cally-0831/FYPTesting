@@ -79,7 +79,11 @@
                                 <img src="images\home\preference.jpg" class="gallery_img">
                             </a>
                         </div>
-                        
+                        <div class="imgcolumn">
+                            <a onclick="checktimecome()">
+                                <img src="images\home\canlendar.jpg" class="gallery_img">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,7 +136,7 @@
 </div>
 <script>
    
-    async function checkhavedraft() {
+   async function checkhavedraft() {
         var response = await fetch("/checkdraft", {
             method: "GET",
         });
@@ -152,13 +156,13 @@
     }
 
     async function checktimecome() {
-        var response = await fetch("/checkschdule", {
+        var response = await fetch("/viewFinalSchedule", {
             method: "GET",
         });
 
         if (response.ok) {
 
-            location.assign("/checkschdule");
+            location.assign("/viewFinalSchedule");
         }
     }
     async function checkrequestdeadline(rolerole) {

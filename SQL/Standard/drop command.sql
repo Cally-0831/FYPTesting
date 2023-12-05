@@ -24,7 +24,7 @@ Drop table if exists allpreffromsup;
 Drop table if exists supervisoravailable;
 Drop table if exists studentavailable;
 Drop table if exists allschedulebox;
-
+Drop table if exists manualhandlecase;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;

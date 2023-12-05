@@ -6,13 +6,9 @@
         </button>
     </div>
 </div>
-<% if(releasedate != null){%>
-    <% var today = new Date();
-        var releasedday = new Date(releasedate).toDateString();
-    var stringstring = releasedday+" "+releasetime;
-    releasedday = new Date(stringstring);
-    console.log(releasedday);
-    %>
+
+<% releasedate = new Date("2023-11-20");if(releasedate != null){%>
+    <% var today = new Date(); var releasedday = new Date(releasedate);%>
     <%if(releasedday < today){%>
         
 
@@ -54,7 +50,7 @@
                         <%=boxdate.toLocaleDateString()%>
                     </td>
                     <td style ="text-align: center;vertical-align:middle;">
-                        <%=personalschedulebox[a].boxtime%>
+                        <%=boxdate.toLocaleTimeString("en-GB")%>
                     </td>
                     <td style ="text-align: center;vertical-align:middle;">
                         <%=personalschedulebox[a].SID%>
@@ -77,10 +73,10 @@
                 <div class = "column is-half">
                     <article class="message is-primary">
                         <div class="message-header">
-                        <p>Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></p>
+                        <p style="font-size: 25px;">Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></p>
                         
                         </div>
-                        <div class="message-body">
+                        <div class="message-body" style="font-size: 20px;">
                             The Presentation Schdeule has not been released.
                             <br>
                             The schedule will not be disclose until the date.
@@ -94,15 +90,22 @@
     
     
     <%}else{%>
-        <article class="message is-primary">
-            <div class="message-header">
-              <p>Sorry</p>
-              
+        <div class = "columns is-centered is-mobile">
+            <div class = "column is-half">
+                <article class="message is-primary">
+                    <div class="message-header">
+                      <p style="font-size: 25px;">Sorry</p>
+                      
+                    </div>
+                    <div class="message-body" style="font-size: 20px;">
+                        The Presentation Schdeule has not been released.
+                    </div>
+                  </article>
             </div>
-            <div class="message-body">
-                The Presentation Schdeule has not been released.
-            </div>
-          </article>
+        </div>
+
+
+       
         <%}%>
 
 

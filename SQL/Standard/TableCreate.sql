@@ -169,6 +169,14 @@ Announcetime timestamp default null,
 primary key (STID)
 );
 
+create table allpreffromsup(
+
+TID varchar(10) not null,
+Prefno varchar(50),
+LastUpdate timestamp not null,
+primary key (TID)
+);
+
 create table allschedulebox(
 boxID varchar(30)not null,
 boxdate Timestamp not null,
@@ -180,14 +188,6 @@ Campus varchar(10) not null,
 RID		varchar(10) Not null,
 LastUpdate timestamp not null,
 primary key (boxID)
-);
-
-create table allpreffromsup(
-
-TID varchar(10) not null,
-Prefno varchar(50),
-LastUpdate timestamp not null,
-primary key (TID)
 );
 
 create table supervisoravailable(
@@ -208,6 +208,13 @@ availableendTime timestamp,
 primary key(sid,availabledate,availablestarttime)
 );
 
+create table manualhandlecase(
+
+SID varchar(10) not null,
+TID varchar(10) not null,
+OID varchar(10) not null,
+primary key(sid)
+);
 
 
 delimiter |

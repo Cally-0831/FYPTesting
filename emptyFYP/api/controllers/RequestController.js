@@ -44,7 +44,7 @@ module.exports = {
 
 
             } catch (err) {
-                console.log("sth happened here");
+                console.log("error happened in RequestController.getview");
 
             }
         })
@@ -69,53 +69,36 @@ module.exports = {
                     deadlinedate.setMinutes(deadlinetime[1]);
                     deadlinedate.setSeconds(deadlinetime[2]);
                     ans = { deadlinedate: deadlinedate };
+                    resolve(ans)
+                }else{
+                    resolve(null);
                 }
-                resolve(ans)
+                
             })
         }).catch((err) => {
-            errmsg = "error happened in ScheduleController.genavailble.getsetting2"
+            errmsg = "error happened : RequestController.listrequest"
         })
         if (req.session.role == "sup") {
-            let thisistheline = "SELECT * FROM allrequestfromsupervisor where tid = \"" + req.session.userid + "\"\;";
-            //console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
-                    var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
-                    requestlist = json;
-                    // console.log('>> stdlist: ', requestlist);
-                    return res.view('user/checkrequest', { thisuserRequestlist: requestlist , setting : setting2});
-                } catch (err) {
-                    console.log("sth happened here");
-
-                }
-
-
-            });
+            queryline = "SELECT * FROM allrequestfromsupervisor where tid = \"" + req.session.userid + "\"\ order by requestdate asc, requeststarttime asc;";
         }  else if (req.session.role == "stu") {
-            let thisistheline = "SELECT * FROM allrequestfromstudent where sid = \"" + req.session.userid + "\"\;";
-            console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    //console.log('>> string: ', string );
-                    var json = JSON.parse(string);
-                    //console.log('>> json: ', json);  
-                    requestlist = json;
-                    console.log('>> my request ist: ', requestlist);
-                    return res.view('user/checkrequest', { thisuserRequestlist: requestlist, setting : setting2});
-                } catch (err) {
-                    console.log("sth happened here");
-
-                }
-
-
-            });
+            queryline = "SELECT * FROM allrequestfromstudent where sid = \"" + req.session.userid + "\"\ order by submission desc;";
         }
 
+        db.query(queryline, (err, results) => {
+            try {
+                var string = JSON.stringify(results);
+                //console.log('>> string: ', string );
+                var json = JSON.parse(string);
+                //console.log('>> json: ', json);  
+                requestlist = json;
+                 return res.view('user/checkrequest', { thisuserRequestlist: requestlist, setting : setting2});
+            } catch (err) {
+                console.log("error happened : RequestController.listrequest");
 
+            }
+
+
+        });
 
     },
 

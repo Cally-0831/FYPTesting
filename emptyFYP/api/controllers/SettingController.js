@@ -316,30 +316,4 @@ module.exports = {
         */
     },
 
-    checksetting: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        let checkdraftexist = " select draft from supervisor";
-
-        db.query(checkdraftexist, (err, results) => {
-            try{var string = JSON.stringify(results);
-            //console.log('>> string: ', string );
-            var json = JSON.parse(string);
-            var havedraft = json[0].draft;
-            //console.log('>> havedraft: ', havedraft);
-            if (havedraft == "Y") {
-                return res.status(200).json("redirect");
-            } else {
-                return res.status(200).json("go")
-            }}catch(err){
-                return res.status(400).json("Error happened when excuting SettingController.checksetting")
-            }
-            
-
-        });
-
-    },
-
-
-
 }
