@@ -150,7 +150,8 @@ module.exports.routes = {
   "GET /supervisorschedulelist/modifyschedule":"ScheduleController.retrievesinglesupervisorschedule",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
-  "GET /viewFinalSchedule":"ScheduleController.viewFinalSchedule"
+  "GET /viewFinalSchedule":"ScheduleController.viewFinalSchedule",
+  "GET /supervisorschedulelist/modifyschedule/HandleManualCase" : "ScheduleController.HandleManualCase"
 
   /***************************************************************************
   *                                                                          *

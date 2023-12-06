@@ -1,0 +1,60 @@
+<div class="Pagetitle">Manual Handle Case</div>
+<div class="rows">
+    <div class="row">
+        <div class="columns">
+            <div class="column">
+                <div class="buttons is-left">
+                    <div class="button buttonlogout " onclick="back()">
+                        Back
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+<%var combinationset= new Array()%>
+<%for (var a = 0 ;a < availableCombination.length;a++){
+    var combination = JSON.parse(JSON.stringify({"date":"","starttime":"","endtime":""}))
+    combination.date = new Date(availableCombination[a].availabledate);
+    combination.starttime = new Date(availableCombination[a].availablestartTime)
+    combination.endtime = new Date(availableCombination[a].availableendTime)
+    combinationset.push(combination);
+}%>
+<%for (var a = 0 ;a < combinationset.length;a++){
+    console.log(combinationset[a]);
+}%>
+
+<div class="columns is-mobile is-centered">
+    <div class="column column-big is-half">
+        <div style="font-size : 25px;padding-top: 10px;" class="title">Handle Case <%=req.query.sid%>
+        </div>
+      
+           
+            <div class="custom-select" style="text-align: center;vertical-align: middle;" > 
+                <label for="cars">Choose a car:</label>
+<select name="cars" id="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="opel">Opel</option>
+  <option value="audi">Audi</option>
+</select>
+              </div>
+            <br>  
+            <div>
+            <label for="UpdateTime">Update to this time range</label>
+            <input id="UpdateTime" type="date">
+        </div>
+    </div>
+</div>
+
+<script>
+    function back() {
+        location.assign("/home")
+    }
+
+    async function submitform(command, startdatestr, enddatestr, maxstdnum) {
+
+
+    }
+</script>

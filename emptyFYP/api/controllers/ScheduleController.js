@@ -1090,7 +1090,7 @@ module.exports = {
                                     console.log(supervisorlist[a].tid, "  ", checkavailabledup)
                                     console.log("this fail", counttimeboxlist[b].sid)
 
-                                    var manualhandleline = "insert into manualhandlecase values(\""+counttimeboxlist[b].sid+"\",\""+counttimeboxlist[b].tid+"\",\""+counttimeboxlist[b].oid+"\")"
+                                    var manualhandleline = "insert into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
 
                                     db.query(manualhandleline, (err, res) => {
                                         try { console.log("inserted manual handlecase") } catch (err) {
@@ -1575,7 +1575,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
         })
 
-        query = "select * from manualhandlecase where tid = \""+req.query.id +"\" or oid = \""+req.query.id +"\"";
+        query = "select * from manualhandlecase where tid = \"" + req.query.id + "\" or oid = \"" + req.query.id + "\"";
         var manualhandlecaseforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1586,7 +1586,7 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.manualhandlecaseforthissupervisor"
         })
-        
+
 
 
 
@@ -1595,7 +1595,7 @@ module.exports = {
             boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
             requestes: requestforthissupervisor, setting: setting3,
             displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page, type: type,
-            manualhandlecase : manualhandlecaseforthissupervisor
+            manualhandlecase: manualhandlecaseforthissupervisor
         })
 
     },
@@ -1606,21 +1606,77 @@ module.exports = {
         let checkdraftexist = " select * from allschedulebox";
 
         db.query(checkdraftexist, (err, results) => {
-            try{var string = JSON.stringify(results);
-            //console.log('>> string: ', string );
-            var json = JSON.parse(string);
-            var havedraft = json;
-            //console.log('>> havedraft: ', havedraft);
-            if (havedraft.length >0) {
-                return res.status(200).json("redirect");
-            } else {
-                return res.status(200).json("go")
-            }}catch(err){
+            try {
+                var string = JSON.stringify(results);
+                //console.log('>> string: ', string );
+                var json = JSON.parse(string);
+                var havedraft = json;
+                //console.log('>> havedraft: ', havedraft);
+                if (havedraft.length > 0) {
+                    return res.status(200).json("redirect");
+                } else {
+                    return res.status(200).json("go")
+                }
+            } catch (err) {
                 return res.status(400).json("Error happened when excuting SettingController.checksetting")
             }
-            
+
 
         });
 
     },
+
+    HandleManualCase: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+        var getCurrentBox = "Select * from allschedulebox where sid = \"" + req.query.sid + "\"; ";
+        CurrentBox = await new Promise((resolve) => {
+            pool.query(getCurrentBox, (err, res) => {
+                if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.getCurrentBox" }))) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                if (json.length > 0) {
+                    var ans = json;
+                    resolve(ans);
+                } else {
+                    resolve(null);
+                }
+
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getCurrentbox"
+        })
+
+        var getavailabletimes = "select t1.tid,t1.sid, observerpairstudent.oid,t1.availabledate,t1.availablestartTime,t1.availableendTime from "
+            + "(select supervisorpairstudent.tid,supervisorpairstudent.sid,sa1.availabledate,sa1.availablestartTime,sa1.availableendTime "
+            + "from supervisorpairstudent left join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid "
+            + "where supervisorpairstudent.sid = \"" + req.query.sid + "\" "
+            + "and (sa1.availabledate in (select availabledate from studentavailable where sid = \"" + req.query.sid + "\") "
+            + "and sa1.availablestartTime in (select availablestartTime from studentavailable where sid = \"" + req.query.sid + "\") "
+            + "and sa1.availableendTime in (select availableendTime from studentavailable where sid = \"" + req.query.sid + "\")) "
+            + ")as t1 left join observerpairstudent on t1.sid = observerpairstudent.sid "
+            + " left join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid "
+            + "where (sa2.availabledate = t1.availabledate "
+            + "and sa2.availablestartTime = t1.availablestartTime "
+            + "and sa2.availableendTime = t1.availableendTime);"
+
+        availableCombination = await new Promise((resolve) => {
+            pool.query(getavailabletimes, (err, res) => {
+                if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination" }))) }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination"
+        })
+        if (availableCombination.errmsg == undefined) {
+            return res.view("user/admin/HandleManualCase", { currentbox:CurrentBox,availableCombination: availableCombination })
+        } else {
+            return res.status(400).json(availableCombination.errmsg);
+        }
+
+    }
 }
