@@ -72,7 +72,8 @@ module.exports = {
       *                                                                           *
       ****************************************************************************/
       // ssl: { rejectUnauthorized: true },
-
+      adapter: require('sails-mysql'),
+      url: 'mysql://root:Psycho.K0831@127.0.0.1:3306/fyptesting',
     },
 
   },
@@ -267,7 +268,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
      onlyAllowOrigins: [
-       'https://fypscheduling19222068.com',
+       'https://hkbu19222068fyp.onrender.com/',
        //'https://staging.example.com',
      ],
 

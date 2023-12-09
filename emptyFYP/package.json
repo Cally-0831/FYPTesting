@@ -19,7 +19,7 @@
     "express-fileupload": "^1.4.0",
     "fs": "^0.0.1-security",
     "ftp": "^0.3.10",
-    "ftp-client": "^0.2.2",
+    "ftp-client": "^0.2.0",
     "ftpd": "^0.2.16",
     "grunt": "1.0.4",
     "jsftp": "^2.1.3",
