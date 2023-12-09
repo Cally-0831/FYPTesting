@@ -21,36 +21,53 @@
     combination.endtime = new Date(availableCombination[a].availableendTime)
     combinationset.push(combination);
 }%>
-<%for (var a = 0 ;a < combinationset.length;a++){
-    console.log(combinationset[a]);
+
+<%var unqiuedateset=new Array()%>
+<%var b =0;%>
+<%for(var a = 0 ;a < combinationset.length;a++){
+    if(a==0){
+        unqiuedateset.push(combinationset[a])
+    }
+        if(combinationset[a].date.toLocaleDateString("en-GB") != unqiuedateset[b].date.toLocaleDateString("en-GB")){
+            unqiuedateset.push(combinationset[a]);
+            b++;
+        }
+    
 }%>
+
 
 <div class="columns is-mobile is-centered">
     <div class="column column-big is-half">
         <div style="font-size : 25px;padding-top: 10px;" class="title">Handle Case <%=req.query.sid%>
         </div>
-      
-           
+            <%if(availableCombination.length >0){%>
             <div class="custom-select" style="text-align: center;vertical-align: middle;" > 
-                <label for="cars">Choose a car:</label>
-<select name="cars" id="cars">
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="opel">Opel</option>
-  <option value="audi">Audi</option>
-</select>
-              </div>
+               
+                    <label for="UpdateDate">Update Date:</label>
+                        <select name="date" id="UpdateDate">
+                            <%for(var a =0 ;a < unqiuedateset.length;a++){%>
+                                <option value="<%=combinationset[a].date%>"><%=(unqiuedateset[a].date).toLocaleDateString("en-GB")%></option>
+                                <%}%>
+                        
+                        </select>
+               
+                
+              </div> 
+              <div>
+                  <label for="UpdateTime">Update to this time range</label>
+                  <input id="UpdateTime" type="date">
+                </div>
+              <%}else{%>
+                <div> This student have no availableCombination</div>
+                <%}%>
             <br>  
-            <div>
-            <label for="UpdateTime">Update to this time range</label>
-            <input id="UpdateTime" type="date">
-        </div>
+            
     </div>
 </div>
 
 <script>
     function back() {
-        location.assign("/home")
+        history.back();
     }
 
     async function submitform(command, startdatestr, enddatestr, maxstdnum) {

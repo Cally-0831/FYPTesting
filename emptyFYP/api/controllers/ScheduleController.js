@@ -1666,8 +1666,11 @@ module.exports = {
                 if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination" }))) }
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                var ans = json;
+                
+                    var ans = json;
                 resolve(ans)
+                
+                
             })
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination"

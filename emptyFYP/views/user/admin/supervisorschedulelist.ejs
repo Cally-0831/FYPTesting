@@ -59,6 +59,9 @@
         <%})%>
 </table>
 <script>
+    function backback(){
+        location.assign("/home")
+    }
     async function checkpath(tid) {
         console.log("checkthisuser have schdeule ", tid);
         location.assign("supervisorschedulelist/modifyschedule?id="+tid+"&Page=1");

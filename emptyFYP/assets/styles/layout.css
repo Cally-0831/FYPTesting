@@ -294,7 +294,7 @@ select {
 .custom-select::after {
   --size: 0.5rem;
   content: "";
-  position: relative;
+  position: absolute;
   right: 1rem;
   pointer-events: none;
   
