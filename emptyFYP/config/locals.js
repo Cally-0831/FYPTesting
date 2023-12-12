@@ -1,6 +1,6 @@
 module.exports = {
-    port: 80,
-    environment: 'production',
+    port: 1337,
+    environment: 'locales',
     adapters: {
         mysql: {
             user: 'root',
