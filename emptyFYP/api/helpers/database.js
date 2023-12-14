@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 
 var db = mysql.createConnection({
-    host: "fypdeploy-mysql.svc",
+    host: "fypdeploy-mysql",
     user: "root",
     port: 3306,
     password: "Psycho.K0831",
