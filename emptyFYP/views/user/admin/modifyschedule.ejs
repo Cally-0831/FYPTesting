@@ -233,18 +233,18 @@
                         
                         <%var printed = false;%>
 
-                        <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString()){%>
+                        <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString() && !printed){%>
                             <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
                                 <%printed = true;%>
-                                <td style="font-size : 14px">
+                                <td>
                                     <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
-                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
-                                        <tr><td><%=boxes[0].boxID%></td></tr>
-                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                        <tr><th style="font-size : 14px ;text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                        <tr><td style="font-size : 12px ;"><%=boxes[0].boxID%></td></tr>
+                                        <tr><th style="font-size : 14px; text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
                                         <tr><td><%=boxes[0].SID%></td></tr>
-                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                        <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
                                         <tr><td><%=boxes[0].Campus%></td></tr>
-                                        <tr><th style="text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                        <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
                                         <tr><td><%=boxes[0].RID%></td></tr>
                                     </table>
                                 </td>
@@ -284,17 +284,18 @@
                                     }%>
                                     <%}%>
                             
-                            <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString()){%>
+                            <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString() && !printed ){%>
                                 <%var requestdaytime = new Date(requestes[0].RequestDate)%>
                                 <%var requestdayendtime = new Date(requestes[0].RequestDate)%>
                                 <%requestdaytime.setHours(parseInt(requestes[0].RequestStartTime.split(":")[0]))%>
                                 <%requestdaytime.setMinutes(parseInt(requestes[0].RequestStartTime.split(":")[1]))%>
                                 <%requestdayendtime.setHours(parseInt(requestes[0].RequestEndTime.split(":")[0]))%>
                                 <%requestdayendtime.setMinutes(parseInt(requestes[0].RequestEndTime.split(":")[1]))%>
-
-                                <%if(    !(requestdayendtime.toLocaleTimeString() < printday.toLocaleTimeString() && requestdaytime.toLocaleDateString >  ( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()) ){%>
+                                <%console.log(requestes[0])%>
+                                <%if(!(requestdayendtime.toLocaleTimeString() < printday.toLocaleTimeString() && requestdaytime.toLocaleDateString() >  ( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()) ){%>
                                     <%printed = true;%>
-                                    <td style="font-size : 14px">
+                                  
+                                    <td style="font-size : 14px"> <%=requestes[0].ReqID%> <%=printday.toLocaleTimeString()%> <%=requestdayendtime.toLocaleTimeString()%>
                                         <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
                                             <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
                                             <tr><td><%=requestes[0].ReqID%></td></tr>
@@ -350,9 +351,9 @@
 
 
 
-                                <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays){%>
+                                <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays && !printed){%>
                                     <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime || (type == "midterm" && ttb[0].starttime == (new Date(printday.getTime() - 30*60*1000)).toLocaleTimeString("en-GB")) ){%>
-                                       hello
+                                     
                                         <%printed = true;%>
                                         <td style="font-size : 14px">
                                             <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
