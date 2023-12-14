@@ -76,7 +76,7 @@ module.exports = {
       ****************************************************************************/
       // ssl: { rejectUnauthorized: true },
       adapter: require('sails-mysql'),
-      url: 'mysql://root:Psycho.K0831@127.0.0.1:3306/fyptesting',
+      url: 'mysql://root:Psycho.K0831@fypdeploy-mysql.mvc',
     },
 
   },
