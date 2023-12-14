@@ -155,7 +155,7 @@ module.exports = {
     ***************************************************************************/
     cors: {
        allowOrigins: [
-         'https://fypdeploy.e9222068.hkbu.app',
+         'https://fyp.e9222068.hkbu.app',
        ]
     },
 
@@ -276,7 +276,7 @@ module.exports = {
        //'https://staging.example.com',
      //],
      
-      onlyAllowOrigins: ["http://fypdeploy.e9222068.hkbu.app", "https://fypdeploy.e9222068.hkbu.app"]
+      onlyAllowOrigins: ["http://fyp.e9222068.hkbu.app", "https://fyp.e9222068.hkbu.app"]
     
 
     /***************************************************************************
