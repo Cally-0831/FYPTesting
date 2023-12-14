@@ -2,7 +2,7 @@ const { createPool } = require("mysql")
 
 const pool = createPool({
     host: "fypdeploy-mysql.svc",
-    user: "fypdeploy",
+    user: "root",
     port:3306,
     password: "Psycho.K0831",
     database: "fypdeploy",
