@@ -1,22 +1,10 @@
-var mysql = require('mysql');
 
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    console.log('MySQL Connected');
-});
 
 module.exports = {
 
     listclassroom: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var classroomlist;
 
         let thisistheline = "SELECT * FROM classroom";
@@ -42,7 +30,8 @@ module.exports = {
     },
 
     deleteclassroom: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let thisistheline = "DELETE FROM classroom WHERE rid= \"" + req.body.RID + "\" and campus = \"" + req.body.Campus + "\"";
         //console.log('delete excution');
         //console.log(thisistheline);
@@ -63,7 +52,8 @@ module.exports = {
 
     getcampus: async function (req, res) {
         var campuslist;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
         console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
@@ -86,7 +76,8 @@ module.exports = {
     },
 
     createnewclassroom: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         thisistheline = "insert into classroom values(\"" +
             req.body.Campus + "\"\,\""
             + req.body.RID + "\",\"Open\"\)\;\n";
@@ -104,6 +95,8 @@ module.exports = {
     },
 
     getsingleroom: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         const roominfo = {
             Campus: req.params.campus,
             RID: req.params.rid
@@ -114,6 +107,8 @@ module.exports = {
     },
 
     addclassroomtimeslot: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let reqid = '' + req.params.campus + "_" + req.params.rid + '_';
         reqid = reqid.replace(/ /g, "_");
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -194,6 +189,8 @@ module.exports = {
 
     listalltimeslot: async function (req, res) {
         var timeslotlist;
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
 
         let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
         db.query(thisistheline, function (err, results) {
@@ -211,7 +208,8 @@ module.exports = {
     },
 
     deletetimeslot: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         if (req.session.role = "adm") {
             let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
             console.log('delete excution');
@@ -230,6 +228,8 @@ module.exports = {
     },
 
     getinfobycampus: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var roomlist;
         let thisistheline = "SELECT * FROM allclassroomtimeslot order by campus,RID,startdate,enddate;";
         db.query(thisistheline, (err, results) => {
@@ -249,6 +249,8 @@ module.exports = {
     },
 
     getsingleroomtimeslot: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         const roominfo = {
             Campus: req.params.campus,
             RID: req.params.rid
@@ -274,6 +276,8 @@ module.exports = {
     },
 
     getoneroom: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var thistimeslotinfo;
         let thisistheline = "SELECT * FROM allclassroomtimeslot where reqid = \"" + req.params.reqid + "\""
         db.query(thisistheline, (err, result) => {
@@ -292,6 +296,8 @@ module.exports = {
     },
 
     updatetimeslot: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let thisistheline = "UPDATE allclassroomtimeslot SET StartDate = \"" + req.body.newstartday.split('T')[0] +
             "\", EndDate = \"" + req.body.newendday.split('T')[0] + "\" , StartTime = \"" + req.body.newstarttime + "\", EndTime = \"" + req.body.newendtime + "\", Remarks = \"" + req.body.newremarks + "\""
             + "where ReqID = \"" + req.body.ReqID + "\"";
@@ -342,6 +348,8 @@ module.exports = {
     },
 
     changestatus: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         var thisistheline;
         if (req.body.Status == "Open") {
             thisistheline = "Update classroom set status = \"Close\" where Campus = \"" + req.body.Campus + "\" and rid = \"" + req.body.RID + "\""

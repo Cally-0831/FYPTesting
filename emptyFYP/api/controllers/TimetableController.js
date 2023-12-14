@@ -1,21 +1,4 @@
-/**
- 
-  mysql = require('mysql');
-const date = require('date-and-time')
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    console.log(' getpersonalallclass MySQL Connected');
-});
-**/
+
 
 module.exports = {
     allDeptlist: {},

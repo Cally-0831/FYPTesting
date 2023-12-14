@@ -1,21 +1,3 @@
-/** 
-var mysql = require('mysql');
-//var url = new url(sails.config.datastores.mysql.url);
-console.log(mysql);
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    //console.log('MySQL Connected');
-});
-**/
 
 
 module.exports = {

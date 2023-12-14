@@ -1,25 +1,12 @@
-var mysql = require('mysql');
 
-var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Psycho.K0831",
-    database: "fyptesting"
-});
-db.connect(async (err) => {
-    if (err) {
-        console.log("Database Connection Failed !!!", err);
-        return;
-    }
-    console.log('MySQL Connected');
-});
 
 
 module.exports = {
 
     listallnotice: async function (req, res) {
         var noticelist;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         if (req.session.role == "adm") {
             let thisistheline = "SELECT  NID, allusersname,content,CreateDate,Creatorname,title from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
             //  console.log(thisistheline)
@@ -82,7 +69,8 @@ module.exports = {
         console.log(req.body);
         let nid = 'nid';
         var thisistheline;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         if (req.body.id == undefined) {
             // not setting related notices
 
@@ -250,7 +238,8 @@ module.exports = {
     },
 
     viewnoticepage: async function (req, res) {
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         if (req.query.type == null) {
             return res.view('user/createnewnotice', { title: null, content: null, id: null });
         }

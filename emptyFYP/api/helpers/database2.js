@@ -1,9 +1,10 @@
 const { createPool } = require("mysql2")
 
 const pool = createPool({
-     host: "fypdeploy-mysql",
-     //host: "localhost",
-    user: "root",
+    host: "fypdeploy-mysql",
+    //host: "localhost",
+    //user: "root",
+    user:"fypdeply",
     port:3306,
     password: "Psycho.K0831",
     database: "fypdeploy",
