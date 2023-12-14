@@ -20,6 +20,8 @@
  */
 
 module.exports = {
+  port:3030,
+
 
 
   /**************************************************************************
@@ -47,7 +49,8 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     default: {
-      
+      port : 3030,
+
       // adapter: 'sails-mysql',
       // url: 'mysql://user:password@host:port/database',
       //--------------------------------------------------------------------------
@@ -73,7 +76,7 @@ module.exports = {
       ****************************************************************************/
       // ssl: { rejectUnauthorized: true },
       adapter: require('sails-mysql'),
-      url: 'mysql://root:Psycho.K0831@127.0.0.1:3306/fyptesting',
+      url: 'mysql://root:Psycho.K0831@fypdeploy-mysql.svc:3306/fyptesting',
     },
 
   },
@@ -150,9 +153,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cors: {
-      // allowOrigins: [
-      //   'https://example.com',
-      // ]
+       allowOrigins: [
+         'https://fypdeploy.e9222068.hkbu.app',
+       ]
     },
 
   },
@@ -267,11 +270,13 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-     onlyAllowOrigins: [
-       'https://hkbu19222068fyp.onrender.com/',
+     //onlyAllowOrigins: [
+       //'https://hkbu19222068fyp.onrender.com/',
        //'https://staging.example.com',
-     ],
-
+     //],
+     
+      onlyAllowOrigins: ["http://fypdeploy.e9222068.hkbu.app", "https://fypdeploy.e9222068.hkbu.app"]
+    
 
     /***************************************************************************
     *                                                                          *
@@ -391,7 +396,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://example.com',
+    baseUrl: 'https://fypdeploy.e9222068.hkbu.app',
     internalEmailAddress: 'support@example.com',
 
     // sendgridSecret: 'SG.fake.3e0Bn0qSQVnwb1E4qNPz9JZP5vLZYqjh7sn8S93oSHU',
