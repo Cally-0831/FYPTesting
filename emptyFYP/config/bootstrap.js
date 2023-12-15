@@ -17,7 +17,7 @@
 // const Importer = require('mysql2-import');
 // const importer = new Importer({host, user, password, database});
 
-const host = 'localhost';
+const host = 'fypdeploy-mysql';
 const user = 'root';
 const password = 'Psycho.K0831';
 const database = 'fypdeploy';
