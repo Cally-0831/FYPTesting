@@ -25,7 +25,7 @@ module.exports = {
         //  console.log(searchingname + "  " + searchingpw);
 
         var thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
-          console.log(thisistheline);
+        console.log(thisistheline);
 
         // Start a new session for the new login user
 
@@ -34,9 +34,9 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
-                console.log('>> results: ', results );
+                console.log('>> results: ', results);
                 var string = JSON.stringify(results);
-                console.log('>> string: ', string );
+                console.log('>> string: ', string);
                 var json = JSON.parse(string);
                 console.log('>> json: ', json);
                 user.allusersname = json[0].allusersname;
@@ -48,20 +48,20 @@ module.exports = {
                 console.log('>> username: ' + user.allusersname);
                 console.log('>> pid: ' + user.pid);
                 console.log('>> pid: ' + user.role);
-               
+
                 if (user.password != searchingpw) {
                     return res.status(401).json("Wrong Password");
                 }
                 req.session.regenerate(function (err) {
                     if (err) return res.serverError(err);
-                   
+
                     req.session.role = user.role;
                     req.session.username = user.allusersname;
                     req.session.userid = user.pid;
                     req.session.boo = false;
-                    
-                    
 
+
+                    console.log("generate session for this ppl")
                     return res.json(user);
                 });
             } catch (err) {
@@ -72,7 +72,7 @@ module.exports = {
 
 
         });
-        
+
 
 
     },
@@ -83,7 +83,7 @@ module.exports = {
         req.session.destroy(function (err) {
 
             if (err) return res.serverError(err);
-          
+
             return res.redirect("/");
         });
     },
@@ -146,15 +146,15 @@ module.exports = {
 
     },
 
-    home: async function (req,res){
+    home: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        if(req.session.userid == "" || req.session.userid == null || req.session.userid == undefined){
+        if (req.session.userid == "" || req.session.userid == null || req.session.userid == undefined) {
             return res.view('user/login')
-        }else{
+        } else {
             return res.view('user/home')
         }
     }
 
-  
+
 }
