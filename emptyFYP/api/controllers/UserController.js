@@ -33,11 +33,11 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
-                //  console.log('>> results: ', results );
+                  console.log('>> results: ', results );
                 var string = JSON.stringify(results);
-                //console.log('>> string: ', string );
+                console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                //console.log('>> json: ', json);
+                console.log('>> json: ', json);
                 user.allusersname = json[0].allusersname;
                 user.pid = json[0].pid;
                 user.password = json[0].password;
