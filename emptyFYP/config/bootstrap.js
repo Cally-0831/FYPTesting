@@ -79,19 +79,19 @@ module.exports.bootstrap = async function () {
   //   console.error(err);
   // });
   // Read the SQL file
-  var dropcommand = fs.readFileSync("../SQL/Standard/dropcommand.sql").toString().split("\n");
-  var TableCreate = fs.readFileSync('../SQL/Standard/TableCreate.sql').toString().split("\n");
-  var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql').toString()
-  var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
-  var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
-  var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
+  // var dropcommand = fs.readFileSync("../SQL/Standard/dropcommand.sql").toString().split("\n");
+  // var TableCreate = fs.readFileSync('../SQL/Standard/TableCreate.sql').toString().split("\n");
+  // var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql').toString()
+  // var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
+  // var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
+  // var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
   const files = [
-    fs.readFileSync("../SQL/Standard/dropcommand.sql",'utf8'),
-    fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8'),
-    fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8'),
-    fs.readFileSync('../SQL/Standard/SampleData.sql','utf8'),
-    fs.readFileSync('../SQL/Standard/Setting.sql','utf8'),
-    fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8')
+    fs.readFileSync("../SQL/Standard/dropcommand.sql","utf8").toString().split("\n"),
+    fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8').toString().split("\n"),
+    //fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8'),
+    //fs.readFileSync('../SQL/Standard/SampleData.sql','utf8'),
+    //fs.readFileSync('../SQL/Standard/Setting.sql','utf8'),
+    //fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8')
   ];
   // console.log(files)
 
@@ -116,6 +116,7 @@ module.exports.bootstrap = async function () {
     //console.log(files[a].length)
     for (var b = 0; b < files[a].length; b++) {
       if (files[a][b] != "") {
+        //console.log(files[a][b])
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var checkcampusandroom = await new Promise((resolve) => {
@@ -123,7 +124,7 @@ module.exports.bootstrap = async function () {
             if (err) {
               console.log(err);
             };
-            console.log(files[a][b])
+            console.log("done 1")
             resolve(res);
           })
         }).catch((err) => {
