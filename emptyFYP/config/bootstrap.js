@@ -24,7 +24,11 @@ const database = 'fypdeploy';
 //const port = 3306
 
 
-
+importer.onDumpCompleted(callback=>{
+  var path = callback.file_path;
+  var result = callback.error;
+  console.log(path,+"     ",result);
+});
 //var fs = require('fs');
 export async function bootstrap () {
   const Importer = require('mysql-import');
