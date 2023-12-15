@@ -67,7 +67,7 @@
             });
             //console.log( new FormData(formElem));
             
-            if (response.ok) {
+            if (response.ok()) {
                 const user = await response.json();
                 console.log(user.allusersname);
                 window.sessionStorage.setItem("pid", user.pid);
