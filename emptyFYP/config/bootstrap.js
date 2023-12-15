@@ -21,16 +21,14 @@ const host = 'localhost';
 const user = 'root';
 const password = 'Psycho.K0831';
 const database = 'fypdeploy';
-//const port = 3306
+const port = 3306
 
 
-importer.onDumpCompleted(callback => {
-  var path = callback.file_path;
-  var result = callback.error;
-  console.log(path, +"     ", result);
-});
+
 //var fs = require('fs');
-export async function bootstrap() {
+
+
+module.exports.bootstrap = async function () {
 
 
   // By convention, this is a good place to set up fake data during development.
@@ -39,8 +37,8 @@ export async function bootstrap() {
   // ```
   // // Set up fake development data (or if we already have some, avast)
 
-
-
+const Importer = require('mysql-import');
+const importer = new Importer({host, user, password, database,port});
   // Recursive function to get files
   const fs = require("fs");
 
@@ -55,25 +53,23 @@ export async function bootstrap() {
 
   // New onProgress method, added in version 5.0!
   //var importer = await sails.helpers.importer();
-  const Importer = require('mysql-import');
-  const importer = new Importer({ host, user, password, database });
-  importer.onDumpCompleted(callback => {
-    var path = callback.file_path;
-    var result = callback.error;
-    console.log(path, +"     ", result);
-  });
-  importer.onProgress(progress => {
+  importer.onProgress(progress=>{
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
   });
 
-  for (let f of sqlfiles) {
+  importer.onDumpCompleted(callback=>{
+    var path = callback.file_path;
+    var result = callback.error;
+    console.log(path,+"     ",result);
+  });
 
-    await importer.import(f);
+  for (let f of sqlfiles) {
+    console.log(f)
+    var result = await importer.import(f);
     var files_imported = importer.getImported();
     console.log(`${files_imported.length} SQL file(s) imported.`);
   }
-
 
   // importer.import('path/to/dump.sql').then(()=>{
   //   var files_imported = importer.getImported();
@@ -99,7 +95,7 @@ export async function bootstrap() {
   // console.log(files)
 
   // var connection = await sails.helpers.database();
-
+  
   // for (let q of files) {
   //   await connection.execute(q)
   // }
@@ -139,45 +135,45 @@ export async function bootstrap() {
   // }
   // var string = "";
   // for (var a = 0; a < TriggerCreate.length; a++) {
-  /** 
-  console.log(TriggerCreate[a].trim(" ")+"\n\n")
-  if (TriggerCreate[a].trim(" ") == "delimiter $$") {
-    string += "delimiter $$ \n"
-  } else {
-    string += TriggerCreate[a];
-    console.log("\n\n\n\n",string,"\n\n\n\n")
-    var checkcampusandroom = await new Promise((resolve) => {
-      pool.query(string, (err, res) => {
-        if (err) {
-          console.log(err);
-        };
-        console.log(TriggerCreate[a])
-        resolve(res);
+    /** 
+    console.log(TriggerCreate[a].trim(" ")+"\n\n")
+    if (TriggerCreate[a].trim(" ") == "delimiter $$") {
+      string += "delimiter $$ \n"
+    } else {
+      string += TriggerCreate[a];
+      console.log("\n\n\n\n",string,"\n\n\n\n")
+      var checkcampusandroom = await new Promise((resolve) => {
+        pool.query(string, (err, res) => {
+          if (err) {
+            console.log(err);
+          };
+          console.log(TriggerCreate[a])
+          resolve(res);
+        })
+      }).catch((err) => {
+        errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
       })
-    }).catch((err) => {
-      errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-    })
-    string = "";
-    
-  }
+      string = "";
+      
+    }
 */
 
 
-
+    
   // }
 
-  /**
-    if (await User.count() > 0) {
-      return;
-    }
-    await User.create({ allusersname: "Admin", id: "admin", password: "P@ssw0rd", status: "Active", errortime: 0, role: "adm" });
-       
-    //   etc.
-  
-    var ans = await User.find()
-    console.log(ans)
-   */
+/**
+  if (await User.count() > 0) {
+    return;
+  }
+  await User.create({ allusersname: "Admin", id: "admin", password: "P@ssw0rd", status: "Active", errortime: 0, role: "adm" });
+     
+  //   etc.
+
+  var ans = await User.find()
+  console.log(ans)
+ */
 
 
 
-}
+};
