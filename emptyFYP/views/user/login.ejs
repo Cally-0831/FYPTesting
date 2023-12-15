@@ -65,7 +65,7 @@
                 method: formElem.method,
                 body: new FormData(formElem),
             });
-            //console.log( new FormData(formElem));
+            
             
             if (response.status == 200) {
                 const user = await response.json();
@@ -81,7 +81,7 @@
             } else {
                 alert(response.statusTest);
             }
- 
+ console.log(response);
         } catch (error) {
             console.log("" + error + "");
         }
