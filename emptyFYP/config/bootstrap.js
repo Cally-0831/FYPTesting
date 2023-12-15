@@ -38,8 +38,8 @@ module.exports.bootstrap = async function () {
   // // Set up fake development data (or if we already have some, avast)
 
   
-const Importer = require('mysql-import');
-const importer = new Importer({host, user, password, database,port});
+// const Importer = require('mysql-import');
+// const importer = new Importer({host, user, password, database,port});
   // Recursive function to get files
   const fs = require("fs");
 
@@ -54,23 +54,23 @@ const importer = new Importer({host, user, password, database,port});
 
   // New onProgress method, added in version 5.0!
   //var importer = await sails.helpers.importer();
-  importer.onProgress(progress=>{
-    var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
-    console.log(`${percent}% Completed`);
-  });
+  // importer.onProgress(progress=>{
+  //   var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
+  //   console.log(`${percent}% Completed`);
+  // });
 
-  importer.onDumpCompleted(callback=>{
-    var path = callback.file_path;
-    var result = callback.error;
-    console.log(path,+"     ",result);
-  });
+  // importer.onDumpCompleted(callback=>{
+  //   var path = callback.file_path;
+  //   var result = callback.error;
+  //   console.log(path,+"     ",result);
+  // });
 
-  for (let f of sqlfiles) {
-    console.log(f)
-    var result = await importer.import(f);
-    var files_imported = importer.getImported();
-    console.log(`${files_imported.length} SQL file(s) imported.`);
-  }
+  // for (let f of sqlfiles) {
+  //   console.log(f)
+  //   var result = await importer.import(f);
+  //   var files_imported = importer.getImported();
+  //   console.log(`${files_imported.length} SQL file(s) imported.`);
+  // }
 
   // importer.import('path/to/dump.sql').then(()=>{
   //   var files_imported = importer.getImported();
