@@ -24,15 +24,14 @@ const database = 'fypdeploy';
 //const port = 3306
 
 
-importer.onDumpCompleted(callback=>{
+importer.onDumpCompleted(callback => {
   var path = callback.file_path;
   var result = callback.error;
-  console.log(path,+"     ",result);
+  console.log(path, +"     ", result);
 });
 //var fs = require('fs');
-export async function bootstrap () {
-  const Importer = require('mysql-import');
-const importer = new Importer({host, user, password, database});
+export async function bootstrap() {
+
 
   // By convention, this is a good place to set up fake data during development.
   //
@@ -56,7 +55,14 @@ const importer = new Importer({host, user, password, database});
 
   // New onProgress method, added in version 5.0!
   //var importer = await sails.helpers.importer();
-  importer.onProgress(progress=>{
+  const Importer = require('mysql-import');
+  const importer = new Importer({ host, user, password, database });
+  importer.onDumpCompleted(callback => {
+    var path = callback.file_path;
+    var result = callback.error;
+    console.log(path, +"     ", result);
+  });
+  importer.onProgress(progress => {
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
   });
@@ -93,7 +99,7 @@ const importer = new Importer({host, user, password, database});
   // console.log(files)
 
   // var connection = await sails.helpers.database();
-  
+
   // for (let q of files) {
   //   await connection.execute(q)
   // }
@@ -133,44 +139,44 @@ const importer = new Importer({host, user, password, database});
   // }
   // var string = "";
   // for (var a = 0; a < TriggerCreate.length; a++) {
-    /** 
-    console.log(TriggerCreate[a].trim(" ")+"\n\n")
-    if (TriggerCreate[a].trim(" ") == "delimiter $$") {
-      string += "delimiter $$ \n"
-    } else {
-      string += TriggerCreate[a];
-      console.log("\n\n\n\n",string,"\n\n\n\n")
-      var checkcampusandroom = await new Promise((resolve) => {
-        pool.query(string, (err, res) => {
-          if (err) {
-            console.log(err);
-          };
-          console.log(TriggerCreate[a])
-          resolve(res);
-        })
-      }).catch((err) => {
-        errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+  /** 
+  console.log(TriggerCreate[a].trim(" ")+"\n\n")
+  if (TriggerCreate[a].trim(" ") == "delimiter $$") {
+    string += "delimiter $$ \n"
+  } else {
+    string += TriggerCreate[a];
+    console.log("\n\n\n\n",string,"\n\n\n\n")
+    var checkcampusandroom = await new Promise((resolve) => {
+      pool.query(string, (err, res) => {
+        if (err) {
+          console.log(err);
+        };
+        console.log(TriggerCreate[a])
+        resolve(res);
       })
-      string = "";
-      
-    }
+    }).catch((err) => {
+      errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+    })
+    string = "";
+    
+  }
 */
 
 
-    
+
   // }
 
-/**
-  if (await User.count() > 0) {
-    return;
-  }
-  await User.create({ allusersname: "Admin", id: "admin", password: "P@ssw0rd", status: "Active", errortime: 0, role: "adm" });
-     
-  //   etc.
-
-  var ans = await User.find()
-  console.log(ans)
- */
+  /**
+    if (await User.count() > 0) {
+      return;
+    }
+    await User.create({ allusersname: "Admin", id: "admin", password: "P@ssw0rd", status: "Active", errortime: 0, role: "adm" });
+       
+    //   etc.
+  
+    var ans = await User.find()
+    console.log(ans)
+   */
 
 
 
