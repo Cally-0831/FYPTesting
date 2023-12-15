@@ -17,6 +17,15 @@
 // const Importer = require('mysql2-import');
 // const importer = new Importer({host, user, password, database});
 
+const host = 'localhost';
+const user = 'root';
+const password = 'Psycho.K0831';
+const database = 'fypdeploy';
+const port = 3306
+
+const Importer = require('mysql2-import');
+const importer = new Importer({host,port, user, password, database});
+
 //var fs = require('fs');
 module.exports.bootstrap = async function () {
 
@@ -42,7 +51,7 @@ module.exports.bootstrap = async function () {
   ]
 
   // New onProgress method, added in version 5.0!
-  var importer = await sails.helpers.importer();
+  //var importer = await sails.helpers.importer();
   importer.onProgress(progress=>{
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
