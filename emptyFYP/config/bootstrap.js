@@ -38,8 +38,8 @@ module.exports.bootstrap = async function () {
   // // Set up fake development data (or if we already have some, avast)
 
   
-// const Importer = require('mysql-import');
-// const importer = new Importer({host, user, password, database,port});
+const Importer = require('mysql-import');
+const importer = new Importer({host, user, password, database});
   // Recursive function to get files
   const fs = require("fs");
 
@@ -53,7 +53,8 @@ module.exports.bootstrap = async function () {
   ]
 
   // New onProgress method, added in version 5.0!
-  var importer = await sails.helpers.importer();
+  //var importer = await sails.helpers.importer();
+  console.log(importer)
   importer.onProgress(progress=>{
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
