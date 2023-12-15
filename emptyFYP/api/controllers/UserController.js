@@ -62,7 +62,7 @@ module.exports = {
 
 
                     console.log("generate session for this ppl");
-                    return res.status(200).json(user);
+                    return res.view('user/home');
                 });
             } catch (err) {
                 console.log(err)
