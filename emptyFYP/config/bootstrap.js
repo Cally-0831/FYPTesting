@@ -53,24 +53,24 @@ module.exports.bootstrap = async function () {
   ]
 
   // New onProgress method, added in version 5.0!
-  //var importer = await sails.helpers.importer();
-  // importer.onProgress(progress=>{
-  //   var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
-  //   console.log(`${percent}% Completed`);
-  // });
+  var importer = await sails.helpers.importer();
+  importer.onProgress(progress=>{
+    var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
+    console.log(`${percent}% Completed`);
+  });
 
-  // importer.onDumpCompleted(callback=>{
-  //   var path = callback.file_path;
-  //   var result = callback.error;
-  //   console.log(path,+"     ",result);
-  // });
+  importer.onDumpCompleted(callback=>{
+    var path = callback.file_path;
+    var result = callback.error;
+    console.log(path,+"     ",result);
+  });
 
-  // for (let f of sqlfiles) {
-  //   console.log(f)
-  //   var result = await importer.import(f);
-  //   var files_imported = importer.getImported();
-  //   console.log(`${files_imported.length} SQL file(s) imported.`);
-  // }
+  for (let f of sqlfiles) {
+    console.log(f)
+    var result = await importer.import(f);
+    var files_imported = importer.getImported();
+    console.log(`${files_imported.length} SQL file(s) imported.`);
+  }
 
   // importer.import('path/to/dump.sql').then(()=>{
   //   var files_imported = importer.getImported();
@@ -85,14 +85,14 @@ module.exports.bootstrap = async function () {
   // var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
   // var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
   // var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
-  const files = [
-    fs.readFileSync("../SQL/Standard/dropcommand.sql","utf8").toString().split("\n"),
-    fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8').toString().split("\n"),
-    //fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8'),
-    //fs.readFileSync('../SQL/Standard/SampleData.sql','utf8'),
-    //fs.readFileSync('../SQL/Standard/Setting.sql','utf8'),
-    //fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8')
-  ];
+  // const files = [
+  //   fs.readFileSync("../SQL/Standard/dropcommand.sql","utf8").toString().split("\n"),
+  //   fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8').toString().split("\n"),
+  //   fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8').toString().split("\n"),
+  //   //fs.readFileSync('../SQL/Standard/SampleData.sql','utf8').toString().split("\n"),
+  //   //fs.readFileSync('../SQL/Standard/Setting.sql','utf8').toString().split("\n"),
+  //   //fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8').toString().split("\n")
+  // ];
   // console.log(files)
 
   // var connection = await sails.helpers.database();
@@ -112,27 +112,27 @@ module.exports.bootstrap = async function () {
 
   // db.serialize ensures that your queries are one after the other depending on which one came first in your `dataArr`
 
-  for (var a = 0; a < files.length; a++) {
-    //console.log(files[a].length)
-    for (var b = 0; b < files[a].length; b++) {
-      if (files[a][b] != "") {
-        //console.log(files[a][b])
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        var checkcampusandroom = await new Promise((resolve) => {
-          pool.query(files[a][b], (err, res) => {
-            if (err) {
-              console.log(err);
-            };
-            console.log("done 1")
-            resolve(res);
-          })
-        }).catch((err) => {
-          errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-        })
-      }
-    }
-  }
+  // for (var a = 0; a < files.length; a++) {
+  //   //console.log(files[a].length)
+  //   for (var b = 0; b < files[a].length; b++) {
+  //     if (files[a][b] != "") {
+  //       //console.log(files[a][b])
+  //       var db = await sails.helpers.database();
+  //       var pool = await sails.helpers.database2();
+  //       var checkcampusandroom = await new Promise((resolve) => {
+  //         pool.query(files[a][b], (err, res) => {
+  //           if (err) {
+  //             console.log(err);
+  //           };
+  //           console.log("done 1")
+  //           resolve(res);
+  //         })
+  //       }).catch((err) => {
+  //         errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+  //       })
+  //     }
+  //   }
+  // }
   // var string = "";
   // for (var a = 0; a < TriggerCreate.length; a++) {
     /** 

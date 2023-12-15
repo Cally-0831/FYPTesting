@@ -1,4 +1,4 @@
-DELIMITER //
+DELIMITER |
 CREATE TRIGGER testref BEFORE INSERT ON allclass FOR EACH ROW BEGIN 
     declare stringstring  varchar(8000);
     declare countcount integer;
@@ -14,10 +14,10 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass FOR EACH ROW BEGIN
     if new.lesson >0 THEN
         set new.cid = concat(new.CDept, new.CCode, '_', new.CSecCode,"_",new.lesson);
     END IF;
-END; //
+END; |
 DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers FOR EACH ROW BEGIN
 	declare countcount integer;
     set countcount =0;
@@ -30,10 +30,9 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers FOR EACH ROW BEG
     END IF;
     END if;
   END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice FOR EACH ROW BEGIN
   declare stringstring  varchar(10);
   declare timetime timestamp;
@@ -48,10 +47,9 @@ CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice FOR EACH ROW BEGIN
     where new.creator = pid;
         set new.creatorname = stringstring;
     END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addlessontimeforoneCode BEFORE INSERT ON allclass FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);
@@ -64,10 +62,9 @@ CREATE TRIGGER addlessontimeforoneCode BEFORE INSERT ON allclass FOR EACH ROW BE
             set new.CID = concat(new.CDept,new.CCode,"_",new.CSecCode,"_",countcount);
         END IF;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER takeallcourseofonecode after INSERT ON alltakecourse FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);
@@ -114,10 +111,9 @@ END IF;
         END if;
         END if;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);
@@ -127,10 +123,9 @@ CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse FOR EACH
         DELETE from alltakecourse where pid = old.pid and cid = old.cid;
     END if;
 END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER delrolecourse After DELETE ON alltakecourse FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);        
@@ -149,10 +144,9 @@ CREATE TRIGGER delrolecourse After DELETE ON alltakecourse FOR EACH ROW BEGIN
         END if;
     END if;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER delallstudenttakecourse After DELETE ON allstudenttakecourse FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);
@@ -161,19 +155,17 @@ CREATE TRIGGER delallstudenttakecourse After DELETE ON allstudenttakecourse FOR 
 	    DELETE from alltakecourse where pid = old.pid and cid = old.cid;
     END if;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addintosetting before insert ON allsupersetting FOR EACH ROW BEGIN
     set new.createdate = now();
     set new.LastUpdate = now();
     END;
-  |
-delimiter ;
+  | DELIMITER ;
 
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting FOR EACH ROW BEGIN
     declare thenotice integer;
     set thenotice =0;
@@ -182,11 +174,10 @@ CREATE TRIGGER clearnoticeforthesetting before Update ON allsupersetting FOR EAC
         delete from allnotice where nid = concat("nid",new.stid);
     END if;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER updatestudentdeadline After Update ON allsupersetting FOR EACH ROW BEGIN
     if (new.typeofsetting = "1") THEN
         update student set ttbdeadline = timestamp(concat(new.deadlinedate," ",new.deadlinetime));
@@ -194,11 +185,10 @@ CREATE TRIGGER updatestudentdeadline After Update ON allsupersetting FOR EACH RO
         update student set requestdeadline = timestamp(concat(new.deadlinedate," ",new.deadlinetime));
     END if;
 END;
-  |
-delimiter ;
+  | DELIMITER ;
 
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent FOR EACH ROW BEGIN
     declare alltopic varchar(100);
     declare countcount integer;
@@ -233,10 +223,9 @@ CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent FOR E
     END if;
 
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse FOR EACH ROW BEGIN
     declare oldcomments varchar(200);
     declare newcomments varchar(200);
@@ -256,19 +245,18 @@ CREATE TRIGGER addsubinstudent after update ON allstudenttakecourse FOR EACH ROW
 		update student set ttbsubmission = null where sid = new.pid;
 	END if;
    END;
-  |
-delimiter ;
+  | DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER addsubinsuper before update ON allsupertakecourse FOR EACH ROW BEGIN
 	if new.confirmation = "1" THEN
 		update supervisor set submission ="Y" where tid = new.pid;
 	END if;
    END;
   |
-delimiter ;
+DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allstudenttakecourse FOR EACH ROW BEGIN
     declare picpic LONGBLOB;
     declare comments varchar(200);
@@ -277,10 +265,9 @@ CREATE TRIGGER copypicdata_and_commentstonewentry_student before insert ON allst
     set new.picdata = picpic;  
     set new.ttbcomments = comments;
    END;
-  |
-delimiter ;
+| DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass FOR EACH ROW BEGIN
     If(Substring(SUBSTRING_INDEX(old.CID,'_',2),10,1) =0 ) THEN
         delete from alltakecourse where CID like concat(SUBSTRING_INDEX(old.CID,'_',1),"%"); 
@@ -288,10 +275,9 @@ CREATE TRIGGER cancellessonwhendeletelesson after delete ON allclass FOR EACH RO
         delete from alltakecourse where CID like old.CID; 
     END if;
 END;
-  |
-delimiter ;
+| DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER checkschboxtocorrdraft after delete ON allschedulebox FOR EACH ROW BEGIN
   declare countcount integer;
   select count(*) into countcount from allschedulebox where tid = old.tid;
@@ -299,12 +285,10 @@ CREATE TRIGGER checkschboxtocorrdraft after delete ON allschedulebox FOR EACH RO
     update supervisor set draft = "N" where tid = old.tid;
   END if;
 END;
-  |
-delimiter ;
+| DELIMITER ;
 
-delimiter |
+DELIMITER |
 CREATE TRIGGER delsupervisor after delete ON supervisor FOR EACH ROW BEGIN
     delete from alluser where pid = tid;
 END;
-  |
-delimiter ;
+| DELIMITER ;
