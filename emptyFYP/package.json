@@ -40,7 +40,9 @@
     "ssh2-sftp-client": "^8.0.0"
   },
   "devDependencies": {
-    "eslint": "5.16.0"
+    "eslint": "5.16.0",
+    "mysql-import": "^5.0.26",
+    "mysql2-import": "^5.0.22"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
