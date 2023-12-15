@@ -23,7 +23,7 @@ module.exports = {
 
         //  console.log(searchingname + "  " + searchingpw);
 
-        let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
+        var thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
           console.log(thisistheline);
 
         // Start a new session for the new login user
@@ -33,7 +33,7 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
-                  console.log('>> results: ', results );
+                console.log('>> results: ', results );
                 var string = JSON.stringify(results);
                 console.log('>> string: ', string );
                 var json = JSON.parse(string);
@@ -94,17 +94,17 @@ module.exports = {
         console.log(typeof req.body.avatar);
         console.log(req.body.avatar);
 
-        let reqid = '' + req.session.userid + '';
+        var reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
-        let counter = 0;
+        var counter = 0;
         while (counter < 5) {
             reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
 
 
-        let thisistheline = "";
+        var thisistheline = "";
 
 
         if (req.session.role == "sup") {

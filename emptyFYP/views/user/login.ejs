@@ -60,10 +60,13 @@
     async function submitform(formElem) {
 
         try {
+            
             var response = await fetch(formElem.action, {
                 method: formElem.method,
                 body: new FormData(formElem),
             });
+            console.log(response);
+            /**
             if (response.ok) {
                 const user = await response.json();
                 console.log(user.allusersname);
@@ -78,10 +81,11 @@
             } else {
                 alert(response.statusTest);
             }
-
+ **/
         } catch (error) {
             console.log("" + error + "");
         }
+       
     }
 
     function inputstd() {
