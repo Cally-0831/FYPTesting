@@ -72,7 +72,7 @@
                 console.log(user.allusersname);
                 window.sessionStorage.setItem("pid", user.pid);
                 console.log(sessionStorage.getItem('pid'))
-                //alert("Welcom back, " + user.allusersname);
+                alert("Welcom back, " + user.allusersname);
                 location.assign("/home");
 
             } else if (response.status == 401) {

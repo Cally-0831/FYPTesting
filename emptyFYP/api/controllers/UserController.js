@@ -61,7 +61,7 @@ module.exports = {
                     req.session.boo = false;
 
 
-                    console.log("generate session for this ppl")
+                    console.log("generate session for this ppl");
                     return res.status(200).json(user);
                 });
             } catch (err) {
