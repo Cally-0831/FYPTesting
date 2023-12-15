@@ -1,4 +1,4 @@
-const { createPool } = require("mysql2/promise")
+const { createPool } = require("mysql2")
 
 const pool = createPool({
     host: "fypdeploy-mysql",

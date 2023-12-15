@@ -37,6 +37,7 @@ module.exports.bootstrap = async function () {
   // ```
   // // Set up fake development data (or if we already have some, avast)
 
+  
 const Importer = require('mysql-import');
 const importer = new Importer({host, user, password, database,port});
   // Recursive function to get files
@@ -78,20 +79,20 @@ const importer = new Importer({host, user, password, database,port});
   //   console.error(err);
   // });
   // Read the SQL file
-  // var dropcommand = fs.readFileSync("../SQL/Standard/dropcommand.sql").toString().split("\n");
-  // var TableCreate = fs.readFileSync('../SQL/Standard/TableCreate.sql').toString().split("\n");
-  // var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql').toString()
-  // var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
-  // var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
-  // var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
-  // const files = [
-  //   fs.readFileSync("../SQL/Standard/dropcommand.sql",
-  //   fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8'),
-  //   fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8'),
-  //   fs.readFileSync('../SQL/Standard/SampleData.sql','utf8'),
-  //   fs.readFileSync('../SQL/Standard/Setting.sql','utf8'),
-  //   fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8')
-  // ];
+  var dropcommand = fs.readFileSync("../SQL/Standard/dropcommand.sql").toString().split("\n");
+  var TableCreate = fs.readFileSync('../SQL/Standard/TableCreate.sql').toString().split("\n");
+  var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql').toString()
+  var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
+  var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
+  var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
+  const files = [
+    fs.readFileSync("../SQL/Standard/dropcommand.sql",'utf8'),
+    fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8'),
+    fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8'),
+    fs.readFileSync('../SQL/Standard/SampleData.sql','utf8'),
+    fs.readFileSync('../SQL/Standard/Setting.sql','utf8'),
+    fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8')
+  ];
   // console.log(files)
 
   // var connection = await sails.helpers.database();
@@ -111,28 +112,26 @@ const importer = new Importer({host, user, password, database,port});
 
   // db.serialize ensures that your queries are one after the other depending on which one came first in your `dataArr`
 
-  // for (var a = 0; a < files.length; a++) {
-  //   console.log(files[a].length)
-  //   for (var b = 0; b < files[a].length; b++) {
-  //     if (files[a][b] != "") {
-  //       var db = await sails.helpers.database();
-  //       var pool = await sails.helpers.database2();
-  //       var checkcampusandroom = await new Promise((resolve) => {
-  //         pool.query(files[a][b], (err, res) => {
-  //           if (err) {
-  //             console.log(err);
-  //           };
-  //           console.log(files[a][b])
-  //           resolve(res);
-  //         })
-  //       }).catch((err) => {
-  //         errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-  //       })
-
-
-  //     }
-  //   }
-  // }
+  for (var a = 0; a < files.length; a++) {
+    //console.log(files[a].length)
+    for (var b = 0; b < files[a].length; b++) {
+      if (files[a][b] != "") {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var checkcampusandroom = await new Promise((resolve) => {
+          pool.query(files[a][b], (err, res) => {
+            if (err) {
+              console.log(err);
+            };
+            console.log(files[a][b])
+            resolve(res);
+          })
+        }).catch((err) => {
+          errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+        })
+      }
+    }
+  }
   // var string = "";
   // for (var a = 0; a < TriggerCreate.length; a++) {
     /** 
