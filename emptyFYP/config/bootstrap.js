@@ -21,14 +21,14 @@ const host = 'localhost';
 const user = 'root';
 const password = 'Psycho.K0831';
 const database = 'fypdeploy';
-const port = 3306
+//const port = 3306
 
-const Importer = require('mysql-import');
-const importer = new Importer({host,port, user, password, database});
+
 
 //var fs = require('fs');
-module.exports.bootstrap = async function () {
-
+export async function bootstrap () {
+  const Importer = require('mysql-import');
+const importer = new Importer({host, user, password, database});
 
   // By convention, this is a good place to set up fake data during development.
   //
@@ -58,11 +58,12 @@ module.exports.bootstrap = async function () {
   });
 
   for (let f of sqlfiles) {
-    
+
     await importer.import(f);
     var files_imported = importer.getImported();
     console.log(`${files_imported.length} SQL file(s) imported.`);
   }
+
 
   // importer.import('path/to/dump.sql').then(()=>{
   //   var files_imported = importer.getImported();
@@ -169,4 +170,4 @@ module.exports.bootstrap = async function () {
 
 
 
-};
+}
