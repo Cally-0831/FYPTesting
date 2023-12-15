@@ -42,7 +42,7 @@ module.exports.bootstrap = async function () {
   ]
 
   // New onProgress method, added in version 5.0!
-  var importer = await await sails.helpers.importer();
+  var importer = await sails.helpers.importer();
   importer.onProgress(progress=>{
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
