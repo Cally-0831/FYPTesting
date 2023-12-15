@@ -23,7 +23,7 @@ module.exports = {
 
         //  console.log(searchingname + "  " + searchingpw);
 
-        let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\'";
+        let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
           console.log(thisistheline);
 
         // Start a new session for the new login user
