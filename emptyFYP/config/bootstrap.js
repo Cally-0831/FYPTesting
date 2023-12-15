@@ -58,6 +58,7 @@ module.exports.bootstrap = async function () {
   });
 
   for (let f of sqlfiles) {
+    
     await importer.import(f);
     var files_imported = importer.getImported();
     console.log(`${files_imported.length} SQL file(s) imported.`);
