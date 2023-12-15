@@ -1,3 +1,6 @@
+INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
+insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
+
 insert IGNORE into allusers values("Prof Chan","tid00001","tpw00001","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00001";
 
