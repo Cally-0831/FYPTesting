@@ -194,7 +194,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     adapter: '@sailshq/connect-redis',
-    url: 'redis://fypdeploy-mysql:3306/fypdeploy',
+    url: 'redis://root:Psycho.K0831@localhost:6379/1',
     //--------------------------------------------------------------------------
     // /\   OR, to avoid checking it in to version control, you might opt to
     // ||   set sensitive credentials like this using an environment variable.
