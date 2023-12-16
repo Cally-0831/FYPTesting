@@ -155,7 +155,10 @@ module.exports = {
     ***************************************************************************/
     cors: {
        allowOrigins: [
-        "*",
+         'https://fyp.e9222068.hkbu.app',
+         'http://fyp.e9222068.hkbu.app',
+         'https://localhost',
+         'https://localhost',
        ]
     },
 
