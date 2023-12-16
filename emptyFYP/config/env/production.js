@@ -276,7 +276,8 @@ module.exports = {
        //'https://staging.example.com',
      //],
      
-      onlyAllowOrigins: ["http://fyp.e9222068.hkbu.app", "https://fyp.e9222068.hkbu.app"]
+      onlyAllowOrigins: ["http://fyp.e9222068.hkbu.app", "https://fyp.e9222068.hkbu.app",
+      'http://localhost','https://localhost']
     
 
     /***************************************************************************
