@@ -57,9 +57,7 @@
 <script type="text/javascript">
   
   io.sails.url = 'https://fyp.e9222068.hkbu.app';
-  autoConnect="false"
-  environment="production"
-  headers='{ "x-csrf-token": "<%= typeof _csrf !== "undefined" ? _csrf : " %>" }'
+
   io.socket.get('/', { data: 'example' }, function(response) {
         console.log('got response', response)
     });
