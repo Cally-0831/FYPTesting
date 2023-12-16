@@ -56,6 +56,9 @@
 <script src="/js/dependencies/sails.io.js"></script>
 <script type="text/javascript">
   io.sails.url = 'https://fyp.e9222068.hkbu.app';
+  io.socket.get('/', { data: 'example' }, function(response) {
+        console.log('got response', response)
+    });
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>

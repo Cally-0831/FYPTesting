@@ -37,7 +37,7 @@
     "sails-mysql": "^3.0.1",
     "sails.io.js": "^1.2.1",
     "sequelize": "^6.32.1",
-    "socket.io-client": "^4.7.1",
+    "socket.io-client": "^4.7.2",
     "ssh2-sftp-client": "^8.0.0"
   },
   "devDependencies": {
