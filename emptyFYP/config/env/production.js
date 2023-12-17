@@ -390,11 +390,11 @@ module.exports = {
   **************************************************************************/
   // ssl: undefined,
 
-  // ssl: {
-  //   ca: require('fs').readFileSync(require('path').resolve(__dirname,'../ssl/ca-bundle.crt')),
-  //   key: require('fs').readFileSync(require('path').resolve(__dirname,'../ssl/fypdeploy-new2-cert-key.key')),
-  //   cert: require('fs').readFileSync(require('path').resolve(__dirname,'../ssl/fypdeploy-new2-cert.crt'))
-  // },
+  ssl: {
+    ca: require('fs').readFileSync(require('path').resolve(__dirname,'../emptyFYP/config/ssl/ca-bundle.crt')),
+    key: require('fs').readFileSync(require('path').resolve(__dirname,'../emptyFYP/config/ssl/fypdeploy-new2-cert-key.key')),
+    cert: require('fs').readFileSync(require('path').resolve(__dirname,'../emptyFYP/config/ssl/fypdeploy-new2-cert.crt'))
+  },
 
   /**************************************************************************
   *                                                                         *
