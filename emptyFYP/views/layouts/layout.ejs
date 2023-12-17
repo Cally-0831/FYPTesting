@@ -58,19 +58,12 @@
 
   io.sails.url = 'https://fyp.e9222068.hkbu.app';
 
-  io.socket.get('/', { data: 'example' }, function (response) {
+  io.socket.get('/', function (response) {
     console.log('got response', response)
   });
 
-  io.socket.get('/', function serverResponded(body, JWR) {
-
-    // JWR ==> "JSON WebSocket Response"
-    console.log('Sails responded with: ', body);
-    console.log('with headers: ', JWR.headers);
-    console.log('and with status code: ', JWR.statusCode);
-
-    // first argument `body` === `JWR.body`
-    // (just for convenience, and to maintain familiar usage, a la `JQuery.get()`)
+  io.socket.get('/login', function gotResponse(data, jwRes) {
+    console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
   });
   console.log(io)
 </script>
