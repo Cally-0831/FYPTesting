@@ -55,12 +55,23 @@
 <script type="text/javascript" src="/dependencies/sails.io.js"></script>
 <script src="/js/dependencies/sails.io.js"></script>
 <script type="text/javascript">
-  
+
   io.sails.url = 'https://fyp.e9222068.hkbu.app';
 
-  io.socket.get('/', { data: 'example' }, function(response) {
-        console.log('got response', response)
-    });
+  io.socket.get('/', { data: 'example' }, function (response) {
+    console.log('got response', response)
+  });
+
+  io.socket.get('/', function serverResponded(body, JWR) {
+
+    // JWR ==> "JSON WebSocket Response"
+    console.log('Sails responded with: ', body);
+    console.log('with headers: ', JWR.headers);
+    console.log('and with status code: ', JWR.statusCode);
+
+    // first argument `body` === `JWR.body`
+    // (just for convenience, and to maintain familiar usage, a la `JQuery.get()`)
+  });
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
