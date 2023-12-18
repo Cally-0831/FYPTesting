@@ -45,13 +45,13 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-   beforeConnect: function(handshake, proceed) {
-  
-    // `true` allows the socket to connect.
-    // (`false` would reject the connection)
+   
+
+  beforeConnect: function(handshake, proceed) {
+    console.log("Socket gets connected");
     return proceed(undefined, true);
-  
-  },
+},
+
 
 
   /***************************************************************************
@@ -62,15 +62,11 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-
-  // afterDisconnect: function(session, socket, done) {
-  
-  //   // By default: do nothing.
-  //   // (but always trigger the callback)
-  //   return done();
-  
-  // },
-
+// Being called when connection gets detached
+afterDisconnect: function(session, socket, done) {
+  sails.log("socket disconnected for socket id ", socket.id);
+  return done();
+},
 
   /***************************************************************************
   *                                                                          *
