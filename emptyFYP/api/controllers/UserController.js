@@ -29,8 +29,6 @@ module.exports = {
 
         // Start a new session for the new login user
 
-
-
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
@@ -53,7 +51,7 @@ module.exports = {
                     return res.status(401).json("Wrong Password");
                 }
                 req.session.regenerate(function (err) {
-                    if (err) return res.serverError(err);
+                    //if (err) return res.serverError(err);
 
                     req.session.role = user.role;
                     req.session.username = user.allusersname;
@@ -147,8 +145,6 @@ module.exports = {
     },
 
     home: async function (req, res) {
-        var socketId = sails.sockets.getId(req);
-        console.log('My socket ID is: ' + socketId);
 
         console.log(req.session.userid);
         if (req.session.userid == "" || req.session.userid == null || req.session.userid == undefined) {
