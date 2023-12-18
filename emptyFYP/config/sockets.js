@@ -63,13 +63,13 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
 
-  afterDisconnect: function(session, socket, done) {
+  // afterDisconnect: function(session, socket, done) {
   
-    // By default: do nothing.
-    // (but always trigger the callback)
-    return done();
+  //   // By default: do nothing.
+  //   // (but always trigger the callback)
+  //   return done();
   
-  },
+  // },
 
 
   /***************************************************************************
