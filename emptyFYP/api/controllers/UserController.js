@@ -60,7 +60,7 @@ module.exports = {
 
 
                     console.log(req.session);
-                    return res.view('user/home');
+                    return res.json(user);
                 });
             } catch (err) {
                 console.log(err)
