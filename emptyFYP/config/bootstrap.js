@@ -17,15 +17,16 @@
 // const Importer = require('mysql2-import');
 // const importer = new Importer({host, user, password, database});
 
-const host = 'fypdeploy-mysql';
-const user = 'root';
-const password = 'Psycho.K0831';
-const database = 'fypdeploy';
-const port = 3306
+// const host = 'fypdeploy-mysql';
+// const user = 'root';
+// const password = 'Psycho.K0831';
+// const database = 'fypdeploy';
+// const port = 3306
 
 
 
 //var fs = require('fs');
+
 
 
 module.exports.bootstrap = async function () {
@@ -37,9 +38,10 @@ module.exports.bootstrap = async function () {
   // ```
   // // Set up fake development data (or if we already have some, avast)
 
-  
-const Importer = require('mysql-import');
-const importer = new Importer({host, user, password, database});
+//const Importer = require('mysql-import');
+//const importer = new Importer({host, user, password,database});
+const importer = await sails.helpers.importer()
+//console.log(importer)
   // Recursive function to get files
   const fs = require("fs");
 
@@ -53,8 +55,7 @@ const importer = new Importer({host, user, password, database});
   ]
 
   // New onProgress method, added in version 5.0!
-  //var importer = await sails.helpers.importer();
-  console.log(importer)
+
   importer.onProgress(progress=>{
     var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
     console.log(`${percent}% Completed`);
@@ -68,31 +69,35 @@ const importer = new Importer({host, user, password, database});
 
   for (let f of sqlfiles) {
     console.log(f)
-    var result = await importer.import(f);
+   await importer.import(f);
     var files_imported = importer.getImported();
     console.log(`${files_imported.length} SQL file(s) imported.`);
   }
 
-  // importer.import('path/to/dump.sql').then(()=>{
-  //   var files_imported = importer.getImported();
-  //   console.log(`${files_imported.length} SQL file(s) imported.`);
-  // }).catch(err=>{
-  //   console.error(err);
-  // });
+
   // Read the SQL file
   // var dropcommand = fs.readFileSync("../SQL/Standard/dropcommand.sql").toString().split("\n");
   // var TableCreate = fs.readFileSync('../SQL/Standard/TableCreate.sql').toString().split("\n");
-  // var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql').toString()
+  //  var TriggerCreate = fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8').toString().split("|")
+
+  //  for(var a = 0 ; a <TriggerCreate.length;a++){
+  //   if(TriggerCreate[a].trim().toLocaleUpperCase() == "DELIMITER"){
+  //     TriggerCreate[a] = TriggerCreate[a]+" | "
+  //   }else if(TriggerCreate[a].trim().toLocaleUpperCase() == "DELIMITER ;"){
+  //     TriggerCreate[a] = "\n | "+TriggerCreate[a];
+  //   }
+  //   console.log("hello   ",TriggerCreate[a]);
+  //  }
   // var SampleData = fs.readFileSync('../SQL/Standard/SampleData.sql').toString().split("\n");
   // var Setting = fs.readFileSync('../SQL/Standard/Setting.sql').toString().split("\n");
   // var AllclassSQL = fs.readFileSync('../SQL/Standard/AllclassSQL.sql').toString().split("\n");
   // const files = [
   //   fs.readFileSync("../SQL/Standard/dropcommand.sql","utf8").toString().split("\n"),
   //   fs.readFileSync('../SQL/Standard/TableCreate.sql','utf8').toString().split("\n"),
-  //   fs.readFileSync('../SQL/Standard/TriggerCreate.sql','utf8').toString().split("\n"),
-  //   //fs.readFileSync('../SQL/Standard/SampleData.sql','utf8').toString().split("\n"),
-  //   //fs.readFileSync('../SQL/Standard/Setting.sql','utf8').toString().split("\n"),
-  //   //fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8').toString().split("\n")
+  //   TriggerCreate,
+    //fs.readFileSync('../SQL/Standard/SampleData.sql','utf8').toString().split("\n"),
+    //fs.readFileSync('../SQL/Standard/Setting.sql','utf8').toString().split("\n"),
+    //fs.readFileSync('../SQL/Standard/AllclassSQL.sql','utf8').toString().split("\n")
   // ];
   // console.log(files)
 
