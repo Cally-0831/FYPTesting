@@ -67,3 +67,16 @@ insert ignore into allclass values("GCAP","3205","00001","","AAB","AAB610","2","
 insert ignore into allclass values("COMP","4057","00001","","Sin Hang","FSC801C","4","08:30","11:20","0");
 insert ignore into allclass values("COMP","4096","00001","","Sin Hang","LMC509","5","14:30","17:20","0");
 insert ignore into allclass values("COMP","4097","00001","","AAB","AAB509","5","14:30","17:20","0");
+
+
+
+insert into alltakecourse values("COMP4096_00001","tid00001");
+insert into alltakecourse values("COMP4025_00001","tid00001");
+insert into alltakecourse values("COMP4025_10001","tid00001");
+
+insert into alltakecourse values("COMP1005_00001","tid00003");
+insert into alltakecourse values("COMP1005_10201","tid00003");
+insert into alltakecourse values("COMP1005_10101","tid00003");
+insert into alltakecourse values("COMP1005_10102","tid00003");
+
+insert into alltakecourse values("COMP4107_00001","tid00002");

@@ -66,58 +66,52 @@ CREATE TRIGGER addlessontimeforoneCode BEFORE INSERT ON allclass FOR EACH ROW BE
 
 DELIMITER |
 CREATE TRIGGER takeallcourseofonecode after INSERT ON alltakecourse FOR EACH ROW BEGIN
-    declare countcount integer;
-    declare stringstring  varchar(20);
+   declare coursetitle varchar(20);
+   declare countlesson integer;
+   declare i integer;
     declare thisisrole varchar(10);
-    declare x integer;
-    declare issup boolean;
-    set issup = false;
-    set thisisrole ="";
-    set countcount =0;
-    select Max(lesson) into  countcount from alltakecourse inner join allclass on allclass.cid like concat(alltakecourse.cid,"%")where alltakecourse.cid  like concat(new.cid,"%");
-        select role into thisisrole from allusers where new.pid = pid;
-        if thisisrole="sup" THEN
-            if countcount >0 THEN
-                while countcount >=0 do
-                    if countcount =0 THEN
-                        set stringstring = concat(new.cid);
-                    else
-                        set stringstring = concat(new.cid,"_",countcount,"");
-                    END IF;
-                    insert into allsupertakecourse values(stringstring,new.pid,false,now());
-                    set countcount= countcount -1;
-                END while;
-	        else if countcount =0 THEN
-		        insert ignore into allsupertakecourse values(new.cid,new.pid,false,now());
-	        else 
-		        insert ignore into allsupertakecourse values( concat(new.cid,"_"),new.pid,false,now());
-	        END if;
-	    END IF;
-END IF;
-
-        if thisisrole="stu" THEN
-            if countcount >0 THEN
-                while countcount >0 do
-                    set stringstring = concat(new.cid,"_",countcount,"");
-                    insert ignore into allstudenttakecourse(cid,pid) values(stringstring,new.pid);
-                    set countcount= countcount -1;
-                END while;
-                insert ignore into  allstudenttakecourse(cid,pid) values(new.cid,new.pid);
-            else if countcount = 0 THEN
-                insert ignore into  allstudenttakecourse(cid,pid)values(new.cid,new.pid);
-            else
-                insert ignore into  allstudenttakecourse(cid,pid) values(concat(new.cid,"_"),new.pid);
-            END if;
-        END if;
-        END if;
+   set i = 0;
+   set thisisrole = "";
+   set countlesson = 0;
+   set coursetitle = new.CID;
+   select count(*) into  countlesson from allclass where allclass.cid like concat(coursetitle,"%");
+   select role into thisisrole from allusers where new.pid = pid;
+   if thisisrole = "sup" then
+	while(i<countlesson) do
+		if(i = 0) then
+			insert into allsupertakecourse(cid,pid) values (coursetitle,new.pid);
+		else
+			insert into allsupertakecourse(cid,pid) values (concat(coursetitle,"_",i),new.pid);
+        end if;
+        set i = i+1;
+    END while;
+   else 
+	   while(i<countlesson) do
+			if(i = 0) then
+				insert into allstudenttakecourse(cid,pid) values (coursetitle,new.pid);
+			else
+				insert into allstudenttakecourse(cid,pid) values (concat(coursetitle,"_",i),new.pid);
+			end if;
+			set i = i+1;
+		END while;
+   end if;
+    
    END;
-  | DELIMITER ;
+| DELIMITER ;
+
+
+
+
+
+
+
+
 
 DELIMITER |
 CREATE TRIGGER delallsupertakecourse After DELETE ON allsupertakecourse FOR EACH ROW BEGIN
     declare countcount integer;
     declare stringstring  varchar(20);
-    set countcount =0;
+    set countcount = 0;
     select count(*) into countcount from alltakecourse where pid = old.pid and cid = old.cid;
     if(countcount >0) THEN
         DELETE from alltakecourse where pid = old.pid and cid = old.cid;
