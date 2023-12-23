@@ -42,7 +42,7 @@ module.exports = {
         console.log(getsetting2)
         var setting2 = await new Promise((resolve) => {
             pool.query(getsetting2, (err, res) => {
-                
+
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
@@ -54,17 +54,17 @@ module.exports = {
                     deadlinedate.setSeconds(deadlinetime[2]);
                     ans = { deadlinedate: deadlinedate };
                     resolve(ans)
-                }else{
+                } else {
                     resolve(null);
                 }
-                
+
             })
         }).catch((err) => {
             errmsg = "error happened : RequestController.listrequest"
         })
         if (req.session.role == "sup") {
             queryline = "SELECT * FROM allrequestfromsupervisor where tid = \"" + req.session.userid + "\"\ order by requestdate asc, requeststarttime asc;";
-        }  else if (req.session.role == "stu") {
+        } else if (req.session.role == "stu") {
             queryline = "SELECT * FROM allrequestfromstudent where sid = \"" + req.session.userid + "\"\ order by submission desc;";
         }
 
@@ -75,7 +75,7 @@ module.exports = {
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);  
                 requestlist = json;
-                 return res.view('user/checkrequest', { thisuserRequestlist: requestlist, setting : setting2});
+                return res.view('user/checkrequest', { thisuserRequestlist: requestlist, setting: setting2 });
             } catch (err) {
                 console.log("error happened : RequestController.listrequest");
 
@@ -206,7 +206,7 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getsetting2"
         })
-    
+
 
         if (req.session.role == "sup") {
             let thisistheline = "select * from allrequestfromstudent where reqid = \"" + req.params.ReqID + "\"";
@@ -309,7 +309,7 @@ module.exports = {
             }
         } else if (req.session.role == "stu") {
             console.log("enter stu");
-console.log(req.body)
+            console.log(req.body)
             if (req.body.starttime == undefined) {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
                     + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
@@ -324,7 +324,7 @@ console.log(req.body)
 
         db.query(thisistheline, (err, results) => {
             try {
-                return  res.status(200).json("ok");
+                return res.status(200).json("ok");
                 console.log("1 row added");
 
             } catch (err) {
@@ -341,7 +341,7 @@ console.log(req.body)
     upload: function (req, res) {
 
         req.file('avatar').upload(function (err, files) {
-            
+
             console.log(files[0].fd);
 
             const fs = require('fs');
@@ -359,7 +359,7 @@ console.log(req.body)
                 thisistheline = "Update allrequestfromstudent set picdata= \"" + data + "\", status = \"Pending\" ,submission = now() where sid=\"" + req.session.userid + "\" and reqid = \"" + req.params.ReqID + "\"";
                 //console.log(thisistheline);
                 var db = await sails.helpers.database();
-               
+
                 db.query(thisistheline, function (error, result) {
                     try {
 
