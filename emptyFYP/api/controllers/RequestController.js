@@ -5,6 +5,7 @@ module.exports = {
     getview: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        console.log("gethere")
         let thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"2\" and Announcetime is not null";
         db.query(thisistheline, (err, results) => {
             try {
@@ -24,9 +25,6 @@ module.exports = {
                     console.log('>> request deadline: ', deadline);
                 }
                 return res.view('user/submitrequest', { theday: deadline });
-
-
-
             } catch (err) {
                 console.log("error happened in RequestController.getview");
 
