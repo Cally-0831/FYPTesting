@@ -7,14 +7,15 @@ module.exports = {
         var pool = await sails.helpers.database2();
         console.log("gethere")
         let thisistheline = "select deadlinedate,deadlinetime from allsupersetting where  typeofsetting =\"2\" and Announcetime is not null";
+        console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
             try {
 
                 var deadline;
                 var string = JSON.stringify(results);
-                //console.log('>> string: ', string );
+                console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                //console.log('>> json: ', json);  
+                console.log('>> json: ', json);  
                 if (json[0] != null) {
                     var deadline = new Date(json[0].deadlinedate);
                     var deadlinetime = json[0].deadlinetime.split(":");
