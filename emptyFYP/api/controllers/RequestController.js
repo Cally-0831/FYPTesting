@@ -25,7 +25,7 @@ module.exports = {
 
                     console.log('>> request deadline: ', deadline);
                 }
-                return res.view('user/submitrequest', { theday: deadline });
+                return res.view('user/hello', { theday: deadline });
             } catch (err) {
                 console.log("error happened in RequestController.getview");
 
