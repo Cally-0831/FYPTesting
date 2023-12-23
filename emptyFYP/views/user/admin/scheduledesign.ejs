@@ -3,9 +3,10 @@
     <br>
     havedraft = <%=havedraft%>
         Waring = <%=warning%>
-            Msg = <%=msg%>
+            Msg = @@<%=msg%>@@
             <%var msgay = msg.split("&")%>
-            <%console.log(msgay)%>
+            <%msgay = msgay.filter((word) => word.length > 0);console.log(msgay)%>
+             
 
                 <br>
                 Presentdate = <%=presentstartday%> - <%=presentendday%>

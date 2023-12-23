@@ -1681,5 +1681,20 @@ module.exports = {
             return res.status(400).json(availableCombination.errmsg);
         }
 
+    },
+    RemoveRecords: async function (req, res) {
+        const importer = await sails.helpers.importer()
+        //console.log(importer)
+        // Recursive function to get files
+        const fs = require("fs");
+
+        const sqlfiles = '../SQL/Standard/RemoveRecords.sql'
+
+        await importer.import(sqlfiles);
+        var files_imported = importer.getImported();
+        console.log(`${files_imported.length} SQL file(s) imported.`);
+
+
+        return res.status(200).json("ok");
     }
 }

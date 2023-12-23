@@ -94,21 +94,23 @@ module.exports = {
         var checking = false;
 
         var checkarrangedobs = "select * from student where sid not in (select sid from observerpairstudent)";
-            var arranged = await new Promise((resolve) => {
-                pool.query(checkarrangedobs, (err, res) => {
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    var ans = json;
-                    if (ans.length > 0) {
-                       ans = false
-                    } else {
-                        ans = true
-                    }
-                    resolve(ans)
-                })
-            }).catch((err) => {
-                errmsg = "Error happened in SettingController.nodraft.checkarrangedobs"
-            })  
+        var arranged = await new Promise((resolve) => {
+            pool.query(checkarrangedobs, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                console.log("pairing result :", ans)
+                if (ans.length > 0) {
+                    ans = false
+                } else {
+                    ans = true
+                }
+                console.log(ans + "    jdshfjashdf")
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "Error happened in SettingController.nodraft.checkarrangedobs"
+        })
 
         var checkdeadline = "select deadlinedate , deadlinetime,typeofsetting from allsupersetting where typeofsetting != 3 and Announcetime is not null order by typeofsetting asc";
         var setting1 = await new Promise((resolve) => {
@@ -117,16 +119,16 @@ module.exports = {
                 var json = JSON.parse(string);
                 var ans = json;
                 if (ans.length > 0) {
-                    for(var a =0 ;a < ans.length;a++){
+                    for (var a = 0; a < ans.length; a++) {
                         var deadlinedate = new Date(ans[a].deadlinedate);
-                    var deadlinetime = ans[a].deadlinetime.split(":");
-                    deadlinedate.setHours(deadlinetime[0]);
-                    deadlinedate.setMinutes(deadlinetime[1]);
-                    deadlinedate.setSeconds(deadlinetime[2]);
-                    ans[a].deadlinedate = deadlinedate;
+                        var deadlinetime = ans[a].deadlinetime.split(":");
+                        deadlinedate.setHours(deadlinetime[0]);
+                        deadlinedate.setMinutes(deadlinetime[1]);
+                        deadlinedate.setSeconds(deadlinetime[2]);
+                        ans[a].deadlinedate = deadlinedate;
                     }
-                    
-                   
+
+
                 } else {
                     ans = undefined
                 }
@@ -134,9 +136,9 @@ module.exports = {
             })
         }).catch((err) => {
             errmsg = "Error happened in SettingController. nodraft.setting1"
-        })    
+        })
 
-       
+
 
         checkdeadline = "select startdate , starttime,enddate,endtime from allsupersetting where typeofsetting = 3 and Announcetime is not null";
         var setting3 = await new Promise((resolve) => {
@@ -157,7 +159,7 @@ module.exports = {
                     var startdday = new Date(stringstring1);
                     presentstartday = startdday
                     presentendday = new Date(stringstring2);
-                    ans = JSON.parse(JSON.stringify({"presentstartday":presentstartday,"presentendday":presentendday}))
+                    ans = JSON.parse(JSON.stringify({ "presentstartday": presentstartday, "presentendday": presentendday }))
                 } else {
                     ans = undefined
                 }
@@ -165,56 +167,65 @@ module.exports = {
             })
         }).catch((err) => {
             errmsg = "Error happened in SettingController. nodraft.setting3"
-        })   
-        
-        console.log(">>setting1",setting1)
-        console.log(">>setting3",setting3)
+        })
 
-                var today = new Date();
-        var errormsg=""
-        for(var a = 0 ; a < setting1.length;a++){
-            console.log("handling   "+setting1[a].typeofsetting)
-            if(setting1[a].typeofsetting ==4 && a != setting1.length-1){
-                setting1.push(setting1.splice(a,1)[0])
-            }else if(setting1[a].typeofsetting == 4 && a == setting1.length-1){
-                if(new Date(setting3.presentstartday) >today){
+        console.log(">>setting1", setting1)
+        console.log(">>setting3", setting3)
+
+        var today = new Date();
+        var errormsg = ""
+        for (var a = 0; a < setting1.length; a++) {
+            console.log("handling   " + setting1[a].typeofsetting)
+            if (setting1[a].typeofsetting == 4 && a != setting1.length - 1) {
+                setting1.push(setting1.splice(a, 1)[0])
+            } else if (setting1[a].typeofsetting == 4 && a == setting1.length - 1) {
+                if (new Date(setting3.presentstartday) > today) {
                     checking = true;
-                }else{
+                } else {
                     checking = false;
                     errormsg += "3&"
                 }
 
 
-                if(setting1[a].deadlinedate > today){
+                if (setting1[a].deadlinedate > today) {
                     checking = true;
-                }else{
+                } else {
                     checking = false;
-                    errormsg += setting1[a].typeofsetting+"&" ;
-                   
+                    errormsg += setting1[a].typeofsetting + "&";
+
                 }
 
 
             }
-            console.log("handling now  "+setting1[a].typeofsetting)
-            if(setting1[a].typeofsetting != 4 && setting1[a].deadlinedate < today){
+            console.log("handling now  " + setting1[a].typeofsetting)
+            if (setting1[a].typeofsetting != 4 && setting1[a].deadlinedate < today) {
                 checking = true
-            }else if(setting1[a].typeofsetting != 4 && setting1[a].deadlinedate > today){
+            } else if (setting1[a].typeofsetting != 4 && setting1[a].deadlinedate > today) {
                 checking = false;
-                errormsg += setting1[a].typeofsetting+"&"
-              
-            }
+                errormsg += setting1[a].typeofsetting + "&"
 
+            }
         }
         var warning;
-        if(arranged && errormsg==""){
-            warning="200";
-        }else if(!arranged || errormsg != ""){
+        console.log(arranged+"    "+errormsg)
+        if (arranged && errormsg == "") {
+            warning = "200";
+            console.log("here1")
+        }else if(arranged  && errormsg != ""){
+            if(errormsg == "4&"){
+                warning = "200";
+            console.log("here4")
+            }
+            
+        } else if (!arranged || errormsg != "") {
             warning = "401"
-           
+            console.log("here2")
+
         }
-        if(!arranged){
-            warning="401"
-            errormsg+= "A&"
+        if (!arranged) {
+            warning = "401"
+            errormsg += "A&"
+            console.log("here3")
         }
 
         return res.view("user/admin/scheduledesign", {
@@ -226,94 +237,94 @@ module.exports = {
 
         });
 
-          
 
-/** 
-        db.query(getallsetting, (err, results) => {
-            try {
-                var string = JSON.stringify(results);
-                //console.log('>> string: ', string );
-                var json = JSON.parse(string);
-                //console.log('>> json: ', json);
-                supersetting = json;
 
-                var today = new Date();
-                var checking = -1;
-                var msg = "";
-                var realreleaseday;
-                var presentstartday;
-                var presentendday;
-                var warning = 200;
-                for (var i = 0; i < supersetting.length; i++) {
-
-                    if (supersetting[i].deadlinedate != null) {
-                        // this is for setting 1/2/4/5/6 
-                        var settingday = new Date(supersetting[i].deadlinedate).toDateString();
-                        var settingtime = supersetting[i].deadlinetime;
-                        var stringstring = settingday + " " + settingtime;
-                        var dday = new Date(stringstring);
-                        if (supersetting[i].typeofsetting == 4) {
-                            realreleaseday = dday
-                        }
-
-                        if (today < dday) {
-
-                            if (i == 3) {
-                                checking = -1
+        /** 
+                db.query(getallsetting, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        //console.log('>> string: ', string );
+                        var json = JSON.parse(string);
+                        //console.log('>> json: ', json);
+                        supersetting = json;
+        
+                        var today = new Date();
+                        var checking = -1;
+                        var msg = "";
+                        var realreleaseday;
+                        var presentstartday;
+                        var presentendday;
+                        var warning = 200;
+                        for (var i = 0; i < supersetting.length; i++) {
+        
+                            if (supersetting[i].deadlinedate != null) {
+                                // this is for setting 1/2/4/5/6 
+                                var settingday = new Date(supersetting[i].deadlinedate).toDateString();
+                                var settingtime = supersetting[i].deadlinetime;
+                                var stringstring = settingday + " " + settingtime;
+                                var dday = new Date(stringstring);
+                                if (supersetting[i].typeofsetting == 4) {
+                                    realreleaseday = dday
+                                }
+        
+                                if (today < dday) {
+        
+                                    if (i == 3) {
+                                        checking = -1
+                                    } else {
+                                        checking = 1;
+                                    }
+                                    msg += supersetting[i].typeofsetting + "&"
+        
+                                }
                             } else {
-                                checking = 1;
+                                // this is for setting 3 
+                                var settingstartday = new Date(supersetting[i].startdate).toDateString();
+                                var settingstarttime = supersetting[i].starttime;
+                                var settingendday = new Date(supersetting[i].enddate).toDateString();
+                                var settingendtime = supersetting[i].endtime;
+        
+                                var stringstring1 = settingstartday + " " + settingstarttime;
+                                var stringstring2 = settingendday + " " + settingendtime;
+                                var startdday = new Date(stringstring1);
+                                presentstartday = startdday
+                                presentendday = new Date(stringstring2);
+        
+                                if (today > startdday) {
+                                    msg += supersetting[i].typeofsetting + "&"
+                                    checking = 1;
+                                }
                             }
-                            msg += supersetting[i].typeofsetting + "&"
-
+        
+                            //  console.log(i + "     " + checking + "       " + msg)
                         }
-                    } else {
-                        // this is for setting 3 
-                        var settingstartday = new Date(supersetting[i].startdate).toDateString();
-                        var settingstarttime = supersetting[i].starttime;
-                        var settingendday = new Date(supersetting[i].enddate).toDateString();
-                        var settingendtime = supersetting[i].endtime;
-
-                        var stringstring1 = settingstartday + " " + settingstarttime;
-                        var stringstring2 = settingendday + " " + settingendtime;
-                        var startdday = new Date(stringstring1);
-                        presentstartday = startdday
-                        presentendday = new Date(stringstring2);
-
-                        if (today > startdday) {
-                            msg += supersetting[i].typeofsetting + "&"
-                            checking = 1;
+                        if (checking && msg == "4&") {
+                            warning = 200;
+                        }else{
+                            warning = 401;
                         }
+        
+                        
+                        return res.view("user/admin/scheduledesign", {
+                            havedraft: "N",
+                            warning: warning, msg: msg,
+                            realreleaseday: realreleaseday,
+                            presentstartday: presentstartday,
+                            presentendday: presentendday,
+        
+                        });
+        
+        
+        
+        
+                    } catch (err) {
+                        return res.status(400).json("Erro exist when excuting SettingController.nodraft.getsetting")
+        
                     }
-
-                    //  console.log(i + "     " + checking + "       " + msg)
-                }
-                if (checking && msg == "4&") {
-                    warning = 200;
-                }else{
-                    warning = 401;
-                }
-
-                
-                return res.view("user/admin/scheduledesign", {
-                    havedraft: "N",
-                    warning: warning, msg: msg,
-                    realreleaseday: realreleaseday,
-                    presentstartday: presentstartday,
-                    presentendday: presentendday,
-
+        
+        
                 });
-
-
-
-
-            } catch (err) {
-                return res.status(400).json("Erro exist when excuting SettingController.nodraft.getsetting")
-
-            }
-
-
-        });
-        */
+                */
     },
 
 }

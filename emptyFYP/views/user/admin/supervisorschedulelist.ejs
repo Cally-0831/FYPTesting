@@ -1,16 +1,31 @@
 <div class="Pagetitle">Supervisor List</div>
 <div class="rows">
-    <div class="columns">
-        <div class="column is-left">
-            <div class="buttons">
-
-                <div class="button buttonlogout is-left is-mobile" onclick="backback()">
+    <div class="columns is-mobile">
+        <div class="column is-half">
+            <div class="buttons is-left">
+                <div class="button buttonlogout" onclick="backback()">
                     Back
                 </div>
-
+                
             </div>
         </div>
-
+        <div class="column is-half">
+            <div class="buttons is-right">
+                <div class="button buttonlogout"  style="float: right;" onclick="regenerate()">
+                    Remove All Records
+                </div>
+            </div>
+        </div>     
+    </div>
+        <!--
+        <div class="column is-right is-half">
+            <div class="buttons">
+                <div class="button buttonlogout is-right is-mobile"  style="float: right;" onclick="regenerate()">
+                    Remove All Records
+                </div>
+            </div>
+        </div>
+-->
     </div>
 </div>
 <br><br>
@@ -65,5 +80,14 @@
     async function checkpath(tid) {
         console.log("checkthisuser have schdeule ", tid);
         location.assign("supervisorschedulelist/modifyschedule?id="+tid+"&Page=1");
+    }
+    async function regenerate(){
+        var response = await fetch("/scheduledesign/removerecords", {
+                method: "POST",
+            });
+            console.log(response);
+            if(response.status == 200){
+                location.assign("/scheduledesign")
+            }
     }
 </script>

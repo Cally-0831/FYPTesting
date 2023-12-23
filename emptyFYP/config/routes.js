@@ -21,18 +21,25 @@ module.exports.routes = {
 
   //'/': { view: 'pages/homepage' },
 
+  // login & logout
   '/': { view: 'user/login' },
-
   'GET /login': "UserController.login",
   'POST /login': "UserController.login",
-  //'POST /login': "SocketController.becomesocket",
-
   'GET /user/logout': 'UserController.logout',
+
+  //homepage
+  'GET /home': 'UserController.home',
+
+
+  //admin scheduling
+  "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
+
+
 
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
-  'GET /home': { view: 'user/home' },
-  //'GET /home': 'UserController.home',
+  //'GET /home': { view: 'user/home' },
+  
   'GET /scheduledesign': "SettingController.nodraft",
   'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
@@ -40,7 +47,7 @@ module.exports.routes = {
 
   "GET /scheduledesign/getpairing": "ScheduleController.getpairing",
 
-  
+
   //"POST /createschedule/createdraft": "ScheduleController.createdraft",
   //"POST /createschedule/createdraft/savebox": "ScheduleController.savebox",
   //"POST /savebox":"ScheduleController.savebox",
@@ -146,12 +153,12 @@ module.exports.routes = {
   "GET /preference": "RequestController.getpreference",
   "POST /preference": "RequestController.submitpreference",
 
-  "GET /supervisorschedulelist":"ScheduleController.supervisorschedulelist",
-  "GET /supervisorschedulelist/modifyschedule":"ScheduleController.retrievesinglesupervisorschedule",
+  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
+  "GET /supervisorschedulelist/modifyschedule": "ScheduleController.retrievesinglesupervisorschedule",
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
-  "GET /viewFinalSchedule":"ScheduleController.viewFinalSchedule",
-  "GET /supervisorschedulelist/modifyschedule/HandleManualCase" : "ScheduleController.HandleManualCase"
+  "GET /viewFinalSchedule": "ScheduleController.viewFinalSchedule",
+  "GET /supervisorschedulelist/modifyschedule/HandleManualCase": "ScheduleController.HandleManualCase"
 
   /***************************************************************************
   *                                                                          *
