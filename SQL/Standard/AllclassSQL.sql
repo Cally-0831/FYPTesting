@@ -80,3 +80,5 @@ insert into alltakecourse values("COMP1005_10101","tid00003");
 insert into alltakecourse values("COMP1005_10102","tid00003");
 
 insert into alltakecourse values("COMP4107_00001","tid00002");
+insert into alltakecourse values("COMP2027_00001","tid00002");
+insert into alltakecourse values("COMP2035_00001","tid00002");
