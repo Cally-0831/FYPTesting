@@ -71,6 +71,8 @@ insert into allrequestfromsupervisor values("tid00002nKCo9","tid00002","2024-01-
 insert into allpreffromsup values("tid00001","1/2/3/0/0/",now());
 insert into allpreffromsup values("tid00002","1/0/0/1/0/",now());
 
+insert into allrequestfromstudent values("sid33333ZCLcq","sid33333","2023-12-25","00:00", "23:59","asdfasd",null,"Require Proof","",now());
+select * from allsupersetting where typeofsetting = "2"
 
 
 

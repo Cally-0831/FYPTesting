@@ -184,7 +184,9 @@
                                         <%if(thisrequestdetails.picdata !=null){%>
                                             <%var base64obj=Buffer.from(thisrequestdetails.picdata)%>
                                                 <img src="data:image/*;base64,<%=base64obj%>">
-                                                <%}%>
+                                                <%}else if(thisrequestdetails.picdata == null && thisrequestdetails.status == "Enforce Approved"){%> 
+                                                   <img src="https://www.wikihow.com/images/thumb/e/e4/Find-Arc-Length-Step-1-Version-3.jpg/v4-728px-Find-Arc-Length-Step-1-Version-3.jpg">
+                                                    <%}%>
                                     </div>
 
                                 </div>
