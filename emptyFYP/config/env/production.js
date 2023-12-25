@@ -18,7 +18,7 @@
  * For more best practices and tips, see:
  * https://sailsjs.com/docs/concepts/deployment
  */
-
+process.env.TZ = 'Asia/Hong_Kong';
 module.exports = {
   port:3030,
 
