@@ -2,10 +2,9 @@
     this is Scheduling
     <br>
     havedraft = <%=havedraft%>
-        Waring = <%=warning%>
-            Msg = @@<%=msg%>@@
-            <%var msgay = msg.split("&")%>
-            <%msgay = msgay.filter((word) => word.length > 0);console.log(msgay)%>
+        Warning = <%=warning%>
+            Msg = @@<%=erray%>@@
+            
              
 
                 <br>
@@ -18,85 +17,89 @@
                                     <div class="button buttonlogout" onclick="backback()">Back</div>
                                 </div>
                             </div>
-                            <%if (warning=="401" && !msgay.includes("4") && !msgay.includes("A") ){%>
-                                <div class="columns is-centered">
-                                    <div class="column is-half">
-                                        <article class="message is-danger">
-                                            <div class="message-header" style="font-size: 25px;">
-                                                <p>Cannot Design Schedule Now</p>
-
-                                            </div>
-                                            <div class="message-body" style="font-size: 20px;">
-                                                Cannot design the Presentation Schedule now since the settings for
-                                                accpecting
-                                                student's timetable and requests are still ongoing.
-                                            </div>
-                                        </article>
-                                    </div>
+                        <%if(erray.includes("A")){%>
+                            <div class="columns is-centered">
+                                <div class="column is-half">
+                                    <article class="message is-danger">
+                                        <div class="message-header" style="font-size: 25px;">
+                                            <p>Cannot Design Schedule Now</p>
+                                        </div>
+                                        <div class="message-body" style="font-size: 20px;">
+                                            Cannot design the Presentation Schedule now since observers are not arranged.
+                                            <br>
+                                            Please arrange observers for students before processing
+                                        </div>
+                                    </article>
                                 </div>
-                                <%}else if(warning=="200"){%>
+                            </div>
+                            <%}else{%>
+                                <%if(warning == "401"){%>
                                     <div class="columns is-centered">
-                                        <div id="create" class="column is-half">
-                                            <div class="scheduledesignchecking">
-                                                <div class="row">
-                                                    <div style="font-size: 25px; font-weight: bold;">
-                                                        Schedule Design
-                                                    </div>
-
-
+                                        <div class="column is-half">
+                                            <article class="message is-danger">
+                                                <div class="message-header" style="font-size: 25px;">
+                                                    <p>Cannot Design Schedule Now</p>
+    
                                                 </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div style="font-size: 20px; ">
-                                                        Present Period = <u>
-                                                            <%=presentstartday.toLocaleDateString()%>
-                                                                <%=presentstartday.toLocaleTimeString("en-US")%>
-                                                        </u> to <u>
-                                                            <%=presentendday.toLocaleDateString()%>
-                                                                <%=presentendday.toLocaleTimeString("en-US")%>
-                                                        </u>
+                                                <div class="message-body" style="font-size: 20px;">
+                                                    Cannot design the Presentation Schedule now since the settings for
+                                                    accpecting
+                                                    inputs of timetable, requests, and preferences are still ongoing.
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                    <%}else{%>
+                                        <div class="columns is-centered">
+                                            <div id="create" class="column is-half">
+                                                <div class="scheduledesignchecking">
+                                                    <div class="row">
+                                                        <div style="font-size: 25px; font-weight: bold;">
+                                                            Schedule Design
+                                                        </div>
+    
+    
                                                     </div>
                                                     <br>
-                                                    <div class="control" id="typeofpresentation">
-                                                        <label class="radio">
-                                                            <input type="radio" name="typeofpresent" value="midterm">
-                                                            Midterm Present
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="typeofpresent" value="final"
-                                                                checked>
-                                                            Final Present
-                                                        </label>
-                                                    </div>
-                                                    <div class="buttons is-right">
-
-                                                        <div class="button buttonlogout"
-                                                            onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
-                                                            Create Draft
+                                                    <div class="row">
+                                                        <div style="font-size: 20px; ">
+                                                            Present Period = <u>
+                                                                <%=presentstartday.toLocaleDateString()%>
+                                                                    <%=presentstartday.toLocaleTimeString("en-US")%>
+                                                            </u> to <u>
+                                                                <%=presentendday.toLocaleDateString()%>
+                                                                    <%=presentendday.toLocaleTimeString("en-US")%>
+                                                            </u>
+                                                        </div>
+                                                        <br>
+                                                        <div class="control" id="typeofpresentation">
+                                                            <label class="radio">
+                                                                <input type="radio" name="typeofpresent" value="midterm">
+                                                                Midterm Present
+                                                            </label>
+                                                            <label class="radio">
+                                                                <input type="radio" name="typeofpresent" value="final"
+                                                                    checked>
+                                                                Final Present
+                                                            </label>
+                                                        </div>
+                                                        <div class="buttons is-right">
+    
+                                                            <div class="button buttonlogout"
+                                                                onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
+                                                                Create Draft
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+    
                                         </div>
+                                    <%}%>
+                                <%}%>
 
-                                    </div>
-                                    <%}else if(warning="401" && msg.includes("A")){%>
-                                        <div class="columns is-centered">
-                                            <div class="column is-half">
-                                                <article class="message is-danger">
-                                                    <div class="message-header" style="font-size: 25px;">
-                                                        <p>Cannot Design Schedule Now</p>
-        
-                                                    </div>
-                                                    <div class="message-body" style="font-size: 20px;">
-                                                        Cannot design the Presentation Schedule now since observers are not arranged.
-                                                        <br>
-                                                        Please arrange observers for students before processing
-                                                    </div>
-                                                </article>
-                                            </div>
-                                        </div>
-                                        <%}%>
+
+                           
 
 </div>
 <script>
@@ -123,7 +126,6 @@
                 method: "POST",
                 body: requestbody
             });
-
             if(response.ok){
                 location.assign("/supervisorschedulelist");
             }

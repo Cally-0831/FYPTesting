@@ -33,6 +33,9 @@ module.exports.routes = {
 
   //admin scheduling
   "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
+  "POST /supervisorschedulelist/modifyschedule":  "ScheduleController.EditRecords",
+  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
+  "GET /supervisorschedulelist/modifyschedule": "ScheduleController.retrievesinglesupervisorschedule",
 
 
 
@@ -73,7 +76,6 @@ module.exports.routes = {
   'GET /notice/createnewnotice/auto': "NoticeListController.viewnoticepage",
   'POST /notice/createnewnotice': "NoticeListController.addnotice",
 
-  "GET /hello": { view: 'user/hello' },
 
   'GET /timetable/submitttb': "TimetableController.getallclass",
   //'GET /timetable/submitttb/': "TimetableController.checkdeadline",
@@ -154,8 +156,7 @@ module.exports.routes = {
   "GET /preference": "RequestController.getpreference",
   "POST /preference": "RequestController.submitpreference",
 
-  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
-  "GET /supervisorschedulelist/modifyschedule": "ScheduleController.retrievesinglesupervisorschedule",
+  
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   "GET /viewFinalSchedule": "ScheduleController.viewFinalSchedule",

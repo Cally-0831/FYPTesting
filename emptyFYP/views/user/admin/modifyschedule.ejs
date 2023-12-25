@@ -7,10 +7,11 @@
         </div>
     </div>
     <br>
-
+<%console.log(boxes.length)%>
+    
     <%if (manualhandlecase.length >0){%>
        
-    <div class = "row">
+    <div class = "row" id = "manualhandlecasetable">
         <div class = "columns is-centered is-mobile">
             <div class = "column ">
                 <div class = "table-container">
@@ -48,7 +49,9 @@
 
     </div> 
     <%}%>
-    <div class = "row">
+
+
+    <div class = "row" id = "Schedule">
         <div class = "columns is-centered is-mobile">
             <div class = "column ">
                 <div class = "table-container">
@@ -58,18 +61,21 @@
                 <%=displaystartday%>   <%=displayendday%>
                 <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
                     <% var printday=new Date(displaydate.getTime())%>
-                    <%console.log(printday.toLocaleDateString())%>
-                        <%var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay()));%>
+                    <!--var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay())-->
+                        <%var enddisplaydate= displayendday;%>
                         <br><%="enddisplay date"%> <%=enddisplaydate%><br>
                         <%
                         var appendlist = [];
                         var removelist = [];
                         for (var a = 0; a < requestes.length; a++) {
+                            
                            if(requestes[a].RequestStartTime=="00:00:00" && requestes[a].RequestEndTime=="23:59:00"){
                             removelist.push(a);
+                            
                             var starttime = 8;
                             var endtime = 18;
-                            while(starttime < endtime){
+                            
+                            while(starttime < endtime){    
                                 var element = JSON.parse(JSON.stringify(requestes[a]))
                                 if(starttime < 10){
                                    element.RequestStartTime = "0"+starttime+":"+"30:00"
@@ -83,19 +89,23 @@
                                 }
                                 starttime = starttime+1;
                                 appendlist.push(element)
+                                
+                                
                             }
                           
                            
                            
 
                           }else{
+                            
                             var starttime = requestes[a].RequestStartTime.split(":");
                             var endtime = requestes[a].RequestEndTime.split(":");
-                            if(parseInt(starttime[1])>30){
+                            if(parseInt(starttime[1])>=30){
                                 starttime[1] = "30";
                             }else{
                                 starttime[1] = "00"
                             }
+                            
                             if(parseInt(endtime[1])>30){
                                 endtime[0] = parseInt(endtime[0])+1;
                                 if(endtime[0] >10){endtime[0] = "0"+endtime[0]}else{endtime[0] = endtime[0]+""};
@@ -103,13 +113,21 @@
                             }else{
                                 endtime[1] = "30"
                             }
-                          }
-                          requestes[a].RequestStartTime = starttime[0]+":"+starttime[1]+":00";
+                            requestes[a].RequestStartTime = starttime[0]+":"+starttime[1]+":00";
                           requestes[a].RequestEndTime = endtime[0]+":"+endtime[1]+":00"
+                          }
+                          
+                          
+                          
                          }
+                         
+                         
+                        removelist.forEach((element)=>requestes.splice(element,1));
                         
-                        removelist.forEach((element)=> requestes.pop(a));
                          appendlist.forEach((element)=> requestes.push(element));
+                         
+                        
+                         
 
                        requestes.sort((a, b) => {
                         if (new Date(a.RequestDate) < new Date(b.RequestDate)) return -1;
@@ -117,7 +135,7 @@
                        if (a.starttime < b.starttime) return -1;
                         if (a.starttime > b.starttime) return 1;
                         })
-                       
+                        
                     %>
 
 
@@ -160,9 +178,7 @@
                        if (a.starttime < b.starttime) return -1;
                         if (a.starttime > b.starttime) return 1;
                         })
-                       
                     %>
-                     <%console.log(">>boxes",boxes,"\n\n\n\n");console.log(">>requestes",requestes,"\n\n\n\n");console.log(">>ttb",ttb,"\n\n\n\n")%>
                       
                         <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" >
                             <%if(Page != 1){%>
@@ -210,15 +226,17 @@
                             
             </tr>
             <tr>
+                <!--printing empty cell for the time column-->
                 <td style="font-size : 14px"></td>
                 <%var printing = new Date(displaystartday.getTime())%>
                 <%=printing%> <%=new Date(displayendday.getTime())%> 
-                 
+                 <!--printing the date on the table on row 2-->
                 <%for(var a = 0 ;a < 7;a++){%>                   
                     <td style="font-size : 14px"><%=printing.toLocaleDateString("en-GB")%></td>
                         <%printing = new Date(printing.getTime()+60*60*1000*24)%>
                     <%}%>
-                                        <td style="font-size : 14px"></td>
+                <!--printing empty cell for the next page arrow-->
+                <td style="font-size : 14px"></td>
             </tr>
             <tr>
                 <%var printday = new Date(displaystartday)%>
@@ -228,14 +246,95 @@
                 
                 <%for(var a = 0 ;a < linenum;a++){%>
                 <tr>
+                    <!--print the time on the table for column 1-->
                      <td><%=printday.toLocaleTimeString("en-GB")%></td>
+                     
                     <%for(var b = 0 ; b < 7;b++){%>
                         
                         <%var printed = false;%>
+                        <!--printing ttb-->
+                        <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays && !printed){%>
+                            <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime || (type == "midterm" && ttb[0].starttime == (new Date(printday.getTime() - 30*60*1000)).toLocaleTimeString("en-GB")) ){%>
+                             
+                                <%printed = true;%>
+                                <td style="font-size : 14px">
+                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
+                                        <tr><td><%=ttb[0].cid%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
+                                        <tr><td><%=ttb[0].campus%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
+                                        <tr><td><%=ttb[0].rid%></td></tr>
+                                        
+                                    </table>
+                                   
+                                </td>
+                                <%var thissessionendtime ; 
+                                if(type == "final"){
+                                     thissessionendtime =new Date(printday.getTime()+60*60*1000); 
+                                    }else{
+                                        thissessionendtime =new Date(printday.getTime()+30*60*1000); 
+                                    }%>
+                                
+                                <%if(ttb[0].endtime == thissessionendtime.toLocaleTimeString("en-GB")){%>
+                                    <%ttb.splice(0,1)%>
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                   
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+                                    <%}else{%>
+                                        
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                   
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+                                        <%}%>
+                                
 
+
+                                   <%}else{%>
+                                    <%if(ttb.length >0){
+                                        var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                       
+                                        if(index != -1){
+                                            while(ttb[0].weekdays == printday.getDay()){
+                                                ttb.push(ttb.shift());
+                                                }
+                                            }
+                                       
+                                        }%>
+    
+                                    <%}%>
+                            <%}else{%>
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                    
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+
+                                
+                                <%}%>
+                        <!--printing shedulebox-->
                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString() && !printed){%>
                             <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
-                                <%printed = true;%>
+                                <%printed = true;var sessiontime = printday.toLocaleTimeString('en-GB')%>
                                 <td>
                                     <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
                                         <tr><th style="font-size : 14px ;text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
@@ -247,6 +346,10 @@
                                         <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
                                         <tr><td><%=boxes[0].RID%></td></tr>
                                     </table>
+                                    <div id="thisbox" class = "buttons is-centered" value = "<%=boxes[0]%>" >
+                                        <div class = "button" style="background-color:  lightgreen; border-color: black;" onclick="edit('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">edit</div>
+                                        <div class = "button" style="background-color: lightcoral;border-color: black;" onclick="del('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">delete</div>
+                                    </div>
                                 </td>
                                 <%boxes.splice(0,1)%>
                                 <%if(boxes.length >0){
@@ -284,6 +387,7 @@
                                     }%>
                                     <%}%>
                             
+                                    <!--printing requests-->
                             <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString() && !printed ){%>
                                 <%var requestdaytime = new Date(requestes[0].RequestDate)%>
                                 <%var requestdayendtime = new Date(requestes[0].RequestDate)%>
@@ -291,7 +395,7 @@
                                 <%requestdaytime.setMinutes(parseInt(requestes[0].RequestStartTime.split(":")[1]))%>
                                 <%requestdayendtime.setHours(parseInt(requestes[0].RequestEndTime.split(":")[0]))%>
                                 <%requestdayendtime.setMinutes(parseInt(requestes[0].RequestEndTime.split(":")[1]))%>
-                                <%console.log(requestes[0])%>
+                                
                                 <%if(!(requestdayendtime.toLocaleTimeString() < printday.toLocaleTimeString() && requestdaytime.toLocaleDateString() >  ( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()) ){%>
                                     <%printed = true;%>
                                   
@@ -351,118 +455,29 @@
 
 
 
-                                <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays && !printed){%>
-                                    <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime || (type == "midterm" && ttb[0].starttime == (new Date(printday.getTime() - 30*60*1000)).toLocaleTimeString("en-GB")) ){%>
-                                     
-                                        <%printed = true;%>
-                                        <td style="font-size : 14px">
-                                            <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
-                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
-                                                <tr><td><%=ttb[0].cid%></td></tr>
-                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
-                                                <tr><td><%=ttb[0].campus%></td></tr>
-                                                <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
-                                                <tr><td><%=ttb[0].rid%></td></tr>
-                                                
-                                            </table>
-                                           
-                                        </td>
-                                        <%var thissessionendtime ; 
-                                        if(type == "final"){
-                                             thissessionendtime =new Date(printday.getTime()+60*60*1000); 
-                                            }else{
-                                                thissessionendtime =new Date(printday.getTime()+30*60*1000); 
-                                            }%>
-                                        <%console.log(ttb[0].endtime , " ttb checking ",thissessionendtime.toLocaleTimeString("en-GB"))%>
-                                        
-                                        <%if(ttb[0].endtime == thissessionendtime.toLocaleTimeString("en-GB")){%>
-                                            <%ttb.splice(0,1)%>
-                                        <%if(ttb.length >0){
-                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
-                                           
-                                            if(index != -1){
-                                                while(ttb[0].weekdays == printday.getDay()){
-                                                    ttb.push(ttb.shift());
-                                                    }
-                                                }
-                                            
-                                            }%>
-                                            <%}else{%>
-                                                
-                                        <%if(ttb.length >0){
-                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
-                                           
-                                            if(index != -1){
-                                                while(ttb[0].weekdays == printday.getDay()){
-                                                    ttb.push(ttb.shift());
-                                                    }
-                                                }
-                                            
-                                            }%>
-                                                <%}%>
-                                        
-        
-        
-                                           <%}else{%>
-                                            <%if(ttb.length >0){
-                                                var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
-                                               
-                                                if(index != -1){
-                                                    while(ttb[0].weekdays == printday.getDay()){
-                                                        ttb.push(ttb.shift());
-                                                        }
-                                                    }
-                                               
-                                                }%>
-            
-                                            <%}%>
-                                    <%}else{%>
-                                        <%if(ttb.length >0){
-                                            var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
-                                            
-                                            if(index != -1){
-                                                while(ttb[0].weekdays == printday.getDay()){
-                                                    ttb.push(ttb.shift());
-                                                    }
-                                                }
-                                            
-                                            }%>
-        
-                                        
-                                        <%}%>
 
 
-
-<%if(!printed){%>
-    <td></td>
-    <%}%>
+                    <%if(!printed){%>
+                        <td></td>
+                        <%}%>
                         
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         <%if(printday.getDay() ==6){ 
                              printday = new Date(displaystartday);
+                            
                             if(type =="final"){
                                 printday.setHours(8+a);
                                 printday.setMinutes(30)
+                                
                             }else{
                                 printday = new Date(printday.getTime()+(60*60*1000)*0.5*(a-1))
+                              
                             }
-                             
+                           
                         }else{
                               
                                    printday =new Date(printday.getTime()+60*60*24*1000)
+                                  
                         }%>
                         <%}%>
                         <td></td>
@@ -487,15 +502,61 @@
         location.assign("/supervisorschedulelist")
     }
     function backpage(id,Pagecount){
-        
         location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)-1))
-      
     }
     function nextpage(id,Pagecount){ 
         location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)+1))
-      
     }
     async function HandleCase(sid){
         location.assign("/supervisorschedulelist/modifyschedule/HandleManualCase?sid="+sid)
+    }
+
+    async function del(tid,boxid,boxdate,type,sid,oid){
+        var r = confirm("Confirm to delete boxid "+boxid+"?");
+        console.log(boxdate,"  ",type)
+        boxdate = new Date(boxdate);
+        var endtime;
+        if(type == "final"){
+            endtime = new Date(boxdate);
+            endtime.setHours(endtime.getHours()+1);
+        }else{
+            endtime = new Date(boxdate);
+            if(endtime.getMinutes()>=30){
+                endtime.setHours(endtime.getHours()+1);
+                endtime.setMinutes(0)
+            }else{
+                endtime.setMinutes(30)
+            }
+            
+        }
+        console.log(endtime);
+        var date = boxdate.toLocaleDateString("en-GB").split("/");
+        date = date[2]+"-"+date[1]+"-"+date[0];
+        
+        var requestbody = JSON.stringify({
+            boxid : boxid,
+            command:"delete",
+            tid:tid,
+            date : date,
+            starttime: boxdate.toLocaleTimeString("en-GB"),
+            endtime:endtime.toLocaleTimeString("en-GB"),
+            sid:sid,
+            oid:oid
+        })
+        console.log(requestbody);
+        
+       if(r){
+        
+        var response = await fetch("/supervisorschedulelist/modifyschedule", {
+        method: "POST",
+        body: requestbody,
+      });
+      if(response.status == 200){
+        location.reload();
+      }
+           
+        }
+        
+
     }
 </script>

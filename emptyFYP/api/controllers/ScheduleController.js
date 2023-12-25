@@ -65,271 +65,6 @@ module.exports = {
 
     },
 
-    /**
-    createdraft: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        var campusfortoday;
-        console.log(req.body)
-
-        var supweeklist = [], obsweeklist = [], stdweeklist = [];
-
-        for (var a = 0; a < 6; a++) {
-            supweeklist.push([]);
-            obsweeklist.push([]);
-            stdweeklist.push([]);
-        }
-
-        var startday = new Date(req.body.fullstartday);
-        var startime = startday.toLocaleTimeString("en-GB");
-        var endday = new Date(req.body.fullendday);
-        var endtime = endday.toLocaleTimeString("en-GB");
-        //#   console.log((endday - startday) / 1000 / 60 / 60 / 24)
-        var sessionduration = 0;
-        var typeofpresent = req.body.typeofpresent;
-
-        if (typeofpresent == "midterm") {
-            sessionduration = 30;
-        } else {
-            sessionduration = 60;
-        }
-
-        var getallclassinfo = "select * from allclass order by Campus asc, rid asc , weekdays asc, starttime asc, endtime asc"
-        var classttb = await new Promise((resolve, reject) => {
-            pool.query(getallclassinfo, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.classttb")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-
-        var getallclassroominschool = "select * from classroom where status != \"Closed\" and rid != \"\" order by Campus asc, rid asc"
-        var classroomlist = await new Promise((resolve, reject) => {
-            pool.query(getallclassroominschool, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.classroomlist")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-        //console.log(classroomlist)
-        let distinctcampuslist = (classroomlist) => {
-            let unique_values = classroomlist
-                .map((item) => item.Campus)
-                .filter(
-                    (value, index, current_value) => current_value.indexOf(value) === index
-                );
-            return unique_values;
-        };
-        var campuslist = distinctcampuslist(classroomlist);
-
-        var getclassroomtimeslot = "select * from allclassroomtimeslot"
-        var classroomtimeslot = await new Promise((resolve, reject) => {
-            pool.query(getclassroomtimeslot, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.classroomtimeslot")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-        var getsupttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.tid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
-        var superttb = await new Promise((resolve, reject) => {
-            pool.query(getsupttb, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getsupttb")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-        for (var a = 0; a < superttb.length; a++) {
-            supweeklist[parseInt(superttb[a].weekdays) - 1].push(superttb[a]);
-        }
-
-        var getsuprequest = "select * from allrequestfromsupervisor where tid = \"" + req.body.tid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) order by RequestDate asc, requeststarttime asc "
-        var superrequest = await new Promise((resolve, reject) => {
-            pool.query(getsuprequest, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-        console.log(">> superrequest", superrequest[0])
-
-        var getsupschedulebox = "select * from allschedulebox where tid = \"" + req.body.tid + "\" order by boxdate asc , boxtime asc";
-        var superschedulebox = await new Promise((resolve, reject) => {
-            pool.query(getsupschedulebox, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-        var getobsttb = "select * from allsupertakecourse left join allclass on allsupertakecourse.CID = allclass.CID where allsupertakecourse.pid = \"" + req.body.oid + "\" and confirmation = \"1\" order by weekdays asc, startTime asc"
-        var obsttb = await new Promise((resolve, reject) => {
-            pool.query(getobsttb, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-        for (var a = 0; a < obsttb.length; a++) { obsweeklist[parseInt(obsttb[a].weekdays) - 1].push(obsttb[a]); }
-
-        var getobsrequest = "select * from allrequestfromsupervisor where tid = \"" + req.body.oid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) order by RequestDate asc, requeststarttime asc "
-        var obsrequest = await new Promise((resolve, reject) => {
-            pool.query(getobsrequest, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-        var getobsschedulebox = "select * from allschedulebox where tid = \"" + req.body.oid + "\" order by boxdate asc , boxtime asc";
-        var obsschedulebox = await new Promise((resolve, reject) => {
-            pool.query(getobsschedulebox, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-
-        var getstdttb = "select * from allstudenttakecourse left join allclass on allstudenttakecourse.CID = allclass.CID where allstudenttakecourse.pid = \"" + req.body.sid + "\" and confirmation = \"2\" order by weekdays asc, startTime asc"
-        var stdttb = await new Promise((resolve, reject) => {
-            pool.query(getstdttb, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-
-        for (var a = 0; a < stdttb.length; a++) { stdweeklist[parseInt(stdttb[a].weekdays) - 1].push(stdttb[a]); }
-        for (var a = 0; a < stdweeklist.length; a++) {
-            if (stdweeklist[a].length == 0) { stdweeklist[a].push("EMPTY") }
-            if (obsweeklist[a].length == 0) { obsweeklist[a].push("EMPTY") }
-            if (supweeklist[a].length == 0) { supweeklist[a].push("EMPTY") }
-        }
-
-
-        var getstdrequest = "select * from allrequestfromstudent where sid =\"" + req.body.sid + "\" and (RequestDate >= Date(\"" + req.body.startdaydate + "\") and RequestDate <= Date(\"" + req.body.enddaydate + "\")) and status = \"Approved\" order by RequestDate asc, requeststarttime asc "
-        var stdrequest = await new Promise((resolve, reject) => {
-            pool.query(getstdrequest, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.superrequest")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-
-        var getsuppreference = "select * from allpreffromsup where tid =\"" + req.body.tid + "\"";
-        var suppref = await new Promise((resolve, reject) => {
-            pool.query(getsuppreference, (err, res) => {
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-
-            })
-        })
-
-        //console.log(suppref.length)
-        if (suppref.length == 0) {
-            suppref = null;
-        } else {
-            suppref = suppref[0]
-            let splitstring = (suppref.Prefno).split("/");
-            suppref = splitstring;
-        }
-        //suppref = suppref[0]
-
-
-        var getobspreference = "select * from allpreffromsup where tid =\"" + req.body.oid + "\"";
-        var obspref = await new Promise((resolve, reject) => {
-            pool.query(getobspreference, (err, res) => {
-                if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getobspreference")) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                var ans = json;
-                resolve(ans)
-            })
-        })
-        if (obspref.length == 0) {
-            obspref = null;
-        } else {
-            obspref = obspref[0]
-            let splitstring = (obspref.Prefno).split("/");
-            obspref = splitstring;
-        }
-        console.log(obspref)
-
-        var startindex = startday.getDay();
-
-        console.log(startday)
-        var currentsessiontimeinpresentday = startday;
-        currentsessiontimeinpresentday.setHours(8, 30, 0);
-        var currentsessionendtimeinpresentday = (new Date(currentsessiontimeinpresentday.getTime() + (1000 * 60 * sessionduration)));
-
-        console.log("finally working")
-
-        console.log(req.body.suppriority + "      " + req.body.obspriority)
-        if (req.body.suppriority <= req.body.obspriority) {
-            for (var a = 0; a < suppref.length; a++) {
-                console.log(currentsessiontimeinpresentday + "     asdfasdf");
-                console.log(currentsessionendtimeinpresentday + "    erqwer ")
-            }
-        } else {
-            for (var a = 0; a < obspref.length; a++) {
-                console.log(currentsessiontimeinpresentday + "     hello");
-                console.log(currentsessionendtimeinpresentday + "     heool")
-                var getcheckobsttb = "select * from allsupertakecourse left join allclass on allclass.CID = allsupertakecourse.CID where pid = \"" + req.body.oid + "\" and weekdays= \"" + currentsessiontimeinpresentday.getDay() + "\" and startTime";
-                var obsttb = await new Promise((resolve, reject) => {
-                    pool.query(getcheckobsttb, (err, res) => {
-                        if (err) { reject(res.status(401).json("Error happened when excuting ScheduleController.createdraft.getobspreference")) }
-                        var string = JSON.stringify(res);
-                        var json = JSON.parse(string);
-                        var ans = json;
-                        resolve(ans)
-                    })
-                })
-                console.log(currentsessiontimeinpresentday + "     hello");
-                console.log(currentsessionendtimeinpresentday + "     heool")
-            }
-
-        }
-
-        return res.status(200).json({
-            tid: req.body.tid,
-            sid: req.body.sid,
-            oid: req.body.oid,
-            finalcampus: finalcampus,
-            finalrid: finalrid,
-            presentday: presentday,
-            presentstartTime: currentsessiontimeinpresentday.toLocaleTimeString("en-GB"),
-            presentendTime: currentsessionendtimeinpresentday.toLocaleTimeString("en-GB")
-        })
-
-    },
- */
     genavailable: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -364,7 +99,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.getsetting3"
         })
         //console.log(errmsg)
-        //console.log(setting3)
+        console.log(setting3)
 
 
 
@@ -422,7 +157,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.gethvrecordbutnosubmit"
         })
 
-        //console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
+        console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
 
         for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
             var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
@@ -741,7 +476,7 @@ module.exports = {
 
 
                     if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
-                        console.log(currentgeneratedate.getDay())
+                        //console.log(currentgeneratedate.getDay())
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                             currentgeneratedate = new Date(currentgeneratedate);
@@ -987,7 +722,7 @@ module.exports = {
             // console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
-            console.log(getallstudentlistforthissuper)
+            // console.log(getallstudentlistforthissuper)
             var studentlistforthissupervisor = await new Promise((resolve) => {
                 pool.query(getallstudentlistforthissuper, (err, res) => {
                     var string = JSON.stringify(res);
@@ -1021,24 +756,23 @@ module.exports = {
                     }).catch((err) => {
                         errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
                     })
-                    //console.log(studentlistforthissupervisor[b].tid)
-                    //console.log(">>studentlistforthissupervisor   ", studentlistforthissupervisor)
-
+                    
                     counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "tid": studentlistforthissupervisor[b].tid, "oid": studentlistforthissupervisor[b].colleague, "availblelist": parseInt(availblelist[0].boxcount) })));
                 }
 
                 counttimeboxlist.sort((a, b) => {
                     return a.availblelist - b.availblelist;
                 })
-                console.log(counttimeboxlist)
+                console.log("countimeboxlist all after sort",counttimeboxlist)
 
 
                 for (var b = 0; b < counttimeboxlist.length; b++) {
-                    console.log(counttimeboxlist[b])
+                    
                     var added = false;
+                    var index = 0;
 
                     for (var c = 0; c < thisschedulebox.length; c++) {
-                        // console.log(thisschedulebox[c])
+                        //console.log(thisschedulebox[c])
                         var presentday = thisschedulebox[c].date;
                         var checker = thisschedulebox[c].prefno;
                         if (checker == "") {
@@ -1048,12 +782,11 @@ module.exports = {
                         }
                         //console.log(thisschedulebox);
 
-                        console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
+                        //console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
 
 
                         if (thisschedulebox[c].schedule.length != checker || (checker == "0")) {
                             while (!added) {
-
                                 function appendquery(thisschedulebox) {
                                     var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
                                         + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
@@ -1085,10 +818,15 @@ module.exports = {
                                     errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
                                 })
 
-                                console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
+                                //console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
                                 if (checkscheduleboxlist[0] == undefined) {
-                                    console.log(supervisorlist[a].tid, "  ", checkavailabledup)
-                                    console.log("this fail", counttimeboxlist[b].sid)
+                                    //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
+                                    index++;
+
+
+
+
+                                    //console.log("this fail", counttimeboxlist[b].sid)
 
                                     var manualhandleline = "insert into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
 
@@ -1104,7 +842,7 @@ module.exports = {
                                     thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
                                     //console.log(">>see see ", thisschedulebox[c].schedule)
                                     added = true;
-                                    console.log("this pass", counttimeboxlist[b].sid)
+                                    //console.log("this pass", counttimeboxlist[b].sid)
                                 }
 
                             }
@@ -1116,11 +854,26 @@ module.exports = {
                             }
 
                         }
-                        if (added) { checker++; break; } else {
+                        if (added) {
+                            checker++;
+                            var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
+
+                            db.query(deletemanualhandleline, (err, res) => {
+                                try { console.log("deleteed manual handlecase") } catch (err) {
+                                    console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
+                                }
+                            })
+                            break;
+                        } else {
                             console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
                         }
                     }
                 }
+                
+console.log(">> final schedulebox",thisschedulebox)
+
+
+
 
                 for (var c = 0; c < thisschedulebox.length; c++) {
                     for (var e = 0; e < thisschedulebox[c].schedule.length; e++) {
@@ -1134,7 +887,7 @@ module.exports = {
                         //console.log(delavailabletimequery)
                         db.query(delavailabletimequery, (err, result) => {
                             try {
-                                console.log("delavailabletimequery complete")
+                                //   console.log("delavailabletimequery complete")
                             } catch (err) {
                                 if (err) {
                                     errmsg = "error happened in ScheduleController.delavailabletimequery"
@@ -1220,7 +973,7 @@ module.exports = {
                         var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\"" + req.body.typeofpresent + "\","
                             + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
                             + "\"" + campus + "\",\"" + room + "\", now()) ;"
-                        console.log(insertscheduleboxquery)
+                        //console.log(insertscheduleboxquery)
 
                         var insertbox = await new Promise((resolve) => {
                             pool.query(insertscheduleboxquery, (err, res) => {
@@ -1229,17 +982,17 @@ module.exports = {
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
                         })
-
-                        var updatesupervisordraft = "update supervisor set draft = \"Y\" where tid = \"" + thisschedulebox[c].schedule[e].tid + "\""
-                        //console.log(updatesupervisordraft)
-                        insertbox = await new Promise((resolve) => {
-                            pool.query(updatesupervisordraft, (err, res) => {
-                                resolve(res)
-                            })
-                        }).catch((err) => {
-                            errmsg = "error happened in ScheduleController.genavailble.updatesupervisordraft"
-                        })
-
+                        /** 
+                                                var updatesupervisordraft = "update supervisor set draft = \"Y\" where tid = \"" + thisschedulebox[c].schedule[e].tid + "\""
+                                                //console.log(updatesupervisordraft)
+                                                insertbox = await new Promise((resolve) => {
+                                                    pool.query(updatesupervisordraft, (err, res) => {
+                                                        resolve(res)
+                                                    })
+                                                }).catch((err) => {
+                                                    errmsg = "error happened in ScheduleController.genavailble.updatesupervisordraft"
+                                                })
+                        */
                     }
 
                 }
@@ -1509,7 +1262,6 @@ module.exports = {
                     endday.setHours(endTime[0]);
                     endday.setMinutes(endTime[1]);
                     endday.setSeconds(endTime[2]);
-                    console.log(startday + "   " + endday)
                     ans = { startday: startday, endday: endday };
                 }
                 resolve(ans)
@@ -1517,11 +1269,15 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
         })
-        var displaystartday = new Date(setting3.startday.getTime() - 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
+        
+        
+        var displaystartday = new Date(setting3.startday.getTime() - 60 * 60 * 24 * 1000 * setting3.startday.getDay() + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
         var displayendday = new Date(setting3.startday.getTime() + 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
+        displayendday.setHours(18);
+        displayendday.setMinutes(30);
         var startday = displaystartday.toLocaleDateString('en-GB').split('/').reverse().join('-');
-        var endday = new Date((displayendday.getTime() + 60 * 60 * 24 * 1000)).toLocaleDateString('en-GB').split('/').reverse().join('-');
-
+        var endday = new Date(displayendday.getTime()+60*60*24*1000).toLocaleDateString('en-GB').split('/').reverse().join('-');
+        console.log(displaystartday,"  ",displaystartday.toLocaleTimeString("en-GB"),"  display from  ",displayendday,"  ",displayendday.toLocaleTimeString("en-GB"))
 
         var query = "select * from allschedulebox where (tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" ) and (boxdate >= date(\"" + startday + "\") and boxdate <= date(\"" + endday + "\") ) order by boxdate asc;"
         console.log(query)
@@ -1542,6 +1298,9 @@ module.exports = {
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
+                    if(ans.length>0){
+                        ans = ans[0].type
+                    }
                     resolve(ans)
                 })
             }).catch((err) => {
@@ -1611,7 +1370,7 @@ module.exports = {
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
                 var havedraft = json;
-                //console.log('>> havedraft: ', havedraft);
+                console.log('>> havedraft: ', havedraft.length);
                 if (havedraft.length > 0) {
                     return res.status(200).json("redirect");
                 } else {
@@ -1666,22 +1425,23 @@ module.exports = {
                 if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination" }))) }
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                
-                    var ans = json;
+
+                var ans = json;
                 resolve(ans)
-                
-                
+
+
             })
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination"
         })
         if (availableCombination.errmsg == undefined) {
-            return res.view("user/admin/HandleManualCase", { currentbox:CurrentBox,availableCombination: availableCombination })
+            return res.view("user/admin/HandleManualCase", { currentbox: CurrentBox, availableCombination: availableCombination })
         } else {
             return res.status(400).json(availableCombination.errmsg);
         }
 
     },
+
     RemoveRecords: async function (req, res) {
         const importer = await sails.helpers.importer()
         //console.log(importer)
@@ -1695,6 +1455,39 @@ module.exports = {
         console.log(`${files_imported.length} SQL file(s) imported.`);
 
 
+        return res.status(200).json("ok");
+    },
+
+    EditRecords: async function (req,res){
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+        if(req.body.command = "delete"){
+
+            var query = ["delete from allschedulebox where boxid = '"+req.body.boxid+"';",
+            "insert into supervisoravailable values('"+req.body.tid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
+            "insert into supervisoravailable values('"+req.body.oid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
+            "insert into studentavailable values('"+req.body.sid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
+            "insert into manualhandlecase values('"+req.body.sid+"','"+req.body.tid+"','"+req.body.oid+"');"]
+            
+            console.log("delete from allschedulebox where boxid = '"+req.body.boxid+"';");
+            console.log("insert into supervisoravailable values('"+req.body.tid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
+            console.log("insert into supervisoravailable values('"+req.body.oid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
+            console.log("insert into studentavailable values('"+req.body.sid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
+            console.log("insert into manualhandlecase values('"+req.body.sid+"','"+req.body.tid+"','"+req.body.oid+"');");
+
+            query.forEach(element => {
+                db.query(element, (err, results) => {
+                            if (err) {
+                                return res.status(400).json("Error happened when excuting ScheduleController.EditRecords.delete")
+                            }
+                    });
+            });
+             
+        
+        }else{
+
+        } 
         return res.status(200).json("ok");
     }
 }
