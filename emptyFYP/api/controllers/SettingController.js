@@ -76,7 +76,7 @@ module.exports = {
                 //console.log('>> json: ', json);  
                 supersetting = json;
 
-                return res.view('user/setting', { thissupersetting: supersetting });
+                return res.view('user/admin/setting', { thissupersetting: supersetting });
             } catch (err) {
                 console.log("error happened when excuting SettingController.getsetting");
 
