@@ -6,7 +6,8 @@ var db = mysql.createConnection({
     user: "root",
     port: 3306,
     password: "Psycho.K0831",
-    database: "fypdeploy"
+    database: "fypdeploy",
+    timezone:"+08:00",
 });
 db.connect(async (err) => {
     if (err) {
