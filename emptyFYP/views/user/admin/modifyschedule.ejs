@@ -1,5 +1,5 @@
 <div>
-    <div class="Pagetitle">Draft Schedule for <%=req.query.id%>
+    <div class="Pagetitle">Draft Schedule for <%=req.params.tid%>
     </div>
     <div class="row">
         <div class="buttons">
@@ -37,8 +37,8 @@
                         <tr>
                             <td style="font-size : 20px; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
                             <td><div class="buttons is-centered">
-                                <div class="button buttonlogout" onclick="HandleCase('<%=manualhandlecase[a].SID%>')">
-                                    Edit</div>
+                                <div class="button" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">
+                                    edit</div>
                             </div></td>
                         </tr>
                     <%}%>
@@ -182,7 +182,7 @@
                       
                         <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" >
                             <%if(Page != 1){%>
-                                 <a onclick="backpage('<%=req.query.id%>','<%=req.query.Page%>')"> < </a> 
+                                 <a onclick="backpage('<%=req.params.tid%>','<%=req.params.Page%>')"> < </a> 
                                 <%}else{%>
                                     <
                                     <%}%>
@@ -218,7 +218,7 @@
                             <th
                                 style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
                                 <%if(enddisplaydate < new Date(setting.endday)){%>
-                                     <a onclick="nextpage('<%=req.query.id%>','<%=req.query.Page%>')"> > </a> 
+                                     <a onclick="nextpage('<%=req.params.tid%>','<%=req.params.Page%>')"> > </a> 
                                     <%}else{%>
                                         >
                                         <%}%>
@@ -347,7 +347,7 @@
                                         <tr><td><%=boxes[0].RID%></td></tr>
                                     </table>
                                     <div id="thisbox" class = "buttons is-centered" value = "<%=boxes[0]%>" >
-                                        <div class = "button" style="background-color:  lightgreen; border-color: black;" onclick="edit('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">edit</div>
+                                        <div class = "button" style="background-color:  lightgreen; border-color: black;" onclick="HandleCase('<%=boxes[0].boxID%>','<%=boxes[0].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">edit</div>
                                         <div class = "button" style="background-color: lightcoral;border-color: black;" onclick="del('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">delete</div>
                                     </div>
                                 </td>
@@ -502,13 +502,13 @@
         location.assign("/supervisorschedulelist")
     }
     function backpage(id,Pagecount){
-        location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)-1))
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+(parseInt(Pagecount)-1))
     }
     function nextpage(id,Pagecount){ 
-        location.assign("/supervisorschedulelist/modifyschedule?id="+id+"&Page="+(parseInt(Pagecount)+1))
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+(parseInt(Pagecount)+1))
     }
-    async function HandleCase(sid){
-        location.assign("/supervisorschedulelist/modifyschedule/HandleManualCase?sid="+sid)
+    async function HandleCase(boxid,sid,type,id,Pagecount){
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+Pagecount+"/HandleManualCase?boxid="+boxid+"&sid="+sid+"&type="+type)
     }
 
     async function del(tid,boxid,boxdate,type,sid,oid){

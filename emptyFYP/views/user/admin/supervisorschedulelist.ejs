@@ -79,7 +79,7 @@
     }
     async function checkpath(tid) {
         console.log("checkthisuser have schdeule ", tid);
-        location.assign("supervisorschedulelist/modifyschedule?id="+tid+"&Page=1");
+        location.assign("supervisorschedulelist/modifyschedule/"+tid+"/1");
     }
     async function regenerate(){
         var response = await fetch("/scheduledesign/removerecords", {

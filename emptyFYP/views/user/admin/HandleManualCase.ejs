@@ -13,64 +13,215 @@
     </div>
 </div>
 <br><br>
-<%var combinationset= new Array()%>
-<%for (var a = 0 ;a < availableCombination.length;a++){
-    var combination = JSON.parse(JSON.stringify({"date":"","starttime":"","endtime":""}))
-    combination.date = new Date(availableCombination[a].availabledate);
-    combination.starttime = new Date(availableCombination[a].availablestartTime)
-    combination.endtime = new Date(availableCombination[a].availableendTime)
-    combinationset.push(combination);
-}%>
 
-<%var unqiuedateset=new Array()%>
-<%var b =0;%>
-<%for(var a = 0 ;a < combinationset.length;a++){
-    if(a==0){
-        unqiuedateset.push(combinationset[a])
-    }
-        if(combinationset[a].date.toLocaleDateString("en-GB") != unqiuedateset[b].date.toLocaleDateString("en-GB")){
-            unqiuedateset.push(combinationset[a]);
-            b++;
-        }
-    
-}%>
-
-
+<%console.log("box in handlepage",currentbox)%>
 <div class="columns is-mobile is-centered">
     <div class="column column-big is-half">
         <div style="font-size : 25px;padding-top: 10px;" class="title">Handle Case <%=req.query.sid%>
         </div>
-            <%if(availableCombination.length >0){%>
+            <%if(availabledate.length >0){%>
             <div class="custom-select" style="text-align: center;vertical-align: middle;" > 
-               
-                    <label for="UpdateDate">Update Date:</label>
-                        <select name="date" id="UpdateDate">
-                            <%for(var a =0 ;a < unqiuedateset.length;a++){%>
-                                <option value="<%=combinationset[a].date%>"><%=(unqiuedateset[a].date).toLocaleDateString("en-GB")%></option>
-                                <%}%>
-                        
-                        </select>
-               
-                
-              </div> 
-              <div>
-                  <label for="UpdateTime">Update to this time range</label>
-                  <input id="UpdateTime" type="date">
+                <label for="UpdateDate">Update Date:</label>
+                <select name="date" id="UpdateDateSelect" onchange="getTimeForThisDay('<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=req.query.type%>')">
+                    <option value="null">---Please Select---</option>
+                            <%for(var a =0 ;a < availabledate.length;a++){%>
+                                <%var weekday = (new Date(availabledate[a]).getDay());
+                                    switch(weekday){
+                                        case 1:
+                                        weekday = "MON";
+                                        break;
+                                        case 2:
+                                        weekday = "TUE";
+                                        break;
+                                        case 3:
+                                        weekday = "WED";
+                                        break;
+                                        case 4:
+                                        weekday = "THU";
+                                        break;
+                                        case 5:
+                                        weekday = "FRI";
+                                        break;
+                                        case 6:
+                                        weekday = "SAT";
+                                        break;
+                                        default:
+                                        weekday = "SUN";
+                                        break;
+                                    }
+                                %>
+                    <option value="<%=availabledate[a]%>"><%=availabledate[a]%> (<%=weekday%>)</option>
+                    <%}%>
+                </select>
+
+                <label for="UpdateTimeSelect">Update Time:</label>
+                <select name="time" id="UpdateTimeSelect" onchange="getCampusForThisDay()">
+                    <option value="null">---Please Select---</option>
+                </select>
+
+                <label for="UpdateCampusSelect">Update Campus:</label>
+                <select name="time" id="UpdateCampusSelect" onchange="getRoomForThisDay()">
+                    <option value="null">---Please Select---</option>
+                </select>
+
+                <label for="UpdateRoomSelect">Update Room:</label>
+                <select name="time" id="UpdateRoomSelect">
+                    <option value="null">---Please Select---</option>
+                </select>
+
+            </div> 
+            <br>
+            
+            <div class = "buttons is-right">
+                <div class ="button buttonlogout"
+                    
+                onclick="submitform('<%=req.params.tid%>','<%=req.params.Page%>',document.getElementById('UpdateDateSelect').value,document.getElementById('UpdateTimeSelect').value,
+                '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=currentbox.TYPE%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value)">
+                    Confirm
                 </div>
-              <%}else{%>
-                <div> This student have no availableCombination</div>
-                <%}%>
-            <br>  
+            </div>
+            <%}else{%>
+            <div> This student have no availableCombination</div>
+            <%}%>
+            
             
     </div>
 </div>
 
 <script>
     function back() {
-        history.back();
+       history.back();
+    }
+    function getRoomForThisDay(){
+        if(document.getElementById("UpdateDateSelect").value != "null"
+         && document.getElementById("UpdateTimeSelect").value != "null"
+         && document.getElementById("UpdateCampusSelect").value != "null"
+         ){
+            var variable = JSON.parse(JSON.stringify({
+                date : document.getElementById("UpdateDateSelect").value,
+                time: document.getElementById("UpdateTimeSelect").value,
+                Campus : document.getElementById("UpdateCampusSelect").value
+                
+        }))
+        fetch_data("getRoom",variable)
+    }else{
+            document.getElementById("UpdateRoomSelect").innerHTML = "";
+         
+        }
     }
 
-    async function submitform(command, startdatestr, enddatestr, maxstdnum) {
+    function getCampusForThisDay(){
+        if(document.getElementById("UpdateDateSelect").value != "null" && document.getElementById("UpdateTimeSelect").value != "null"){
+            
+            var variable = JSON.parse(JSON.stringify({
+                date : document.getElementById("UpdateDateSelect").value,
+                time: document.getElementById("UpdateTimeSelect").value,
+                
+        }))
+        fetch_data("getCampus",variable)
+    }else{
+            document.getElementById("UpdateCampusSelect").innerHTML = "";
+         
+        }
+    }
+
+   function getTimeForThisDay(TID,SID,OID,type) {
+        if(document.getElementById("UpdateDateSelect").value != "null"){
+            console.log(document.getElementById("UpdateDateSelect").value);
+            var variable = JSON.parse(JSON.stringify({
+                date : document.getElementById("UpdateDateSelect").value,
+                TID:TID,
+                SID:SID,
+                OID:OID,
+                type:type
+        }))
+        console.log(variable);
+            //fetch_data("getTime",document.getElementById("UpdateDateSelect").value,TID,SID,OID,type)
+            fetch_data("getTime",variable)
+        } else{
+            document.getElementById("UpdateTimeSelect").innerHTML = "";
+        }
+        
+    };
+
+    function defaulthtml(){
+        return "\<option value=\"null\"\>---Please Select---</option\>\n";
+    }
+
+    function fetch_data(command,variable) {
+        console.log(variable)
+        if(command=="getTime"){
+             fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata?Command="+command+"&Date="+variable.date+"&TID="+variable.TID+"&SID="+variable.SID+"&OID="+variable.OID+"&type="+variable.type).then(function (response) {
+            return response.json();
+        }).then(function (responseData) {
+            var html = "";
+            html += "\<option value=\"null\"\>---Please Select---</option\>\n";
+            responseData.forEach(element => {
+                html += "<option value=\"" + element + "\">" + element + "</option> \n";
+            });      
+            document.getElementById("UpdateTimeSelect").innerHTML = "";
+            document.getElementById("UpdateCampusSelect").innerHTML = defaulthtml();
+            document.getElementById("UpdateRoomSelect").innerHTML = defaulthtml();
+           document.getElementById("UpdateTimeSelect").innerHTML = html;      
+        })
+
+
+        }else if(command == "getCampus"){
+            fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata?Command="+command+"&Date="+variable.date+"&Time="+variable.time).then(function (response) {
+            return response.json();
+        }).then(function (responseData) {
+            var html = "";
+            html += "\<option value=\"null\"\>---Please Select---</option\>\n";
+            responseData.forEach(element => {
+                html += "<option value=\"" + element.Campus + "\">" + element.Campus + "</option> \n";
+            });      
+            document.getElementById("UpdateCampusSelect").innerHTML = "";
+            document.getElementById("UpdateRoomSelect").innerHTML = defaulthtml();
+           document.getElementById("UpdateCampusSelect").innerHTML = html;      
+        })
+
+
+        }else if (command == "getRoom"){
+            fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata?Command="+command+"&Date="+variable.date+"&Time="+variable.time+"&Campus="+variable.Campus).then(function (response) {
+           return response.json();
+        }).then(function (responseData) {
+            var html = "";
+            html += "\<option value=\"null\"\>---Please Select---</option\>\n";
+            responseData.forEach(element => {
+                html += "<option value=\"" + element.Room + "\">" + element.Room + "</option> \n";
+            });      
+            document.getElementById("UpdateRoomSelect").innerHTML = "";
+           document.getElementById("UpdateRoomSelect").innerHTML = html;      
+        }) 
+        }
+       
+    }
+    
+    async function submitform(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID) {
+        alert(currentsup)
+        if(date == "null" || time == "null"){return alert("Please input BOTH date and time for updates")}
+        
+        var requestbody = JSON.stringify({
+            boxID: boxID,
+            date: date,
+            time: time,
+            TYPE: type,
+            TID: TID,
+            SID: SID,
+            OID: OID,
+            Campus: Campus,
+            RID : RID
+        })
+        var response = await fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase", {
+                method: "POST",
+                body: requestbody,
+        });
+
+        
+        if(response.status == 200){
+            alert("Update Success");
+           location.assign("/supervisorschedulelist/modifyschedule/"+currentsup+"/"+currentPage);
+        }
 
 
     }

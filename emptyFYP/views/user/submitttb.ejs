@@ -81,21 +81,14 @@
         } else {
             var requestbody = new FormData(formElem);
             requestbody.append(document.getElementById("enrollnotclassbox").value, true)
-            
-
         }
 
-
         if (role == "stu") {
-
             var response = await fetch("/timetable/submitttb/deadline", {
                 method: "POST",
             });
 
-
-            if (response.ok) {
-
-              
+            if (response.ok) {  
                 var response2 = await fetch("/timetable/submitttb/checkduplication", {
                     method: "POST",
                     body: requestbody
@@ -114,21 +107,14 @@
                         body: requestbody
                     });
                 }
-
-                   
-
                     if (response3.ok) {
                         location.assign("/timetable");
                     }
-
-
                 } else {
                     var msg = await response2.json();
                     alert(msg);
                     location.reload();
                 }
-
-
             } else if (response.status == 401) {
                 var msg = await response.json();
                 alert(msg);
@@ -136,14 +122,11 @@
             } else {
                 alert(response.statusTest);
             }
-
         } else {
-
-            var response = await fetch("/timetable/submitttb/checkduplication", {
+           var response = await fetch("/timetable/submitttb/checkduplication", {
                 method: "POST",
                 body: requestbody
             });
-
             if (response.ok) {
                 var response2 = await fetch(formElem.action, {
                     method: formElem.method,
@@ -162,7 +145,6 @@
                 location.reload();
             }
         }
-   
     }
 
     function _(element) {

@@ -756,18 +756,18 @@ module.exports = {
                     }).catch((err) => {
                         errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
                     })
-                    
+
                     counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "tid": studentlistforthissupervisor[b].tid, "oid": studentlistforthissupervisor[b].colleague, "availblelist": parseInt(availblelist[0].boxcount) })));
                 }
 
                 counttimeboxlist.sort((a, b) => {
                     return a.availblelist - b.availblelist;
                 })
-                console.log("countimeboxlist all after sort",counttimeboxlist)
+                console.log("countimeboxlist all after sort", counttimeboxlist)
 
 
                 for (var b = 0; b < counttimeboxlist.length; b++) {
-                    
+
                     var added = false;
                     var index = 0;
 
@@ -869,8 +869,8 @@ module.exports = {
                         }
                     }
                 }
-                
-console.log(">> final schedulebox",thisschedulebox)
+
+                console.log(">> final schedulebox", thisschedulebox)
 
 
 
@@ -1269,17 +1269,17 @@ console.log(">> final schedulebox",thisschedulebox)
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getsetting3"
         })
-        
-        
-        var displaystartday = new Date(setting3.startday.getTime() - 60 * 60 * 24 * 1000 * setting3.startday.getDay() + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
-        var displayendday = new Date(setting3.startday.getTime() + 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.query.Page - 1) * 7);
+
+
+        var displaystartday = new Date(setting3.startday.getTime() - 60 * 60 * 24 * 1000 * setting3.startday.getDay() + 60 * 60 * 24 * 1000 * (req.params.Page - 1) * 7);
+        var displayendday = new Date(setting3.startday.getTime() + 60 * 60 * 24 * 1000 * (6 - setting3.startday.getDay()) + 60 * 60 * 24 * 1000 * (req.params.Page - 1) * 7);
         displayendday.setHours(18);
         displayendday.setMinutes(30);
         var startday = displaystartday.toLocaleDateString('en-GB').split('/').reverse().join('-');
-        var endday = new Date(displayendday.getTime()+60*60*24*1000).toLocaleDateString('en-GB').split('/').reverse().join('-');
-        console.log(displaystartday,"  ",displaystartday.toLocaleTimeString("en-GB"),"  display from  ",displayendday,"  ",displayendday.toLocaleTimeString("en-GB"))
+        var endday = new Date(displayendday.getTime() + 60 * 60 * 24 * 1000).toLocaleDateString('en-GB').split('/').reverse().join('-');
+        console.log(displaystartday, "  ", displaystartday.toLocaleTimeString("en-GB"), "  display from  ", displayendday, "  ", displayendday.toLocaleTimeString("en-GB"))
 
-        var query = "select * from allschedulebox where (tid = \"" + req.query.id + "\" or oid =  \"" + req.query.id + "\" ) and (boxdate >= date(\"" + startday + "\") and boxdate <= date(\"" + endday + "\") ) order by boxdate asc;"
+        var query = "select * from allschedulebox where (tid = \"" + req.params.tid + "\" or oid =  \"" + req.params.tid + "\" ) and (boxdate >= date(\"" + startday + "\") and boxdate <= date(\"" + endday + "\") ) order by boxdate asc;"
         console.log(query)
         var boxesforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
@@ -1298,7 +1298,7 @@ console.log(">> final schedulebox",thisschedulebox)
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
-                    if(ans.length>0){
+                    if (ans.length > 0) {
                         ans = ans[0].type
                     }
                     resolve(ans)
@@ -1310,7 +1310,7 @@ console.log(">> final schedulebox",thisschedulebox)
             type = boxesforthissupervisor[0].TYPE;
         }
 
-        query = "select * from allrequestfromsupervisor where tid = \"" + req.query.id + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
+        query = "select * from allrequestfromsupervisor where tid = \"" + req.params.tid + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1322,7 +1322,7 @@ console.log(">> final schedulebox",thisschedulebox)
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
         })
 
-        query = "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \"" + req.query.id + "\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
+        query = "select allclass.cid,weekdays,starttime,endtime,campus,rid from (select * from allsupertakecourse where pid = \"" + req.params.tid + "\") as t1 left join allclass on t1.cid = allclass.cid order by weekdays asc, allclass.starttime asc;";
         var ttbforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1334,7 +1334,7 @@ console.log(">> final schedulebox",thisschedulebox)
             errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getttbforthissupervisor"
         })
 
-        query = "select * from manualhandlecase where tid = \"" + req.query.id + "\" or oid = \"" + req.query.id + "\"";
+        query = "select * from manualhandlecase where tid = \"" + req.params.tid + "\" or oid = \"" + req.params.tid + "\"";
         var manualhandlecaseforthissupervisor = await new Promise((resolve) => {
             pool.query(query, (err, res) => {
                 var string = JSON.stringify(res);
@@ -1353,7 +1353,7 @@ console.log(">> final schedulebox",thisschedulebox)
         return res.view("user/admin/modifyschedule", {
             boxes: boxesforthissupervisor, ttb: ttbforthissupervisor,
             requestes: requestforthissupervisor, setting: setting3,
-            displaystartday: displaystartday, displayendday: displayendday, Page: req.query.Page, type: type,
+            displaystartday: displaystartday, displayendday: displayendday, Page: req.params.Page, type: type,
             manualhandlecase: manualhandlecaseforthissupervisor
         })
 
@@ -1389,40 +1389,89 @@ console.log(">> final schedulebox",thisschedulebox)
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
-        var getCurrentBox = "Select * from allschedulebox where sid = \"" + req.query.sid + "\"; ";
-        CurrentBox = await new Promise((resolve) => {
-            pool.query(getCurrentBox, (err, res) => {
-                if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.getCurrentBox" }))) }
-                var string = JSON.stringify(res);
-                var json = JSON.parse(string);
-                if (json.length > 0) {
-                    var ans = json;
-                    resolve(ans);
-                } else {
-                    resolve(null);
-                }
 
+        if (req.query.boxid == "null") {
+            // don't have a schedulebox
+            console.log("this is a empty student")
+
+            var getpairing = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid and supervisorpairstudent.sid = \"" + req.query.sid + "\"";
+            console.log(getpairing);
+            pairinginfo = await new Promise((resolve) => {
+                pool.query(getpairing, (err, res) => {
+                    if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.HandleManualCase.getPairing" }))) }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    if (json.length > 0) {
+                        var ans = json[0];
+                        resolve(ans);
+                    } else {
+                        resolve(null);
+                    }
+
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.HandleManualCase.getPairing"
             })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getCurrentbox"
-        })
+            console.log(pairinginfo);
+            var CurrentBox = JSON.parse(JSON.stringify({
+                boxID: null,
+                boxdate: null,
+                TYPE: req.query.type,
+                TID: pairinginfo.tid,
+                SID: pairinginfo.sid,
+                OID: pairinginfo.oid,
+                Campus: null,
+                RID: null,
+                LastUpdate: null
+            }));
+            console.log(CurrentBox);
 
-        var getavailabletimes = "select t1.tid,t1.sid, observerpairstudent.oid,t1.availabledate,t1.availablestartTime,t1.availableendTime from "
-            + "(select supervisorpairstudent.tid,supervisorpairstudent.sid,sa1.availabledate,sa1.availablestartTime,sa1.availableendTime "
-            + "from supervisorpairstudent left join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid "
-            + "where supervisorpairstudent.sid = \"" + req.query.sid + "\" "
-            + "and (sa1.availabledate in (select availabledate from studentavailable where sid = \"" + req.query.sid + "\") "
-            + "and sa1.availablestartTime in (select availablestartTime from studentavailable where sid = \"" + req.query.sid + "\") "
-            + "and sa1.availableendTime in (select availableendTime from studentavailable where sid = \"" + req.query.sid + "\")) "
-            + ")as t1 left join observerpairstudent on t1.sid = observerpairstudent.sid "
-            + " left join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid "
-            + "where (sa2.availabledate = t1.availabledate "
-            + "and sa2.availablestartTime = t1.availablestartTime "
-            + "and sa2.availableendTime = t1.availableendTime);"
+            // var getavailabletimes = "select t1.tid,t1.sid, observerpairstudent.oid,t1.availabledate,t1.availablestartTime,t1.availableendTime from "
+            //     + "(select supervisorpairstudent.tid,supervisorpairstudent.sid,sa1.availabledate,sa1.availablestartTime,sa1.availableendTime "
+            //     + "from supervisorpairstudent left join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid "
+            //     + "where supervisorpairstudent.sid = \"" + req.query.sid + "\" "
+            //     + "and (sa1.availabledate in (select availabledate from studentavailable where sid = \"" + req.query.sid + "\") "
+            //     + "and sa1.availablestartTime in (select availablestartTime from studentavailable where sid = \"" + req.query.sid + "\") "
+            //     + "and sa1.availableendTime in (select availableendTime from studentavailable where sid = \"" + req.query.sid + "\")) "
+            //     + ")as t1 left join observerpairstudent on t1.sid = observerpairstudent.sid "
+            //     + " left join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid "
+            //     + "where (sa2.availabledate = t1.availabledate "
+            //     + "and sa2.availablestartTime = t1.availablestartTime "
+            //     + "and sa2.availableendTime = t1.availableendTime);"
+        } else {
+            // have a schedulebox
 
+            var getCurrentBox = "Select * from allschedulebox where boxid = \"" + req.query.boxid + "\"; ";
+            CurrentBox = await new Promise((resolve) => {
+                pool.query(getCurrentBox, (err, res) => {
+                    if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.HandleManualCase.getCurrentBox" }))) }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    if (json.length > 0) {
+                        var ans = json[0];
+                        resolve(ans);
+                    } else {
+                        resolve(null);
+                    }
+
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.HandleManualCase.getCurrentBox"
+            })
+
+            console.log("this box need modify ", CurrentBox)
+
+
+        }
+        var getavailabletimes = "select availabledate , availablestartTime from studentavailable where sid = \"" + CurrentBox.SID + "\" and availabledate in("
+            + " select availabledate from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
+            + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\")) "
+            + "and availablestarttime in( select availablestartTime from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
+            + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\"));";
+        console.log(getavailabletimes);
         availableCombination = await new Promise((resolve) => {
             pool.query(getavailabletimes, (err, res) => {
-                if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination" }))) }
+                if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.HandleManualCase.availableCombination" }))) }
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
 
@@ -1432,14 +1481,195 @@ console.log(">> final schedulebox",thisschedulebox)
 
             })
         }).catch((err) => {
-            errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.availableCombination"
+            errmsg = "error happened in ScheduleController.HandleManualCase.availableCombination"
         })
+
+        function getuniquedate(arr) {
+            let unique = [];
+            arr.forEach(element => {
+                var stringdate = ((new Date(element.availabledate)).toLocaleDateString('en-GB')).split("/")
+                stringdate = stringdate[2] + "-" + stringdate[1] + "-" + stringdate[0];
+                if (!unique.includes(stringdate)) {
+                    unique.push(stringdate);
+                }
+            });
+            return unique;
+        }
+        var availabledate = getuniquedate(availableCombination);
+
         if (availableCombination.errmsg == undefined) {
-            return res.view("user/admin/HandleManualCase", { currentbox: CurrentBox, availableCombination: availableCombination })
+            return res.view("user/admin/HandleManualCase", { currentbox: CurrentBox, availabledate: availabledate, availableCombination: availableCombination })
         } else {
             return res.status(400).json(availableCombination.errmsg);
         }
 
+    },
+
+    GetData: async function (req, res, next) {
+        console.log(req.query);
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+        if (req.query.Command == "getTime") {
+            var getavailabletimes = "select availablestartTime from studentavailable where sid = \"" + req.query.SID + "\" and availablestartTime in ("
+                + "select availablestartTime from supervisoravailable where tid = \"" + req.query.OID + "\" "
+                + "and availablestartTime in(select availablestartTime from supervisoravailable where tid = \"" + req.query.TID + "\" and availabledate = \"" + req.query.Date + "\"));"
+            console.log(getavailabletimes)
+            availbletimes = await new Promise((resolve) => {
+                pool.query(getavailabletimes, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in HandelManualCase.GetTimeByDate") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = new Array();
+                    json.forEach(element => {
+                        var starttime = (new Date(element.availablestartTime)).toLocaleTimeString("en-GB");
+                        ans.push(starttime);
+                    });
+                    console.log(ans);
+                    resolve(ans);
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.HandleManualCase.availableCombination"
+            })
+
+
+            return res.status(200).json(availbletimes);
+        } else if (req.query.Command == "getCampus") {
+            var getcampus = "select distinct(Campus) as Campus from classroom where Campus != \"\";"
+            campuslist = await new Promise((resolve) => {
+                pool.query(getcampus, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in HandelManualCase.GetTimeByDate") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    resolve(json);
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.HandleManualCase.availableCombination"
+            })
+            return res.status(200).json(campuslist);
+        } else if (req.query.Command == "getRoom") {
+            var newdate = new Date(req.query.Date + " " + req.query.Time);
+            var newdatestring = newdate.toLocaleDateString("en-GB").split("/");
+            var timestampstring = newdatestring[2] + "-" + newdatestring[1] + "-" + newdatestring[0] + " " + newdate.toLocaleTimeString("en-GB");
+            var getRoomquery = "select distinct(rid) as Room from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid != \"\" "
+                + " and (rid not in (select rid from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (endtime >= time(\"" + newdate.toLocaleTimeString("en-GB") + "\") and time(\"" + newdate.toLocaleTimeString("en-GB") + "\") >= starttime)) "
+                + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) <= timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) >= timestamp(\"" + timestampstring + "\"))));"
+                ;
+            console.log(getRoomquery)
+            roomlist = await new Promise((resolve) => {
+                pool.query(getRoomquery, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in HandelManualCase.Getdata.Roomlist") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+
+                    resolve(json);
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.HandleManualCase.Getdata.Roomlist"
+            })
+            return res.status(200).json(roomlist);
+        } else {
+            return res.status(401).json("error with no command matched")
+        }
+
+
+    },
+
+    EditScheduleBox: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+
+        var boxdate = req.body.date + " " + req.body.time;
+        // Schedulebox format
+        // {
+        //     boxID: 'boxIDnsTovD31ySUIFtF',
+        //     boxdate: '2024-01-20T04:30:00.000Z',
+        //     TYPE: 'final',
+        //     TID: 'tid00001',
+        //     SID: 'sid10111',
+        //     OID: 'tid00002',
+        //     Campus: 'AAB',
+        //     RID: 'AAB509',
+        //     LastUpdate: '2023-12-26T01:05:25.000Z'
+        // }
+
+
+        console.log(req.body);
+        if (req.body.boxID == "") {
+            //create a new schedulebox by insert 
+            let boxid = 'boxID';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < 15) {
+                boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+            req.body.boxID = boxid;
+            console.log(req.body);
+            var query = ["insert allschedulebox values (\"" + req.body.boxID + "\",\"" + req.body.date + " " + req.body.time + "\",\"" + req.body.TYPE + "\",\"" + req.body.TID + "\",\"" + req.body.SID + "\",\"" + req.body.OID + "\",\"" + req.body.Campus + "\",\"" + req.body.RID + "\",now());",
+            "Delete from supervisoravailable where tid = \"" + req.body.TID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            "Delete from supervisoravailable where tid = \"" + req.body.OID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            "Delete from studentavailable where sid = \"" + req.body.SID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            "Delete from manualhandlecase where sid = \"" + req.body.SID + "\" ;",
+            ]
+
+            query.forEach(element => {
+                db.query(element, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                })
+            });
+
+            return res.status(200).json("done");
+
+        } else {
+            // check whether the current classroom can still be used for present
+            var getCurrentBox = "select * from allschedulebox where boxID = \"" + req.body.boxID + "\";";
+            console.log(getCurrentBox)
+            var CurrentBox = await new Promise((resolve) => {
+                pool.query(getCurrentBox, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    if (json.length > 0) {
+                        resolve(json[0]);
+                    } else {
+                        resolve(null);
+                    }
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.EditScheduleBox.getCurrentBox"
+            })
+            var oldboxdate = new Date(CurrentBox.boxdate);
+            var oldboxdatestring = oldboxdate.toLocaleDateString("en-GB").split("/");
+            var oldboxendtime;
+            if (req.body.type == "final") {
+                oldboxendtime = new Date(oldboxdate.getTime() + 60 * 60 * 1000);
+            } else {
+                oldboxendtime = new Date(oldboxdate.getTime() + 30 * 60 * 1000);
+            }
+            var query = ["Update allschedulebox set boxdate = \"" + req.body.date + " " + req.body.time + "\" , Campus = \"" + req.body.Campus + "\", RID = \"" + req.body.RID + "\",LastUpdate = now() where boxID = \"" + req.body.boxID + "\";",
+            "insert into supervisoravailable values('" + req.body.TID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
+            "insert into supervisoravailable values('" + req.body.OID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
+            "insert into studentavailable values('" + req.body.SID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
+            "Delete from supervisoravailable where tid = \"" + req.body.TID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            "Delete from supervisoravailable where tid = \"" + req.body.OID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            "Delete from studentavailable where sid = \"" + req.body.SID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
+            ]
+            query.forEach(element => {
+                db.query(element, (err, res) => {
+                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                })
+            });
+
+            return res.status(200).json("done");
+
+
+            // update the box
+
+        }
+
+        //update 3 ppl's availabletimeslot table
     },
 
     RemoveRecords: async function (req, res) {
@@ -1458,36 +1688,30 @@ console.log(">> final schedulebox",thisschedulebox)
         return res.status(200).json("ok");
     },
 
-    EditRecords: async function (req,res){
+    EditRecords: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
-        if(req.body.command = "delete"){
+        if (req.body.command = "delete") {
 
-            var query = ["delete from allschedulebox where boxid = '"+req.body.boxid+"';",
-            "insert into supervisoravailable values('"+req.body.tid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
-            "insert into supervisoravailable values('"+req.body.oid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
-            "insert into studentavailable values('"+req.body.sid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');",
-            "insert into manualhandlecase values('"+req.body.sid+"','"+req.body.tid+"','"+req.body.oid+"');"]
-            
-            console.log("delete from allschedulebox where boxid = '"+req.body.boxid+"';");
-            console.log("insert into supervisoravailable values('"+req.body.tid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
-            console.log("insert into supervisoravailable values('"+req.body.oid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
-            console.log("insert into studentavailable values('"+req.body.sid+"','"+req.body.date+"','"+req.body.date+" "+req.body.starttime+"','"+req.body.date+" "+req.body.endtime+"');");
-            console.log("insert into manualhandlecase values('"+req.body.sid+"','"+req.body.tid+"','"+req.body.oid+"');");
+            var query = ["delete from allschedulebox where boxid = '" + req.body.boxid + "';",
+            "insert into supervisoravailable values('" + req.body.tid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
+            "insert into supervisoravailable values('" + req.body.oid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
+            "insert into studentavailable values('" + req.body.sid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
+            "insert into manualhandlecase values('" + req.body.sid + "','" + req.body.tid + "','" + req.body.oid + "');"]
 
             query.forEach(element => {
                 db.query(element, (err, results) => {
-                            if (err) {
-                                return res.status(400).json("Error happened when excuting ScheduleController.EditRecords.delete")
-                            }
-                    });
+                    if (err) {
+                        return res.status(400).json("Error happened when excuting ScheduleController.EditRecords.delete")
+                    }
+                });
             });
-             
-        
-        }else{
 
-        } 
+
+        } else {
+
+        }
         return res.status(200).json("ok");
     }
 }

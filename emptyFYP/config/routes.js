@@ -35,7 +35,10 @@ module.exports.routes = {
   "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
   "POST /supervisorschedulelist/modifyschedule":  "ScheduleController.EditRecords",
   "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
-  "GET /supervisorschedulelist/modifyschedule": "ScheduleController.retrievesinglesupervisorschedule",
+  "GET /supervisorschedulelist/modifyschedule/:tid/:Page": "ScheduleController.retrievesinglesupervisorschedule",
+  "GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.HandleManualCase",
+  'GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata': "ScheduleController.GetData",
+  "POST /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.EditScheduleBox",
 
   //admin setting
   "GET /setting": "SettingController.getsetting",
@@ -162,8 +165,7 @@ module.exports.routes = {
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   "GET /viewFinalSchedule": "ScheduleController.viewFinalSchedule",
-  "GET /supervisorschedulelist/modifyschedule/HandleManualCase": "ScheduleController.HandleManualCase"
-
+ 
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *
