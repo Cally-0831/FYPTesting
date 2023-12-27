@@ -23,32 +23,32 @@
 <br>
 <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
     <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
             <a class="sorting" id='headerCampus' onclick="sorting('sorting','mytable','headerCampus',0);">&#8593;</a>
             Campus
         </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
             <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',1);">&#8593;</a>
             Room Name
         </th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
             <a class="sorting" id='headerStatus' onclick="sorting('sorting','mytable','headerStatus',2);">&#8593;</a>Status</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Add timeslot</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">View</th>
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">Add timeslot</th>
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">View</th>
 
         <% allClassroomlist.forEach( function(classroom) { %>
             <%if(classroom.Campus !='' ){%>
 
 
                 <tr>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <%=classroom.Campus%>
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <%=classroom.RID%>
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
                             <%if(classroom.status == "Close"){%>
                                 <button class="button buttonlogout" style="background-color: rgb(200, 130, 60);" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
@@ -58,20 +58,20 @@
                         </div>
                         
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
                             <button class="button buttonlogout" type="button" onclick="redirect('/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>')">Add</button>
                        </div>
 
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
                         <button class="button buttonlogout"onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
                             Delete
                         </button>
                     </div>
                     </td>
-                    <td style="text-align: center;vertical-align:middle;">
+                    <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class = "buttons is-centered">
                             <button class="button buttonlogout" onclick="redirect('/view/<%= classroom.Campus%>/<%= classroom.RID%>')">view</button>
                        </div>
