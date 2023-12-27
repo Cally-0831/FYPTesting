@@ -7,37 +7,37 @@
     </div>
 </div>
 
-<% releasedate = new Date("2023-11-20");if(releasedate != null){%>
+<% releasedate = new Date("2023-12-25");if(releasedate != null){%>
     <% var today = new Date(); var releasedday = new Date(releasedate);%>
     <%if(releasedday < today){%>
         
 
-        <div id = "personalschdule">
-            <table class="table is-bordered is-striped  center" style="width:80%">
+        <div id = "personalschdule" style="overflow-x: scroll; overflow-y: scroll;">
+            <table class="table is-bordered is-striped center" style="width:80%">
                 <thead >
                     <tr>
-                        <th colspan="6" style ="text-align: center; font-size: large;vertical-align:middle;background-color: rgb(216, 152, 33);">
+                        <th colspan="6" style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: rgb(216, 152, 33);">
                             Personal Schedule
                         </th>
                     </tr>
                 
                 <tr>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         Date
                     </th>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         Time
                     </th>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         Student
                     </th>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         Observer
                     </th>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         Campus
                     </th>
-                    <th style ="text-align: center; font-size: large;vertical-align:middle;background-color: blanchedalmond;">
+                    <th style ="text-align: center; font-size: calc(15px + 0.390625vw);;vertical-align:middle;background-color: blanchedalmond;">
                         RID
                     </th>
                     
@@ -47,7 +47,7 @@
                 <tr>
                     <td style ="text-align: center;vertical-align:middle;">
                         <%var boxdate = new Date(personalschedulebox[a].boxdate)%>
-                        <%=boxdate.toLocaleDateString()%>
+                        <%=boxdate.toLocaleDateString("en-GB")%>
                     </td>
                     <td style ="text-align: center;vertical-align:middle;">
                         <%=boxdate.toLocaleTimeString("en-GB")%>
@@ -73,7 +73,7 @@
                 <div class = "column is-half">
                     <article class="message is-primary">
                         <div class="message-header">
-                        <p style="font-size: 25px;">Release Date :   <%=releasedday.toLocaleDateString();%>   <%=releasedday.toLocaleTimeString("en-US")%></p>
+                        <p style="font-size: 25px;">Release Date :   <%=releasedday.toLocaleDateString("en-GB");%>   <%=releasedday.toLocaleTimeString("en-US")%></p>
                         
                         </div>
                         <div class="message-body" style="font-size: 20px;">
