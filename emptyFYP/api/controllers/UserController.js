@@ -1,11 +1,17 @@
 
 
+
 module.exports = {
 
+
     login: async function (req, res) {
+       //console.log(req)
+       if(req.session.userid != null){
+        return res.view('user/home')
+       }
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        console.log(req.body);
+        
         const user = {
             allusersname: "",
             pid: "",
@@ -24,19 +30,21 @@ module.exports = {
 
         //  console.log(searchingname + "  " + searchingpw);
 
-        var thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
-        console.log(thisistheline);
+        let thisistheline = "SELECT * FROM allusers where pid = \'" + searchingname + "\';";
+          console.log(thisistheline);
 
         // Start a new session for the new login user
+
+
 
         db.query(thisistheline, (err, results) => {
             try {
                 // This is the important function
-                console.log('>> results: ', results);
+                //  console.log('>> results: ', results );
                 var string = JSON.stringify(results);
-                console.log('>> string: ', string);
+                //console.log('>> string: ', string );
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);
+                //console.log('>> json: ', json);
                 user.allusersname = json[0].allusersname;
                 user.pid = json[0].pid;
                 user.password = json[0].password;
@@ -46,20 +54,20 @@ module.exports = {
                 console.log('>> username: ' + user.allusersname);
                 console.log('>> pid: ' + user.pid);
                 console.log('>> pid: ' + user.role);
-
+               
                 if (user.password != searchingpw) {
                     return res.status(401).json("Wrong Password");
                 }
                 req.session.regenerate(function (err) {
-                    //if (err) return res.serverError(err);
-
+                    if (err) return res.serverError(err);
+                   
                     req.session.role = user.role;
                     req.session.username = user.allusersname;
                     req.session.userid = user.pid;
                     req.session.boo = false;
+                    
+                    
 
-
-                    console.log(req.session);
                     return res.json(user);
                 });
             } catch (err) {
@@ -70,7 +78,7 @@ module.exports = {
 
 
         });
-
+        
 
 
     },
@@ -81,7 +89,7 @@ module.exports = {
         req.session.destroy(function (err) {
 
             if (err) return res.serverError(err);
-
+          
             return res.redirect("/");
         });
     },
@@ -93,17 +101,17 @@ module.exports = {
         console.log(typeof req.body.avatar);
         console.log(req.body.avatar);
 
-        var reqid = '' + req.session.userid + '';
+        let reqid = '' + req.session.userid + '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
-        var counter = 0;
+        let counter = 0;
         while (counter < 5) {
             reqid += characters.charAt(Math.floor(Math.random() * charactersLength));
             counter += 1;
         }
 
 
-        var thisistheline = "";
+        let thisistheline = "";
 
 
         if (req.session.role == "sup") {
@@ -144,15 +152,17 @@ module.exports = {
 
     },
 
-    home: async function (req, res) {
-
-        console.log(req.session.userid);
-        if (req.session.userid == "" || req.session.userid == null || req.session.userid == undefined) {
+    home: async function (req,res){
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        //console.log(req);
+        
+        if(req.session.userid == "" || req.session.userid == null || req.session.userid == undefined){
             return res.view('user/login')
-        } else {
+        }else{
             return res.view('user/home')
         }
     }
 
-
+  
 }

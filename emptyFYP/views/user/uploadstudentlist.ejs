@@ -20,12 +20,12 @@
 <div class="rows">
   <div class="row">
     <div class="columns is-mobile is-centered">
-
-        <div class="column is-two-fifths template">
-          <form enctype="multipart/form-data">
+        <div class="column ">
+          <div class = "template">
+            <form enctype="multipart/form-data">
             <div class="Pagetitle">Student List</div>
-            <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
-            <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\StudentSample.xlsx"
+            <div style="font-size: calc(15px + 0.390625vw);color: grey;">Please Upload only excel files</div>
+            <div style="font-size: calc(15px + 0.390625vw);color: grey;">Sample file: <a href="images\Samplefile\StudentSample.xlsx"
                 download><u>Student Excel List</u></a></div>
             <br>
             <%if(checkdate != undefined){%>
@@ -41,14 +41,17 @@
             
 
           </form>
-
-          <br>
+           <br>
           <div id="getliststudentdata" style="font-size: 20px;"></div>
 
           <div class="control">
             <textarea class="textarea form-control" id="studentxlx_json"
               style="width:90% ;height:40% ; overflow: scroll; " readonly></textarea>
           </div>
+          </div>
+          
+
+         
 
 
 

@@ -22,7 +22,7 @@ module.exports.routes = {
   //'/': { view: 'pages/homepage' },
 
   // login & logout
-  '/': { view: 'user/login' },
+  'GET /': "UserController.login",
   'GET /login': "UserController.login",
   'POST /login': "UserController.login",
   'GET /user/logout': 'UserController.logout',

@@ -9,9 +9,9 @@
 font-size: 20px;
 }
 .template{
-  width :100%;
+  width :100vw;
   padding:20px 20px 10px 20px;
-  margin: 30px 20px 0px 0px;
+  margin: 30px 20px 0px 20px !important;
   
   border-radius: 15px;
   box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
@@ -96,12 +96,13 @@ font-size: 20px;
 }
 
 .title {
-  font-size: 20px;
+  font-size: 20vp;
   font: bold;
 }
 
 .Pagetitle {
-  font-size: 40px;
+  /* font-size: calc(20px + 0.390625vw); */
+  font-size: 20px;
   text-align: center;
   font: bold;
 }
@@ -126,7 +127,7 @@ font-size: 20px;
 
 @media (min-width: 768px) {
   .button-64 {
-    font-size: 24px;
+    font-size: 24vw;
     min-width: 196px;
   }
 }
@@ -142,7 +143,7 @@ font-size: 20px;
   color: #FFFFFF;
   display: flex;
   font-family: Phantomsans, sans-serif;
-  font-size: 15px;
+  font-size: 15vw;
   justify-content: center;
   line-height: 1em;
   max-width: 50%;
@@ -166,7 +167,7 @@ font-size: 20px;
   cursor: pointer;
   display: flex;
   font-family: Inter, sans-serif;
-  font-size: 16px;
+  font-size: 16vw;
   height: 48px;
   justify-content: center;
   line-height: 24px;
@@ -205,6 +206,7 @@ font-size: 20px;
 }
 
 .buttonlogout:hover {
+  color: transparent;
   outline: 0;
 }
 
@@ -215,53 +217,51 @@ font-size: 20px;
 }
 
 .navbar {
-  overflow: hidden;
-  background-color: wheat;
+  float: left;
+  overflow: hidden !important;
+  background-color: transparent;
   top: 0;
   /* Position the navbar at the top of the page */
   width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: nowrap;
   /* Full width */
 }
 
 .navbar-start {
+  /* float: left; */
+  display: flex;
+  flex-wrap: nowrap;
   float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
+  color: transparent;
+ align-items: center;
   text-decoration: none;
 }
 
-.navbar-item :hover {
-  background: #ddd;
-  color: black;
-}
+
 
 .navbar-end {
+  /* float: right; */
+  display: flex;
+  flex-wrap: nowrap;
   float: right;
-  display: block;
-  color: #f2f2f2;
+  color: transparent;
   text-align: center;
-  padding: 14px 16px;
   text-decoration: none;
+  overflow: visible !important;
 }
 
-.gallery {
-  float: left;
-  display: block;
-  padding: 10px;
-}
 
 .imgcolumn {
   width: 25%;
   height: 25%;
-  padding: 20px 20px;
+  padding: 10px 10px;
 
 }
 
 .allcontent {
-
-  padding: 20px 20px;
+  padding: 100px 100px;
 }
 
 .pagecontent {
@@ -458,6 +458,11 @@ img{
  
 }
 
+table {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
 .table tbody tr:hover td, .table tbody tr:hover th {
   background-color: rgb(230, 208, 182);
 }
@@ -465,6 +470,7 @@ img{
 .tablenothover tbody tr:hover td, .tablenothover tbody tr:hover th {
   background-color: transparent;
 }
+
 
 .selectobs {
   width: 80px;
