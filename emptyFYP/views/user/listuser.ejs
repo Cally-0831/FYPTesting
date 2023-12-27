@@ -2,7 +2,7 @@
 <%if (req.session.role == "sup"){%>
     <div class="Pagetitle">Student List</div>
     <div class="rows">
-        <div class="columns">
+        <div class="columns is-multiline is-mobile">
             <div class="column is-left">
                 <div class="buttons">
                     <div class="button buttonlogout is-left" onclick="back()">
@@ -184,16 +184,16 @@
         <div class="rows">
             <div class="columns is-multiline is-mobile">
                 <div class="column">
-                    <div class="buttons">
+                    <div class="buttons is-left ">
                         
-                        <div class="button buttonlogout is-left is-mobile" onclick="backback()">
+                        <div class="button buttonlogout" onclick="backback()">
                             Back
                         </div>
         
                     </div>
                 </div>
                 <div class="column ">
-                    <div class="buttons is-right is-mobile">
+                    <div class="buttons is-right">
                         <%var datedate = new Date(checkdate);%>
                         <%var today = new Date();%>
                         <%if(checkdate != undefined && today > datedate && !arranged){%>
