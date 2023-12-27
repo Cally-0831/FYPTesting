@@ -1,12 +1,14 @@
 .welcome {
 
   text-align: center;
-  font-size: 30px;
+  /* font-size: 30px; */
+  font-size: calc(25px + 0.390625vw);
   font: bold;
 }
 
 .requestform{
-font-size: 20px;
+/* font-size: 20px; */
+font-size: calc(15px + 0.390625vw);
 }
 .template{
   width :100%;
@@ -96,7 +98,8 @@ font-size: 20px;
 }
 
 .title {
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: calc(15px + 0.390625vw);
   font: bold;
 }
 
@@ -127,7 +130,8 @@ font-size: 20px;
 
 @media (min-width: 768px) {
   .button-64 {
-    font-size: 24px;
+    /* font-size: 24px; */
+    font-size: calc(20px + 0.390625vw);
     min-width: 196px;
   }
 }
@@ -143,7 +147,8 @@ font-size: 20px;
   color: #FFFFFF;
   display: flex;
   font-family: Phantomsans, sans-serif;
-  font-size: 15px;
+  /* font-size: 15px; */
+  font-size: calc(13px + 0.390625vw);
   justify-content: center;
   line-height: 1em;
   max-width: 50%;
@@ -167,7 +172,8 @@ font-size: 20px;
   cursor: pointer;
   display: flex;
   font-family: Inter, sans-serif;
-  font-size: 16px;
+  /* font-size: 16px; */
+  font-size: calc(13px + 0.390625vw);
   height: 48px;
   justify-content: center;
   line-height: 24px;
@@ -266,7 +272,8 @@ font-size: 20px;
 }
 
 .pagecontent {
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: calc(15px + 0.390625vw);
   font: bold
 }
 
@@ -346,13 +353,15 @@ select {
 }
 
 .td {
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: calc(15px + 0.390625vw);
   text-align: center;
   vertical-align: middle;
 }
 
 .th {
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: calc(20px + 0.390625vw);
   text-align: center;
   vertical-align: middle;
 }
