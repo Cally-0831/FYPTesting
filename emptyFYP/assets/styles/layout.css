@@ -101,7 +101,8 @@ font-size: 20px;
 }
 
 .Pagetitle {
-  font-size: 40px;
+  font-size: calc(25px + 0.390625vw);
+  /* font-size: 40px; */
   text-align: center;
   font: bold;
 }
