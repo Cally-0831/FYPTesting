@@ -174,11 +174,11 @@ font-size: calc(13px + 0.390625vw);;
   font-family: Inter, sans-serif;
   /* font-size: 16px; */
   font-size: calc(13px + 0.390625vw);
-  height: 48px;
+  height: calc(48px + 0.390625vw);
   justify-content: center;
-  line-height: 24px;
+  line-height: calc(24px + 0.390625vw);
   max-width: 100%;
-  padding: 0 25px;
+  padding: 0 calc(25px + 0.390625vw);
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -192,7 +192,7 @@ font-size: calc(13px + 0.390625vw);;
   border-radius: 8px;
   content: "";
   display: block;
-  height: 48px;
+  height: calc(48px + 0.390625vw);
   left: 0;
   width: 100%;
   position: absolute;
@@ -267,8 +267,8 @@ font-size: calc(13px + 0.390625vw);;
 }
 
 .allcontent {
-
   padding: 20px 20px;
+  overflow: scroll;
 }
 
 .pagecontent {
