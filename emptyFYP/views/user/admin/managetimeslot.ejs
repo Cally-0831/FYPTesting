@@ -4,43 +4,43 @@
         Back
     </div>
 </div>
-
+<div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
 <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerReqID' onclick="sorting('sorting','mytable','headerReqID',0);">&#8593;</a>
         ReqID
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerCampus' onclick="sorting('sorting','mytable','headerCampus',1);">&#8593;</a>
         Campus
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',2);">&#8593;</a>
         RID
     </th>
 
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerStartday' onclick="sorting('sorting','mytable','headerStartday',3);">&#8593;</a>
         StartDay
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerEndday' onclick="sorting('sorting','mytable','headerEndday',4);">&#8593;</a>
         EndDay
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerStarttime' onclick="sorting('sorting','mytable','headerStarttime',5);">&#8593;</a>
         StartTime
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerEndtime' onclick="sorting('sorting','mytable','headerEndtime',6);">&#8593;</a>
         EndTime
     </th>
 
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
         <a class="sorting" id='headerRemarks' onclick="sorting('sorting','mytable','headerRemarks',7);">&#8593;</a>
         remarks
     </th>
-    <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">
+    <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">
 
         Delete
     </th>
@@ -50,35 +50,35 @@
         Date(timeslotlist.StartDate).toLocaleDateString('en-CA'); const EndDay=new
         Date(timeslotlist.EndDate).toLocaleDateString('en-CA'); %>
         <tr>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.ReqID %>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.Campus %>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.RID %>
             </td>
 
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= StartDay%>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= EndDay %>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.StartTime %>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.EndTime %>
             </td>
 
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <%= timeslotlist.Remarks%>
             </td>
-            <td style="text-align: center;vertical-align:middle;">
+            <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                 <button class="button" type="button"
-                    onclick="deleteclassroomtimeslot('<%= timeslotlist.ReqID %>')">Delete</button>
+                    onclick="deleteclassroomtimeslot('<%= timeslotlist.ReqID %>')" style="background-color: salmon;">Delete</button>
             </td>
 
         </tr>
@@ -86,6 +86,7 @@
         <% }); %>
 
 </table>
+</div>
 <script>
     async function deleteclassroomtimeslot(reqid) {
         var r = confirm("Confirm Delete " + reqid + " ?");
