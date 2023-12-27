@@ -17,11 +17,11 @@
     var allstudentarray = new Array(0);
 </script>
 <div class="columns is-centered">
-    <div class="column is-two-fifths template" style="overflow-y: scroll;"">
+    <div class="column is-two-fifths template">
         <form enctype="multipart/form-data">
             <div class="Pagetitle">Supervisor List</div>
             <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
-            <div style="font-size: 15px;color: grey;">Sample file: <a href="..\images\Samplefile\SupervisorSample.xlsx"
+            <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\SupervisorSample.xlsx"
                     download><u>Supervisor Excel List</u></a></div>
             <br>
             <input id="supervisorupload" type=file name="files[]">
@@ -125,6 +125,7 @@
             } else if (response.status == 401) {
                 var msg = await response.json();
                 alert(msg);
+                location.reload();
             } else {
                 alert(response.statusTest);
             }

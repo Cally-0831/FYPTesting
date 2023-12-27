@@ -8,7 +8,7 @@
  * https://sailsjs.com/docs/concepts/policies
  */
 
-const ScheduleController = require("../api/controllers/ScheduleController");
+//const ScheduleController = require("../api/controllers/ScheduleController");
 
 module.exports.policies = {
   "*":"isLoggedin",
@@ -16,8 +16,8 @@ module.exports.policies = {
 
   UserController: {
     login: true,
-    uploadstudentlist: "isSuper",
-    uploadsupervisorlist:"isAdmin",
+  //  uploadstudentlist: "isSuper",
+  //  uploadsupervisorlist:"isAdmin",
   },
   TimetableController: {
     "*":"isLoggedin",
@@ -25,7 +25,9 @@ module.exports.policies = {
     readsinglestudentttb: "isSuper"
   },
   StudentListController: {
-    "*": "isSuser"
+    "*":"isLoggedin",
+    "*": "isSuser",
+    createnewsup:"isAdmin"
   },
   SettingController: {
     "*": "isAdmin"
@@ -44,11 +46,11 @@ module.exports.policies = {
     '*': "isAdmin"
   },
   ScheduleController:{
-    viewfinalschdule :"isLUser"
+    //viewfinalschdule :"isLUser"
   },
 
   LessonListController:{
-    '*': "isAdmin"
+   // '*': "isAdmin"
   }
 
   

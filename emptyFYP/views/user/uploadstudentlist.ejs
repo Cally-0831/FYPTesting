@@ -173,6 +173,7 @@
       } else if (response.status == 401) {
         var msg = await response.json();
         alert(msg);
+        location.reload()
       } else {
         alert(response.statusTest);
       }

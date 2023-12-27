@@ -18,7 +18,7 @@ module.exports = {
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
-                    if(ans.length ==0){ans = null;}
+                    if (ans.length == 0) { ans = null; }
                     resolve(ans)
                 })
             }).catch((err) => {
@@ -31,7 +31,7 @@ module.exports = {
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
-                    if(ans.length ==0){ans = null;}
+                    if (ans.length == 0) { ans = null; }
                     resolve(ans)
                 })
             }).catch((err) => {
@@ -59,61 +59,61 @@ module.exports = {
                 })
             }).catch((err) => {
                 errmsg = "Error happened in StudentListController.liststudent.checkdeadline"
-            })          
+            })
 
-            return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist ,arranged : null});
-                       /** 
-            db.query(getsupstdlist, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    var json = JSON.parse(string);
-                    var stdlist = json;
-                    console.log('>> stdlist: ', stdlist); 
-                    if(stdlist.length ==0){stdlist = null;}
-                    var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
-                    db.query(getsupbeobslist, (err, results) => {
-                        try {
-                            var string = JSON.stringify(results);
-                            var json = JSON.parse(string);
-                            var observinglist = null;
-                            if (json.length > 0) {
-                                observinglist = json;
-                            }
+            return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist, arranged: null });
+            /** 
+ db.query(getsupstdlist, (err, results) => {
+     try {
+         var string = JSON.stringify(results);
+         var json = JSON.parse(string);
+         var stdlist = json;
+         console.log('>> stdlist: ', stdlist); 
+         if(stdlist.length ==0){stdlist = null;}
+         var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
+         db.query(getsupbeobslist, (err, results) => {
+             try {
+                 var string = JSON.stringify(results);
+                 var json = JSON.parse(string);
+                 var observinglist = null;
+                 if (json.length > 0) {
+                     observinglist = json;
+                 }
 
-                            var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
-                            db.query(checkdeadline, (err, results) => {
-                                try {
-                                    var string = JSON.stringify(results);
-                                    var json = JSON.parse(string);
+                 var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
+                 db.query(checkdeadline, (err, results) => {
+                     try {
+                         var string = JSON.stringify(results);
+                         var json = JSON.parse(string);
 
-                                    if (json.length > 0) {
-                                        deadlinedate = new Date(json[0].deadlinedate);
-                                        deadlinetime = json[0].deadlinetime.split(":");
-                                        deadlinedate.setHours(deadlinetime[0]);
-                                        deadlinedate.setMinutes(deadlinetime[1]);
-                                        deadlinedate.setSeconds(deadlinetime[2]);
-                                        finaldate = deadlinedate;
-                                    } else {
-                                        finaldate = undefined
-                                    }
-                                    console.log("controller    " + finaldate)
-                                    
-                                    return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
-                       
-                                   //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
-                                } catch (err) {
-                                    return res.status(400).json("Error happened in StudentListController.liststudent.checkdeadline");
-                                }
-                            })
-                        } catch (err) {
-                            return res.status(400).json("Error happened in StudentListController.liststudent.getsupbeobslist");
-                        }
-                    })
-                } catch (err) {
-                    return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
-                }
-            });
-            */
+                         if (json.length > 0) {
+                             deadlinedate = new Date(json[0].deadlinedate);
+                             deadlinetime = json[0].deadlinetime.split(":");
+                             deadlinedate.setHours(deadlinetime[0]);
+                             deadlinedate.setMinutes(deadlinetime[1]);
+                             deadlinedate.setSeconds(deadlinetime[2]);
+                             finaldate = deadlinedate;
+                         } else {
+                             finaldate = undefined
+                         }
+                         console.log("controller    " + finaldate)
+                         
+                         return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+            
+                        //return res.view('user/listuser', { checkdate: finaldate, allstdlist: stdlist, allsuplist: null, observinglist: observinglist });
+                     } catch (err) {
+                         return res.status(400).json("Error happened in StudentListController.liststudent.checkdeadline");
+                     }
+                 })
+             } catch (err) {
+                 return res.status(400).json("Error happened in StudentListController.liststudent.getsupbeobslist");
+             }
+         })
+     } catch (err) {
+         return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
+     }
+ });
+ */
         } else {
             getsuplist = "select supervisor.tid,supervisor.supname,student.sid,student.stdname,supervisor.submission from supervisor left join supervisorpairstudent on  supervisorpairstudent.tid = supervisor.tid left join student on supervisorpairstudent.sid = student.sid";
             var suplist = await new Promise((resolve) => {
@@ -125,7 +125,7 @@ module.exports = {
                 })
             }).catch((err) => {
                 errmsg = "Error happened in StudentListController.liststudent.suplist"
-            })          
+            })
 
 
             var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
@@ -148,7 +148,7 @@ module.exports = {
                 })
             }).catch((err) => {
                 errmsg = "Error happened in StudentListController.liststudent.checkdeadline"
-            })          
+            })
 
             var checkarrangedobs = "select * from student where sid not in (select sid from observerpairstudent)";
             var arranged = await new Promise((resolve) => {
@@ -157,7 +157,7 @@ module.exports = {
                     var json = JSON.parse(string);
                     var ans = json;
                     if (ans.length > 0) {
-                       ans = false
+                        ans = false
                     } else {
                         ans = true
                     }
@@ -165,48 +165,48 @@ module.exports = {
                 })
             }).catch((err) => {
                 errmsg = "Error happened in StudentListController.liststudent.checkarrangedobs"
-            })          
-            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null , arranged: arranged});
-                      
-/** 
-            db.query(thisistheline, (err, results) => {
-                try {
-                    var string = JSON.stringify(results);
-                    var json = JSON.parse(string);
-                    suplist = json;
-                    var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
-                    db.query(thisistheline, function (err, result) {
-                        try {
-                            var string = JSON.stringify(result);
-                            var json = JSON.parse(string);
-                            var deadlinedate;
-                            var deadlinetime;
-                            var finaldate;
+            })
+            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null, arranged: arranged });
 
-                            if (json.length > 0) {
-                                deadlinedate = new Date(json[0].deadlinedate);
-                                deadlinetime = json[0].deadlinetime.split(":");
-                                deadlinedate.setHours(deadlinetime[0]);
-                                deadlinedate.setMinutes(deadlinetime[1]);
-                                deadlinedate.setSeconds(deadlinetime[2]);
-                                finaldate = deadlinedate;
-                            } else {
-                                finaldate = undefined
+            /** 
+                        db.query(thisistheline, (err, results) => {
+                            try {
+                                var string = JSON.stringify(results);
+                                var json = JSON.parse(string);
+                                suplist = json;
+                                var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
+                                db.query(thisistheline, function (err, result) {
+                                    try {
+                                        var string = JSON.stringify(result);
+                                        var json = JSON.parse(string);
+                                        var deadlinedate;
+                                        var deadlinetime;
+                                        var finaldate;
+            
+                                        if (json.length > 0) {
+                                            deadlinedate = new Date(json[0].deadlinedate);
+                                            deadlinetime = json[0].deadlinetime.split(":");
+                                            deadlinedate.setHours(deadlinetime[0]);
+                                            deadlinedate.setMinutes(deadlinetime[1]);
+                                            deadlinedate.setSeconds(deadlinetime[2]);
+                                            finaldate = deadlinedate;
+                                        } else {
+                                            finaldate = undefined
+                                        }
+            
+                                        return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
+                                    } catch (err) {
+                                        return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
+                                    }
+                                })
+                            } catch (err) {
+                                return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
+            
                             }
-
-                            return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null });
-                        } catch (err) {
-                            return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
-                        }
-                    })
-                } catch (err) {
-                    return res.status(400).json("Error happened in StudentListController.liststudent.getsupstdlist");
-
-                }
-
-
-            });
-            */
+            
+            
+                        });
+                        */
         }
 
 
@@ -530,9 +530,16 @@ module.exports = {
 
 
         });
+        var updateline = "update supervisor set priority = \"" + req.body.priority + "\" where tid = \"" + req.body.tid + "\""
+        console.log(updateline);
+        db.query(updateline, function (err, result) {
+            try {
 
+            } catch (err) {
+                return res.status(401).json("Error happened when excuting StudentListContorller.createnewsup.updateline");
 
-
+            }
+        })
 
     },
 
@@ -559,6 +566,9 @@ module.exports = {
     uploadstudentlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        (req.body).forEach(i => {
+            if (req.body[i].sid == "undefined" || req.body[i].studentname == "undefined" || req.body[i].password == "undefined") { return res.status(401).json("Invalid Input") }
+        });
         console.log(req.body);
 
 
@@ -612,6 +622,10 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        (req.body).forEach(i => {
+            if (req.body[i].tid == "undefined" || req.body[i].supervisorname == "undefined" || req.body[i].password == "undefined") { return res.status(401).json("Invalid Input") }
+
+        });
 
 
         for (var i = 0; i < req.body.length; i++) {
@@ -643,130 +657,134 @@ module.exports = {
         }
         return res.ok();
     },
-
-    uploadpairlist: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        for (var i = 0; i < req.body.length; i++) {
-            console.log("\n\n\n\n\n")
-            console.log(req.body[i]);
-
-
-            thisistheline = "insert IGNORE into allusers values(\"" +
-                req.body[i].studentname + "\"\,\""
-                + req.body[i].sid + "\"\,\"" +
-                req.body[i].stupassword + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-            console.log(thisistheline);
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadpairlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-                };
-                console.log("1 stu record inserted");
-
-
+    /** 
+        uploadpairlist: async function (req, res) {
+            var db = await sails.helpers.database();
+            var pool = await sails.helpers.database2();
+            (req.body).forEach(i => {
+                if (req.body[i].sid == "undefined" || req.body[i].studentname == "undefined" || req.body[i].stupassword == "undefined") { return res.status(401).json("Invalid Input") }
             });
-            thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
-                req.session.userid + "\"\,\""
-                + req.body[i].sid + "\"\,\"" +
-                req.body[i].topic + "\"\);";
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadpairlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-
-                };
-                console.log("1 suppairstu record inserted");
-            });
-
-        }
-
-
-
-
-
-        for (var i = 0; i < req.body.length; i++) {
-
-
-            thisistheline = "insert IGNORE into allusers values(\"" +
-                req.body[i].observername + "\"\,\""
-                + req.body[i].oid + "\"\,\"" +
-                req.body[i].obspassword + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
-            console.log(thisistheline);
-            db.query(thisistheline, function (err, result) {
+    
+            for (var i = 0; i < req.body.length; i++) {
+                console.log("\n\n\n\n\n")
+                console.log(req.body[i]);
+    
+    
+                thisistheline = "insert IGNORE into allusers values(\"" +
+                    req.body[i].studentname + "\"\,\""
+                    + req.body[i].sid + "\"\,\"" +
+                    req.body[i].stupassword + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
                 console.log(thisistheline);
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadpairlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-                };
-                console.log("1 obs record inserted");
-            });
-            thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
-                req.session.userid + "\"\,\""
-                + req.body[i].oid + "\"\);";
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadpairlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-
-                };
-                console.log("1 suppairobs record inserted");
-            });
-
-        }
-        console.log("\n\n\n\n\n")
-
-        for (var i = 0; i < req.body.length; i++) {
-
-            thisistheline = "insert IGNORE into observerpairstudent values(\"" +
-                req.body[i].oid + "\"\,\""
-                + req.body[i].sid + "\"\);";
-            db.query(thisistheline, function (err, result) {
-                if (err) {
-                    console.log("error happened at StudentListContorller: uploadpairlist");
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-
-                };
-                console.log("1 obspairstud record inserted");
-            });
-
-        }
-
-        return res.ok();
-
-
-    },
-
-    checkuploadstudentlistdeadline: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
-        var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
-        db.query(thisistheline, function (err, result) {
-            try {
-                var string = JSON.stringify(result);
-                var json = JSON.parse(string);
-                var deadlinedate;
-                var deadlinetime;
-                var finaldate;
-
-                if (json.length > 0) {
-                    deadlinedate = new Date(json[0].deadlinedate);
-                    deadlinetime = json[0].deadlinetime.split(":");
-                    deadlinedate.setHours(deadlinetime[0]);
-                    deadlinedate.setMinutes(deadlinetime[1]);
-                    deadlinedate.setSeconds(deadlinetime[2]);
-                    finaldate = deadlinedate;
-                } else {
-                    finaldate = undefined
-                }
-                console.log(json);
-                return res.view('user/uploadstudentlist', { checkdate: finaldate });
-            } catch (err) {
-                console.log("error happened at StudentListContorller: checkuploadstudentlistdeadline");
+                db.query(thisistheline, function (err, result) {
+                    if (err) {
+                        console.log("error happened at StudentListContorller: uploadpairlist");
+                        res.status(401).json("Error happened when excuting : " + thisistheline);
+                    };
+                    console.log("1 stu record inserted");
+    
+    
+                });
+                thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
+                    req.session.userid + "\"\,\""
+                    + req.body[i].sid + "\"\,\"" +
+                    req.body[i].topic + "\"\);";
+                db.query(thisistheline, function (err, result) {
+                    if (err) {
+                        console.log("error happened at StudentListContorller: uploadpairlist");
+                        res.status(401).json("Error happened when excuting : " + thisistheline);
+    
+                    };
+                    console.log("1 suppairstu record inserted");
+                });
+    
             }
-        })
-    },
-
+    
+    
+    
+    
+    
+            for (var i = 0; i < req.body.length; i++) {
+    
+    
+                thisistheline = "insert IGNORE into allusers values(\"" +
+                    req.body[i].observername + "\"\,\""
+                    + req.body[i].oid + "\"\,\"" +
+                    req.body[i].obspassword + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
+                console.log(thisistheline);
+                db.query(thisistheline, function (err, result) {
+                    console.log(thisistheline);
+                    if (err) {
+                        console.log("error happened at StudentListContorller: uploadpairlist");
+                        res.status(401).json("Error happened when excuting : " + thisistheline);
+                    };
+                    console.log("1 obs record inserted");
+                });
+                thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
+                    req.session.userid + "\"\,\""
+                    + req.body[i].oid + "\"\);";
+                db.query(thisistheline, function (err, result) {
+                    if (err) {
+                        console.log("error happened at StudentListContorller: uploadpairlist");
+                        res.status(401).json("Error happened when excuting : " + thisistheline);
+    
+                    };
+                    console.log("1 suppairobs record inserted");
+                });
+    
+            }
+            console.log("\n\n\n\n\n")
+    
+            for (var i = 0; i < req.body.length; i++) {
+    
+                thisistheline = "insert IGNORE into observerpairstudent values(\"" +
+                    req.body[i].oid + "\"\,\""
+                    + req.body[i].sid + "\"\);";
+                db.query(thisistheline, function (err, result) {
+                    if (err) {
+                        console.log("error happened at StudentListContorller: uploadpairlist");
+                        res.status(401).json("Error happened when excuting : " + thisistheline);
+    
+                    };
+                    console.log("1 obspairstud record inserted");
+                });
+    
+            }
+    
+            return res.ok();
+    
+    
+        },
+    
+        checkuploadstudentlistdeadline: async function (req, res) {
+            var db = await sails.helpers.database();
+            var pool = await sails.helpers.database2();
+            var thisistheline = "select * from allsupersetting where typeofsetting = \"5\" and Announcetime is not null"
+            db.query(thisistheline, function (err, result) {
+                try {
+                    var string = JSON.stringify(result);
+                    var json = JSON.parse(string);
+                    var deadlinedate;
+                    var deadlinetime;
+                    var finaldate;
+    
+                    if (json.length > 0) {
+                        deadlinedate = new Date(json[0].deadlinedate);
+                        deadlinetime = json[0].deadlinetime.split(":");
+                        deadlinedate.setHours(deadlinetime[0]);
+                        deadlinedate.setMinutes(deadlinetime[1]);
+                        deadlinedate.setSeconds(deadlinetime[2]);
+                        finaldate = deadlinedate;
+                    } else {
+                        finaldate = undefined
+                    }
+                    console.log(json);
+                    return res.view('user/uploadstudentlist', { checkdate: finaldate });
+                } catch (err) {
+                    console.log("error happened at StudentListContorller: checkuploadstudentlistdeadline");
+                }
+            })
+        },
+    */
     generateobs: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
