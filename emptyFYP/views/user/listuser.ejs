@@ -25,39 +25,40 @@
         </div>
     </div>
 <br><br>
-    <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+<div style="overflow-x:auto;overflow-y:auto;">
+    <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth" >
         <tr>
             <th colspan="7"
-                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                style="font-size: calc(20px + 0.390625vw);text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
                 Student List</th>
         </tr>
         <tr>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerSID' onclick="sorting('sorting','mytable','headerSID',0);">&#8593;</a> SID
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerstuname' onclick="sorting('sorting','mytable','headerstuname',1);">&#8593;</a>
                 Student Name
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headertopic' onclick="sorting('sorting','mytable','headertopic',2);">&#8593;</a>
                 Topic
             </th>
     
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerstudtid' onclick="sorting('sorting','mytable','headerstudtid',3);">&#8593;</a>
                 OID
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerstudsup' onclick="sorting('sorting','mytable','headerstudsup',4);">&#8593;</a>
                 Observer
             </th>
     
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerTTBstatus'
                     onclick="sorting('sorting','mytable','headerTTBstatus',5);">&#8593;</a> TTB status
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',6);">&#8593;</a>
                 Submission of TTB
             </th>
@@ -66,26 +67,26 @@
         <% allstdlist.forEach( function(allstdlist) { %>
     
             <tr onclick="redirectplease('<%= allstdlist.sid%>')">
-                <td id="sid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="sid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= allstdlist.sid %>
                 </td>
     
-                <td id="studentname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studentname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
     
                     <%= allstdlist.stdname %>
     
                 </td>
     
-                <td id="studenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studenttopic" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= allstdlist.Topic%>
                 </td>
-                <td id="studenttid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studenttid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= allstdlist.OID%>
                 </td>
-                <td id="studentsupname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studentsupname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= allstdlist.obsname%>
                 </td>
-                <td id="studentstatus" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studentstatus" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
                         <div style="font-weight: bold;color: red;">Require Proof</div>
                         <%}else if (allstdlist.ttbsubmission=="Pending" ){%>
@@ -100,7 +101,7 @@
                                                 <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
                                                 <%}%>
                 </td>
-                <td id="studentttb" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <% if (allstdlist.ttbsubmission != "N" ){%>
                         <div class="buttons is-centered">
                             <a href="/readttb/<%= allstdlist.sid%>">
@@ -116,32 +117,34 @@
             <%}%>
     
     </table>
-
+</div>
     <%if(observinglist != null){%>
+        <br>
+        <div style="overflow-x:auto;overflow-y:auto;">
     <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
         <tr>
             <th colspan="7"
-                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                style="font-size: calc(20px + 0.390625vw);text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
                 Observing List</th>
         </tr>
         <tr>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerobservingSID' onclick="sorting('sorting2','mytable2','headerobservingSID',0);">&#8593;</a> SID
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerobservingstuname' onclick="sorting('sorting2','mytable2','headerobservingstuname',1);">&#8593;</a>
                 Student Name
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerobservingtopic' onclick="sorting('sorting2','mytable2','headerobservingtopic',2);">&#8593;</a>
                 Topic
             </th>
     
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerobservingstudtid' onclick="sorting('sorting2','mytable2','headerobservingstudtid',3);">&#8593;</a>
                 TID
             </th>
-            <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerobservingstdsup' onclick="sorting('sorting2','mytable2','headerobservingstdsup',4);">&#8593;</a>
                 Supervisor
             </th>
@@ -149,22 +152,22 @@
 
         <% observinglist.forEach( function(observingstd) { %>
             <tr>
-                <td id="observingsid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="observingsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= observingstd.sid %>
                 </td>
 
-                <td id="observingstudentname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="observingstudentname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
 
                     <%= observingstd.stdname %>
 
                 </td>
-                <td id="observingstudenttopic" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="observingstudenttopic" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= observingstd.Topic%>
                 </td>
-                <td id="observingstudenttid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="observingstudenttid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= observingstd.tid%>
                 </td>
-                <td id="observingstudentsupname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                <td id="observingstudentsupname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                     <%= observingstd.supname%>
                 </td>
             </tr>
@@ -172,14 +175,15 @@
             
             <%})%>
         </table>
+      </div>
         <%}%>
 
 
     <%}else{%>
         <div class="Pagetitle">Supervisor List</div>
         <div class="rows">
-            <div class="columns">
-                <div class="column is-left">
+            <div class="columns is-multiline is-mobile">
+                <div class="column">
                     <div class="buttons">
                         
                         <div class="button buttonlogout is-left is-mobile" onclick="backback()">
@@ -194,7 +198,6 @@
                         <%var today = new Date();%>
                         <%if(checkdate != undefined && today > datedate && !arranged){%>
                              <button class="buttonlogout" id="generateobs" onclick="gotogenobs()">Arrange Observer</button>&ensp;
-                       
                             <%}%>
                         <button class="buttonlogout" id="createnewsup" onclick="gotocreatesup()">Create new Supervisior</button>
                     
@@ -204,33 +207,34 @@
             </div>
         </div>
 <br><br>
+<div style="overflow-x:auto;overflow-y:auto;">
         <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
 
             <tr>
                 <th colspan="6"
-                    style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    style="font-size: calc(20px + 0.390625vw);text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
                     Supervisior List</th>
             </tr>
             <tr>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting2" id='headerTID' onclick="sorting('sorting2','mytable2','headerTID',0);">&#8593;</a> TID
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting2" id='headersupname'
                         onclick="sorting('sorting2','mytable2','headersupname',1);">&#8593;</a> Supervisor Name
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     SID
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     Student Name
                 </th>
         
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting2" id='headersupTTBview'
                         onclick="sorting('sorting2','mytable2','headersupTTBview',2);">&#8593;</a> Submission of TTB
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     Delete
                 </th>
             </tr>
@@ -258,17 +262,17 @@
             <% suplist.forEach( function(list) { %>
         
                 <tr  onclick="redirectplease('<%=list.tid%>')">
-                    <td id="tid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td id="tid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <%= list.tid %>
                     </td>
         
         
-                    <td id="supname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td id="supname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
         
                         <%= list.supname %>
         
                     </td>
-                    <td id="supsid" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <% for(var j = 0 ; j < list.supsidlist.length ; j++){%>
                             <a href="/read/<%= list.supsidlist[j]%>"><%=list.supsidlist[j]%></a><br>
                         <%}%>
@@ -276,17 +280,17 @@
         
         
                     </td>
-                    <td id=" supstuname" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <% for(var j = 0 ; j < list.supstunamelist.length ; j++){%>
                             <a href="/read/<%= list.supsidlist[j]%>"><%= list.supstunamelist[j]%></a> <br>
                                             <%}%>
                     </td>
-                    <td id="supsubmission" style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td id="supsubmission" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
         
                         <%= list.submission %>
         
                     </td>
-                    <td style="font-size:20px;text-align: center;vertical-align:middle;">
+                    <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <div class="buttons is-centered">
                             <div class="button buttonlogout" type="button"
                                 onclick="deletesupervisor('<%=list.tid%>')">
@@ -298,7 +302,7 @@
         
                 <%})%>
         </table>
-        
+      </div>
    <%}%>
 
 
