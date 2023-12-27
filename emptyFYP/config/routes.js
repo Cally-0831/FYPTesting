@@ -29,6 +29,7 @@ module.exports.routes = {
 
   //homepage
   'GET /home': 'UserController.home',
+  'POST /resetDB': "SettingController.resetDB",
 
 
   //admin scheduling

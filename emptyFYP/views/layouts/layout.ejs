@@ -11,8 +11,8 @@
  -->
 
 
-  
- 
+
+
 
   <title>FYP Scheduling System</title>
 
@@ -65,19 +65,42 @@
 
     <div class="navbar">
       <div class="navbar-start">
-        <div class="navbar-item" >
+        <div class="navbar-item">
           <% if (req.session.username!=null) { %>
-            <a href="/home"><img src="\images\login\compbg.png" ></a>
+            <a href="/home"><img src="\images\login\compbg.png"></a>
             <% }else{ %>
-              <a href="/"><img src="\images\login\compbg.png" ></a>
+              <a href="/"><img src="\images\login\compbg.png"></a>
               <% } %>
         </div>
       </div>
       <div class="navbar-end">
         <% if (req.session.username!=null) { %>
 
+          <script>
+            function function2() {
+              location.assign('/home')
+            }
+            async function function3() {
+              var r = confirm("Confirm to restore defalut DB?")
+              if (r) {
+                var response = await fetch("/resetDB", {
+                  method: "POST",
+                });
+                if(response.status ==200){
+                  alert("reset DB success");
+                  location.reload()
+                }else{
+                  alert("Reset DB fail")
+                }
+              }
+            }
+          </script>
+
           <div class="buttons is-right">
-            <div class="button buttonlogout">
+            <div class="button buttonlogout" onclick="function3()">
+              Reset Defalut DB
+            </div>
+            <div class="button buttonlogout" onclick="function2()">
               <%= req.session.username %>
             </div>
             <p>&nbsp;&nbsp;</p>
@@ -170,7 +193,7 @@
     <!--SCRIPTS-->
     <script src="/dependencies/sails.io.js"></script>
     <!--SCRIPTS END-->
-<br><br><br>
+    <br><br><br>
     </body>
 </div>
 
