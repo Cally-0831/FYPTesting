@@ -1,105 +1,105 @@
 <div class="Pagetitle">Submitted Timeslots for <%=roominfo.Campus%>
-        <%=roominfo.RID%>
+    <%=roominfo.RID%>
 </div>
 <div class="buttons">
-    <div class="button buttonlogout " onclick="backback()">
-        Back
-    </div>
+<div class="button buttonlogout " onclick="backback()">
+    Back
+</div>
 </div>
 
 <br>
-<div>
-    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+<div style="overflow-x: scroll; overflow-y: scroll;">
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
 
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Remarks</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
-        <th style="font-size:20px;text-align: center;vertical-align:middle;background-color: #C3B091;">Update</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">ReqID</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">StartDay</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">EndDay</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">StartTime</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">EndTime</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">Remarks</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">Delete</th>
+    <th style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;">Update</th>
 
-        <% thetimeslotlist.forEach( function(list) { const StartDay=new
-            Date(list.StartDate).toLocaleDateString('en-CA'); const EndDay=new
-            Date(list.EndDate).toLocaleDateString('en-CA'); %>
-            <tr>
+    <% thetimeslotlist.forEach( function(list) { const StartDay=new
+        Date(list.StartDate).toLocaleDateString('en-CA'); const EndDay=new
+        Date(list.EndDate).toLocaleDateString('en-CA'); %>
+        <tr>
 
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= list.ReqID%>
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= StartDay%>
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= EndDay %>
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= list.StartTime %>
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= list.EndTime %>
-                </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= list.ReqID%>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= StartDay%>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= EndDay %>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= list.StartTime %>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= list.EndTime %>
+            </td>
 
-                <td style="text-align: center;vertical-align:middle;">
-                    <%= list.Remarks%>
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <div class="buttons is-centered">
-                        <button class="button buttonlogout" type="button"
-                            onclick="deletetimeslot('<%= list.ReqID %>', '<%=roominfo.Campus%>','<%=roominfo.RID%>')">Delete</button>
-                    </div>
+            <td style="text-align: center;vertical-align:middle;">
+                <%= list.Remarks%>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <div class="buttons is-centered">
+                    <button class="button buttonlogout" type="button"
+                        onclick="deletetimeslot('<%= list.ReqID %>', '<%=roominfo.Campus%>','<%=roominfo.RID%>')">Delete</button>
+                </div>
 
-                </td>
-                <td style="text-align: center;vertical-align:middle;">
-                    <div class="buttons is-centered">
-                        <button class="button buttonlogout" type="button"
-                            onclick="updatetimeslot('<%= list.ReqID %>')">Update</button>
-                    </div>
+            </td>
+            <td style="text-align: center;vertical-align:middle;">
+                <div class="buttons is-centered">
+                    <button class="button buttonlogout" type="button"
+                        onclick="updatetimeslot('<%= list.ReqID %>')">Update</button>
+                </div>
 
-                </td>
-            </tr>
+            </td>
+        </tr>
 
-            <% }); %>
+        <% }); %>
 
-    </table>
+</table>
 </div>
 <script>
-    async function updatetimeslot(reqid) {
+async function updatetimeslot(reqid) {
 
 
-        var response = await fetch("/updatetime/"+reqid, {
-            method: "GET",
-           
+    var response = await fetch("/updatetime/"+reqid, {
+        method: "GET",
+       
+    });
+    if (response.ok) {
+        location.assign(response.url);
+    }
+
+}
+async function deletetimeslot(reqid, campus, rid) {
+    var r = confirm("Confirm Delete?" + reqid);
+    var requestBody = JSON.stringify({ ReqID: reqid });
+    if (r) {
+
+        var response = await fetch("/view", {
+            method: "DELETE",
+            body: requestBody
         });
+
         if (response.ok) {
-            location.assign(response.url);
+            // var html = await response.text();
+            // alert(html);
+
+            alert("Request deleted.");
+            location.assign("/view/" + campus + "/" + rid);
+        } else {
+            alert(response.status + ": " + response.statusText);
         }
 
     }
-    async function deletetimeslot(reqid, campus, rid) {
-        var r = confirm("Confirm Delete?" + reqid);
-        var requestBody = JSON.stringify({ ReqID: reqid });
-        if (r) {
-
-            var response = await fetch("/view", {
-                method: "DELETE",
-                body: requestBody
-            });
-
-            if (response.ok) {
-                // var html = await response.text();
-                // alert(html);
-
-                alert("Request deleted.");
-                location.assign("/view/" + campus + "/" + rid);
-            } else {
-                alert(response.status + ": " + response.statusText);
-            }
-
-        }
-    };
-    function backback() {
-        location.assign("/classroomlist")
-    }
+};
+function backback() {
+    location.assign("/classroomlist")
+}
 </script>

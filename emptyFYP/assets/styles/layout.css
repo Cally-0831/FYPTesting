@@ -2,13 +2,13 @@
 
   text-align: center;
   /* font-size: 30px; */
-  font-size: calc(25px + 0.390625vw);
+  font-size: calc(20px + 0.390625vw);
   font: bold;
 }
 
 .requestform{
 /* font-size: 20px; */
-font-size: calc(15px + 0.390625vw);
+font-size: calc(13px + 0.390625vw);;
 }
 .template{
   width :100%;
@@ -99,12 +99,12 @@ font-size: calc(15px + 0.390625vw);
 
 .title {
   /* font-size: 20px; */
-  font-size: calc(15px + 0.390625vw);
+  font-size: calc(13px + 0.390625vw);;
   font: bold;
 }
 
 .Pagetitle {
-  font-size: calc(25px + 0.390625vw);
+  font-size: calc(20px + 0.390625vw);
   /* font-size: 40px; */
   text-align: center;
   font: bold;
@@ -131,7 +131,7 @@ font-size: calc(15px + 0.390625vw);
 @media (min-width: 768px) {
   .button-64 {
     /* font-size: 24px; */
-    font-size: calc(20px + 0.390625vw);
+    font-size: calc(15px + 0.390625vw);;
     min-width: 196px;
   }
 }
@@ -273,7 +273,7 @@ font-size: calc(15px + 0.390625vw);
 
 .pagecontent {
   /* font-size: 20px; */
-  font-size: calc(15px + 0.390625vw);
+  font-size: calc(13px + 0.390625vw);;
   font: bold
 }
 
@@ -283,8 +283,11 @@ select {
   -webkit-appearance: none;
   /*  other styles for aesthetics */
   width: 100%;
-  font-size: 1.15rem;
-  padding: 0.675em 6em 0.675em 1em;
+  height:100%;
+  font-size: calc(15px+0.4vw);
+  padding: 1em 1em 1em 1em;
+  /* font-size: 1.15rem; */
+  /* padding: 0.675em 6em 0.675em 1em; */
   background-color: #fff;
   border: 1px solid #caced1;
   border-radius: 0.25rem;
@@ -354,14 +357,14 @@ select {
 
 .td {
   /* font-size: 20px; */
-  font-size: calc(15px + 0.390625vw);
+  font-size: calc(13px + 0.390625vw);;
   text-align: center;
   vertical-align: middle;
 }
 
 .th {
   /* font-size: 20px; */
-  font-size: calc(20px + 0.390625vw);
+  font-size: calc(15px + 0.390625vw);;
   text-align: center;
   vertical-align: middle;
 }

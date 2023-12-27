@@ -1,18 +1,18 @@
 <div class="Pagetitle">Create New Supervisor</div>
 <br>
-<div class="columns is-centered createnewstudent ">
+<div class="columns is-centered template" style="align-items: center;">
     <form action="/createnewsup" method="post" onsubmit="createnewsup(this);return false;">
         <label>Supervisor name:&emsp;&emsp;</label>
         <input type="text" placeholder="Enter Supervisor name" id="supervisorname" name="supervisorname" value=""
-            style="width:300px" required><br>
+            style="width:calc(300px + 0.390625vw)" required><br>
         <br>
         <label>tid:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;</label>
-        <input type="text" placeholder="Enter tid" id="tid" name="tid" value="" style="width:300px" required><br><br>
+        <input type="text" placeholder="Enter tid" id="tid" name="tid" value="" style="width:calc(300px + 0.390625vw)" required><br><br>
 
         <div class="buttons is-right">
             <button type="submit is-success" class="buttonlogout">Submit</button>
         </div>
-
+<br>
     </form>
 
 </div>
