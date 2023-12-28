@@ -12,8 +12,8 @@ font-size: calc(13px + 0.390625vw);;
 }
 .template{
   width :100%;
-  padding:20px 20px 10px 20px;
-  margin: 30px 20px 0px 0px;
+  padding:20px 20px 20px 20px;
+  margin: 30px 30px 30px 30px;
   
   border-radius: 15px;
   box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
@@ -28,7 +28,7 @@ font-size: calc(13px + 0.390625vw);;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#9bc635', endColorstr='#c0ea67', GradientType=1);
   /* IE6-9 fallback on horizontal gradient */
   display: inline-block;
-  overflow: auto
+  overflow-x: auto
 }
 
 .scheduledesignchecking{
@@ -268,7 +268,6 @@ font-size: calc(13px + 0.390625vw);;
 
 .allcontent {
   padding: 20px 20px;
-  overflow: scroll;
 }
 
 .pagecontent {
