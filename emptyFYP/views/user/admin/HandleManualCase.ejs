@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="back()">
+                    <div class="button buttonlogout is-responsive " onclick="back()">
                         Back
                     </div>
                 </div>
@@ -73,7 +73,7 @@
             <br>
             
             <div class = "buttons is-right">
-                <div class ="button buttonlogout"
+                <div class ="button buttonlogout is-responsive"
                     
                 onclick="submitform('<%=req.params.tid%>','<%=req.params.Page%>',document.getElementById('UpdateDateSelect').value,document.getElementById('UpdateTimeSelect').value,
                 '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=currentbox.TYPE%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value)">
