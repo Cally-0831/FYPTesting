@@ -2,7 +2,7 @@
     <%=roominfo.RID%>
 </div>
 <div class="buttons">
-<div class="button buttonlogout " onclick="backback()">
+<div class="button buttonlogout is-responsive " onclick="backback()">
     Back
 </div>
 </div>
@@ -46,14 +46,14 @@
             </td>
             <td style="text-align: center;vertical-align:middle;">
                 <div class="buttons is-centered">
-                    <button class="button buttonlogout" type="button"
+                    <button class="button buttonlogout is-responsive" type="button"
                         onclick="deletetimeslot('<%= list.ReqID %>', '<%=roominfo.Campus%>','<%=roominfo.RID%>')">Delete</button>
                 </div>
 
             </td>
             <td style="text-align: center;vertical-align:middle;">
                 <div class="buttons is-centered">
-                    <button class="button buttonlogout" type="button"
+                    <button class="button buttonlogout is-responsive" type="button"
                         onclick="updatetimeslot('<%= list.ReqID %>')">Update</button>
                 </div>
 

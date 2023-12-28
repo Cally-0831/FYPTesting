@@ -3,7 +3,7 @@
     </div>
     <div class="row">
         <div class="buttons">
-            <div class="button buttonlogout" onclick="backback()">Back</div>
+            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
         </div>
     </div>
     <br>
@@ -37,7 +37,7 @@
                         <tr>
                             <td style="font-size : 20px; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
                             <td><div class="buttons is-centered">
-                                <div class="button" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">
+                                <div class="button is-responsive" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">
                                     edit</div>
                             </div></td>
                         </tr>
@@ -347,8 +347,8 @@
                                         <tr><td><%=boxes[0].RID%></td></tr>
                                     </table>
                                     <div id="thisbox" class = "buttons is-centered" value = "<%=boxes[0]%>" >
-                                        <div class = "button" style="background-color:  lightgreen; border-color: black;" onclick="HandleCase('<%=boxes[0].boxID%>','<%=boxes[0].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">edit</div>
-                                        <div class = "button" style="background-color: lightcoral;border-color: black;" onclick="del('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">delete</div>
+                                        <div class = "button is-responsive" style="background-color:  lightgreen; border-color: black;" onclick="HandleCase('<%=boxes[0].boxID%>','<%=boxes[0].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">edit</div>
+                                        <div class = "button is-responsive" style="background-color: lightcoral;border-color: black;" onclick="del('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">delete</div>
                                     </div>
                                 </td>
                                 <%boxes.splice(0,1)%>

@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="back()">
+                    <div class="button buttonlogout is-responsive " onclick="back()">
                         Back
                     </div>
                 </div>
@@ -111,26 +111,26 @@
                                                 
                                                 <% if(hv1 >=0 && checkdate > new Date()){%>
                                                     <% if(hv1anoun >=0){%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>','<%=thissupersetting[hv1anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(0,'<%=updatetothisdate%>','<%=thissupersetting[hv1].deadlinetime%>','<%=thissupersetting[hv1].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                            <button class="button buttonlogout"
+                                                            <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforttb('update')">Update</button>
                                                              <%}else if(hv1 >=0 && checkdate < new Date()){%>
                                                                
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforttb('update')">Submit</button>
                                                                     
                                                                
                                                                 <%}else{%>
-                                                                    <button class="button buttonlogout"
+                                                                    <button class="button buttonlogout is-responsive"
                                                                     onclick="submitdeadlineforttb('insert')">Submit</button>
                                                                     <%}%>
                                             </div>
@@ -188,25 +188,25 @@
                                                   <% if(hv2 >=0 && checkdate > new Date()){%>
                                                    
                                                     <% if(hv2anoun >=0){%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>','<%=thissupersetting[hv2anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(1,'<%=updatetothisdate%>','<%=thissupersetting[hv2].deadlinetime%>','<%=thissupersetting[hv2].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                            <button class="button buttonlogout" onclick="submitdeadlineforrequest('update')">Update</button>
+                                                            <button class="button buttonlogout is-responsive" onclick="submitdeadlineforrequest('update')">Update</button>
                                                             <%}else if(hv2 >=0 && checkdate < new Date()){%>
                                                                
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforrequest('update')">Submit</button>
                                                                     
                                                                
                                                                 <%}else{%>
-                                                                    <button class="button buttonlogout"
+                                                                    <button class="button buttonlogout is-responsive"
                                                                     onclick="submitdeadlineforrequest('insert')">Submit</button>
                                                                     <%}%>
                                             </div>
@@ -298,26 +298,26 @@
                                                 <% if(hv3 >=0 && checkdate > new Date()){%>
                                                     <% if(hv3anoun >=0 ){%>
                                                         
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>','<%=thissupersetting[hv3anoun].STID%>','<%=updatetothisenddate%>','<%=updatetothisendtime%>','1')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(2,'<%=updatetothisstartdate%>','<%=updatetothisstarttime%>','<%=thissupersetting[hv3].STID%>',null,'<%=updatetothisenddate%>','<%=updatetothisendtime%>','1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                         onclick="submitpresentationperiod('update')">Update</button>
                                                         <%}else if(hv3 >=0 && checkdate < new Date()){%>
                                                                
-                                                            <button class="button buttonlogout"
+                                                            <button class="button buttonlogout is-responsive"
                                                             onclick="submitpresentationperiod('update')">Submit</button>
                                                                 
                                                            
                                                             <%}else{%>
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitpresentationperiod('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
@@ -371,26 +371,26 @@
                                             <div class="buttons is-right">
                                                 <% if(hv4 >=0 && checkdate > new Date()){%>
                                                     <% if(hv4anoun >=0){%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>','<%=thissupersetting[hv4anoun].STID%>',null,null,'1')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(3,'<%=updatetothisdate%>','<%=thissupersetting[hv4].deadlinetime%>','<%=thissupersetting[hv4].STID%>',null,null,null,'1')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                         onclick="submitdeadlineforreleaseschdule('update')">Update</button>
                                                         <%}else if(hv4 >=0 && checkdate < new Date()){%>
                                                                
-                                                            <button class="button buttonlogout"
+                                                            <button class="button buttonlogout is-responsive"
                                                             onclick="submitdeadlineforreleaseschdule('update')">Submit</button>
                                                                 
                                                            
                                                             <%}else{%>
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforreleaseschdule('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
@@ -447,26 +447,26 @@
                                             <div class="buttons is-right">
                                                 <% if(hv5 >=0 && checkdate > new Date()){%>
                                                     <% if(hv5anoun >=0){%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>','<%=thissupersetting[hv5anoun].STID%>',null,null,'3')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(4,'<%=updatetothisdate%>','<%=thissupersetting[hv5].deadlinetime%>','<%=thissupersetting[hv5].STID%>',null,null,null,'3')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                         onclick="submitdeadlineforuploadstulist('update')">Update</button>
                                                         <%}else if(hv5 >=0 && checkdate < new Date()){%>
                                                                
-                                                            <button class="button buttonlogout"
+                                                            <button class="button buttonlogout is-responsive"
                                                             onclick="submitdeadlineforuploadstulist('update')">Submit</button>
                                                                 
                                                            
                                                             <%}else{%>
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforuploadstulist('insert')">Submit</button>
                                                                 <%}%>
                                             </div>
@@ -517,26 +517,26 @@
                                             <div class="buttons is-right">
                                                 <% if(hv6 >=0 && checkdate > new Date()){%>
                                                     <% if(hv6anoun >=0){%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(5,'<%=updatetothisdate%>','<%=thissupersetting[hv6].deadlinetime%>','<%=thissupersetting[hv6].STID%>','<%=thissupersetting[hv6anoun].STID%>',null,null,'3')">Create
                                                             Notice</button>
                                                     <%}else{%>
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                             onclick="CreateNotice(5,'<%=updatetothisdate%>','<%=thissupersetting[hv6].deadlinetime%>','<%=thissupersetting[hv6].STID%>',null,null,null,'3')">Create
                                                             Notice</button>
                                                         <%}%>    
 
 
-                                                        <button class="button buttonlogout"
+                                                        <button class="button buttonlogout is-responsive"
                                                         onclick="submitdeadlineforuploadsuperpreference('update')">Update</button>
                                                         <%}else if(hv6 >=0 && checkdate < new Date()){%>
                                                                
-                                                            <button class="button buttonlogout"
+                                                            <button class="button buttonlogout is-responsive"
                                                             onclick="submitdeadlineforuploadsuperpreference('update')">Submit</button>
                                                                 
                                                            
                                                             <%}else{%>
-                                                                <button class="button buttonlogout"
+                                                                <button class="button buttonlogout is-responsive"
                                                                 onclick="submitdeadlineforuploadsuperpreference('insert')">Submit</button>
                                                                 <%}%>
                                             </div>

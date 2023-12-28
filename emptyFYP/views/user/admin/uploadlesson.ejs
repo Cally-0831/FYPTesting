@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="buttons">
-        <div class="button buttonlogout" onclick="backback()">Back</div>
+        <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
     </div>
 </div>
 <div class="row">
@@ -15,7 +15,7 @@
                 </div>
                 <br>
                 <div style="font-size: 15px;color: grey; padding-left:30px">Sample file: <a
-                        href="..\images\Samplefile\ClassinfoSample.xlsx" download><u>Class Info Samplefile</u></a></div>
+                        href="images\Samplefile\ClassinfoSample.xlsx" download><u>Class Info Samplefile</u></a></div>
                 <br>
                 <input id="lessonupload" type=file name="files[]">
             </form>
@@ -67,7 +67,7 @@
                     document.getElementById("getlessondata").innerHTML = "Total " + alllessonarray.length + " lessons will be created,\<br\> Click confirm to create."
                         + "\<br\>"
                         + " \<form  action\=\"\/uploadlesson\" method\=\"post\" onsubmit\=\"submitform(this)\;return false\;\"\>"
-                        + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
+                        + "\<button class=\"button buttonlogout is-responsive\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
                         + "\<\/form>";
                     jQuery('#lessonxlx_json').val(json_object);
 

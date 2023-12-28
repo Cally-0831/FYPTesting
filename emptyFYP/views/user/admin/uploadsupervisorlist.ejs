@@ -4,7 +4,7 @@
         <div class="columns ">
             <div class="column">
                 <div class="buttons is-left">
-                    <div class="button buttonlogout " onclick="history.back()">
+                    <div class="button buttonlogout is-responsive " onclick="history.back()">
                         Back
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     document.getElementById("getlistsupervisordata").innerHTML = "Total " + allsupervisorarray.length + " supervisors will be created under your management,\<br\> Click confirm to create."
                         + "\<br\>"
                         + " \<form  action\=\"\/uploadsupervisorlist\" method\=\"post\" onsubmit\=\"submitform(this,\'sup\')\;return false\;\"\>"
-                        + "\<button class=\"buttonlogout\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
+                        + "\<button class=\"button buttonlogout is-responsive\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
                         + "\<\/form>";
                     jQuery('#supervisorxlx_json').val(json_object);
 
