@@ -3,7 +3,7 @@
 <div class="columns is-mobile">
     <div class="column is-half">
         <div class="buttons">
-            <div class="button buttonlogout " onclick="history.back()">
+            <div class="button buttonlogout is-responsive " onclick="history.back()">
                 Back
             </div>
         </div>
@@ -12,7 +12,7 @@
     </div>
     <div class="column is-half">
         <div class="buttons is-right">
-            <button class="button buttonlogout" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
+            <button class="button buttonlogout is-responsive" id="createnewroom" onclick="gotocreateroom()">Create new room</button>
         </div>
     </div>
 </div>
@@ -51,29 +51,29 @@
                     <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
                             <%if(classroom.status == "Close"){%>
-                                <button class="button buttonlogout" style="background-color: rgb(200, 130, 60);" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
+                                <button class="button buttonlogout is-responsive" style="background-color: rgb(200, 130, 60);" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
                             <%}else{%>
-                                <button class="button buttonlogout" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
+                                <button class="button buttonlogout is-responsive" onclick="changestatus('<%=classroom.Campus%>','<%=classroom.RID%>','<%=classroom.status%>')"><%=classroom.status%></button>
                             <%}%>
                         </div>
                         
                     </td>
                     <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
-                            <button class="button buttonlogout" type="button" onclick="redirect('/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>')">Add</button>
+                            <button class="button buttonlogout is-responsive" type="button" onclick="redirect('/addtimeslot/<%= classroom.Campus%>/<%= classroom.RID%>')">Add</button>
                        </div>
 
                     </td>
                     <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class="buttons is-centered">
-                        <button class="button buttonlogout"onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
+                        <button class="button buttonlogout is-responsive"onclick="deleteclassroom('<%= classroom.Campus %>','<%= classroom.RID%>')">
                             Delete
                         </button>
                     </div>
                     </td>
                     <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                         <div class = "buttons is-centered">
-                            <button class="button buttonlogout" onclick="redirect('/view/<%= classroom.Campus%>/<%= classroom.RID%>')">view</button>
+                            <button class="button buttonlogout is-responsive" onclick="redirect('/view/<%= classroom.Campus%>/<%= classroom.RID%>')">view</button>
                        </div>
                     </td>
                 </tr>

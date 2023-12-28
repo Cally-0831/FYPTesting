@@ -13,7 +13,7 @@
     <%var endday = new Date(enddate);%>
     <div class = "columns is-mobile">
         <div class = "column is-half">
-            <button class="button buttonlogout is-left" onclick="backback('<%=startday%>','<%=endday%>','<%=req.session.userid%>')">
+            <button class="button buttonlogout  is-responsive is-left" onclick="backback('<%=startday%>','<%=endday%>','<%=req.session.userid%>')">
             Back
             </button>
         </div>
@@ -22,7 +22,7 @@
                 
     <%var finalsubmitbody =[];%>
     
-            <button class="button buttonlogout" onclick ="submitform('<%=startday%>',' <%=endday%>','<%=req.session.userid%>',1)">
+            <button class="button buttonlogout  is-responsive" onclick ="submitform('<%=startday%>',' <%=endday%>','<%=req.session.userid%>',1)">
                 Save Changes
             </button></div>
         </div>
@@ -72,7 +72,7 @@
     
    
         
-
+    <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
     <table class="table tablenothover is-bordered is-striped is-halfwidth center">
     <tr>
         <th class="th" style="width: 5%;vertical-align:middle;"> 
@@ -80,7 +80,7 @@
           
 
             <div class="buttons is-centered">
-                <button class="button  is-small is-warning" onclick="changepage('<%=pagenum%>','back','<%=startday%>','<%=endday%>','<%=req.session.userid%>')"> < </button>
+                <button class="button  is-responsive is-small is-warning" onclick="changepage('<%=pagenum%>','back','<%=startday%>','<%=endday%>','<%=req.session.userid%>')"> < </button>
              </div>
 
             <%}%>
@@ -142,7 +142,7 @@
         <th class="th" style="width: 5%;vertical-align:middle;" >
             <%if(startday <= endday){%>
                 <div class="buttons is-centered">
-                    <button class="button  is-small is-warning" onclick="changepage('<%=pagenum%>','forward')"> > </button>
+                    <button class="button  is-responsive is-small is-warning" onclick="changepage('<%=pagenum%>','forward')"> > </button>
                  </div>
             <%}%>
         </th>
@@ -750,7 +750,7 @@
                
             <%}%>
     </table>    
-
+</div>
 </div>
 
 
