@@ -80,26 +80,11 @@
             function function2() {
               location.assign('/home')
             }
-            async function function3() {
-              var r = confirm("Confirm to restore defalut DB?")
-              if (r) {
-                var response = await fetch("/resetDB", {
-                  method: "POST",
-                });
-                if(response.status ==200){
-                  alert("reset DB success");
-                  location.reload()
-                }else{
-                  alert("Reset DB fail")
-                }
-              }
-            }
+            
           </script>
 
           <div class="buttons is-right">
-            <div class="button buttonlogout is-responsive" onclick="function3()">
-              Reset Defalut DB
-            </div>
+            
             <div class="button buttonlogout is-responsive" onclick="function2()">
               <%= req.session.username %>
             </div>

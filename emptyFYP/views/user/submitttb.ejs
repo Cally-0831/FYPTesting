@@ -102,12 +102,12 @@
                 if (response2.ok) {
                     var response3;
                     if(document.getElementById("enrollnotclassbox").checked != true){
-                        response3 = await fetch("/timetable/submitttb/", {
+                        response3 = await fetch("/timetable/submitttb", {
                         method: "POST",
                         body: requestbody
                     });
                 }else{
-                    response3 = await fetch("/timetable/submitempty/", {
+                    response3 = await fetch("/timetable/submitempty", {
                         method: "POST",
                         body: requestbody
                     });

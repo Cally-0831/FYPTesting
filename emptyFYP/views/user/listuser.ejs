@@ -101,7 +101,7 @@
                                                 <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
                                                 <%}%>
                 </td>
-                <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
+                <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('/readttb/<%=allstdlist.sid%>')">
                     <% if (allstdlist.ttbsubmission != "N" ){%>
                         <div class="buttons is-centered">
                             <a href="/readttb/<%= allstdlist.sid%>">

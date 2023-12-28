@@ -30,6 +30,7 @@ module.exports.policies = {
     createnewsup:"isAdmin"
   },
   SettingController: {
+    "resetDB":"isLoggedin",
     "*": "isAdmin"
   },
   RequestController: {

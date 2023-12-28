@@ -1,5 +1,4 @@
 
-
 module.exports = {
     allDeptlist: {},
     allCCodelist: {},
@@ -22,13 +21,11 @@ module.exports = {
                 var json = JSON.parse(string);
                 deptlist = json;
                 return res.view('user/submitttb', {
-
                     allDeptlist: deptlist,
-
                 });
 
             } catch (err) {
-                console.log("sth happened here" + err);
+                return res.status(400).json("error happened in TimetableController.getallclass");
 
             }
 
@@ -127,7 +124,7 @@ module.exports = {
             } else {
                 caninsertthisclasslabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classlabsection + "\",\"" + req.session.userid + "\");\n";
             }
-            caninsertthisclasssection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
+            caninsertthisclasssection = "insert ignore into alltakecourse values(\"" + req.body.classdep + "" + req.body.classcode + "_" + req.body.classsection + "\",\"" + req.session.userid + "\");\n";
 
             //"select * from allclass where CID like \"" + req.body.classdep + req.body.classcode + "_" + req.body.classlabsection + "%\"";
         }
@@ -136,7 +133,7 @@ module.exports = {
         if (caninsertthisclasslabsection != "") {
             if (req.body.classlabsection == "all") {
                 var getalllabsection = "SELECT distinct(CSecCode) FROM allclass WHERE CID like \"" + req.body.classdep + req.body.classcode + "_1%\" or CID like \"" + req.body.classdep + req.body.classcode + "_2%\""
-                console.log("\n\n\n" + getalllabsection)
+                console.log(">>getalllabsection" + getalllabsection)
                 db.query(getalllabsection, function (err, result) {
                     var string = JSON.stringify(result);
                     var json = JSON.parse(string);
@@ -146,10 +143,10 @@ module.exports = {
 
                     for (var i = 0; i < labsectionlist.length; i++) {
                         var insertinglabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + req.body.classcode + "_" + labsectionlist[i].CSecCode + "\",\"" + req.session.userid + "\")"
-                        console.log(insertinglabsection);
+                        console.log(">>insertinglabsection",insertinglabsection);
                         db.query(insertinglabsection, function (err, result) {
                             try { } catch (err) {
-                                return console.log("Error happened when excuting TimtableController.submitclass.insertingmultiplelabsection \n" + err)
+                                return res.status(401).json("Error happened when excuting TimtableController.submitclass.insertingmultiplelabsection \n" + err)
 
                             }
                         })
@@ -157,20 +154,21 @@ module.exports = {
 
                 })
             } else {
+                console.log(">>caninsertthisclasslabsection ",caninsertthisclasslabsection,"\n")
                 db.query(caninsertthisclasslabsection, function (err, result) {
                     try { } catch (err) {
-                        return console.log("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
+                        return res.status(401).json("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
                     }
                 })
             }
 
         }
-
+console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
         db.query(caninsertthisclasssection, function (err, result) {
             try {
                 return res.ok();
             } catch (err) {
-                return console.log("Error happened when excuting TimtableController.submitclass.insertingsection \n" + err)
+                return res.status(401).json("Error happened when excuting TimtableController.submitclass.insertingsection \n" + err)
             }
         })
 
@@ -314,11 +312,11 @@ module.exports = {
                             return res.ok();
                         }
                     } catch (err) {
-                        return console.log("Error happened when excuting TimtableController.submitclass.findtimecrash \n" + err)
+                        return res.status(401).json("Error happened when excuting TimtableController.submitclass.findtimecrash \n" + err)
                     }
                 })
             } catch (err) {
-                return console.log("Error happened when excuting TimtableController.checkduplication.findallclassinfo \n" + err)
+                return res.status(401).json("Error happened when excuting TimtableController.checkduplication.findallclassinfo \n" + err)
             }
         })
     },

@@ -78,4 +78,7 @@ insert into alltakecourse values("COMP1015_00001","tid00003");
 insert into alltakecourse values("COMP4107_00001","tid00002");
 insert into alltakecourse values("COMP2027_00001","tid00002");
 insert into alltakecourse values("COMP2035_00001","tid00002");
+insert ignore  into alltakecourse values("COMP2027_00001","sid33333");
+insert ignore  into alltakecourse values("GCAP3205_00001","sid33333");
+insert ignore  into alltakecourse values("COMP2037_00001","sid33333");
 update allsupertakecourse set confirmation = "1" , submissiontime = now();

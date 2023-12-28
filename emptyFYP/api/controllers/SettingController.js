@@ -239,9 +239,8 @@ module.exports = {
         });
     },
     resetDB: async function (req, res) {
-        const importer = await sails.helpers.importer();
-        const fs = require("fs");
-
+       
+        var importer= await sails.helpers.importer();
         const sqlfiles = [
             '../SQL/Standard/dropcommand.sql',
             '../SQL/Standard/TableCreate.sql',
@@ -249,24 +248,27 @@ module.exports = {
             '../SQL/Standard/SampleData.sql',
             '../SQL/Standard/Setting.sql',
             '../SQL/Standard/AllclassSQL.sql'
-        ]
-        importer.onProgress(progress => {
+          ]
+         
+          importer.onProgress(progress=>{
             var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
             console.log(`${percent}% Completed`);
-        });
-
-        importer.onDumpCompleted(callback => {
+          });
+        
+          importer.onDumpCompleted(callback=>{
             var path = callback.file_path;
             var result = callback.error;
-            console.log(path, +"     ", result);
-        });
-
-        for (let f of sqlfiles) {
+            console.log(path,+"     ",result);
+          });
+        
+          for (let f of sqlfiles) {
             console.log(f)
-            await importer.import(f);
+           await importer.import(f);
             var files_imported = importer.getImported();
             console.log(`${files_imported.length} SQL file(s) imported.`);
-        }
+          }
+        
+       
         return res.status(200).json("ok");
 
     },

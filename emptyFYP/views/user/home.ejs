@@ -1,4 +1,10 @@
 <div>
+    <div class = "buttons is-left">
+        <div class="button buttonlogout is-responsive" onclick="resetDB()">
+        Reset Defalut DB
+      </div>
+    </div>
+    
     <% if (req.session.role=="stu" ){%>
         <p>this is a student</p>
         <div class="rows is-mobile">
@@ -182,5 +188,20 @@
         }
 
     }
+        async function resetDB() {
+              var r = confirm("Confirm to restore defalut DB?")
+              if (r) {
+                var response = await fetch("/resetDB", {
+                  method: "POST",
+                });
+                if(response.status ==200){
+                  alert("reset DB success");
+                  location.reload();
+                }else{
+                  alert("Reset DB fail")
+                  location.reload();
+                }
+              }
+            }
 
 </script>
