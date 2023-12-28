@@ -83,9 +83,7 @@
         };
     };
     function handlelesson(evt) {
-
         var files = evt.target.files; // FileList object
-        console.log(files[0].name);
         var namestring = (files[0].name).split("\.");
         if (namestring[1] != "xlsx") {
             alert("This is not a .xlsx file, please upload a correct format file");
