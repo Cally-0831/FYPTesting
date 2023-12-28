@@ -38,89 +38,90 @@
 
                     </div>
                     <br><br>
-                    <table class="table is-bordered is-striped is-hoverable is-fullwidth">
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center; background-color: burlywood;">
-                            ReqID</th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            SID</th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            Unavaildable date
-                        </th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            Start Time</th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            EndTime</th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            Reason</th>
-                        <th
-                            style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
-                            Status</th>
+                    <div style="overflow: scroll;">
+                        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center; background-color: burlywood;">
+                                ReqID</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                SID</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                Unavaildable date
+                            </th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                Start Time</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                EndTime</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                Reason</th>
+                            <th
+                                style="font-size:20px;text-align: center;vertical-align:center;background-color: burlywood;">
+                                Status</th>
 
 
 
-                        <tr>
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= thisrequestdetails.ReqID %>
-                            </td>
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= thisrequestdetails.SID %>
-                            </td>
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= new Date(thisrequestdetails.RequestDate).toLocaleDateString('en-CA') %>
-                            </td>
-
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= thisrequestdetails.RequestStartTime %>
-                            </td>
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= thisrequestdetails.RequestEndTime%>
-                            </td>
-                            <td style="text-align: center;vertical-align:center;">
-                                <%= thisrequestdetails.reason%>
-                            </td>
-
-                            <% if(thisrequestdetails.status=="Require Proof" ){%>
-                                <td style="text-align: center;vertical-align:center; color: red;  font-weight: bold;">
-                                    <%= thisrequestdetails.status%>
+                            <tr>
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= thisrequestdetails.ReqID %>
                                 </td>
-                                <%}else if(thisrequestdetails.status=="Pending" ){%>
-                                    <td
-                                        style="text-align: center;vertical-align:center; color: rgb(158, 73, 201);  font-weight: bold;">
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= thisrequestdetails.SID %>
+                                </td>
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= new Date(thisrequestdetails.RequestDate).toLocaleDateString('en-CA') %>
+                                </td>
+
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= thisrequestdetails.RequestStartTime %>
+                                </td>
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= thisrequestdetails.RequestEndTime%>
+                                </td>
+                                <td style="text-align: center;vertical-align:center;">
+                                    <%= thisrequestdetails.reason%>
+                                </td>
+
+                                <% if(thisrequestdetails.status=="Require Proof" ){%>
+                                    <td style="text-align: center;vertical-align:center; color: red;  font-weight: bold;">
                                         <%= thisrequestdetails.status%>
                                     </td>
-                                    <%}else if(thisrequestdetails.status=="Approved" ){%>
+                                    <%}else if(thisrequestdetails.status=="Pending" ){%>
                                         <td
-                                            style="text-align: center;vertical-align:center; color: green;  font-weight: bold;">
+                                            style="text-align: center;vertical-align:center; color: rgb(158, 73, 201);  font-weight: bold;">
                                             <%= thisrequestdetails.status%>
                                         </td>
-                                        <%}else if(thisrequestdetails.status=="Rejected" ){%>
+                                        <%}else if(thisrequestdetails.status=="Approved" ){%>
                                             <td
-                                                style="text-align: center;vertical-align:center; color: orange;  font-weight: bold;">
+                                                style="text-align: center;vertical-align:center; color: green;  font-weight: bold;">
                                                 <%= thisrequestdetails.status%>
                                             </td>
-                                            <%}else if(thisrequestdetails.status=="Enforce Rejected" ){%>
+                                            <%}else if(thisrequestdetails.status=="Rejected" ){%>
                                                 <td
-                                                    style="text-align: center;vertical-align:center; color: brown;  font-weight: bold;">
+                                                    style="text-align: center;vertical-align:center; color: orange;  font-weight: bold;">
                                                     <%= thisrequestdetails.status%>
                                                 </td>
-                                                <%}else if(thisrequestdetails.status=="Enforce Approved" ){%>
-                                                    <td style="text-align: center;vertical-align:middle; color: yellowgreen;;  font-weight: bold;">
+                                                <%}else if(thisrequestdetails.status=="Enforce Rejected" ){%>
+                                                    <td
+                                                        style="text-align: center;vertical-align:center; color: brown;  font-weight: bold;">
                                                         <%= thisrequestdetails.status%>
                                                     </td>
-                                                    <%}%>
+                                                    <%}else if(thisrequestdetails.status=="Enforce Approved" ){%>
+                                                        <td style="text-align: center;vertical-align:middle; color: yellowgreen;;  font-weight: bold;">
+                                                            <%= thisrequestdetails.status%>
+                                                        </td>
+                                                        <%}%>
 
-                        </tr>
+                            </tr>
 
 
 
-                    </table>
-
+                        </table>
+                    </div>
 
                     <br><br>
 
@@ -138,6 +139,7 @@
                             <div class="column">
                                 <div class="rows">
                                     <div class="row">
+                                        <div style="overflow: scroll;">
                                         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
                                             <th
                                                 style="font-size:20px;text-align: center;vertical-align:center;background-color:burlywood;">
@@ -153,6 +155,7 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                        </div>
                                     </div>
                                     <br>
                                     <div class="row">
@@ -191,6 +194,7 @@
 
                                 </div>
                                 <div class="column">
+                                <div style="overflow: scroll;"></div>
                                     <table class="table is-bordered is-striped is-hoverable is-fullwidth">
                                         <th
                                             style="font-size:20px;text-align: center;vertical-align:center;background-color:burlywood;">
@@ -205,7 +209,7 @@
                                             </td>
                                         </tr>
                                     </table>
-
+                                </div>
                                 </div>
                             </div>
 

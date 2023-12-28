@@ -4,21 +4,20 @@
 <div>
     <button class="button buttonlogout is-responsive" onclick="history.back()">Back</button>
 </div>
-<div class="columns is-centered is-onethird is-mobile">
-    <div class="column"></div>
+<div class="columns is-centered is-multiline is-mobile" style="align-items: center;">
+    
     <%var today=new Date();%>
         <% today=today.toLocaleString()%>
             <% var date=new Date(theday)%>
-                <div class="column template">
-
-                    <% if (req.session.role=="stu" ){%>
+                <div class="column template is-half-desktop is-full-width-mobile" style="align-items: center;">
+                    <% if (req.session.role== "stu" ){%>
 
                         <form name="therequest" action="/submitrequest" method="post"
                             onsubmit="submitstudetrequest(this,'<%=theday%>');return false;">
 
 
                             <article class="message is-warning">
-                                <div class="message-header" style="font-size: 19px; color: red;">
+                                <div class="message-header" style="font-size: calc(15px + 0.390625vw); color: red;">
                                     <p>Submission Deadline for Request Submission
                                         <br>
 
@@ -28,7 +27,7 @@
 
                                     </p>
                                 </div>
-                                <div class="message-body">
+                                <div class="message-body" style="font-size: calc(12px + 0.390625vw);">
                                     Please be aware that Presentation of your FYP also count in your personal
                                     marks.
                                     <br><br>
@@ -44,34 +43,68 @@
                             </article>
 
 
-                            <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
-                            <!-- min="2024-04-01" max="2024-04-30" -->
-                            <input type="date" id="notokday" name="notokday"style="font-size: 15px;" required>
-                            &nbsp;
-                            
-                            <input type="checkbox" id="notokday_wholeday" id="notokday_wholeday" value="whole day"
-                                onclick="dontshowtime()">
-                            <label for="notokday_wholeday">Whole Day</label>
-                            <!--
-        <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
-        -->
-                            <br><br>
-                            <div id="showthetime">
-                                <label for="starttime" style="font-size: 20px;">Start
-                                    time&emsp;:&emsp;&emsp;</label>
-                                <input type="time" id="starttime" name="starttime" style="font-size: 20px;" required>
-                                <br>
-                                <label for="endtime" style="font-size: 20px;">End
-                                    time&emsp;&nbsp;:&emsp;&emsp;</label>
-                                <input type="time" id="endtime" name="endtime" style="font-size: 20px;" required>
-                            </div>
+                            <table class="table is-fullwidth" style=" background-color: transparent;text-align: left; font-size: calc(15px + 0.390625vw);">
+                                    
+                                <tr>
+                                    <td>
+                                        <label for="notokday" style="font-size: calc(15px + 0.390625vw);">Unavailable Date:</label>
+                                    </td>
+                                    <td>
+                                         <!--min="2024-04-01" max="2024-04-30"-->
+                            <input type="date" id="notokday" name="notokday" style="font-size: 15px;" required>
                             <br>
-
-                            <label for="reason" style="font-size: 20px;">Reason:&emsp;&emsp;</label>
-                            <input type="text" id="reason" name="reason"
+                            <input type="checkbox" id="notokday_wholeday" value="wholeday" onclick="dontshowtime()">
+                            <label for="notokday_wholeday">Whole Day</label>
+                                    </td>
+                                </tr> 
+                               
+                                <tr id = "showthetime1">
+                                  
+                                        <td><label for="starttime" style="font-size: calc(15px + 0.390625vw);">Start time:</label></td>
+                                        <td><input type="time" id="starttime" name="starttime" required></td>
+                                        
+                                        
+                                
+                               
+                                </tr>
+                                <tr id = "showthetime2">
+                                    <td>
+                                        <label for="endtime" style="font-size: calc(15px + 0.390625vw);">End
+                                            time:</label>
+                                    </td>
+                                    <td><input type="time" id="endtime" name="endtime" required></td> 
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="reason" style="font-size: calc(15px + 0.390625vw);">Reason:</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="reason" name="reason"
                                 placeholder="Please describle your difficulties" style="width: 100%; height: 200px;"
                                 required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    
+                                <%var today=new Date()%>
+                                <%if ((theday==null) || (theday!=null&& today < date)){%>
+                                    <td></td>
+                                    <td>
+                                    <div id="orgformbutton " class="buttons is-right">
+                                        <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
+                                    </div></td>
 
+                                    <%}else {%>
+<td colspan="2">
+                                        <div id="row" style="text-align: center;">
+                                            <div class="box"
+                                                style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
+                                                Not Accepting
+                                                Submission Anymore</div>
+                                        </div></td>
+                                        <%}%>
+                           </tr>
+                            </table>
 
                             <br><br>
 
@@ -86,7 +119,7 @@
 
                                             <div id="row" style="text-align: center;">
                                                 <div class="box"
-                                                    style="background-color:transparent; box-shadow: none ;font-size: 20px;font-weight: bold; color : red;">
+                                                    style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
                                                     Not Accepting
                                                     Submission Anymore</div>
                                             </div>
@@ -101,25 +134,62 @@
 
                             <form name="therequest" action="/submitrequest" method="post"
                                 onsubmit="submitrequest(this);return false;">
-
-                                <label for="notokday" style="font-size: 20px;">Unavailable Date:&nbsp;&nbsp;</label>
-                                <!--min="2024-04-01" max="2024-04-30"-->
+                                <table class="table is-fullwidth" style=" background-color: transparent;text-align: center; font-size: calc(15px + 0.390625vw);">
+                                    
+                                    <tr>
+                                        <td>
+                                            <label for="notokday" style="font-size: calc(15px + 0.390625vw);">Unavailable Date:</label>
+                                        </td>
+                                        <td>
+                                             <!--min="2024-04-01" max="2024-04-30"-->
                                 <input type="date" id="notokday" name="notokday" style="font-size: 15px;" required>
-                                &nbsp;
+                                <br>
                                 <input type="checkbox" id="notokday_wholeday" value="wholeday" onclick="dontshowtime()">
                                 <label for="notokday_wholeday">Whole Day</label>
+                                        </td>
+                                    </tr> 
+                                   
+                                    <tr id = "showthetime1">
+                                      
+                                            <td><label for="starttime" style="font-size: calc(15px + 0.390625vw);">Start time:</label></td>
+                                            <td><input type="time" id="starttime" name="starttime" required></td>
+                                            
+                                            
+                                    
+                                   
+                                    </tr>
+                                    <tr id = "showthetime2">
+                                        <td>
+                                            <label for="endtime" style="font-size: calc(15px + 0.390625vw);">End
+                                                time:</label>
+                                        </td>
+                                        <td><input type="time" id="endtime" name="endtime" required></td> 
+                                    </tr>
+                               
+                                </table>
+
+                                <!-- <label for="notokday" style="font-size: calc(15px + 0.390625vw);">Unavailable Date:&nbsp;&nbsp;</label> -->
+                                
+                                <!--min="2024-04-01" max="2024-04-30"-->
+
+                                <!-- <input type="date" id="notokday" name="notokday" style="font-size: 15px;" required>
+                                &nbsp;
+                                <br>
+                                <input type="checkbox" id="notokday_wholeday" value="wholeday" onclick="dontshowtime()">
+                                <label for="notokday_wholeday">Whole Day</label> -->
+
                                 <!--
             <input type="radio" id="notokday_timeslot" id="notokday_timeslot" value="time slot" onclick="showtimetime()">
             -->
-                                <br><br>
+                                <!-- <br><br>
                                 <div id="showthetime">
-                                    <label for="starttime" style="font-size: 20px;">Start time:&nbsp;&nbsp;</label>
+                                    <label for="starttime" style="font-size: calc(15px + 0.390625vw);">Start time:&nbsp;&nbsp;</label>
                                     <input type="time" id="starttime" name="starttime" required>
                                     <br>
-                                    <label for="endtime" style="font-size: 20px;">End
+                                    <label for="endtime" style="font-size: calc(15px + 0.390625vw);">End
                                         time:&nbsp;&nbsp;&nbsp;</label>
                                     <input type="time" id="endtime" name="endtime" required>
-                                </div>
+                                </div> -->
 
                                 <br>
                                 <%var today=new Date()%>
@@ -133,7 +203,7 @@
 
                                         <div id="row" style="text-align: center;">
                                             <div class="box"
-                                                style="background-color:transparent; box-shadow: none ;font-size: 20px;font-weight: bold; color : red;">
+                                                style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
                                                 Not Accepting
                                                 Submission Anymore</div>
                                         </div>
@@ -145,7 +215,7 @@
                             <%}%>
 
                 </div>
-                <div class="column"></div>
+                
 </div>
 
 
@@ -161,16 +231,21 @@
             showtimetime();
         } else {
             checked = true;
-            document.getElementById("showthetime").innerHTML = "";
+            console.log(document.getElementById("showthetime1").innerHTML);
+            document.getElementById("showthetime1").innerHTML = "<tr></tr>";
+            console.log(document.getElementById("showthetime1").innerHTML);
+            console.log(document.getElementById("showthetime2").innerHTML);
+            document.getElementById("showthetime2").innerHTML = "<tr></tr>";
+            console.log(document.getElementById("showthetime2").innerHTML);
         }
 
     }
     function showtimetime() {
-        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
-            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\ style=\"font-size: 20px;\"required>"
-            + "\<br\>"
-            + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
-            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"  style=\"font-size: 20px;\" required>";
+        document.getElementById("showthetime1").innerHTML = "\<td\>\<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>\</td\>"
+            + " \<td>\<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\ style=\"font-size: calc(15px + 0.390625vw);\"required>\</td\>";
+           
+                document.getElementById("showthetime2").innerHTML =  "\<td\>\<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>\</td\>"
+            + "\<td\>\<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"  style=\"font-size: calc(15px + 0.390625vw);\" required>\</td\>";
     }
 
     async function submitrequest(formElem) {
