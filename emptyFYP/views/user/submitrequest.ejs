@@ -107,26 +107,6 @@
                             </table>
 
                             <br><br>
-
-                            <%var today=new Date()%>
-                                    <%if ((theday==null) || (theday!=null&& today < date)){%>
-
-                                        <div id="orgformbutton " class="buttons is-right">
-                                            <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
-                                        </div>
-
-                                        <%}else {%>
-
-                                            <div id="row" style="text-align: center;">
-                                                <div class="box"
-                                                    style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
-                                                    Not Accepting
-                                                    Submission Anymore</div>
-                                            </div>
-                                            <%}%>
-
-
-
                         </form>
 
 
@@ -165,6 +145,26 @@
                                         </td>
                                         <td><input type="time" id="endtime" name="endtime" required></td> 
                                     </tr>
+                                    <tr>
+                                        <%var today=new Date()%>
+                                        <%if ((theday==null) || (theday!=null&& today < date)){%>
+                                            <td></td>
+                                            <td>
+                                         <div class="buttons is-right">
+                                             <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
+                                         </div>
+     </td>
+                                         <%}else {%>
+                                            <td colspan="2">
+                                             <div id="row" style="text-align: center;">
+                                                 <div class="box"
+                                                     style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
+                                                     Not Accepting
+                                                     Submission Anymore</div>
+                                             </div>
+                                             </td>
+                                             <%}%>
+                                    </tr>
                                
                                 </table>
 
@@ -192,24 +192,6 @@
                                 </div> -->
 
                                 <br>
-                                <%var today=new Date()%>
-                                   <%if ((theday==null) || (theday!=null&& today < date)){%>
-
-                                    <div class="buttons is-right">
-                                        <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
-                                    </div>
-
-                                    <%}else {%>
-
-                                        <div id="row" style="text-align: center;">
-                                            <div class="box"
-                                                style="background-color:transparent; box-shadow: none ;font-size: calc(15px + 0.390625vw);font-weight: bold; color : red;">
-                                                Not Accepting
-                                                Submission Anymore</div>
-                                        </div>
-                                        <%}%>
-                                
-
                             </form>
 
                             <%}%>
