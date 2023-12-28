@@ -13,7 +13,7 @@
        
     <div class = "row" id = "manualhandlecasetable">
         <div class = "columns is-centered is-mobile">
-            <div class = "column ">
+            <div class = "column" style = "overflow: auto;">
                 <div class = "table-container">
                 <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
                     <tr>
@@ -35,7 +35,7 @@
                     </tr>
                     <%for(var a = 0 ;a < manualhandlecase.length ; a++){%>
                         <tr>
-                            <td style="font-size : 20px; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
+                            <td style="font-size: calc(15px + 0.390625vw);; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
                             <td><div class="buttons is-centered">
                                 <div class="button is-responsive" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">
                                     edit</div>
@@ -51,18 +51,12 @@
     <%}%>
 
 
-    <div class = "row" id = "Schedule">
-        <div class = "columns is-centered is-mobile">
-            <div class = "column ">
-                <div class = "table-container">
-        <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
-            <tr>
-                <%var realpresentday = new Date(setting.startday)%>
+    <div class = "row" id = "Schedule"> 
+        <%var realpresentday = new Date(setting.startday)%>
                 <%=displaystartday%>   <%=displayendday%>
                 <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
-                    <% var printday=new Date(displaydate.getTime())%>
-                    <!--var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay())-->
-                        <%var enddisplaydate= displayendday;%>
+                    <% var printday=new Date(displaydate.getTime())%> 
+                     <%var enddisplaydate= displayendday;%>
                         <br><%="enddisplay date"%> <%=enddisplaydate%><br>
                         <%
                         var appendlist = [];
@@ -179,6 +173,14 @@
                         if (a.starttime > b.starttime) return 1;
                         })
                     %>
+        <div class = "columns is-centered is-mobile">
+            <div class = "column " style = "overflow: auto;">
+                <div class = "table-container">
+        <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
+            <tr>
+               
+                    <!--var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay())-->
+                      
                       
                         <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" >
                             <%if(Page != 1){%>
@@ -229,7 +231,7 @@
                 <!--printing empty cell for the time column-->
                 <td style="font-size : 14px"></td>
                 <%var printing = new Date(displaystartday.getTime())%>
-                <%=printing%> <%=new Date(displayendday.getTime())%> 
+               
                  <!--printing the date on the table on row 2-->
                 <%for(var a = 0 ;a < 7;a++){%>                   
                     <td style="font-size : 14px"><%=printing.toLocaleDateString("en-GB")%></td>

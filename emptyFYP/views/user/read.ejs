@@ -14,7 +14,7 @@
         <div>
             <br><br>
             <!--Student Personal info table-->
-            <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+            <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                 <table class="table is-bordered is-striped is-fullwidth">
                     <tr>
                         <%if(req.session.role=="sup" ){%>
@@ -92,7 +92,7 @@
             </div>
 
             <!--Student Request info-->
-            <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+            <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                 <table class="table is-bordered is-striped is-fullwidth">
                     <tr>
                         <th colspan="6"
@@ -161,7 +161,7 @@
             <div>
                 <br><br>
                 <!--Supervisor Personal info table-->
-                <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+                <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                     <table class="table is-bordered is-striped is-fullwidth">
                         <tr>
                             <th colspan="3"
@@ -194,7 +194,7 @@
                 </div>
 
                 <!--Supervisor Request info table-->
-                <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+                <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                     <table class="table is-bordered is-striped is-fullwidth">
                         <tr>
                             <th colspan="3"
@@ -237,7 +237,7 @@
 
                    <!--Supervisor Supervising Student list table-->
                 <%if(thatppl[0].sid !=null){%>
-                    <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+                    <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                         <table class="table is-bordered is-striped is-fullwidth">
                             <tr>
                                 <th colspan="5"
@@ -292,7 +292,7 @@
 
                 <!--Supervisor Observing Student list table-->
                 <%if(obslist.length >0 ){%>
-                    <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
+                    <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                         <table class="table is-bordered is-striped is-fullwidth">
                                 <tr>
                                     <th colspan="5"

@@ -4,6 +4,7 @@ module.exports = {
 
     },
     viewFinalSchedule: async function (req, res) {
+       
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var getsettinginfo;
@@ -36,8 +37,11 @@ module.exports = {
             var settingdate = new Date(setting.deadlinedate);
             settingdate.setHours(setting.deadlinetime.split(":")[0]);
             settingdate.setMinutes(setting.deadlinetime.split(":")[1]);
-            console.log(settingdate)
-            if (settingdate > new Date()) {
+            var today = new Date();
+            console.log(">>settingdate",settingdate.toLocaleDateString() , "  ",settingdate.toLocaleTimeString("en-GB")," ",today.toLocaleDateString(),"  ",today.toLocaleTimeString("en-GB"))
+            console.log(settingdate >= new Date())
+            console.log(settingdate >= today)
+            if (settingdate <= new Date()) {
 
                 if (req.session.role == "sup") {
                     getschedulebox = "select * from allschedulebox where tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\" order by boxdate";
@@ -55,12 +59,14 @@ module.exports = {
                         });
 
                     } catch (err) {
-                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
+                       return res.status(400).json("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
                     }
                 });
+            }else{
+                return res.status(400).json("not yet disclose");
             }
         } else {
-            console.log(setting.errmsg)
+            return res.status(400).json(setting.errmsg);
         }
 
     },

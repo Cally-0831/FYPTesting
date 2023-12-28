@@ -155,11 +155,16 @@
         var response = await fetch("/viewFinalSchedule", {
             method: "GET",
         });
-
-        if (response.ok) {
-
-            location.assign("/viewFinalSchedule");
+        if(response.ok){
+            location.assign(response.url);
+        }else{
+            var msg = await response.json();
+            alert(msg);
+            location.reload()
         }
+        
+        
+        
     }
     async function checkrequestdeadline(rolerole) {
 
@@ -169,7 +174,11 @@
 
         if (response.ok) {
 
-            location.assign("/submitrequest");
+            location.assign(response.url);
+        }else{
+            var msg = await response.json();
+            alert(msg);
+            location.reload()
         }
 
     }
