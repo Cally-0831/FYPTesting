@@ -733,7 +733,7 @@ module.exports = {
     
     
         },
-    
+    */
         checkuploadstudentlistdeadline: async function (req, res) {
             var db = await sails.helpers.database();
             var pool = await sails.helpers.database2();
@@ -763,7 +763,7 @@ module.exports = {
                 }
             })
         },
-    */
+  
     generateobs: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
