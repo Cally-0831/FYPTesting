@@ -5,7 +5,7 @@
         <div class="columns is-multiline is-mobile">
             <div class="column is-left">
                 <div class="buttons">
-                    <div class="button buttonlogout is-left" onclick="back()">
+                    <div class="button buttonlogout is-responsive is-left" onclick="back()">
                         Back
                     </div>
     
@@ -17,7 +17,7 @@
             <%if(finaldate > today){%>
                 <div class="column ">
                     <div class="buttons is-right">
-                        <button class="buttonlogout" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
+                        <button class="button buttonlogout is-responsive" id="createnewstu" onclick="gotocreatestu()">Create new Student</button>
                     </div>
                 </div>
                 <%}%>
@@ -105,7 +105,7 @@
                     <% if (allstdlist.ttbsubmission != "N" ){%>
                         <div class="buttons is-centered">
                             <a href="/readttb/<%= allstdlist.sid%>">
-                                <button class="button buttonlogout">View Submission</button>
+                                <button class="button buttonlogout is-responsive">View Submission</button>
                             </a>
                         </div>
                         <%}%>
@@ -186,7 +186,7 @@
                 <div class="column">
                     <div class="buttons is-left ">
                         
-                        <div class="button buttonlogout" onclick="backback()">
+                        <div class="button buttonlogout is-responsive" onclick="backback()">
                             Back
                         </div>
         
@@ -292,7 +292,7 @@
                     </td>
                     <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <div class="buttons is-centered">
-                            <div class="button buttonlogout" type="button"
+                            <div class="button buttonlogout is-responsive" type="button"
                                 onclick="deletesupervisor('<%=list.tid%>')">
                                 Delete
                             </div>
@@ -377,8 +377,15 @@
         location.assign("/createnewsup");
     }
 
-    function redirectplease(path) {
-        location.assign("/read/" + path);
+    async function redirectplease(path) {
+        var response = await fetch("/read/" + path,{
+            method:"GET",
+        })
+        if(response.ok){
+            location.assign(response.url);
+        }else{
+            alert("Cannot get into this user's detail page, please report this issue");
+        }   
     }
 
     function back(){

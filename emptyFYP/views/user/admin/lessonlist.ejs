@@ -2,7 +2,7 @@
     <div class=" Pagetitle">All Lessons</div>
     <div class="row">
         <div class="buttons">
-            <div class="button buttonlogout" onclick="backback()">Back</div>
+            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
         </div>
     </div>
     <br><br>
@@ -10,55 +10,55 @@
         <div class="table" style="width: 100%;overflow-x: scroll; overflow-y: scroll;">
         <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
             <tr>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting" id='headerCDept'
                         onclick="sorting('sorting','mytable','headerCDept',0);">&#8593;</a>
                     CDept
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting" id='headerCCode'
                         onclick="sorting('sorting','mytable','headerCCode',1);">&#8593;</a>
                     CCode
                 </th>
 
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting" id='headerCSectCode'
                         onclick="sorting('sorting','mytable','headerCSectCode',2);">&#8593;</a>
                     CSection
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting" id='headerCampus'
                         onclick="sorting('sorting','mytable','headerCampus',3);">&#8593;</a>
                     Campus
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     <a class="sorting" id='headerRID' onclick="sorting('sorting','mytable','headerRID',4);">&#8593;</a>
                     RID
                 </th>
-                <th style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                     Action
                 </th>
                 <%for(var i=0 ; i < lessonlist.length;i++){%>
                     <%if(lessonlist[i].CDept !="EMPTY" ){%>
             <tr onclick="location.href = '/lessonlist/<%=lessonlist[i].CDept%><%=lessonlist[i].CCode%>';">
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <%=lessonlist[i].CDept%>
                 </td>
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <%=lessonlist[i].CCode%>
                 </td>
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <%=lessonlist[i].CID%>
                 </td>
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <%=lessonlist[i].Campus%>
                 </td>
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <%=lessonlist[i].RID%>
                 </td>
-                <td style="text-align: center;vertical-align:middle;">
+                <td style="text-align: center;vertical-align:middle;font-size: calc(13px + 0.390625vw);">
                     <div class="buttons is-centered">
-                        <button class="button buttonlogout" onclick="deletelesson('<%=lessonlist[i].CID%>')">
+                        <button class="button buttonlogout is-responsive" onclick="deletelesson('<%=lessonlist[i].CID%>')">
                             Delete</button>
                     </div>
 

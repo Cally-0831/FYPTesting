@@ -26,7 +26,7 @@
             <div class="Pagetitle">
                 <%=req.session.username%>'s Submitted TimeTable
             </div>
-            <div class="row" style="text-align: center;font-size: 15px;color: grey;">
+            <div class="row" style="text-align: center;font-size:calc(13px + 0.390625vw);color: grey;">
                 <% var submitteddate=new Date(allpersonallist[0].Submissiontime)%>
                     Submitted at <%=submitteddate.toLocaleDateString()%> ,
                         <%=submitteddate.toLocaleTimeString('en-US')%>
@@ -35,57 +35,37 @@
             <%}%>
                 <div class="rows is-mobile">
                     <div class="row">
-                        <div class="columns is-mobile">
-                            <div class="column is-half is-mobile">
+                        <div class="columns is-multiline is-mobile">
+                            <div class="column is-half">
                                 <div class="buttons is-left">
-                                    <button class="button buttonlogout" onclick="history.back()">Back</button>
+                                    <button class="button buttonlogout is-responsive" onclick="history.back()">Back</button>
                                 </div>
+                                
 
                             </div>
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="columns is-mobile">
-                            <div class="column is-onethird">
+                        <div class="columns is-multiline is-mobile">
+                            <!--add class button-->
+                            <div class="column">
                                 <% if (allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
                                     &&allpersonallist[0].confirmation !="2" )){%>
                                         
                                     <%if ((date== undefined) || (date != undefined && today < date)){%>
                                         <div class="buttons">
                                             <a href="timetable/submitttb">
-                                                <button class="button buttonlogout" id="addclass" >Add Class</button>
+                                                <button class="button buttonlogout is-responsive" id="addclass" >Add Class</button></a>
                                         </div>
-                                        </a>
-
                                         <%}%>
-                                            <%}%>
+                        
+                                 <%}%>
+                                            
                             </div>
-                            <div class="column is-onethird">
-                                <%if(req.session.role=="stu" ){%>
-                                    <%if(allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
-                                        &&allpersonallist[0].confirmation !="2" )){%>
-                                        <%if ((date== undefined) || (date != undefined && today < date)){%>
-                                            <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
-                                                <div class="columns is-mobile">
-                                                    <div class="column is-onethird">
-                                                        <label for="studentttbpic">Timetable
-                                                            Proof:&emsp;&emsp;&emsp;</label>
-                                                        <input type="file" id="uploadfileinput" name="avatar"
-                                                            multiple="multiple" accept="image/*"
-                                                            onchange="savefile(this)">
-                                                    </div>
-                                                    <div class="column is-onethird" id="appearthebutton">
-                                                    </div>
-                                                </div>
 
-                                            </form>
-                                            <%}%>
-                                                <%}%>
-
-                                                    <%}%>
-                            </div>
-                            <div class="column is-onethird" style="text-align: right;">
+                            <!--submit ttb button-->
+                            <div class="column " style="text-align: right;">
                                 <%if(req.session.role=="stu" ){%>
 
                                     <%if(allpersonallist.length==0){%>
@@ -93,13 +73,11 @@
                                         <%if (date != undefined && today> date){%>
                                             
                                             <div class="box"
-                                                style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                style="font-size:calc(15px + 0.390625vw); text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                 No Submission will be Accepted</div>
                                             <%}else{%>
                                                 <div class="buttons is-right">
-                                                    <button class="button buttonlogout"
-                                                        onclick="submitstudentttb('0','<%=date%>')">Submit
-                                                        Student Timetable</button>
+                                                    <button class="button buttonlogout is-responsive" onclick="submitstudentttb('0','<%=date%>')">Submit Timetable</button>
                                                 </div>
                                                 <%}%>
                                                     <!--no class input status-->
@@ -112,23 +90,23 @@
 
                                                         <%if(allpersonallist[0].confirmation=="0" ){%>
                                                             <%if (date== undefined || today < date){%>
+                                                                
                                                                 <div class="buttons is-right">
-                                                                    <button class="button buttonlogout"
-                                                                        onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Submit
-                                                                        Student Timetable</button>
+                                                                    <button class="button buttonlogout is-responsive"
+                                                                        onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Submit Timetable</button>
                                                                 </div>
-
+                                                                
                                                                 <div class="box"
                                                                     style="background-color: blanchedalmond; text-align: right;">
                                                                     <%if(allpersonallist[0].picdata!=null){%>
-                                                                        <div style="font-size: 17px;">Status :<strong><u
+                                                                        <div style="font-size:calc(15px + 0.390625vw);">Status :<strong><u
                                                                                     style="color: red;">Click Submit</u>
                                                                                 for
                                                                                 Supervisor
                                                                                 to review</strong></div>
 
                                                                         <%}else{%>
-                                                                            <div style="font-size: 17px;">Status
+                                                                            <div style="font-size:calc(15px + 0.390625vw);">Status
                                                                                 :<strong><u style="color: red;">Require
                                                                                         Upload
                                                                                         Proof</u> for
@@ -137,7 +115,7 @@
                                                                             <%}%>
                                                                                 <%}else{%>
                                                                                     <div class="box"
-                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                        style="font-size:calc(15px + 0.390625vw); text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                                                         No Submission will be Accepted
                                                                                     </div>
                                                                                     <%}%>
@@ -151,14 +129,14 @@
                                                                                                 <div
                                                                                                     class="buttons is-right">
                                                                                                     <button
-                                                                                                        class="button buttonlogout"
+                                                                                                        class="button buttonlogout is-responsive"
                                                                                                         onclick="submitstudentttb('<%=allpersonallist[0].picdata%>','<%=date%>')">Resubmit
                                                                                                         Student
                                                                                                         Timetable</button>
                                                                                                 </div>
                                                                                                 <%}else{%>
                                                                                                     <div class="box"
-                                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                                        style="font-size:calc(15px + 0.390625vw); text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                                                                         No Submission
                                                                                                         will be Accepted
                                                                                                     </div>
@@ -166,7 +144,7 @@
                                                                                                         <div class="box"
                                                                                                             style="background-color: blanchedalmond; text-align: right;">
                                                                                                             <div
-                                                                                                                style="font-size: 17px;">
+                                                                                                                style="font-size:calc(15px + 0.390625vw);">
                                                                                                                 Status
                                                                                                                 :<strong><u
                                                                                                                         style="color: orangered;">Rejected</u>
@@ -179,7 +157,7 @@
                                                                                                                 reviewdate=new
                                                                                                                 Date(allpersonallist[0].review)%>
                                                                                                                 <div
-                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                     Reviewed
                                                                                                                     at
                                                                                                                     <%=reviewdate.toLocaleDateString()%>
@@ -187,7 +165,7 @@
                                                                                                                         <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                                                                 </div>
                                                                                                                 <div
-                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                     Comments:
                                                                                                                     <%var
                                                                                                                         stringstring=allpersonallist[0].ttbcomments.split("_");%>
@@ -203,7 +181,7 @@
                                                                                                         <div class="box"
                                                                                                             style="background-color: blanchedalmond; text-align: right;">
                                                                                                             <div
-                                                                                                                style="font-size: 17px;">
+                                                                                                                style="font-size:calc(15px + 0.390625vw);">
                                                                                                                 Status
                                                                                                                 :<strong><u
                                                                                                                         style="color: brown;">Enforced</u>
@@ -216,7 +194,7 @@
                                                                                                                 reviewdate=new
                                                                                                                 Date(allpersonallist[0].review)%>
                                                                                                                 <div
-                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                     Reviewed
                                                                                                                     at
                                                                                                                     <%=reviewdate.toLocaleDateString()%>
@@ -224,7 +202,7 @@
                                                                                                                         <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                                                                 </div>
                                                                                                                 <div
-                                                                                                                    style="font-size: 15px; color: gray;">
+                                                                                                                    style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                     Comments:
                                                                                                                     <%var
                                                                                                                         stringstring=allpersonallist[0].ttbcomments.split("_");%>
@@ -243,7 +221,7 @@
                                                                                                                 <%if(allpersonallist[0].confirmation=="1"
                                                                                                                     ){%>
                                                                                                                     <div
-                                                                                                                        style="font-size:17px;">
+                                                                                                                        style="font-size:calc(15px + 0.390625vw);">
                                                                                                                         Status
                                                                                                                         :<strong><u
                                                                                                                                 style="color: rgb(127, 18, 189);">Pending</u>
@@ -255,7 +233,7 @@
                                                                                                                             if(allpersonallist[0].confirmation=="2"
                                                                                                                             ){%>
                                                                                                                             <div
-                                                                                                                                style="font-size: 17px;">
+                                                                                                                                style="font-size:calc(15px + 0.390625vw);">
                                                                                                                                 Status
                                                                                                                                 :<strong><u
                                                                                                                                         style="color: green;">Approved</u>
@@ -267,7 +245,7 @@
                                                                                                                                     reviewdate=new
                                                                                                                                     Date(allpersonallist[0].review)%>
                                                                                                                                     <div
-                                                                                                                                        style="font-size: 15px; color: gray;">
+                                                                                                                                        style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                                         Reviewed
                                                                                                                                         at
                                                                                                                                         <%=reviewdate.toLocaleDateString()%>
@@ -275,7 +253,7 @@
                                                                                                                                             <%=reviewdate.toLocaleTimeString('en-US')%>
                                                                                                                                     </div>
                                                                                                                                     <div
-                                                                                                                                        style="font-size: 15px; color: gray;">
+                                                                                                                                        style="font-size:calc(13px + 0.390625vw); color: gray;">
                                                                                                                                         Comments:
                                                                                                                                         <%var
                                                                                                                                             stringstring=allpersonallist[0].ttbcomments.split("_");%>
@@ -297,12 +275,12 @@
                                                                                                                                 <div
                                                                                                                             class="buttons is-right">
                                                                                                                             <button
-                                                                                                                                class="button buttonlogout"
+                                                                                                                                class="button buttonlogout is-responsive"
                                                                                                                                 onclick="submitttb('<%=allpersonallist.length%>')">Submit
                                                                                                                                 Timetable</button>
                                                                                                                         </div><%}else{%>
                                                                                                                                 <div class="box"
-                                                                                        style="font-size:20px; text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
+                                                                                        style="font-size:calc(15px + 0.390625vw); text-align:  right; background-color: beige; padding:20px;font-weight: bold;color: red;">
                                                                                         No Submission will be Accepted
                                                                                     </div>
                                                                                                                                 <%}%>
@@ -316,8 +294,38 @@
                                                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+                </div>
+<br>
+                    <div class="row">
+                            <div class="column is-fullwidth-mobile ">
+                                <%if(req.session.role=="stu" ){%>
+                                    <%if(allpersonallist.length==0 || (allpersonallist[0].confirmation !="1"
+                                        &&allpersonallist[0].confirmation !="2" )){%>
+                                        <%if ((date== undefined) || (date != undefined && today < date)){%>
+                                            <form method="POST" action="/timetable/pic" enctype="multipart/form-data">
+                                                <div class="columns is-mobile is-centered">
+                                                    <div class="column is-left">
+                                                        <label for="studentttbpic">Timetable
+                                                            Proof:&emsp;&emsp;&emsp;</label>
+                                                        <input type="file" id="uploadfileinput" name="avatar"
+                                                            multiple="multiple" accept="image/*"
+                                                            onchange="savefile(this)">
+                                                            <br><br>
+                                                            <div  id="appearthebutton">
+                                                    </div>
+                                                    </div>
+                                                    
+                                                </div>
 
+                                            </form>
+                                            <%}%>
+                                                <%}%>
+
+                                                    <%}%>
+                            </div>
+                    </div>   
+                   
                     <%if( allpersonallist.length>0 ){%>
                         <!---if have input picture , display in a better view use-->
                         <%if(allpersonallist[0].picdata!= null){%>
@@ -341,16 +349,16 @@
                                             <table
                                                 class="table is-bordered is-striped is-hoverable is-fullwidth text-center">
                                                 <th
-                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                    style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                     Class
                                                     Code</th>
                                                 <th
-                                                    style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                    style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                     Class
                                                     Section</th>
                                                 <%if((allpersonallist[0].confirmation=="0"||allpersonallist[0].confirmation=="3") &&(date ==undefined || today < date)){%>
                                                     <th
-                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
 
                                                         Action</th>
 
@@ -361,11 +369,11 @@
                                                             <tr>
                                                                 <%if(stringstring.length < 3){%>
                                                                     <td
-                                                                        style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                                                                         <%=stringstring[0]%>
                                                                     </td>
                                                                     <td
-                                                                        style="font-size:20px;text-align: center;vertical-align:middle;">
+                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                                                                         <% if(stringstring[0]=="EMPTY" && (
                                                                             allpersonallist[0].confirmation=="0"
                                                                             ||allpersonallist[0].confirmation=="3" )){%>
@@ -380,8 +388,8 @@
                                                                     <%if((allpersonallist[0].confirmation=="0" ||
                                                                         allpersonallist[0].confirmation=="3") && (date == undefined || today < date) ){%>
                                                                         <td
-                                                                            style="font-size:20px;text-align: center;vertical-align:middle;">
-                                                                            <button class="button" type="button"
+                                                                            style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
+                                                                            <button class="button  is-responsive" type="button"
                                                                                 onclick="deleteclassinput('<%=stringstring[0]%>','<%=stringstring[1]%>')">Delete</button>
                                                                         </td>
                                                                         <%}%>
@@ -403,23 +411,20 @@
                             <%}else{%>
                                 <!--- 0 input init -->
                                 <br>
-                                <div class="columns is-mobile">
-                                    <div class="column is-one-fifth">
 
-                                    </div>
-
-                                    <div class="column is-three-fifths">
-                                        <article class="message is-large">
+                                <div class="columns is-mobile is-centered">
+                                    
+                                    <div class="column is-half-desktop is-fullwidth-mobile" style="align-items: center;">
+                                        <article class="message is-large" style="width: 100%;">
                                             <div class="message-header">
                                                 <p>Submission Deadline for Timetable<br>
-                                                    
                                                     <%if(date != undefined){%>
                                                         <%=datedate.toLocaleDateString()%>
                                                             <%=datedate.toLocaleTimeString('en-US')%>
                                                                 <%}%>
                                                 </p>
                                             </div>
-                                            <div class="message-body" style="font-size: 18px;">
+                                            <div class="message-body" style="font-size:calc(20px + 0.390625vw);">
                                                 <strong>Currently there are no class inputted by you</strong>
                                                 <% if(req.session.role!="sup" ){%>
                                                     <br><br>
@@ -479,9 +484,6 @@
                                             </div>
                                         </article>
                                     </div>
-                                    <div class="column is-one-fifth">
-
-                                    </div>
                                 </div>
 
 
@@ -518,25 +520,25 @@
                                                                                 <table
                                                                                     class="table is-bordered is-striped is-hoverable is-halfwidth center">
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                     </th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         MON</th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         TUE</th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         WED</th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         THU</th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         FRI</th>
                                                                                     <th
-                                                                                        style="font-size:20px;text-align: center;vertical-align:middle; background-color: bisque;">
+                                                                                        style="font-size:calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                                                                                         SAT</th>
 
                                                                                     <!---j = timebox-->
@@ -596,7 +598,7 @@
 
 
 
-                </div>
+                
                 <script>
                     async function submitstudentttb(picdata, date) {
                         var requestBody = JSON.stringify({ deadline: date });
@@ -645,7 +647,7 @@
                             document.getElementById("appearthebutton").innerHTML = "";
                             var newbutton = document.createElement("button");
                             newbutton.setAttribute("id", "upload");
-                            newbutton.setAttribute("class", "button buttonlogout");
+                            newbutton.setAttribute("class", "button is-warning is-hovered is-responsive");
                             newbutton.setAttribute("onclick", "checkcheck()");
                             newbutton.innerText = "Upload"
                             document.getElementById("appearthebutton").appendChild(newbutton);

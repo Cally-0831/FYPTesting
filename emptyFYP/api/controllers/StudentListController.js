@@ -292,23 +292,16 @@ module.exports = {
                                     return res.view('user/read', { type: type, thatppl: studentresult, obslist: undefined, requestlist: studentrequestlist, checkdate: checkdate });
 
                                 } catch (err) {
-                                    console.log("error happened in StudentListController: readsingleppl 1");
+                                    return res.status(401).json("error happened in StudentListController: readsingleppl 1");
                                 }
                             })
                         } catch (err) {
-                            console.log("error happened in StudentListController: readsingleppl 2");
+                            return res.status(401).json("error happened in StudentListController: readsingleppl 2");
                         }
                     })
-
-
-
-
                 } catch (err) {
-                    console.log("error happened in StudentListController: readsingleppl3");
-
+                    return res.status(401).json("error happened in StudentListController: readsingleppl3");
                 }
-
-
             });
         } else if (req.params.id.charAt(0) == "t") {
             type = "sup";
@@ -338,32 +331,18 @@ module.exports = {
                                     return res.view('user/read', { type: type, thatppl: supervisorresult, obslist: obslist, requestlist: supervisorrequestlist });
 
                                 } catch (err) {
-                                    console.log("error happened in StudentListController: readsingleppl");
+                                    return res.status(401).json("error happened in StudentListController: readsingleppl");
                                 }
-
                             })
                         } catch (err) {
-                            console.log("error happened in StudentListController: readsingleppl");
+                            return res.status(401).json("error happened in StudentListController: readsingleppl");
                         }
-
                     })
-
-
-
-
                 } catch (err) {
-                    console.log("error happened in StudentListController: readsingleppl");
-
+                    return res.status(401).json("error happened in StudentListController: readsingleppl");
                 }
-
-
             });
         }
-
-
-
-
-
     },
 
 

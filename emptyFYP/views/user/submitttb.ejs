@@ -1,14 +1,14 @@
 <div class="Pagetitle">Add Class To Your TimeTable</div>
 <div class="buttons">
-    <div class="button buttonlogout is-left" onclick="history.back()">
+    <div class="button buttonlogout is-left is-responsive" onclick="history.back()">
         Back
     </div>
 
 </div>
 <br>
-<div class="columns is-mobile">
-    <div class="column is-one-third"></div>
-    <div class="column is-one-third singleclassinfo">
+<div class="columns is-mobile is-centered">
+   
+    <div class="column is-fullwidth-mobile is-half-desktop singleclassinfo">
         <form action="/timetable/submitttb" method="post"
             onsubmit="submitform(this,'<%=req.session.role%>');return false;">
 
@@ -18,9 +18,10 @@
                     <input id="enrollnotclassbox" type="checkbox" value="noclassenrolled" onchange="cleartheform()"> I
                     take 0 course this semester
                 </div>
+                <br>
                 <div id="singleclassinfo">
                     <div id="deptinputfield">
-                        <label for="classdep">Please input your class's department code&nbsp;:&nbsp;</label>
+                        <label for="classdep" style=" font-weight: bold;font-size: calc(15px+0.390625vw);">Department code&nbsp;:&nbsp;</label>
                         <select name="classdep" id="classdep">
                             <option value="">---Please Select---</option>
                             <%allDeptlist.forEach( function(list) { %>
@@ -32,24 +33,28 @@
                                         <% })%>
                         </select>
                     </div>
+                    <br>
                     <div id="codeinputfield">
-                        <label for="classcode">Please input your class's code&nbsp;:&nbsp;</label>
+                        <label for="classcode" style=" font-weight: bold;font-size: calc(15px+0.390625vw);">Class's code&nbsp;:&nbsp;</label>
                         <select name="classcode" id="classcode">
                             <option value="">---Please Select---</option>
 
                         </select>
                     </div>
+                    <br>
                     <div id="sectioninputfield">
-                        <label for="classsection">Please input your class's section code&nbsp;:&nbsp;</label>
+                        <label for="classsection" style=" font-weight: bold;font-size: calc(15px+0.390625vw);">Section code&nbsp;:&nbsp;</label>
                         <select name="classsection" id="classsection"
                             onchange="findlabsection('<%=req.session.role%>')">
                             <option value="">---Please Select---</option>
                         </select>
                     </div>
                     <div id="labsectioninputfield"></div>
+                    <br>
                     <div class="buttons is-right">
-                        <button class="button buttonlogout" type="submit is-success">Add Class</button>
+                        <button class="button buttonlogout is-responsive" type="submit is-success">Add Class</button>
                     </div>
+
                 </div>
         </form>
     </div>
@@ -173,7 +178,7 @@
             }
 
             if (type == "load_lab" && responseData.length > 0) {
-                html = "<label for=\"classlabsection\">Please input your class's tutorial section code&nbsp;:&nbsp;</label\>"
+                html = "<br><label for=\"classlabsection\" style=\"font-weight: bold;font-size: calc(15px+0.390625vw);\">Tutorial Section Code&nbsp;:&nbsp;</label\>"
                     + "<select name=\"classlabsection\" id=\"classlabsection\"\>"
                     + "\<option value=\"\"\>---Please Select---</option\>"
                 if (role == "sup") {
