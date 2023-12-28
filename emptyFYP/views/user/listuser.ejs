@@ -67,26 +67,26 @@
         <% allstdlist.forEach( function(allstdlist) { %>
     
             <tr >
-                <td id="sid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="sid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%= allstdlist.sid%>')">
                     <%= allstdlist.sid %>
                 </td>
     
-                <td id="studentname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="studentname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%= allstdlist.sid%>')">
     
                     <%= allstdlist.stdname %>
     
                 </td>
     
-                <td id="studenttopic" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="studenttopic" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%= allstdlist.sid%>')">
                     <%= allstdlist.Topic%>
                 </td>
-                <td id="studenttid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="studenttid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%= allstdlist.sid%>')">
                     <%= allstdlist.OID%>
                 </td>
-                <td id="studentsupname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="studentsupname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%= allstdlist.sid%>')">
                     <%= allstdlist.obsname%>
                 </td>
-                <td id="studentstatus" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectplease('<%= allstdlist.sid%>')">
+                <td id="studentstatus" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%= allstdlist.sid%>')">
                     <%if (allstdlist.ttbsubmission=="Require Proof" ){%>
                         <div style="font-weight: bold;color: red;">Require Proof</div>
                         <%}else if (allstdlist.ttbsubmission=="Pending" ){%>
@@ -101,10 +101,8 @@
                                                 <div style="font-weight: bold;color: rgb(78, 162, 252);">No Submission</div>
                                                 <%}%>
                 </td>
-                <%=allstdlist.sid+"@@"+allstdlist.ttbsubmission+"@@"%><%=allstdlist.ttbsubmission != "N"%>
-                
                     <% if (allstdlist.ttbsubmission != "N" ){%>
-                        <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirect('/readttb/<%= allstdlist.sid%>')">
+                        <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
                         <div class="buttons is-centered">
                             <a href="/readttb/<%= allstdlist.sid%>">
                                 <button class="button buttonlogout is-responsive">View Submission</button>
@@ -112,6 +110,7 @@
                         </div>
                     </td>
                         <%}else if(allstdlist.ttbsubmission == "N"){%>
+                            <td id="studentttb" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%= allstdlist.sid%>')">
                             </td>
                             <%}%>
                
@@ -267,17 +266,17 @@
             <% suplist.forEach( function(list) { %>
         
                 <tr >
-                    <td id="tid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%=list.tid%>')">
+                    <td id="tid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
                         <%= list.tid %>
                     </td>
         
         
-                    <td id="supname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%=list.tid%>')">
+                    <td id="supname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
         
                         <%= list.supname %>
         
                     </td>
-                    <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%=list.tid%>')">
+                    <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
                         <% for(var j = 0 ; j < list.supsidlist.length ; j++){%>
                             <a href="/read/<%= list.supsidlist[j]%>"><%=list.supsidlist[j]%></a><br>
                         <%}%>
@@ -285,12 +284,12 @@
         
         
                     </td>
-                    <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%=list.tid%>')">
+                    <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
                         <% for(var j = 0 ; j < list.supstunamelist.length ; j++){%>
                             <a href="/read/<%= list.supsidlist[j]%>"><%= list.supstunamelist[j]%></a> <br>
                                             <%}%>
                     </td>
-                    <td id="supsubmission" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectplease('<%=list.tid%>')">
+                    <td id="supsubmission" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
         
                         <%= list.submission %>
         
@@ -382,7 +381,7 @@
         location.assign("/createnewsup");
     }
 
-    async function redirectplease(path) {
+    async function redirectinfo(path) {
         var response = await fetch("/read/" + path,{
             method:"GET",
         })
@@ -392,16 +391,7 @@
             alert("Cannot get into this user's detail page, please report this issue");
         }   
     }
-    async function redirect(path) {
-        var response = await fetch(path,{
-            method:"GET",
-        })
-        if(response.ok){
-            location.assign(response.url);
-        }else{
-            alert("Cannot get into this user's detail page, please report this issue");
-        }   
-    }
+  
 
     function back(){
         location.assign("/home")
