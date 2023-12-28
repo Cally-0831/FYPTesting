@@ -12,7 +12,7 @@
                             <%=lasttime.toLocaleTimeString("en-US")%>
                     </div>
                     <div class="buttons">
-                        <div class="button buttonlogout is-left" onclick="backback()">
+                        <div class="button buttonlogout is-responsive is-left" onclick="backback()">
                             Back
                         </div>
 
@@ -162,9 +162,9 @@
                                             required></textarea>
                                         <br><br>
                                         <div class="buttons is-right">
-                                            <button class="button buttonlogout" type="submit is-success"
+                                            <button class="button buttonlogout is-responsive" type="submit is-success"
                                                 onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
-                                            <button class="button buttonlogout" type="submit is-success"
+                                            <button class="button buttonlogout is-responsive" type="submit is-success"
                                                 onclick="rejectthis('<%=thisrequestdetails.ReqID%>')">Reject</button>
 
                                         </div>
@@ -229,7 +229,7 @@
         } else {
             var newbutton = document.createElement("button");
             newbutton.setAttribute("id", "upload");
-            newbutton.setAttribute("class", "button buttonlogout");
+            newbutton.setAttribute("class", "button buttonlogout is-responsive");
             newbutton.innerText = "Upload"
             document.getElementById("appearthebutton").appendChild(newbutton);
         }

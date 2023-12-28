@@ -11,7 +11,7 @@
     Create New Notice
 </div>
 <div class="buttons">
-    <div class="button buttonlogout is-left" onclick="history.back()">
+    <div class="button buttonlogout is-responsive is-left" onclick="history.back()">
         Back
     </div>
 
@@ -55,13 +55,13 @@
                     
                     <%if( id == null){%>
                        <%if(req.session.role =="adm"){%>
-                        <button class="buttonlogout" onclick="submitplainform(1)">Submit</button>
+                        <button class="button buttonlogout is-responsive" onclick="submitplainform(1)">Submit</button>
                         <%}else if(req.session.role == "sup"){%>
-                            <button class="buttonlogout" onclick="submitplainform(2)">Submit</button>
+                            <button class="button buttonlogout is-responsive" onclick="submitplainform(2)">Submit</button>
                             <%}%>
 
                         <%}else{%>
-                            <button class="buttonlogout" onclick="submitform('<%=id%>','<%=oldid%>','<%=level%>')">Submit</button>
+                            <button class="button buttonlogout is-responsive" onclick="submitform('<%=id%>','<%=oldid%>','<%=level%>')">Submit</button>
 
                             <%}%>
                     

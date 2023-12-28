@@ -1,4 +1,10 @@
 <div class="Pagetitle">Create New Student</div>
+<div class="buttons">
+  <div class="button buttonlogout is-responsive is-left" onclick="history.back()">
+      Back
+  </div>
+
+</div>
 <br>
 <div class="columns is-centered createnewstudent ">
   <form action="/createnewstudent" method="post" onsubmit="createnewstudent(this);return false;">
@@ -32,7 +38,7 @@
                   <input type="text" name="othertext" id="inputtext" >
                   <br><br>
                   <div class="buttons is-right">
-                    <button type="submit is-success" class="buttonlogout">Submit</button>
+                    <button type="submit is-success" class="button buttonlogout is-responsive">Submit</button>
                   </div>
                  
   </form>

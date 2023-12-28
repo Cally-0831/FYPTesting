@@ -1,4 +1,10 @@
 <div class="Pagetitle">Create New Supervisor</div>
+<div class="buttons">
+    <div class="button buttonlogout is-responsive is-left" onclick="history.back()">
+        Back
+    </div>
+
+</div>
 <br>
 <div class="columns is-centered template" style="align-items: center;">
     <form action="/createnewsup" method="post" onsubmit="createnewsup(this);return false;">
@@ -32,7 +38,7 @@
         <input type="" placeholder="Enter Priority" id="tid" name="Priority" value="" style="width:calc(300px + 0.390625vw)" min = "1" max = "3"required><br><br> -->
 <br>
         <div class="buttons is-right">
-            <button type="submit is-success" class="buttonlogout">Submit</button>
+            <button type="submit is-success" class="button buttonlogout is-responsive">Submit</button>
         </div>
         <br>
     </form>

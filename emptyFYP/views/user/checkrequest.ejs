@@ -1,6 +1,6 @@
 <div class="Pagetitle">All submitted Unavailable timeslots</div>
 <div class="buttons">
-    <div class="button buttonlogout is-left" onclick="history.back()">
+    <div class="button buttonlogout is-responsive is-left" onclick="history.back()">
         Back
     </div>
 
@@ -37,7 +37,7 @@
                     </td>   
                     <%if(setting == null || new Date(setting.deadlinedate) > new Date()){%>
                     <td style="text-align: center;vertical-align:middle;font-size: calc(15px + 0.390625vw);">
-                            <button class="button" type="button"
+                            <button class="button is-responsive" type="button"
                             onclick="deleterequestfromsupervisor('<%= request.ReqID %>')">Delete</button>    
                     </td>
                     <%}%>
@@ -115,14 +115,14 @@
                         </td>  
                         <%if((setting == null || new Date(setting.deadlinedate) > new Date()) &&request.status != "Approved" && request.status != "Rejected" && request.status != "Enforced Reject"){%>    
                         <td style="text-align: center;vertical-align:middle;font-size: calc(15px + 0.390625vw);">
-                              <button class="button" type="button"
+                              <button class="button is-responsive" type="button"
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         
                                 
                             </td><%}%>
                         <td style="text-align: center;vertical-align:middle;font-size: calc(15px + 0.390625vw);">
                             
-                                <button class="button" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
+                                <button class="button is-responsive" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
                             
                         </td>
                     </tr>
