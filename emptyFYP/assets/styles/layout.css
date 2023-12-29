@@ -1,57 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 .welcome{
   text-align: center;
   /* font-size: 30px; */
   font-size: calc(20px + 0.390625vw);
   font: bold;
 }
-.demo {
-  --stripe-step: 1.2vmax;
-  --stripe-tiny-step: 0.5vmax;
-  --stripe-offset: calc(var(--stripe-step) * 0.75);
-
-  position: relative;
-  width: 100%;
-  height: 1em;
-  font-family: "Fredoka One", cursive;
-  line-height: 1;
-  text-align: center;
-
-  &__text,
-  &::before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 99%;
-    mask-image: repeating-linear-gradient(
-      -45deg,
-      black 0,
-      black var(--stripe-step),
-      transparent 0,
-      transparent calc(var(--stripe-step) * 2)
-    );
-    mask-position: 0 0;
-    mask-size: 120% 120%;
-  }
-
-  &__text {
-    left: 0;
-    top: 0;
-    color: darkturquoise;
-  }
-
-  &::before {
-    content: attr(data-text);
-  }
-
-  &::before {
-    left: var(--stripe-offset);
-    bottom: var(--stripe-offset);
-    mask-position: var(--stripe-offset) var(--stripe-offset);
-    color: aquamarine;
-  }
-}
-
 
 .requestform {
   /* font-size: 20px; */
@@ -286,7 +238,7 @@
 .navbar-start {
   float: left;
   display: block;
-  color: #f2f2f2;
+ 
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -297,7 +249,7 @@
 .navbar-end {
   float: right;
   display: block;
-  color: #f2f2f2;
+ 
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
