@@ -1,5 +1,4 @@
 
-
 module.exports = {
 
     listclassroom: async function (req, res) {
@@ -32,6 +31,7 @@ module.exports = {
     deleteclassroom: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+
         let thisistheline = "DELETE FROM classroom WHERE rid= \"" + req.body.RID + "\" and campus = \"" + req.body.Campus + "\"";
         //console.log('delete excution');
         //console.log(thisistheline);
@@ -51,9 +51,10 @@ module.exports = {
     },
 
     getcampus: async function (req, res) {
-        var campuslist;
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        var campuslist;
+
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
         console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
@@ -188,9 +189,9 @@ module.exports = {
     },
 
     listalltimeslot: async function (req, res) {
-        var timeslotlist;
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        var timeslotlist;
 
         let thisistheline = "SELECT * FROM allclassroomtimeslot ORDER BY startdate,starttime;";
         db.query(thisistheline, function (err, results) {
@@ -210,6 +211,7 @@ module.exports = {
     deletetimeslot: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+
         if (req.session.role = "adm") {
             let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
             console.log('delete excution');
@@ -219,8 +221,9 @@ module.exports = {
 
                     return res.ok("Deleted");
                 } catch (err) {
-                    if (err) { console.log("error happened when excuting ClassroomlistController.deletetimeslot");
-                }
+                    if (err) {
+                        console.log("error happened when excuting ClassroomlistController.deletetimeslot");
+                    }
                 }
 
             });
@@ -240,8 +243,9 @@ module.exports = {
                 return res.view('user/admin/classroommanagement', { allClassroomlist: roomlist });
 
             } catch (err) {
-                if (err) { cconsole.log("error happened when excuting ClassroomlistController.getinfobycampus");
-            }
+                if (err) {
+                    cconsole.log("error happened when excuting ClassroomlistController.getinfobycampus");
+                }
             }
 
         });
@@ -266,8 +270,9 @@ module.exports = {
                 //console.log(json);
                 return res.view('user/admin/view', { roominfo: roominfo, thetimeslotlist: timeslotlist });
             } catch (err) {
-                if (err) { console.log("error happened when excuting ClassroomlistController.getsingleroomtimeslot");
-            }
+                if (err) {
+                    console.log("error happened when excuting ClassroomlistController.getsingleroomtimeslot");
+                }
             }
 
         });
@@ -289,7 +294,7 @@ module.exports = {
                 return res.view('user/admin/updatetime', { thistimeslotinfo: thistimeslotinfo });
             } catch (err) {
                 console.log("error happened when excuting ClassroomlistController.getoneroom");
-            
+
             }
 
         });
@@ -367,5 +372,10 @@ module.exports = {
 
         });
     },
+    uploadclassroom: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        console.log(req.body);
 
+    },
 }

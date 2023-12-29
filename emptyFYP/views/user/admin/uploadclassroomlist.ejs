@@ -1,0 +1,144 @@
+<div class="Pagetitle">Upload Classroom List</div>
+<div class="rows">
+    <div class="row">
+        <div class="columns ">
+            <div class="column">
+                <div class="buttons is-left">
+                    <div class="button buttonlogout is-responsive " onclick="history.back()">
+                        Back
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+<script>
+    var allclassroomarray = new Array(0);
+</script>
+<div class="columns is-centered">
+    <div class="column is-two-fifths template">
+        <form enctype="multipart/form-data">
+            <div class="Pagetitle">Classroom List</div>
+            <div style="font-size: 15px;color: grey;">Please Upload only excel files</div>
+            <div style="font-size: 15px;color: grey;">Sample file: <a href="images\Samplefile\ClassroomSample.xlsx"
+                    download><u>Classroom Excel List</u></a></div>
+            <br>
+            <input id="classroomupload" type=file name="files[]">
+
+        </form>
+        <br>
+        <div id="getlistclassroomdata" style="font-size: 20px;"></div>
+        <div class="control">
+            <textarea class="textarea form-control" id="classroomxlx_json"
+                style="width:100% ;height:50% ; overflow: auto;" readonly></textarea>
+        </div>
+
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+
+<script>
+    if (document.getElementById('classroomupload') != null) {
+        document.getElementById('classroomupload').addEventListener('change', handleclassroomFileSelect, false);
+        var allclassroomarray = new Array(0);
+    }
+
+    var classroomjsonobj;
+
+    var ExcelToJSON = function () {
+
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    // Here is your object
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    var json_object = JSON.stringify(XL_row_object);
+
+                    jsonobj = json_object
+                     console.log("check jsonobj      " + jsonobj);
+
+
+
+                    console.log("here")
+                    console.log("check json_object      " + json_object);
+                    classroomjsonobj = json_object;
+                    console.log("check jsonobj      " + classroomjsonobj);
+                    allclassroomarray = JSON.parse(json_object);
+                    document.getElementById("getlistclassroomdata").innerHTML = "Total " + allclassroomarray.length + " classrooms will be created under your management,\<br\> Click confirm to create."
+                        + "\<br\>"
+                        + " \<form  action\=\"\/uploadclassroomlist\" method\=\"post\" onsubmit\=\"submitform(this)\;return false\;\"\>"
+                        + "\<button class=\"button buttonlogout is-responsive\" id\=\"confirm is\-success\"\>Confirm\<\/button\><br>"
+                        + "\<\/form>";
+                    jQuery('#classroomxlx_json').val(json_object);
+
+
+
+                })
+            };
+
+            reader.onerror = function (ex) {
+                console.log(ex);
+            };
+
+            reader.readAsBinaryString(file);
+        };
+    };
+
+    function handleclassroomFileSelect(evt) {
+
+        var files = evt.target.files; // FileList object
+        console.log(files[0].name);
+        var namestring = (files[0].name).split("\.");
+        if (namestring[1] != "xlsx") {
+            alert("This is not a .xlsx file, please upload a correct format file");
+            return;
+        }
+        var xl2json = new ExcelToJSON();
+        xl2json.parseExcel(files[0]);
+    }
+
+
+    async function submitform(formElem) {
+        var jsonobj;
+        try {
+
+            jsonobj = classroomjsonobj;
+           
+
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: jsonobj
+            });
+            
+            if (response.ok) {
+
+                alert("classrooms are created");
+                location.assign("/classroomlist");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
+                location.reload();
+            } else {
+                alert(response.statusTest);
+            }
+
+
+        } catch (err) {
+            console.log("Things happened here");
+        }
+
+    }
+
+
+
+</script>
