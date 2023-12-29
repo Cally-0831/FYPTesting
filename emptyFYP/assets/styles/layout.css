@@ -230,6 +230,14 @@ font-size: calc(13px + 0.390625vw);;
   width: 100%;
   /* Full width */
 }
+.navbar-item {
+  overflow: hidden;
+  background-color: wheat;
+  top: 0;
+  /* Position the navbar at the top of the page */
+  width: 100%;
+  /* Full width */
+}
 
 .navbar-start {
   float: left;
