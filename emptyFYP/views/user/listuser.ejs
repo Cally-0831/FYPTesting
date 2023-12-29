@@ -28,7 +28,7 @@
 <div style="overflow-x:auto;overflow-y:auto;">
     <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth" >
         <tr>
-            <th colspan="7"
+            <th colspan="8"
                 style="font-size: calc(20px + 0.390625vw);text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
                 Student List</th>
         </tr>
@@ -61,6 +61,9 @@
             <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
                 <a class="sorting" id='headerTTBview' onclick="sorting('sorting','mytable','headerTTBview',6);">&#8593;</a>
                 Submission of TTB
+            </th>
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; background-color: bisque;">
+               Delete
             </th>
         </tr>
         <%if(allstdlist != null){%>
@@ -114,7 +117,9 @@
                             </td>
                             <%}%>
                
-    
+                            <td  style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle; align-items: center;" onclick="deletestudent('<%= allstdlist.sid%>')">
+                                <div class = "buttons is-centered"><button class = "button buttonlogout is-responsive">Delete</button></div>
+                            </td>
             </tr>
     
             <% }); %>
@@ -415,15 +420,36 @@
                 // var html = await response.text();
                 // alert(html);
 
-                alert("Supoervisor deleted.");
+                alert("Supervisor deleted.");
                 location.assign("listuser");
             } else {
                 alert(response.status + ": " + response.statusText);
             }
 
-        } else {
-            alert("cancelled");
-        }
+        } 
+    };
+    
+    async function deletestudent(id) {
+        var r = confirm("Confirm Delete?" + id);
+
+        if (r) {
+
+            var response = await fetch("/listuser/" + id, {
+                method: "DELETE",
+
+            });
+
+            if (response.ok) {
+                // var html = await response.text();
+                // alert(html);
+
+                alert("Student deleted.");
+                location.assign("listuser");
+            } else {
+                alert(response.status + ": " + response.statusText);
+            }
+
+        } 
     };
     
     async function gotogenobs(){

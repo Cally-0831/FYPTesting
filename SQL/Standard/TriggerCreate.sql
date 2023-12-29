@@ -283,6 +283,26 @@ END;
 
 DELIMITER |
 CREATE TRIGGER delsupervisor after delete ON supervisor FOR EACH ROW BEGIN
-    delete from alluser where pid = tid;
+    
+	delete from alltakecourse where pid = old.tid;
+    delete from supervisorpairstudent where tid = old.tid;
+    delete from observerpairstudent where oid = old.tid;
+    delete from allnotice where Creator = old.tid;
+    delete from allpreffromsup where tid= old.tid;
+    delete from allrequestfromsupervisor where tid = old.tid;
+	delete from allusers where pid = old.tid;
+END;
+| DELIMITER ;
+
+DELIMITER |
+CREATE TRIGGER delstudent after delete ON student FOR EACH ROW BEGIN
+    
+	delete from alltakecourse where pid = old.sid;
+    delete from supervisorpairstudent where sid = old.sid;
+    delete from observerpairstudent where sid = old.sid;
+    delete from allrequestfromstudent where sid = old.sid;
+	delete from manualhandlecase where sid = old.sid ;
+	delete from studentavailable where sid = old.sid;
+	delete from allusers where pid = old.sid;
 END;
 | DELIMITER ;

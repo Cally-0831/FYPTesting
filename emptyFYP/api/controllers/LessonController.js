@@ -1,9 +1,15 @@
 
-
 module.exports = {
     uploadlesson: async function (req, res) {
         var db = await sails.helpers.database();
         console.log(req.body);
+        try{
+            if(req.body[0].Cdept == undefined || req.body[0].CSecCode == undefined 
+            || req.body[0].Campus == undefined || req.body[0].RID == undefined 
+            || req.body[0].weekdays == undefined || req.body[0].startTime == undefined|| req.body[0].endTime == undefined){
+                return res.status(401).json("Invalid Input")
+            }
+        }catch(err){return res.status(401).json("Invalid Input")}
         for (var i = 0; i < req.body.length; i++) {
             let thisistheline = "insert ignore into allclass values(\"" + req.body[i].Cdept + "\",\"" + req.body[i].Ccode + "\",\""
                 + req.body[i].CSecCode + "\",\"\",\"" + req.body[i].Campus + "\",\"" + req.body[i].RID + "\",\"" + req.body[i].weekdays + "\",\""

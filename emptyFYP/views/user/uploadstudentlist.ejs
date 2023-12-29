@@ -167,9 +167,6 @@
           alert("Students are created");
           location.assign("/listuser");
         } 
-
-
-
       } else if (response.status == 401) {
         var msg = await response.json();
         alert(msg);

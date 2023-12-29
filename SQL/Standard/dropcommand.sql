@@ -47,3 +47,4 @@ Drop trigger if exists checkschboxtocorrdraft;
 Drop trigger if exists delsupervisor;
 Drop trigger if exists updatestudentdeadline ;
 Drop trigger if exists delrolecourse;
+Drop trigger if exists delstudent;

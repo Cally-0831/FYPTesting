@@ -112,11 +112,13 @@
         try {
 
             jsonobj = supervisorjsonobj;
+           
 
             var response = await fetch(formElem.action, {
                 method: formElem.method,
                 body: jsonobj
             });
+            
             if (response.ok) {
 
                 alert("supervisors are created");
