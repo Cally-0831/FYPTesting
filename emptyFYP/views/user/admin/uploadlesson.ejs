@@ -83,6 +83,7 @@
         };
     };
     function handlelesson(evt) {
+
         var files = evt.target.files; // FileList object
         var namestring = (files[0].name).split("\.");
         if (namestring[1] != "xlsx") {
@@ -102,7 +103,7 @@
         if (response.ok) {
             alert("Class Created")
             location.assign("/lessonlist")
-        } else if(response.status == 401) {
+        } else if (response.status == 401){
             var msg = await response.json();
                 alert(msg);
                 location.reload();

@@ -1,4 +1,9 @@
 <div class="Pagetitle"> Create new Classroom</div>
+<div class="row">
+  <div class="buttons">
+      <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+  </div>
+</div>
 <br><br>
 <div class="columns is-centered is-onethird">
   <div class="column"></div>
@@ -40,7 +45,9 @@
 </div>
 
 <script>
-
+ function backback() {
+        location.assign("/classroomlist");
+    }
   async function createnewclassroom(formElem) {
     try {
       console.log(document.getElementById("Campus").value)
