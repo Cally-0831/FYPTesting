@@ -71,18 +71,21 @@
         <% if (req.session.username!=null) { %>
 
           <script>
-            function function2() {
+            function home() {
               location.assign('/home')
+            }
+            function logout() {
+              location.assign('/user/logout')
             }
 
           </script>
           <div class="navbar-item">
             <div class="buttons">
-              <button class="button buttonlogout is-responsive" onclick="function2()">
+              <button class="button buttonlogout is-responsive" onclick="home()">
                 <%= req.session.username %>
               </button>
               &ensp;
-              <button class="button buttonlogout is-responsive" href="/user/logout">
+              <button class="button buttonlogout is-responsive" onclick="logout()">
                 Logout
               </button>
             </div>
