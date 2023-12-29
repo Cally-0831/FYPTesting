@@ -240,10 +240,7 @@ font-size: calc(13px + 0.390625vw);;
   text-decoration: none;
 }
 
-.navbar-item :hover {
-  background: #ddd;
-  color: black;
-}
+
 
 .navbar-end {
   float: right;

@@ -64,15 +64,11 @@
   <header>
 
     <div class="navbar" style="width : 100%vw">
-      <div class="navbar-start" style="max-width : 10%vw">
-        <div class="navbar-item">
-          <% if (req.session.username!=null) { %>
-            <a href="/home"><img src="\images\login\compbg.png"></a>
-            <% }else{ %>
-              <a href="/"><img src="\images\login\compbg.png"></a>
-              <% } %>
-        </div>
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/"><img src="\images\login\compbg.png"></a>
+        
       </div>
+      
       <div class="navbar-end">
         <% if (req.session.username!=null) { %>
 
@@ -84,16 +80,16 @@
           </script>
           <div class="navbar-item">
             <div class="buttons">
-              <a class="buttonlogout is-responsive" onclick="function2()">
+              <button class="button buttonlogout is-responsive" onclick="function2()">
                 <%= req.session.username %>
-              </a>
+              </button>
               &ensp;
-              <a class="buttonlogout is-responsive" href="/user/logout">
+              <button class="button buttonlogout is-responsive" href="/user/logout">
                 Logout
-              </a>
+              </button>
             </div>
 
-            
+
           </div>
 
       </div>
