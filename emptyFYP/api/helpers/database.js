@@ -1,5 +1,5 @@
 var mysql = require('mysql2');
-//hello
+
 var db = mysql.createConnection({
     //host: "fypdeploy2-mysql",
     host: "fypdeploy-mysql",
