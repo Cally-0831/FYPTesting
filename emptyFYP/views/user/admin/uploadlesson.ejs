@@ -102,8 +102,10 @@
         if (response.ok) {
             alert("Class Created")
             location.assign("/lessonlist")
-        } else {
-            alert("strange things happened")
+        } else if(response.status == 401) {
+            var msg = await response.json();
+                alert(msg);
+                location.reload();
         }
     }
 </script>
