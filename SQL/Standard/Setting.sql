@@ -10,8 +10,8 @@ insert into allnotice values("nidstid736WB","admin","Admin",now(),"1","Presentat
 Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidqBQSy","admin","4","2024-01-05","22:00");
 insert into allnotice values("nidstidqBQSy","admin","Admin",now(),"1","Presentation Schdeule Release Date","The release date for presentation schdeule has been set as follows: newline Date: 05/01/2023 newline Time: 22:00:00 newline  newline All users can check and their personal timeslots after the release of the schdeule.");
 
-Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidfcM35","admin","5","2024-01-04","10:30");
-insert into allnotice values("nidstidfcM35","admin","Admin",now(),"3","Deadline for Student List Upload","The deadline of uploading student list has been set as follows: newline Date: 04/01/2024 newline Time: 23:30:00 newline  newline  After gathering all the student list from supervisors, observer for students will be arranged.");
+Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidfcM35","admin","5","2023-12-04","10:30");
+insert into allnotice values("nidstidfcM35","admin","Admin",now(),"3","Deadline for Student List Upload","The deadline of uploading student list has been set as follows: newline Date: 04/12/2023 newline Time: 23:30:00 newline  newline  After gathering all the student list from supervisors, observer for students will be arranged.");
 
 Insert into allsupersetting (stid,creator,typeofsetting,deadlinedate,deadlinetime)values("stidwTbry","admin","6","2024-01-04","23:15");
 insert into allnotice values("nidstidwTbry","admin","Admin",now(),"3","Deadline for Upload Supervisor Preference","The deadline of uploading supervisor preference has been set as follows: newline Date: 04/01/2024 newline Time: 23:15:00 newline  newline  Please be aware that the final schdule may not be able to fullfill all supervisor's preferences.");

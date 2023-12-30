@@ -119,10 +119,12 @@
                                 onclick="deleterequestfromstudent('<%= request.ReqID %>','<%= request.status %>')">Delete</button>
                         
                                 
-                            </td><%}%>
+                            </td><%}else{%>
+                                <td style="text-align: center;vertical-align:middle;font-size: calc(15px + 0.390625vw);"></td>
+                                <%}%>
                         <td style="text-align: center;vertical-align:middle;font-size: calc(15px + 0.390625vw);">
                             
-                                <button class="button is-responsive" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
+                                <button class="button greenbutton is-responsive" type="button" onclick="Viewqrequest('<%= request.ReqID %>')">view</button>
                             
                         </td>
                     </tr>

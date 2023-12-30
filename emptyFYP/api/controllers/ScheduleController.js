@@ -1315,6 +1315,7 @@ module.exports = {
         } else {
             type = boxesforthissupervisor[0].TYPE;
         }
+        console.log("type from controller",type)
 
         query = "select * from allrequestfromsupervisor where tid = \"" + req.params.tid + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {

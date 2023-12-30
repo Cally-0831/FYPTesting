@@ -71,14 +71,62 @@ insert ignore into allclass values("COMP","4097","00001","","AAB","AAB509","5","
 
 
 insert into alltakecourse values("COMP4096_00001","tid00001");
-insert into alltakecourse values("COMP4025_00001","tid00001");
-insert into alltakecourse values("COMP4025_10001","tid00001");
+insert into alltakecourse values("COMP4025_00001","tid00004");
+insert into alltakecourse values("COMP4025_10001","tid00004");
 
 insert into alltakecourse values("COMP1015_00001","tid00003");
 insert into alltakecourse values("COMP4107_00001","tid00002");
-insert into alltakecourse values("COMP2027_00001","tid00002");
-insert into alltakecourse values("COMP2035_00001","tid00002");
+insert into alltakecourse values("COMP2027_00001","tid00005");
+insert into alltakecourse values("COMP2035_00001","tid00006");
 insert ignore  into alltakecourse values("COMP2027_00001","sid33333");
 insert ignore  into alltakecourse values("GCAP3205_00001","sid33333");
 insert ignore  into alltakecourse values("COMP2037_00001","sid33333");
+insert ignore  into alltakecourse values("COMP1007_00001","sid44444");
+insert ignore  into alltakecourse values("COMP1015_00001","sid55555");
+insert ignore  into alltakecourse values("COMP2037_00001","sid66666");
+insert ignore  into alltakecourse values("COMP1007_00001","sid21111");
+insert ignore  into alltakecourse values("COMP1015_00001","sid21111");
+insert ignore  into alltakecourse values("COMP2037_00001","sid22222");
+
+insert ignore  into alltakecourse values("COMP4107_00001","sid30000");
+insert ignore  into alltakecourse values("COMP3005_00001","sid30000");
+insert ignore into alltakecourse values("COMP4025_00001","sid31111");
+insert ignore  into alltakecourse values("COMP4025_10001","sid31111");
+insert ignore  into alltakecourse values("COMP4097_00001","sid32222");
+insert ignore  into alltakecourse values("COMP2035_00001","sid32222");
+
+insert ignore into alltakecourse values("COMP2026_00001","sid40000");
+insert ignore  into alltakecourse values("COMP2026_20101","sid40000");
+insert ignore  into alltakecourse values("COMP3005_00001","sid41111");
+insert ignore into alltakecourse values("COMP3015_00001","sid42222");
+insert ignore  into alltakecourse values("COMP3015_10002","sid42222");
+insert ignore  into alltakecourse values("COMP2027_00001","sid42222");
+
+insert ignore into alltakecourse values("COMP3015_00001","sid50000");
+insert ignore  into alltakecourse values("COMP3015_10001","sid50000");
+insert ignore  into alltakecourse values("COMP2027_00001","sid50000");
+insert ignore into alltakecourse values("COMP2045_00002","sid51111");
+insert ignore  into alltakecourse values("COMP2045_20201","sid51111");
+
+insert ignore  into alltakecourse values("COMP4057_00001","sid61111");
+insert ignore  into alltakecourse values("GCAP3205_00001","sid61111");
+ 
+#Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid33333";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid44444";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid55555";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid66666";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid21111";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid22222";
+#Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid30000";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid31111";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid32222";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid40000";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid41111";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid42222";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid50000";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid51111";
+Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid61111";
+
+
+
 update allsupertakecourse set confirmation = "1" , submissiontime = now();

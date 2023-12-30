@@ -143,7 +143,7 @@ module.exports = {
 
                     for (var i = 0; i < labsectionlist.length; i++) {
                         var insertinglabsection = "insert ignore  into alltakecourse values(\"" + req.body.classdep + req.body.classcode + "_" + labsectionlist[i].CSecCode + "\",\"" + req.session.userid + "\")"
-                        console.log(">>insertinglabsection",insertinglabsection);
+                        console.log(">>insertinglabsection", insertinglabsection);
                         db.query(insertinglabsection, function (err, result) {
                             try { } catch (err) {
                                 return res.status(401).json("Error happened when excuting TimtableController.submitclass.insertingmultiplelabsection \n" + err)
@@ -154,7 +154,7 @@ module.exports = {
 
                 })
             } else {
-                console.log(">>caninsertthisclasslabsection ",caninsertthisclasslabsection,"\n")
+                console.log(">>caninsertthisclasslabsection ", caninsertthisclasslabsection, "\n")
                 db.query(caninsertthisclasslabsection, function (err, result) {
                     try { } catch (err) {
                         return res.status(401).json("Error happened when excuting TimtableController.submitclass.insertinglabsection \n" + err)
@@ -163,7 +163,7 @@ module.exports = {
             }
 
         }
-console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
+        console.log(">>caninsertthisclasssection ", caninsertthisclasssection, "\n")
         db.query(caninsertthisclasssection, function (err, result) {
             try {
                 return res.ok();
@@ -240,19 +240,19 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
                             if (personallist[0].CID == null) {
                                 date = deadline;
                                 personallist = [];
-                                zerocourse=true;
+                                zerocourse = true;
                             }
                         }
 
                         return res.view('user/timetable', {
                             date: date,
                             allpersonallist: personallist,
-                            checkzerocourse : zerocourse
+                            checkzerocourse: zerocourse
 
                         });
                     } catch (err) {
                         return res.status(400).json('Error exist when excuting TimeTableController.getallpersonalclass.checksetting')
-                        }
+                    }
 
                 })
 
@@ -260,7 +260,7 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
 
             } catch (err) {
                 return res.status(400).json('Error exist when excuting TimeTableController.getallpersonalclass.getclassinput');
-                 }
+            }
 
         });
         // return res.json("ok");
@@ -355,15 +355,15 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
         let thisistheline;
 
         if (req.session.role == "sup") {
-            thisistheline = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
-            console.log(thisistheline);
+            updatesupsubmittion = "Update allsupertakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+            console.log(updatesupsubmittion);
             // console.log(thisistheline);
-            db.query(thisistheline, function (err, result) {
+            db.query(updatesupsubmittion, function (err, result) {
                 try {
                     console.log("Submitted")
                     return res.redirect("../timetable");
                 } catch (err) {
-                    console.log(' submitpersonalallclass MySQL Problem' + "    " + err);
+                    return res.status(401).json('Error happened in TimetablController.submitpersonalallclass.updatesupsubmittion');
                 }
 
             });
@@ -383,16 +383,16 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
 
 
             //console.log(req.file('avatar'));
-            thisistheline = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"";
+            updatepending = "Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\" ;";
             //console.log(thisistheline);
-            console.log("Update allstudenttakecourse set confirmation =\"1\",SubmissionTime = now() where pid=\"" + req.session.userid + "\"");
-            db.query(thisistheline, function (error, result) {
+            console.log(updatepending);
+            db.query(updatepending, function (error, result) {
                 try {
 
                     console.log("Submitted")
                     return res.redirect("../timetable");
                 } catch (err) {
-                    console.log(' submitpersonalallclass MySQL Problem' + "    " + error);
+                    return res.status(401).json('Error happened in TimetablController.submitpersonalallclass.updatapending' + "    " + error);
                 }
 
             });
@@ -438,7 +438,7 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
                         //    console.log(data);
 
                         //console.log(req.file('avatar'));
-                       
+
                         thisistheline = "Update allstudenttakecourse set picdata= \"" + data + "\"  where pid=\"" + req.session.userid + "\"";
                         //console.log(thisistheline);
                         db.query(thisistheline, function (error, result) {
@@ -493,20 +493,18 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
 
     judgettb: async function (req, res) {
         var db = await sails.helpers.database();
-        let thisistheline;
+        let judgeline;
         if (req.body.type == "Approved") {
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"" + req.body.comments + "\"  where allstudenttakecourse.pid=\"" + req.params.SID + "\"";
+            judgeline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"2\",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = \"" + req.body.comments + "\"  where allstudenttakecourse.pid=\"" + req.params.SID + "\";";
         } else {
-            thisistheline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\"" + req.body.comments + "\" where allstudenttakecourse.pid=\"" + req.params.SID + "\"";
+            judgeline = "Update allstudenttakecourse set allstudenttakecourse.confirmation = \"3\", allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments=\"" + req.body.comments + "\" where allstudenttakecourse.pid=\"" + req.params.SID + "\";";
         }
-        console.log(thisistheline);
-        db.query(thisistheline, function (error, result) {
+        console.log(judgeline);
+        db.query(judgeline, function (error, result) {
             try {
-
-
                 return res.redirect("../listuser");
             } catch (err) {
-                console.log(' judgettb MySQL Problem' + "    " + error);
+                return res.status(401).json('Error happened in TimetablController.judgettb');
             }
 
         });

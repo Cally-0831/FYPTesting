@@ -15,7 +15,7 @@ module.exports = {
             var getsupstdlist = "select student.sid, student.stdname,supervisorpairstudent.Topic,observerpairstudent.OID,observerpairstudent.obsname,student.ttbsubmission from supervisor join  supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid join student on student.sid = supervisorpairstudent.sid left join observerpairstudent on observerpairstudent.sid = student.sid where supervisor.tid = \"" + req.session.userid + "\"";
             var stdlist = await new Promise((resolve) => {
                 pool.query(getsupstdlist, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.getsupstdlist")}
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.getsupstdlist") }
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -29,7 +29,7 @@ module.exports = {
             var getsupbeobslist = "select student.stdname, observerpairstudent.sid,supervisor.tid,supervisor.supname,supervisorpairstudent.Topic from observerpairstudent left join student on student.sid = observerpairstudent.sid left join supervisorpairstudent on supervisorpairstudent.sid = student.sid left join supervisor on supervisor.tid = supervisorpairstudent.tid where oid = \"" + req.session.userid + "\"";
             var observinglist = await new Promise((resolve) => {
                 pool.query(getsupbeobslist, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.getsupbeobslist")}
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.getsupbeobslist") }
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -44,7 +44,7 @@ module.exports = {
             var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
             var finaldate = await new Promise((resolve) => {
                 pool.query(checkdeadline, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.checkdeadline")}
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.checkdeadline") }
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -121,7 +121,7 @@ module.exports = {
             getsuplist = "select supervisor.tid,supervisor.supname,student.sid,student.stdname,supervisor.submission from supervisor left join supervisorpairstudent on  supervisorpairstudent.tid = supervisor.tid left join student on supervisorpairstudent.sid = student.sid";
             var suplist = await new Promise((resolve) => {
                 pool.query(getsuplist, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.getsuplist")}
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.getsuplist") }
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -135,7 +135,7 @@ module.exports = {
             var checkdeadline = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = \"5\" and Announcetime is not null";
             var finaldate = await new Promise((resolve) => {
                 pool.query(checkdeadline, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.checkdeadline")}
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.checkdeadline") }
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -158,8 +158,8 @@ module.exports = {
             var checkarrangedobs = "select * from student where sid not in (select sid from observerpairstudent)";
             var arranged = await new Promise((resolve) => {
                 pool.query(checkarrangedobs, (err, res) => {
-                    if(err){return res.status(401).json("Error happened in StudentListController.liststudent.checkarrangedobs")}
-                   
+                    if (err) { return res.status(401).json("Error happened in StudentListController.liststudent.checkarrangedobs") }
+
                     var string = JSON.stringify(res);
                     var json = JSON.parse(string);
                     var ans = json;
@@ -173,7 +173,7 @@ module.exports = {
             }).catch((err) => {
                 errmsg = "Error happened in StudentListController.liststudent.checkarrangedobs"
             })
-            console.log(">> arranged    ",arranged)
+            console.log(">> arranged    ", arranged)
             return res.view('user/listuser', { allsuplist: suplist, checkdate: finaldate, observinglist: null, arranged: arranged });
 
             /** 
@@ -555,12 +555,12 @@ module.exports = {
     uploadstudentlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        if (!req.body[0].hasOwnProperty("sid") || !req.body[0].hasOwnProperty("studentname"|| !req.body[0].hasOwnProperty("password"))) {
+        if (!req.body[0].hasOwnProperty("sid") || !req.body[0].hasOwnProperty("studentname" || !req.body[0].hasOwnProperty("password"))) {
             return res.status(401).json("Invalid Inputs")
-        }else{
-             console.log(req.body);
+        } else {
+            console.log(req.body);
         }
-        
+
 
 
 
@@ -614,10 +614,10 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        if (!req.body[0].hasOwnProperty("tid") || !req.body[0].hasOwnProperty("supervisorname"|| !req.body[0].hasOwnProperty("password"))) {
+        if (!req.body[0].hasOwnProperty("tid") || !req.body[0].hasOwnProperty("supervisorname" || !req.body[0].hasOwnProperty("password"))) {
             return res.status(401).json("Invalid Inputs")
-        }else{
-             console.log(req.body);
+        } else {
+            console.log(req.body);
         }
 
 
@@ -782,74 +782,168 @@ module.exports = {
     generateobs: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        var thisistheline = "select supervisor.supname, supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
-        db.query(thisistheline, function (err, result) {
-            try {
-                var string = JSON.stringify(result);
+        var getDescSupervisingNumList = "select supervisor.supname, supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum desc"
+        var descSupervisingNumList = await new Promise((resolve) => {
+            pool.query(getDescSupervisingNumList, (err, res) => {
+                if (err) {  console.log(err)}
+                var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                var supstdnumlist = json;
+                resolve(json);
+            })
+        })
+        console.log(">>descSupervisingNumList ",descSupervisingNumList)
+        var getDescObservingNumList = "select supervisor.tid,count(supervisor.tid) as obsnum from supervisor left join observerpairstudent on supervisor.tid = observerpairstudent.oid group by supervisor.tid"
+        var descObservingNumList = await new Promise((resolve) => {
+            pool.query(getDescObservingNumList, (err, res) => {
+                if (err) { return res.status(401).json("Error happened in StudentListController.generateobs.getDescObservingNumList") }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                resolve(json);
+            })
+        })
+        console.log(">>descObservingNumList ",descObservingNumList)
+        // step 1 pair according to the number of supervising
+        for(var i = 0 ; i < descSupervisingNumList.length ; i ++){
+            var supervisor = descSupervisingNumList[i];
+            var getnotPairedStudentlist = "select supervisorpairstudent.sid from student left join supervisorpairstudent on supervisorpairstudent.sid = student.sid where supervisorpairstudent.tid != \""+supervisor.tid+"\" and student.sid not in(select sid from observerpairstudent where observerpairstudent.oid != \"null\")"
+            console.log(">>getnotPairedStudentlist ",getnotPairedStudentlist)
+            var notPairedStudentlist = await new Promise((resolve) => {
+                pool.query(getnotPairedStudentlist, (err, res) => {
+                    if (err) { return res.status(401).json("Error happened in StudentListController.generateobs.notPairedStudentlist") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    resolve(json);
+                })
+            })
 
-
-                thisistheline = "SELECT supervisorpairstudent.tid,supervisorpairstudent.sid,observerpairstudent.OID FROM supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid"
-                db.query(thisistheline, function (err, result) {
-                    try {
-                        var string = JSON.stringify(result);
-                        var json = JSON.parse(string);
-                        var pairinglist = json;
-
-                        var hvstdSUPER = [];
-                        var nostdSUPER = [];
-
-
-                        for (var a = 0; a < supstdnumlist.length; a++) {
-                            if (parseInt(supstdnumlist[a].stdnum) > 0) {
-                                hvstdSUPER.push(supstdnumlist[a])
-                            } else {
-                                nostdSUPER.push(supstdnumlist[a])
-                            }
-                        }
-
-                        var checkallstdhvobs = 0;
-                        console.log(hvstdSUPER)
-                        console.log(pairinglist)
-                        for (var a = 0; a < pairinglist.length; a++) {
-
-                            for (var b = 0; b < hvstdSUPER.length; b++) {
-                                if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
-                                    hvstdSUPER[b].stdnum = parseInt(hvstdSUPER[b].stdnum) - 1;
-                                    pairinglist[a].OID = hvstdSUPER[b].tid;
-                                    pairinglist[a].obsname = hvstdSUPER[b].supname
-                                    checkallstdhvobs++;
-                                }
-                            }
-                        }
-                        if (checkallstdhvobs != pairinglist.length) {
-                            for (var a = 0; a < pairinglist.length; a++) {
-                                if (pairinglist[a].OID == null) {
-                                    var index = Math.floor(Math.random() * nostdSUPER.length);
-                                    pairinglist[a].OID = nostdSUPER[index].tid
-                                    pairinglist[a].obsname = nostdSUPER[index].supname
-                                }
-                            }
-                        }
-
-                        for (var a = 0; a < pairinglist.length; a++) {
-                            thisistheline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\"" + pairinglist[a].obsname + "\",\"" + pairinglist[a].OID + "\",\"" + pairinglist[a].sid + "\")"
-                            console.log(thisistheline)
-                            db.query(thisistheline, function (err, result) { if (err) { console.log("error happened at StudentListContorller: generateobs"); } })
-                        }
-
-                        console.log(pairinglist)
-                        return res.status(200).json("ok");
-
-                    } catch (err) {
-                        console.log("error happened at StudentListContorller: generateobs");
+            var count = 0;
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+              }
+              console.log(count == parseInt(supervisor.stdnum))
+            while(count != supervisor.stdnum){
+                var index = getRandomInt(notPairedStudentlist.length);
+                console.log(index)
+                var pairingline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\""+supervisor.supname+"\",\""+supervisor.tid+"\",\""+notPairedStudentlist[index].sid+"\");"
+                console.log(">>dtep1 pairing ",pairingline)
+                db.query(pairingline, function (err, result) {
+                    try{
+                    }catch(err){
+                        return res.status(401).json("Error happened when excueting StudentListController.generateobse.pairingline")
                     }
-                });
-            } catch (err) {
-                console.log("error happened at StudentListContorller: generateobs");
+                })
+                count ++;
+                notPairedStudentlist.splice(index,1);
             }
+
+        };
+
+        // step 2 still have student unpaired
+
+        var getUnpairedStudent = "select * from supervisorpairstudent where sid not in (select sid from observerpairstudent where observerpairstudent.oid != \"null\")"
+        var unpairedstudent = await new Promise((resolve) => {
+            pool.query(getUnpairedStudent, (err, res) => {
+                if (err) { return res.status(401).json("Error happened in StudentListController.generateobs.unpairedstudent") }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                resolve(json);
+            })
+        })
+        console.log(">>unpairedstudent ", unpairedstudent)
+
+        var getSupervisorList = "select supervisor.supname, supervisor.tid, count(supervisorpairstudent.tid) as stdnum from supervisor left join supervisorpairstudent on supervisor.tid = supervisorpairstudent.tid group by supervisor.tid  order by stdnum asc"
+        var SupervisorList = await new Promise((resolve) => {
+            pool.query(getSupervisorList, (err, res) => {
+                if (err) { return res.status(401).json("Error happened in StudentListController.generateobs.SupervisorList") }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                resolve(json);
+            })
+        })
+
+        unpairedstudent.forEach(student => {
+            var pairingline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\""+SupervisorList[0].supname+"\",\""+SupervisorList[0].tid+"\",\""+student.SID+"\");"
+           console.log(">>dtep2 pairing ",pairingline)
+            db.query(pairingline, function (err, result) {
+                try{
+                }catch(err){
+                    return res.status(401).json("Error happened when excueting StudentListController.generateobse.pairingline")
+                }
+            })
+            SupervisorList[0].stdnum = parseInt(SupervisorList[0].stdnum) +1;
+            SupervisorList = _.sortBy(SupervisorList,"stdnum");
+            console.log(SupervisorList)
         });
+
+        return res.status(200).json("ok");
+
+        // db.query(thisistheline, function (err, result) {
+        //     try {
+        //         var string = JSON.stringify(result);
+        //         var json = JSON.parse(string);
+        //         var supstdnumlist = json;
+
+
+        //         thisistheline = "SELECT supervisorpairstudent.tid,supervisorpairstudent.sid,observerpairstudent.OID FROM supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid"
+        //         db.query(thisistheline, function (err, result) {
+        //             try {
+        //                 var string = JSON.stringify(result);
+        //                 var json = JSON.parse(string);
+        //                 var pairinglist = json;
+
+        //                 var hvstdSUPER = [];
+        //                 var nostdSUPER = [];
+
+
+        //                 for (var a = 0; a < supstdnumlist.length; a++) {
+        //                     if (parseInt(supstdnumlist[a].stdnum) > 0) {
+        //                         hvstdSUPER.push(supstdnumlist[a])
+        //                     } else {
+        //                         nostdSUPER.push(supstdnumlist[a])
+        //                     }
+        //                 }
+
+        //                 var checkallstdhvobs = 0;
+        //                 console.log(hvstdSUPER)
+        //                 console.log(pairinglist)
+        //                 for (var a = 0; a < pairinglist.length; a++) {
+
+        //                     for (var b = 0; b < hvstdSUPER.length; b++) {
+        //                         if (pairinglist[a].tid != hvstdSUPER[b].tid && parseInt(hvstdSUPER[b].stdnum) != 0) {
+        //                             hvstdSUPER[b].stdnum = parseInt(hvstdSUPER[b].stdnum) - 1;
+        //                             pairinglist[a].OID = hvstdSUPER[b].tid;
+        //                             pairinglist[a].obsname = hvstdSUPER[b].supname
+        //                             checkallstdhvobs++;
+        //                         }
+        //                     }
+        //                 }
+        //                 if (checkallstdhvobs != pairinglist.length) {
+        //                     for (var a = 0; a < pairinglist.length; a++) {
+        //                         if (pairinglist[a].OID == null) {
+        //                             var index = Math.floor(Math.random() * nostdSUPER.length);
+        //                             pairinglist[a].OID = nostdSUPER[index].tid
+        //                             pairinglist[a].obsname = nostdSUPER[index].supname
+        //                         }
+        //                     }
+        //                 }
+
+        //                 for (var a = 0; a < pairinglist.length; a++) {
+        //                     thisistheline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\"" + pairinglist[a].obsname + "\",\"" + pairinglist[a].OID + "\",\"" + pairinglist[a].sid + "\")"
+        //                     console.log(thisistheline)
+        //                     db.query(thisistheline, function (err, result) { if (err) { console.log("error happened at StudentListContorller: generateobs"); } })
+        //                 }
+
+        //                 console.log(pairinglist)
+        //                 return res.status(200).json("ok");
+
+        //             } catch (err) {
+        //                 console.log("error happened at StudentListContorller: generateobs");
+        //             }
+        //         });
+        //     } catch (err) {
+        //         console.log("error happened at StudentListContorller: generateobs");
+        //     }
+        // });
 
     },
 
