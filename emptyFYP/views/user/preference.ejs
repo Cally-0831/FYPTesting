@@ -18,28 +18,32 @@
    
     
 <div class = "columns is-mobile is-centered">
-    <div class = "column column-big is-half-desktop is-full-width-mobile">
-        <div style="font-size : 25px;padding-top: 10px;" class="title">Preference Form</div>
-        <%if(oldpref!=undefined){%>
-            <div style="text-align:center; font-size : 18px; color:gray;padding-top: 0px;">
-                
-                <%if(deadlinedate != undefined){%>
-                    
-                    Submittion Deadline: <%=deadlinedate.toLocaleDateString("en-GB")%> , <%=deadlinedate.toLocaleTimeString("en-GB")%>
+    <div class = "column template is-half-desktop is-full-width-mobile">
+        <div class="title">Preference Form</div>
+        
+            <div id = "msg">
+                <article class="message is-link">
+                <div class="message-header" style="font-size : calc(16px + 0.390625vw);">
+                    <%if(oldpref!=undefined){%>
+                    <%if(deadlinedate != undefined){%>
+                        Submittion Deadline: <%=deadlinedate.toLocaleDateString("en-GB")%> , <%=deadlinedate.toLocaleTimeString("en-GB")%>
+                        <%}%>
+                        <br>
+                    <%var lastupdate = new Date(oldpref.LastUpdate)%>
+                    Last Update: <%=lastupdate.toLocaleDateString("en-GB")%> , <%=lastupdate.toLocaleTimeString('en-US')%>
                     <%}%>
+                </div>
+                <div class="message-body" style="font-size : calc(15px + 0.390625vw);">
+                    Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
                     <br>
-                <%var lastupdate = new Date(oldpref.LastUpdate)%>
-                Last Update: <%=lastupdate.toLocaleDateString("en-GB")%> , <%=lastupdate.toLocaleTimeString('en-US')%>
+                    You can input your prefered presentation number for the presentation date
+                    <br>
+                    <u>Your totoal presentation number: <%=studentnum%></u>
+                </div>
+              </article>
             </div>
-            <%}%>
-           
-        <div style="background-color: blanchedalmond; font-size : 18px;padding-top: 10px;color:gray;  text-align: left;padding-left: 50px;padding-right: 50px;padding-top: 10px;">
-            Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
-            <br>
-            You can input your prefered presentation number for the presentation date
-            <br>
-            Your totoal presentation number: <%=studentnum%> 
-    </div>
+        
+       
    
         <%var newpresentperiodenddate =new Date(presentperiodenddate)%>
         <%var newpresentperiodstartdate =new Date(presentperiodstartdate)%>
@@ -54,53 +58,55 @@
             <%var index = 0;%>
             <%command = "Update"%>
         <%}%>
-        
-        <%while(!printend){%>
-            <%var day = startdate.getDay()%>
-           
-            <%switch (day){
-                case 0:
-                day = "Sun"
-                break;
-                case 1:
-                day = "Mon"
-                break;
-                case 2:
-                day = "Tue"
-                break;
-                case 3:
-                day = "Wed"
-                break;
-                case 4:
-                day = "Thu"
-                break;
-                case 5:
-                day = "Fri"
-                break;
-                case 6:
-                day = "Sat"
-                break;
+        <div class = "columns is-centered is-mobile" style="padding-top: 30px;">
+                <table class="table is-hoverable" style="background-color: transparent;">
+                    <%while(!printend){%>
+                    <%var day = startdate.getDay()%>
                 
-            }%>
-            <%if(day != "Sun"){%>
-<div style="font-size : 20px;padding-top: 10px;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :&ensp;&ensp;
-
-                <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> <%if(deadlinedate > new Date()){%> ->
-                   
-                    <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">
-                
+                    <%switch (day){
+                        case 0:
+                        day = "Sun"
+                        break;
+                        case 1:
+                        day = "Mon"
+                        break;
+                        case 2:
+                        day = "Tue"
+                        break;
+                        case 3:
+                        day = "Wed"
+                        break;
+                        case 4:
+                        day = "Thu"
+                        break;
+                        case 5:
+                        day = "Fri"
+                        break;
+                        case 6:
+                        day = "Sat"
+                        break;
+                        
+                    }%>
+                    <%if(day != "Sun"){%>
+                        <tr>
+                            <td style="font-size : calc(20px+0.390625vw);padding-top: 10px; text-align: center; vertical-align: middle;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :</td>
+                            <td style="font-size : calc(20px+0.390625vw);padding-top: 10px; text-align: center; vertical-align: middle;"> <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> <%if(deadlinedate > new Date()){%> ->
+                                <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">                            
+                                <%}%></td>
+                        </tr>
+                    
+                    
                     <%}%>
-                
-            </div>
-            
-            <%}%>
-            
-            
-            <%startdate.setDate(startdate.getDate()+1);%>
+                    
+                    
+                    <%startdate.setDate(startdate.getDate()+1);%>
 
-            <%if(startdate.toLocaleDateString() > newpresentperiodenddate.toLocaleDateString()){%>
-                <%printend = true;}%>
-        <%}%>
+                    <%if(startdate.toLocaleDateString() > newpresentperiodenddate.toLocaleDateString()){%>
+                        <%printend = true;}%>
+                <%}%>
+                </table>
+           
+        </div>
         <%var deadlinedate = new Date(deadlinedate)%>
         
         <%if(deadlinedate > new Date()){%>
@@ -112,7 +118,7 @@
         </div>
             <%}else{%>
             <div style="padding: 10px;">
-                    <p style=" font-size : 23px; background-color: orange" >Cannot Submit Preference Form Now</p>
+                    <p style=" font-size : calc(20px + 0.390625vw); background-color: orange" >Cannot Submit Preference Form Now</p>
                 </div>
                 
                 

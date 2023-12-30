@@ -29,10 +29,10 @@
                                         <input type="file" id="uploadfileinput" name="avatar" multiple="multiple"
                                             accept="image/*" onchange="savefile(this)">
                                     </div>
-                                    <div class="column is-onethird" id="appearthebutton">
-                                    </div>
+                                    
                                 </div>
-
+                                <div class="column is-onethird" id="appearthebutton">
+                                    </div>
                             </form>
                             <%}%>
 
@@ -165,11 +165,11 @@
                                             required></textarea>
                                         <br><br>
                                         <div class="buttons is-right">
-                                            <button class="button buttonlogout is-responsive" type="submit is-success"
-                                                onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
-                                            <button class="button buttonlogout is-responsive" type="submit is-success"
+                                            <button class="button buttonlogout is-responsive"  style = "background-color: salmon;" type="submit is-success"
                                                 onclick="rejectthis('<%=thisrequestdetails.ReqID%>')">Reject</button>
-
+                                            <button class="button buttonlogout is-responsive"  style = "background-color: lightgreen;"  type="submit is-success"
+                                                onclick="approvethis('<%=thisrequestdetails.ReqID%>')">Approve</button>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
         } else {
             var newbutton = document.createElement("button");
             newbutton.setAttribute("id", "upload");
-            newbutton.setAttribute("class", "button buttonlogout is-responsive");
+            newbutton.setAttribute("class", "button is-warning is-responsive");
             newbutton.innerText = "Upload"
             document.getElementById("appearthebutton").appendChild(newbutton);
         }
@@ -271,13 +271,14 @@
             method: "POST",
             body: requestBody
         });
-
-        if (response.ok) {
-            // var html = await response.text();
-            // alert(html);
-            alert("Status of this thisrequestdetails has been updated to " + answer);
+        var msg = await response.json()
+        if (response.status == 200) {
+            alert(msg);
             location.assign("/readstudentrequestlist");
-        } else {
+        } else if (response.status == 401){
+            alert(msg);
+            location.reload();
+        }else{
             alert(response.status + ": " + response.statusText);
         }
 

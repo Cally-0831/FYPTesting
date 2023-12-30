@@ -1,14 +1,17 @@
 <div class="Pagetitle">Setting</div>
-<div class="rows">
-    <div class="row">
-        <div class="columns">
-            <div class="column">
-                <div class="buttons is-left">
-                    <div class="button buttonlogout is-responsive " onclick="back()">
-                        Back
-                    </div>
-                </div>
+<div class="columns is-mobile">
+    <div class="column is-half">
+        <div class="buttons">
+            <div class="button buttonlogout is-responsive " onclick="backback()">
+                Back
             </div>
+        </div>
+
+
+    </div>
+    <div class="column is-half">
+        <div class="buttons is-right">
+            <button class="button buttonlogout is-responsive" onclick="FastUpdate()">FastUpdate</button>
         </div>
     </div>
 </div>
@@ -556,10 +559,26 @@
 
 <script>
 
-    function back(){
+    function backback(){
         location.assign("home")
     }
 
+    async function FastUpdate(){
+        var r = confirm("Confirm to adopt fast update?")
+
+        if(r){
+            var response = await fetch("/FastUpdateSetting", {
+                    method: "GET",
+            });
+
+            var msg = await response.json();
+
+            alert(msg);
+            location.reload();
+
+
+        }
+    }
 
     async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime,type) {
         console.log(type)

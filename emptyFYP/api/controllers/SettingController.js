@@ -238,6 +238,7 @@ module.exports = {
 
         });
     },
+
     resetDB: async function (req, res) {
        
         var importer= await sails.helpers.importer();
@@ -269,7 +270,36 @@ module.exports = {
           }
         
        
-        return res.status(200).json("ok");
+          return res.status(200).json("SQL excuetion complete");
+
+    },
+
+    FastUpdateSetting: async function (req, res) {
+       
+        var importer= await sails.helpers.importer();
+        const sqlfiles = [
+            '../SQL/Standard/SettingUpdateForFastTesting.sql'
+          ]
+         
+          importer.onProgress(progress=>{
+            var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
+            console.log(`${percent}% Completed`);
+          });
+        
+          importer.onDumpCompleted(callback=>{
+            var path = callback.file_path;
+            var result = callback.error;
+            console.log(path,+"     ",result);
+          });
+        
+          for (let f of sqlfiles) {
+            console.log(f)
+           await importer.import(f);
+            var files_imported = importer.getImported();
+            console.log(`${files_imported.length} SQL file(s) imported.`);
+          }
+        
+        return res.status(200).json("SQL excuetion complete");
 
     },
 }

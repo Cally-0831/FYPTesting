@@ -44,6 +44,7 @@ module.exports.routes = {
   //admin setting
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
+  "GET /FastUpdateSetting" : "SettingController.FastUpdateSetting",
 
   //admin classroom
   "GET /uploadclassroomlist" : { view: 'user/admin/uploadclassroomlist' },

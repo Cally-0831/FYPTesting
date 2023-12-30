@@ -260,9 +260,9 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("Updated");
-                return res.json("ok");
+                return res.status(200).json("Successfully updated "+req.body.ReqID +" to "+ req.body.status);
             } catch (err) {
-                console.log("sth happened here " + err);
+                return res.status(401).json("Unable to update "+req.body.ReqID);
             }
         });
 

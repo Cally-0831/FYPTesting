@@ -194,21 +194,19 @@
         <div class="Pagetitle">Supervisor List</div>
         <div class="rows">
             <div class="columns is-multiline is-mobile">
-                <div class="column">
+                <div class="column is-half-desktop is-3-mobile">
                     <div class="buttons is-left ">
-                        
                         <div class="button buttonlogout is-responsive" onclick="backback()">
                             Back
                         </div>
-        
                     </div>
                 </div>
-                <div class="column ">
+                <div class="column is-half-desktop is-9-mobile">
                     <div class="buttons is-right">
                         <%var datedate = new Date(checkdate);%>
                         <%var today = new Date();%>
                         <%if(checkdate != undefined && today > datedate && !arranged){%>
-                             <button class="button buttonlogout is-responsive" id="generateobs" onclick="gotogenobs()">Arrange Observer</button>&ensp;
+                             <button class="button buttonlogout is-responsive" id="generateobs" onclick="gotogenobs()">Arrange Observer</button>
                             <%}%>
                         <button class="button buttonlogout is-responsive" id="createnewsup" onclick="gotocreatesup()">Create new Supervisior</button>
                     
@@ -270,7 +268,8 @@
             }
         }%>
         
-            <% suplist.forEach( function(list) { %>
+            <% suplist.forEach( function(list) { console.log(">>list ",list)%>
+
         
                 <tr >
                     <td id="tid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
@@ -283,19 +282,31 @@
                         <%= list.supname %>
         
                     </td>
-                    <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
-                        <% for(var j = 0 ; j < list.supsidlist.length ; j++){%>
-                            <a href="/read/<%= list.supsidlist[j]%>"><%=list.supsidlist[j]%></a><br>
+                    
+                    <%if(list.supsidlist[0] == null){%>
+                        <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;"onclick="redirectinfo('<%=list.tid%>')">
+                        </td>
+                        <%}else{%>
+                            <td id="supsid" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
+                                <% for(var j = 0 ; j < list.supsidlist.length ; j++){%>
+                                    <a href="/read/<%= list.supsidlist[j]%>"><%=list.supsidlist[j]%></a><br>
+                                <%}%>
+                            </td>
                         <%}%>
+                    
+                        <%if(list.supstunamelist[0] == null){%>
                            
-        
-        
-                    </td>
-                    <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
-                        <% for(var j = 0 ; j < list.supstunamelist.length ; j++){%>
-                            <a href="/read/<%= list.supsidlist[j]%>"><%= list.supstunamelist[j]%></a> <br>
-                                            <%}%>
-                    </td>
+                            <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
+                            </td>
+                            <%}else{%>
+                                <td id=" supstuname" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;">
+                                    <% for(var j = 0 ; j < list.supstunamelist.length ; j++){%>
+                                        <a href="/read/<%= list.supsidlist[j]%>"><%= list.supstunamelist[j]%></a> <br>
+                                                        <%}%>
+                                </td>
+                            <%}%>
+
+                    
                     <td id="supsubmission" style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;" onclick="redirectinfo('<%=list.tid%>')">
         
                         <%= list.submission %>
