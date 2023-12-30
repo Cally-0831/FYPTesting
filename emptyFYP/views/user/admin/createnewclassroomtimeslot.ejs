@@ -5,35 +5,53 @@
 <br>
 <div class="columns is-centered is-mobile">
    
-        <div class="column template is-three-fifths">
+        <div class="column template is-three-fifths-desktop is-full-width-mobile">
             <form action="/addtimeslot/<%=roominfo.Campus%>/<%=roominfo.RID%>" method="post"
                 onsubmit="createnewclassroomtimeslot(this);return false;">
                 <p></p>
-                <div id="roominfo" class="pagecontent">
-                    Createing Unavailable timeslot for <%=roominfo.RID%> in <%=roominfo.Campus%>
+                <div id="roominfo" class="title">
+                    Create Unavailable timeslot for <u style = "color: red;"><%=roominfo.RID%></u> in <u style = "color: red;"><%=roominfo.Campus%></u>
                 </div>
-                <label for="Unavailabletype">Please choose a type</label>
-                <select name="Unavailabletype" id="Unavailabletype" onchange="showcontent(value)">
-                    <option value="">-----Please Choose-----</option>
-                    <option value="timeslot">Timeslot in a day</option>
-                    <option value="wholeday">Whole Day</option>
-                    <option value="dayrange">Day Range</option>
+                <table class="table is-fullwidth" style=" background-color: transparent;text-align: left; font-size: calc(15px + 0.390625vw);">
+                            <tr>
+                                <td>
+                                    <label for="Unavailabletype" style="font-size: calc(15px + 0.390625vw);">Unavailable type :</label>
+                                </td>
+                                <td>
+                                    <select name="Unavailabletype" id="Unavailabletype" onchange="showcontent(value)" style="font-size: calc(10px + 0.390625vw);">
+                                        <option value="" >-----Please Choose-----</option>
+                                        <option value="timeslot">Timeslot in a day</option>
+                                        <option value="wholeday">Whole Day</option>
+                                        <option value="dayrange">Day Range</option>
+                    
+                                    </select>
+                                    <div id="showthedayrange"style="font-size: calc(10px + 0.390625vw);"></div>
+                                    <p></p>
+                                    <div id="showtheday" style="font-size: calc(10px + 0.390625vw);"></div>
+                                    <p></p>
+                                    <div id="showthetime" style="font-size: calc(10px + 0.390625vw);"></div>
+                                </td>
+                            </tr>
+                            <tr>
 
-                </select>
-                <p></p>
-                <div id="showthedayrange"></div>
-                <p></p>
-                <div id="showtheday"></div>
-                <p></p>
-                <div id="showthetime"></div>
-                <br>
-                <label for="remarks">Remarks</label>
-                <textarea class="textarea" id="remarks" name="remarks"  placeholder=""></textarea>
-                  
-                <br>
-                <div class = "buttons is-right">
-                     <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
-                </div>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="remarks" style="font-size: calc(15px + 0.390625vw);">Remarks :</label>
+                                </td>
+                                <td>
+                                    <textarea class="textarea" id="remarks" name="remarks"  placeholder="" style="font-size: calc(12px + 0.390625vw);"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><div class = "buttons is-right">
+                                    <button class="button buttonlogout is-responsive" type="submit is-success">Submit</button>
+                               </div></td>
+                            </tr>
+
+                </table>
+                
                
             </form>
 
@@ -71,26 +89,26 @@
     }
 
     function showdayrange() {
-        document.getElementById("showthedayrange").innerHTML = "<label for=\"notokstartday\">Unavailable Start Date:&nbsp;&nbsp;</label\>"
-            + "<input type=\"date\" id=\"notokstartday\" name=\"notokstartday\"required\>"
+        document.getElementById("showthedayrange").innerHTML = "<label for=\"notokstartday\" >Unavailable Start Date:</label\>\<br\>"
+            + "<input type=\"date\" id=\"notokstartday\" name=\"notokstartday\" style=\"font-size: calc(10px + 0.390625vw);\"required\>"
             + "<p\></p\>"
-            + "<label for=\"notokendday\">Unavailable End Date:&nbsp;&nbsp;</label\>"
-            + "<input type=\"date\" id=\"notokendday\" name=\"notokendday\"required\>"
+            + "<label for=\"notokendday\">Unavailable End Date:</label\>\<br\>"
+            + "<input type=\"date\" id=\"notokendday\" name=\"notokendday\"style=\"font-size: calc(10px + 0.390625vw);\" required\>"
             ;
 
     }
 
     function showday() {
-        document.getElementById("showtheday").innerHTML = "<label for=\"notokstartday\">Unavailable Date:&nbsp;&nbsp;</label\>"
-            + "<input type=\"date\" id=\"notokstartday\" name=\"notokstartday\"required\>";
+        document.getElementById("showtheday").innerHTML = "<label for=\"notokstartday\">Unavailable Date:</label\>\<br\>"
+            + "<input type=\"date\" id=\"notokstartday\" name=\"notokstartday\" style=\"font-size: calc(10px + 0.390625vw);\" required\>";
     }
 
     function showtime() {
-        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:&nbsp;&nbsp;\</label\>"
-            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\required>"
+        document.getElementById("showthetime").innerHTML = "<label for = \"starttime\"\>Start Time\:\</label\>\<br\>"
+            + " \<input type\=\"time\" id\=\"starttime\" name\=\"starttime\"\ style=\"font-size: calc(10px + 0.390625vw);\" required>"
             + "<p\></p\>"
-            + "<label for = \"endtime\"\>End Time\:&nbsp;&nbsp;&nbsp;\</label\>"
-            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\required>";
+            + "<label for = \"endtime\"\>End Time\:\</label\>\<br\>"
+            + " \<input type\=\"time\" id\=\"endtime\" name\=\"endtime\"\ style=\"font-size: calc(10px + 0.390625vw);\" required>";
     }
 
     async function createnewclassroomtimeslot(formElem) {

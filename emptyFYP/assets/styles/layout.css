@@ -98,19 +98,26 @@
   display: inline-block;
   overflow: auto
 }
+.redbutton {
+  background-color: salmon;
+}
 
+.greenbutton {
+  background-color: lightgreen;
+}
 .title {
   /* font-size: 20px; */
-  font-size: calc(13px + 0.390625vw);
-  ;
-  font: bold;
+  font-size: calc(15px + 0.390625vw);
+  text-align: center;
+  font-weight: bold;
+
 }
 
 .Pagetitle {
-  font-size: calc(20px + 0.390625vw);
+  font-size: calc(25px + 0.390625vw);
   /* font-size: 40px; */
   text-align: center;
-  font: bold;
+  font-weight: bold;
 }
 
 .button-64:active,
