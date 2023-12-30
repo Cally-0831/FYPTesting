@@ -525,9 +525,6 @@ console.log(">>caninsertthisclasssection ",caninsertthisclasssection,"\n")
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
 
-
-
-
                 if (json.length != 0) {
                     var deadline = new Date(json[0].deadlinedate);
                     var deadlinetime = json[0].deadlinetime.split(":");

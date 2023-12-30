@@ -107,7 +107,7 @@
 }
 .title {
   /* font-size: 20px; */
-  font-size: calc(15px + 0.390625vw);
+  font-size: calc(25px + 0.390625vw);
   text-align: center;
   font-weight: bold;
 
