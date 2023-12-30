@@ -547,13 +547,12 @@ module.exports = {
     uploadstudentlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-
-        try {
-            if (req.body[0].sid == undefined || req.body[0].studentname == undefined
-                || req.body[0].password == undefined) { return res.status(401).json("Invalid Input"); }
-        } catch (err) {
-            return res.status(401).json("Invalid Input");
+        if (!req.body[0].hasOwnProperty("sid") || !req.body[0].hasOwnProperty("studentname"|| !req.body[0].hasOwnProperty("password"))) {
+            return res.status(401).json("Invalid Inputs")
+        }else{
+             console.log(req.body);
         }
+        
 
 
 
@@ -607,12 +606,10 @@ module.exports = {
     uploadsupervisorlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-
-        try {
-            if (req.body[0].tid == undefined || req.body[0].supervisorname == undefined
-                || req.body[0].password == undefined) { return res.status(401).json("Invalid Input"); }
-        } catch (err) {
-            return res.status(401).json("Invalid Input");
+        if (!req.body[0].hasOwnProperty("tid") || !req.body[0].hasOwnProperty("supervisorname"|| !req.body[0].hasOwnProperty("password"))) {
+            return res.status(401).json("Invalid Inputs")
+        }else{
+             console.log(req.body);
         }
 
 

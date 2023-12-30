@@ -29,6 +29,7 @@ module.exports = {
     },
 
     deleteclassroom: async function (req, res) {
+
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
@@ -54,7 +55,8 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var campuslist;
-
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
         let thisistheline = "SELECT DISTINCT campus FROM classroom";
         console.log(thisistheline)
         db.query(thisistheline, (err, results) => {
@@ -211,6 +213,7 @@ module.exports = {
     deletetimeslot: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+
 
         if (req.session.role = "adm") {
             let thisistheline = "DELETE FROM  allclassroomtimeslot WHERE reqid= \"" + req.body.ReqID + "\"\n";
@@ -375,7 +378,25 @@ module.exports = {
     uploadclassroom: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        console.log(req.body);
+
+        if (!req.body[0].hasOwnProperty("Campus") && !req.body[0].hasOwnProperty("RID")) {
+            return res.status(401).json("Invalid Inputs")
+        } else {
+            console.log(req.body);
+        }
+        req.body.forEach(classroom => {
+            var insertline = "insert ignore into classroom values(\"" + classroom.Campus + "\",\"" + classroom.RID + "\",\"Open\");"
+            console.log(insertline)
+            db.query(insertline, function (err, result) {
+                try {
+                } catch (err) {
+                    return res.status(401).json("Error happened when excuting StudentListContorller.uploadclassroomlist.insertline");
+                }
+            });
+            return res.status(200).json("Complete create")
+
+        });
+
 
     },
 }
