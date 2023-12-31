@@ -24,9 +24,9 @@ create table allrequestfromsupervisor(ReqID	varchar(20) not null,TID		varchar(10
 
 create table allrequestfromstudent( ReqID	varchar(20) not null, SID		varchar(10) not null, RequestDate DATE not null, RequestStartTime time not null, RequestEndTime time not null, reason	varchar(1000) not null,picdata LONGBLOB,status varchar(20) not null,reply varchar(100),submission timestamp,primary key (ReqID) );
 
-create table supervisorpairstudent( TID		varchar(20) not null, SID		varchar(10) not null, Topic 	varchar(100) not null, primary key (TID,SID) );
+create table supervisorpairstudent( TID		varchar(20) not null, SID		varchar(10) not null unique, Topic 	varchar(100) not null, primary key (TID,SID) );
 
-create table observerpairstudent( OID		varchar(20) not null, SID		varchar(10) not null, obsname varchar(100) not null, primary key (SID) ); 
+create table observerpairstudent( OID		varchar(20) not null, SID		varchar(10) not null unique, obsname varchar(100) not null, primary key (OID,SID) ); 
 
 create table allclassroomtimeslot( ReqID	varchar(30) not null, Campus varchar(10) not null, RID		varchar(10) Not null, StartDate DATE not null, EndDate DATE not null, StartTime time not null, EndTime time not null, Remarks varchar(100), primary key (ReqID) );
 

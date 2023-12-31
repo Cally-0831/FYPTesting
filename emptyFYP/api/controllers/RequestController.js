@@ -301,7 +301,7 @@ module.exports = {
             console.log("enter sup");
             if (req.body.starttime == undefined) {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
-                    + "\",\"00:00\", \"23:59\");";
+                    + "\",\"08:30\", \"18:30\");";
             } else {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\");";
@@ -311,7 +311,7 @@ module.exports = {
             console.log(req.body)
             if (req.body.starttime == undefined) {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
-                    + "\",\"00:00\", \"23:59\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
+                    + "\",\"08:30\", \"18:30\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";
             } else {
                 thisistheline = "insert into allrequestfromstudent values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\",\"" + req.body.reason + "\",null,\"Require Proof\",\"\",now());";

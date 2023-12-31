@@ -231,20 +231,36 @@
     }
 
     async function submitrequest(formElem) {
-
+           
 
         if (!checked) {
             var startstart = document.getElementById("starttime").value;
             var endend = document.getElementById("endtime").value;
+            console.log(startstart,"   ",endend)
 
             if (endend <= startstart) {
                 alert("End time cannot be earlier than Start time \n" + "Please review your input");
                 return;
             }
+            if(startstart < "08:30"){
+                alert("The system will not consider timeslots earlier than 08:30 \n The Start Time of the request will be assign as 08:30 ");
+                startstart = "08:30";
+            }
 
+            if(endend > "18:30"){
+                alert("The system will not consider timeslots later than 18:30 \n The End Time of the request will be assign as 18:30");
+                endend = "18:30";
+            }
+            document.getElementById("starttime").value =startstart;
+            document.getElementById("endtime").value = endend;
+        }else{
+                alert("The system will not consider timeslots earlier than 08:30 and later than 18:30"+
+                "\n The Start Time of the request will be assign as 08:30 "+
+                "\n The End Time of the request will be assign as 18:30");   
         }
         try {
-            console.log(formElem.action)
+            
+            
             var response = await fetch(formElem.action, {
                 method: formElem.method,
                 body: new FormData(formElem),
@@ -257,9 +273,9 @@
 
             } else if (response.status == 401) {
                 var msg = await response.json();
-                alert(msg);
+               alert(msg);
             } else {
-                alert(response.statusTest);
+               alert(response.statusTest);
             }
 
         } catch (error) {
@@ -284,7 +300,21 @@
                 alert("End time cannot be earlier than Start time \n" + "Please review your input");
                 return;
             }
+            if(startstart < "08:30"){
+                alert("The system will not consider timeslots earlier than 08:30 \n The Start Time of the request will be assign as 08:30 ");
+                startstart = "08:30";
+            }
 
+            if(endend > "18:30"){
+                alert("The system will not consider timeslots later than 18:30 \n The End Time of the request will be assign as 18:30");
+                endend = "18:30";
+            }
+            document.getElementById("starttime").value =startstart;
+            document.getElementById("endtime").value = endend;
+         }else{
+                alert("The system will not consider timeslots earlier than 08:30 and later than 18:30"+
+                "\n The Start Time of the request will be assign as 08:30 "+
+                "\n The End Time of the request will be assign as 18:30");   
         }
         try {
             var response = await fetch(formElem.action, {

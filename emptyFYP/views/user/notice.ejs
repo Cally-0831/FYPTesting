@@ -21,45 +21,47 @@
         </div>
     </div>
     <br>
-    <div class="row" style="overflow-x: auto; overflow-y: auto;">
-        <% for(var i=0 ; i < thisusernoticetlist.length;i++){ var
-            contents=thisusernoticetlist[i].content.split('newline'); %>
-        <table class="table is-bordered is-striped is-hoverable is-fullwidth is-mobile" style="border: 1px; border-color: black;">
-            <tr>
-            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;" colspan="2"><%=i+1%>. <%=thisusernoticetlist[i].title %></th>
-            </tr>
-            <tr>
-                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Announced Date</th> 
-                <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;width: 50vw;">
-                <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleDateString(); %> 
-                <br>
-                <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleTimeString('en-GB')%>
-                </td>
-            </tr>
-            <tr>
-                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Announcer</th>
-                <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;width: 50vw;">
-                    <%= thisusernoticetlist[i].Creatorname%>
-                </td>
-            </tr>
-            <tr>
-                <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Content</th>
-                <td style="font-size: calc(15px + 0.390625vw);text-align: left;vertical-align:middle;width: 50vw;">
-                    <%if(contents !=null){%>
-                        <%for(var j=0 ;j < contents.length;j++){%>
-                            <%=contents[j]%>
-                                <br>
-                                <%}%>
+    <div class = "row">
+<div class="columns is-centered is-mobile">
+    <div class = "column is-8-desktop is-full-width-mobile " style="overflow-x: auto; overflow-y: auto;">
+    <% for(var i=0 ; i < thisusernoticetlist.length;i++){ var
+        contents=thisusernoticetlist[i].content.split('newline'); %>
+    <table class="table is-bordered is-hoverable is-fullwidth" style="border: 1px; border-color: black;">
+        <tr>
+        <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;" colspan="2"><%=i+1%>. <%=thisusernoticetlist[i].title %></th>
+        </tr>
+        <tr>
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Announced Date</th> 
+            <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;width: 50vw;">
+            <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleDateString(); %>  <%= new Date(thisusernoticetlist[i].CreateDate).toLocaleTimeString('en-GB')%>
+            </td>
+        </tr>
+        <tr>
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Announcer</th>
+            <td style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;width: 50vw;">
+                <%= thisusernoticetlist[i].Creatorname%>
+            </td>
+        </tr>
+        <tr>
+            <th style="font-size: calc(15px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #f3e1c3;width: 20vw;">Content</th>
+            <td style="font-size: calc(15px + 0.390625vw);text-align: left;vertical-align:middle;width: 50vw;">
+                <%if(contents !=null){%>
+                    <%for(var j=0 ;j < contents.length;j++){%>
+                        <%=contents[j]%>
+                            <br>
+                            <%}%>
 
-                                    <%}else{%>
-                                        <%= thisusernoticetlist[i].content %>
-                                            <%}%>
-                </td>
-            </tr>
+                                <%}else{%>
+                                    <%= thisusernoticetlist[i].content %>
+                                        <%}%>
+            </td>
+        </tr>
 
-        </table>
-        <%}%>
-        
+    </table>
+    <%}%>
+</div>
+</div>
+
     </div>
 </div>
 
