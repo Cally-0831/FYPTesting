@@ -1,17 +1,706 @@
-<%if(printed){
-                                        var removelist = [];
-                                        for(var a = 0 ; a < requestes.length;a++){
-                                            var requestdaytime = new Date(requestes[a].RequestDate);
-                                            var requestdayendtime = new Date(requestes[a].RequestDate);
-                                            requestdaytime.setHours(parseInt(requestes[a].RequestStartTime.split(":")[0]));
-                                            requestdaytime.setMinutes(parseInt(requestes[a].RequestStartTime.split(":")[1]));
-                                            requestdayendtime.setHours(parseInt(requestes[a].RequestEndTime.split(":")[0]));
-                                            requestdayendtime.setMinutes(parseInt(requestes[a].RequestEndTime.split(":")[1]));
+ if(startmin != endmin && (endhour - starthour) >=1 ){
 
-                                            if(requestdaytime.toLocaleDateString() == printday.toLocaleDateString() && requestdayendtime.getTime() <= printday.getTime()){
-                                                removelist.push(requestes[a]);
+
+
+
+
+    <div>
+    <div class="Pagetitle">Draft Schedule for <%=req.params.tid%>
+    </div>
+    <div class="row">
+        <div class="buttons">
+            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+        </div>
+    </div>
+    <br>
+<%console.log(boxes.length)%>
+    
+    <%if (manualhandlecase.length >0){%>
+       
+    <div class = "row" id = "manualhandlecasetable">
+        <div class = "columns is-centered is-mobile">
+            <div class = "column" style = "overflow: auto;">
+                <div class = "table-container">
+                <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
+                    <tr>
+                        <thead>
+                            <th
+                            style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" colspan="2">
+                            Manual Handle Cases</th>
+                        </thead>
+                    </tr>
+                    <tr>
+                        <th
+                        style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                        SID
+                    </th>
+                    <th
+                        style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                        Edit
+                    </th>
+                    </tr>
+                    <%for(var a = 0 ;a < manualhandlecase.length ; a++){%>
+                        <tr>
+                            <td style="font-size: calc(15px + 0.390625vw);; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
+                            <td><div class="buttons is-centered">
+                                <div class="button is-responsive" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">
+                                    edit</div>
+                            </div></td>
+                        </tr>
+                    <%}%>
+                    </table>
+</div>
+            </div>
+        </div>
+
+    </div> 
+    <%}%>
+
+
+    <div class = "row" id = "Schedule"> 
+        <%var realpresentday = new Date(setting.startday)%>
+                <%=displaystartday%>   <%=displayendday%>
+                <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
+                    <% var printday=new Date(displaydate.getTime())%> 
+                     <%var enddisplaydate= displayendday;%>
+                        <br><%="enddisplay date"%> <%=enddisplaydate%><br>
+                        <%
+                        var appendlist = [];
+                        var removelist = [];
+                        
+                        for (var a = 0; a < requestes.length; a++) {
+                          
+                           if(requestes[a].RequestStartTime=="00:00:00" && requestes[a].RequestEndTime=="23:59:00"){
+                            removelist.push(a);
+                            
+                            var starttime = 8;
+                            var endtime = 18;
+                            
+                            while(starttime < endtime){    
+                                var element = JSON.parse(JSON.stringify(requestes[a]))
+                                
+                                if(type == "final"){
+                                    console.log("are you here ??")
+                                }else{
+
+                                }
+                                if(starttime < 10){
+                                   element.RequestStartTime = "0"+starttime+":"+"30:00"
+                                }else{
+                                   element.RequestStartTime = starttime+":"+"30:00"
+                                }
+                                if((starttime+1) < 10){
+                                   element.RequestEndTime = "0"+(starttime+1)+":"+"30:00"
+                                }else{
+                                   element.RequestEndTime = (starttime+1)+":"+"30:00"
+                                }
+                                starttime = starttime+1;
+                                appendlist.push(element)
+                                
+                                
+                            }
+                          
+                           
+                           
+
+                          }else{
+                            
+                            var starttime = requestes[a].RequestStartTime.split(":");
+                            var endtime = requestes[a].RequestEndTime.split(":");
+                            
+                            if(type == "midterm"){
+                                if(parseInt(starttime[1])>=parseInt(30)){
+
+
+                                    if(parseInt(starttime[0])+1 <=9){
+                                        starttime[0] = "0"+(parseInt(starttime[0]));
+                                        console.log(">>check time 1", starttime[0]+"   "+starttime[1])
+                                    }else{
+                                        starttime[0] = (parseInt(starttime[0]));
+                                        console.log(">>check time 2", starttime[0]+"   "+starttime[1])
+                                    }
+                                    starttime[1] = "30"
+                                    console.log(">>check time 3", starttime[0]+"   "+starttime[1])
+
+                                }else{
+                                    starttime[1] = "00"
+                                    console.log(">>check time", starttime[0]+"   "+starttime[1])
+                                }
+
+
+                                if(parseInt(endtime[1])>=30){
+                                    endtime[1] = "00"
+                                    console.log("check time output end hello", (parseInt(endtime[0])+1))
+                                    if( (parseInt(endtime[0])+1) <= 9){
+                                        endtime[0] = "0"+(parseInt(endtime[0])+1);
+
+                                    }else{
+                                        endtime[0] = (parseInt(endtime[0])+1);
+                                    }
+                                }else{
+                                    endtime[1] = "30"
+                                }
+                                
+
+                            }else{
+                               
+                                if(parseInt(starttime[1])>parseInt(30)){
+                                    starttime[1] = "00";
+                                }else{
+                                    starttime[1] = "30"
+                                }
+                                if(parseInt(endtime[1])>30){
+                                    endtime[0] = parseInt(endtime[0])+1;
+                                    if(endtime[0] >10){endtime[0] = "0"+endtime[0]}else{endtime[0] = endtime[0]+""};
+                                   endtime[1] = "00";
+                                }else{
+                                    endtime[1] = "30"
+                                }
+                            }
+                            
+                            requestes[a].RequestStartTime = starttime[0]+":"+starttime[1]+":00";
+                          requestes[a].RequestEndTime = endtime[0]+":"+endtime[1]+":00";
+                         console.log(type,"check time output",requestes[a].RequestStartTime," ",requestes[a].RequestEndTime)
+
+                          var starthour = parseInt(starttime[0]);
+                          var endhour = parseInt(endtime[0]);
+                          var startmin = parseInt(starttime[1]);
+                          var endmin = parseInt(endtime[1]);
+                         
+                          if(  type == "final" ){
+                            if(endhour - starthour >= 2){
+                            removelist.push(a);
+                            while(starthour != endhour){
+                             var element = JSON.parse(JSON.stringify(requestes[a]));
+                            if(starthour < 10){
+                                element.RequestStartTime =  "0"+starthour+":"+starttime[1]+":00";
+                                if(starthour+1 < 10){
+                                    element.RequestEndTime =  "0"+(starthour+1)+":"+starttime[1]+":00";
+                                }else{
+                                    element.RequestEndTime =  ""+(starthour+1)+":"+starttime[1]+":00";
+                                }
+                            }else{
+                                element.RequestStartTime =  ""+starthour+":"+starttime[1]+":00";
+                                if(starthour+1 < 10){
+                                    element.RequestEndTime =  "0"+(starthour+1)+":"+starttime[1]+":00";
+                                }else{
+                                    element.RequestEndTime =  ""+(starthour+1)+":"+starttime[1]+":00";
+                                }
+                            }
+                            appendlist.push(element);
+                            starthour++;
+                            
+                          }
+                        }
+                          }else{
+                            if(startmin == endmin){
+                                removelist.push(a);
+                                console.log(">> check element", starthour,"   ",endhour,"   ",startmin,"   ",endmin)
+                                while(!((starthour+1) == endhour && startmin != endmin)){
+                                    console.log("\n")
+                                    var element = JSON.parse(JSON.stringify(requestes[a]));
+                                    if(startmin < 30){
+                                        if(starthour < 10){
+                                            element.RequestStartTime =  "0"+starthour+":00:00";
+                                            element.RequestEndTime = "0"+starthour+":30:00";
+                                              
+                                        }else{
+                                            element.RequestStartTime =  starthour+":"+startmin+":00";
+                                            element.RequestStartTime =  starthour+":30:00";
+                                    
+                                        }
+                                        startmin = 30;
+
+
+                                        
+                                    }else{
+                                        
+                                        if((starthour+1) <= 9){
+                                            element.RequestStartTime =  "0"+(starthour)+":"+startmin+":00";
+                                            element.RequestEndTime =  "0"+(starthour+1)+":00:00";
+                                            
+                                        }else{
+                                            element.RequestStartTime =  (starthour+1)+":00:00";
+                                            element.RequestEndTime =  (starthour+1)+":30:00";
+                                      
+                                        }
+                                        startmin = 0
+                                        starthour++;
+                                    }       
+                                  
+                                    appendlist.push(element);
+                                }
+                            }
+                          }
+
+
+
+                          
+                          }
+                          
+                          
+                          
+                         }
+                         
+                         
+                        removelist.forEach((element)=>requestes.splice(element,1));
+                        
+                         appendlist.forEach((element)=> requestes.push(element));
+                         
+                        
+
+                       requestes.sort((a, b) => {
+                        if (new Date(a.RequestDate) < new Date(b.RequestDate)) return -1;
+                        if (new Date(a.RequestDate) > new Date(b.RequestDate)) return 1;
+                        if (a.RequestStartTime < b.RequestStartTime) return -1;
+                        if (a.RequestStartTime > b.RequestStartTime) return 1;
+                        })
+
+
+                        
+                    %>
+   
+                        <%
+                        var appendlist = [];
+                        for (var a = 0; a < ttb.length; a++) {
+                            var starttimeay = ttb[a].starttime.split(":");
+                            var endtimeay = ttb[a].endtime.split(":");
+                          
+                            if (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+                              
+                                var index = 1;
+                                while (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+                                    
+                                    var element = JSON.parse(JSON.stringify(ttb[a]))
+                                    element.starttime = (parseInt(starttimeay[0]) + index) + ":" + "30:00"
+                                    element.endtime = (parseInt(starttimeay[0]) + index + 1) + ":" + "30:00"
+                                    appendlist.push(element);
+                                    endtimeay = element.starttime.split(":");
+                                   
+                                    index++;
+                                   
+                                }
+                            } 
+                            ttb[a].endtime = (parseInt(starttimeay[0])+1) + ":30:00";
+                            
+                        }
+                       appendlist.forEach((element)=> ttb.push(element))
+                        
+
+                       ttb.sort((a, b) => {
+                        if (a.weekdays < b.weekdays) return -1;
+                        if (a.weekdays > b.weekdays) return 1;
+                       if (a.starttime < b.starttime) return -1;
+                        if (a.starttime > b.starttime) return 1;
+                        })
+                    %>
+        <div class = "columns is-centered is-mobile">
+            <div class = "column " style = "overflow: auto;">
+                <div class = "table-container">
+        <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
+            <tr>
+               
+                    <!--var enddisplaydate=new Date(displaydate.getTime()+ 60*60*24*1000*(6-displaydate.getDay())-->
+                      
+                      
+                        <th style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" >
+                            <%if(Page != 1){%>
+                                 <a onclick="backpage('<%=req.params.tid%>','<%=req.params.Page%>')"> < </a> 
+                                <%}else{%>
+                                    <
+                                    <%}%>
+                             </th> 
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                SUN
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                MON
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                TUE
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                WED
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                THU
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                FRI
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                                SAT
+                            </th>
+                            <th
+                                style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;">
+                                <%if(enddisplaydate < new Date(setting.endday)){%>
+                                     <a onclick="nextpage('<%=req.params.tid%>','<%=req.params.Page%>')"> > </a> 
+                                    <%}else{%>
+                                        >
+                                        <%}%>
+                               </th> 
+                            
+            </tr>
+            <tr>
+                <!--printing empty cell for the time column-->
+                <td style="font-size : 14px"></td>
+                <%var printing = new Date(displaystartday.getTime())%>
+               
+                 <!--printing the date on the table on row 2-->
+                <%for(var a = 0 ;a < 7;a++){%>                   
+                    <td style="font-size : 14px"><%=printing.toLocaleDateString("en-GB")%></td>
+                        <%printing = new Date(printing.getTime()+60*60*1000*24)%>
+                    <%}%>
+                <!--printing empty cell for the next page arrow-->
+                <td style="font-size : 14px"></td>
+            </tr>
+            <tr>
+                <%var printday = new Date(displaystartday)%>
+                <%printday.setHours(8);printday.setMinutes(30)%>
+                <%var linenum = 0;%>
+                <%if(type == "final"){linenum = 13}else{linenum = 13*2}%>
+                
+                <%for(var a = 0 ;a < linenum;a++){%>
+                <tr>
+                    <!--print the time on the table for column 1-->
+                     <td><%=printday.toLocaleTimeString("en-GB")%></td>
+                     
+                    <%for(var b = 0 ; b < 7;b++){%>
+                        
+                        <%var printed = false;%>
+                        <!--printing ttb-->
+                        <%if(ttb.length > 0 && printday.getDay() == ttb[0].weekdays && !printed){%>
+                            <%if(printday.toLocaleTimeString("en-GB") == ttb[0].starttime || (type == "midterm" && ttb[0].starttime == (new Date(printday.getTime() - 30*60*1000)).toLocaleTimeString("en-GB")) ){%>
+                             
+                                <%printed = true;%>
+                                <td style="font-size : 14px">
+                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Class:</th></tr>
+                                        <tr><td><%=ttb[0].cid%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">Campus:</th></tr>
+                                        <tr><td><%=ttb[0].campus%></td></tr>
+                                        <tr><th style="text-align: center;vertical-align:middle; background-color: pink;">RID:</th></tr>
+                                        <tr><td><%=ttb[0].rid%></td></tr>
+                                        
+                                    </table>
+                                   
+                                </td>
+                                <%var thissessionendtime ; 
+                                if(type == "final"){
+                                     thissessionendtime =new Date(printday.getTime()+60*60*1000); 
+                                    }else{
+                                        thissessionendtime =new Date(printday.getTime()+30*60*1000); 
+                                    }%>
+                                
+                                <%if(ttb[0].endtime == thissessionendtime.toLocaleTimeString("en-GB")){%>
+                                    <%ttb.splice(0,1)%>
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                   
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
                                             }
                                         }
-                                        console.log("removing when printed   ",removelist);
+                                    
+                                    }%>
+                                    <%}else{%>
+                                        
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                   
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+                                        <%}%>
+                                
+
+
+                                   <%}else{%>
+                                    <%if(ttb.length >0){
+                                        var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                       
+                                        if(index != -1){
+                                            while(ttb[0].weekdays == printday.getDay()){
+                                                ttb.push(ttb.shift());
+                                                }
+                                            }
+                                       
+                                        }%>
+    
+                                    <%}%>
+                            <%}else{%>
+                                <%if(ttb.length >0){
+                                    var index = ttb.findIndex((element) => element.weekdays != printday.getDay());
+                                    
+                                    if(index != -1){
+                                        while(ttb[0].weekdays == printday.getDay()){
+                                            ttb.push(ttb.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+
+                                
+                                <%}%>
+                        <!--printing shedulebox-->
+                        <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString() && !printed){%>
+                            <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
+                                <%printed = true;var sessiontime = printday.toLocaleTimeString('en-GB')%>
+                                <td>
+                                    <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                        <tr><th style="font-size : 14px ;text-align: center;vertical-align:middle; background-color: bisque;">boxid:</th></tr>
+                                        <tr><td style="font-size : 12px ;"><%=boxes[0].boxID%></td></tr>
+                                        <tr><th style="font-size : 14px; text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
+                                        <tr><td><%=boxes[0].SID%></td></tr>
+                                        <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
+                                        <tr><td><%=boxes[0].Campus%></td></tr>
+                                        <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
+                                        <tr><td><%=boxes[0].RID%></td></tr>
+                                    </table>
+                                    <div id="thisbox" class = "buttons is-centered" value = "<%=boxes[0]%>" >
+                                        <div class = "button is-responsive" style="background-color:  lightgreen; border-color: black;" onclick="HandleCase('<%=boxes[0].boxID%>','<%=boxes[0].SID%>','<%=type%>','<%=req.params.tid%>','<%=req.params.Page%>')">edit</div>
+                                        <div class = "button is-responsive" style="background-color: lightcoral;border-color: black;" onclick="del('<%=boxes[0].TID%>','<%=boxes[0].boxID%>','<%=boxes[0].boxdate%>','<%=type%>','<%=boxes[0].SID%>','<%=boxes[0].OID%>')">delete</div>
+                                    </div>
+                                </td>
+                                <%boxes.splice(0,1)%>
+                                <%if(boxes.length >0){
+                                    var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                     if(index != -1){
+                                        while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                            boxes.push(boxes.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+
+
+                                   <%}else{%>
+                                    <%if(boxes.length >0){
+                                        var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                         if(index != -1){
+                                            while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                boxes.push(boxes.shift());
+                                                }
+                                            }
+                                        
+                                        }%>
+                                    
+                                    <%}%>
+                            <%}else{%>
+                                <%if(boxes.length >0){
+                                    var index = boxes.findIndex((element) => (new Date(element.boxdate)).toLocaleDateString() != printday.toLocaleDateString());
+                                     if(index != -1){
+                                        while((new Date(boxes[0].boxdate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                            boxes.push(boxes.shift());
+                                            }
+                                        }
+                                    
+                                    }%>
+                                    <%}%>
+                            
+                                    <!--printing requests-->
+
+                            <%if(requestes.length > 0 && printday.toLocaleDateString() == (new Date(requestes[0].RequestDate)).toLocaleDateString() && !printed ){%>
+                                <%var requestdaytime = new Date(requestes[0].RequestDate)%>
+                                <%var requestdayendtime = new Date(requestes[0].RequestDate)%>
+                                <%requestdaytime.setHours(parseInt(requestes[0].RequestStartTime.split(":")[0]))%>
+                                <%requestdaytime.setMinutes(parseInt(requestes[0].RequestStartTime.split(":")[1]))%>
+                                <%requestdayendtime.setHours(parseInt(requestes[0].RequestEndTime.split(":")[0]))%>
+                                <%requestdayendtime.setMinutes(parseInt(requestes[0].RequestEndTime.split(":")[1]))%>
+
+                               
+                                
+                                <%if(!(requestdayendtime.toLocaleTimeString() < printday.toLocaleTimeString() && requestdaytime.toLocaleDateString() >  ( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()) ){%>
+                                    <%printed = true;%>
+                                  
+                                    <td style="font-size : 14px"> <%=requestes[0].ReqID%> <%=printday.toLocaleTimeString()%> <%=requestdayendtime.toLocaleTimeString()%>
+                                        <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
+                                            <tr><td><%=requestes[0].ReqID%></td></tr>
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Start Time :</th></tr>
+                                            <tr><td><%=requestes[0].RequestStartTime%></td></tr>
+                                            <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">End Time :</th></tr>
+                                            <tr><td><%=requestes[0].RequestEndTime%></td></tr>
+                                            
+                                        </table>
+                                       
+                                    </td>
+
+                                    <%if(requestdayendtime.toLocaleTimeString() <=( new Date(printday.getTime()+60*60*1000)).toLocaleTimeString()){%>
+                                        <%requestes.splice(0,1)%>
+                                    <%if(requestes.length >0){
+                                        var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                        if(index != -1){
+                                            while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                               requestes.push(requestes.shift());
+                                                }
+                                            }
+                                        
+                                        }%>
+    
+                                        
+                                        <%}%>
+                                    
+    
+                                       <%}else{%>
+                                        <%if(requestes.length >0){
+                                            var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                            if(index != -1){
+                                                while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                                   requestes.push(requestes.shift());
+                                                    }
+                                                }
+                                            
+                                            }%>
+                                        <%}%>
+                                <%}else{%>
+
+                                   
+                                    <%if(printed){
+                                        var removelist = [];
+                                        for(var ritem = 0 ; ritem < requestes.length; ritem++){
+                                            var requestdaytime = new Date(requestes[ritem].RequestDate);
+                                            var requestdayendtime = new Date(requestes[ritem].RequestDate);
+                                            requestdaytime.setHours(parseInt(requestes[ritem].RequestStartTime.split(":")[0]));
+                                            requestdaytime.setMinutes(parseInt(requestes[ritem].RequestStartTime.split(":")[1]));
+                                            requestdayendtime.setHours(parseInt(requestes[ritem].RequestEndTime.split(":")[0]));
+                                            requestdayendtime.setMinutes(parseInt(requestes[ritem].RequestEndTime.split(":")[1]));
+
+                                            if(requestdaytime.toLocaleDateString() == printday.toLocaleDateString() && requestdaytime.getTime() <= printday.getTime()){
+                                                removelist.push(requestes[ritem]);
+                                            }
+                                        }
                                         removelist.forEach((element)=>requestes.splice(element,1));
                                     }%>
+                                    
+                                    <%if(requestes.length >0){
+                                        var index = requestes.findIndex((element) => (new Date(element.RequestDate)).toLocaleDateString() != printday.toLocaleDateString());
+                                        if(index != -1){
+                                            while((new Date(requestes[0].RequestDate)).toLocaleDateString() == printday.toLocaleDateString()){
+                                               requestes.push(requestes.shift());
+                                                }
+                                            }
+                                        }%>
+                                    
+                                    <%}%>
+
+
+
+
+
+
+                    <%if(!printed){%>
+                        <td></td>
+                        <%}%>
+                        
+
+                        <%if(printday.getDay() ==6){ 
+                             printday = new Date(displaystartday);
+                            
+                            if(type =="final"){
+                                printday.setHours(8+a);
+                                printday.setMinutes(30)
+                                
+                            }else{
+                                printday = new Date(printday.getTime()+(60*60*1000)*0.5*(a-1))
+                              
+                            }
+                           
+                        }else{
+                              
+                                   printday =new Date(printday.getTime()+60*60*24*1000)
+                                  
+                        }%>
+                        <%}%>
+                        <td></td>
+                </tr>
+                 
+                <%if(type == "final"){
+                    printday = new Date(printday.getTime()+60*60*1000)
+                }%>
+                <%}%>
+            </tr>
+
+        </table>
+    </div>
+    </div>
+        </div>
+   
+    </div>
+</div>
+
+<script>
+    function backback() {
+        location.assign("/supervisorschedulelist")
+    }
+    function backpage(id,Pagecount){
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+(parseInt(Pagecount)-1))
+    }
+    function nextpage(id,Pagecount){ 
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+(parseInt(Pagecount)+1))
+    }
+    async function HandleCase(boxid,sid,type,id,Pagecount){
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+Pagecount+"/HandleManualCase?boxid="+boxid+"&sid="+sid+"&type="+type)
+    }
+
+    async function del(tid,boxid,boxdate,type,sid,oid){
+        var r = confirm("Confirm to delete boxid "+boxid+"?");
+        console.log(boxdate,"  ",type)
+        boxdate = new Date(boxdate);
+        var endtime;
+        if(type == "final"){
+            endtime = new Date(boxdate);
+            endtime.setHours(endtime.getHours()+1);
+        }else{
+            endtime = new Date(boxdate);
+            if(endtime.getMinutes()>=30){
+                endtime.setHours(endtime.getHours()+1);
+                endtime.setMinutes(0)
+            }else{
+                endtime.setMinutes(30)
+            }
+            
+        }
+        console.log(endtime);
+        var date = boxdate.toLocaleDateString("en-GB").split("/");
+        date = date[2]+"-"+date[1]+"-"+date[0];
+        
+        var requestbody = JSON.stringify({
+            boxid : boxid,
+            command:"delete",
+            tid:tid,
+            date : date,
+            starttime: boxdate.toLocaleTimeString("en-GB"),
+            endtime:endtime.toLocaleTimeString("en-GB"),
+            sid:sid,
+            oid:oid
+        })
+        console.log(requestbody);
+        
+       if(r){
+        
+        var response = await fetch("/supervisorschedulelist/modifyschedule", {
+        method: "POST",
+        body: requestbody,
+      });
+      if(response.status == 200){
+        location.reload();
+      }
+           
+        }
+        
+
+    }
+</script>

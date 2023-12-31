@@ -7,7 +7,7 @@
         </div>
     </div>
     <br>
-<%console.log(boxes.length)%>
+<%console.log("\n\n\n\n@@@@@@@",ttb,"@@@@@@@@\n\n\n")%>
     
     <%if (manualhandlecase.length >0){%>
        
@@ -267,26 +267,41 @@
                         <%
                         var appendlist = [];
                         for (var a = 0; a < ttb.length; a++) {
+                            console.log("hello   ttb ",ttb)
                             var starttimeay = ttb[a].starttime.split(":");
                             var endtimeay = ttb[a].endtime.split(":");
                           
                             if (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+
+                                var endhour = parseInt(endtimeay[0]);
+                                var starthour = parseInt(starttimeay[0]);
                               
                                 var index = 1;
-                                while (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
-                                    
+
+                                while (endhour - starthour >1){
+                                    console.log("check a",parseInt(endtimeay[0]),"   ",parseInt(starttimeay[0]))
                                     var element = JSON.parse(JSON.stringify(ttb[a]))
                                     element.starttime = (parseInt(starttimeay[0]) + index) + ":" + "30:00"
                                     element.endtime = (parseInt(starttimeay[0]) + index + 1) + ":" + "30:00"
                                     appendlist.push(element);
                                     endtimeay = element.starttime.split(":");
-                                   
+                                    
                                     index++;
-                                   
+                                    console.log("check b",parseInt(endtimeay[0]),"   ",parseInt(starttimeay[0]))
+                                    starthour++;
                                 }
+                               
+
+
+
+
+
+
+
+                                
                             } 
                             ttb[a].endtime = (parseInt(starttimeay[0])+1) + ":30:00";
-                            
+                           
                         }
                        appendlist.forEach((element)=> ttb.push(element))
                         
