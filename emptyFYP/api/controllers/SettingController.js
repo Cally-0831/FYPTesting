@@ -99,13 +99,13 @@ module.exports = {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
-                console.log("pairing result :", ans)
+                //console.log("pairing result :", ans)
                 if (ans.length > 0) {
                     ans = false
                 } else {
                     ans = true
                 }
-                console.log(ans + "    jdshfjashdf")
+                //console.log(ans + "    jdshfjashdf")
                 resolve(ans)
             })
         }).catch((err) => {
@@ -169,8 +169,8 @@ module.exports = {
             errmsg = "Error happened in SettingController. nodraft.setting3"
         })
 
-        console.log(">>setting1", setting1)
-        console.log(">>setting3", setting3)
+        //console.log(">>setting1", setting1)
+        //console.log(">>setting3", setting3)
 
         var today = new Date();
         var errormsg = ""
@@ -197,7 +197,7 @@ module.exports = {
 
 
             }
-            console.log("handling now  " + setting1[a].typeofsetting)
+            //console.log("handling now  " + setting1[a].typeofsetting)
             if (setting1[a].typeofsetting != 4 && setting1[a].deadlinedate < today) {
                 checking = true
             } else if (setting1[a].typeofsetting != 4 && setting1[a].deadlinedate > today) {
@@ -211,22 +211,22 @@ module.exports = {
         erray = erray.filter((word) => word.length > 0);
 
 
-        console.log(arranged + "    " + erray)
+        //console.log(arranged + "    " + erray)
         if (arranged) {
             if (erray.length == 1 && erray.includes("4")) {
                 warning = "200";
-                console.log("here1")
+                //console.log("here1")
             } else {
                 warning = "401";
-                console.log("here2");
+                //console.log("here2");
             }
 
         } else {
             warning = "401";
             erray.push("A");
-            console.log("here3")
+            //console.log("here3")
         }
-        console.log("erray", erray);
+        //console.log("erray", erray);
 
         return res.view("user/admin/scheduledesign", {
             havedraft: "N",

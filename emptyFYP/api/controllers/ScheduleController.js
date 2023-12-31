@@ -4,7 +4,7 @@ module.exports = {
 
     },
     viewFinalSchedule: async function (req, res) {
-       
+
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var getsettinginfo;
@@ -38,7 +38,7 @@ module.exports = {
             settingdate.setHours(setting.deadlinetime.split(":")[0]);
             settingdate.setMinutes(setting.deadlinetime.split(":")[1]);
             var today = new Date();
-            console.log(">>settingdate",settingdate.toLocaleDateString() , "  ",settingdate.toLocaleTimeString("en-GB")," ",today.toLocaleDateString(),"  ",today.toLocaleTimeString("en-GB"))
+            console.log(">>settingdate", settingdate.toLocaleDateString(), "  ", settingdate.toLocaleTimeString("en-GB"), " ", today.toLocaleDateString(), "  ", today.toLocaleTimeString("en-GB"))
             console.log(settingdate >= new Date())
             console.log(settingdate >= today)
             if (settingdate <= new Date()) {
@@ -59,10 +59,10 @@ module.exports = {
                         });
 
                     } catch (err) {
-                       return res.status(400).json("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
+                        return res.status(400).json("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
                     }
                 });
-            }else{
+            } else {
                 return res.status(400).json("not yet disclose");
             }
         } else {
@@ -115,22 +115,21 @@ module.exports = {
             while (true) {
                 var scheduleboxsetting = JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
                 // console.log("new schedulebox",schedulebox)
-                var presentday = (new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days)).toLocaleDateString("en-GB");
-                //console.log(presentday.toLocaleDateString())
-                if (setting3.startday.getDay() != 6 || setting.startday.getDay() != 0) {
-                    var date = presentday.split("/");
-                    scheduleboxsetting.date = date[2] + "-" + date[1] + "-" + date[0];
-                    schedulebox.push(scheduleboxsetting);
+                var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
+                //console.log(new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days))
+                if (setting3.startday.getDay() != 6 || setting3.startday.getDay() != 0) {
+                    if (presentday.getDay() != 0) {
+                        var date = presentday.toLocaleDateString("en-GB").split("/");
+                        scheduleboxsetting.date = date[2] + "-" + date[1] + "-" + date[0];
+                        schedulebox.push(scheduleboxsetting);
+                    }
                     days++;
                 }
-
-                if (presentday == (new Date(setting3.endday)).toLocaleDateString("en-GB")) {
+                if (presentday.toLocaleDateString("en-GB") == (new Date(setting3.endday)).toLocaleDateString("en-GB")) {
                     false;
                     break;
                 }
-
             }
-
             //console.log("resetted schedulebox", schedulebox)
             return schedulebox;
         }
@@ -163,14 +162,14 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.gethvrecordbutnosubmit"
         })
 
-        console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
+        //console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
 
         for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
             var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
             //console.log(deleteline)
             db.query(deleteline, (err, result) => {
                 try {
-                    console.log("delete complete")
+                    //console.log("delete complete")
                 } catch (err) {
                     if (err) {
                         errstring = "";
@@ -185,7 +184,7 @@ module.exports = {
             //console.log(insertemptyline)
             db.query(insertemptyline, (err, result) => {
                 try {
-                    console.log("insert complete")
+                    //console.log("insert complete")
                 } catch (err) {
                     if (err) {
                         errstring = "";
@@ -200,7 +199,7 @@ module.exports = {
             //console.log(updatetakecourseline)
             db.query(updatetakecourseline, (err, result) => {
                 try {
-                    console.log("update complete")
+                    //console.log("update complete")
                 } catch (err) {
                     if (err) {
                         errstring = "";
@@ -230,7 +229,7 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.getallstudentttbnotok"
         })
-        console.log(studentlist)
+        //console.log(studentlist)
 
         for (var a = 0; a < studentlist.length; a++) {
             //try enroll all of them to EMPTY
@@ -238,7 +237,7 @@ module.exports = {
             //console.log(insertemptyline)
             db.query(insertemptyline, (err, result) => {
                 try {
-                    console.log("insert complete")
+                    //console.log("insert complete")
                 } catch (err) {
                     if (err) {
                         errstring = "";
@@ -253,7 +252,7 @@ module.exports = {
             //console.log(updatetakecourseline)
             db.query(updatetakecourseline, (err, result) => {
                 try {
-                    console.log("update complete")
+                    //console.log("update complete")
                 } catch (err) {
                     if (err) {
                         errstring = "";
@@ -270,7 +269,7 @@ module.exports = {
         //console.log(updaterequiredproofline)
         db.query(updaterequiredproofline, (err, result) => {
             try {
-                console.log("update complete")
+                //console.log("update complete")
             } catch (err) {
                 if (err) {
                     errstring = "";
@@ -286,7 +285,7 @@ module.exports = {
         //console.log(updatependingrequestline)
         db.query(updatependingrequestline, (err, result) => {
             try {
-                console.log("update complete")
+                //console.log("update complete")
             } catch (err) {
                 if (err) {
                     errstring = "";
@@ -715,8 +714,11 @@ module.exports = {
             var thisschedulebox = resetschedulebox();
 
             if (prefofthissuper != null && prefofthissuper.length > 0) {
-                //console.log(prefofthissuper[0].Prefno)
-                var prefary = prefofthissuper[0].Prefno.split("/");
+                console.log("hello pref    ", prefofthissuper[0])
+                var prefary = (prefofthissuper[0].Prefno).split("/");
+                prefary.pop()
+                //console.log(prefary);
+
 
                 for (var b = 0; b < prefary.length; b++) {
                     thisschedulebox[b].prefno = prefary[b];
@@ -725,6 +727,31 @@ module.exports = {
             thisschedulebox.sort((a, b) => {
                 return b.prefno - a.prefno;
             });
+            var dateofsat = [];
+            function arrayRemove(arr, value) {
+                return arr.filter(function (geeks) {
+                    return geeks.date != value.date;
+                });
+            }
+
+            thisschedulebox.forEach(element => {
+                var datecheck = new Date(element.date);
+                if (datecheck.getDay() == 6) {
+                    dateofsat.push(element);
+                }
+            });
+            //console.log(dateofsat)
+            dateofsat.forEach(element => {
+                let result = arrayRemove(thisschedulebox, element)
+                //console.log(result)
+                thisschedulebox = result;
+            });
+            //console.log(thisschedulebox)
+            dateofsat.forEach(element => {
+                thisschedulebox.push(element)
+            });
+
+
             // console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
@@ -791,7 +818,7 @@ module.exports = {
                         //console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
 
 
-                        if (thisschedulebox[c].schedule.length != checker || (checker == "0")) {
+                        if ((checker == "0") || thisschedulebox[c].schedule.length != checker ) {
                             while (!added) {
                                 function appendquery(thisschedulebox) {
                                     var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
@@ -812,7 +839,7 @@ module.exports = {
                                 }
 
                                 var checkavailabledup = appendquery(thisschedulebox);
-                                //console.log(checkavailabledup)
+                                console.log(checkavailabledup)
                                 var checkscheduleboxlist = await new Promise((resolve) => {
                                     pool.query(checkavailabledup, (err, res) => {
                                         var string = JSON.stringify(res);
@@ -824,7 +851,7 @@ module.exports = {
                                     errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
                                 })
 
-                                //console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
+                                console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
                                 if (checkscheduleboxlist[0] == undefined) {
                                     //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
                                     index++;
@@ -1315,7 +1342,7 @@ module.exports = {
         } else {
             type = boxesforthissupervisor[0].TYPE;
         }
-        console.log("type from controller",type)
+        console.log("type from controller", type)
 
         query = "select * from allrequestfromsupervisor where tid = \"" + req.params.tid + "\"  and (RequestDate >= date(\"" + startday + "\") and RequestDate <= date(\"" + endday + "\") ) order by requestdate asc, requeststarttime asc";
         var requestforthissupervisor = await new Promise((resolve) => {
