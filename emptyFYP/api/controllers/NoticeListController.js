@@ -44,11 +44,12 @@ module.exports = {
                 }
             });
         } else {
-            let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
-                + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
-                + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.type= \"1\" order by allnotice.CreateDate DESC;"
-            console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
+            // let thisistheline = "select distinct allnotice.nid, allnotice.Creator,allnotice.Creatorname,allnotice.CreateDate, allnotice.title, allnotice.content from allnotice "
+            //     + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
+            //     + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.type= \"1\" order by allnotice.CreateDate DESC;"
+            // console.log(thisistheline)
+            var viewline = "select * from allnotice where (creator = \"admin\" and type != 6 and type != 3) or creator in (select tid from supervisorpairstudent where sid = \""+req.session.userid+"\")"
+            db.query(viewline , (err, results) => {
                 try {
                     var string = JSON.stringify(results);
                     //console.log('>> string: ', string );

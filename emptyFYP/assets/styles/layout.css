@@ -1,7 +1,7 @@
 .welcome{
   text-align: center;
   /* font-size: 30px; */
-  font-size: calc(30px + 0.390625vw);
+  font-size: calc(25px + 0.390625vw);
   font-weight: bold;
 }
 

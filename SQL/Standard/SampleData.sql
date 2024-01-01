@@ -33,18 +33,18 @@ update supervisor set priority = "1" where tid = "tid00010";
 
 
 
-insert IGNORE into allusers values("Cathy","sid33333","spw33333","ACTIVE","0","stu");
-insert IGNORE into allusers values("Dorthy","sid44444","spw44444","ACTIVE","0","stu");
-insert IGNORE into allusers values("Emily","sid55555","spw55555","ACTIVE","0","stu");
-insert IGNORE into allusers values("Fiona","sid66666","spw66666","ACTIVE","0","stu");
-insert IGNORE into allusers values("Gloria","sid77777","spw77777","ACTIVE","0","stu");
-insert IGNORE into allusers values("Helena","sid88888","spw88888","ACTIVE","0","stu");
-insert IGNORE into supervisorpairstudent values("tid00001","sid33333","how to get abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid44444","where is abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid55555","how to get abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid66666","where is abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid77777","how to get abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid88888","where is abc");
+insert IGNORE into allusers values("Cathy","sid11111","spw11111","ACTIVE","0","stu");
+insert IGNORE into allusers values("Dorthy","sid12222","spw12222","ACTIVE","0","stu");
+insert IGNORE into allusers values("Emily","sid15555","spw15555","ACTIVE","0","stu");
+insert IGNORE into allusers values("Fiona","sid16666","spw16666","ACTIVE","0","stu");
+insert IGNORE into allusers values("Gloria","sid17777","spw17777","ACTIVE","0","stu");
+insert IGNORE into allusers values("Helena","sid18888","spw18888","ACTIVE","0","stu");
+insert IGNORE into supervisorpairstudent values("tid00001","sid11111","how to get abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid12222","where is abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid15555","how to get abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid16666","where is abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid17777","how to get abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid18888","where is abc");
 
 
 insert IGNORE into allusers values("Emily","sid21111","spw21111","ACTIVE","0","stu");

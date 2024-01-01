@@ -9,32 +9,36 @@
     <div class="welcome">FYP Scheduling System</div>
     <br><br>
     <div class="buttons is-centered is-mobile">
-        <button class="button button-64 is-responsive" id="autoinputsup" onclick="inputsup()">SUPER1</button>
-        <button class="button button-64 is-responsive" id="autoinputsup" onclick="inputsup2()">SUPER2</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputstd()">Apple</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputstd2()">Cathy</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputstd3()">Emily</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputstd4()">Dorthy</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputsup3()">AAmantha</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputsup4()">BBanana</button>
-        <button class="button button-64 is-responsive" id="autoinputstd" onclick="inputsup5()">CCatie</button>
-        <button class="button button-64 is-responsive" id="autoinputadm" onclick="inputadm()">Admin</button>
+        
+        <button class="button is-responsive" id="autoinputsup" style = "background-color:  pink;" onclick="inputsup()">tid00001</button>
+        <button class="button is-responsive" id="autoinputsup" style = "background-color:  pink;"  onclick="inputsup2()">tid00002</button>
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup3()">tid00003</button>
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup4()">tid00004</button>
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup5()">tid00005</button>
+
+
+     
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd2()">Cathy</button>
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd3()">Emily</button>
+        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd4()">Dorthy</button>
+        
+        <button class="button  is-responsive" id="autoinputadm" style = "background-color:  lightgreen;" onclick="inputadm()">Admin</button>
     </div>
     <div class="columns is-centered">
         <div class="column is-half is-mobile">
             <div class="scheduledesignchecking">
                 <div class="rows">
                     <div class="row">
-                        <div class="title is-3">Login</div>
+                        <div class="title">Login</div>
                     </div>
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <form action="/login" method="post" onsubmit="submitform(this);return false;">
-                            <label for="username" class="subtitle is-4">Username</label>
+                            <label for="username" class="subtitle">Username</label>
                             <input type="text" class="input is-rounded is-half" placeholder="Enter Username (SID/TID)"
                                 id="username" name="username" value=""><br>
                             <br>
-                            <label for="pw" class="subtitle is-4">Password </label>
+                            <label for="pw" class="subtitle">Password </label>
                             <input type="password" class="input is-rounded is-half" placeholder="Enter Password" id="pw"
                                 name="pw" value=""><br><br>
                             <div class="buttons is-centered">
@@ -78,14 +82,11 @@
             }
         }
     
-        function inputstd() {
-            document.getElementById("username").value = "sid11111";
-            document.getElementById("pw").value = "spw11111";
-        }
+       
     
         function inputstd2() {
-            document.getElementById("username").value = "sid33333";
-            document.getElementById("pw").value = "spw33333";
+            document.getElementById("username").value = "sid11111";
+            document.getElementById("pw").value = "spw11111";
         }
     
         function inputstd3() {

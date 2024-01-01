@@ -6,7 +6,6 @@
     </div>
     
     <% if (req.session.role=="stu" ){%>
-        <p>this is a student</p>
         <div class="rows is-mobile">
             <div class="row">
                 <div class="columns is-multiline is-mobile">
@@ -40,7 +39,6 @@
             </div>
         </div>
         <%}else if(req.session.role=="sup" ) {%>
-            <p>this is a supervisor</p>
             <div class="rows is-mobile">
                 <div class="row">
                     <div class="columns is-multiline is-mobile">
@@ -95,7 +93,6 @@
             </div>
             
                 <%}else if(req.session.role=="adm" ) {%>
-                    <p>this is a admin</p>
                     <div class="rows is-mobile">
                         <div class="row">
                             <div class="columns is-multiline is-mobile">
