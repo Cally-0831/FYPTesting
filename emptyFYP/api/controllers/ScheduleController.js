@@ -1073,31 +1073,31 @@ module.exports = {
                         //  console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
                         var timestamp = new Date(thisschedulebox[c].schedule[e].availablestartTime);
 
-                        // var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
-                        // // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        // //console.log(delavailabletimequery)
-                        // db.query(delavailabletimequery, (err, result) => {
-                        //     try {
-                        //         //   console.log("delavailabletimequery complete")
-                        //     } catch (err) {
-                        //         if (err) {
-                        //             errmsg = "error happened in ScheduleController.delavailabletimequery"
-                        //         }
-                        //     }
+                        var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
+                        // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        //console.log(delavailabletimequery)
+                        db.query(delavailabletimequery, (err, result) => {
+                            try {
+                                //   console.log("delavailabletimequery complete")
+                            } catch (err) {
+                                if (err) {
+                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                }
+                            }
 
-                        // })
-                        // delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        // //console.log(delavailabletimequery)
-                        // db.query(delavailabletimequery, (err, result) => {
-                        //     try {
-                        //         console.log("delavailabletimequery complete")
-                        //     } catch (err) {
-                        //         if (err) {
-                        //             errmsg = "error happened in ScheduleController.delavailabletimequery"
-                        //         }
-                        //     }
+                        })
+                        delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        //console.log(delavailabletimequery)
+                        db.query(delavailabletimequery, (err, result) => {
+                            try {
+                                console.log("delavailabletimequery complete")
+                            } catch (err) {
+                                if (err) {
+                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                }
+                            }
 
-                        // })
+                        })
 
                         var getcampusandroomquery = "select t2.cid,pid,priority, campus,rid,startTime,endTime from (select * from (select * from allsupertakecourse where (pid = \"" + thisschedulebox[c].schedule[e].tid + "\" or pid = \"" + thisschedulebox[c].schedule[e].oid + "\")) as t1 left join supervisor on supervisor.tid = t1.pid )as t2 left join allclass on allclass.cid = t2.CID where weekdays = \"" + timestamp.getDay() + "\" order by t2.priority asc, startTime asc, Campus asc , RID asc"
                         // console.log(getcampusandroomquery)

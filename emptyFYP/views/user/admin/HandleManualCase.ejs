@@ -198,7 +198,6 @@
     }
     
     async function submitform(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID) {
-        alert(currentsup)
         if(date == "null" || time == "null"){return alert("Please input BOTH date and time for updates")}
         
         var requestbody = JSON.stringify({
