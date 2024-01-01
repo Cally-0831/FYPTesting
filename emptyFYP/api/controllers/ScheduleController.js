@@ -718,41 +718,45 @@ module.exports = {
                 var prefary = (prefofthissuper[0].Prefno).split("/");
                 prefary.pop()
                 //console.log(prefary);
-
-
                 for (var b = 0; b < prefary.length; b++) {
                     thisschedulebox[b].prefno = prefary[b];
                 }
             }
-            thisschedulebox.sort((a, b) => {
-                return b.prefno - a.prefno;
-            });
-            var dateofsat = [];
-            function arrayRemove(arr, value) {
-                return arr.filter(function (geeks) {
-                    return geeks.date != value.date;
+
+            function sortingscheduleboxSAT() {
+                thisschedulebox.sort((a, b) => {
+                    return b.prefno - a.prefno;
                 });
+                var dateofsat = [];
+                function arrayRemove(arr, value) {
+                    return arr.filter(function (geeks) {
+                        return geeks.date != value.date;
+                    });
+                }
+
+                thisschedulebox.forEach(element => {
+                    var datecheck = new Date(element.date);
+                    if (datecheck.getDay() == 6) {
+                        dateofsat.push(element);
+                    }
+                });
+                //console.log(dateofsat)
+                dateofsat.forEach(element => {
+                    let result = arrayRemove(thisschedulebox, element)
+                    //console.log(result)
+                    thisschedulebox = result;
+                });
+                //console.log(thisschedulebox)
+                dateofsat.forEach(element => {
+                    thisschedulebox.push(element)
+                });
+                return thisschedulebox;
             }
 
-            thisschedulebox.forEach(element => {
-                var datecheck = new Date(element.date);
-                if (datecheck.getDay() == 6) {
-                    dateofsat.push(element);
-                }
-            });
-            //console.log(dateofsat)
-            dateofsat.forEach(element => {
-                let result = arrayRemove(thisschedulebox, element)
-                //console.log(result)
-                thisschedulebox = result;
-            });
-            //console.log(thisschedulebox)
-            dateofsat.forEach(element => {
-                thisschedulebox.push(element)
-            });
+            thisschedulebox = sortingscheduleboxSAT();
 
 
-            // console.log(supervisorlist[a].tid, "   ", thisschedulebox)
+            console.log(supervisorlist[a].tid, "   ", thisschedulebox)
 
             var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
             // console.log(getallstudentlistforthissuper)
@@ -798,7 +802,8 @@ module.exports = {
                 })
                 console.log("countimeboxlist all after sort", counttimeboxlist)
 
-
+                /*** step 1 fulfill supervisor pref */
+                var addedlist = [];
                 for (var b = 0; b < counttimeboxlist.length; b++) {
 
                     var added = false;
@@ -817,29 +822,32 @@ module.exports = {
 
                         //console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
 
+                        if (thisschedulebox[c].schedule.length < checker) {
 
-                        if ((checker == "0") || thisschedulebox[c].schedule.length != checker ) {
+                            // if ((checker == "0") || thisschedulebox[c].schedule.length != checker ) {
                             while (!added) {
                                 function appendquery(thisschedulebox) {
                                     var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
                                         + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
                                         + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
                                         + "and studentavailable.availabledate =\"" + presentday + "\""
-                                    for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
-                                        var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
-                                        //     console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
-                                        checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-                                    }
+                                        thisschedulebox.forEach(dayday => {
+                                            dayday.schedule.forEach(schedulebox => {
+                                                var timestamp = new Date(schedulebox.availablestartTime);
+                                                checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+                                    
+                                            });
+                                        });
                                     checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
                                         + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
                                         + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-                                        + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\")"
+                                        + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\") order by availablestartTime"
                                     // console.log(checkavailabledup);
                                     return checkavailabledup;
                                 }
 
                                 var checkavailabledup = appendquery(thisschedulebox);
-                                console.log(checkavailabledup)
+                                //console.log(checkavailabledup)
                                 var checkscheduleboxlist = await new Promise((resolve) => {
                                     pool.query(checkavailabledup, (err, res) => {
                                         var string = JSON.stringify(res);
@@ -855,42 +863,192 @@ module.exports = {
                                 if (checkscheduleboxlist[0] == undefined) {
                                     //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
                                     index++;
-
-
-
-
                                     //console.log("this fail", counttimeboxlist[b].sid)
-
-                                    var manualhandleline = "insert into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
-
+                                    var manualhandleline = "insert ignore into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
                                     db.query(manualhandleline, (err, res) => {
                                         try { console.log("inserted manual handlecase") } catch (err) {
                                             console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
                                         }
                                     })
-
-
                                     break;
                                 } else {
                                     thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
+
                                     //console.log(">>see see ", thisschedulebox[c].schedule)
                                     added = true;
                                     //console.log("this pass", counttimeboxlist[b].sid)
                                 }
 
                             }
+                            if (added) {
+                                checker++;
+                                var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
+                                addedlist.push(counttimeboxlist[b].sid)
+                                db.query(deletemanualhandleline, (err, res) => {
+                                    try { console.log("deleteed manual handlecase") } catch (err) {
+                                        console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
+                                    }
+                                })
+                                break;
+                            } else {
+                                console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
+                            }
                         } else {
-                            if (checker == "0") {
-                                console.log("need to handle this ppl 1", counttimeboxlist[b].sid)
-                            } else if (thisschedulebox[c].schedule.length == parseInt(checker)) {
-                                console.log("need to handle this ppl 2", counttimeboxlist[b].sid)
+                            // if (checker == "0") {
+                            //     console.log("need to handle this ppl 1", counttimeboxlist[b].sid)
+                            // } else if (thisschedulebox[c].schedule.length == parseInt(checker)) {
+                            //     console.log("need to handle this ppl 2", counttimeboxlist[b].sid)
+                            // }
+
+                            if (parseInt(checker) == 0) {
+                                break;
                             }
 
                         }
-                        if (added) {
-                            checker++;
-                            var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
 
+
+
+
+
+
+                        // if (added) {
+                        //     checker++;
+                        //     var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
+
+                        //     db.query(deletemanualhandleline, (err, res) => {
+                        //         try { console.log("deleteed manual handlecase") } catch (err) {
+                        //             console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
+                        //         }
+                        //     })
+                        //     break;
+                        // } else {
+                        //     console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
+                        // }
+                    }
+                }
+
+                
+                function arrayRemovesid(arr, value) {
+                    return arr.filter(function (geeks) {
+                        return geeks.sid != value;
+                    });
+                }
+
+                console.log("added list   ",   addedlist);
+                addedlist.forEach(element => {
+                        counttimeboxlist = arrayRemovesid(counttimeboxlist, element);
+                    //console.log("new countimebox in prcess  ", counttimeboxlist)
+                })
+
+
+                //console.log("countimeboxlist all after sort 2 ", counttimeboxlist)
+                console.log(">> final schedulebox", thisschedulebox)
+                function sortingschedulebox() {
+                    thisschedulebox.sort((a, b) => {
+                        return (a.schedule.length - b.schedule.length);
+                    });
+                    var dateofsat = [];
+                    function arrayRemove(arr, value) {
+                        return arr.filter(function (geeks) {
+                            return geeks.date != value.date;
+                        });
+                    }
+
+                    thisschedulebox.forEach(element => {
+                        var datecheck = new Date(element.date);
+                        if (datecheck.getDay() == 6) {
+                            dateofsat.push(element);
+                        }
+                    });
+                    //console.log(dateofsat)
+                    dateofsat.forEach(element => {
+                        let result = arrayRemove(thisschedulebox, element)
+                        //console.log(result)
+                        thisschedulebox = result;
+                    });
+                    //console.log(thisschedulebox)
+                    dateofsat.forEach(element => {
+                        thisschedulebox.push(element)
+                    });
+                    return thisschedulebox;
+                }
+
+                thisschedulebox = sortingschedulebox();
+                //console.log("after sorting   ", thisschedulebox);
+                addedlist = [];
+
+                //console.log("after remove   ", counttimeboxlist)
+
+
+                /***step 2 insert by sorting the least amount of box */
+                for (var b = 0; b < counttimeboxlist.length; b++) {
+                    var added = false;
+                    
+                    for (var c = 0; c < thisschedulebox.length; c++) {
+                        var presentday = thisschedulebox[c].date;
+                        function appendquery(thisschedulebox) {
+                            var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
+                                + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
+                                + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
+                                + "and studentavailable.availabledate =\"" + presentday + "\""
+                                thisschedulebox.forEach(dayday => {
+                                    dayday.schedule.forEach(schedulebox => {
+                                        var timestamp = new Date(schedulebox.availablestartTime);
+                                        checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+                            
+                                    });
+                                });
+                            // for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
+                            //     var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
+                            //     //     console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
+                            //     checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+                            // }
+                            checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
+                                + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
+                                + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
+                                + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\") order by availablestartTime"
+                            // console.log("checkavailabledup in step 2", checkavailabledup);
+                            return checkavailabledup;
+                        }
+
+                        var checkavailabledup = appendquery(thisschedulebox);
+                        console.log("checkavailabledup 2    ",checkavailabledup)
+                        var checkscheduleboxlist = await new Promise((resolve) => {
+                            pool.query(checkavailabledup, (err, res) => {
+                                var string = JSON.stringify(res);
+                                var json = JSON.parse(string);
+                                var ans = json;
+                                resolve(ans)
+                            })
+                        }).catch((err) => {
+                            errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
+                        })
+
+                        console.log(">>checkscheduleboxlist 2 ", checkscheduleboxlist[0]);
+                        if (checkscheduleboxlist[0] == undefined) {
+                            //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
+                            index++;
+                            //console.log("this fail", counttimeboxlist[b].sid)
+                            var manualhandleline = "insert ignore into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
+                            db.query(manualhandleline, (err, res) => {
+                                try { console.log("inserted manual handlecase") } catch (err) {
+                                    console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
+                                }
+                            })
+                            break;
+                        } else {
+                            thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
+
+                            console.log(">>see see  2", thisschedulebox[c].schedule)
+                            added = true;
+                            console.log("this pass 2", counttimeboxlist[b].sid)
+                        }
+
+                        if (added) {
+                            var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
+                            addedlist.push(counttimeboxlist[b].sid);
+                            thisschedulebox = sortingschedulebox();
+                            console.log(counttimeboxlist[b].tid,"  thisschdeulebox after sorting again",thisschedulebox)
                             db.query(deletemanualhandleline, (err, res) => {
                                 try { console.log("deleteed manual handlecase") } catch (err) {
                                     console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
@@ -901,10 +1059,10 @@ module.exports = {
                             console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
                         }
                     }
+
                 }
 
-                console.log(">> final schedulebox", thisschedulebox)
-
+                console.log(supervisorlist[a].tid ,"schedulebox after step 2     ", thisschedulebox)
 
 
 
@@ -915,31 +1073,31 @@ module.exports = {
                         //  console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
                         var timestamp = new Date(thisschedulebox[c].schedule[e].availablestartTime);
 
-                        var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
-                        // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        //console.log(delavailabletimequery)
-                        db.query(delavailabletimequery, (err, result) => {
-                            try {
-                                //   console.log("delavailabletimequery complete")
-                            } catch (err) {
-                                if (err) {
-                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
-                                }
-                            }
+                        // var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
+                        // // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        // //console.log(delavailabletimequery)
+                        // db.query(delavailabletimequery, (err, result) => {
+                        //     try {
+                        //         //   console.log("delavailabletimequery complete")
+                        //     } catch (err) {
+                        //         if (err) {
+                        //             errmsg = "error happened in ScheduleController.delavailabletimequery"
+                        //         }
+                        //     }
 
-                        })
-                        delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        //console.log(delavailabletimequery)
-                        db.query(delavailabletimequery, (err, result) => {
-                            try {
-                                console.log("delavailabletimequery complete")
-                            } catch (err) {
-                                if (err) {
-                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
-                                }
-                            }
+                        // })
+                        // delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                        // //console.log(delavailabletimequery)
+                        // db.query(delavailabletimequery, (err, result) => {
+                        //     try {
+                        //         console.log("delavailabletimequery complete")
+                        //     } catch (err) {
+                        //         if (err) {
+                        //             errmsg = "error happened in ScheduleController.delavailabletimequery"
+                        //         }
+                        //     }
 
-                        })
+                        // })
 
                         var getcampusandroomquery = "select t2.cid,pid,priority, campus,rid,startTime,endTime from (select * from (select * from allsupertakecourse where (pid = \"" + thisschedulebox[c].schedule[e].tid + "\" or pid = \"" + thisschedulebox[c].schedule[e].oid + "\")) as t1 left join supervisor on supervisor.tid = t1.pid )as t2 left join allclass on allclass.cid = t2.CID where weekdays = \"" + timestamp.getDay() + "\" order by t2.priority asc, startTime asc, Campus asc , RID asc"
                         // console.log(getcampusandroomquery)
@@ -1015,17 +1173,7 @@ module.exports = {
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
                         })
-                        /** 
-                                                var updatesupervisordraft = "update supervisor set draft = \"Y\" where tid = \"" + thisschedulebox[c].schedule[e].tid + "\""
-                                                //console.log(updatesupervisordraft)
-                                                insertbox = await new Promise((resolve) => {
-                                                    pool.query(updatesupervisordraft, (err, res) => {
-                                                        resolve(res)
-                                                    })
-                                                }).catch((err) => {
-                                                    errmsg = "error happened in ScheduleController.genavailble.updatesupervisordraft"
-                                                })
-                        */
+
                     }
 
                 }
@@ -1037,98 +1185,6 @@ module.exports = {
 
         return res.ok();
     },
-
-
-    /**
-        savebox: async function (req, res) {
-            var db = await sails.helpers.database();
-            // console.log(req.body.boxlist);
-            var boxlist = req.body.boxlist;
-            updatesupdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[0].tid + "\"";
-            
-            db.query( updatesupdraftexist, (err, results) => {
-                if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updatesupdraftexist") };
-            });
-     
-            for (var a = 0; a < boxlist.length; a++) {
-                updateobsdraftexist = "Update supervisor set draft= \"Y\" where tid = \"" + boxlist[a].oid + "\"";
-                
-                db.query(updateobsdraftexist, (err, results) => {
-                    if (err) { return res.status(401).json("Error happened when excuting ScheduleController.savebox.updateobsdraftexist") };
-                });
-                
-                boxid = "" + (boxlist[a].presentday.split("T"))[0] + "_" + boxlist[a].presentstartTime;
-    
-                insertline = "insert ignore into allschedulebox values(\"" + boxid + "\",\"" + boxlist[a].presentday + "\",\"" + boxlist[a].presentstartTime + "\",\"" + boxlist[a].tid + "\",\"" + boxlist[a].sid + "\",\"" + boxlist[a].oid + "\",\"" + boxlist[a].finalcampus + "\",\"" + boxlist[a].finalrid + "\",now())";
-                updateline = "Update allschedulebox set boxdate = \"" + boxlist[a].presentday + "\", boxtime = \"" + boxlist[a].presentstartTime + "\" ,SID =\"" + boxlist[a].sid + "\", OID = \"" + boxlist[a].oid + "\", Campus = \"" + boxlist[a].finalcampus + "\", RID = \"" + boxlist[a].finalrid + "\", LastUpdate = now() where boxid = \"" + boxid + "\"";
-                console.log(boxid)
-                console.log(insertline)
-                console.log(updateline)
-               
-                db.query(insertline, (err, result) => {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + insertline + "\n"
-                        statuscode = 401;
-                    }
-     
-                })
-                db.query(updateline, (err, result) => {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + thisistheline + "\n"
-                        statuscode = 401;
-                    }
-                })
-             
-    
-            }
-    
-         
-            var errstring = "ok";
-            var statuscode = 200;
-            var arrayint = [];
-     
-            thisistheline = "Update supervisor set draft= \"Y\" where tid = \"" + req.session.userid + "\"";
-            db.query(thisistheline, (err, results) => {
-                if (err) { return res.status(401).json("Error happened when updating") }
-            });
-     
-            for (var a = 0; a < req.body.length; a++) {
-                console.log("\n\n\n\n");
-                console.log(req.body[a].boxid);
-                console.log(req.body[a].stu);
-                console.log(req.body[a].obs);
-                console.log(req.body[a].Campus);
-                console.log(req.body[a].RID);
-                insertline = "insert ignore into allschedulebox values(\"" + req.body[a].boxid + "\",\"" + req.body[a].boxdate + "\",\"" + req.body[a].boxtime + "\",\"" + req.session.userid + "\",\"" + req.body[a].stu + "\",\"" + req.body[a].obs + "\",\"" + req.body[a].Campus + "\",\"" + req.body[a].RID + "\",now())";
-     
-                thisistheline = "Update allschedulebox set boxdate = \"" + req.body[a].boxdate + "\", boxtime = \"" + req.body[a].boxtime + "\" ,SID =\"" + req.body[a].stu + "\", OID = \"" + req.body[a].obs + "\", Campus = \"" + req.body[a].Campus + "\", RID = \"" + req.body[a].RID + "\", LastUpdate = now() where boxid = \"" + req.body[a].boxid + "\"";
-     
-                console.log(thisistheline)
-                db.query(insertline, (err, result) => {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + insertline + "\n"
-                        statuscode = 401;
-                    }
-     
-                })
-                db.query(thisistheline, (err, result) => {
-                    if (err) {
-                        errstring = "";
-                        errstring += "error happened for:" + thisistheline + "\n"
-                        statuscode = 401;
-                    }
-                })
-              
-            }
-    
-    
-            console.log(supervisorlist)
-            return res.ok();
-        },
-     */
 
 
     getrequestroomlist: async function (req, res) {
@@ -1650,7 +1706,7 @@ module.exports = {
 
             query.forEach(element => {
                 db.query(element, (err, res) => {
-                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                    try{}catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
                 })
             });
 
@@ -1692,7 +1748,7 @@ module.exports = {
             ]
             query.forEach(element => {
                 db.query(element, (err, res) => {
-                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                    try{}catch(err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
                 })
             });
 
@@ -1736,7 +1792,7 @@ module.exports = {
 
             query.forEach(element => {
                 db.query(element, (err, results) => {
-                    if (err) {
+                    try{}catch(err) {
                         return res.status(400).json("Error happened when excuting ScheduleController.EditRecords.delete")
                     }
                 });
