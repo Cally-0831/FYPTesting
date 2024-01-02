@@ -79,14 +79,14 @@
         </a>
         <%if (req.session.userid!=null) { %>
           <div class="navbar-menu" id="nav-links" style="background-color: transparent; outline: none;box-shadow: none;">
-            <a class="navbar-item">
-              <button class="button buttonlogout is-responsive" onclick="home()">
+            <a class="navbar-item" href="/user/logout">
+              <button class="button buttonlogout is-responsive">
                 <%= req.session.username %>
               </button>
 
             </a>
-            <a class="navbar-item">
-              <button class="button buttonlogout is-responsive" onclick="logout()">
+            <a class="navbar-item" href="/user/logout">
+              <button class="button buttonlogout is-responsive" >
                 Logout
               </button>
             </a>
