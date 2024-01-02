@@ -62,51 +62,44 @@
 <body>
 
   <header>
+    <nav class="navbar is-transparent">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <img src="\images\login\compbg.png" style="max-height: 50px;">
+        </a>
 
-    <div class="navbar">
-      <div class="navbar-start">
-        <div class="navbar-item">
-          <% if (req.session.username!=null) { %>
-            <a href="/home"><img src="\images\login\compbg.png"></a>
-            <% }else{ %>
-              <a href="/"><img src="\images\login\compbg.png"></a>
-              <% } %>
-        </div>
       </div>
       <div class="navbar-end">
-        <% if (req.session.username!=null) { %>
-
-          <script>
-            function home() {
-              location.assign('/home')
-            }
-            function logout() {
-              location.assign('/user/logout')
-            }
-
-          </script>
-          <div class="navbar-item">
-            <div class="buttons">
+        <a class="navbar-burger" id="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+        <%if (req.session.userid!=null) { %>
+          <div class="navbar-menu" id="nav-links">
+            <a class="navbar-item">
               <button class="button buttonlogout is-responsive" onclick="home()">
                 <%= req.session.username %>
               </button>
-              &ensp;
+
+            </a>
+            <a class="navbar-item">
               <button class="button buttonlogout is-responsive" onclick="logout()">
                 Logout
               </button>
-            </div>
-
-
+            </a>
           </div>
-
+          <%}%>
       </div>
+    </nav>
+    <script>
+      const burgerIcon = document.getElementById("burger");
+      const navbarMenu = document.getElementById("nav-links");
 
-      <% } %>
-
-    </div>
-
-
-
+      burgerIcon.addEventListener("click", () => {
+        navbarMenu.classList.toggle("is-active");
+      })
+    </script>
   </header>
 
 </body>
