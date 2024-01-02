@@ -7,10 +7,11 @@ module.exports = {
         var noticelist;
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        var viewline;
         if (req.session.role == "adm") {
-            let thisistheline = "SELECT  NID, allusersname,content,CreateDate,Creatorname,title from allnotice inner join allusers on allnotice.Creator = allusers.pid order by allnotice.CreateDate DESC;";
-            //  console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
+            viewline = "SELECT * from allnotice order by CreateDate DESC;";
+            //  console.log(viewline)
+            db.query(viewline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
                     var json = JSON.parse(string);
@@ -18,19 +19,17 @@ module.exports = {
                     //         console.log('>> noticelist: ', noticelist);
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
                 } catch (err) {
-                    console.log("sth happened here");
-
+                    console.log("Error in NoticeListController.listallnotice retrieving "+req.session.userid+"'s notice list");
+                    return res.status(401).json("Error in NoticeListController.listallnotice");
                 }
 
 
             });
         } else if (req.session.role == "sup") {
-            let thisistheline = " SELECT  allnotice.NID, allusers.allusersname,allnotice.content,allnotice.CreateDate,allnotice.Creator,allnotice.Creatorname,allnotice.title from allnotice" +
-                "\ninner join allusers on allnotice.Creator = allusers.pid "
-                + " where allnotice.creator = \"admin\" or allnotice.creator= \"" + req.session.userid + "\" order by allnotice.CreateDate DESC;";
+            viewline = " select * from allnotice where type != 2 or creator = \""+req.session.userid+"\"  order by createdate desc";
 
-            //    console.log(thisistheline)
-            db.query(thisistheline, (err, results) => {
+                console.log(viewline)
+            db.query(viewline, (err, results) => {
                 try {
                     var string = JSON.stringify(results);
                     //console.log('>> string: ', string );
@@ -40,7 +39,9 @@ module.exports = {
                     //            console.log('>> noticelist: ', noticelist);
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("Error in NoticeListController.listallnotice retrieving "+req.session.userid+"'s notice list");
+                    return res.status(401).json("Error in NoticeListController.listallnotice");
+               
                 }
             });
         } else {
@@ -48,7 +49,8 @@ module.exports = {
             //     + "inner join  supervisorpairstudent on supervisorpairstudent.sid=\"" + req.session.userid + "\" "
             //     + "and  allnotice.Creator =supervisorpairstudent.tid or allnotice.type= \"1\" order by allnotice.CreateDate DESC;"
             // console.log(thisistheline)
-            var viewline = "select * from allnotice where (creator = \"admin\" and type != 6 and type != 3) or creator in (select tid from supervisorpairstudent where sid = \""+req.session.userid+"\")"
+           viewline = "select * from allnotice where (creator = \"admin\" and type = 1) or creator in (select tid from supervisorpairstudent where sid = \""+req.session.userid+"\")"
+            console.log(viewline)
             db.query(viewline , (err, results) => {
                 try {
                     var string = JSON.stringify(results);
@@ -59,7 +61,9 @@ module.exports = {
                     //       console.log('>> noticelist: ', noticelist);
                     return res.view('user/notice', { thisusernoticetlist: noticelist });
                 } catch (err) {
-                    console.log("sth happened here");
+                    console.log("Error in NoticeListController.listallnotice retrieving "+req.session.userid+"'s notice list");
+                    return res.status(401).json("Error in NoticeListController.listallnotice");
+               
                 }
             });
         }
@@ -72,8 +76,9 @@ module.exports = {
         var thisistheline;
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+       
         if (req.body.id == undefined) {
-            // not setting related notices
+            // not setting_related notices
 
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             const charactersLength = characters.length;
@@ -191,7 +196,7 @@ module.exports = {
                 } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
             });
         } else {
-            //setting related but the first notice of this type
+            //setting related but the first time notice of this type
             nid += req.body.id;
             thisistheline = "insert into allnotice values(\"" + nid + "\",\"" + req.session.userid + "\",\"" + req.session.username + "\",now(),\"" + req.body.level + "\",\"" + req.body.title + "\",\"" + req.body.content + "\"\);"
             console.log(thisistheline);
@@ -201,6 +206,9 @@ module.exports = {
                 } catch (err) { console.log("error happened when excuteing NoticeListController: addnotice"); }
             });
         }
+
+
+        //email list
         var sendemaillist;
         if (req.body.level == 1) {
             thisistheline = "select pid as emailadd from allusers"
@@ -239,8 +247,8 @@ module.exports = {
     },
 
     viewnoticepage: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
+       // var db = await sails.helpers.database();
+       // var pool = await sails.helpers.database2();
         if (req.query.type == null) {
             return res.view('user/createnewnotice', { title: null, content: null, id: null });
         }

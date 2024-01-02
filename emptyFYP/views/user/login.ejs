@@ -9,20 +9,36 @@
     <div class="welcome">FYP Scheduling System</div>
     <br><br>
     <div class="buttons is-centered is-mobile">
-        
-        <button class="button is-responsive" id="autoinputsup" style = "background-color:  pink;" onclick="inputsup()">tid00001</button>
-        <button class="button is-responsive" id="autoinputsup" style = "background-color:  pink;"  onclick="inputsup2()">tid00002</button>
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup3()">tid00003</button>
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup4()">tid00004</button>
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  pink;"  onclick="inputsup5()">tid00005</button>
-
-
-     
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd2()">Cathy</button>
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd3()">Emily</button>
-        <button class="button  is-responsive" id="autoinputstd" style = "background-color:  lightsalmon;" onclick="inputstd4()">Dorthy</button>
-        
-        <button class="button  is-responsive" id="autoinputadm" style = "background-color:  lightgreen;" onclick="inputadm()">Admin</button>
+        <button class="button is-responsive" id="autoinputsup" style="background-color:  pink;"
+            onclick="inputsup(1)">tid00001</button>
+        <button class="button is-responsive" id="autoinputsup" style="background-color:  pink;"
+            onclick="inputsup(2)">tid00002</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
+            onclick="inputsup(3)">tid00003</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
+            onclick="inputsup(4)">tid00004</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
+            onclick="inputsup(5)">tid00005</button>
+    </div>
+    <div class="buttons is-centered is-mobile">
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(1,0)">sid1_0</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(1,1)">sid1_1</button>
+    
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(2,0)">sid2_0</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(2,1)">sid2_1</button>
+    
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(3,0)">sid3_0</button>
+            <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(3,1)">sid3_1</button>
+    </div>
+    <div class="buttons is-centered is-mobile">
+        <button class="button  is-responsive" id="autoinputadm" style="background-color:  lightgreen;"
+            onclick="inputadm()">Admin</button>
     </div>
     <div class="columns is-centered">
         <div class="column is-half is-mobile">
@@ -67,7 +83,7 @@
                 });
                 if (response.ok) {
                     const user = await response.json();
-                   alert("Welcom back, " + user.allusersname);
+                    alert("Welcom back, " + user.allusersname);
                     location.assign("/home");
     
                 } else if (response.status == 401) {
@@ -82,46 +98,23 @@
             }
         }
     
-       
     
-        function inputstd2() {
-            document.getElementById("username").value = "sid11111";
-            document.getElementById("pw").value = "spw11111";
-        }
-    
-        function inputstd3() {
-            document.getElementById("username").value = "sid21111";
-            document.getElementById("pw").value = "spw21111";
+        function inputstd(supcode, selfcode) {
+            document.getElementById("username").value = "sid" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
+            document.getElementById("pw").value = "spw" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
         }
     
-        function inputstd4() {
-            document.getElementById("username").value = "sid44444";
-            document.getElementById("pw").value = "spw44444";
-        }
+        function inputsup(supcode) {
+            if (parseInt(supcode) < 10) {
+                document.getElementById("username").value = "tid0000" + supcode;
+                document.getElementById("pw").value = "tpw0000" + supcode;
     
-        function inputsup() {
-            document.getElementById("username").value = "tid00001";
-            document.getElementById("pw").value = "tpw00001";
-        }
+            } else {
+                document.getElementById("username").value = "tid000" + supcode;
+                document.getElementById("pw").value = "tpw000" + supcode;
+            }
     
-        function inputsup2() {
-            document.getElementById("username").value = "tid00002";
-            document.getElementById("pw").value = "tpw00002";
         }
-    
-        function inputsup3() {
-            document.getElementById("username").value = "tid00003";
-            document.getElementById("pw").value = "tpw00003";
-        }
-        function inputsup4() {
-            document.getElementById("username").value = "tid00004";
-            document.getElementById("pw").value = "tpw00004";
-        }
-        function inputsup5() {
-            document.getElementById("username").value = "tid00005";
-            document.getElementById("pw").value = "tpw00005";
-        }
-    
     
     
     

@@ -306,3 +306,10 @@ CREATE TRIGGER delstudent after delete ON student FOR EACH ROW BEGIN
 	delete from allusers where pid = old.sid;
 END;
 | DELIMITER ;
+
+DELIMITER |
+CREATE TRIGGER delnoticefromdelsetting after delete ON allsupersetting FOR EACH ROW BEGIN
+	delete from allnotice where nid = concat("nid",old.stid);
+    
+END;
+| DELIMITER ;

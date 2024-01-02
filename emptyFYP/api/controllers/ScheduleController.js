@@ -59,14 +59,16 @@ module.exports = {
                         });
 
                     } catch (err) {
-                        return res.status(400).json("error happened in ScheduleController.viewFinalSchedule.getschedulebox");
+                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox\n "+ getschedulebox)
+                        return res.status(401).json("Sorry, encountered error");
                     }
                 });
             } else {
-                return res.status(400).json("not yet disclose");
+                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " +"Date : "+ setting.deadlinedate.split("T")[0] + "\nTime : "+ setting.deadlinetime);
             }
         } else {
-            return res.status(400).json(setting.errmsg);
+            console.log(setting.errmsg);
+            return res.status(401).json("Sorry, encountered error");
         }
 
     },
@@ -1325,7 +1327,7 @@ module.exports = {
                 //console.log(ans)
                 return res.view("user/admin/supervisorschedulelist", { allsuplist: ans })
             } catch (err) {
-                return res.status(400).json("error happened in SchdeuleController.supervisorschedulelist.query")
+                return res.status(401).json("error happened in SchdeuleController.supervisorschedulelist.query")
             }
         })
     },
@@ -1467,7 +1469,7 @@ module.exports = {
                     return res.status(200).json("go")
                 }
             } catch (err) {
-                return res.status(400).json("Error happened when excuting SettingController.checksetting")
+                return res.status(401).json("Error happened when excuting SettingController.checksetting")
             }
 
 
@@ -1590,7 +1592,7 @@ module.exports = {
         if (availableCombination.errmsg == undefined) {
             return res.view("user/admin/HandleManualCase", { currentbox: CurrentBox, availabledate: availabledate, availableCombination: availableCombination })
         } else {
-            return res.status(400).json(availableCombination.errmsg);
+            return res.status(401).json(availableCombination.errmsg);
         }
 
     },
@@ -1793,7 +1795,7 @@ module.exports = {
             query.forEach(element => {
                 db.query(element, (err, results) => {
                     try{}catch(err) {
-                        return res.status(400).json("Error happened when excuting ScheduleController.EditRecords.delete")
+                        return res.status(401).json("Error happened when excuting ScheduleController.EditRecords.delete")
                     }
                 });
             });

@@ -32,49 +32,47 @@ update supervisor set priority = "1" where tid = "tid00010";
 
 
 
-
-insert IGNORE into allusers values("Cathy","sid11111","spw11111","ACTIVE","0","stu");
-insert IGNORE into allusers values("Dorthy","sid12222","spw12222","ACTIVE","0","stu");
-insert IGNORE into allusers values("Emily","sid15555","spw15555","ACTIVE","0","stu");
-insert IGNORE into allusers values("Fiona","sid16666","spw16666","ACTIVE","0","stu");
-insert IGNORE into allusers values("Gloria","sid17777","spw17777","ACTIVE","0","stu");
-insert IGNORE into allusers values("Helena","sid18888","spw18888","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Helena","sid10000","spw10000","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Cathy","sid11111","spw11111","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Dorthy","sid12222","spw12222","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Emily","sid13333","spw13333","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Fiona","sid14444","spw14444","ACTIVE","0","stu");
+insert IGNORE into allusers values("1Gloria","sid15555","spw15555","ACTIVE","0","stu");
 insert IGNORE into supervisorpairstudent values("tid00001","sid11111","how to get abc");
 insert IGNORE into supervisorpairstudent values("tid00001","sid12222","where is abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid13333","how to get abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid14444","where is abc");
 insert IGNORE into supervisorpairstudent values("tid00001","sid15555","how to get abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid16666","where is abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid17777","how to get abc");
-insert IGNORE into supervisorpairstudent values("tid00001","sid18888","where is abc");
+insert IGNORE into supervisorpairstudent values("tid00001","sid10000","where is abc");
 
-
-insert IGNORE into allusers values("Emily","sid21111","spw21111","ACTIVE","0","stu");
-insert IGNORE into allusers values("Fanny","sid22222","spw22222","ACTIVE","0","stu");
+insert IGNORE into allusers values("2Fanny","sid20000","spw20000","ACTIVE","0","stu");
+insert IGNORE into allusers values("2Emily","sid21111","spw21111","ACTIVE","0","stu");
 insert IGNORE into supervisorpairstudent values("tid00002","sid21111","how to get efg");
-insert IGNORE into supervisorpairstudent values("tid00002","sid22222","where is efg");
+insert IGNORE into supervisorpairstudent values("tid00002","sid20000","where is efg");
 
 insert IGNORE into allusers values("3Apple","sid30000","spw30000","ACTIVE","0","stu");
 insert IGNORE into allusers values("3Cathy","sid31111","spw31111","ACTIVE","0","stu");
 insert IGNORE into allusers values("3Dorthy","sid32222","spw32222","ACTIVE","0","stu");
-insert IGNORE into allusers values("3Emily","sid34444","spw34444","ACTIVE","0","stu");
-insert IGNORE into allusers values("3Fiona","sid35555","spw35555","ACTIVE","0","stu");
-insert IGNORE into allusers values("3Gloria","sid36666","spw36666","ACTIVE","0","stu");
+insert IGNORE into allusers values("3Emily","sid33333","spw33333","ACTIVE","0","stu");
+insert IGNORE into allusers values("3Fiona","sid34444","spw34444","ACTIVE","0","stu");
+insert IGNORE into allusers values("3Gloria","sid35555","spw35555","ACTIVE","0","stu");
 insert IGNORE into supervisorpairstudent values("tid00003","sid30000","topic 3 for tid3");
 insert IGNORE into supervisorpairstudent values("tid00003","sid31111","topic 3 for tid3");
 insert IGNORE into supervisorpairstudent values("tid00003","sid32222","topic 4 for tid3");
-insert IGNORE into supervisorpairstudent values("tid00003","sid34444","topic 4 for tid3");
-insert IGNORE into supervisorpairstudent values("tid00003","sid35555","topic 3 for tid3");
-insert IGNORE into supervisorpairstudent values("tid00003","sid36666","topic 4 for tid3");
+insert IGNORE into supervisorpairstudent values("tid00003","sid33333","topic 4 for tid3");
+insert IGNORE into supervisorpairstudent values("tid00003","sid34444","topic 3 for tid3");
+insert IGNORE into supervisorpairstudent values("tid00003","sid35555","topic 4 for tid3");
 
 insert IGNORE into allusers values("4Cathy","sid40000","spw40000","ACTIVE","0","stu");
 insert IGNORE into allusers values("4Dorthy","sid41111","spw41111","ACTIVE","0","stu");
 insert IGNORE into allusers values("4Emily","sid42222","spw42222","ACTIVE","0","stu");
 insert IGNORE into allusers values("4Fiona","sid43333","spw43333","ACTIVE","0","stu");
-insert IGNORE into allusers values("4Gloria","sid45555","spw45555","ACTIVE","0","stu");
+insert IGNORE into allusers values("4Gloria","sid44444","spw44444","ACTIVE","0","stu");
 insert IGNORE into supervisorpairstudent values("tid00004","sid40000","topic 5 for tid4");
 insert IGNORE into supervisorpairstudent values("tid00004","sid41111","topic 5 for tid4");
 insert IGNORE into supervisorpairstudent values("tid00004","sid42222","topic 6 for tid4");
 insert IGNORE into supervisorpairstudent values("tid00004","sid43333","topic 5 for tid4");
-insert IGNORE into supervisorpairstudent values("tid00004","sid45555","topic 7 for tid4");
+insert IGNORE into supervisorpairstudent values("tid00004","sid44444","topic 7 for tid4");
 
 insert IGNORE into allusers values("5Cathy","sid50000","spw50000","ACTIVE","0","stu");
 insert IGNORE into allusers values("5Dorthy","sid51111","spw51111","ACTIVE","0","stu");

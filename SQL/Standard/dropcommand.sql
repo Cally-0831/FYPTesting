@@ -48,3 +48,4 @@ Drop trigger if exists delsupervisor;
 Drop trigger if exists updatestudentdeadline ;
 Drop trigger if exists delrolecourse;
 Drop trigger if exists delstudent;
+Drop trigger if exists delnoticefromdelsetting;
