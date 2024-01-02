@@ -78,7 +78,7 @@
           <span></span>
         </a>
         <%if (req.session.userid!=null) { %>
-          <div class="navbar-menu" id="nav-links">
+          <div class="navbar-menu" id="nav-links" style="background-color: transparent; outline: none;box-shadow: none;">
             <a class="navbar-item">
               <button class="button buttonlogout is-responsive" onclick="home()">
                 <%= req.session.username %>
@@ -100,6 +100,7 @@
 
       burgerIcon.addEventListener("click", () => {
         navbarMenu.classList.toggle("is-active");
+        console.log(document.getElementById("nav-links").style)
       })
     </script>
   </header>
