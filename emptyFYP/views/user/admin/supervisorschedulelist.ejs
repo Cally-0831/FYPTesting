@@ -29,7 +29,46 @@
     </div>
 </div>
 <br><br>
-<table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
+<div class = "columns is-centered is-multiline" style = "padding: 5px;" >
+    <%if(manualhandlecase != null){%>
+         <div class = "column is-fullwidth-mobile is-half-desktop" style = "overflow: auto;">
+            <table class="table is-bordered is-striped is-hoverable is-narrow" style="margin-left: auto; margin-right: auto;">
+                <tr>
+                    <thead>
+                        <th
+                        style="font-size:25px;text-align: center;vertical-align:middle; background-color: darkorange;" colspan="2">
+                        Manual Handle Cases</th>
+                    </thead>
+                </tr>
+                <tr>
+                   
+                    <th
+                    style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    SID
+                </th>
+               
+                <th
+                    style="font-size:25px;text-align: center;vertical-align:middle; background-color: rgb(222, 166, 82);">
+                    View
+                </th>
+                </tr>
+                <%for(var a = 0 ;a < manualhandlecase.length ; a++){%>
+                    <tr>
+                        
+                        <td style="font-size: calc(15px + 0.390625vw);; text-align: center;vertical-align:middle;"><%=manualhandlecase[a].SID%></td>
+                        
+                        <td><div class="buttons is-centered">
+                            <div class="button is-responsive" style="background-color:  lightgreen; border-color: black;"  onclick="HandleCase(null,'<%=manualhandlecase[a].SID%>',null,'<%=manualhandlecase[a].TID%>','1')">
+                                edit</div>
+                        </div></td>
+                    </tr>
+                <%}%>
+                </table>
+    </div>
+        <%}%>
+   
+    <div class = "column is-fullwidth-mobile is-half-desktop" style = "overflow: auto;">
+        <table id="mytable2" class="table is-bordered is-striped is-hoverable is-fullwidth">
 
     <tr>
         <th colspan="6"
@@ -73,6 +112,11 @@
 
         <%})%>
 </table>
+    </div>
+
+
+</div>
+
 <script>
     function backback(){
         location.assign("/home")
@@ -89,5 +133,8 @@
             if(response.status == 200){
                 location.assign("/scheduledesign")
             }
+    }
+    async function HandleCase(boxid,sid,type,id,Pagecount){
+        location.assign("/supervisorschedulelist/modifyschedule/"+id+"/"+Pagecount+"/HandleManualCase?boxid="+boxid+"&sid="+sid+"&type="+type)
     }
 </script>

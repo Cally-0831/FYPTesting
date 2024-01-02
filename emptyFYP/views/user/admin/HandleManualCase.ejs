@@ -21,7 +21,7 @@
         </div>
             <%if(availabledate.length >0){%>
             <div class="custom-select" style="text-align: center;vertical-align: middle;" > 
-                <label for="UpdateDate">Update Date:</label>
+                <label for="UpdateDateSelect">Update Date:</label>
                 <select name="date" id="UpdateDateSelect" onchange="getTimeForThisDay('<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=req.query.type%>')">
                     <option value="null">---Please Select---</option>
                             <%for(var a =0 ;a < availabledate.length;a++){%>
@@ -76,7 +76,7 @@
                 <div class ="button buttonlogout is-responsive"
                     
                 onclick="submitform('<%=req.params.tid%>','<%=req.params.Page%>',document.getElementById('UpdateDateSelect').value,document.getElementById('UpdateTimeSelect').value,
-                '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=currentbox.TYPE%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value)">
+                '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=req.query.sid%>','<%=currentbox.OID%>','<%=req.query.type%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value)">
                     Confirm
                 </div>
             </div>
@@ -198,7 +198,9 @@
     }
     
     async function submitform(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID) {
+        console.log(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID)
         if(date == "null" || time == "null"){return alert("Please input BOTH date and time for updates")}
+        if(Campus == "null" || RID == "null"){return alert("Please input BOTH Campus and Room for updates")}
         
         var requestbody = JSON.stringify({
             boxID: boxID,

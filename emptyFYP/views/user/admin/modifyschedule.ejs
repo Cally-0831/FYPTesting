@@ -7,7 +7,7 @@
         </div>
     </div>
     <br>
-<%console.log("\n\n\n\n@@@@@@@",ttb,"@@@@@@@@\n\n\n")%>
+
     
     <%if (manualhandlecase.length >0){%>
        
@@ -180,6 +180,7 @@
                             
                           }
                         }
+                       
                           }else{
                             if(startmin != endmin && (endhour - starthour) >=1 ){
                                 removelist.push(a);
@@ -247,8 +248,13 @@
                          }
                          
                          
-                        removelist.forEach((element)=>requestes.splice(element,1));
-                        
+console.log("removelist",removelist)
+                         
+                        for(var a = removelist.length-1; a >=0 ; a--){
+                            console.log(removelist[a], requestes[a])
+                            requestes.splice(removelist[a],1);
+                        }
+                        console.log("requests  ",requestes)
                          appendlist.forEach((element)=> requestes.push(element));
                         
                         
@@ -478,7 +484,21 @@
                                 <%}%>
                         <!--printing shedulebox-->
                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString() && !printed){%>
-                            <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString()){%>
+                            <%var checktimevar ;
+                            if(type == "midterm"){
+                                if(printday.getMinutes() != (new Date(setting.startday)).getMinutes()){
+                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(setting.startday)).getMinutes()));
+                                }
+                            }else{
+                                if(printday.getMinutes() != (new Date(setting.startday)).getMinutes()){
+                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(setting.startday)).getMinutes()));
+                                
+                                }
+                            }
+                            console.log(checktimevar);
+                            %>
+                            <%console.log((new Date(boxes[0].boxdate)).toLocaleTimeString())%>
+                           <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString() || printday.toLocaleTimeString() == (new Date((new Date(boxes[0].boxdate)).getTime()-checktimevar*60*1000)).toLocaleTimeString()){%>
                                 <%printed = true;var sessiontime = printday.toLocaleTimeString('en-GB')%>
                                 <td>
                                     <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
@@ -486,6 +506,9 @@
                                         <tr><td style="font-size : 12px ;"><%=boxes[0].boxID%></td></tr>
                                         <tr><th style="font-size : 14px; text-align: center;vertical-align:middle; background-color: bisque;">SID:</th></tr>
                                         <tr><td><%=boxes[0].SID%></td></tr>
+                                        <tr><th style="font-size : 14px; text-align: center;vertical-align:middle; background-color: bisque;">Time:</th></tr>
+                                        <tr><td><%=(new Date(boxes[0].boxdate)).toLocaleTimeString("en-GB")%></td></tr>
+                                        
                                         <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">Campus:</th></tr>
                                         <tr><td><%=boxes[0].Campus%></td></tr>
                                         <tr><th style="font-size : 14px;text-align: center;vertical-align:middle; background-color: bisque;">RID:</th></tr>
@@ -552,7 +575,7 @@
                                 <%if(requestdaytime.toLocaleTimeString() == printday.toLocaleTimeString()){%>
                                     <%printed = true;%>
                                   
-                                    <td style="font-size : 14px"> <%=requestes[0].ReqID%> <%=printday.toLocaleTimeString()%> <%=requestdayendtime.toLocaleTimeString()%>
+                                    <td style="font-size : 14px">
                                         <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">
                                             <tr><th style="text-align: center;vertical-align:middle; background-color: plum;">Requestid:</th></tr>
                                             <tr><td><%=requestes[0].ReqID%></td></tr>

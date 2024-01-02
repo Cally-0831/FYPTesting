@@ -50,6 +50,12 @@ module.exports.routes = {
   "GET /uploadclassroomlist" : { view: 'user/admin/uploadclassroomlist' },
   "POST /uploadclassroomlist" : "ClassroomListController.uploadclassroom",
 
+  //admin listuser
+  "POST /listuser/uploadobssql":"StudentListController.uploadobssql",
+  'GET /listuser': "StudentListController.liststudent",
+  'POST /listuser': "StudentListController.liststudent",
+  'POST /listuser/genobs': "StudentListController.generateobs",
+  'DELETE /listuser/:id': "StudentListController.deletestudent",
 
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
@@ -147,10 +153,7 @@ module.exports.routes = {
   //'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
 
-  'GET /listuser': "StudentListController.liststudent",
-  'POST /listuser': "StudentListController.liststudent",
-  'POST /listuser/genobs': "StudentListController.generateobs",
-  'DELETE /listuser/:id': "StudentListController.deletestudent",
+ 
 
   'GET /createnewstudent': "StudentListController.gettopic",
   'POST /createnewstudent': "StudentListController.createnewstudent",
