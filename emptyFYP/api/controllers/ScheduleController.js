@@ -59,12 +59,12 @@ module.exports = {
                         });
 
                     } catch (err) {
-                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox\n "+ getschedulebox)
+                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox\n " + getschedulebox)
                         return res.status(401).json("Sorry, encountered error");
                     }
                 });
             } else {
-                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " +"Date : "+ setting.deadlinedate.split("T")[0] + "\nTime : "+ setting.deadlinetime);
+                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " + "Date : " + setting.deadlinedate.split("T")[0] + "\nTime : " + setting.deadlinetime);
             }
         } else {
             console.log(setting.errmsg);
@@ -833,13 +833,13 @@ module.exports = {
                                         + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
                                         + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
                                         + "and studentavailable.availabledate =\"" + presentday + "\""
-                                        thisschedulebox.forEach(dayday => {
-                                            dayday.schedule.forEach(schedulebox => {
-                                                var timestamp = new Date(schedulebox.availablestartTime);
-                                                checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-                                    
-                                            });
+                                    thisschedulebox.forEach(dayday => {
+                                        dayday.schedule.forEach(schedulebox => {
+                                            var timestamp = new Date(schedulebox.availablestartTime);
+                                            checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+
                                         });
+                                    });
                                     checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
                                         + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
                                         + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
@@ -929,16 +929,16 @@ module.exports = {
                     }
                 }
 
-                
+
                 function arrayRemovesid(arr, value) {
                     return arr.filter(function (geeks) {
                         return geeks.sid != value;
                     });
                 }
 
-                console.log("added list   ",   addedlist);
+                console.log("added list   ", addedlist);
                 addedlist.forEach(element => {
-                        counttimeboxlist = arrayRemovesid(counttimeboxlist, element);
+                    counttimeboxlist = arrayRemovesid(counttimeboxlist, element);
                     //console.log("new countimebox in prcess  ", counttimeboxlist)
                 })
 
@@ -985,7 +985,7 @@ module.exports = {
                 /***step 2 insert by sorting the least amount of box */
                 for (var b = 0; b < counttimeboxlist.length; b++) {
                     var added = false;
-                    
+
                     for (var c = 0; c < thisschedulebox.length; c++) {
                         var presentday = thisschedulebox[c].date;
                         function appendquery(thisschedulebox) {
@@ -993,13 +993,13 @@ module.exports = {
                                 + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
                                 + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
                                 + "and studentavailable.availabledate =\"" + presentday + "\""
-                                thisschedulebox.forEach(dayday => {
-                                    dayday.schedule.forEach(schedulebox => {
-                                        var timestamp = new Date(schedulebox.availablestartTime);
-                                        checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-                            
-                                    });
+                            thisschedulebox.forEach(dayday => {
+                                dayday.schedule.forEach(schedulebox => {
+                                    var timestamp = new Date(schedulebox.availablestartTime);
+                                    checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
+
                                 });
+                            });
                             // for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
                             //     var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
                             //     //     console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
@@ -1014,7 +1014,7 @@ module.exports = {
                         }
 
                         var checkavailabledup = appendquery(thisschedulebox);
-                        console.log("checkavailabledup 2    ",checkavailabledup)
+                        console.log("checkavailabledup 2    ", checkavailabledup)
                         var checkscheduleboxlist = await new Promise((resolve) => {
                             pool.query(checkavailabledup, (err, res) => {
                                 var string = JSON.stringify(res);
@@ -1050,7 +1050,7 @@ module.exports = {
                             var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
                             addedlist.push(counttimeboxlist[b].sid);
                             thisschedulebox = sortingschedulebox();
-                            console.log(counttimeboxlist[b].tid,"  thisschdeulebox after sorting again",thisschedulebox)
+                            console.log(counttimeboxlist[b].tid, "  thisschdeulebox after sorting again", thisschedulebox)
                             db.query(deletemanualhandleline, (err, res) => {
                                 try { console.log("deleteed manual handlecase") } catch (err) {
                                     console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
@@ -1064,7 +1064,7 @@ module.exports = {
 
                 }
 
-                console.log(supervisorlist[a].tid ,"schedulebox after step 2     ", thisschedulebox)
+                console.log(supervisorlist[a].tid, "schedulebox after step 2     ", thisschedulebox)
 
 
 
@@ -1102,23 +1102,46 @@ module.exports = {
                         })
 
                         var getcampusandroomquery = "select t2.cid,pid,priority, campus,rid,startTime,endTime from (select * from (select * from allsupertakecourse where (pid = \"" + thisschedulebox[c].schedule[e].tid + "\" or pid = \"" + thisschedulebox[c].schedule[e].oid + "\")) as t1 left join supervisor on supervisor.tid = t1.pid )as t2 left join allclass on allclass.cid = t2.CID where weekdays = \"" + timestamp.getDay() + "\" order by t2.priority asc, startTime asc, Campus asc , RID asc"
-                        // console.log(getcampusandroomquery)
+                        console.log(getcampusandroomquery)
                         var checkcampusandroom = await new Promise((resolve) => {
                             pool.query(getcampusandroomquery, (err, res) => {
                                 var string = JSON.stringify(res);
                                 var json = JSON.parse(string);
                                 var ans = json;
+                                console.log("checkcampusandroom length    " , ans.length)
                                 resolve(ans)
                             })
                         }).catch((err) => {
                             errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
                         })
+                        console.log(checkcampusandroom.length , "   check after query get   ",thisschedulebox[c].schedule[e])
+                        if (checkcampusandroom.length == 0) {
+                            getcampusandroomquery = "select campus,rid from classroom where Campus != \"\""
+                            checkcampusandroom = await new Promise((resolve) => {
+                                pool.query(getcampusandroomquery, (err, res) => {
+                                    var string = JSON.stringify(res);
+                                    var json = JSON.parse(string);
+                                    var ans = json;
+                                    resolve(ans)
+                                })
+                            }).catch((err) => {
+                                errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
+                            })
 
-                        if (checkcampusandroom.length > 0) {
-                            campus = checkcampusandroom[0].campus
-                        } else {
+                        }
+                         
+                        console.log(checkcampusandroom , "   check campus")
+                        var added = false;
+                        for (var i = 0; i < checkcampusandroom.length; i++) {
+                            added = false;
+                            var campus = checkcampusandroom[i].campus;
+                            console.log(campus + "   check campus")
+                            getcampusandroomquery = "select * from classroom where Campus =\"" + campus + "\" and status=\"Open\" "
+                                + " and rid not in (select rid from allclassroomtimeslot where Campus = \"" + campus + "\" and startdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
+                                + " and rid not in(select rid from allclass where Campus = \"" + campus + "\" and weekdays = \"" + timestamp.getDay() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
+                                + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\")"
+                            console.log(getcampusandroomquery);
 
-                            getcampusandroomquery = "select * from classroom where Campus != \"\""
                             var checkcampusandroom = await new Promise((resolve) => {
                                 pool.query(getcampusandroomquery, (err, res) => {
                                     var string = JSON.stringify(res);
@@ -1129,52 +1152,43 @@ module.exports = {
                             }).catch((err) => {
                                 errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
                             })
-                            campus = checkcampusandroom[0].Campus
-                        }
-                        // console.log(campus + "   hello")
+                            // console.log(checkcampusandroom)
+                            if (checkcampusandroom.length > 0) {
+                                room = checkcampusandroom[0].RID;
+                            } else {
+                                room = null;
+                            }
 
-                        getcampusandroomquery = "select * from classroom where Campus =\"" + campus + "\" and status=\"Open\" "
-                            + " and rid not in (select rid from allclassroomtimeslot where Campus = \"" + campus + "\" and startdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
-                            + " and rid not in(select rid from allclass where Campus = \"" + campus + "\" and weekdays = \"" + timestamp.getDay() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
-                        // console.log(getcampusandroomquery);
+                            if (room != null) {
+                                 console.log(campus + "    " + room)
+                                let boxid = 'boxID';
+                                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                                const charactersLength = characters.length;
+                                let counter = 0;
+                                while (counter < 15) {
+                                    boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                                    counter += 1;
+                                }
+                                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\"" + req.body.typeofpresent + "\","
+                                    + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
+                                    + "\"" + campus + "\",\"" + room + "\", now()) ;"
+                                console.log(insertscheduleboxquery)
 
-                        var checkcampusandroom = await new Promise((resolve) => {
-                            pool.query(getcampusandroomquery, (err, res) => {
-                                var string = JSON.stringify(res);
-                                var json = JSON.parse(string);
-                                var ans = json;
-                                resolve(ans)
-                            })
-                        }).catch((err) => {
-                            errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-                        })
-                        // console.log(checkcampusandroom)
-                        if (checkcampusandroom.length > 0) {
-                            room = checkcampusandroom[0].RID;
-                        } else {
-                            room = "ooops"
-                        }
-                        // console.log(campus + "    " + room)
-                        let boxid = 'boxID';
-                        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                        const charactersLength = characters.length;
-                        let counter = 0;
-                        while (counter < 15) {
-                            boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
-                            counter += 1;
-                        }
-                        var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\"" + req.body.typeofpresent + "\","
-                            + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
-                            + "\"" + campus + "\",\"" + room + "\", now()) ;"
-                        //console.log(insertscheduleboxquery)
+                                var insertbox = await new Promise((resolve) => {
+                                    pool.query(insertscheduleboxquery, (err, res) => {
+                                        resolve(res)
+                                    })
+                                }).catch((err) => {
+                                    errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
+                                })
+                                added = true;
+                                break;
+                            } else {
+                                console.log("this set have problem" , thisschedulebox[c].schedule[e])
+                            }
 
-                        var insertbox = await new Promise((resolve) => {
-                            pool.query(insertscheduleboxquery, (err, res) => {
-                                resolve(res)
-                            })
-                        }).catch((err) => {
-                            errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
-                        })
+                        }
+
 
                     }
 
@@ -1645,7 +1659,8 @@ module.exports = {
             var timestampstring = newdatestring[2] + "-" + newdatestring[1] + "-" + newdatestring[0] + " " + newdate.toLocaleTimeString("en-GB");
             var getRoomquery = "select distinct(rid) as Room from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid != \"\" "
                 + " and (rid not in (select rid from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (endtime >= time(\"" + newdate.toLocaleTimeString("en-GB") + "\") and time(\"" + newdate.toLocaleTimeString("en-GB") + "\") >= starttime)) "
-                + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) <= timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) >= timestamp(\"" + timestampstring + "\"))));"
+                + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) <= timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) >= timestamp(\"" + timestampstring + "\")))"
+                + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \""+timestampstring+"\"));"
                 ;
             console.log(getRoomquery)
             roomlist = await new Promise((resolve) => {
@@ -1708,7 +1723,7 @@ module.exports = {
 
             query.forEach(element => {
                 db.query(element, (err, res) => {
-                    try{}catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                    try { } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
                 })
             });
 
@@ -1750,7 +1765,7 @@ module.exports = {
             ]
             query.forEach(element => {
                 db.query(element, (err, res) => {
-                    try{}catch(err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                    try { } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
                 })
             });
 
@@ -1794,7 +1809,7 @@ module.exports = {
 
             query.forEach(element => {
                 db.query(element, (err, results) => {
-                    try{}catch(err) {
+                    try { } catch (err) {
                         return res.status(401).json("Error happened when excuting ScheduleController.EditRecords.delete")
                     }
                 });
