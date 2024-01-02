@@ -7,7 +7,7 @@
         </div>
     </div>
     <br>
-
+<%console.log(ttb)%>
     
     <%if (manualhandlecase.length >0){%>
        
@@ -53,11 +53,9 @@
 
     <div class = "row" id = "Schedule"> 
         <%var realpresentday = new Date(setting.startday)%>
-                <%=displaystartday%>   <%=displayendday%>
-                <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
+               <%var displaydate = new Date(realpresentday.getTime()+(Page-1)*60*60*1000*24)%>
                     <% var printday=new Date(displaydate.getTime())%> 
                      <%var enddisplaydate= displayendday;%>
-                        <br><%="enddisplay date"%> <%=enddisplaydate%><br>
                         <%
                         var appendlist = [];
                         var removelist = [];
@@ -273,11 +271,11 @@ console.log("removelist",removelist)
                         <%
                         var appendlist = [];
                         for (var a = 0; a < ttb.length; a++) {
-                            console.log("hello   ttb ",ttb)
+                            console.log("hello   ttb ",ttb);
                             var starttimeay = ttb[a].starttime.split(":");
                             var endtimeay = ttb[a].endtime.split(":");
-                          
-                            if (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) > 1) {
+                            console.log("hello   ttb ",endtimeay[0] , " ",starttimeay[0]);
+                            if (parseInt(endtimeay[0]) - parseInt(starttimeay[0]) >= 1) {
 
                                 var endhour = parseInt(endtimeay[0]);
                                 var starthour = parseInt(starttimeay[0]);
@@ -295,6 +293,7 @@ console.log("removelist",removelist)
                                     index++;
                                     console.log("check b",parseInt(endtimeay[0]),"   ",parseInt(starttimeay[0]))
                                     starthour++;
+                                    console.log("check c",endhour,"   ",starthour)
                                 }
                                
 
@@ -304,9 +303,19 @@ console.log("removelist",removelist)
 
 
 
+
+
                                 
                             } 
-                            ttb[a].endtime = (parseInt(starttimeay[0])+1) + ":30:00";
+                           
+                                    
+                            if(parseInt(starttimeay[0])+1 < 10 ){
+                                ttb[a].endtime = "0"+(parseInt(starttimeay[0])+1) + ":30:00";
+                            }else{
+                                 ttb[a].endtime = (parseInt(starttimeay[0])+1) + ":30:00";
+                            }
+                            console.log(ttb[a]);
+                           
                            
                         }
                        appendlist.forEach((element)=> ttb.push(element))
@@ -318,6 +327,8 @@ console.log("removelist",removelist)
                        if (a.starttime < b.starttime) return -1;
                         if (a.starttime > b.starttime) return 1;
                         })
+
+                      
                         console.log("check top ttb  ",ttb);
                     %>
         <div class = "columns is-centered is-mobile">
