@@ -831,7 +831,12 @@ module.exports = {
                 prefary.pop()
                 //console.log(prefary);
                 for (var b = 0; b < thisschedulebox.length; b++) {
-                    thisschedulebox[b].prefno = prefary[b];
+                    if(prefary.length <b){
+                        thisschedulebox[b].prefno = "0"
+                    }else{
+                        thisschedulebox[b].prefno = prefary[b];
+                    }
+                    
                 }
                 // for (var b = 0; b < prefary.length; b++) {
                 //     thisschedulebox[b].prefno = prefary[b];
