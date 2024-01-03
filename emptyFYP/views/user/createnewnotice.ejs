@@ -153,7 +153,7 @@
     }
 
     async function submitform(id,oldid,level) {
-        const r = confirm("Confirm to create this notice?   large one");
+        const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
         stringstring = stringstring.replace(/\n/g, " newline ");
         var titlestr = document.getElementById("title").value;
@@ -191,7 +191,7 @@
                 content = document.getElementById("content").value.replace(/\n/g, "<br>") 
                 +"<br><br>----------------------------<br>"
                 +"This emails send towards : <br>"+ content;
-                console.log(type);
+                console.log("check type",type);
                 console.log(typeof type);
                 
                 if(type == 1){
