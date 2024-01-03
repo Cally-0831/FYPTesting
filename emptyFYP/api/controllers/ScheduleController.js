@@ -1888,13 +1888,13 @@ module.exports = {
         console.log("check here final", req.body.TYPE == "final");
 
         var type = await new Promise((resolve) => {
-            pool.query("select distinct(type) as type from allschedulebox", (err, res) => {
+            pool.query("select distinct(TYPE) as TYPE from allschedulebox", (err, res) => {
                 if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                console.log("check here 2 ", json);
+                console.log("check here 2 ", json[0].TYPE);
                 if (json.length > 0) {
-                    resolve(json[0].type);
+                    resolve(json[0].TYPE);
                 } else {
                     resolve(null);
                 }

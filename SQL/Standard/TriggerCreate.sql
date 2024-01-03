@@ -313,3 +313,4 @@ CREATE TRIGGER delnoticefromdelsetting after delete ON allsupersetting FOR EACH 
     
 END;
 | DELIMITER ;
+
