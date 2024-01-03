@@ -2,8 +2,8 @@ var mysql = require('mysql2');
 //twotwo
 var db = mysql.createConnection({
     //host: "fypdeploy3-mysql",
-   //host: "fypdeploy2-mysql",
-    host: "fypdeploy-mysql",
+   host: "fypdeploy2-mysql",
+    //host: "fypdeploy-mysql",
     //host: "localhost",
     user: "root",
     port: 3306,
