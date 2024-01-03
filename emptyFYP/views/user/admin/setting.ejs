@@ -68,7 +68,7 @@
             <div class="column is-half">
                 <div id="ttbdealine" class="settingbox">
                     <div class="row">
-                        <div id="handleTTB" style="font-size : 23px;padding-top: 10px;" class="title">1. TimeTable
+                        <div id="handleTTB" style="font-size : calc(20px + 0.390625vw);padding-top: 10px;" class="title">1. TimeTable
                             Submission Deadline</div>
                     </div>
                     <br>
@@ -77,7 +77,7 @@
                         <%var announcetime = new Date(thissupersetting[hv1anoun].Announcetime)%>
                         <%var announceddate = new Date(thissupersetting[hv1anoun].deadlinedate)%>
                         <%var announcedtimetime = thissupersetting[hv1anoun].deadlinetime%>
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
                             <br>
                             Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleDateString("en-GB")%>, <%=announcetime.toLocaleTimeString("en-GB")%>
@@ -91,7 +91,7 @@
                         <%var updatetothistime = thissupersetting[hv1].deadlinetime%>
                         <%var checkdate = new Date(new Date(thissupersetting[hv1].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
                       
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
                             Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -104,9 +104,9 @@
                                         <br>
                                         <div class="row" style="text-align: center;">
                                             <input type="Date" id="deadlineforttb"
-                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                             <input type="time" id="deadlineforttbtime" name="deadlineforttbtime"
-                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                         </div>
                                         <br>
                                         <div class="row">
@@ -147,7 +147,7 @@
 
                 <div id="requestdealine" class="settingbox">
                     <div class="row">
-                        <div id="handleRequest" style="font-size : 23px" class="title">2. Request Submission Deadline</div>
+                        <div id="handleRequest" style="font-size : calc(20px + 0.390625vw);" class="title">2. Request Submission Deadline</div>
                     </div>
                     <br>
                     
@@ -157,7 +157,7 @@
                         <%var announcetime = new Date(thissupersetting[hv2anoun].Announcetime)%>
                         <%var announceddate = new Date(thissupersetting[hv2anoun].deadlinedate)%>
                         <%var announcedtimetime = thissupersetting[hv2anoun].deadlinetime%>
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
                             <br>
                             Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
@@ -171,7 +171,7 @@
                         <%var updatetothistime = thissupersetting[hv2].deadlinetime%>
                       <%var checkdate = new Date(new Date(thissupersetting[hv2].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
                         
-                      <div class="row" style="font-size: 10px;">
+                      <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
                             Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -180,9 +180,9 @@
                                         <br>
                                         <div class="row" style="text-align: center;">
                                             <input type="Date" id="deadlineforrequest"
-                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                             <input type="time" id="deadlineforrequesttime" name="deadlineforrequesttime"
-                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                         </div>
                                         <br>
                                         <div class="row">
@@ -227,7 +227,7 @@
             <div class="column is-half">
                 <div id="presentationperiod" class="settingbox">
                     <div class="row">
-                        <div id="handlepresent" style="font-size : 23px;padding-top: 10px;" class="title">3. Presentation
+                        <div id="handlepresent" style="font-size : calc(20px + 0.390625vw);;padding-top: 10px;" class="title">3. Presentation
                             Period</div>
                     </div>
                     <br>
@@ -238,10 +238,21 @@
                         <%var announcedstarttimetime = thissupersetting[hv3anoun].starttime%>
                         <%var announcedenddate = new Date(thissupersetting[hv3anoun].enddate)%>
                         <%var announcedendtimetime = thissupersetting[hv3anoun].endtime%>
-                        <div class="row" style="font-size: 10px;">
-                            Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: From&ensp;&ensp;<%=announcedstartdate.toLocaleDateString("en-GB")%>, <%=announcedstarttimetime%>&ensp;&ensp;To&ensp;&ensp;<%=announcedenddate.toLocaleDateString("en-GB")%>, <%=announcedendtimetime%>
-                            <br>
-                            Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
+                            <table>
+                                <tr>
+                                    <td>Setting Info :</td>
+                                    <td>&ensp;&ensp;From&ensp;&ensp;<%=announcedstartdate.toLocaleDateString("en-GB")%> <%=announcedstarttimetime%></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>&ensp;&ensp;To&ensp;&ensp;&ensp;&ensp;&ensp;<%=announcedenddate.toLocaleDateString("en-GB")%><%=announcedendtimetime%></td>
+                                </tr>
+                                <tr>
+                                    <td>Announced At :</td>
+                                    <td>&ensp;&ensp;<%=announcetime.toLocaleString("en-GB")%></td>
+                                </tr>
+                            </table>
                         </div>
                         <br>
                         <%}%>
@@ -254,7 +265,7 @@
                         <%var updatetothisendtime = thissupersetting[hv3].endtime%>
                         <%var checkdate = new Date(new Date(thissupersetting[hv3].startdate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothisstarttime)%>
                      
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Updated Info&ensp;&ensp;&ensp;: From&ensp;&ensp;<%=updatetothisstartdate%>, <%=updatetothisstarttime%>&ensp;&ensp;To&ensp;&ensp;<%=updatetothisenddate%>, <%=updatetothisendtime%> 
                             <br>
                             Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -266,28 +277,28 @@
                                             <div class="columns">
                                                 <div class="column is-half">
                                                     <div class="row" style="text-align: center;">
-                                                        <label for="startpresent" style="font-size:20px;">Start
+                                                        <label for="startpresent" style="font-size : calc(15px + 0.390625vw);">Start
                                                             Date</label>
                                                     </div>
                                                     <div class="row" style="text-align: center;">
                                                         <input type="Date" id="startpresent"
-                                                            style="width: 150px; font-size:20px;text-align: center;"
+                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
                                                         <input type="time" id="startpresenttime" name="startpresenttime"
-                                                            style="width: 150px; font-size:20px;text-align: center;"
+                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
                                                     </div>
                                                 </div>
                                                 <div class="column is-half">
                                                     <div class="row" style="text-align: center;">
-                                                        <label for="endpresent" style="font-size:20px;">End Date</label>
+                                                        <label for="endpresent" style="font-size : calc(15px + 0.390625vw);">End Date</label>
                                                     </div>
                                                     <div class="row" style="text-align: center;">
                                                         <input type="Date" id="endpresent"
-                                                            style="width: 150px; font-size:20px;text-align: center;"
+                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
                                                         <input type="time" id="endpresenttime" name="endpresenttime"
-                                                            style="width: 150px; font-size:20px;text-align: center;"
+                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
                                                     </div>
                                                 </div>
@@ -333,7 +344,7 @@
             <div class="column is-half">
                 <div id="schdeulerelease" class="settingbox">
                     <div class="row">
-                        <div id="Handleschdule" style="font-size : 23px" class="title">4. Release Schdeule Date</div>
+                        <div id="Handleschdule" style="font-size : calc(20px + 0.390625vw);" class="title">4. Release Schdeule Date</div>
                     </div>
                     <br>
                     <%if(hv4anoun>=0){%> 
@@ -341,7 +352,7 @@
                         <%var announcetime = new Date(thissupersetting[hv4anoun].Announcetime)%>
                         <%var announceddate = new Date(thissupersetting[hv4anoun].deadlinedate)%>
                         <%var announcedtimetime = thissupersetting[hv4anoun].deadlinetime%>
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
                             <br>
                             Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
@@ -355,7 +366,7 @@
                         <%var updatetothistime = thissupersetting[hv4].deadlinetime%>
                         <%var checkdate = new Date(new Date(thissupersetting[hv4].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
                      
-                        <div class="row" style="font-size: 10px;">
+                        <div class="row" style="font-size : calc(13px + 0.390625vw);">
                             Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                             <br>
                             Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -364,10 +375,10 @@
                                         <br>
                                         <div class="row" style="text-align: center;">
                                             <input type="Date" id="deadlineforreleaseschdule"
-                                                style="width: 150px; font-size:20px;text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                             <input type="time" id="deadlineforreleaseschduletime"
                                                 name="deadlineforreleaseschduletime"
-                                                style="width: 150px; font-size:20px; text-align: center;" required>
+                                                style="width: 150px; font-size : calc(15px + 0.390625vw); text-align: center;" required>
                                         </div>
                                         <br>
                                         <div class="row">
@@ -410,13 +421,13 @@
             <div class="column is-half">
                 <div id="uploadstudentlist" class="settingbox">
                     <div class="row">
-                        <div id="handleuploadstulist" style="font-size : 23px;padding-top: 10px;" class="title">5. Upload Student List</div>
+                        <div id="handleuploadstulist" style="font-size : calc(20px + 0.390625vw);;padding-top: 10px;" class="title">5. Upload Student List</div>
                         <%if(hv5anoun>=0){%> 
                             <%console.log(thissupersetting[hv5anoun])%>
                             <%var announcetime = new Date(thissupersetting[hv5anoun].Announcetime)%>
                             <%var announceddate = new Date(thissupersetting[hv5anoun].deadlinedate)%>
                             <%var announcedtimetime = thissupersetting[hv5anoun].deadlinetime%>
-                            <div class="row" style="font-size: 10px;">
+                            <div class="row" style="font-size : calc(13px + 0.390625vw);">
                                 Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
                                 <br>
                                 Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
@@ -430,7 +441,7 @@
                                <%var updatetothistime = thissupersetting[hv5].deadlinetime%>
                                <%var checkdate = new Date(new Date(thissupersetting[hv5].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
                      
-                               <div class="row" style="font-size: 10px;">
+                               <div class="row" style="font-size : calc(13px + 0.390625vw);">
                                    Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                                    <br>
                                    Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -439,10 +450,10 @@
                                <br>
                                <div class="row" style="text-align: center;">
                                    <input type="Date" id="deadlineforuploadstulist"
-                                       style="width: 150px; font-size:20px;text-align: center;" required>
+                                       style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                    <input type="time" id="deadlineforuploadstulisttime"
                                        name="deadlineforuploadstulisttime"
-                                       style="width: 150px; font-size:20px; text-align: center;" required>
+                                       style="width: 150px; font-size : calc(15px + 0.390625vw); text-align: center;" required>
                                </div>
                                <br>
                                
@@ -480,13 +491,13 @@
              <div class="column is-half">
                 <div id="uploadsuperpreference" class="settingbox">
                     <div class="row">
-                        <div id="handleuploadsuperpreference" style="font-size : 23px;padding-top: 10px;" class="title"> 6. Upload Supervisior Perference</div>
+                        <div id="handleuploadsuperpreference" style="font-size : calc(20px + 0.390625vw);;padding-top: 10px;" class="title"> 6. Upload Supervisior Perference</div>
                         <%if(hv6anoun>=0){%> 
                             <%console.log(thissupersetting[hv6anoun])%>
                             <%var announcetime = new Date(thissupersetting[hv6anoun].Announcetime)%>
                             <%var announceddate = new Date(thissupersetting[hv6anoun].deadlinedate)%>
                             <%var announcedtimetime = thissupersetting[hv6anoun].deadlinetime%>
-                            <div class="row" style="font-size: 10px;">
+                            <div class="row" style="font-size : calc(13px + 0.390625vw);">
                                 Setting Info&ensp;&ensp;&ensp;&ensp;&ensp;: <%=announceddate.toLocaleDateString("en-GB")%>, <%=announcedtimetime%> 
                                 <br>
                                 Announced At&ensp;&ensp;&nbsp;: <%=announcetime.toLocaleString("en-GB")%>
@@ -500,7 +511,7 @@
                                <%var updatetothistime = thissupersetting[hv6].deadlinetime%>
                                <%var checkdate = new Date(new Date(thissupersetting[hv6].deadlinedate).toLocaleDateString().replace(/\//g, '-')+" "+updatetothistime)%>
                      
-                               <div class="row" style="font-size: 10px;">
+                               <div class="row" style="font-size : calc(13px + 0.390625vw);">
                                    Updated Info&ensp;&ensp;&ensp;: <%=updatetothisdate%>, <%=updatetothistime%> 
                                    <br>
                                    Updated At&ensp;&ensp;&ensp;&ensp;&nbsp;: <%=updatedate.toLocaleString("en-GB")%> 
@@ -509,10 +520,10 @@
                                <br>
                                <div class="row" style="text-align: center;">
                                    <input type="Date" id="deadlineforuploadsuperpreference"
-                                       style="width: 150px; font-size:20px;text-align: center;" required>
+                                       style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;" required>
                                    <input type="time" id="deadlineforuploadsuperpreferencetime"
                                        name="deadlineforuploadsuperpreferencetime"
-                                       style="width: 150px; font-size:20px; text-align: center;" required>
+                                       style="width: 150px; font-size : calc(15px + 0.390625vw); text-align: center;" required>
                                </div>
                                <br>
                                

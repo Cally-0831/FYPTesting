@@ -830,9 +830,12 @@ module.exports = {
                 var prefary = (prefofthissuper[0].Prefno).split("/");
                 prefary.pop()
                 //console.log(prefary);
-                for (var b = 0; b < prefary.length; b++) {
+                for (var b = 0; b < thisschedulebox.length; b++) {
                     thisschedulebox[b].prefno = prefary[b];
                 }
+                // for (var b = 0; b < prefary.length; b++) {
+                //     thisschedulebox[b].prefno = prefary[b];
+                // }
             }
 
             function sortingscheduleboxSAT() {

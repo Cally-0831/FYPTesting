@@ -114,6 +114,12 @@ insert into allrequestfromsupervisor values("tid00009nKCo2","tid00009","2024-01-
 insert into allrequestfromsupervisor values("tid00009nKCo3","tid00009","2024-01-23","10:30", "16:30");
 insert into allrequestfromsupervisor values("tid00009nKCo4","tid00009","2024-01-24","10:30", "16:30");
 
+
+insert into allrequestfromstudent values("sid10000dSlOu","sid10000","2024-01-23","08:30", "10:00","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
+insert into allrequestfromstudent values("sid21111dSlOu","sid21111","2024-01-19","13:30", "14:30","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
+insert into allrequestfromstudent values("sid72222dSlOu","sid72222","2024-01-20","14:30", "16:30","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
+
+
 insert into allpreffromsup values("tid00001","1/2/3/0/0/",now());
 insert into allpreffromsup values("tid00002","1/0/0/1/0/",now());
 insert into allpreffromsup values("tid00003","1/0/0/1/0/",now());

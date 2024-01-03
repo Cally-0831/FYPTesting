@@ -303,11 +303,14 @@
             if(startstart < "08:30"){
                 alert("The system will not consider timeslots earlier than 08:30 \n The Start Time of the request will be assign as 08:30 ");
                 startstart = "08:30";
+                if(startstart == endend){return alert("The StartTime and the EndTime collapse\nThis is not a valid request, please review your input")}
             }
 
             if(endend > "18:30"){
                 alert("The system will not consider timeslots later than 18:30 \n The End Time of the request will be assign as 18:30");
                 endend = "18:30";
+                if(startstart == endend){return alert("The StartTime and the EndTime collapse\nThis is not a valid request, please review your input")}
+           
             }
             document.getElementById("starttime").value =startstart;
             document.getElementById("endtime").value = endend;

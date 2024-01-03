@@ -296,6 +296,13 @@ module.exports = {
 
         let thisistheline = "";
 
+        if(req.body.starttime < "08:30"){
+            req.body.starttime = "08:30";
+        }
+        if(req.body.endtime > "18:30"){
+            req.body.endtime = "18:30";
+        }
+
 
         if (req.session.role == "sup") {
             console.log("enter sup");
@@ -303,6 +310,7 @@ module.exports = {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
                     + "\",\"08:30\", \"18:30\");";
             } else {
+                
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\");";
             }
