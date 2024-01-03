@@ -1653,7 +1653,7 @@ module.exports = {
 
         if (req.query.boxid == "null") {
             // don't have a schedulebox
-            console.log("this is a empty student")
+            console.log("this is a empty student , ")
 
             var getpairing = "select tid,supervisorpairstudent.sid,oid from supervisorpairstudent join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid and supervisorpairstudent.sid = \"" + req.query.sid + "\"";
             //console.log(getpairing);
@@ -1884,26 +1884,28 @@ module.exports = {
 
         console.log(req.body);
         console.log("check here ", req.body.TYPE);
-        if (req.body.TYPE != "midterm" || req.body.TYPE != "final") {
-            var type = await new Promise((resolve) => {
-                pool.query("select distinct(type) as type from allschedulebox", (err, res) => {
-                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    console.log("check here 2 ", json);
-                    if (json.length > 0) {
-                        resolve(json[0].TYPE);
-                    } else {
-                        resolve(null);
-                    }
-                })
-            }).catch((err) => {
-                errmsg = "error happened in ScheduleController.EditScheduleBox.gettype"
-            })
-            req.body.TYPE = type;
-        }
+        console.log("check here midterm", req.body.TYPE == "midterm");
+        console.log("check here final", req.body.TYPE == "final");
 
-        
+        var type = await new Promise((resolve) => {
+            pool.query("select distinct(type) as type from allschedulebox", (err, res) => {
+                if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                console.log("check here 2 ", json);
+                if (json.length > 0) {
+                    resolve(json[0].type);
+                } else {
+                    resolve(null);
+                }
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.EditScheduleBox.gettype"
+        })
+        req.body.TYPE = type;
+
+
+
         console.log("check here 3", req.body.TYPE);
         if (req.body.boxID == "") {
             //create a new schedulebox by insert 
