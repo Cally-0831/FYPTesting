@@ -494,22 +494,26 @@ console.log("removelist",removelist)
                                 
                                 <%}%>
                         <!--printing shedulebox-->
+                        <%console.log("hello   ",printday.getMinutes())%>
                         <%if(boxes.length > 0 && printday.toLocaleDateString() == (new Date(boxes[0].boxdate)).toLocaleDateString() && !printed){%>
-                            <%var checktimevar ;
+                            <%var checktimevar  = 0;
                             if(type == "midterm"){
                                 if(printday.getMinutes() != (new Date(setting.startday)).getMinutes()){
-                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(setting.startday)).getMinutes()));
+                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(realpresentday.startday)).getMinutes()));
                                 }
                             }else{
                                 if(printday.getMinutes() != (new Date(setting.startday)).getMinutes()){
-                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(setting.startday)).getMinutes()));
+                                    checktimevar = Math.abs(parseInt(printday.getMinutes()) - parseInt((new Date(realpresentday.startday)).getMinutes()));
                                 
                                 }
                             }
                             console.log(checktimevar);
                             %>
-                            <%console.log((new Date(boxes[0].boxdate)).toLocaleTimeString())%>
-                           <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString() || printday.toLocaleTimeString() == (new Date((new Date(boxes[0].boxdate)).getTime()-checktimevar*60*1000)).toLocaleTimeString()){%>
+                            <%console.log(printday.toLocaleDateString(),"  ",printday.toLocaleTimeString(),"   ",(new Date(boxes[0].boxdate)).toLocaleTimeString())%>
+                            <%console.log(printday.toLocaleTimeString(),"   ",(new Date((new Date(boxes[0].boxdate)).getTime() - (checktimevar * 60*1000))).toLocaleTimeString() )%>
+                            <%console.log(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString() || printday.toLocaleTimeString() == (new Date((new Date(boxes[0].boxdate)).getTime() - (checktimevar * 60*1000))).toLocaleTimeString())%>
+<%console.log()%>
+                            <%if(printday.toLocaleTimeString() == (new Date(boxes[0].boxdate)).toLocaleTimeString() || printday.toLocaleTimeString() == (new Date((new Date(boxes[0].boxdate)).getTime() - (checktimevar * 60*1000))).toLocaleTimeString()  ){%>
                                 <%printed = true;var sessiontime = printday.toLocaleTimeString('en-GB')%>
                                 <td>
                                     <table class="table is-narrow" style="margin-left: auto; margin-right: auto;">

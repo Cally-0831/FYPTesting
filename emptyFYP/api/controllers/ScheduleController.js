@@ -107,7 +107,7 @@ module.exports = {
             errmsg = "error happened in ScheduleController.genavailble.getsetting3"
         })
         //console.log(errmsg)
-       // console.log(setting3)
+        // console.log(setting3)
 
 
 
@@ -317,15 +317,15 @@ module.exports = {
 
             var currentgeneratedate = new Date(setting3.startday);
             var currentgeneratedateend = new Date(setting3.startday);
-            
+
             while (currentgeneratedate < new Date(setting3.endday)) {
-                
+
                 var supervisorttblist;
                 var supervisorrequest;
-              
+
                 if (req.body.typeofpresent == "midterm") {
                     // console.log()
-                    if(currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")){
+                    if (currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")) {
                         if (currentgeneratedate.getMinutes() == 30) {
                             currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
                             currentgeneratedateend.setMinutes(0)
@@ -335,13 +335,13 @@ module.exports = {
                         }
                         //console.log(currentgeneratedate.toLocaleString("en-GB"), "  hellobello  ", currentgeneratedateend.toLocaleString("en-GB"))
 
-                    }else if (currentgeneratedate.getMinutes() == 30) {
+                    } else if (currentgeneratedate.getMinutes() == 30) {
                         currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
                         currentgeneratedateend.setMinutes(0)
                     } else {
                         currentgeneratedateend.setMinutes(30);
                     }
-                   
+
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
                     var boolcheckttb = false;
@@ -400,7 +400,7 @@ module.exports = {
                         })
 
                     }
-                        
+
                     var checkdate1 = new Date();
                     checkdate1.setHours(setting3.endday.getHours());
                     checkdate1.setMinutes(setting3.endday.getMinutes());
@@ -411,15 +411,15 @@ module.exports = {
                     checkdate2.setMinutes(currentgeneratedate.getMinutes());
                     checkdate2.setSeconds(currentgeneratedate.getSeconds());
 
-                   
-                
+
+
                     // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-                   
+
                     // console.log(checkdate1.getTime() - 30*60*1000 - checkdate2.getTime()<=30*60*1000  , "endend")
-                   
-                    if (checkdate1.getTime() - 30*60*1000 - checkdate2.getTime()<30*60*1000 ) {
-                   
-                    // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
+
+                    if (checkdate1.getTime() - 30 * 60 * 1000 - checkdate2.getTime() < 30 * 60 * 1000) {
+
+                        // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                             currentgeneratedate = new Date(currentgeneratedate);
@@ -452,7 +452,7 @@ module.exports = {
 
                     }
                     // console.log("midterm check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-                  
+
 
 
 
@@ -514,9 +514,9 @@ module.exports = {
                             errmsg = "error happened in ScheduleController.genavailble.insertavability"
                         })
                     }
-                    
+
                     var checkdate1 = new Date();
-                    checkdate1.setHours(setting3.endday.getHours()-1);
+                    checkdate1.setHours(setting3.endday.getHours() - 1);
                     checkdate1.setMinutes(setting3.endday.getMinutes());
                     checkdate1.setSeconds(setting3.endday.getSeconds());
 
@@ -525,13 +525,13 @@ module.exports = {
                     checkdate2.setMinutes(currentgeneratedate.getMinutes());
                     checkdate2.setSeconds(currentgeneratedate.getSeconds());
 
-                   
-                
+
+
                     // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
                     // console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
                     // console.log(checkdate1.getTime() - checkdate2.getTime()<= 60*60*1000 , "endend")
-                    if (checkdate1.getTime() - checkdate2.getTime() < 60*60*1000 ) {
-                    // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
+                    if (checkdate1.getTime() - checkdate2.getTime() < 60 * 60 * 1000) {
+                        // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
                         //console.log(currentgeneratedate.getDay())
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
@@ -577,12 +577,12 @@ module.exports = {
             var currentgeneratedate = new Date(setting3.startday);
             var currentgeneratedateend = new Date(setting3.startday);
             while (currentgeneratedate < new Date(setting3.endday)) {
-             
+
                 var supervisorttblist;
                 var supervisorrequest;
                 if (req.body.typeofpresent == "midterm") {
                     //console.log("midterm")
-                    if(currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")){
+                    if (currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")) {
                         if (currentgeneratedate.getMinutes() == 30) {
                             currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
                             currentgeneratedateend.setMinutes(0)
@@ -592,7 +592,7 @@ module.exports = {
                         }
                         // console.log(currentgeneratedate.toLocaleString("en-GB"), "  hellobello  ", currentgeneratedateend.toLocaleString("en-GB"))
 
-                    }else if (currentgeneratedate.getMinutes() == 30) {
+                    } else if (currentgeneratedate.getMinutes() == 30) {
                         currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
                         currentgeneratedateend.setMinutes(0)
                     } else {
@@ -664,17 +664,17 @@ module.exports = {
                     checkdate2.setMinutes(currentgeneratedate.getMinutes());
                     checkdate2.setSeconds(currentgeneratedate.getSeconds());
 
-                   
-                
+
+
                     // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-                   
+
                     // console.log((checkdate1.getTime() - 30*60*1000) - checkdate2.getTime()<=30*60*1000 , "endend")
-                   
-                    if (checkdate1.getTime() - 30*60*1000 - checkdate2.getTime()<30*60*1000 ) {
-                   
+
+                    if (checkdate1.getTime() - 30 * 60 * 1000 - checkdate2.getTime() < 30 * 60 * 1000) {
 
 
-                    // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
+
+                        // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
                         //console.log(currentgeneratedate.getDay())
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
@@ -708,7 +708,7 @@ module.exports = {
 
                     }
                     // console.log("midterm check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-                  
+
 
                 } else if (req.body.typeofpresent == "final") {
                     //console.log("final")
@@ -764,9 +764,9 @@ module.exports = {
                         })
                     }
 
-    
+
                     var checkdate1 = new Date();
-                    checkdate1.setHours(setting3.endday.getHours()-1);
+                    checkdate1.setHours(setting3.endday.getHours() - 1);
                     checkdate1.setMinutes(setting3.endday.getMinutes());
                     checkdate1.setSeconds(setting3.endday.getSeconds());
 
@@ -775,22 +775,22 @@ module.exports = {
                     checkdate2.setMinutes(currentgeneratedate.getMinutes());
                     checkdate2.setSeconds(currentgeneratedate.getSeconds());
 
-                   
-                
+
+
                     // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
                     // console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
                     // console.log(checkdate1.getTime() - checkdate2.getTime()<= 60*60*1000 , "endend")
-                    if (checkdate1.getTime() - checkdate2.getTime() < 60*60*1000 ) {
+                    if (checkdate1.getTime() - checkdate2.getTime() < 60 * 60 * 1000) {
 
-                    // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
+                        // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                         currentgeneratedate = new Date(currentgeneratedate);
                         // currentgeneratedate.setHours(9);
                         // currentgeneratedate.setMinutes(30);
                         // currentgeneratedate.setSeconds(0);
                         currentgeneratedate.setHours(setting3.startday.getHours());
-                            currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-                            currentgeneratedate.setSeconds(setting3.startday.getSeconds())
+                        currentgeneratedate.setMinutes(setting3.startday.getMinutes());
+                        currentgeneratedate.setSeconds(setting3.startday.getSeconds())
                     } else {
                         currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
                     }
@@ -826,17 +826,17 @@ module.exports = {
             var thisschedulebox = resetschedulebox();
 
             if (prefofthissuper != null && prefofthissuper.length > 0) {
-               // console.log("hello pref    ", prefofthissuper[0])
+                // console.log("hello pref    ", prefofthissuper[0])
                 var prefary = (prefofthissuper[0].Prefno).split("/");
                 prefary.pop()
                 //console.log(prefary);
                 for (var b = 0; b < thisschedulebox.length; b++) {
-                    if(prefary.length <b){
+                    if (prefary.length < b) {
                         thisschedulebox[b].prefno = "0"
-                    }else{
+                    } else {
                         thisschedulebox[b].prefno = prefary[b];
                     }
-                    
+
                 }
                 // for (var b = 0; b < prefary.length; b++) {
                 //     thisschedulebox[b].prefno = prefary[b];
@@ -1006,10 +1006,10 @@ module.exports = {
                                 var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
                                 addedlist.push(counttimeboxlist[b].sid)
                                 db.query(deletemanualhandleline, (err, res) => {
-                                    try { 
+                                    try {
                                         //console.log("deleteed manual handlecase") 
                                     } catch (err) {
-                                       // console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
+                                        // console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
                                     }
                                 })
                                 break;
@@ -1154,7 +1154,7 @@ module.exports = {
                             //console.log("this fail", counttimeboxlist[b].sid)
                             var manualhandleline = "insert ignore into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
                             db.query(manualhandleline, (err, res) => {
-                                try { 
+                                try {
                                     //console.log("inserted manual handlecase") 
                                 } catch (err) {
                                     //console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
@@ -1164,7 +1164,7 @@ module.exports = {
                         } else {
                             thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
 
-                        //console.log(">>see see  2", thisschedulebox[c].schedule)
+                            //console.log(">>see see  2", thisschedulebox[c].schedule)
                             added = true;
                             //console.log("this pass 2", counttimeboxlist[b].sid)
                         }
@@ -1175,7 +1175,7 @@ module.exports = {
                             thisschedulebox = sortingschedulebox();
                             // console.log(counttimeboxlist[b].tid, "  thisschdeulebox after sorting again", thisschedulebox)
                             db.query(deletemanualhandleline, (err, res) => {
-                                try { 
+                                try {
                                     // console.log("deleteed manual handlecase") 
                                 } catch (err) {
                                     // console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
@@ -1228,7 +1228,7 @@ module.exports = {
                             })
 
                         }
-                         
+
                         // console.log(checkcampusandroom , "   check campus")
                         var added = false;
                         for (var i = 0; i < checkcampusandroom.length; i++) {
@@ -1283,46 +1283,46 @@ module.exports = {
                                 added = true;
                                 break;
                             } else {
-                                 console.log("this set have problem" , thisschedulebox[c].schedule[e])
+                                console.log("this set have problem", thisschedulebox[c].schedule[e])
                             }
 
                         }
-                        if(!added){
-                            var manualhandleline = "insert ignore into manualhandlecase values(\"" +  thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].tid + "\",\"" +  thisschedulebox[c].schedule[e].oid + "\")"
+                        if (!added) {
+                            var manualhandleline = "insert ignore into manualhandlecase values(\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\")"
                             db.query(manualhandleline, (err, res) => {
-                                try { 
+                                try {
                                     // console.log("inserted manual handlecase")
-                                 } catch (err) {
+                                } catch (err) {
                                     // console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
                                 }
                             })
-                        }else{
+                        } else {
 
-                        var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
-                        // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        //console.log(delavailabletimequery)
-                        db.query(delavailabletimequery, (err, result) => {
-                            try {
-                                //   console.log("delavailabletimequery complete")
-                            } catch (err) {
-                                if (err) {
-                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                            var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
+                            // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                            //console.log(delavailabletimequery)
+                            db.query(delavailabletimequery, (err, result) => {
+                                try {
+                                    //   console.log("delavailabletimequery complete")
+                                } catch (err) {
+                                    if (err) {
+                                        errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                    }
                                 }
-                            }
 
-                        })
-                        delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-                        //console.log(delavailabletimequery)
-                        db.query(delavailabletimequery, (err, result) => {
-                            try {
-                                // console.log("delavailabletimequery complete")
-                            } catch (err) {
-                                if (err) {
-                                    errmsg = "error happened in ScheduleController.delavailabletimequery"
+                            })
+                            delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
+                            //console.log(delavailabletimequery)
+                            db.query(delavailabletimequery, (err, result) => {
+                                try {
+                                    // console.log("delavailabletimequery complete")
+                                } catch (err) {
+                                    if (err) {
+                                        errmsg = "error happened in ScheduleController.delavailabletimequery"
+                                    }
                                 }
-                            }
 
-                        })
+                            })
 
                         }
 
@@ -1475,12 +1475,12 @@ module.exports = {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
-                if(json.length == 0){
+                if (json.length == 0) {
                     resolve(null);
-                }else{
-                    resolve(ans) 
+                } else {
+                    resolve(ans)
                 }
-               
+
             })
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.supervisorschedulelist.getmanualhandlecase"
@@ -1493,7 +1493,7 @@ module.exports = {
                 var string = JSON.stringify(result);
                 var json = JSON.parse(string);
                 var ans = json;
-                
+
                 return res.view("user/admin/supervisorschedulelist", { allsuplist: ans, manualhandlecase: manualhandlecase })
             } catch (err) {
                 return res.status(401).json("error happened in SchdeuleController.supervisorschedulelist.query")
@@ -1674,27 +1674,27 @@ module.exports = {
                 errmsg = "error happened in ScheduleController.HandleManualCase.getPairing"
             })
 
-            if(req.query.type == "null"){
+            if (req.query.type == "null") {
                 var type = await new Promise((resolve) => {
                     pool.query("select distinct(type) as type from allschedulebox", (err, res) => {
                         if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.HandleManualCase.getPairing" }))) }
                         var string = JSON.stringify(res);
                         var json = JSON.parse(string);
                         if (json.length > 0) {
-                            var ans = json[0];
+                            var ans = json[0].type;
                             resolve(ans);
                         } else {
                             resolve(null);
                         }
-    
+
                     })
                 }).catch((err) => {
                     errmsg = "error happened in ScheduleController.HandleManualCase.getPairing"
                 })
-                req.query.type = type; 
+                req.query.type = type;
                 console.log(req.query.type);
             }
-           
+
             var CurrentBox = JSON.parse(JSON.stringify({
                 boxID: null,
                 boxdate: null,
@@ -1836,7 +1836,7 @@ module.exports = {
             var getRoomquery = "select distinct(rid) as Room from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid != \"\" "
                 + " and (rid not in (select rid from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (endtime >= time(\"" + newdate.toLocaleTimeString("en-GB") + "\") and time(\"" + newdate.toLocaleTimeString("en-GB") + "\") >= starttime)) "
                 + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) <= timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) >= timestamp(\"" + timestampstring + "\")))"
-                + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \""+timestampstring+"\"));"
+                + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \"" + timestampstring + "\"));"
                 ;
             console.log(getRoomquery)
             roomlist = await new Promise((resolve) => {
@@ -1862,10 +1862,10 @@ module.exports = {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
-        if(req.body.Campus == "null"  || req.body.RID == "null" 
-        || req.body.SID == "null" || req.body.TID == "null" || req.body.OID == "null"
-        || req.body.date == "null" || req.body.time == "null"
-        ||req.body.type == "null"){return res.status(401).json("Invalid input involoved")}
+        if (req.body.Campus == "null" || req.body.RID == "null"
+            || req.body.SID == "null" || req.body.TID == "null" || req.body.OID == "null"
+            || req.body.date == "null" || req.body.time == "null"
+        ) { return res.status(401).json("Invalid input involoved") }
 
         var boxdate = req.body.date + " " + req.body.time;
         // Schedulebox format
@@ -1883,6 +1883,28 @@ module.exports = {
 
 
         console.log(req.body);
+        console.log("check here ", req.body.TYPE);
+        if (req.body.TYPE != "midterm" || req.body.TYPE != "final") {
+            var type = await new Promise((resolve) => {
+                pool.query("select distinct(type) as type from allschedulebox", (err, res) => {
+                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    console.log("check here 2 ", json);
+                    if (json.length > 0) {
+                        resolve(json[0].TYPE);
+                    } else {
+                        resolve(null);
+                    }
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.EditScheduleBox.gettype"
+            })
+            req.body.TYPE = type;
+        }
+
+        
+        console.log("check here 3", req.body.TYPE);
         if (req.body.boxID == "") {
             //create a new schedulebox by insert 
             let boxid = 'boxID';
