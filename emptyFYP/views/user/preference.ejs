@@ -143,8 +143,8 @@
       
         var daypref = document.querySelector("input[type='radio'][name=daypref]:checked");
         var movepref = document.querySelector("input[type='radio'][name=movementpref]:checked");
-        if(daypref.value == undefined){return alert("please input your preference on day arragement.")}
-        if(movepref.value == undefined){return alert("please input your preference on movement.")}
+        if(daypref == undefined){return alert("please input your preference on day arragement.")}
+        if(movepref == undefined){return alert("please input your preference on movement.")}
         alert("hello "+daypref.value+"  "+movepref.value)
         
         
