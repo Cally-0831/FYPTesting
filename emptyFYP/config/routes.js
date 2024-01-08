@@ -164,7 +164,7 @@ module.exports.routes = {
   'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
 
-  "POST /scheduledesign/genavailable": "ScheduleController.genavailable",
+  "POST /scheduledesign/genAvailable": "ScheduleController.genAvailable",
 
   "GET /preference": "RequestController.getpreference",
   "POST /preference": "RequestController.submitpreference",
