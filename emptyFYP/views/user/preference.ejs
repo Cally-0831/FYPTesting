@@ -145,25 +145,24 @@
         var movepref = document.querySelector("input[type='radio'][name=movementpref]:checked");
         if(daypref == undefined){return alert("please input your preference on day arragement.")}
         if(movepref == undefined){return alert("please input your preference on movement.")}
-        alert("hello "+daypref.value+"  "+movepref.value)
         
         
       
       
         requestBody = JSON.stringify({command:command,movepref:movepref.value,daypref:daypref.value})
-        console.log(requestBody)
         
         
         var response = await fetch("/preference", {
             method: "POST",
             body : requestBody
         });
+        var msg = await response.json();
 
         if(response.status == 200){
-            alert("Successfully submitted");
-            location.reload()
+            alert(msg);
+            location.reload();
         }else {
-            alert("error here")
+            alert(msg);
         }
 
         

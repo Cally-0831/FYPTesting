@@ -515,7 +515,7 @@ module.exports = {
 
         console.log(queryline)
         db.query(queryline, (err, results) => {
-            if (err) {console.log("error exist when excueting RequestController.submitpreference"); console.log(err); return res.status(401).json("Unsuccessful Submittion, please contact Admin") } else { return res.status(200).json("Sumittion Success") }
+            if (err) {console.log("error exist when excueting RequestController.submitpreference"); console.log(err); return res.status(401).json("Unsuccessful Submittion, please contact Admin") } else { return res.status(200).json("Submission Success") }
         })
     },
 
