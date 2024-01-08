@@ -35,86 +35,75 @@
                 </div>
                 <div class="message-body" style="font-size : calc(15px + 0.390625vw);">
                     Please be aware that this form is only for referencing when creating schdeule draft, not all inputted preferences can be fullfilled.
-                    <br>
-                    You can input your prefered presentation number for the presentation date
-                    <br>
-                    <u>Your totoal presentation number: <%=studentnum%></u>
+                    
                 </div>
               </article>
             </div>
         
-       
+            
    
-        <%var newpresentperiodenddate =new Date(presentperiodenddate)%>
-        <%var newpresentperiodstartdate =new Date(presentperiodstartdate)%>
-        
-        <%var printend = false%>
-        <%var startdate = newpresentperiodstartdate%>
-        <%var command = "Submit"%>
-        <%if(oldpref!=undefined){%>
-
-        <%var oldprefinput = oldpref.Prefno.split("/")%>
-        
-            <%var index = 0;%>
-            <%command = "Update"%>
-        <%}%>
-        <div class = "columns is-centered is-mobile" style="padding-top: 30px;">
-                <table class="table is-hoverable" style="background-color: transparent;">
-                    <%while(!printend){%>
-                    <%var day = startdate.getDay()%>
-                
-                    <%switch (day){
-                        case 0:
-                        day = "Sun"
-                        break;
-                        case 1:
-                        day = "Mon"
-                        break;
-                        case 2:
-                        day = "Tue"
-                        break;
-                        case 3:
-                        day = "Wed"
-                        break;
-                        case 4:
-                        day = "Thu"
-                        break;
-                        case 5:
-                        day = "Fri"
-                        break;
-                        case 6:
-                        day = "Sat"
-                        break;
-                        
-                    }%>
-                    <%if(day != "Sun"){%>
-                        <tr>
-                            <td style="font-size : calc(20px+0.390625vw);padding-top: 10px; text-align: center; vertical-align: middle;"><%=startdate.toLocaleDateString("en-GB")%> (<%=day%>) :</td>
-                            <td style="font-size : calc(20px+0.390625vw);padding-top: 10px; text-align: center; vertical-align: middle;"> <%if(oldpref!=undefined){%><%=oldprefinput[index]%><%index++;}%> <%if(deadlinedate > new Date()){%> ->
-                                <input id="pref_<%=startdate.toLocaleDateString('en-GB')%>" type="number" style="text-align: center; width: 80px" min="0" max ="10" value="0">                            
-                                <%}%></td>
-                        </tr>
+       <div class = "columns is-centered is-mobile" style="padding-top: 30px;">
+            <div class = "column is-half-desktop is-full-width-mobile">
+                 <table class="table is-responsive is-fullwidth" style="background-color: transparent;">
+                    <%if(oldpref != null){
+                        var command = "Update";%>
+                    <tr>
+                        <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Current Preference :</th>
+                           <td>
+                            <%if(oldpref.daypref == true){%>
+                                    Minimize Days<br>
+                                <%}else{%>
+                                    Don't matter<br>
+                                <%}%>
+                                <%if(oldpref.movementpref == true){%>
+                                    Minimize Movement<br>
+                                <%}else{%>
+                                    Don't matter<br>
+                                <%}%>
+                            </td>
+                       </tr>
+                       <%}else{var command = "Submit";}%>
+                <tr>
+                    <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Day Arragement:</th>
+                    <td>
+                        <input type="radio" id="leastdays" name="daypref" value="true">
+                        <label for="leastdays">Minimize</label>
+                        <br>
+                        <input type="radio" id="moredays" name="daypref" value="false">
+                        <label for="moredays">Don't matter</label>
+                    </td>
                     
+                </tr>
+               
+                <tr>
+                    <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Movement:</th>
+                    <td>
+                        <input type="radio" id="leastmove" name="movementpref" value="true">
+                        <label for="leastmove">Minimize</label>
+                        <br>
+                        <input type="radio" id="moremove" name="movementpref" value="false">
+                        <label for="moremove">Don't matter</label>
+                    </td>
                     
-                    <%}%>
-                    
-                    
-                    <%startdate.setDate(startdate.getDate()+1);%>
-
-                    <%if(startdate.toLocaleDateString() > newpresentperiodenddate.toLocaleDateString()){%>
-                        <%printend = true;}%>
-                <%}%>
-                </table>
+                </tr>
+            </table>
+            </div>
+           
+          
+            
+            <br><br>
+            
            
         </div>
         <%var deadlinedate = new Date(deadlinedate)%>
+        
         
         <%if(deadlinedate > new Date()){%>
             <div class = "buttons is-right">
             
             <%presentationstartdate = new Date(presentperiodstartdate).toLocaleDateString("en-GB")%>
             <%presentationenddate = new Date(presentperiodenddate).toLocaleDateString("en-GB")%>
-            <button class="button buttonlogout is-responsive"  onclick="submitform('<%=command%>','<%=presentationstartdate%>','<%=presentationenddate%>','<%=studentnum%>')"><%=command%></button>
+            <button class="button buttonlogout is-responsive"  onclick="submitform('<%=command%>','<%=presentationstartdate%>','<%=presentationenddate%>')"><%=command%></button>
         </div>
             <%}else{%>
             <div style="padding: 10px;">
@@ -150,42 +139,20 @@
         location.assign("/home")
     }
 
-    async function submitform(command,startdatestr,enddatestr,maxstdnum){
-        var startdate = startdatestr.split("/")
+    async function submitform(command,startdatestr,enddatestr){
+      
+        var daypref = document.querySelector("input[type='radio'][name=daypref]:checked");
+        var movepref = document.querySelector("input[type='radio'][name=movementpref]:checked");
+        if(daypref.value == undefined){return alert("please input your preference on day arragement.")}
+        if(movepref.value == undefined){return alert("please input your preference on movement.")}
+        alert("hello "+daypref.value+"  "+movepref.value)
         
-        startdate = new Date(parseInt(startdate[2]),parseInt(startdate[1])-1,parseInt(startdate[0]));
-        var enddate = enddatestr.split("/");
-        enddate = new Date(parseInt(enddate[2]),parseInt(enddate[1])-1,parseInt(enddate[0]));
         
-        var checkdate = false;
-        var checkstudentnum=0;
-        var prefnumstr = "";
-        while(!checkdate){
-             if(startdate.getDay() != 0){
-                var ans =document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value;
-                
-         
-                if(ans == ""){ 
-                     ans = 0;
-                }else{
-                     ans = parseInt(document.getElementById("pref_"+startdate.toLocaleDateString("en-GB")).value);
-                }
-                console.log("@@"+ans+"@@");
-                
-                checkstudentnum+=ans;
-            if(checkstudentnum > maxstdnum){return alert("Please Review Your inputs. \n Your maximum presentation number is "+maxstdnum)}
-            
-            prefnumstr+= ans+"/";
-            }
-           
-            
-            startdate = new Date(startdate.getTime()+60*60*24*1000);
-            if(startdate > enddate){checkdate = true;}
-            
-            console.log(prefnumstr)
-    }
-        requestBody = JSON.stringify({command:command,prefnumstr:prefnumstr})
+      
+      
+        requestBody = JSON.stringify({command:command,movepref:movepref.value,daypref:daypref.value})
         console.log(requestBody)
+        
         
         var response = await fetch("/preference", {
             method: "POST",

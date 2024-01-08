@@ -13,9 +13,9 @@ module.exports = {
 
                 var deadline;
                 var string = JSON.stringify(results);
-                console.log('>> string: ', string );
+                console.log('>> string: ', string);
                 var json = JSON.parse(string);
-                console.log('>> json: ', json);  
+                console.log('>> json: ', json);
                 if (json[0] != null) {
                     var deadline = new Date(json[0].deadlinedate);
                     var deadlinetime = json[0].deadlinetime.split(":");
@@ -260,9 +260,9 @@ module.exports = {
         db.query(thisistheline, (err, results) => {
             try {
                 console.log("Updated");
-                return res.status(200).json("Successfully updated "+req.body.ReqID +" to "+ req.body.status);
+                return res.status(200).json("Successfully updated " + req.body.ReqID + " to " + req.body.status);
             } catch (err) {
-                return res.status(401).json("Unable to update "+req.body.ReqID);
+                return res.status(401).json("Unable to update " + req.body.ReqID);
             }
         });
 
@@ -296,10 +296,10 @@ module.exports = {
 
         let thisistheline = "";
 
-        if(req.body.starttime < "08:30"){
+        if (req.body.starttime < "08:30") {
             req.body.starttime = "08:30";
         }
-        if(req.body.endtime > "18:30"){
+        if (req.body.endtime > "18:30") {
             req.body.endtime = "18:30";
         }
 
@@ -310,7 +310,7 @@ module.exports = {
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday
                     + "\",\"08:30\", \"18:30\");";
             } else {
-                
+
                 thisistheline = "insert into allrequestfromsupervisor values(\"" + reqid + "\",\"" + req.session.userid + "\",\"" + req.body.notokday + "\",\"" +
                     req.body.starttime + "\", \"" + req.body.endtime + "\");";
             }
@@ -387,8 +387,6 @@ module.exports = {
     },
 
     getpreference: async function (req, res) {
-        var db = await sails.helpers.database();
-        var pool = await sails.helpers.database2();
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
@@ -498,112 +496,26 @@ module.exports = {
             oldpref: oldpref
         });
 
-        /** 
-        
-                thisistheline = "select * from allpreffromsup where tid = \"" + req.session.userid + "\"";
-                db.query(thisistheline, (err, results) => {
-                    try {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        var preference = json;
-                        thisistheline = "select * from allsupersetting where typeofsetting = \"6\"  and announcetime is not null";
-                        db.query(thisistheline, (err, results) => {
-                            try {
-                                var string = JSON.stringify(results);
-                                var json = JSON.parse(string);
-                                var deadlinedate;
-                                var deadlinetime;
-        
-                                if (json.length > 0) {
-                                    deadlinedate = new Date(json[0].deadlinedate);
-                                    deadlinetime = json[0].deadlinetime.split(":");
-                                    deadlinedate.setHours(deadlinetime[0]);
-                                    deadlinedate.setMinutes(deadlinetime[1]);
-                                    deadlinedate.setMinutes(deadlinetime[2]);
-                                }
-                                thisistheline = "select * from allsupersetting where typeofsetting = \"3\"  and announcetime is not null";
-                                db.query(thisistheline, (err, results) => {
-                                    try {
-                                        var string = JSON.stringify(results);
-                                        var json = JSON.parse(string);
-                                        var presentperiodstartdate;
-                                        var presentperiodenddate;
-                                        var presentperiodstarttime;
-                                        var presentperiodendtime;
-                                        if (json.length > 0) {
-                                            presentperiodstartdate = new Date(json[0].startdate);
-                                            presentperiodenddate = new Date(json[0].enddate);
-                                            presentperiodstarttime = json[0].starttime.split(":");
-                                            presentperiodendtime = json[0].endtime.split(":");
-                                            presentperiodstartdate.setHours(presentperiodstarttime[0])
-                                            presentperiodstartdate.setMinutes(presentperiodstarttime[1])
-                                            presentperiodstartdate.setSeconds(presentperiodstarttime[2])
-                                            presentperiodenddate.setHours(presentperiodendtime[0])
-                                            presentperiodenddate.setMinutes(presentperiodendtime[1])
-                                            presentperiodenddate.setSeconds(presentperiodendtime[2])
-                                        }
-        
-                                        thisistheline = "select count(*) as needtolisten from supervisorpairstudent left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid where tid = \"" + req.session.userid + "\" or oid = \"" + req.session.userid + "\""
-                                        db.query(thisistheline, (err, results) => {
-                                            try {
-                                                var string = JSON.stringify(results);
-                                                var json = JSON.parse(string);
-                                                var studentnum = json[0].needtolisten;
-                                                thisistheline = "select * from allpreffromsup where tid = \"" + req.session.userid + "\""
-                                                db.query(thisistheline, (err, results) => {
-                                                    try {
-                                                        var string = JSON.stringify(results);
-                                                        var json = JSON.parse(string);
-                                                        var oldpref = json[0]
-        
-                                                        return res.view('user/preference', {
-                                                            preference: preference, deadlinedate: deadlinedate,
-                                                            presentperiodstartdate: presentperiodstartdate,
-                                                            presentperiodenddate: presentperiodenddate,
-                                                            studentnum: studentnum,
-                                                            oldpref: oldpref
-                                                        });
-                                                    } catch (err) {
-                                                        return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
-                                                    }
-        
-        
-                                                })
-        
-                                            } catch (err) {
-                                                return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
-                                            }
-                                        })
-                                    } catch (err) {
-                                        return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
-                                    }
-                                });
-                            } catch (err) {
-                                return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
-                            }
-                        });
-                    } catch (err) {
-                        return res.stauts(401).json("Error happened when excuting RequestController.getpreference");
-                    }
-                });
-                */
+
     },
 
     submitpreference: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
+        console.log(req.body)
+
 
         var queryline = "";
         if (req.body.command == "Submit") {
-            queryline = "insert into allpreffromsup values(\"" + req.session.userid + "\",\"" + req.body.prefnumstr + "\",now());";
+            queryline = "insert into allpreffromsup values(\"" + req.session.userid + "\"," + req.body.daypref + "," + req.body.movepref + ",now());";
         } else if (req.body.command == "Update") {
-            queryline = "Update allpreffromsup set prefno = \"" + req.body.prefnumstr + "\", LastUpdate = now() where tid = \"" + req.session.userid + "\"";
+            queryline = "Update allpreffromsup set daypref = " + req.body.daypref + ", movementpref = " + req.body.movepref + ", LastUpdate = now() where tid = \"" + req.session.userid + "\"";
         }
 
         console.log(queryline)
         db.query(queryline, (err, results) => {
-            if (err) { console.log(err); return res.status(401).json("error exist when excueting RequestController.submitpreference") } else { return res.status(200).json("ok") }
+            if (err) {console.log("error exist when excueting RequestController.submitpreference"); console.log(err); return res.status(401).json("Unsuccessful Submittion, please contact Admin") } else { return res.status(200).json("Sumittion Success") }
         })
     },
 

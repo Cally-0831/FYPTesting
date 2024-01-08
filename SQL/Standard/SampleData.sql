@@ -120,13 +120,13 @@ insert into allrequestfromstudent values("sid21111dSlOu","sid21111","2024-01-19"
 insert into allrequestfromstudent values("sid72222dSlOu","sid72222","2024-01-20","14:30", "16:30","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
 
 
-insert into allpreffromsup values("tid00001","1/2/3/0/0/",now());
-insert into allpreffromsup values("tid00002","1/0/0/1/0/",now());
-insert into allpreffromsup values("tid00003","1/0/0/1/0/",now());
-insert into allpreffromsup values("tid00004","1/0/0/0/1/",now());
-insert into allpreffromsup values("tid00005","0/0/0/1/0/",now());
-insert into allpreffromsup values("tid00006","0/1/0/0/2/",now());
-insert into allpreffromsup values("tid00010","1/0/1/0/0/",now());
+insert into allpreffromsup values("tid00001",true,true,now());
+insert into allpreffromsup values("tid00002",true,true,now());
+insert into allpreffromsup values("tid00003",true,true,now());
+insert into allpreffromsup values("tid00004",true,true,now());
+insert into allpreffromsup values("tid00005",true,true,now());
+insert into allpreffromsup values("tid00006",true,true,now());
+insert into allpreffromsup values("tid00010",false,false,now());
 
 
 
