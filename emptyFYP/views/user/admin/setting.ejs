@@ -246,7 +246,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td>&ensp;&ensp;To&ensp;&ensp;&ensp;&ensp;&ensp;<%=announcedenddate.toLocaleDateString("en-GB")%><%=announcedendtimetime%></td>
+                                    <td>&ensp;&ensp;To&ensp;&ensp;&ensp;&ensp;&nbsp;<%=announcedenddate.toLocaleDateString("en-GB")%> <%=announcedendtimetime%></td>
                                 </tr>
                                 <tr>
                                     <td>Announced At :</td>
@@ -284,9 +284,7 @@
                                                         <input type="Date" id="startpresent"
                                                             style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
-                                                        <input type="time" id="startpresenttime" name="startpresenttime"
-                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
-                                                            required>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="column is-half">
@@ -297,9 +295,7 @@
                                                         <input type="Date" id="endpresent"
                                                             style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
                                                             required>
-                                                        <input type="time" id="endpresenttime" name="endpresenttime"
-                                                            style="width: 150px; font-size : calc(15px + 0.390625vw);text-align: center;"
-                                                            required>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -786,23 +782,22 @@
     async function submitpresentationperiod(command) {
         var startdate = document.getElementById("startpresent").value;
         var enddate = document.getElementById("endpresent").value;
-        var starttime = document.getElementById("startpresenttime").value;
-        var endtime = document.getElementById("endpresenttime").value;
-        if (startdate == null || startdate == "" || enddate == null || enddate == ""
-        ||starttime == null || starttime == "" || endtime == null || endtime == "") {
-            return alert("Please input ALL dates and times for presentation period");
+       
+     
+        if (startdate == null || startdate == "" || enddate == null || enddate == "") {
+            return alert("Please input ALL dates for presentation period");
         }
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
-        var presentstartdate = new Date(startdate + " " + starttime);
-        var presentenddate = new Date(enddate + " " + endtime);
+        var presentstartdate = new Date(startdate + " 09:30:00");
+        var presentenddate = new Date(enddate + " 18:30:00");
 
         if (presentstartdate >= presentenddate) { return alert("Please Review Your Setting \nYou cannot set an endday earlier than the startday.") }
         if (presentstartdate <= today) { return alert("Please Review Your Setting \nYou cannot set a startday earlier than today.") }
         if (presentenddate <= today) { return alert("Please Review Your Setting \nYou cannot set an endday earlier than today.") }
         var r = confirm("Please Confirm Your Setting for Presentation Period\n\n"
-            + "StartDate :       " + document.getElementById("startpresent").value + "  "+ document.getElementById("startpresenttime").value+"\n"
-            + "EndDate :         " + document.getElementById("endpresent").value + "  "+ document.getElementById("endpresenttime").value+"\n"
+            + "StartDate :       " + document.getElementById("startpresent").value + "  "+ "09:30:00"+"\n"
+            + "EndDate :         " + document.getElementById("endpresent").value + "  "+ "18:30:00"+"\n"
         )
         if (r) {
             try {
@@ -810,9 +805,7 @@
                     type: "3",
                     command: command,
                     startdate: document.getElementById("startpresent").value,
-                    starttime: document.getElementById("startpresenttime").value,
                     enddate: document.getElementById("endpresent").value,
-                    endtime: document.getElementById("endpresenttime").value,
                     level:"1"
                 });
                 var response = await fetch("/setting", {
@@ -822,8 +815,8 @@
                 if (response.ok) {
 
 
-                    alert("Presentation Period has been settle as \nFrom: " + document.getElementById("startpresent").value + " , " + document.getElementById("startpresenttime").value
-                     +"\nTo: "+ document.getElementById("endpresent").value+ " , " + document.getElementById("endpresenttime").value);
+                    alert("Presentation Period has been settle as \nFrom: " + document.getElementById("startpresent").value + " , " + "09:30:00"
+                     +"\nTo: "+ document.getElementById("endpresent").value+ " , " + "18:30:00");
                     location.assign("/setting");
 
                 } else if (response.status == 401) {
