@@ -314,3 +314,17 @@ CREATE TRIGGER delnoticefromdelsetting after delete ON allsupersetting FOR EACH 
 END;
 | DELIMITER ;
 
+DELIMITER |
+CREATE TRIGGER autoinserttidoidprior before insert ON threeparty FOR EACH ROW BEGIN
+	declare tidp int;
+    declare oidp int;
+    set tidp =0;
+    set oidp =0;
+    select priority into tidp from supervisor where tid = new.tid;
+    select priority into oidp from supervisor where tid = new.oid;
+    
+    set new.tidprior = tidp;
+    set new.oidprior = oidp;
+    
+END;
+| DELIMITER ;

@@ -20,8 +20,6 @@ create table allstudenttakecourse(CID		varchar(20) not null,PID		varchar(10) not
 
 create table allrequestfromsupervisor(ReqID	varchar(20) not null,TID		varchar(10) not null,RequestDate DATE not null,RequestStartTime time not null,RequestEndTime time not null,primary key (ReqID));
 
-
-
 create table allrequestfromstudent( ReqID	varchar(20) not null, SID		varchar(10) not null, RequestDate DATE not null, RequestStartTime time not null, RequestEndTime time not null, reason	varchar(1000) not null,picdata LONGBLOB,status varchar(20) not null,reply varchar(100),submission timestamp,primary key (ReqID) );
 
 create table supervisorpairstudent( TID		varchar(20) not null, SID		varchar(10) not null unique, Topic 	varchar(100) not null, primary key (TID,SID) );
@@ -44,3 +42,4 @@ create table studentavailable( SID varchar(10) not null, availabledate DATE, ava
 
 create table manualhandlecase( SID varchar(10) not null, TID varchar(10) not null, OID varchar(10) not null, primary key(sid) );
 
+create table threeparty (TID varchar(10) not null, SID varchar(10) not null, OID varchar(10) not null, TIDPrior int , OIDPrior int, availabledate DATE, availablestarttime timestamp, availableendtime timestamp, primary key(TID,SID,OID,availablestarttime));

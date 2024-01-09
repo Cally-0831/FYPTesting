@@ -278,6 +278,7 @@ module.exports = {
         })
         //console.log(">>studentlist", studentlist)
 
+        //Generate studentavailable
         for (var a = 0; a < studentlist.length; a++) {
 
             var currentgeneratedate = new Date(setting3.startday);
@@ -509,7 +510,7 @@ module.exports = {
 
             }
         }
-
+        //Generate supervisioravailable
         for (var a = 0; a < supervisorlist.length; a++) {
             //console.log(supervisorlist[a]);
             var currentgeneratedate = new Date(setting3.startday);
@@ -725,6 +726,61 @@ module.exports = {
 
             }
         }
+
+        var pairinglist = await new Promise((resolve) => {
+            pool.query("select tid, supervisorpairstudent.sid,oid from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid ;", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.genavailble.paringlist"
+        })
+        console.log(pairinglist)
+
+   for(var a = 0 ; a < pairinglist.length;a++){
+        console.log("select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
+        +"and studentavailable.sid = \""+pairinglist[a].sid+"\" and supavaTID.tid = \""+pairinglist[a].tid+"\" and supavaOID.tid = \""+pairinglist[a].oid+"\";"  )
+            var addthreepartyAva = await new Promise((resolve) => {
+                pool.query(
+                "select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
+                    +"and studentavailable.sid = \""+pairinglist[a].sid+"\" and supavaTID.tid = \""+pairinglist[a].tid+"\" and supavaOID.tid = \""+pairinglist[a].oid+"\";"                   
+                    , (err, res) => {
+                    var string = JSON.stringify(res);
+                    var json = JSON.parse(string);
+                    var ans = json;
+                    resolve(ans)
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.genavailble.paringlist"
+            })
+            console.log(">>addthreepartyAVA", addthreepartyAva);
+
+            addthreepartyAva.forEach( threepartyava =>{
+                threepartyava.availabledate = threepartyava.availabledate.split("T")[0];
+                threepartyava.availablestarttime = threepartyava.availabledate+" "+(new Date(threepartyava.availablestarttime)).toLocaleTimeString("en-GB");
+                threepartyava.availableendtime = threepartyava.availabledate+" "+(new Date(threepartyava.availableendtime)).toLocaleTimeString("en-GB");
+                console.log("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\""+threepartyava.tid+"\",\""+threepartyava.sid+"\",\""+threepartyava.oid+"\",Date(\""+threepartyava.availabledate+"\"),Timestamp(\""+threepartyava.availablestarttime+"\"),timestamp(\""+threepartyava.availableendtime+"\")) ");
+                db.query("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\""+threepartyava.tid+"\",\""+threepartyava.sid+"\",\""+threepartyava.oid+"\",Date(\""+threepartyava.availabledate+"\"),Timestamp(\""+threepartyava.availablestarttime+"\"),timestamp(\""+threepartyava.availableendtime+"\")) ", (err, result) => {
+                    try {
+                       // console.log("update complete")
+                    } catch (err) {
+                        if (err) {
+                            errstring = "";
+                            errstring += "error happened for:" + threepartyava + "\n"
+                            statuscode = 401;
+                        }
+                    }
+        
+                })
+    
+                
+             });
+
+         }
+    return res.view("user/hello");
+
 
     },
 

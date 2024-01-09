@@ -25,6 +25,7 @@ Drop table if exists supervisoravailable;
 Drop table if exists studentavailable;
 Drop table if exists allschedulebox;
 Drop table if exists manualhandlecase;
+Drop table if exists threeparty;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
@@ -49,3 +50,4 @@ Drop trigger if exists updatestudentdeadline ;
 Drop trigger if exists delrolecourse;
 Drop trigger if exists delstudent;
 Drop trigger if exists delnoticefromdelsetting;
+Drop trigger if exists autoinserttidoidprior;
