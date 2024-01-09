@@ -72,39 +72,39 @@ module.exports = {
         }
 
     },
-    
-    genAvailable: async function(req,res){
+
+    genAvailable: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
-         // get presentperiod
-         var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
-         var setting3 = await new Promise((resolve) => {
-             pool.query(getsetting3, (err, res) => {
-                 var string = JSON.stringify(res);
-                 var json = JSON.parse(string);
-                 var ans = json;
-                 if (ans.length != 0) {
-                     var startday = new Date(ans[0].startdate);
-                     var endday = new Date(ans[0].enddate);
-                     var startTime = ans[0].starttime.split(":");
-                     var endTime = ans[0].endtime.split(":");
-                     startday.setHours(startTime[0]);
-                     startday.setMinutes(startTime[1]);
-                     startday.setSeconds(startTime[2]);
-                     endday.setHours(endTime[0]);
-                     endday.setMinutes(endTime[1]);
-                     endday.setSeconds(endTime[2]);
-                     console.log(startday + "   " + endday)
-                     ans = { startday: startday, endday: endday };
-                 }
-                 resolve(ans)
-             })
-         }).catch((err) => {
-             errmsg = "error happened in ScheduleController.genavailble.getsetting3"
-         })
+        // get presentperiod
+        var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
+        var setting3 = await new Promise((resolve) => {
+            pool.query(getsetting3, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (ans.length != 0) {
+                    var startday = new Date(ans[0].startdate);
+                    var endday = new Date(ans[0].enddate);
+                    var startTime = ans[0].starttime.split(":");
+                    var endTime = ans[0].endtime.split(":");
+                    startday.setHours(startTime[0]);
+                    startday.setMinutes(startTime[1]);
+                    startday.setSeconds(startTime[2]);
+                    endday.setHours(endTime[0]);
+                    endday.setMinutes(endTime[1]);
+                    endday.setSeconds(endTime[2]);
+                    console.log(startday + "   " + endday)
+                    ans = { startday: startday, endday: endday };
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.genavailble.getsetting3"
+        })
 
-          // gen all supervisors
+        // gen all supervisors
         var getallsupervisor = "select tid,submission from supervisor order by priority asc"
         var supervisorlist = await new Promise((resolve) => {
             pool.query(getallsupervisor, (err, res) => {
@@ -289,11 +289,11 @@ module.exports = {
                 var supervisorttblist;
                 var supervisorrequest;
 
-               
+
 
                 if (req.body.typeofpresent == "midterm") {
                     // console.log()
-                    currentgeneratedateend = new Date(currentgeneratedate.getTime()+25*60*1000);
+                    currentgeneratedateend = new Date(currentgeneratedate.getTime() + 25 * 60 * 1000);
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
                     var boolcheckttb = false;
@@ -404,7 +404,7 @@ module.exports = {
 
 
                 } else if (req.body.typeofpresent == "final") {
-                    currentgeneratedateend = new Date(currentgeneratedate.getTime()+45*60*1000);
+                    currentgeneratedateend = new Date(currentgeneratedate.getTime() + 45 * 60 * 1000);
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
 
@@ -473,9 +473,9 @@ module.exports = {
 
 
 
-                    console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime()< 45*60*1000 , "endend")
+                    console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
+                    console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
+                    console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
                     if (checkdate1.getTime() - checkdate2.getTime() <= 45 * 60 * 1000) {
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
@@ -498,7 +498,7 @@ module.exports = {
                         }
 
                     } else {
-                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 45*60*1000);
+                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 45 * 60 * 1000);
                     }
 
 
@@ -519,10 +519,10 @@ module.exports = {
 
                 var supervisorttblist;
                 var supervisorrequest;
-               
+
                 if (req.body.typeofpresent == "midterm") {
                     //console.log("midterm")
-                     currentgeneratedateend = new Date(currentgeneratedate.getTime()+25*60*1000);
+                    currentgeneratedateend = new Date(currentgeneratedate.getTime() + 25 * 60 * 1000);
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
 
                     var boolcheckttb = false;
@@ -628,7 +628,7 @@ module.exports = {
 
                 } else if (req.body.typeofpresent == "final") {
                     //console.log("final")
-                    currentgeneratedateend = new Date(currentgeneratedate.getTime()+45*60*1000);
+                    currentgeneratedateend = new Date(currentgeneratedate.getTime() + 45 * 60 * 1000);
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
                     var boolcheckttb = false;
@@ -693,12 +693,12 @@ module.exports = {
 
 
 
-                    console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime()< 45*60*1000 , "endend")
+                    console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
+                    console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
+                    console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
                     if (checkdate1.getTime() - checkdate2.getTime() <= 45 * 60 * 1000) {
 
-                    
+
 
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
@@ -720,7 +720,7 @@ module.exports = {
                             // currentgeneratedate.setSeconds(setting3.startday.getSeconds())
                         }
                     } else {
-                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 45*60*1000);
+                        currentgeneratedate.setTime(currentgeneratedate.getTime() + 45 * 60 * 1000);
                     }
                 }
 
@@ -739,32 +739,34 @@ module.exports = {
         })
         console.log(pairinglist)
 
-   for(var a = 0 ; a < pairinglist.length;a++){
-        console.log("select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
-        +"and studentavailable.sid = \""+pairinglist[a].sid+"\" and supavaTID.tid = \""+pairinglist[a].tid+"\" and supavaOID.tid = \""+pairinglist[a].oid+"\";"  )
+        for (var a = 0; a < pairinglist.length; a++) {
+            console.log("select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
+                + "and studentavailable.sid = \"" + pairinglist[a].sid + "\" and supavaTID.tid = \"" + pairinglist[a].tid + "\" and supavaOID.tid = \"" + pairinglist[a].oid + "\";")
             var addthreepartyAva = await new Promise((resolve) => {
                 pool.query(
-                "select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
-                    +"and studentavailable.sid = \""+pairinglist[a].sid+"\" and supavaTID.tid = \""+pairinglist[a].tid+"\" and supavaOID.tid = \""+pairinglist[a].oid+"\";"                   
+                    "select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
+                    + "and studentavailable.sid = \"" + pairinglist[a].sid + "\" and supavaTID.tid = \"" + pairinglist[a].tid + "\" and supavaOID.tid = \"" + pairinglist[a].oid + "\";"
                     , (err, res) => {
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    var ans = json;
-                    resolve(ans)
-                })
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        var ans = json;
+                        resolve(ans)
+                    })
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.genavailble.paringlist"
             })
             console.log(">>addthreepartyAVA", addthreepartyAva);
 
-            addthreepartyAva.forEach( threepartyava =>{
-                threepartyava.availabledate = threepartyava.availabledate.split("T")[0];
-                threepartyava.availablestarttime = threepartyava.availabledate+" "+(new Date(threepartyava.availablestarttime)).toLocaleTimeString("en-GB");
-                threepartyava.availableendtime = threepartyava.availabledate+" "+(new Date(threepartyava.availableendtime)).toLocaleTimeString("en-GB");
-                console.log("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\""+threepartyava.tid+"\",\""+threepartyava.sid+"\",\""+threepartyava.oid+"\",Date(\""+threepartyava.availabledate+"\"),Timestamp(\""+threepartyava.availablestarttime+"\"),timestamp(\""+threepartyava.availableendtime+"\")) ");
-                db.query("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\""+threepartyava.tid+"\",\""+threepartyava.sid+"\",\""+threepartyava.oid+"\",Date(\""+threepartyava.availabledate+"\"),Timestamp(\""+threepartyava.availablestarttime+"\"),timestamp(\""+threepartyava.availableendtime+"\")) ", (err, result) => {
+            addthreepartyAva.forEach(threepartyava => {
+                var availabledate = ((new Date(threepartyava.availabledate)).toLocaleDateString("en-GB")).split("/");
+                threepartyava.availabledate = availabledate[2] + "-" + availabledate[1] + "-" + availabledate[0];
+
+                threepartyava.availablestarttime = threepartyava.availabledate + " " + (new Date(threepartyava.availablestarttime)).toLocaleTimeString("en-GB");
+                threepartyava.availableendtime = threepartyava.availabledate + " " + (new Date(threepartyava.availableendtime)).toLocaleTimeString("en-GB");
+                console.log("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\"" + threepartyava.tid + "\",\"" + threepartyava.sid + "\",\"" + threepartyava.oid + "\",Date(\"" + threepartyava.availabledate + "\"),Timestamp(\"" + threepartyava.availablestarttime + "\"),timestamp(\"" + threepartyava.availableendtime + "\")) ");
+                db.query("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\"" + threepartyava.tid + "\",\"" + threepartyava.sid + "\",\"" + threepartyava.oid + "\",Date(\"" + threepartyava.availabledate + "\"),Timestamp(\"" + threepartyava.availablestarttime + "\"),timestamp(\"" + threepartyava.availableendtime + "\")) ", (err, result) => {
                     try {
-                       // console.log("update complete")
+                        // console.log("update complete")
                     } catch (err) {
                         if (err) {
                             errstring = "";
@@ -772,19 +774,19 @@ module.exports = {
                             statuscode = 401;
                         }
                     }
-        
-                })
-    
-                
-             });
 
-         }
-    return res.view("user/hello");
+                })
+
+
+            });
+
+        }
+        return res.view("user/hello");
 
 
     },
 
-   
+
     // genavailable: async function (req, res) {
     //     var db = await sails.helpers.database();
     //     var pool = await sails.helpers.database2();
