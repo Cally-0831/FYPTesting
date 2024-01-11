@@ -1,26 +1,25 @@
 <div class="Pagetitle"> Create new Classroom</div>
 <div class="row">
   <div class="buttons">
-      <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+    <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
   </div>
 </div>
 <br><br>
-<div class="columns is-centered is-onethird">
-  <div class="column"></div>
-  <div class="column column-big">
+<div class="columns is-mobile is-centered">
+  <div class="column is-fullwidth-mobile is-half-desktop template">
     <form action="/createnewclassroom" method="post" onsubmit="createnewclassroom(this);return false;">
-      <br><br>
-      <label for="Campus" style="font-size: 20px;">Campus&emsp;:&emsp;&nbsp;</label>
+      <div  style = "align-self: center;">
+      <label for="Campus" style="font-size:  calc(10px + 0.390625vw);">Campus&emsp;:&emsp;&nbsp;</label>
 
-      <select name="Campus" id="Campus" style=" font-size: 20px; width : 232px;" required>
-        <option value="" style="font-size: 20px;">
+      <select name="Campus" id="Campus" style=" font-size:  calc(10px + 0.390625vw); max-width: 50%;" required>
+        <option value="" style="font-size:  calc(10px + 0.390625vw);">
           ---Please Select---
         </option>
         <% allCampuslist.forEach( function(campus) { %>
           <%console.log("@@"+campus.campus+"@@")%>
             <%console.log(campus.campus !="" )%>
               <%if (campus.campus !="" ){%>
-                <option value="<%= campus.campus %>" style="font-size: 20px;">
+                <option value="<%= campus.campus %>" style="font-size:  calc(10px + 0.390625vw);">
 
                   <%= campus.campus %>
 
@@ -31,30 +30,32 @@
                   <% }); %>
       </select>
       <br><br>
-      <label for="RID" style="font-size: 20px; ">Room ID&emsp;:&emsp;&emsp;</label>
-      <input type="text" placeholder="Enter RID" id="RID" name="RID" value="" style="font-size: 20px;" required>
+      <label for="RID" style="font-size:   calc(10px + 0.390625vw); ">Room ID&emsp;:&emsp;&emsp;</label>
+      <input type="text" placeholder="Enter RID" id="RID" name="RID" value="" style="font-size:   calc(10px + 0.390625vw);" required>
       <br><br><br>
       <div class="buttons is-right">
         <button type="submit is-success" class="button is-responsive buttonlogout">Submit</button>
       </div>
       <br>
+      </div>
+      
     </form>
 
   </div>
-  <div class="column"></div>
+
 </div>
 
 <script>
- function backback() {
-        location.assign("/classroomlist");
-    }
+  function backback() {
+    location.assign("/classroomlist");
+  }
   async function createnewclassroom(formElem) {
     try {
       console.log(document.getElementById("Campus").value)
       if (document.getElementById("Campus").value == "") {
         return alert("Please input Campus location before submission")
       }
-      
+
       var response = await fetch(formElem.action, {
         method: formElem.method,
         body: new FormData(formElem),
@@ -69,7 +70,7 @@
       } else {
         alert(response.statusTest);
       }
-     
+
 
     } catch (error) {
       console.log(error);

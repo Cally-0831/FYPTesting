@@ -45,7 +45,8 @@ module.exports = {
                 //console.log('>> string: ', string );
                 var json = JSON.parse(string);
                 //console.log('>> json: ', json);
-                user.allusersname = json[0].allusersname;
+                if(json.length >0){
+                    user.allusersname = json[0].allusersname;
                 user.pid = json[0].pid;
                 user.password = json[0].password;
                 user.status = json[0].status;
@@ -70,6 +71,10 @@ module.exports = {
 
                     return res.json(user);
                 });
+                }else{
+                    return res.status(401).json("User not found");
+                }
+                
             } catch (err) {
                 console.log(err)
                 if (user.pid != searchingname) return res.status(401).json("User not found");

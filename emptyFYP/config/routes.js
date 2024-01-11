@@ -57,6 +57,10 @@ module.exports.routes = {
   'POST /listuser/genobs': "StudentListController.generateobs",
   'DELETE /listuser/:id': "StudentListController.deletestudent",
 
+  //admin dbmanagement
+  "GET /dbmanagement" :  "DatabaseController.viewdbmanagement",
+  "POST /dbmanagement" :  "DatabaseController.removeData",
+
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
   //'GET /home': { view: 'user/home' },

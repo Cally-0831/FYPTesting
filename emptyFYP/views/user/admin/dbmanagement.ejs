@@ -1,0 +1,278 @@
+<div class="Pagetitle">
+    Database Management
+</div>
+<div class="columns is-mobile">
+    <div class="column is-half">
+        <button class="button buttonlogout  is-responsive is-left" onclick="history.back()">
+            Back
+        </button>
+    </div>
+</div>
+<div class="columns is-mobile is-multiline is-centered">
+    <!--remove all user-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear All User</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL Student and Supervisor users from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>Student users</li>
+                            <li>Supervisor users</li>
+                            <li>Student's timetable records</li>
+                            <li>Student's request records</li>
+                            <li>Supervisor's timetable records</li>
+                            <li>Supervisor's request records</li>
+                            <li>Supervisor's preference records</li>
+                            <li>All Schdeule records</li>
+                        </ol>
+                    </div>
+
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('User')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--remove all student-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear All Student</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL Student users from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>Student users</li>
+                            <li>Student's timetable records</li>
+                            <li>Student's request records</li>
+                            <li>Pairing records between Students and Supervisor/Oberservers</li>
+                            <li>All Schdeule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Student')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--remove all supervisor-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear All Supervisor</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL Supervisor users from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>Supervisor users</li>
+                            <li>Supervisor's timetable records</li>
+                            <li>Supervisor's request records</li>
+                            <li>Supervisor's notices</li>
+                            <li>Pairing records between Students and Supervisor/Oberservers</li>
+                            <li>All Schdeule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Supervisor')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--remove all timetable-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear Timetable record</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL Timetable records from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>Student timetable records</li>
+                            <li>Supervisor timetable records</li>
+                            <li>All schdeule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Timetable')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--remove all Request Records-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear Unavailable Timeslots record</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL unavailable timeslots records from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>Student unavailable timeslot requests</li>
+                            <li>Supervisor unavailable timeslot records</li>
+                            <li>All schdeule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Unavailable Timeslots')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--Remove all Schedule Records-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear Schedule record</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL schedule records from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>All schdeule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Schedule')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--Remove all class Records-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear Class record</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL classes/lessons from the system
+                    <br><br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>All Classes / Lessones inputs</li>
+                            <li>Student Timetable records</li>
+                            <li>Supervisor Timetable records</li>
+                            <li>All schedule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Class')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--Remove ALL DATA-->
+    <div class="column is-fullwidth-mobile is-half-desktop">
+        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
+            style="background-color:  rgb(248, 214, 152);">
+            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
+                colspan="2">
+                Clear ALL DATA</th>
+            <tr>
+                <td style="vertical-align: middle;">
+                    Remove ALL DATA from the system
+                    <p style="color: red;">Caution : This function will remove everything from the system.<br>This
+                        function should only be applied when start a new academic year.</p>
+                    <br>
+                    <p style="color: blue;">After excuetion, the system will only remains admin user.</p>
+                    <br>
+                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
+                    <div class="content">
+                        <ol type="1">
+                            <li>All Student & Supervisor users</li>
+                            <li>All timetable records from Student & Supervisor users</li>
+                            <li>All unavailable timeslots records from Student & Supervisor users</li>
+                            <li>All Classes / Lessones inputs</li>
+                            <li>All Campus and room informations</li>
+                            <li>All unavailable timeslots for classroom</li>
+                            <li>All notices</li>
+                            <li>All schedule records</li>
+                        </ol>
+                    </div>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                    <button class="button is-responsive redbutton" onclick="remove('Data')">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+
+<script>
+    async function remove(command) {
+        var r = confirm("Confirm to remove ALL " + command + "?\n" + "Once excuetion was done, the data cannot be retrieved and restored in anyway.");
+        if (r) {
+            var requestbody = JSON.stringify({ command: command })
+
+            var response = await fetch("/dbmanagement", {
+                method: "POST",
+                body: requestbody,
+            });
+
+if(response.status == 200){
+    location.reload();
+}else{
+    var msg = await response.json();
+    alert(msg);
+}
+        }
+    }
+
+</script>
