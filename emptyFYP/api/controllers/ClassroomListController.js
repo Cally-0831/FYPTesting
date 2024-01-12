@@ -390,13 +390,12 @@ module.exports = {
             db.query(insertline, function (err, result) {
                 try {
                 } catch (err) {
-                    return res.status(401).json("Error happened when excuting StudentListContorller.uploadclassroomlist.insertline");
+                    console.log("Error happened when excuting StudentListContorller.uploadclassroomlist.insertline\n"+insertline)
+                    return res.status(401).json("Insert Fail, please report this issue");
                 }
             });
-            return res.status(200).json("Complete create")
-
         });
-
+        return res.status(200).json("Complete create")
 
     },
 }
