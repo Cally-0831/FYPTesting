@@ -17,7 +17,6 @@ DROP TABLE IF EXISTS observerpairstudent;
 Drop table if exists allrequestfromsupervisor;
 Drop table if exists allclassroomtimeslot;
 Drop table if exists allnotice;
-Drop table if exists temptakecourse;
 Drop table if exists allsupersetting;
 Drop table if exists allschedulebox;
 Drop table if exists allpreffromsup;

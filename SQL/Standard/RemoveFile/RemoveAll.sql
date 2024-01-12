@@ -13,7 +13,6 @@ Delete from observerpairstudent;
 Delete from allrequestfromsupervisor;
 Delete from allclassroomtimeslot;
 Delete from allnotice;
-Delete from temptakecourse;
 Delete from allsupersetting;
 Delete from allpreffromsup;
 Delete from supervisoravailable;
