@@ -29,7 +29,7 @@ module.exports.routes = {
 
   //homepage
   'GET /home': 'UserController.home',
-  'POST /resetDB': "SettingController.resetDB",
+  
 
 
   //admin scheduling
@@ -60,6 +60,7 @@ module.exports.routes = {
   //admin dbmanagement
   "GET /dbmanagement" :  "DatabaseController.viewdbmanagement",
   "POST /dbmanagement" :  "DatabaseController.removeData",
+  'POST /resetDB': "DatabaseController.resetDB",
 
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 

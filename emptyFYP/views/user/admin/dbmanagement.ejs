@@ -241,12 +241,10 @@
                 method: "POST",
                 body: requestbody,
             });
-
-            if (response.status == 200) {
+            var msg = await response.json();
+            alert(msg)
+            if (response.status == 200) {  
                 location.reload();
-            } else {
-                var msg = await response.json();
-                alert(msg);
             }
         }
     }
