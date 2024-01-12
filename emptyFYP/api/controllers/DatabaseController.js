@@ -57,7 +57,7 @@ module.exports = {
                 break;
 
         }
-        return res.status(200).json("Complete deletion on All " + req.bod.command);
+        return res.status(200).json("Complete deletion on All " + req.body.command);
     },
 
     resetDB: async function (req, res) {
