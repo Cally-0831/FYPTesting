@@ -1,7 +1,6 @@
 Delete from allusers where role != "adm";
 Delete from student;
 Delete from supervisor;
-Delete from observer;
 Delete from allclass;
 Delete from classroom;
 Delete from logs;
