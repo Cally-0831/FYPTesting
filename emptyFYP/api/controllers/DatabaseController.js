@@ -8,7 +8,7 @@ module.exports = {
         //console.log(importer)
         // Recursive function to get files
         const fs = require("fs");
-        var sqlfiles ="";
+        var sqlfiles = "";
         console.log(req.body.command)
         switch (req.body.command) {
             case "User":
@@ -23,13 +23,37 @@ module.exports = {
                 var files_imported = importer.getImported();
                 console.log(`${files_imported.length} SQL file(s) imported.`);
                 break;
-            case "Supervisor": break;
-            case "Timetable": break;
-            case "Unavailable Timeslots": break;
-            case "Schedule": break;
-            case "Class": break;
-            case "Data": break;
-
+            case "Timetable":
+                sqlfiles = '../SQL/Standard/RemoveFile/RemoveAllTimetable.sql';
+                await importer.import(sqlfiles);
+                var files_imported = importer.getImported();
+                console.log(`${files_imported.length} SQL file(s) imported.`);
+                break;
+            case "Unavailable Timeslots":
+                sqlfiles = '../SQL/Standard/RemoveFile/RemoveAllUnavaTime.sql';
+                await importer.import(sqlfiles);
+                var files_imported = importer.getImported();
+                console.log(`${files_imported.length} SQL file(s) imported.`);
+                break;
+            case "Schedule":
+                sqlfiles = '../SQL/Standard/RemoveFile/RemoveAllSchedule.sql';
+                await importer.import(sqlfiles);
+                var files_imported = importer.getImported();
+                console.log(`${files_imported.length} SQL file(s) imported.`);
+                break;
+            case "Class":
+                sqlfiles = '../SQL/Standard/RemoveFile/RemoveAllClass.sql';
+                await importer.import(sqlfiles);
+                var files_imported = importer.getImported();
+                console.log(`${files_imported.length} SQL file(s) imported.`);
+                break;
+            case "Data":
+                sqlfiles = '../SQL/Standard/RemoveFile/RemoveAll.sql';
+                await importer.import(sqlfiles);
+                var files_imported = importer.getImported();
+                console.log(`${files_imported.length} SQL file(s) imported.`);
+                break;
+                break;
             default:
                 break;
 

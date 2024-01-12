@@ -16,19 +16,18 @@ module.exports = {
                 + req.body[i].startTime + "\",\"" + req.body[i].endTime + "\",\"0\");"
             console.log(thisistheline)
             db.query(thisistheline, function (err, result) {
-                if (err) {
+                try{
+                     console.log("1 record inserted");
+                }catch(err){
                     console.log(err);
-                    res.status(401).json("Error happened when excuting : " + thisistheline);
-
-                };
-                console.log("1 record inserted");
-
+                    return res.status(401).json("Error happened when excuting : " + thisistheline);
+                }
             });
 
 
 
         }
-        return res.json();
+        return res.status(200).json("ok");
     },
 
     listlesson: async function (req, res) {

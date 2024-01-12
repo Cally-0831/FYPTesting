@@ -1,11 +1,18 @@
 <div class="Pagetitle">
     Database Management
 </div>
-<div class="columns is-mobile">
-    <div class="column is-half">
-        <button class="button buttonlogout  is-responsive is-left" onclick="history.back()">
+<div class="columns is-mobile is-multiline">
+    <div class="column">
+        <button class="button buttonlogout  is-responsive" onclick="history.back()">
             Back
         </button>
+    </div>
+    <div class="column is-half" style="align-self: right;">
+        <div class="buttons is-right">
+            <button class="button buttonlogout is-responsive" onclick="resetDB()">
+                Reset Defalut DB
+            </button>
+        </div>
     </div>
 </div>
 <div class="columns is-mobile is-multiline is-centered">
@@ -67,37 +74,6 @@
                 </td>
                 <td style="vertical-align: middle; text-align: center;">
                     <button class="button is-responsive redbutton" onclick="remove('Student')">
-                        Remove
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <!--remove all supervisor-->
-    <div class="column is-fullwidth-mobile is-half-desktop">
-        <table class="table is-bordered is-fullwidth is-hoverable is-striped"
-            style="background-color:  rgb(248, 214, 152);">
-            <th style="font-size: calc(13px + 0.390625vw);text-align: center;vertical-align:middle;background-color: #C3B091;"
-                colspan="2">
-                Clear All Supervisor</th>
-            <tr>
-                <td style="vertical-align: middle;">
-                    Remove ALL Supervisor users from the system
-                    <br><br>
-                    <p style="font-weight: bold; font-size: large;">Remove Data:</p>
-                    <div class="content">
-                        <ol type="1">
-                            <li>Supervisor users</li>
-                            <li>Supervisor's timetable records</li>
-                            <li>Supervisor's request records</li>
-                            <li>Supervisor's notices</li>
-                            <li>Pairing records between Students and Supervisor/Oberservers</li>
-                            <li>All Schdeule records</li>
-                        </ol>
-                    </div>
-                </td>
-                <td style="vertical-align: middle; text-align: center;">
-                    <button class="button is-responsive redbutton" onclick="remove('Supervisor')">
                         Remove
                     </button>
                 </td>
@@ -266,13 +242,27 @@
                 body: requestbody,
             });
 
-if(response.status == 200){
-    location.reload();
-}else{
-    var msg = await response.json();
-    alert(msg);
-}
+            if (response.status == 200) {
+                location.reload();
+            } else {
+                var msg = await response.json();
+                alert(msg);
+            }
         }
     }
-
+    async function resetDB() {
+        var r = confirm("Confirm to restore defalut DB?")
+        if (r) {
+            var response = await fetch("/resetDB", {
+                method: "POST",
+            });
+            if (response.status == 200) {
+                alert("reset DB success");
+                location.reload();
+            } else {
+                alert("Reset DB fail")
+                location.reload();
+            }
+        }
+    }
 </script>

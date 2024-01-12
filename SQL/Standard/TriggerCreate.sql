@@ -3,7 +3,8 @@ CREATE TRIGGER testref BEFORE INSERT ON allclass FOR EACH ROW BEGIN
     declare stringstring  varchar(8000);
     declare countcount integer;
     declare findcampusroom integer;
-    set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode); set countcount =0;
+    set new.CID = concat(new.CDept, new.CCode, '_', new.CSecCode); 
+    set countcount =0;
     select count(*) into countcount from allclass where (rid = new.rid and campus = new.campus) and weekdays = new.weekdays and (starttime <= new.starttime and ENDtime >= new.starttime);  select count(*) into  findcampusroom from classroom where campus = new.campus and rid = new.rid;
     IF findcampusroom = 0 THEN
         insert into classroom values (new.campus,new.rid,"Open");
@@ -26,7 +27,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers FOR EACH ROW BEG
         if new.role = "stu" THEN
             insert into student(stdname,sid,password) values(new.allusersname,new.pid,new.password);
 	    elseif new.role = "sup" THEN
-            insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"","N","N",0);
+            insert into supervisor values(new.allusersname,new.pid,new.password,new.states,new.errortime,"N","N",0);
     END IF;
     END if;
   END;
@@ -203,8 +204,7 @@ CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent FOR E
     if countcountcount =0 THEN
         select count(*) into  countcount from supervisorpairstudent where Topic like new.Topic and tid = new.tid;
         if countcount = 0 THEN
-            select topics into alltopic from supervisor  where tid = new.tid;
-            update supervisor set topics = concat(alltopic,'/',new.topic) where tid = new.tid;
+            insert into alltopics values(new.topic,new.tid);
         END if;
     END if;
     if requestdeadlineannounced is not null THEN

@@ -232,19 +232,17 @@ module.exports = {
         console.log(topiclist)
         console.log(topiclist.length)
 
-        let thisistheline = "SELECT  topics FROM supervisor where tid =\"" + req.session.userid + "\"\;";
+        let thisistheline = "SELECT topicname FROM alltopics where tid =\"" + req.session.userid + "\"\;";
 
         db.query(thisistheline, (err, results) => {
             try {
                 var string = JSON.stringify(results);
 
                 var json = JSON.parse(string);
-                //   console.log('>> json: ', json);  
-                var stringstring = json[0].topics.split("/").sort()
-                topiclist = stringstring;
+                console.log(">>topiclist final   ",json)
+                var topiclist = json;
 
-
-                console.log(">>topiclist final   " + topiclist)
+                console.log(">>topiclist final   ",topiclist)
                 return res.view('user/createnewstudent', { alltopiclist: topiclist });
             } catch (err) {
 

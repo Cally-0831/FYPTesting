@@ -4,7 +4,9 @@ create table  allusers(allusersname	varchar(100) Not null,pid			varchar(20) not 
 
 create table   student(stdname		varchar(100) Not null,sid			varchar(20) not null,password	varchar(20) not null,states		varchar(20) default "ACTIVE",errortime	int default 0,ttbsubmission  varchar(20) default "N",ttbcomments varchar(200) default "",ttbdeadline timestamp default null,requestdeadline timestamp default null,PRIMARY key (sid));
 
-create table supervisor(supname		varchar(100) Not null,tid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,topics		varchar(100) Not null,submission  varchar(10) default "N", draft 		varchar(10) default "N", priority	int default 0,PRIMARY key (tid));
+create table supervisor(supname		varchar(100) Not null,tid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,submission  varchar(10) default "N", draft 		varchar(10) default "N", priority	int default 0,PRIMARY key (tid));
+
+create table alltopics(topicname varchar(500), tid varchar(10), primary key(topicname,tid));
 
 create table allclass(CDept		varchar(10) Not null,CCode		varchar(10)  Not null,CSecCode	varchar(10)  not null,CID			varchar(20) not null,Campus		Varchar(10) not null,RID			varchar(10) not null,weekdays 	integer,startTime	time,endTime		time,lesson		integer default 0,Check (endTime>startTime),PRIMARY key (CID));
 

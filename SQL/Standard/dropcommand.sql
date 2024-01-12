@@ -23,6 +23,7 @@ Drop table if exists studentavailable;
 Drop table if exists allschedulebox;
 Drop table if exists manualhandlecase;
 Drop table if exists threeparty;
+Drop table if exists alltopics;
 
 DROP trigger IF exists testref;
 Drop trigger if exists checkstudenttakecourse;
