@@ -22,19 +22,19 @@
     </div>
     <div class="buttons is-centered is-mobile">
         <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(1,0)">sid1_0</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
             onclick="inputstd(1,1)">sid1_1</button>
-    
         <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(2,0)">sid2_0</button>
+            onclick="inputstd(1,2)">sid1_2</button>
+    
         <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
             onclick="inputstd(2,1)">sid2_1</button>
+        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(2,2)">sid2_2</button>
     
         <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(3,0)">sid3_0</button>
-            <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
             onclick="inputstd(3,1)">sid3_1</button>
+            <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
+            onclick="inputstd(3,2)">sid3_2</button>
     </div>
     <div class="buttons is-centered is-mobile">
         <button class="button  is-responsive" id="autoinputadm" style="background-color:  lightgreen;"
@@ -100,6 +100,9 @@
     
     
         function inputstd(supcode, selfcode) {
+            if(supcode < 10){
+                supcode = "0"+supcode;
+            }
             document.getElementById("username").value = "sid" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
             document.getElementById("pw").value = "spw" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
         }

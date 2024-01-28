@@ -2,7 +2,7 @@
 
 create table  allusers(allusersname	varchar(100) Not null,pid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,role	varchar(20),PRIMARY key (pid));
 
-create table   student(stdname		varchar(100) Not null,sid			varchar(20) not null,password	varchar(20) not null,states		varchar(20) default "ACTIVE",errortime	int default 0,ttbsubmission  varchar(20) default "N",ttbcomments varchar(200) default "",ttbdeadline timestamp default null,requestdeadline timestamp default null,PRIMARY key (sid));
+create table   student(stdname		varchar(100) Not null,sid			varchar(20) not null,password	varchar(20) not null,states		varchar(20) default "ACTIVE",errortime	int default 0,credit int default 3,ttbsubmission  varchar(20) default "N",ttbcomments varchar(200) default "",ttbdeadline timestamp default null,requestdeadline timestamp default null,PRIMARY key (sid));
 
 create table supervisor(supname		varchar(100) Not null,tid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,submission  varchar(10) default "N", draft 		varchar(10) default "N", priority	int default 0,PRIMARY key (tid));
 
