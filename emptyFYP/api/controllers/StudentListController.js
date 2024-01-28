@@ -553,7 +553,7 @@ module.exports = {
     uploadstudentlist: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        if (!req.body[0].hasOwnProperty("sid") || !req.body[0].hasOwnProperty("studentname" || !req.body[0].hasOwnProperty("password"))) {
+        if (!req.body[0].hasOwnProperty("sid") || !req.body[0].hasOwnProperty("studentname" || !req.body[0].hasOwnProperty("password")|| !req.body[0].hasOwnProperty("credit"))) {
             return res.status(401).json("Invalid Inputs")
         } else {
             console.log(req.body);
@@ -577,6 +577,17 @@ module.exports = {
                     res.status(401).json("Error happened when excuting : " + createstudentline);
                 };
             });
+            if(req.body[i].credit == '6'){
+                updateline = "update student set credit = 6 where sid = \""+req.body[i].sid+"\"";
+                console.log(updateline)
+                db.query(updateline, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        console.log("error happened at StudentListContorller: updatestudencredit");
+                        res.status(401).json("Error happened when excuting : "+ updateline);
+                    };
+                });
+            }
 
         }
 
