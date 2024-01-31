@@ -111,13 +111,17 @@
                 }
             }
             var requestbody = JSON.stringify({ typeofpresent: typeofpresent })
-            console.log(requestbody)
+           
             var response = await fetch("/scheduledesign/genAvailable", {
                 method: "POST",
                 body: requestbody
             });
+    
             if (response.ok) {
-                location.assign("/supervisorschedulelist");
+                location.assign(response.url);
+                
+            }else{
+               alert("Error exists")
             }
         }
 

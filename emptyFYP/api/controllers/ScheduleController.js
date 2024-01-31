@@ -1,8 +1,11 @@
+const { start } = require("repl");
+
 module.exports = {
 
     viewschedulepage: async function (req, res) {
 
     },
+
     viewFinalSchedule: async function (req, res) {
 
         var db = await sails.helpers.database();
@@ -76,6 +79,7 @@ module.exports = {
     genAvailable: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        console.log(req.body);
 
         // get presentperiod
         var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
@@ -296,25 +300,27 @@ module.exports = {
                     currentgeneratedateend = new Date(currentgeneratedate.getTime() + 25 * 60 * 1000);
 
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-                    var boolcheckttb = false;
+                    /**midterm no need to check stu midterm */
+                    // var boolcheckttb = false;
+
                     var boolcheckreq = false;
 
-                    var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-                    //console.log(getcheckstudentttb);
 
-                    studentttblist = await new Promise((resolve) => {
-                        pool.query(getcheckstudentttb, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    }).catch((err) => {
-                        errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
-                    })
-                    if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
-                        boolcheckttb = true;
-                    }
+                    /**midterm no need to check stu midterm */
+                    // var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
+                    // studentttblist = await new Promise((resolve) => {
+                    //     pool.query(getcheckstudentttb, (err, res) => {
+                    //         var string = JSON.stringify(res);
+                    //         var json = JSON.parse(string);
+                    //         var ans = json;
+                    //         resolve(ans)
+                    //     })
+                    // }).catch((err) => {
+                    //     errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
+                    // })
+                    // if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
+                    //     boolcheckttb = true;
+                    // }
 
 
                     var getcheckstudentrequest = "select * from allrequestfromstudent where (status = \"Approved\" or status = \"Enforce Approved\") and sid = \"" + studentlist[a].sid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
@@ -339,8 +345,9 @@ module.exports = {
 
 
 
-
-                    if (boolcheckreq && boolcheckttb) {
+                    /**midterm no need to check stu midterm */
+                    // if (boolcheckreq && boolcheckttb) {
+                    if (boolcheckreq) {
                         var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
                         //console.log(insertavability)
                         var studentavailbilityinsert = await new Promise((resolve) => {
@@ -473,9 +480,9 @@ module.exports = {
 
 
 
-                    console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
+                    // console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
+                    // console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
+                    // console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
                     if (checkdate1.getTime() - checkdate2.getTime() <= 45 * 60 * 1000) {
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
@@ -524,27 +531,28 @@ module.exports = {
                     //console.log("midterm")
                     currentgeneratedateend = new Date(currentgeneratedate.getTime() + 25 * 60 * 1000);
                     var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
+                    /**midterm no need to check stu midterm */
+                    // var boolcheckttb = false;
 
-                    var boolcheckttb = false;
                     var boolcheckreq = false;
 
                     var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
                     // console.log(getchecksupervisorttb);
 
-
-                    supervisorttblist = await new Promise((resolve) => {
-                        pool.query(getchecksupervisorttb, (err, res) => {
-                            var string = JSON.stringify(res);
-                            var json = JSON.parse(string);
-                            var ans = json;
-                            resolve(ans)
-                        })
-                    }).catch((err) => {
-                        errmsg = "error happened in ScheduleController.genavailble.getsupervisorttblist"
-                    })
-                    if (supervisorttblist.length == 0 || supervisorttblist == null || supervisorttblist == undefined) {
-                        boolcheckttb = true;
-                    }
+                    /**midterm no need to check stu midterm */
+                    // supervisorttblist = await new Promise((resolve) => {
+                    //     pool.query(getchecksupervisorttb, (err, res) => {
+                    //         var string = JSON.stringify(res);
+                    //         var json = JSON.parse(string);
+                    //         var ans = json;
+                    //         resolve(ans)
+                    //     })
+                    // }).catch((err) => {
+                    //     errmsg = "error happened in ScheduleController.genavailble.getsupervisorttblist"
+                    // })
+                    // if (supervisorttblist.length == 0 || supervisorttblist == null || supervisorttblist == undefined) {
+                    //     boolcheckttb = true;
+                    // }
 
                     var getchecksupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
                     //console.log(getchecksupervisorrequest)
@@ -564,7 +572,9 @@ module.exports = {
                         //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
                         boolcheckreq = true;
                     }
-                    if (boolcheckreq && boolcheckttb) {
+                    /**midterm no need to check stu midterm */
+                    // if (boolcheckreq && boolcheckttb) {
+                    if (boolcheckreq) {
                         var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
                         //console.log(insertavability)
 
@@ -693,9 +703,9 @@ module.exports = {
 
 
 
-                    console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
-                    console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
+                    // console.log(checkdate1.toLocaleTimeString("en-GB"), "  ", checkdate2.toLocaleTimeString("en-GB"), "endend")
+                    // console.log(checkdate1.getTime() - checkdate2.getTime(), "endend")
+                    // console.log(checkdate1.getTime() - checkdate2.getTime() < 45 * 60 * 1000, "endend")
                     if (checkdate1.getTime() - checkdate2.getTime() <= 45 * 60 * 1000) {
 
 
@@ -737,11 +747,11 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.genavailble.paringlist"
         })
-        console.log(pairinglist)
+        // console.log(pairinglist)
 
         for (var a = 0; a < pairinglist.length; a++) {
-            console.log("select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
-                + "and studentavailable.sid = \"" + pairinglist[a].sid + "\" and supavaTID.tid = \"" + pairinglist[a].tid + "\" and supavaOID.tid = \"" + pairinglist[a].oid + "\";")
+            //console.log("select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
+            //+ "and studentavailable.sid = \"" + pairinglist[a].sid + "\" and supavaTID.tid = \"" + pairinglist[a].tid + "\" and supavaOID.tid = \"" + pairinglist[a].oid + "\";")
             var addthreepartyAva = await new Promise((resolve) => {
                 pool.query(
                     "select supavaTID.tid, studentavailable.sid,supavaOID.tid as oid, studentavailable.availabledate, studentavailable.availablestarttime,studentavailable.availableendtime from studentavailable left join supervisorpairstudent on supervisorpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaTID on supavaTID.tid = supervisorpairstudent.tid  left join observerpairstudent on observerpairstudent.sid = studentavailable.sid left join supervisoravailable as supavaOID on supavaOID.tid = observerpairstudent.oid where supavaTID.availablestartTime = studentavailable.availablestartTime and supavaOID.availablestartTime = supavaTID.availablestartTime "
@@ -755,7 +765,7 @@ module.exports = {
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.genavailble.paringlist"
             })
-            console.log(">>addthreepartyAVA", addthreepartyAva);
+            // console.log(">>addthreepartyAVA", addthreepartyAva);
 
             addthreepartyAva.forEach(threepartyava => {
                 var availabledate = ((new Date(threepartyava.availabledate)).toLocaleDateString("en-GB")).split("/");
@@ -763,29 +773,568 @@ module.exports = {
 
                 threepartyava.availablestarttime = threepartyava.availabledate + " " + (new Date(threepartyava.availablestarttime)).toLocaleTimeString("en-GB");
                 threepartyava.availableendtime = threepartyava.availabledate + " " + (new Date(threepartyava.availableendtime)).toLocaleTimeString("en-GB");
-                console.log("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\"" + threepartyava.tid + "\",\"" + threepartyava.sid + "\",\"" + threepartyava.oid + "\",Date(\"" + threepartyava.availabledate + "\"),Timestamp(\"" + threepartyava.availablestarttime + "\"),timestamp(\"" + threepartyava.availableendtime + "\")) ");
+                //console.log("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\"" + threepartyava.tid + "\",\"" + threepartyava.sid + "\",\"" + threepartyava.oid + "\",Date(\"" + threepartyava.availabledate + "\"),Timestamp(\"" + threepartyava.availablestarttime + "\"),timestamp(\"" + threepartyava.availableendtime + "\")) ");
                 db.query("insert into threeparty (tid,sid,oid,availabledate,availablestarttime,availableendtime) values(\"" + threepartyava.tid + "\",\"" + threepartyava.sid + "\",\"" + threepartyava.oid + "\",Date(\"" + threepartyava.availabledate + "\"),Timestamp(\"" + threepartyava.availablestarttime + "\"),timestamp(\"" + threepartyava.availableendtime + "\")) ", (err, result) => {
                     try {
-                        // console.log("update complete")
+
                     } catch (err) {
                         if (err) {
                             errstring = "";
                             errstring += "error happened for:" + threepartyava + "\n"
                             statuscode = 401;
                         }
+                        console.log(errstring);
                     }
 
                 })
 
 
             });
-
+            // console.log("all gen ok")
         }
-        return res.view("user/hello");
+        console.log("all gen ok all")
 
 
+        return res.redirect("/scheduledesign/startschedule?typeOfPresent=" + req.body.typeofpresent)
     },
 
+    startScheduling: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var setting3 = await new Promise((resolve) => {
+            pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans;
+                if (json.length > 0) {
+                    var presentstartdate = new Date(json[0].startdate);
+                    var presentenddate = new Date(json[0].enddate);
+                    var presentstarttime = json[0].starttime;
+                    var presentendtime = json[0].endtime;
+                    ans = JSON.parse(JSON.stringify({
+                        presentstartdate: presentstartdate,
+                        presentenddate: presentenddate,
+                        presentstarttime: presentstarttime,
+                        presentendtime: presentendtime
+                    }))
+                }
+                ans.presentstartdate = new Date(ans.presentstartdate);
+                ans.presentenddate = new Date(ans.presentenddate);
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.startScheduling.setting3"
+        })
+        // console.log(setting3)
+
+        // gen combination of date for possible plans
+        var presentperiod = new Array();
+        var possibledatecombination = new Array();
+        var designdate = new Date();
+        designdate.setTime(setting3.presentstartdate.getTime());
+        // console.log(">>designdate", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+        while (designdate.toLocaleDateString("en-GB") != setting3.presentenddate.toLocaleDateString("en-GB")) {
+            // console.log(">>designdate2", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+            if (designdate.getDay() != 0) {
+                presentperiod.push(designdate);
+            }
+
+            // console.log(">>presentperiod ",presentperiod);
+            // presentperiod.forEach(item=>{
+            //     console.log(">>designdate3 ", item.toLocaleDateString("en-GB")," ",item.toLocaleTimeString("en-GB"));
+            // })
+            // console.log("\n");
+            designdate = new Date(designdate.getTime() + 60 * 60 * 24 * 1000);
+            // console.log(">>designdate", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+        }
+
+        // console.log(">>presentperiod", presentperiod);
+
+        function copyarray(array1) {
+            var ans = new Array();
+            ans = array1.slice();
+            return ans;
+        }
+
+        for (var a = 0; a < presentperiod.length; a++) {
+            var ans = copyarray(presentperiod);
+            var combinationforthisday = new Array();
+            for (var b = 0; b < a; b++) {
+                ans.shift(ans[b]);
+            }
+            // console.log(">>after cutting top ",ans,"\n")
+            for (var b = presentperiod.length - 1; b >= a; b--) {
+                // console.log(">>cutting bottom ",ans,"\n")
+                var copycopy = copyarray(ans);
+                combinationforthisday.push(copycopy)
+                // console.log(">>combinationforthisday ",combinationforthisday)
+                ans.pop(ans[b]);
+
+            }
+            // console.log(">>final combinationforthisday ",combinationforthisday)
+            combinationforthisday.forEach(item => { possibledatecombination.push(item); })
+        }
+        possibledatecombination.sort((a, b) => a.length - b.length);
+        // console.log(">> final possibledatecombination ", possibledatecombination)
+
+        var preSetClassroomList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'RRS638']
+        // console.log(">> preSetClassroomList ", preSetClassroomList);
+        console.log(req.query);
+
+
+        //gen based on the possibile date combinations
+
+        function resetsessionstarttime(dateoftoday) {
+            var sessionstart = new Date(dateoftoday);
+            sessionstart.setHours(9);
+            sessionstart.setMinutes(30);
+            return sessionstart;
+        }
+        function resetsessionendtime(sessionstarttime) {
+            var sessionend;
+            if (req.query.typeOfPresent == "final") {
+                sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
+            } else {
+                sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
+            }
+            return sessionend;
+        }
+        async function checkclassroomttb(classroom, weekday, starttime, endtime) {
+            console.log("select * from  allclass where RID =\"" + classroom + "\" and weekdays = " + weekday + " and !(Time(\"" + starttime + "\") >= endTime || Time(\"" + endtime + "\") <= startTime);")
+            var checking = await new Promise((resolve) => {
+                pool.query("select * from  allclass where RID =\"" + classroom + "\" and weekdays = " + weekday + " and !(Time(\"" + starttime + "\") >= endTime || Time(\"" + endtime + "\") <= startTime);", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            //have class during the time => cant use
+                            resolve(false);
+                        } else {
+                            //no class during the time => can use
+                            resolve(true);
+                        }
+                    } catch (err) {
+                        resolve("err");
+                    }
+                });
+            }).catch((err) => {
+                return res.status(401).json("Error happened when excuting ScheduleController,startschedule.checkclassroomttb()")
+            })
+            if (checking != "err") { return checking; } else { return false; }
+        }
+
+        async function checkclassroomtimeslot(classroom, dateoftoday, starttime, endtime) {
+            var checking = await new Promise((resolve) => {
+                pool.query("select * from  allclassroomtimeslot where RID = \"" + classroom + "\" and (time(\"" + dateoftoday + " " + starttime + "\") >= time(concat(startdate,\" \",starttime)) && time(\"" + dateoftoday + " " + endtime + "\") <= time(concat(enddate,\" \",endtime)) );", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            //have class during the time => cant use
+                            resolve(false);
+                        } else {
+                            //no class during the time => can use
+                            resolve(true);
+                        }
+                    } catch (err) {
+                        resolve("err");
+                    }
+                });
+            }).catch((err) => {
+                return res.status(401).json("Error happened when excuting ScheduleController,startschedule.checkclassroomtimeslot()")
+            })
+            if (checking != "err") { return checking; } else { return false; }
+        }
+
+        async function getsuplist() {
+            var suplist = await new Promise((resolve) => {
+                pool.query("select tid, priority from supervisor order by priority asc, tid asc", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.retrievesinglesupervisorschedule.getrequestforthissupervisor"
+            })
+            if (suplist != "err") { return suplist; } else { return false; }
+        }
+
+        async function getpairinglistforthissup(tid) {
+            var pairinglist = await new Promise((resolve) => {
+                pool.query("select * from (select t1.oid, t1.sid,t2.priority as obspriority from observerpairstudent as t1 left join supervisor as t2 on t2.tid = t1.oid) as t4 right join (select * from supervisorpairstudent where tid = \"" + tid + "\") as t3 on t4.sid = t3.sid;", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getpairinglistforthissup"
+            })
+            if (pairinglist != "err") { return pairinglist; } else { return false; }
+        }
+
+        async function getprefofthissuper(tid) {
+            var prefofthissup = await new Promise((resolve) => {
+                pool.query("select * from allpreffromsup where tid = \"" + tid + "\";", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getprefofthissuper"
+            })
+            if (prefofthissup != "err") { return prefofthissup; } else { return false; }
+
+        }
+
+        async function getthreepartyavalist() {
+            var threepartyava = await new Promise((resolve) => {
+                pool.query("select * from threeparty;", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getthreepartyavalist()"
+            })
+            if (threepartyava != "err") { return threepartyava; } else { return false; }
+
+        }
+        async function checkanypaironlythistimeslot(currentschedule, dateoftoday, starttime) {
+            var pairsonlythistimeslot = await new Promise((resolve) => {
+                //select * from threeparty where sid in (select sid from threeparty where availabledate = "2024-02-19" group by tid,sid,oid,TIDPrior,OIDPrior  having count(availablestarttime) =1) and availabledate = "2024-02-19";
+                pool.query("select * from threeparty where tid not in (select tid from (SELECT tid,sid,oid, TIDPrior,OIDPrior,count(*) FROM threeparty where availabledate = \"" + dateoftoday + "\" and availablestarttime != \"" + dateoftoday + " " + starttime + "\"  group by tid,sid,oid,TIDPrior,OIDPrior having count(*) >1) as t1) and availabledate = \"" + dateoftoday + "\";", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.checkanypaironlythistimeslot()"
+            })
+            if (pairsonlythistimeslot != "err") { return pairsonlythistimeslot; } else { return false; }
+        }
+
+        async function checkanypaircanusethistimeslot(currentschedule, dateoftoday, starttime) {
+
+            var pairscanusethistimeslot = await new Promise((resolve) => {
+                pool.query("select t1.tid, t1.sid,t1.oid,t1.TIDPrior,t1.OIDPrior,threeparty.availabledate,threeparty.availablestarttime , threeparty.availableendtime from threeparty right join (SELECT tid,sid,oid, TIDPrior,OIDPrior, count(*) as counting FROM threeparty where availabledate = \"" + dateoftoday + "\" and timestamp(\"" + dateoftoday + " " + starttime + "\") group by tid,sid,oid,TIDPrior,OIDPrior having count(*) >0 ) as t1 on t1.tid = threeparty.tid and t1.sid = threeparty.sid and t1.oid = threeparty.oid where availablestarttime = \"" + dateoftoday + " " + starttime + "\" order by t1.counting asc , t1.TIDPrior asc, t1.OIDPrior asc  ;", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.checkanypaironlythistimeslot()"
+            })
+            if (pairsonlythistimeslot != "err") { return pairsonlythistimeslot; } else { return false; }
+
+        }
+
+        async function checkuniquetimeslotcountforoneday(plan) {
+            console.log("\n\n>>checkuniquetimeslotcountforoneday()    ", "select distinct(availablestarttime),count(*) as counting  from  threeparty where " + getallplandate(plan) + " group by availablestarttime order by counting asc  ;\n\n");
+            var uniquetimeslotcounts = await new Promise((resolve) => {
+                pool.query("select distinct(availablestarttime),count(*) as counting  from  threeparty where " + getallplandate(plan) + " group by availablestarttime order by counting asc  ;", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.checkuniquetimeslotcountforoneday()"
+            })
+            if (uniquetimeslotcounts != "err") { return uniquetimeslotcounts; } else { return false; }
+        }
+
+        async function getascorderoftimecountpairlist(planNo,parallelschedule, dateoftoday, starttime) {
+            // var query = "select t2.tid,t2.sid,t2.oid,t2.availabledate,t2.availablestarttime,t2.availableendtime,t1.counting from threeparty as t2 left join (select sid, availabledate,count(availabledate) as counting  from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and availablestarttime >= \"" + dateoftoday + " " +starttime + "\"  group by tid,sid,oid, availabledate)as t1 on t1.sid = t2.sid and t1.availabledate = t2.availabledate  where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.sid in (select  sid from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and  tid not in(select tid from allschedulebox where planNo = "+planNo+" ) and  oid not in(select oid from allschedulebox where planNo =  "+planNo+" ) and  sid not in(select sid from allschedulebox where planNo = "+planNo+" )   group by tid,sid,oid, availabledate) order by t1.counting asc;";
+           var query = "select t2.*,t1.counting from threeparty as t2 left join (select tid,sid,oid,count(availabledate) as counting from threeparty where availabledate =\"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(*) > 0) as t1 on t1.tid = t2.tid and t1.sid = t2.sid and t2.oid = t2.oid where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.tid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.oid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.sid not in (select sid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") order by t1.counting asc;"
+            console.log(query);
+            var pairsforthistimeslot = await new Promise((resolve) => {
+                pool.query(query, (err, results) => {
+                    console.log(query);
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        console.log("pairsforthistimeslot  ", results.length)
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getascorderoftimecountpairlist()"
+            })
+            console.log("pairsforthistimeslot  ", pairsforthistimeslot.length)
+            if (pairsforthistimeslot != "err") { return pairsforthistimeslot; } else { return false; }
+        }
+        async function getnumberofstudent() {
+            var ans = await new Promise((resolve) => {
+                pool.query("select count(*) as counting from student;", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json[0].counting);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getnumberofstudent()"
+            })
+            if (ans != "err") { console.log(ans); return ans; } else { return false; }
+        }
+
+
+        function sidnotinschedulelist(currentschedule) {
+            var ans = "";
+            for (var a = 0; a < currentschedule.length; a++) {
+                if (a != currentschedule.length - 1) {
+                    ans += "sid != \"" + currentschedule[a].sid + "\" and ";
+                } else {
+                    ans += "sid != \"" + currentschedule[a].sid + "\" ";
+                }
+
+            }
+            if (ans != "") {
+                ans = "and " + ans;
+                return ans;
+            } else {
+                return ans;
+            }
+
+        }
+
+        function tidnotinschedulelist(currentschedule) {
+            var ans = "";
+            for (var a = 0; a < currentschedule.length; a++) {
+                if (a != currentschedule.length - 1) {
+                    ans += " tid != \"" + currentschedule[a].tid + "\" and oid != \"" + currentschedule[a].tid + "\" and ";
+                    ans += " tid != \"" + currentschedule[a].oid + "\" and oid != \"" + currentschedule[a].oid + "\" and ";
+                } else {
+                    ans += " tid != \"" + currentschedule[a].tid + "\" and oid != \"" + currentschedule[a].tid + "\" and ";
+                    ans += "tid != \"" + currentschedule[a].oid + "\" and oid != \"" + currentschedule[a].oid + "\" ";
+                }
+            }
+            if (ans != "") {
+                ans = " and " + ans;
+                console.log(">tidnot up ", ans)
+                return ans;
+            } else {
+                console.log(">tidnot down ", ans)
+                return ans;
+            }
+
+        }
+
+
+        function createschedulebox(planNo, tid, sid, oid, availabledate, availabletimeslot, campus, rid) {
+            var thetime = new Date(availabledate);
+            thetime.setHours(availabletimeslot.split(":")[0]);
+            thetime.setMinutes(availabletimeslot.split(":")[1]);
+            var schedulebox = JSON.parse(JSON.stringify({
+                boxID: "",
+                planNo: planNo,
+                boxdate: thetime,
+                type: req.query.typeOfPresent,
+                tid: tid,
+                sid: sid,
+                oid: oid,
+                campus: campus,
+                rid: rid,
+                LastUpdate: "",
+
+            }));
+            console.log(schedulebox);
+            return schedulebox
+        }
+
+        function getallplandate(plan) {
+            var ans = "";
+
+            for (var a = 0; a < plan.length; a++) {
+
+                var datestring = plan[a].toLocaleDateString("en-GB").split("/");
+                datestring = datestring[2] + "-" + datestring[1] + "-" + datestring[0];
+                if (a != plan.length - 1) {
+                    ans += " availabledate = \"" + datestring + "\" or ";
+                } else {
+                    ans += " availabledate = \"" + datestring + "\" ";
+                }
+            }
+            console.log(ans)
+            return ans;
+        }
+
+        async function insertbox(element ,sqldatestring, sessionstarttime ) {
+ 
+                let boxid = 'boxID';
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const charactersLength = characters.length;
+                let counter = 0;
+                while (counter < 15) {
+                    boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    counter += 1;
+                }
+               
+                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\""+element.planNo+"\",\"" +sqldatestring+" "+sessionstarttime.toLocaleTimeString("en-GB")+ "\",\"" + element.type + "\","
+                    + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
+                    + "\"" + element.campus + "\",\"" +element.rid+ "\", now()) ;"
+                console.log(insertscheduleboxquery)
+
+                db.query(insertscheduleboxquery, (err, results) => {
+                    try {
+                        console.log("inserted ")
+                    } catch (err) {
+                        return err;
+                    }
+                });
+           
+        }
+
+        async function insertarraybox(parallelschedule ,sqldatestring, sessionstarttime ) {
+            
+            parallelschedule.forEach((element => {
+                let boxid = 'boxID';
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const charactersLength = characters.length;
+                let counter = 0;
+                while (counter < 15) {
+                    boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    counter += 1;
+                }
+               
+                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\""+element.planNo+"\",\"" +sqldatestring+" "+sessionstarttime.toLocaleTimeString("en-GB")+ "\",\"" + element.type + "\","
+                    + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
+                    + "\"" + element.campus + "\",\"" +element.rid+ "\", now()) ;"
+                console.log(insertscheduleboxquery)
+
+                db.query(insertscheduleboxquery, (err, results) => {
+                    try {
+                        console.log("inserted ")
+                    } catch (err) {
+                        return err;
+                    }
+                });
+            }))
+        }
+
+
+
+        function checkpairsmustusethistimeslot(planNo, parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime) {
+            console.log(pairsforthistimeslot);
+            var copyarray = pairsforthistimeslot.slice();
+            console.log(copyarray)
+            copyarray.forEach(element => {
+                parallelschedule.forEach(element2 => {
+                    if (element.sid == element2.sid) {
+                        pairsforthistimeslot.pop(element)
+                    }
+                });
+            });
+            var ans = new Array();
+            pairsforthistimeslot.forEach(element => {
+                if (element.counting == 1) {
+                    var schedulebox = createschedulebox(planNo, element.tid, element.sid, element.oid, sqldatestring, sessionstarttime, null, null);
+                    ans.push(schedulebox);
+                }
+            });
+            return ans;
+        }
+
+
+        var threepartyAvaList = await getthreepartyavalist();
+        // console.log(threepartyAvaList)
+
+        // var a  == looping in possible plans
+        // for (var a = 0; a < possibledatecombination.length; a++) {
+        for (var a = 0; a < 1; a++) {
+            var scheduleforthisplan = new Array();
+            console.log(">>plan ", a, " ", possibledatecombination[a])
+            // var b  == looping dates in the plans
+            var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[a]);
+            console.log(uniquetimeslotcounts);
+            //looping the timeslots for this day
+            for (var c = 0; c < 1; c++) {
+                // for (var c = 0; c < 5; c++) {
+                // console.log(uniquetimeslotcounts[c].availablestarttime);
+
+                var sessionstarttime = new Date(uniquetimeslotcounts[c].availablestarttime);
+                var sessionendtime = resetsessionendtime(sessionstarttime);
+                var sqldatestring = sessionstarttime.toLocaleDateString("en-GB").split("/");
+                sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
+                sqldatestring.trim();
+
+                //get the classroomlist that available for the time
+                var availableclassroomlist = new Array();;
+                for (var d = 0; d < 4; d++) {
+                    if (req.query.typeOfPresent == "final") {
+                        var roomttbresult = await checkclassroomttb(preSetClassroomList[d], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[d], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        if (roomttbresult && roomtimeslotresult) {
+                            availableclassroomlist.push(preSetClassroomList[d]);
+                        }
+                    } else {
+                        var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[d], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        if (roomtimeslotresult) {
+                            availableclassroomlist.push(preSetClassroomList[d]);
+                        }
+                    }
+
+                }
+
+                console.log("availableclassroomlist.length   ", availableclassroomlist.length, availableclassroomlist)
+                var parallelschedule = new Array();
+                for (var d = 0; d < availableclassroomlist.length; d++) {
+                    var pairsforthistimeslot = await getascorderoftimecountpairlist(a, parallelschedule, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
+                    console.log(pairsforthistimeslot);
+                    if (pairsforthistimeslot.length != 0) {
+                        console.log("this classroom ", availableclassroomlist[d], " is ok for ", sessionstarttime.toLocaleDateString("en-GB"), " this timeslot ", sessionstarttime.toLocaleTimeString("en-GB"), "  ", sessionendtime.toLocaleTimeString("en-GB"))
+                        var schedulebox = createschedulebox(a, pairsforthistimeslot[0].TID, pairsforthistimeslot[0].SID, pairsforthistimeslot[0].OID, sessionstarttime, sessionstarttime.toLocaleTimeString('en-GB'), "Sin Hang", preSetClassroomList[d]);
+                        parallelschedule.push(schedulebox);
+                        console.log(schedulebox)
+                        console.log("now insert mustusepair")
+                        insertbox(schedulebox,sqldatestring,sessionstarttime);
+                        pairsforthistimeslot.shift();
+                    }
+                    console.log(">>parallelschedule for date time ", sessionstarttime.toLocaleDateString("en-GB"), " ", sessionstarttime.toLocaleTimeString("en-GB"), " ", parallelschedule.length, "\n", parallelschedule);
+                }
+                var mustusepair = checkpairsmustusethistimeslot(a,parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"))
+                // insertbox(parallelschedule,sqldatestring,sessionstarttime);
+console.log("now insert mustusepair")
+insertarraybox(mustusepair,sqldatestring,sessionstarttime);
+
+            }
+
+            console.log("\n\n\n")
+            console.log(">>scheduleforthisplan  ", scheduleforthisplan.length, " ", scheduleforthisplan);
+        }
+        return res.redirect("/hello")
+    },
 
     // genavailable: async function (req, res) {
     //     var db = await sails.helpers.database();

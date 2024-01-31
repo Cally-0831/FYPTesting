@@ -32,7 +32,7 @@ module.exports.routes = {
   
 
 
-  //admin scheduling
+  //admin modify scheduling
   "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
   "POST /supervisorschedulelist/modifyschedule":  "ScheduleController.EditRecords",
   "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
@@ -40,6 +40,15 @@ module.exports.routes = {
   "GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.HandleManualCase",
   'GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata': "ScheduleController.GetData",
   "POST /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.EditScheduleBox",
+
+  //admin click scheduling
+  'GET /scheduledesign': "SettingController.nodraft",
+  "POST /scheduledesign/genAvailable": "ScheduleController.genAvailable",
+  'GET /scheduledesign/startschedule': "ScheduleController.startScheduling",
+  'GET /checkdraft': "ScheduleController.checksetting",
+  "GET /checkschedule": "ScheduleController.viewfinalschedule",
+  
+  
 
   //admin setting
   "GET /setting": "SettingController.getsetting",
@@ -64,11 +73,9 @@ module.exports.routes = {
 
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
-  //'GET /home': { view: 'user/home' },
+  'GET /hello': { view: 'user/hello' },
   
-  'GET /scheduledesign': "SettingController.nodraft",
-  'GET /checkdraft': "ScheduleController.checksetting",
-  "GET /checkschedule": "ScheduleController.viewfinalschedule",
+  
 
 
   "GET /scheduledesign/getpairing": "ScheduleController.getpairing",
@@ -169,7 +176,6 @@ module.exports.routes = {
   'POST /read/:id': "StudentListController.addpairing",
   'DELETE /read/:id': "StudentListController.deletestudent",
 
-  "POST /scheduledesign/genAvailable": "ScheduleController.genAvailable",
 
   "GET /preference": "RequestController.getpreference",
   "POST /preference": "RequestController.submitpreference",

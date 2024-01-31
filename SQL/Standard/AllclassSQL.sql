@@ -179,3 +179,6 @@ Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstu
 
 
 update allsupertakecourse set confirmation = "1" , submissiontime = now();
+
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa0Nk","Sin Hang","FSC801C","2024-02-19","2024-02-19","11:00","12:00","Check aircon")
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_yDbh0","Sin Hang","FSC801D","2024-02-19","2024-02-20","17:30","10:00","aircon")
