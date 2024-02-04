@@ -123,11 +123,11 @@ insert IGNORE into allusers values("11Emily","sid112222","spw112222","ACTIVE","0
 insert IGNORE into allusers values("11Fiona","sid113333","spw113333","ACTIVE","0","stu");
 insert IGNORE into allusers values("11Cathy","sid114444","spw114444","ACTIVE","0","stu");
 insert IGNORE into allusers values("11Issac","sid115555","spw115555","ACTIVE","0","stu");
-insert IGNORE into supervisorpairstudent values("tid00005","sid111111","Mobile App for Cloth Washing Service");
-insert IGNORE into supervisorpairstudent values("tid00005","sid112222","Mobile App for Supporting the Elderly");
-insert IGNORE into supervisorpairstudent values("tid00005","sid113333","Mobile App for Cloth Washing Service");
-insert IGNORE into supervisorpairstudent values("tid00005","sid114444","Hello HK Tourist Guide");
-insert IGNORE into supervisorpairstudent values("tid00005","sid115555","Mobile App for Supporting the Elderly");
+insert IGNORE into supervisorpairstudent values("tid00011","sid111111","Mobile App for Cloth Washing Service");
+insert IGNORE into supervisorpairstudent values("tid00011","sid112222","Mobile App for Supporting the Elderly");
+insert IGNORE into supervisorpairstudent values("tid00011","sid113333","Mobile App for Cloth Washing Service");
+insert IGNORE into supervisorpairstudent values("tid00011","sid114444","Hello HK Tourist Guide");
+insert IGNORE into supervisorpairstudent values("tid00011","sid115555","Mobile App for Supporting the Elderly");
 
 insert IGNORE into allusers values("12Cathy","sid121111","spw121111","ACTIVE","0","stu");
 insert IGNORE into allusers values("12Dorthy","sid122222","spw122222","ACTIVE","0","stu");

@@ -1053,9 +1053,12 @@ module.exports = {
         }
 
         async function checkuniquetimeslotcountforoneday(plan) {
-            console.log("\n\n>>checkuniquetimeslotcountforoneday()    ", "select distinct(availablestarttime),count(*) as counting  from  threeparty where " + getallplandate(plan) + " group by availablestarttime order by counting asc  ;\n\n");
+            var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
+            // var queryline = "SELECT COUNT(*)  from  threeparty where availabledate = \"2024-02-19\" GROUP BY availablestarttime;"
+            // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
+            console.log("\n\n>>checkuniquetimeslotcountforoneday()    ",queryline);
             var uniquetimeslotcounts = await new Promise((resolve) => {
-                pool.query("select distinct(availablestarttime),count(*) as counting  from  threeparty where " + getallplandate(plan) + " group by availablestarttime order by counting asc  ;", (err, results) => {
+                pool.query(queryline, (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
@@ -1070,26 +1073,46 @@ module.exports = {
             if (uniquetimeslotcounts != "err") { return uniquetimeslotcounts; } else { return false; }
         }
 
-        async function getascorderoftimecountpairlist(planNo,parallelschedule, dateoftoday, starttime) {
+        async function getascorderoftimecountpairlist(planNo, parallelschedule, dateoftoday, starttime) {
             // var query = "select t2.tid,t2.sid,t2.oid,t2.availabledate,t2.availablestarttime,t2.availableendtime,t1.counting from threeparty as t2 left join (select sid, availabledate,count(availabledate) as counting  from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and availablestarttime >= \"" + dateoftoday + " " +starttime + "\"  group by tid,sid,oid, availabledate)as t1 on t1.sid = t2.sid and t1.availabledate = t2.availabledate  where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.sid in (select  sid from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and  tid not in(select tid from allschedulebox where planNo = "+planNo+" ) and  oid not in(select oid from allschedulebox where planNo =  "+planNo+" ) and  sid not in(select sid from allschedulebox where planNo = "+planNo+" )   group by tid,sid,oid, availabledate) order by t1.counting asc;";
-           var query = "select t2.*,t1.counting from threeparty as t2 left join (select tid,sid,oid,count(availabledate) as counting from threeparty where availabledate =\"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(*) > 0) as t1 on t1.tid = t2.tid and t1.sid = t2.sid and t2.oid = t2.oid where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.tid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.oid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.sid not in (select sid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") order by t1.counting asc;"
+            //    var query = "select t2.*,t1.counting from threeparty as t2 left join (select tid,sid,oid,count(availabledate) as counting from threeparty where availabledate =\"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(*) > 0) as t1 on t1.tid = t2.tid and t1.sid = t2.sid and t2.oid = t2.oid where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.tid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.oid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.sid not in (select sid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") order by t1.counting asc;"
+            // var query = "select tid,sid,oid,availabledate,count(availablestarttime)as counting from threeparty where availabledate = \"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(availablestarttime >\"" + dateoftoday + " " + starttime + "\") >0;"
+            var query = "select tid,sid,oid,TIDPrior,OIDPrior,availabledate,count(*) from threeparty where availabledate = \"" + dateoftoday + "\" and sid in (select sid from threeparty where availablestarttime = \"" + dateoftoday + " " + starttime + "\") group by tid,sid,oid,TIDPrior,OIDPrior,availabledate order by count(*) asc, TIDPrior asc, OIDPrior asc ;"
             console.log(query);
-            var pairsforthistimeslot = await new Promise((resolve) => {
+            var getCounts = await new Promise((resolve) => {
                 pool.query(query, (err, results) => {
                     console.log(query);
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        console.log("pairsforthistimeslot  ", results.length)
+                        console.log("counts  ", json.length )
                         resolve(json);
                     } catch (err) {
                         resolve("err")
                     }
                 });
             }).catch((err) => {
-                errmsg = "error happened in ScheduleController.startschedule.getascorderoftimecountpairlist()"
+                errmsg = "error happened in ScheduleController.startschedule.getascorderoftimecountpairlist().getCounts"
             })
-            console.log("pairsforthistimeslot  ", pairsforthistimeslot.length)
+
+            
+
+            // var pairsforthistimeslot = await new Promise((resolve) => {
+            //     pool.query(query, (err, results) => {
+            //         console.log(query);
+            //         try {
+            //             var string = JSON.stringify(results);
+            //             var json = JSON.parse(string);
+            //             console.log("pairsforthistimeslot  ", json )
+            //             resolve(json);
+            //         } catch (err) {
+            //             resolve("err")
+            //         }
+            //     });
+            // }).catch((err) => {
+            //     errmsg = "error happened in ScheduleController.startschedule.getascorderoftimecountpairlist()"
+            // })
+            // console.log("pairsforthistimeslot  ", pairsforthistimeslot.length)
             if (pairsforthistimeslot != "err") { return pairsforthistimeslot; } else { return false; }
         }
         async function getnumberofstudent() {
@@ -1190,34 +1213,34 @@ module.exports = {
             return ans;
         }
 
-        async function insertbox(element ,sqldatestring, sessionstarttime ) {
- 
-                let boxid = 'boxID';
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                const charactersLength = characters.length;
-                let counter = 0;
-                while (counter < 15) {
-                    boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
-                    counter += 1;
-                }
-               
-                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\""+element.planNo+"\",\"" +sqldatestring+" "+sessionstarttime.toLocaleTimeString("en-GB")+ "\",\"" + element.type + "\","
-                    + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
-                    + "\"" + element.campus + "\",\"" +element.rid+ "\", now()) ;"
-                console.log(insertscheduleboxquery)
+        async function insertbox(element, sqldatestring, sessionstarttime) {
 
-                db.query(insertscheduleboxquery, (err, results) => {
-                    try {
-                        console.log("inserted ")
-                    } catch (err) {
-                        return err;
-                    }
-                });
-           
+            let boxid = 'boxID';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < 15) {
+                boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+
+            var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + element.planNo + "\",\"" + sqldatestring + " " + sessionstarttime.toLocaleTimeString("en-GB") + "\",\"" + element.type + "\","
+                + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
+                + "\"" + element.campus + "\",\"" + element.rid + "\", now()) ;"
+            console.log(insertscheduleboxquery)
+
+            db.query(insertscheduleboxquery, (err, results) => {
+                try {
+                    console.log("inserted ")
+                } catch (err) {
+                    return err;
+                }
+            });
+
         }
 
-        async function insertarraybox(parallelschedule ,sqldatestring, sessionstarttime ) {
-            
+        async function insertarraybox(parallelschedule, sqldatestring, sessionstarttime) {
+
             parallelschedule.forEach((element => {
                 let boxid = 'boxID';
                 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -1227,10 +1250,10 @@ module.exports = {
                     boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
                     counter += 1;
                 }
-               
-                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\""+element.planNo+"\",\"" +sqldatestring+" "+sessionstarttime.toLocaleTimeString("en-GB")+ "\",\"" + element.type + "\","
+
+                var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + element.planNo + "\",\"" + sqldatestring + " " + sessionstarttime.toLocaleTimeString("en-GB") + "\",\"" + element.type + "\","
                     + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
-                    + "\"" + element.campus + "\",\"" +element.rid+ "\", now()) ;"
+                    + "\"" + element.campus + "\",\"" + element.rid + "\", now()) ;"
                 console.log(insertscheduleboxquery)
 
                 db.query(insertscheduleboxquery, (err, results) => {
@@ -1267,7 +1290,7 @@ module.exports = {
         }
 
 
-        var threepartyAvaList = await getthreepartyavalist();
+        // var threepartyAvaList = await getthreepartyavalist();
         // console.log(threepartyAvaList)
 
         // var a  == looping in possible plans
@@ -1310,23 +1333,24 @@ module.exports = {
                 console.log("availableclassroomlist.length   ", availableclassroomlist.length, availableclassroomlist)
                 var parallelschedule = new Array();
                 for (var d = 0; d < availableclassroomlist.length; d++) {
+                    console.log(sqldatestring,"     ", sessionstarttime.toLocaleTimeString("en-GB"))
                     var pairsforthistimeslot = await getascorderoftimecountpairlist(a, parallelschedule, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
                     console.log(pairsforthistimeslot);
-                    if (pairsforthistimeslot.length != 0) {
-                        console.log("this classroom ", availableclassroomlist[d], " is ok for ", sessionstarttime.toLocaleDateString("en-GB"), " this timeslot ", sessionstarttime.toLocaleTimeString("en-GB"), "  ", sessionendtime.toLocaleTimeString("en-GB"))
-                        var schedulebox = createschedulebox(a, pairsforthistimeslot[0].TID, pairsforthistimeslot[0].SID, pairsforthistimeslot[0].OID, sessionstarttime, sessionstarttime.toLocaleTimeString('en-GB'), "Sin Hang", preSetClassroomList[d]);
-                        parallelschedule.push(schedulebox);
-                        console.log(schedulebox)
-                        console.log("now insert mustusepair")
-                        insertbox(schedulebox,sqldatestring,sessionstarttime);
-                        pairsforthistimeslot.shift();
-                    }
+                    // if (pairsforthistimeslot.length != 0) {
+                    //     console.log("this classroom ", availableclassroomlist[d], " is ok for ", sessionstarttime.toLocaleDateString("en-GB"), " this timeslot ", sessionstarttime.toLocaleTimeString("en-GB"), "  ", sessionendtime.toLocaleTimeString("en-GB"))
+                    //     var schedulebox = createschedulebox(a, pairsforthistimeslot[0].TID, pairsforthistimeslot[0].SID, pairsforthistimeslot[0].OID, sessionstarttime, sessionstarttime.toLocaleTimeString('en-GB'), "Sin Hang", preSetClassroomList[d]);
+                    //     parallelschedule.push(schedulebox);
+                    //     console.log(schedulebox)
+                    //     console.log("now insert mustusepair")
+                    //     insertbox(schedulebox,sqldatestring,sessionstarttime);
+                    //     pairsforthistimeslot.shift();
+                    // }
                     console.log(">>parallelschedule for date time ", sessionstarttime.toLocaleDateString("en-GB"), " ", sessionstarttime.toLocaleTimeString("en-GB"), " ", parallelschedule.length, "\n", parallelschedule);
                 }
-                var mustusepair = checkpairsmustusethistimeslot(a,parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"))
+                var mustusepair = checkpairsmustusethistimeslot(a, parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"))
                 // insertbox(parallelschedule,sqldatestring,sessionstarttime);
-console.log("now insert mustusepair")
-insertarraybox(mustusepair,sqldatestring,sessionstarttime);
+                console.log("now insert mustusepair")
+                insertarraybox(mustusepair, sqldatestring, sessionstarttime);
 
             }
 
