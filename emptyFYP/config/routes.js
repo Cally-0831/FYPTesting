@@ -45,6 +45,7 @@ module.exports.routes = {
   'GET /scheduledesign': "SettingController.nodraft",
   "POST /scheduledesign/genAvailable": "ScheduleController.genAvailable",
   'GET /scheduledesign/startschedule': "ScheduleController.startScheduling",
+  'GET /scheduledesign/scheduleList': "ScheduleController.scheduleList",
   'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
   

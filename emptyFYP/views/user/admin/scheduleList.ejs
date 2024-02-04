@@ -1,0 +1,84 @@
+<div>
+    <div class="Pagetitle">Schedule List </div>
+    <div class="row">
+        <div class="buttons">
+            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+        </div>
+    </div>
+    <br>
+    <div class = "columns is-centered is-multiline">
+        <div class="tabs is-toggle">
+        <ul>
+            <%plannumber.forEach(element =>{%>
+                <%console.log(req.query.planNo,"  ",element.planno)%>
+                <%if(req.query.planNo == element.planno){%>
+                    <li class="is-active"><a>Plan No. <%=element.planno%></a></li>
+                    <%}else{%>
+                         <li><a href = "/scheduledesign/scheduleList?planNo=<%=element.planno%>">Plan No. <%=element.planno%></a></li>
+                <%}%>
+            <%})%>
+          
+        </ul>
+      </div>
+      <div class = "column is-fullwidth-mobile is-8-desktop">
+        <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
+            <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+            </tr><th>
+                    Date
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Classroom
+                </th>
+                <th>
+                    Supervisor
+                </th>
+                <th>
+                    Student
+                </th>
+                <th>
+                    Observer
+                </th>
+                <th>
+                    Topic
+                </th></tr>
+                <%plandetails.forEach(element => {%>
+                    <%console.log(element)%>
+                    <tr>
+                    <td>
+                        <%=(new Date (element.boxdate)).toLocaleDateString("en-GB")%>
+                    </td>
+                    <td>
+                        <%=(new Date (element.boxdate)).toLocaleTimeString("en-GB")%>
+                    </td>
+                    <td>
+                        <%=element.RID%>
+                    </td>
+                    <td>
+                        <%=element.TID%>
+                    </td>
+                    <td>
+                        <%=element.SID%>
+                    </td>
+                    <td>
+                        <%=element.OID%>
+                    </td>
+                    <td>
+                        <%=element.topic%>
+                    </td>
+                </tr>
+                    <%})%>
+                </table>
+            </div>
+      </div>
+     
+    </div>
+    
+</div>
+
+
+<script>
+
+</script>

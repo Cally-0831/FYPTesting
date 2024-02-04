@@ -42,6 +42,6 @@ create table supervisoravailable( TID varchar(10) not null, availabledate DATE, 
 
 create table studentavailable( SID varchar(10) not null, availabledate DATE, availablestartTime timestamp, availableendTime timestamp, primary key(sid,availabledate,availablestarttime) );
 
-create table manualhandlecase( SID varchar(10) not null, TID varchar(10) not null, OID varchar(10) not null, primary key(sid) );
+create table manualhandlecase( SID varchar(10) not null, TID varchar(10) not null, OID varchar(10) not null,planNo int not null, primary key(sid,planNo) );
 
 create table threeparty (TID varchar(10) not null, SID varchar(10) not null, OID varchar(10) not null, TIDPrior int , OIDPrior int, availabledate DATE, availablestarttime timestamp, availableendtime timestamp, primary key(TID,SID,OID,availablestarttime));

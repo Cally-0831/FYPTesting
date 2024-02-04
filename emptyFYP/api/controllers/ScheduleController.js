@@ -736,7 +736,7 @@ module.exports = {
                 }
 
             }
-            
+
         }
 
         var pairinglist = await new Promise((resolve) => {
@@ -794,7 +794,7 @@ module.exports = {
             });
             // console.log("all gen ok")
         }
-        
+
 
         console.log("all gen ok all")
 
@@ -804,20 +804,6 @@ module.exports = {
     startScheduling: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-
-        
-        // var checking = await new Promise((resolve) => {
-        //    db.query("select count(*) from threeparty", (err, res) => {
-        //         var string = JSON.stringify(res);
-        //         var json = JSON.parse(string);
-        //         var ans = json;
-        //         resolve(ans)
-        //     }) 
-        // }).catch((err) => {
-        //     errmsg = "error happened in ScheduleController.genavailble.paringlist"
-        // })
-        // console.log(">>checking", checking);
-
 
         var setting3 = await new Promise((resolve) => {
             pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
@@ -981,21 +967,24 @@ module.exports = {
             if (suplist != "err") { return suplist; } else { return false; }
         }
 
-        async function getpairinglistforthissup(tid) {
-            var pairinglist = await new Promise((resolve) => {
-                pool.query("select * from (select t1.oid, t1.sid,t2.priority as obspriority from observerpairstudent as t1 left join supervisor as t2 on t2.tid = t1.oid) as t4 right join (select * from supervisorpairstudent where tid = \"" + tid + "\") as t3 on t4.sid = t3.sid;", (err, results) => {
+        async function getStudentnum() {
+            var studentnum = await new Promise((resolve) => {
+                pool.query("select count(*) as counting from student", (err, results) => {
                     try {
                         var string = JSON.stringify(results);
                         var json = JSON.parse(string);
-                        resolve(json);
+                        if (json.length > 0) {
+                            resolve(json[0].counting);
+                        }
+
                     } catch (err) {
                         resolve("err")
                     }
                 });
             }).catch((err) => {
-                errmsg = "error happened in ScheduleController.startschedule.getpairinglistforthissup"
+                errmsg = "error happened in ScheduleController.startschedule.getStudentnum()"
             })
-            if (pairinglist != "err") { return pairinglist; } else { return false; }
+            if (studentnum != "err") { return studentnum; } else { return false; }
         }
 
         async function getprefofthissuper(tid) {
@@ -1072,9 +1061,9 @@ module.exports = {
 
         async function checkuniquetimeslotcountforoneday(plan) {
             // var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
-            var queryline = "SELECT distinct(availablestarttime),COUNT(*)  from  threeparty where "+getallplandate(plan)+" GROUP BY availablestarttime order by count(*) asc;"
+            var queryline = "SELECT distinct(availablestarttime),COUNT(*)  from  threeparty where " + getallplandate(plan) + " GROUP BY availablestarttime order by count(*) asc;"
             // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
-            console.log("\n\n>>checkuniquetimeslotcountforoneday()    ",queryline);
+            console.log("\n\n>>checkuniquetimeslotcountforoneday()    ", queryline);
             var uniquetimeslotcounts = await new Promise((resolve) => {
                 db.query(queryline, (err, results) => {
                     try {
@@ -1088,11 +1077,11 @@ module.exports = {
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.startschedule.checkuniquetimeslotcountforoneday()"
             })
-            if (uniquetimeslotcounts != "err") {return uniquetimeslotcounts; } else { return false; }
+            if (uniquetimeslotcounts != "err") { return uniquetimeslotcounts; } else { return false; }
         }
 
         async function getascorderoftimecountpairlist(planNo, parallelschedule, dateoftoday, starttime) {
-            var query = "select t2.tid,t2.sid,t2.oid,t2.availabledate,t2.availablestarttime,t2.availableendtime,t1.counting from threeparty as t2 left join (select sid, availabledate,count(availabledate) as counting  from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and availablestarttime >= \"" + dateoftoday + " " +starttime + "\"  group by tid,sid,oid, availabledate)as t1 on t1.sid = t2.sid and t1.availabledate = t2.availabledate  where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.sid in (select  sid from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and  tid not in(select tid from allschedulebox where planNo = "+planNo+" ) and tid not in (select oid from allschedulebox where planNo =  "+planNo+" ) and oid not in (select tid from allschedulebox where planNo =  "+planNo+" ) and oid not in(select oid from allschedulebox where planNo =  "+planNo+" ) and  sid not in(select sid from allschedulebox where planNo = "+planNo+" )   group by tid,sid,oid, availabledate) order by t1.counting asc;";
+            var query = "select t2.tid,t2.sid,t2.oid,t2.availabledate,t2.availablestarttime,t2.availableendtime,t1.counting from threeparty as t2 left join (select sid, availabledate,count(availabledate) as counting  from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and availablestarttime >= \"" + dateoftoday + " " + starttime + "\"  group by tid,sid,oid, availabledate)as t1 on t1.sid = t2.sid and t1.availabledate = t2.availabledate  where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.sid in (select  sid from threeparty as t1 where availabledate = \"" + dateoftoday + "\" and  tid not in(select tid from allschedulebox where planNo = " + planNo + " and boxdate = \"" + dateoftoday + " " + starttime + "\" ) and tid not in (select oid from allschedulebox where planNo =  " + planNo + " and boxdate = \"" + dateoftoday + " " + starttime + "\") and oid not in (select tid from allschedulebox where planNo =  " + planNo + " and boxdate = \"" + dateoftoday + " " + starttime + "\") and oid not in(select oid from allschedulebox where planNo =  " + planNo + " and boxdate = \"" + dateoftoday + " " + starttime + "\") and  sid not in(select sid from allschedulebox where planNo = " + planNo + " )   group by tid,sid,oid, availabledate) order by t1.counting asc;";
             //    var query = "select t2.*,t1.counting from threeparty as t2 left join (select tid,sid,oid,count(availabledate) as counting from threeparty where availabledate =\"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(*) > 0) as t1 on t1.tid = t2.tid and t1.sid = t2.sid and t2.oid = t2.oid where availablestarttime = \"" + dateoftoday + " " + starttime + "\" and t2.tid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.oid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") and t2.sid not in (select sid from allschedulebox where planno = 0 and boxdate = \"" + dateoftoday + " " + starttime + "\") order by t1.counting asc;"
             // var query = "select tid,sid,oid,availabledate,count(availablestarttime)as counting from threeparty where availabledate = \"" + dateoftoday + "\" group by tid,sid,oid,availabledate having count(availablestarttime >\"" + dateoftoday + " " + starttime + "\") >0;"
             // var query = "select tid,sid,oid,TIDPrior,OIDPrior,availabledate,count(*) from threeparty where availabledate = \"" + dateoftoday + "\" and sid in (select sid from threeparty where availablestarttime = \"" + dateoftoday + " " + starttime + "\") group by tid,sid,oid,TIDPrior,OIDPrior,availabledate order by count(*) asc, TIDPrior asc, OIDPrior asc ;"
@@ -1112,65 +1101,6 @@ module.exports = {
             })
             if (pairsforthistimeslot != "err") { return pairsforthistimeslot; } else { return false; }
         }
-        async function getnumberofstudent() {
-            var ans = await new Promise((resolve) => {
-                pool.query("select count(*) as counting from student;", (err, results) => {
-                    try {
-                        var string = JSON.stringify(results);
-                        var json = JSON.parse(string);
-                        resolve(json[0].counting);
-                    } catch (err) {
-                        resolve("err")
-                    }
-                });
-            }).catch((err) => {
-                errmsg = "error happened in ScheduleController.startschedule.getnumberofstudent()"
-            })
-            if (ans != "err") { console.log(ans); return ans; } else { return false; }
-        }
-
-
-        function sidnotinschedulelist(currentschedule) {
-            var ans = "";
-            for (var a = 0; a < currentschedule.length; a++) {
-                if (a != currentschedule.length - 1) {
-                    ans += "sid != \"" + currentschedule[a].sid + "\" and ";
-                } else {
-                    ans += "sid != \"" + currentschedule[a].sid + "\" ";
-                }
-
-            }
-            if (ans != "") {
-                ans = "and " + ans;
-                return ans;
-            } else {
-                return ans;
-            }
-
-        }
-
-        function tidnotinschedulelist(currentschedule) {
-            var ans = "";
-            for (var a = 0; a < currentschedule.length; a++) {
-                if (a != currentschedule.length - 1) {
-                    ans += " tid != \"" + currentschedule[a].tid + "\" and oid != \"" + currentschedule[a].tid + "\" and ";
-                    ans += " tid != \"" + currentschedule[a].oid + "\" and oid != \"" + currentschedule[a].oid + "\" and ";
-                } else {
-                    ans += " tid != \"" + currentschedule[a].tid + "\" and oid != \"" + currentschedule[a].tid + "\" and ";
-                    ans += "tid != \"" + currentschedule[a].oid + "\" and oid != \"" + currentschedule[a].oid + "\" ";
-                }
-            }
-            if (ans != "") {
-                ans = " and " + ans;
-                console.log(">tidnot up ", ans)
-                return ans;
-            } else {
-                console.log(">tidnot down ", ans)
-                return ans;
-            }
-
-        }
-
 
         function createschedulebox(planNo, tid, sid, oid, availabledate, availabletimeslot, campus, rid) {
             var thetime = new Date(availabledate);
@@ -1263,7 +1193,81 @@ module.exports = {
             }))
         }
 
+        async function sortAvaforManualCase(planno, sqldatestring, sessionstarttime) {
+            var queryline = " select t2.tid,t2.sid,t2.oid, t1.counting from threeparty as t2 right join (select tid,sid,oid,TIDPrior,OIDPrior,availabledate,count(availablestarttime) as counting from threeparty where sid not in (select distinct(sid) from allschedulebox where planno =  0) and availabledate = \"" + sqldatestring + "\" group by tid,sid,oid,TIDPrior,OIDPrior,availabledate) as t1 on t1.sid = t2.sid and t1.availabledate = t2.availabledate where t2.availablestarttime = \"" + sqldatestring + " " + sessionstarttime + "\" and t2.tid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + sqldatestring + " " + sessionstarttime + "\") and t2.tid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + sqldatestring + " " + sessionstarttime + "\") and t2.oid not in (select tid from allschedulebox where planno = 0 and boxdate = \"" + sqldatestring + " " + sessionstarttime + "\") and t2.oid not in (select oid from allschedulebox where planno = 0 and boxdate = \"" + sqldatestring + " " + sessionstarttime + "\") order by t1.counting asc, t2.TIDprior asc, t2.OIDprior asc "
+            console.log("\n\n", queryline, "\n\n")
+            var sortedManualCase = await new Promise((resolve) => {
+                db.query(queryline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.sortAvaforManualCase()"
+            })
+            if (sortedManualCase != "err") { return sortedManualCase; } else { return false; }
+        }
+        async function getNotYetDecidedCase(planno) {
+            var queryline = "select t1.*, t2.oid from observerpairstudent as t2 right join (select tid,sid,topic from supervisorpairstudent where sid not in (select sid from allschedulebox where planno = " + planno + ")) as t1 on t1.sid = t2.sid;"
+            console.log("\n\n", queryline, "\n\n")
+            var NotYetCase = await new Promise((resolve) => {
+                db.query(queryline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.sortAvaforManualCase()"
+            })
+            if (NotYetCase != "err") { return NotYetCase; } else { return false; }
+        }
+        async function maualhandlecaserequired(planno) {
+            var queryline = "select t1.tid,t1.sid,t1.topic,t2.oid from observerpairstudent as t2 right join (select * from supervisorpairstudent where sid in (select distinct(sid) from threeparty where sid not in(select sid from allschedulebox where planno = " + planno + ")))as t1 on t1.sid = t2.sid"
+            console.log("\n\n", queryline, "\n\n")
+            var ManualCase = await new Promise((resolve) => {
+                db.query(queryline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.ManualCase()"
+            })
 
+            if (ManualCase != "err") {
+                ManualCase.forEach(async element => {
+                    console.log(element)
+                    insertline = "insert into manualhandlecase values(\"" + element.SID + "\",\"" + element.TID + "\",\"" + element.oid + "\"," + planno + ")"
+                    console.log("\n\n", insertline, "\n\n")
+                    var insertManualCase = await new Promise((resolve) => {
+                        db.query(insertline, (err, results) => {
+                            try {
+                                resolve()
+                            } catch (err) {
+                                resolve("err")
+                            }
+                        });
+                    }).catch((err) => {
+                        errmsg = "error happened in ScheduleController.startschedule.ManualCase()"
+                    })
+                });
+
+
+                return true;
+            } else { return false; }
+        }
 
         function checkpairsmustusethistimeslot(planNo, parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime) {
             console.log(pairsforthistimeslot);
@@ -1289,18 +1293,20 @@ module.exports = {
 
         // var threepartyAvaList = await getthreepartyavalist();
         // console.log(threepartyAvaList)
+        var successschedule = new Array();
 
         // var a  == looping in possible plans
-        // for (var a = 0; a < possibledatecombination.length; a++) {
-        for (var a = 0; a < 1; a++) {
+        for (var a = 0; a < possibledatecombination.length; a++) {
+            // for (var a = 0; a < 2; a++) {
             var scheduleforthisplan = new Array();
+            var manualhandlecase = new Array();
             console.log(">>plan ", a, " ", possibledatecombination[a])
             // var b  == looping dates in the plans
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[a]);
-            console.log( uniquetimeslotcounts);
+            console.log(uniquetimeslotcounts);
             //looping the timeslots for this day
-            for (var c = 0; c < 1; c++) {
-                // for (var c = 0; c < uniquetimeslotcounts.length; c++) {
+            // for (var c = 0; c < 1; c++) {
+            for (var c = 0; c < uniquetimeslotcounts.length; c++) {
                 // console.log(uniquetimeslotcounts[c].availablestarttime);
 
                 var sessionstarttime = new Date(uniquetimeslotcounts[c].availablestarttime);
@@ -1331,31 +1337,82 @@ module.exports = {
                 var parallelschedule = new Array();
                 for (var d = 0; d < availableclassroomlist.length; d++) {
                     // for (var d = 0; d < 1; d++) {
-                    console.log(sqldatestring,"     ", sessionstarttime.toLocaleTimeString("en-GB"))
+                    // console.log(sqldatestring,"     ", sessionstarttime.toLocaleTimeString("en-GB"))
                     var pairsforthistimeslot = await getascorderoftimecountpairlist(a, parallelschedule, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
-                     console.log(pairsforthistimeslot[0]);
+                    console.log(pairsforthistimeslot[0]);
                     if (pairsforthistimeslot.length != 0) {
                         console.log("this classroom ", availableclassroomlist[d], " is ok for ", sessionstarttime.toLocaleDateString("en-GB"), " this timeslot ", sessionstarttime.toLocaleTimeString("en-GB"), "  ", sessionendtime.toLocaleTimeString("en-GB"))
                         var schedulebox = createschedulebox(a, pairsforthistimeslot[0].tid, pairsforthistimeslot[0].sid, pairsforthistimeslot[0].oid, sessionstarttime, sessionstarttime.toLocaleTimeString('en-GB'), "Sin Hang", preSetClassroomList[d]);
                         parallelschedule.push(schedulebox);
                         scheduleforthisplan.push(schedulebox);
                         console.log(schedulebox)
-                        insertbox(schedulebox,sqldatestring,sessionstarttime);
+                        insertbox(schedulebox, sqldatestring, sessionstarttime);
                         pairsforthistimeslot.shift();
                     }
-                    console.log(">>parallelschedule for date time ", sessionstarttime.toLocaleDateString("en-GB"), " ", sessionstarttime.toLocaleTimeString("en-GB"), " ", parallelschedule.length, "\n", parallelschedule,"\n\n");
+                    // console.log(">>parallelschedule for date time ", sessionstarttime.toLocaleDateString("en-GB"), " ", sessionstarttime.toLocaleTimeString("en-GB"), " ", parallelschedule.length, "\n", parallelschedule,"\n\n");
                 }
-                var mustusepair = checkpairsmustusethistimeslot(a, parallelschedule, pairsforthistimeslot, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"))
-                scheduleforthisplan.push(schedulebox);
-                console.log("now insert mustusepair")
+                // scheduleforthisplan.push(schedulebox);
+                // console.log("now insert mustusepair ",mustusepair)
                 // insertarraybox(mustusepair, sqldatestring, sessionstarttime);
-
             }
 
+            var NotYetDecidedCase = await getNotYetDecidedCase(a);
+
+            NotYetDecidedCase.forEach(element => {
+                manualhandlecase.push(element);
+            });
+
+            console.log("maualhandlecase ", manualhandlecase)
+
+            /**handle manualcase by checking RRS first */
+            for (var e = 0; e < manualhandlecase.length; e++) {
+
+                for (var c = 0; c < uniquetimeslotcounts.length; c++) {
+                    var sessionstarttime = new Date(uniquetimeslotcounts[c].availablestarttime);
+                    var sessionendtime = resetsessionendtime(sessionstarttime);
+                    var sqldatestring = sessionstarttime.toLocaleDateString("en-GB").split("/");
+                    sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
+                    sqldatestring.trim();
+                    var roomttbresult;
+                    var roomtimeslotresult;
+                    var availablemanualhandlecase = await sortAvaforManualCase(a, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
+                    if (req.query.typeOfPresent == "final") {
+                        roomttbresult = await checkclassroomttb(preSetClassroomList[4], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[4], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+
+                    } else {
+                        roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[4], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        roomttbresult = true;
+                    }
+
+                    if (roomttbresult && roomtimeslotresult) {
+                        console.log(availablemanualhandlecase)
+                        if (availablemanualhandlecase.length != 0) {
+                            console.log("this classroom ", preSetClassroomList[4], " is ok for ", sessionstarttime.toLocaleDateString("en-GB"), " this timeslot ", sessionstarttime.toLocaleTimeString("en-GB"), "  ", sessionendtime.toLocaleTimeString("en-GB"))
+                            var schedulebox = createschedulebox(a, availablemanualhandlecase[0].tid, availablemanualhandlecase[0].sid, availablemanualhandlecase[0].oid, sessionstarttime, sessionstarttime.toLocaleTimeString('en-GB'), "Sin Hang", preSetClassroomList[4]);
+                            scheduleforthisplan.push(schedulebox);
+                            // console.log(schedulebox)
+                            insertbox(schedulebox, sqldatestring, sessionstarttime);
+                            // availablemanualhandlecase.shift();
+                        }
+                    }
+                }
+            }
+
+
+            /** ManualCases left */
+            maualhandlecaserequired(a);
+
             console.log("\n\n\n")
-            console.log(">>scheduleforthisplan  ", scheduleforthisplan.length, " ", scheduleforthisplan);
+            // console.log(">>scheduleforthisplan  ", scheduleforthisplan.length, " ", scheduleforthisplan);
+            if (scheduleforthisplan.length == (await getStudentnum())) {
+                successschedule.push(a);
+            }
         }
-        return res.redirect("/hello")
+        console.log(successschedule)
+        // return res.redirect("/scheduledesign/startschedule?typeOfPresent=" + req.body.typeofpresent)
+  
+        return res.redirect("/scheduledesign/scheduleList?planNo="+successschedule[0]);
     },
 
     // genavailable: async function (req, res) {
@@ -2749,6 +2806,48 @@ module.exports = {
                     }
                 })
                 */
+    },
+
+    scheduleList: async function (req, res) {
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        console.log("hello")
+        var plannumber= await new Promise((resolve) => {
+            db.query("select distinct(planno) from allschedulebox group by planno having count(*) = (select count(*) as counting from student) order by planno asc", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (json.length == 0) {
+                    resolve(null);
+                } else {
+                    resolve(ans);
+                }
+
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.scheduleList"
+        })
+        console.log(plannumber)
+        var plandetails = await new Promise((resolve) => {
+            var queryline = "select * from allschedulebox where planno = "+req.query.planNo;
+            console.log(queryline);
+            db.query("select allschedulebox.*,supervisorpairstudent.topic from allschedulebox left join supervisorpairstudent on supervisorpairstudent.sid = allschedulebox.sid where planno = "+req.query.planNo+" order by boxdate asc, RID asc", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (json.length == 0) {
+                    resolve(null);
+                } else {
+                    resolve(ans);
+                }
+
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.scheduleList"
+        })
+        return res.view("user/admin/scheduleList",{plandetails : plandetails , plannumber:plannumber})
+        // return res.view("user/admin/supervisorschedulelist", { allsuplist: ans, manualhandlecase: manualhandlecase })
+       
     },
 
     supervisorschedulelist: async function (req, res) {
