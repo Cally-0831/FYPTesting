@@ -51,7 +51,10 @@ const importer = await sails.helpers.importer()
     '../SQL/Standard/TriggerCreate.sql',
     '../SQL/Standard/SampleData.sql',
     '../SQL/Standard/Setting.sql',
-    '../SQL/Standard/AllclassSQL.sql'
+    '../SQL/Standard/AllclassSQL.sql',
+
+    '../SQL/Standard/SettingUpdateForFastTesting.sql',
+    '../SQL/Standard/PairingObserver.sql',
   ]
 
   // New onProgress method, added in version 5.0!

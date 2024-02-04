@@ -1053,7 +1053,7 @@ module.exports = {
         }
 
         async function checkuniquetimeslotcountforoneday(plan) {
-            var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
+            var queryline = "select count(*) from threeparty"
             // var queryline = "SELECT COUNT(*)  from  threeparty where availabledate = \"2024-02-19\" GROUP BY availablestarttime;"
             // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
             console.log("\n\n>>checkuniquetimeslotcountforoneday()    ",queryline);
