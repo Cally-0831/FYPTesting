@@ -48,6 +48,7 @@ module.exports.routes = {
   'GET /scheduledesign/scheduleList': "ScheduleController.scheduleList",
   'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
+  "POST /scheduledesign/output": "ScheduleController.outputCSV",
   
   
 

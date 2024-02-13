@@ -145,14 +145,15 @@
             method: "GET",
         });
         if (response.ok) {
-            var msg = await response.json();
-            console.log("here !!!!!!! " + msg)
-            if (msg == "redirect") {
-                console.log("redirect from home")
-                location.assign("/supervisorschedulelist");
-            } else {
-                location.assign("/scheduledesign");
-            }
+            // var msg = await response.json();
+            // console.log("here !!!!!!! " + msg)
+            // if (msg == "redirect") {
+            //     console.log("redirect from home")
+            //     location.assign("/supervisorschedulelist");
+            // } else {
+            //     location.assign("/scheduledesign");
+            // }
+            location.assign(response.url);
         } else {
             alert("Please finish all setup before you enter to this page");
         }

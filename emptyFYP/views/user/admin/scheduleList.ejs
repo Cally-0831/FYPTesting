@@ -1,84 +1,202 @@
-<div>
-    <div class="Pagetitle">Schedule List </div>
-    <div class="row">
-        <div class="buttons">
-            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
-        </div>
-    </div>
-    <br>
-    <div class = "columns is-centered is-multiline">
-        <div class="tabs is-toggle">
-        <ul>
-            <%plannumber.forEach(element =>{%>
-                <%console.log(req.query.planNo,"  ",element.planno)%>
-                <%if(req.query.planNo == element.planno){%>
-                    <li class="is-active"><a>Plan No. <%=element.planno%></a></li>
-                    <%}else{%>
-                         <li><a href = "/scheduledesign/scheduleList?planNo=<%=element.planno%>">Plan No. <%=element.planno%></a></li>
-                <%}%>
-            <%})%>
-          
-        </ul>
-      </div>
-      <div class = "column is-fullwidth-mobile is-8-desktop">
-        <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
-            <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
-            </tr><th>
-                    Date
-                </th>
-                <th>
-                    Time
-                </th>
-                <th>
-                    Classroom
-                </th>
-                <th>
-                    Supervisor
-                </th>
-                <th>
-                    Student
-                </th>
-                <th>
-                    Observer
-                </th>
-                <th>
-                    Topic
-                </th></tr>
-                <%plandetails.forEach(element => {%>
-                    <%console.log(element)%>
-                    <tr>
-                    <td>
-                        <%=(new Date (element.boxdate)).toLocaleDateString("en-GB")%>
-                    </td>
-                    <td>
-                        <%=(new Date (element.boxdate)).toLocaleTimeString("en-GB")%>
-                    </td>
-                    <td>
-                        <%=element.RID%>
-                    </td>
-                    <td>
-                        <%=element.TID%>
-                    </td>
-                    <td>
-                        <%=element.SID%>
-                    </td>
-                    <td>
-                        <%=element.OID%>
-                    </td>
-                    <td>
-                        <%=element.topic%>
-                    </td>
-                </tr>
-                    <%})%>
-                </table>
+<%%>
+    <div>
+        <div class="Pagetitle">Schedule List </div>
+        <div class="row">
+            <div class="buttons">
+                <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
             </div>
-      </div>
-     
+        </div>
+        <br>
+
+        <div class="rows">
+            <div class="row">
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-fullwidth-mobile is-8-desktop">
+                        <div class="tabs is-toggle">
+                            <ul>
+                                <%plannumber.forEach(element=>{%>
+
+                                    <%if(req.query.planNo==element.planno){%>
+                                        <li class="is-active"><a>Plan No. <%=element.planno%></a></li>
+                                        <%}else{%>
+                                            <li><a href="/scheduledesign/scheduleList?planNo=<%=element.planno%>">Plan
+                                                    No.
+                                                    <%=element.planno%>
+                                                </a></li>
+                                            <%}%>
+                                                <%})%>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="columns is-centered is-multiline">
+                    <div class="column is-fullwidth-mobile is-9-desktop">
+                        <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
+                            <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
+                                <tr>
+                                    <th colspan="8"
+                                        style="text-align:center; font-size: calc(20px + 0.390625vw); background-color: bisque;">
+                                        Plan Number : <%=req.query.planNo%>
+                                            <div class="buttons is-responsive is-right is-bordered">
+                                                <div class="button greenbutton"
+                                                    onclick="output('<%=req.query.planNo%>')"
+                                                    style="border-color: black;">
+                                                    Output CSV file
+                                                </div>
+                                            </div>
+
+
+                                    </th>
+                                </tr>
+                                </tr>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    Date
+                                </th>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    Time
+                                </th>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    Classroom
+                                </th>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    StdID
+                                </th>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    SupName
+                                </th>
+                                
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    StuName
+                                </th>
+                               
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    ObsName
+                                </th>
+                                <th style="text-align:center; font-size: calc(15px + 0.390625vw);">
+                                    Topic
+                                </th>
+                                </tr>
+
+                                <%plandetails.forEach(element=> {%>
+                                    <tr>
+
+
+                                        <td id="Date" style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                            <%=(new Date (element.Date)).toLocaleDateString("en-GB")%>
+                                        </td>
+
+
+
+                                        <td style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                            <%=element.Time%>
+                                        </td>
+                                        <% switch(element.Classroom){ case "FSC801C" :%>
+                                            <td
+                                                style="background-color: rgb(247, 168, 168); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                <%=element.Classroom%>
+                                            </td>
+                                            <%break;%>
+                                                <%case "FSC801D" :%>
+                                                    <td
+                                                        style="background-color: rgb(239, 128, 42); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                        <%=element.Classroom%>
+                                                    </td>
+                                                    <%break;%>
+                                                        <%case "FSC901C" :%>
+                                                            <td
+                                                                style="background-color: rgb(249, 245, 147); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                <%=element.Classroom%>
+                                                            </td>
+                                                            <%break;%>
+                                                                <%case "FSC901D" :%>
+                                                                    <td
+                                                                        style="background-color: rgb(166, 249, 147); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                        <%=element.Classroom%>
+                                                                    </td>
+                                                                    <%break;%>
+                                                                        <%case "RRS638" :%>
+                                                                            <td
+                                                                                style="background-color: rgb(147, 249, 247); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                <%=element.Classroom%>
+                                                                            </td>
+                                                                            <%break;%>
+                                                                                <%default: %>
+                                                                                    <td
+                                                                                        style="background-color: rgb(160, 160, 254); text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                        <%=element.Classroom%>
+                                                                                    </td>
+                                                                                    <%}%>
+
+
+                                                                                    <td
+                                                                                    style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                    <%=element.StuID%>
+                                                                                </td>
+                                                                                        <td
+                                                                                            style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                            <%=element.SupName%>
+                                                                                        </td>
+                                                                                       
+                                                                                        <td
+                                                                                            style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                            <%=element.StuName%>
+                                                                                        </td>
+                                                                                        
+                                                                                        <td
+                                                                                            style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                            <%=element.ObsName%>
+                                                                                        </td>
+                                                                                        <td
+                                                                                            style="text-align:center; font-size: calc(10px + 0.390625vw);">
+                                                                                            <%=element.Topic%>
+                                                                                        </td>
+                                    </tr>
+                                    <%})%>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
     </div>
-    
-</div>
 
 
-<script>
+    <script>
+        function datecolor() {
 
-</script>
+        }
+        async function output(planNo) {
+            var reqbody = JSON.stringify({ planNo: planNo });
+            console.log(reqbody);
+            var response = await fetch("/scheduledesign/output", {
+                method: "POST",
+                body: reqbody
+            });
+            if (response.status == 200) {
+                var filefile = await response.json();
+               downloadBlob(filefile,"SchedulePlanNo"+planNo+".csv", 'text/csv;charset=utf-8;')
+                function downloadBlob(content, filename, contentType) {
+                    // Create a blob
+                    var blob = new Blob([content], { type: contentType });
+                    var url = URL.createObjectURL(blob);
+
+                    // Create a link to download it
+                    var pom = document.createElement('a');
+                    pom.href = url;
+                    pom.setAttribute('download', filename);
+                    pom.click();
+                }
+            }
+        }
+        function backback() {
+            location.assign("/home");
+        }
+    </script>
