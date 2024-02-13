@@ -1,4 +1,4 @@
-var mysql = require('mysql2');
+var mysql = require('mysql');
 //twotwo
 var db = mysql.createConnection({
     // host: "fypdeploy3-mysql",

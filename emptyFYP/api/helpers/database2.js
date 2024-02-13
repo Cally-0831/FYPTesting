@@ -1,4 +1,4 @@
-const { createPool } = require("mysql2")
+const { createPool } = require("mysql")
 
 const pool = createPool({
 //    host: "fypdeploy3-mysql",
