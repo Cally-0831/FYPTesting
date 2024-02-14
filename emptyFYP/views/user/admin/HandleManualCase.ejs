@@ -22,7 +22,7 @@
             <%if(availabledate.length >0){%>
             <div class="custom-select" style="text-align: center;vertical-align: middle;" > 
                 <label for="UpdateDateSelect">Update Date:</label>
-                <select name="date" id="UpdateDateSelect" onchange="getTimeForThisDay('<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=req.query.type%>')">
+                <select name="date" id="UpdateDateSelect" onchange="getTimeForThisDay('<%=currentbox.TID%>','<%=currentbox.SID%>','<%=currentbox.OID%>','<%=req.query.type%>','<%=req.query.planNo%>')">
                     <option value="null">---Please Select---</option>
                             <%for(var a =0 ;a < availabledate.length;a++){%>
                                 <%var weekday = (new Date(availabledate[a]).getDay());
@@ -75,8 +75,8 @@
             <div class = "buttons is-right">
                 <div class ="button buttonlogout is-responsive"
                     
-                onclick="submitform('<%=req.params.tid%>','<%=req.params.Page%>',document.getElementById('UpdateDateSelect').value,document.getElementById('UpdateTimeSelect').value,
-                '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=req.query.sid%>','<%=currentbox.OID%>','<%=req.query.type%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value)">
+                onclick="submitform(document.getElementById('UpdateDateSelect').value,document.getElementById('UpdateTimeSelect').value,
+                '<%=currentbox.boxID%>','<%=currentbox.TID%>','<%=req.query.sid%>','<%=currentbox.OID%>','<%=req.query.type%>',document.getElementById('UpdateCampusSelect').value,document.getElementById('UpdateRoomSelect').value,'<%=req.query.planNo%>')">
                     Confirm
                 </div>
             </div>
@@ -125,7 +125,7 @@
         }
     }
 
-   function getTimeForThisDay(TID,SID,OID,type) {
+   function getTimeForThisDay(TID,SID,OID,type,planNo) {
         if(document.getElementById("UpdateDateSelect").value != "null"){
             console.log(document.getElementById("UpdateDateSelect").value);
             var variable = JSON.parse(JSON.stringify({
@@ -133,9 +133,10 @@
                 TID:TID,
                 SID:SID,
                 OID:OID,
-                type:type
+                type:type,
+                planNo:planNo,
         }))
-        console.log(variable);
+        // console.log(variable);
             //fetch_data("getTime",document.getElementById("UpdateDateSelect").value,TID,SID,OID,type)
             fetch_data("getTime",variable)
         } else{
@@ -151,7 +152,7 @@
     function fetch_data(command,variable) {
         console.log(variable)
         if(command=="getTime"){
-             fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata?Command="+command+"&Date="+variable.date+"&TID="+variable.TID+"&SID="+variable.SID+"&OID="+variable.OID+"&type="+variable.type).then(function (response) {
+             fetch("/scheduledesign/scheduleList/modifyschedule/HandleManualCase/getdata?Command="+command+"&Date="+variable.date+"&TID="+variable.TID+"&SID="+variable.SID+"&OID="+variable.OID+"&type="+variable.type+"&planNo="+variable.planNo).then(function (response) {
             return response.json();
         }).then(function (responseData) {
             var html = "";
@@ -197,8 +198,8 @@
        
     }
     
-    async function submitform(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID) {
-        console.log(currentsup,currentPage,date,time,boxID,TID,SID,OID,type,Campus,RID)
+    async function submitform(date,time,boxID,TID,SID,OID,type,Campus,RID,planNo) {
+        console.log(date,time,boxID,TID,SID,OID,type,Campus,RID)
         if(date == "null" || time == "null"){return alert("Please input BOTH date and time for updates")}
         if(Campus == "null" || RID == "null"){return alert("Please input BOTH Campus and Room for updates")}
         
@@ -211,9 +212,11 @@
             SID: SID,
             OID: OID,
             Campus: Campus,
-            RID : RID
+            RID : RID,
+            planNo:planNo
         })
-        var response = await fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase", {
+        // var response = await fetch("/supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase", {
+        var response = await fetch("/scheduledesign/scheduleList/modifyschedule/HandleManualCase", {
                 method: "POST",
                 body: requestbody,
         });
@@ -221,7 +224,7 @@
         
         if(response.status == 200){
             alert("Update Success");
-           location.assign("/supervisorschedulelist/modifyschedule/"+currentsup+"/"+currentPage);
+           location.assign(response.url);
         }
 
 

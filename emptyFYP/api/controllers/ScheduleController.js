@@ -1,10 +1,10 @@
 const { start } = require("repl");
 const { setTimeout } = require("timers/promises");
 const { Blob } = require('buffer');
-const { Parser } =require('@json2csv/plainjs');
+const { Parser } = require('@json2csv/plainjs');
 
 module.exports = {
- 
+
     viewschedulepage: async function (req, res) {
 
     },
@@ -1593,7 +1593,7 @@ module.exports = {
             // console.log(">>scheduleforthisplan  ", scheduleforthisplan.length, " ", scheduleforthisplan);
             if (scheduleforthisplan.length == (await getStudentnum())) {
                 successschedule.push(a);
-                db.query("update allschedulebox set planStatus = true where planNo = " + a + " ", (err, results) => {
+                db.query("update allschedulebox set planStatus = \"Successful\" where planNo = " + a + " ", (err, results) => {
                     try {
                         // console.log("inserted ")
                     } catch (err) {
@@ -1607,1272 +1607,6 @@ module.exports = {
 
         return res.redirect("/scheduledesign/scheduleList?planNo=" + successschedule[0]);
     },
-
-    // genavailable: async function (req, res) {
-    //     var db = await sails.helpers.database();
-    //     var pool = await sails.helpers.database2();
-    //     var errmsg = "";
-    //     //var schedulebox = new Array();
-
-
-    //     // get presentperiod
-    //     var getsetting3 = "select * from allsupersetting where typeofsetting = 3;"
-    //     var setting3 = await new Promise((resolve) => {
-    //         pool.query(getsetting3, (err, res) => {
-    //             var string = JSON.stringify(res);
-    //             var json = JSON.parse(string);
-    //             var ans = json;
-    //             if (ans.length != 0) {
-    //                 var startday = new Date(ans[0].startdate);
-    //                 var endday = new Date(ans[0].enddate);
-    //                 var startTime = ans[0].starttime.split(":");
-    //                 var endTime = ans[0].endtime.split(":");
-    //                 startday.setHours(startTime[0]);
-    //                 startday.setMinutes(startTime[1]);
-    //                 startday.setSeconds(startTime[2]);
-    //                 endday.setHours(endTime[0]);
-    //                 endday.setMinutes(endTime[1]);
-    //                 endday.setSeconds(endTime[2]);
-    //                 console.log(startday + "   " + endday)
-    //                 ans = { startday: startday, endday: endday };
-    //             }
-    //             resolve(ans)
-    //         })
-    //     }).catch((err) => {
-    //         errmsg = "error happened in ScheduleController.genavailble.getsetting3"
-    //     })
-    //     //console.log(errmsg)
-    //     // console.log(setting3)
-
-
-
-    //     function resetschedulebox() {
-    //         var days = 0;
-    //         var schedulebox = new Array();
-    //         while (true) {
-    //             var scheduleboxsetting = JSON.parse(JSON.stringify({ "date": "", "prefno": "", "schedule": new Array() }))
-    //             // console.log("new schedulebox",schedulebox)
-    //             var presentday = new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days);
-    //             //console.log(new Date((new Date(setting3.startday)).getTime() + (24 * 60 * 60 * 1000) * days))
-    //             if (setting3.startday.getDay() != 6 || setting3.startday.getDay() != 0) {
-    //                 if (presentday.getDay() != 0) {
-    //                     var date = presentday.toLocaleDateString("en-GB").split("/");
-    //                     scheduleboxsetting.date = date[2] + "-" + date[1] + "-" + date[0];
-    //                     schedulebox.push(scheduleboxsetting);
-    //                 }
-    //                 days++;
-    //             }
-    //             if (presentday.toLocaleDateString("en-GB") == (new Date(setting3.endday)).toLocaleDateString("en-GB")) {
-    //                 false;
-    //                 break;
-    //             }
-    //         }
-    //         //console.log("resetted schedulebox", schedulebox)
-    //         return schedulebox;
-    //     }
-
-
-    //     // gen all supervisors
-    //     var getallsupervisor = "select tid,submission from supervisor order by priority asc"
-    //     var supervisorlist = await new Promise((resolve) => {
-    //         pool.query(getallsupervisor, (err, res) => {
-    //             var string = JSON.stringify(res);
-    //             var json = JSON.parse(string);
-    //             var ans = json;
-    //             resolve(ans)
-    //         })
-    //     }).catch((err) => {
-    //         errmsg = "error happened in ScheduleController.genavailble.getallsupervvisor"
-    //     })
-
-
-    //     //need to del all unpending records
-    //     var gethvrecordbutnosubmit = "select distinct(student.sid) from allstudenttakecourse left join student on student.sid = allstudenttakecourse.pid where ttbsubmission = \"N\" or ttbsubmission=\"Rejected\";"
-    //     var hvrecordbutnosubmitstudent = await new Promise((resolve) => {
-    //         pool.query(gethvrecordbutnosubmit, (err, res) => {
-    //             var string = JSON.stringify(res);
-    //             var json = JSON.parse(string);
-    //             var ans = json;
-    //             resolve(ans)
-    //         })
-    //     }).catch((err) => {
-    //         errmsg = "error happened in ScheduleController.genavailble.gethvrecordbutnosubmit"
-    //     })
-
-    //     //console.log(">>hvrecordbutnosubmitstudent", hvrecordbutnosubmitstudent)
-
-    //     for (var a = 0; a < hvrecordbutnosubmitstudent.length; a++) {
-    //         var deleteline = "delete from allstudenttakecourse where pid = \"" + hvrecordbutnosubmitstudent[a].sid + "\" and (confirmation = \"0\" or confirmation = \"3\");"
-    //         //console.log(deleteline)
-    //         db.query(deleteline, (err, result) => {
-    //             try {
-    //                 //console.log("delete complete")
-    //             } catch (err) {
-    //                 if (err) {
-    //                     errstring = "";
-    //                     errstring += "error happened for:" + deleteline + "\n"
-    //                     statuscode = 401;
-    //                 }
-    //             }
-
-    //         })
-
-    //         var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + hvrecordbutnosubmitstudent[a].sid + "\");"
-    //         //console.log(insertemptyline)
-    //         db.query(insertemptyline, (err, result) => {
-    //             try {
-    //                 //console.log("insert complete")
-    //             } catch (err) {
-    //                 if (err) {
-    //                     errstring = "";
-    //                     errstring += "error happened for:" + deleteline + "\n"
-    //                     statuscode = 401;
-    //                 }
-    //             }
-
-    //         })
-
-    //         updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + hvrecordbutnosubmitstudent[a].sid + "\";"
-    //         //console.log(updatetakecourseline)
-    //         db.query(updatetakecourseline, (err, result) => {
-    //             try {
-    //                 //console.log("update complete")
-    //             } catch (err) {
-    //                 if (err) {
-    //                     errstring = "";
-    //                     errstring += "error happened for:" + updatetakecourseline + "\n"
-    //                     statuscode = 401;
-    //                 }
-    //             }
-
-    //         })
-
-
-
-    //     }
-
-
-
-
-    //     // gen all student update those who didnot even handin ttb
-    //     var getallstudentttbnotok = "select distinct(sid) from student where ttbsubmission = \"N\";"
-    //     var studentlist = await new Promise((resolve) => {
-    //         pool.query(getallstudentttbnotok, (err, res) => {
-    //             var string = JSON.stringify(res);
-    //             var json = JSON.parse(string);
-    //             var ans = json;
-    //             resolve(ans)
-    //         })
-    //     }).catch((err) => {
-    //         errmsg = "error happened in ScheduleController.genavailble.getallstudentttbnotok"
-    //     })
-    //     //console.log(studentlist)
-
-    //     for (var a = 0; a < studentlist.length; a++) {
-    //         //try enroll all of them to EMPTY
-    //         var insertemptyline = "insert ignore into alltakecourse values(\"EMPTY_\",\"" + studentlist[a].sid + "\");"
-    //         //console.log(insertemptyline)
-    //         db.query(insertemptyline, (err, result) => {
-    //             try {
-    //                 //console.log("insert complete")
-    //             } catch (err) {
-    //                 if (err) {
-    //                     errstring = "";
-    //                     errstring += "error happened for:" + deleteline + "\n"
-    //                     statuscode = 401;
-    //                 }
-    //             }
-
-    //         })
-
-    //         updatetakecourseline = "Update allstudenttakecourse set allstudenttakecourse.ttbcomments = \"enforced to enroll empty since no submission or being rejected\" , allstudenttakecourse.confirmation = \"4\",  allstudenttakecourse.review = now() where allstudenttakecourse.pid=\"" + studentlist[a].sid + "\";"
-    //         //console.log(updatetakecourseline)
-    //         db.query(updatetakecourseline, (err, result) => {
-    //             try {
-    //                 //console.log("update complete")
-    //             } catch (err) {
-    //                 if (err) {
-    //                     errstring = "";
-    //                     errstring += "error happened for:" + updatetakecourseline + "\n"
-    //                     statuscode = 401;
-    //                 }
-    //             }
-
-    //         })
-    //     }
-
-    //     //turn Required Proof into Rejected
-    //     var updaterequiredproofline = "Update allrequestfromstudent set status = \"Enforce Rejected\", reply=\"Enforced to reject since didn't upload proof ontime\" where status = \"Require Proof\""
-    //     //console.log(updaterequiredproofline)
-    //     db.query(updaterequiredproofline, (err, result) => {
-    //         try {
-    //             //console.log("update complete")
-    //         } catch (err) {
-    //             if (err) {
-    //                 errstring = "";
-    //                 errstring += "error happened for:" + updaterequiredproofline + "\n"
-    //                 statuscode = 401;
-    //             }
-    //         }
-
-    //     })
-
-    //     //turn Pending into Approved
-    //     updatependingrequestline = "Update allrequestfromstudent set status = \"Enforce Approved\", reply=\"Enforced to approve since supervisor left for pending\" where status = \"Pending\";"
-    //     //console.log(updatependingrequestline)
-    //     db.query(updatependingrequestline, (err, result) => {
-    //         try {
-    //             //console.log("update complete")
-    //         } catch (err) {
-    //             if (err) {
-    //                 errstring = "";
-    //                 errstring += "error happened for:" + updatependingrequestline + "\n"
-    //                 statuscode = 401;
-    //             }
-    //         }
-
-    //     })
-
-    //     // handle gen student availble 
-    //     // gen all students
-    //     var getallstudent = "select  supervisorpairstudent.tid , student.sid , observerpairstudent.oid from student join supervisorpairstudent on supervisorpairstudent.sid = student.sid  join observerpairstudent on observerpairstudent.sid = student.sid"
-    //     var studentlist = await new Promise((resolve) => {
-    //         pool.query(getallstudent, (err, res) => {
-    //             var string = JSON.stringify(res);
-    //             var json = JSON.parse(string);
-    //             var ans = json;
-    //             resolve(ans)
-    //         })
-    //     }).catch((err) => {
-    //         errmsg = "error happened in ScheduleController.genavailble.getallstudent"
-    //     })
-    //     //console.log(">>studentlist", studentlist)
-
-    //     for (var a = 0; a < studentlist.length; a++) {
-
-    //         var currentgeneratedate = new Date(setting3.startday);
-    //         var currentgeneratedateend = new Date(setting3.startday);
-
-    //         while (currentgeneratedate < new Date(setting3.endday)) {
-
-    //             var supervisorttblist;
-    //             var supervisorrequest;
-
-    //             if (req.body.typeofpresent == "midterm") {
-    //                 // console.log()
-    //                 if (currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")) {
-    //                     if (currentgeneratedate.getMinutes() == 30) {
-    //                         currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-    //                         currentgeneratedateend.setMinutes(0)
-    //                     } else {
-    //                         currentgeneratedateend.setHours(currentgeneratedate.getHours());
-    //                         currentgeneratedateend.setMinutes(30);
-    //                     }
-    //                     //console.log(currentgeneratedate.toLocaleString("en-GB"), "  hellobello  ", currentgeneratedateend.toLocaleString("en-GB"))
-
-    //                 } else if (currentgeneratedate.getMinutes() == 30) {
-    //                     currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-    //                     currentgeneratedateend.setMinutes(0)
-    //                 } else {
-    //                     currentgeneratedateend.setMinutes(30);
-    //                 }
-
-
-    //                 var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-    //                 var boolcheckttb = false;
-    //                 var boolcheckreq = false;
-
-    //                 var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-    //                 //console.log(getcheckstudentttb);
-
-    //                 studentttblist = await new Promise((resolve) => {
-    //                     pool.query(getcheckstudentttb, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
-    //                 })
-    //                 if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
-    //                     boolcheckttb = true;
-    //                 }
-
-
-    //                 var getcheckstudentrequest = "select * from allrequestfromstudent where (status = \"Approved\" or status = \"Enforce Approved\") and sid = \"" + studentlist[a].sid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
-    //                 //console.log(getcheckstudentrequest)
-
-    //                 studentrequest = await new Promise((resolve) => {
-    //                     pool.query(getcheckstudentrequest, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getcheckstudentrequest"
-    //                 })
-
-    //                 if (studentrequest.length == 0 || studentrequest == null || studentrequest == undefined) {
-    //                     //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
-    //                     //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
-    //                     boolcheckreq = true;
-    //                 }
-
-
-
-
-    //                 if (boolcheckreq && boolcheckttb) {
-    //                     var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-    //                     //console.log(insertavability)
-    //                     var studentavailbilityinsert = await new Promise((resolve) => {
-    //                         pool.query(insertavability, (err, res) => {
-    //                             resolve(res);
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.insertavability"
-    //                     })
-
-    //                 }
-
-    //                 var checkdate1 = new Date();
-    //                 checkdate1.setHours(setting3.endday.getHours());
-    //                 checkdate1.setMinutes(setting3.endday.getMinutes());
-    //                 checkdate1.setSeconds(setting3.endday.getSeconds());
-
-    //                 var checkdate2 = new Date();
-    //                 checkdate2.setHours(currentgeneratedate.getHours());
-    //                 checkdate2.setMinutes(currentgeneratedate.getMinutes());
-    //                 checkdate2.setSeconds(currentgeneratedate.getSeconds());
-
-
-
-    //                 // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-
-    //                 // console.log(checkdate1.getTime() - 30*60*1000 - checkdate2.getTime()<=30*60*1000  , "endend")
-
-    //                 if (checkdate1.getTime() - 30 * 60 * 1000 - checkdate2.getTime() < 30 * 60 * 1000) {
-
-    //                     // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
-    //                     if (currentgeneratedate.getDay() != 6) {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                     } else {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                     }
-
-
-
-    //                 } else {
-    //                     if (currentgeneratedate.getMinutes() == 30) {
-    //                         currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
-    //                         currentgeneratedate.setMinutes(0)
-    //                     } else {
-    //                         currentgeneratedate.setMinutes(30)
-    //                     }
-
-    //                 }
-    //                 // console.log("midterm check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-
-
-
-
-
-    //             } else if (req.body.typeofpresent == "final") {
-    //                 currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-
-    //                 var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-
-    //                 // console.log(datestring)
-    //                 //console.log("final")
-    //                 var boolcheckttb = false;
-    //                 var boolcheckreq = false;
-
-    //                 var getcheckstudentttb = "select * from allstudenttakecourse left join allclass on allclass.cid = allstudenttakecourse.cid  where pid = \"" + studentlist[a].sid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime < Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime > time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-    //                 //console.log(getcheckstudentttb);
-    //                 studentttblist = await new Promise((resolve) => {
-    //                     pool.query(getcheckstudentttb, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getcheckstudentttb"
-    //                 })
-    //                 if (studentttblist == null || studentttblist == undefined || studentttblist.length == 0) {
-    //                     boolcheckttb = true;
-    //                 }
-
-    //                 var getcheckstudentrequest = "select * from allrequestfromstudent where (status = \"Approved\" or status = \"Enforce Approved\") and sid = \"" + studentlist[a].sid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
-    //                 //console.log(getcheckstudentrequest)
-    //                 studentrequest = await new Promise((resolve) => {
-    //                     pool.query(getcheckstudentrequest, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getcheckstudentrequest"
-    //                 })
-
-    //                 if (studentrequest.length == 0 || studentrequest == null || studentrequest == undefined) {
-    //                     //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
-    //                     //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
-    //                     boolcheckreq = true;
-    //                 }
-
-
-    //                 if (boolcheckreq && boolcheckttb) {
-    //                     var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-    //                     //console.log(insertavability)
-    //                     var studentavailbilityinsert = await new Promise((resolve) => {
-    //                         pool.query(insertavability, (err, res) => {
-    //                             resolve(res);
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.insertavability"
-    //                     })
-    //                 }
-
-    //                 var checkdate1 = new Date();
-    //                 checkdate1.setHours(setting3.endday.getHours() - 1);
-    //                 checkdate1.setMinutes(setting3.endday.getMinutes());
-    //                 checkdate1.setSeconds(setting3.endday.getSeconds());
-
-    //                 var checkdate2 = new Date();
-    //                 checkdate2.setHours(currentgeneratedate.getHours());
-    //                 checkdate2.setMinutes(currentgeneratedate.getMinutes());
-    //                 checkdate2.setSeconds(currentgeneratedate.getSeconds());
-
-
-
-    //                 // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-    //                 // console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
-    //                 // console.log(checkdate1.getTime() - checkdate2.getTime()<= 60*60*1000 , "endend")
-    //                 if (checkdate1.getTime() - checkdate2.getTime() < 60 * 60 * 1000) {
-    //                     // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
-    //                     //console.log(currentgeneratedate.getDay())
-    //                     if (currentgeneratedate.getDay() != 6) {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // console.log(setting3,"check setting 3")
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds());
-
-    //                     } else {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                     }
-
-
-    //                 } else {
-    //                     currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
-    //                 }
-
-
-    //                 // console.log("final check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-    //                 //  console.log(currentgeneratedate.toLocaleDateString("en-GB") + "   " + currentgeneratedate.toLocaleTimeString("en-GB"))
-
-    //             }
-
-    //         }
-    //     }
-
-
-    //     // console.log(supervisorlist.length)
-    //     //console.log(supervisorlist)
-    //     for (var a = 0; a < supervisorlist.length; a++) {
-    //         //console.log(supervisorlist[a]);
-    //         var currentgeneratedate = new Date(setting3.startday);
-    //         var currentgeneratedateend = new Date(setting3.startday);
-    //         while (currentgeneratedate < new Date(setting3.endday)) {
-
-    //             var supervisorttblist;
-    //             var supervisorrequest;
-    //             if (req.body.typeofpresent == "midterm") {
-    //                 //console.log("midterm")
-    //                 if (currentgeneratedate.toLocaleTimeString("en-GB") == setting3.startday.toLocaleTimeString("en-GB")) {
-    //                     if (currentgeneratedate.getMinutes() == 30) {
-    //                         currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-    //                         currentgeneratedateend.setMinutes(0)
-    //                     } else {
-    //                         currentgeneratedateend.setHours(currentgeneratedate.getHours());
-    //                         currentgeneratedateend.setMinutes(30);
-    //                     }
-    //                     // console.log(currentgeneratedate.toLocaleString("en-GB"), "  hellobello  ", currentgeneratedateend.toLocaleString("en-GB"))
-
-    //                 } else if (currentgeneratedate.getMinutes() == 30) {
-    //                     currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-    //                     currentgeneratedateend.setMinutes(0)
-    //                 } else {
-    //                     currentgeneratedateend.setMinutes(30);
-    //                 }
-    //                 var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-
-    //                 var boolcheckttb = false;
-    //                 var boolcheckreq = false;
-
-    //                 var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-    //                 // console.log(getchecksupervisorttb);
-
-
-    //                 supervisorttblist = await new Promise((resolve) => {
-    //                     pool.query(getchecksupervisorttb, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getsupervisorttblist"
-    //                 })
-    //                 if (supervisorttblist.length == 0 || supervisorttblist == null || supervisorttblist == undefined) {
-    //                     boolcheckttb = true;
-    //                 }
-
-    //                 var getchecksupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
-    //                 //console.log(getchecksupervisorrequest)
-    //                 supervisorrequest = await new Promise((resolve) => {
-    //                     pool.query(getchecksupervisorrequest, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getchecksupervisorrequest"
-    //                 })
-
-    //                 if (supervisorrequest.length == 0 || supervisorrequest == null || supervisorrequest == undefined) {
-    //                     //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
-    //                     //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
-    //                     boolcheckreq = true;
-    //                 }
-    //                 if (boolcheckreq && boolcheckttb) {
-    //                     var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-    //                     //console.log(insertavability)
-
-    //                     var supervisoravailbilityinsert = await new Promise((resolve) => {
-    //                         pool.query(insertavability, (err, res) => {
-    //                             resolve(res);
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.insertavability"
-    //                     })
-    //                 }
-
-
-
-    //                 var checkdate1 = new Date();
-    //                 checkdate1.setHours(setting3.endday.getHours());
-    //                 checkdate1.setMinutes(setting3.endday.getMinutes());
-    //                 checkdate1.setSeconds(setting3.endday.getSeconds());
-
-    //                 var checkdate2 = new Date();
-    //                 checkdate2.setHours(currentgeneratedate.getHours());
-    //                 checkdate2.setMinutes(currentgeneratedate.getMinutes());
-    //                 checkdate2.setSeconds(currentgeneratedate.getSeconds());
-
-
-
-    //                 // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-
-    //                 // console.log((checkdate1.getTime() - 30*60*1000) - checkdate2.getTime()<=30*60*1000 , "endend")
-
-    //                 if (checkdate1.getTime() - 30 * 60 * 1000 - checkdate2.getTime() < 30 * 60 * 1000) {
-
-
-
-    //                     // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
-    //                     //console.log(currentgeneratedate.getDay())
-    //                     if (currentgeneratedate.getDay() != 6) {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                     } else {
-    //                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
-    //                         currentgeneratedate = new Date(currentgeneratedate);
-    //                         // currentgeneratedate.setHours(9);
-    //                         // currentgeneratedate.setMinutes(30);
-    //                         // currentgeneratedate.setSeconds(0);
-    //                         currentgeneratedate.setHours(setting3.startday.getHours());
-    //                         currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                         currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                     }
-
-
-
-    //                 } else {
-    //                     if (currentgeneratedate.getMinutes() == 30) {
-    //                         currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
-    //                         currentgeneratedate.setMinutes(0)
-    //                     } else {
-    //                         currentgeneratedate.setMinutes(30)
-    //                     }
-
-    //                 }
-    //                 // console.log("midterm check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-
-
-    //             } else if (req.body.typeofpresent == "final") {
-    //                 //console.log("final")
-    //                 currentgeneratedateend.setHours(currentgeneratedate.getHours() + 1);
-
-    //                 var datestring = currentgeneratedate.getFullYear() + "-" + (currentgeneratedate.getMonth() + 1) + "-" + currentgeneratedate.getDate();
-    //                 var boolcheckttb = false;
-    //                 var boolcheckreq = false;
-
-    //                 var getchecksupervisorttb = "select * from allsupertakecourse left join allclass on allclass.cid = allsupertakecourse.cid  where confirmation = 1 and pid = \"" + supervisorlist[a].tid + "\" and weekdays = \"" + currentgeneratedate.getDay() + "\" and (starttime < Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and endtime > time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\")) order by pid asc, weekdays asc,startTime asc"
-    //                 //console.log(getchecksupervisorttb);
-    //                 supervisorttblist = await new Promise((resolve) => {
-    //                     pool.query(getchecksupervisorttb, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getsupervisorttblist"
-    //                 })
-    //                 if (supervisorttblist.length == 0 || supervisorttblist == null || supervisorttblist == undefined) {
-    //                     boolcheckttb = true;
-    //                 }
-
-
-    //                 var getchecksupervisorrequest = "select * from allrequestfromsupervisor where tid = \"" + supervisorlist[a].tid + "\" and requestDate = DATE(\"" + datestring + "\") and (requeststarttime <= Time(\"" + currentgeneratedateend.toLocaleTimeString("en-GB") + "\") and requestendtime >= time(\"" + currentgeneratedate.toLocaleTimeString("en-GB") + "\"))";
-    //                 supervisorrequest = await new Promise((resolve) => {
-    //                     pool.query(getchecksupervisorrequest, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.getchecksupervisorrequest"
-    //                 })
-
-    //                 if (supervisorrequest.length == 0 || supervisorrequest == null || supervisorrequest == undefined) {
-    //                     //console.log(supervisorlist[a].tid+"     "+currentgeneratedate.toLocaleDateString()+"   "+currentgeneratedate.toLocaleTimeString()+"    "+currentgeneratedateend.toLocaleTimeString())
-    //                     //var datestring = currentgeneratedate.getFullYear()+"-"+(currentgeneratedate.getMonth()+1)+"-"+currentgeneratedate.getDate();
-    //                     boolcheckreq = true;
-    //                 }
-    //                 if (boolcheckreq && boolcheckttb) {
-    //                     var insertavability = "insert into supervisoravailable value(\"" + supervisorlist[a].tid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-    //                     // console.log(insertavability)
-    //                     var supervisoravailbilityinsert = await new Promise((resolve) => {
-    //                         pool.query(insertavability, (err, res) => {
-    //                             resolve(res);
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.insertavability"
-    //                     })
-    //                 }
-
-
-    //                 var checkdate1 = new Date();
-    //                 checkdate1.setHours(setting3.endday.getHours() - 1);
-    //                 checkdate1.setMinutes(setting3.endday.getMinutes());
-    //                 checkdate1.setSeconds(setting3.endday.getSeconds());
-
-    //                 var checkdate2 = new Date();
-    //                 checkdate2.setHours(currentgeneratedate.getHours());
-    //                 checkdate2.setMinutes(currentgeneratedate.getMinutes());
-    //                 checkdate2.setSeconds(currentgeneratedate.getSeconds());
-
-
-
-    //                 // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
-    //                 // console.log(checkdate1.getTime() - checkdate2.getTime() , "endend")
-    //                 // console.log(checkdate1.getTime() - checkdate2.getTime()<= 60*60*1000 , "endend")
-    //                 if (checkdate1.getTime() - checkdate2.getTime() < 60 * 60 * 1000) {
-
-    //                     // if (currentgeneratedate.toLocaleTimeString("en-GB") == "17:30:00") {
-    //                     currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
-    //                     currentgeneratedate = new Date(currentgeneratedate);
-    //                     // currentgeneratedate.setHours(9);
-    //                     // currentgeneratedate.setMinutes(30);
-    //                     // currentgeneratedate.setSeconds(0);
-    //                     currentgeneratedate.setHours(setting3.startday.getHours());
-    //                     currentgeneratedate.setMinutes(setting3.startday.getMinutes());
-    //                     currentgeneratedate.setSeconds(setting3.startday.getSeconds())
-    //                 } else {
-    //                     currentgeneratedate.setHours(currentgeneratedate.getHours() + 1);
-    //                 }
-
-    //                 //  console.log(currentgeneratedate.toLocaleDateString("en-GB") + "   " + currentgeneratedate.toLocaleTimeString("en-GB"))
-
-    //             }
-
-    //         }
-    //     }
-
-    //     //console.log(">>supervisorlist", supervisorlist);
-
-    //     //  for (var a = 0; a < 3; a++) {
-
-
-
-
-    //     for (var a = 0; a < supervisorlist.length; a++) {
-    //         var getprefofthissuper = "select * from allpreffromsup where tid = \"" + supervisorlist[a].tid + "\"";
-    //         var prefofthissuper = await new Promise((resolve) => {
-    //             pool.query(getprefofthissuper, (err, res) => {
-    //                 var string = JSON.stringify(res);
-    //                 var json = JSON.parse(string);
-    //                 var ans = json;
-    //                 resolve(ans)
-    //             })
-    //         }).catch((err) => {
-    //             errmsg = "error happened in ScheduleController.genavailble.getprefofthissuper"
-    //         })
-    //         //console.log(">>preflist", prefofthissuper)
-    //         //console.log(prefofthissuper.length)
-    //         var thisschedulebox = resetschedulebox();
-
-    //         if (prefofthissuper != null && prefofthissuper.length > 0) {
-    //             // console.log("hello pref    ", prefofthissuper[0])
-    //             var prefary = (prefofthissuper[0].Prefno).split("/");
-    //             prefary.pop()
-    //             //console.log(prefary);
-    //             for (var b = 0; b < thisschedulebox.length; b++) {
-    //                 if (prefary.length < b) {
-    //                     thisschedulebox[b].prefno = "0"
-    //                 } else {
-    //                     thisschedulebox[b].prefno = prefary[b];
-    //                 }
-
-    //             }
-    //             // for (var b = 0; b < prefary.length; b++) {
-    //             //     thisschedulebox[b].prefno = prefary[b];
-    //             // }
-    //         }
-
-    //         function sortingscheduleboxSAT() {
-    //             thisschedulebox.sort((a, b) => {
-    //                 return b.prefno - a.prefno;
-    //             });
-    //             var dateofsat = [];
-    //             function arrayRemove(arr, value) {
-    //                 return arr.filter(function (geeks) {
-    //                     return geeks.date != value.date;
-    //                 });
-    //             }
-
-    //             thisschedulebox.forEach(element => {
-    //                 var datecheck = new Date(element.date);
-    //                 if (datecheck.getDay() == 6) {
-    //                     dateofsat.push(element);
-    //                 }
-    //             });
-    //             //console.log(dateofsat)
-    //             dateofsat.forEach(element => {
-    //                 let result = arrayRemove(thisschedulebox, element)
-    //                 //console.log(result)
-    //                 thisschedulebox = result;
-    //             });
-    //             //console.log(thisschedulebox)
-    //             dateofsat.forEach(element => {
-    //                 thisschedulebox.push(element)
-    //             });
-    //             return thisschedulebox;
-    //         }
-
-    //         thisschedulebox = sortingscheduleboxSAT();
-
-
-    //         //console.log(supervisorlist[a].tid, "   ", thisschedulebox)
-
-    //         var getallstudentlistforthissuper = "(select tid, supervisorpairstudent.sid, oid as colleague from supervisorpairstudent left join observerpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where supervisorpairstudent.tid = \"" + supervisorlist[a].tid + "\"and supervisorpairstudent.sid not in (select sid from allschedulebox) )union (select oid,observerpairstudent.sid , tid as colleague from observerpairstudent left join supervisorpairstudent on observerpairstudent.sid = supervisorpairstudent.sid where observerpairstudent.oid = \"" + supervisorlist[a].tid + "\" and observerpairstudent.sid not in (select sid from allschedulebox))";
-    //         // console.log(getallstudentlistforthissuper)
-    //         var studentlistforthissupervisor = await new Promise((resolve) => {
-    //             pool.query(getallstudentlistforthissuper, (err, res) => {
-    //                 var string = JSON.stringify(res);
-    //                 var json = JSON.parse(string);
-    //                 var ans = json;
-    //                 resolve(ans)
-    //             })
-    //         }).catch((err) => {
-    //             errmsg = "error happened in ScheduleController.genavailble.getallstudentlistforthissuper"
-    //         })
-    //         //console.log(">>studentlistforthissupervisor", studentlistforthissupervisor)
-
-    //         var counttimeboxlist = new Array();
-    //         if (studentlistforthissupervisor != 0) {
-    //             for (var b = 0; b < studentlistforthissupervisor.length; b++) {
-    //                 var checkavailabledup = "select count(*) as boxcount from supervisorpairstudent "
-    //                     + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
-    //                     + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + studentlistforthissupervisor[b].sid + "\" "
-    //                     + "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + studentlistforthissupervisor[b].tid + "\" or sa1.tid = \"" + studentlistforthissupervisor[b].colleague + "\") "
-    //                     + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
-    //                     + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-    //                     + "and (sa2.tid = \"" + studentlistforthissupervisor[b].colleague + "\" or sa2.tid = \"" + studentlistforthissupervisor[b].tid + "\");"
-    //                 //console.log(checkavailabledup)
-    //                 var availblelist = await new Promise((resolve) => {
-    //                     pool.query(checkavailabledup, (err, res) => {
-    //                         var string = JSON.stringify(res);
-    //                         var json = JSON.parse(string);
-    //                         var ans = json;
-    //                         resolve(ans)
-    //                     })
-    //                 }).catch((err) => {
-    //                     errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
-    //                 })
-
-    //                 counttimeboxlist.push(JSON.parse(JSON.stringify({ "sid": studentlistforthissupervisor[b].sid, "tid": studentlistforthissupervisor[b].tid, "oid": studentlistforthissupervisor[b].colleague, "availblelist": parseInt(availblelist[0].boxcount) })));
-    //             }
-
-    //             counttimeboxlist.sort((a, b) => {
-    //                 return a.availblelist - b.availblelist;
-    //             })
-    //             console.log("countimeboxlist all after sort", counttimeboxlist)
-
-    //             /*** step 1 fulfill supervisor pref */
-    //             var addedlist = [];
-    //             for (var b = 0; b < counttimeboxlist.length; b++) {
-
-    //                 var added = false;
-    //                 var index = 0;
-
-    //                 for (var c = 0; c < thisschedulebox.length; c++) {
-    //                     //console.log(thisschedulebox[c])
-    //                     var presentday = thisschedulebox[c].date;
-    //                     var checker = thisschedulebox[c].prefno;
-    //                     if (checker == "") {
-    //                         checker = 0;
-    //                     } else {
-    //                         checker = parseInt(thisschedulebox[c].prefno);
-    //                     }
-    //                     //console.log(thisschedulebox);
-
-    //                     //console.log(">>presentday", presentday, "  ", counttimeboxlist[b].sid, "  ", checker, "  ", thisschedulebox[c].schedule.length)
-
-    //                     if (thisschedulebox[c].schedule.length < checker) {
-
-    //                         // if ((checker == "0") || thisschedulebox[c].schedule.length != checker ) {
-    //                         while (!added) {
-    //                             function appendquery(thisschedulebox) {
-    //                                 var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
-    //                                     + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
-    //                                     + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
-    //                                     + "and studentavailable.availabledate =\"" + presentday + "\""
-    //                                 thisschedulebox.forEach(dayday => {
-    //                                     dayday.schedule.forEach(schedulebox => {
-    //                                         var timestamp = new Date(schedulebox.availablestartTime);
-    //                                         checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-
-    //                                     });
-    //                                 });
-    //                                 checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
-    //                                     + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
-    //                                     + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-    //                                     + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\") order by availablestartTime"
-    //                                 // console.log(checkavailabledup);
-    //                                 return checkavailabledup;
-    //                             }
-
-    //                             var checkavailabledup = appendquery(thisschedulebox);
-    //                             //console.log(checkavailabledup)
-    //                             var checkscheduleboxlist = await new Promise((resolve) => {
-    //                                 pool.query(checkavailabledup, (err, res) => {
-    //                                     var string = JSON.stringify(res);
-    //                                     var json = JSON.parse(string);
-    //                                     var ans = json;
-    //                                     resolve(ans)
-    //                                 })
-    //                             }).catch((err) => {
-    //                                 errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
-    //                             })
-
-    //                             //console.log(">>checkscheduleboxlist", checkscheduleboxlist[0])
-    //                             if (checkscheduleboxlist[0] == undefined) {
-    //                                 //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
-    //                                 index++;
-    //                                 //console.log("this fail", counttimeboxlist[b].sid)
-    //                                 var manualhandleline = "insert ignore into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
-    //                                 db.query(manualhandleline, (err, res) => {
-    //                                     try { //console.log("inserted manual handlecase") 
-    //                                     } catch (err) {
-    //                                         //console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
-    //                                     }
-    //                                 })
-    //                                 break;
-    //                             } else {
-    //                                 thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
-
-    //                                 //console.log(">>see see ", thisschedulebox[c].schedule)
-    //                                 added = true;
-    //                                 //console.log("this pass", counttimeboxlist[b].sid)
-    //                             }
-
-    //                         }
-    //                         if (added) {
-    //                             checker++;
-    //                             var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
-    //                             addedlist.push(counttimeboxlist[b].sid)
-    //                             db.query(deletemanualhandleline, (err, res) => {
-    //                                 try {
-    //                                     //console.log("deleteed manual handlecase") 
-    //                                 } catch (err) {
-    //                                     // console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
-    //                                 }
-    //                             })
-    //                             break;
-    //                         } else {
-    //                             console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
-    //                         }
-    //                     } else {
-    //                         // if (checker == "0") {
-    //                         //     console.log("need to handle this ppl 1", counttimeboxlist[b].sid)
-    //                         // } else if (thisschedulebox[c].schedule.length == parseInt(checker)) {
-    //                         //     console.log("need to handle this ppl 2", counttimeboxlist[b].sid)
-    //                         // }
-
-    //                         if (parseInt(checker) == 0) {
-    //                             break;
-    //                         }
-
-    //                     }
-
-
-
-
-
-
-    //                     // if (added) {
-    //                     //     checker++;
-    //                     //     var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
-
-    //                     //     db.query(deletemanualhandleline, (err, res) => {
-    //                     //         try { console.log("deleteed manual handlecase") } catch (err) {
-    //                     //             console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
-    //                     //         }
-    //                     //     })
-    //                     //     break;
-    //                     // } else {
-    //                     //     console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
-    //                     // }
-    //                 }
-    //             }
-
-
-    //             function arrayRemovesid(arr, value) {
-    //                 return arr.filter(function (geeks) {
-    //                     return geeks.sid != value;
-    //                 });
-    //             }
-
-    //             //console.log("added list   ", addedlist);
-    //             addedlist.forEach(element => {
-    //                 counttimeboxlist = arrayRemovesid(counttimeboxlist, element);
-    //                 //console.log("new countimebox in prcess  ", counttimeboxlist)
-    //             })
-
-
-    //             //console.log("countimeboxlist all after sort 2 ", counttimeboxlist)
-    //             //console.log(">> final schedulebox", thisschedulebox)
-    //             function sortingschedulebox() {
-    //                 thisschedulebox.sort((a, b) => {
-    //                     return (a.schedule.length - b.schedule.length);
-    //                 });
-    //                 var dateofsat = [];
-    //                 function arrayRemove(arr, value) {
-    //                     return arr.filter(function (geeks) {
-    //                         return geeks.date != value.date;
-    //                     });
-    //                 }
-
-    //                 thisschedulebox.forEach(element => {
-    //                     var datecheck = new Date(element.date);
-    //                     if (datecheck.getDay() == 6) {
-    //                         dateofsat.push(element);
-    //                     }
-    //                 });
-    //                 //console.log(dateofsat)
-    //                 dateofsat.forEach(element => {
-    //                     let result = arrayRemove(thisschedulebox, element)
-    //                     //console.log(result)
-    //                     thisschedulebox = result;
-    //                 });
-    //                 //console.log(thisschedulebox)
-    //                 dateofsat.forEach(element => {
-    //                     thisschedulebox.push(element)
-    //                 });
-    //                 return thisschedulebox;
-    //             }
-
-    //             thisschedulebox = sortingschedulebox();
-    //             //console.log("after sorting   ", thisschedulebox);
-    //             addedlist = [];
-
-    //             //console.log("after remove   ", counttimeboxlist)
-
-
-    //             /***step 2 insert by sorting the least amount of box */
-    //             for (var b = 0; b < counttimeboxlist.length; b++) {
-    //                 var added = false;
-
-    //                 for (var c = 0; c < thisschedulebox.length; c++) {
-    //                     var presentday = thisschedulebox[c].date;
-    //                     function appendquery(thisschedulebox) {
-    //                         var checkavailabledup = "select supervisorpairstudent.tid , supervisorpairstudent.sid , observerpairstudent.oid, studentavailable.availabledate, studentavailable.availablestartTime, studentavailable.availableendTime from supervisorpairstudent "
-    //                             + "left join observerpairstudent on supervisorpairstudent.sid = observerpairstudent.sid "
-    //                             + "join studentavailable on studentavailable.sid = supervisorpairstudent.sid and studentavailable.sid =\"" + counttimeboxlist[b].sid + "\" "
-    //                             + "and studentavailable.availabledate =\"" + presentday + "\""
-    //                         thisschedulebox.forEach(dayday => {
-    //                             dayday.schedule.forEach(schedulebox => {
-    //                                 var timestamp = new Date(schedulebox.availablestartTime);
-    //                                 checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-
-    //                             });
-    //                         });
-    //                         // for (var z = 0; z < thisschedulebox[c].schedule.length; z++) {
-    //                         //     var timestamp = new Date(thisschedulebox[c].schedule[z].availablestartTime);
-    //                         //     //     console.log(timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB"))
-    //                         //     checkavailabledup += "and studentavailable.availablestarttime != \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\" "
-    //                         // }
-    //                         checkavailabledup += "join supervisoravailable as sa1 on sa1.tid = supervisorpairstudent.tid and (sa1.tid = \"" + counttimeboxlist[b].tid + "\" or sa1.tid = \"" + counttimeboxlist[b].oid + "\") "
-    //                             + "and sa1.availabledate = studentavailable.availabledate and sa1.availablestartTime = studentavailable.availablestartTime "
-    //                             + "join supervisoravailable as sa2 on sa2.tid = observerpairstudent.oid and sa1.availabledate = sa2.availabledate and sa1.availablestartTime = sa2.availablestartTime  "
-    //                             + "and (sa2.tid = \"" + counttimeboxlist[b].oid + "\" or sa2.tid = \"" + counttimeboxlist[b].tid + "\") order by availablestartTime"
-    //                         // console.log("checkavailabledup in step 2", checkavailabledup);
-    //                         return checkavailabledup;
-    //                     }
-
-    //                     var checkavailabledup = appendquery(thisschedulebox);
-    //                     //console.log("checkavailabledup 2    ", checkavailabledup)
-    //                     var checkscheduleboxlist = await new Promise((resolve) => {
-    //                         pool.query(checkavailabledup, (err, res) => {
-    //                             var string = JSON.stringify(res);
-    //                             var json = JSON.parse(string);
-    //                             var ans = json;
-    //                             resolve(ans)
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.checkavailabledup"
-    //                     })
-
-    //                     //console.log(">>checkscheduleboxlist 2 ", checkscheduleboxlist[0]);
-    //                     if (checkscheduleboxlist[0] == undefined) {
-    //                         //console.log(supervisorlist[a].tid, "  ", checkavailabledup)
-    //                         index++;
-    //                         //console.log("this fail", counttimeboxlist[b].sid)
-    //                         var manualhandleline = "insert ignore into manualhandlecase values(\"" + counttimeboxlist[b].sid + "\",\"" + counttimeboxlist[b].tid + "\",\"" + counttimeboxlist[b].oid + "\")"
-    //                         db.query(manualhandleline, (err, res) => {
-    //                             try {
-    //                                 //console.log("inserted manual handlecase") 
-    //                             } catch (err) {
-    //                                 //console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
-    //                             }
-    //                         })
-    //                         break;
-    //                     } else {
-    //                         thisschedulebox[c].schedule.push(checkscheduleboxlist[0])
-
-    //                         //console.log(">>see see  2", thisschedulebox[c].schedule)
-    //                         added = true;
-    //                         //console.log("this pass 2", counttimeboxlist[b].sid)
-    //                     }
-
-    //                     if (added) {
-    //                         var deletemanualhandleline = "delete from manualhandlecase where sid = \"" + counttimeboxlist[b].sid + "\";";
-    //                         addedlist.push(counttimeboxlist[b].sid);
-    //                         thisschedulebox = sortingschedulebox();
-    //                         // console.log(counttimeboxlist[b].tid, "  thisschdeulebox after sorting again", thisschedulebox)
-    //                         db.query(deletemanualhandleline, (err, res) => {
-    //                             try {
-    //                                 // console.log("deleteed manual handlecase") 
-    //                             } catch (err) {
-    //                                 // console.log("error happened in inserting ScheduleController.genavailble.deletemanualhandleline")
-    //                             }
-    //                         })
-    //                         break;
-    //                     } else {
-    //                         // console.log("need to handle this ppl manually", counttimeboxlist[b].sid);
-    //                     }
-    //                 }
-
-    //             }
-
-    //             console.log(supervisorlist[a].tid, "schedulebox after step 2     ", thisschedulebox)
-
-
-
-    //             for (var c = 0; c < thisschedulebox.length; c++) {
-    //                 for (var e = 0; e < thisschedulebox[c].schedule.length; e++) {
-    //                     var campus = "";
-    //                     var room = "";
-    //                     //  console.log(thisschedulebox[c].schedule[e].tid, " ", thisschedulebox[c].schedule[e].oid, " ", thisschedulebox[c].date);
-    //                     var timestamp = new Date(thisschedulebox[c].schedule[e].availablestartTime);
-
-    //                     var getcampusandroomquery = "select t2.cid,pid,priority, campus,rid,startTime,endTime from (select * from (select * from allsupertakecourse where (pid = \"" + thisschedulebox[c].schedule[e].tid + "\" or pid = \"" + thisschedulebox[c].schedule[e].oid + "\")) as t1 left join supervisor on supervisor.tid = t1.pid )as t2 left join allclass on allclass.cid = t2.CID where weekdays = \"" + timestamp.getDay() + "\" order by t2.priority asc, startTime asc, Campus asc , RID asc"
-    //                     //console.log(getcampusandroomquery)
-    //                     var checkcampusandroom = await new Promise((resolve) => {
-    //                         pool.query(getcampusandroomquery, (err, res) => {
-    //                             var string = JSON.stringify(res);
-    //                             var json = JSON.parse(string);
-    //                             var ans = json;
-    //                             //console.log("checkcampusandroom length    " , ans.length)
-    //                             resolve(ans)
-    //                         })
-    //                     }).catch((err) => {
-    //                         errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-    //                     })
-    //                     //console.log(checkcampusandroom.length , "   check after query get   ",thisschedulebox[c].schedule[e])
-    //                     if (checkcampusandroom.length == 0) {
-    //                         getcampusandroomquery = "select campus,rid from classroom where Campus != \"\""
-    //                         checkcampusandroom = await new Promise((resolve) => {
-    //                             pool.query(getcampusandroomquery, (err, res) => {
-    //                                 var string = JSON.stringify(res);
-    //                                 var json = JSON.parse(string);
-    //                                 var ans = json;
-    //                                 resolve(ans)
-    //                             })
-    //                         }).catch((err) => {
-    //                             errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-    //                         })
-
-    //                     }
-
-    //                     // console.log(checkcampusandroom , "   check campus")
-    //                     var added = false;
-    //                     for (var i = 0; i < checkcampusandroom.length; i++) {
-    //                         added = false;
-    //                         var campus = checkcampusandroom[i].campus;
-    //                         //console.log(campus + "   check campus")
-    //                         getcampusandroomquery = "select * from classroom where Campus =\"" + campus + "\" and status=\"Open\" "
-    //                             + " and rid not in (select rid from allclassroomtimeslot where Campus = \"" + campus + "\" and startdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
-    //                             + " and rid not in(select rid from allclass where Campus = \"" + campus + "\" and weekdays = \"" + timestamp.getDay() + "\" and (starttime < Time(\"" + timestamp.toLocaleTimeString("en-GB") + "\")< endtime))"
-    //                             + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\")"
-    //                         //console.log(getcampusandroomquery);
-
-    //                         var checkcampusandroom = await new Promise((resolve) => {
-    //                             pool.query(getcampusandroomquery, (err, res) => {
-    //                                 var string = JSON.stringify(res);
-    //                                 var json = JSON.parse(string);
-    //                                 var ans = json;
-    //                                 resolve(ans)
-    //                             })
-    //                         }).catch((err) => {
-    //                             errmsg = "error happened in ScheduleController.genavailble.getcampusandroomquery"
-    //                         })
-    //                         // console.log(checkcampusandroom)
-    //                         if (checkcampusandroom.length > 0) {
-    //                             room = checkcampusandroom[0].RID;
-    //                         } else {
-    //                             room = null;
-    //                         }
-
-    //                         if (room != null) {
-    //                             // console.log(campus + "    " + room)
-    //                             let boxid = 'boxID';
-    //                             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //                             const charactersLength = characters.length;
-    //                             let counter = 0;
-    //                             while (counter < 15) {
-    //                                 boxid += characters.charAt(Math.floor(Math.random() * charactersLength));
-    //                                 counter += 1;
-    //                             }
-    //                             var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\",\"" + req.body.typeofpresent + "\","
-    //                                 + "\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\","
-    //                                 + "\"" + campus + "\",\"" + room + "\", now()) ;"
-    //                             // console.log(insertscheduleboxquery)
-
-    //                             var insertbox = await new Promise((resolve) => {
-    //                                 pool.query(insertscheduleboxquery, (err, res) => {
-    //                                     resolve(res)
-    //                                 })
-    //                             }).catch((err) => {
-    //                                 errmsg = "error happened in ScheduleController.genavailble.insertscheduleboxquery"
-    //                             })
-    //                             added = true;
-    //                             break;
-    //                         } else {
-    //                             console.log("this set have problem", thisschedulebox[c].schedule[e])
-    //                         }
-
-    //                     }
-    //                     if (!added) {
-    //                         var manualhandleline = "insert ignore into manualhandlecase values(\"" + thisschedulebox[c].schedule[e].sid + "\",\"" + thisschedulebox[c].schedule[e].tid + "\",\"" + thisschedulebox[c].schedule[e].oid + "\")"
-    //                         db.query(manualhandleline, (err, res) => {
-    //                             try {
-    //                                 // console.log("inserted manual handlecase")
-    //                             } catch (err) {
-    //                                 // console.log("error happened in inserting ScheduleController.genavailble.manualhandleline")
-    //                             }
-    //                         })
-    //                     } else {
-
-    //                         var delavailabletimequery = "delete from supervisoravailable where (tid = \"" + thisschedulebox[c].schedule[e].tid + "\" or tid = \"" + thisschedulebox[c].schedule[e].oid + "\") and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\"; "
-    //                         // + "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-    //                         //console.log(delavailabletimequery)
-    //                         db.query(delavailabletimequery, (err, result) => {
-    //                             try {
-    //                                 //   console.log("delavailabletimequery complete")
-    //                             } catch (err) {
-    //                                 if (err) {
-    //                                     errmsg = "error happened in ScheduleController.delavailabletimequery"
-    //                                 }
-    //                             }
-
-    //                         })
-    //                         delavailabletimequery = "delete from studentavailable where sid = \"" + thisschedulebox[c].schedule[e].sid + "\" and availablestartTime = \"" + timestamp.getFullYear() + "-" + (timestamp.getMonth() + 1) + "-" + timestamp.getDate() + " " + timestamp.toLocaleTimeString("en-GB") + "\";"
-    //                         //console.log(delavailabletimequery)
-    //                         db.query(delavailabletimequery, (err, result) => {
-    //                             try {
-    //                                 // console.log("delavailabletimequery complete")
-    //                             } catch (err) {
-    //                                 if (err) {
-    //                                     errmsg = "error happened in ScheduleController.delavailabletimequery"
-    //                                 }
-    //                             }
-
-    //                         })
-
-    //                     }
-
-
-    //                 }
-
-    //             }
-
-
-    //         }
-    //     }
-
-
-    //     return res.ok();
-    // },
 
 
     getrequestroomlist: async function (req, res) {
@@ -3006,7 +1740,7 @@ module.exports = {
         var pool = await sails.helpers.database2();
         // console.log("hello")
         var plannumber = await new Promise((resolve) => {
-            db.query("select distinct(planno) from allschedulebox group by planno having count(*) = (select count(*) as counting from student) order by planno asc", (err, res) => {
+            db.query("select distinct(planno) as planNo , planStatus from allschedulebox where planStatus != \"Unsuccessful\";", (err, res) => {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
@@ -3020,10 +1754,10 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.scheduleList"
         })
-         console.log(plannumber)
+        console.log(plannumber)
         var plandetails = await new Promise((resolve) => {
-            var queryline = "select Date(boxdate)as Date , Time(boxdate) as Time, allschedulebox.tid as SupID, supervisor.supname as SupName, allschedulebox.sid as StuID, student.stdname as StuName, allschedulebox.oid as ObsID, observerpairstudent.obsname as ObsName , rid as Classroom, Topic from allschedulebox left join supervisor on supervisor.tid = allschedulebox.TID left join observerpairstudent on allschedulebox.sid = observerpairstudent.sid left join student on allschedulebox.sid = student.SID left join supervisorpairstudent on allschedulebox.sid = supervisorpairstudent.sid where planNo = " + req.query.planNo + " order by boxdate asc, RID asc";
-            // console.log(queryline);
+            var queryline = "select allschedulebox.boxID, Date(boxdate)as Date , Time(boxdate) as Time,allschedulebox.type as Type, allschedulebox.tid as SupID, supervisor.supname as SupName, allschedulebox.sid as StuID, student.stdname as StuName, allschedulebox.oid as ObsID, observerpairstudent.obsname as ObsName , rid as Classroom, Topic from allschedulebox left join supervisor on supervisor.tid = allschedulebox.TID left join observerpairstudent on allschedulebox.sid = observerpairstudent.sid left join student on allschedulebox.sid = student.SID left join supervisorpairstudent on allschedulebox.sid = supervisorpairstudent.sid where planNo = " + req.query.planNo + " order by boxdate asc, RID asc";
+            console.log(queryline);
             db.query(queryline, (err, res) => {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
@@ -3249,7 +1983,7 @@ module.exports = {
     checksetting: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        let checkdraftexist = "select * from allschedulebox where planStatus = true ";
+        let checkdraftexist = "select * from allschedulebox where planStatus != \"Unsuccessful\" ";
 
         db.query(checkdraftexist, (err, results) => {
             try {
@@ -3259,7 +1993,7 @@ module.exports = {
                 var havedraft = json;
                 console.log('>> havedraft: ', havedraft.length);
                 if (havedraft.length > 0) {
-                    db.query("select min(planNo) as pathNo from allschedulebox where planStatus = true ", (err, results) => {
+                    db.query("select min(planNo) as pathNo from allschedulebox where planStatus != \"Unsuccessful\" ", (err, results) => {
                         var string = JSON.stringify(results);
                         //console.log('>> string: ', string );
                         var json = JSON.parse(string);
@@ -3377,12 +2111,20 @@ module.exports = {
 
 
         }
-        var getavailabletimes = "select availabledate , availablestartTime from studentavailable where sid = \"" + CurrentBox.SID + "\" and availabledate in("
-            + " select availabledate from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
-            + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\")) "
-            + "and availablestarttime in( select availablestartTime from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
-            + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\"));";
-        //console.log(getavailabletimes);
+
+        var getavailabletimes = "select * from threeparty where sid = \"" + CurrentBox.SID + "\" "
+            + "and availabledate in (select distinct(Date(boxdate)) from allschedulebox where planNo = " + req.query.planNo + " ) "
+            + "and availablestarttime not in "
+            + "(select boxdate from allschedulebox where planNo = " + req.query.planNo + " "
+            + "and (tid = \"" + CurrentBox.TID + "\" or oid = \"" + CurrentBox.TID + "\" or tid = \"" + CurrentBox.OID + "\" or oid = \"" + CurrentBox.OID + "\"))"
+
+
+        // "select availabledate , availablestartTime from studentavailable where sid = \"" + CurrentBox.SID + "\" and availabledate in("
+        //     + " select availabledate from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
+        //     + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\")) "
+        //     + "and availablestarttime in( select availablestartTime from supervisoravailable where tid = \"" + CurrentBox.TID + "\" "
+        //     + "and availablestarttime in(select availablestarttime from supervisoravailable where tid = \"" + CurrentBox.OID + "\"));";
+        console.log(getavailabletimes);
         availableCombination = await new Promise((resolve) => {
             pool.query(getavailabletimes, (err, res) => {
                 if (err) { resolve(JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.HandleManualCase.availableCombination" }))) }
@@ -3425,10 +2167,15 @@ module.exports = {
         var pool = await sails.helpers.database2();
 
         if (req.query.Command == "getTime") {
-            var getavailabletimes = "select availablestartTime from studentavailable where sid = \"" + req.query.SID + "\" and availablestartTime in ("
-                + "select availablestartTime from supervisoravailable where tid = \"" + req.query.OID + "\" "
-                + "and availablestartTime in(select availablestartTime from supervisoravailable where tid = \"" + req.query.TID + "\" and availabledate = \"" + req.query.Date + "\"));"
-            console.log(getavailabletimes)
+            // var getavailabletimes = "select availablestartTime from studentavailable where sid = \"" + req.query.SID + "\" and availablestartTime in ("
+            //     + "select availablestartTime from supervisoravailable where tid = \"" + req.query.OID + "\" "
+            //     + "and availablestartTime in(select availablestartTime from supervisoravailable where tid = \"" + req.query.TID + "\" and availabledate = \"" + req.query.Date + "\"));"
+            var getavailabletimes = "select Time(availablestarttime) as availableTime from threeparty where sid = \"" + req.query.SID + "\" "
+                + "and availabledate =\"" + req.query.Date + "\" "
+                + "and availablestarttime not in "
+                + "(select boxdate from allschedulebox where planNo = " + req.query.planNo + " "
+                + "and (tid = \"" + req.query.TID + "\" or oid = \"" + req.query.TID + "\" or tid = \"" + req.query.OID + "\" or oid = \"" + req.query.OID + "\"))"
+            // console.log(getavailabletimes)
             availbletimes = await new Promise((resolve) => {
                 pool.query(getavailabletimes, (err, res) => {
                     if (err) { return res.status(401).json("error happened in HandelManualCase.GetTimeByDate") }
@@ -3436,17 +2183,13 @@ module.exports = {
                     var json = JSON.parse(string);
                     var ans = new Array();
                     json.forEach(element => {
-                        var starttime = (new Date(element.availablestartTime)).toLocaleTimeString("en-GB");
-                        ans.push(starttime);
+                        ans.push(element.availableTime);
                     });
-                    console.log(ans);
                     resolve(ans);
                 })
             }).catch((err) => {
                 errmsg = "error happened in ScheduleController.HandleManualCase.availableCombination"
             })
-
-
             return res.status(200).json(availbletimes);
         } else if (req.query.Command == "getCampus") {
             var getcampus = "select distinct(Campus) as Campus from classroom where Campus != \"\";"
@@ -3551,64 +2294,50 @@ module.exports = {
             }
             req.body.boxID = boxid;
             console.log(req.body);
-            var query = ["insert allschedulebox values (\"" + req.body.boxID + "\",\"" + req.body.date + " " + req.body.time + "\",\"" + req.body.TYPE + "\",\"" + req.body.TID + "\",\"" + req.body.SID + "\",\"" + req.body.OID + "\",\"" + req.body.Campus + "\",\"" + req.body.RID + "\",now());",
-            "Delete from supervisoravailable where tid = \"" + req.body.TID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            "Delete from supervisoravailable where tid = \"" + req.body.OID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            "Delete from studentavailable where sid = \"" + req.body.SID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            "Delete from manualhandlecase where sid = \"" + req.body.SID + "\" ;",
-            ]
+            var insertquery = "insert allschedulebox values (\"" + req.body.boxID + "\","+req.body.planNo+","+"(select distinct(planStatus) as planStatus from allschedulebox where planNo = "+req.body.planNo+")"+",\"" + req.body.date + " " + req.body.time + "\",\"" + req.body.TYPE + "\",\"" + req.body.TID + "\",\"" + req.body.SID + "\",\"" + req.body.OID + "\",\"" + req.body.Campus + "\",\"" + req.body.RID + "\",now());";
 
-            query.forEach(element => {
-                db.query(element, (err, res) => {
-                    try { } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
-                })
-            });
+            db.query(insertquery, (err, res) => {
+                try { console.log("inserted")} catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+            })
 
-            return res.status(200).json("done");
+
+            // return res.status(200).json("done");
+            return res.redirect("/scheduledesign/scheduleList?planNo=" + req.body.planNo)
 
         } else {
             // check whether the current classroom can still be used for present
-            var getCurrentBox = "select * from allschedulebox where boxID = \"" + req.body.boxID + "\";";
-            console.log(getCurrentBox)
-            var CurrentBox = await new Promise((resolve) => {
-                pool.query(getCurrentBox, (err, res) => {
-                    if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    if (json.length > 0) {
-                        resolve(json[0]);
-                    } else {
-                        resolve(null);
-                    }
-                })
-            }).catch((err) => {
-                errmsg = "error happened in ScheduleController.EditScheduleBox.getCurrentBox"
+            // var getCurrentBox = "select * from allschedulebox where boxID = \"" + req.body.boxID + "\";";
+            // console.log(getCurrentBox)
+            // var CurrentBox = await new Promise((resolve) => {
+            //     pool.query(getCurrentBox, (err, res) => {
+            //         if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
+            //         var string = JSON.stringify(res);
+            //         var json = JSON.parse(string);
+            //         if (json.length > 0) {
+            //             resolve(json[0]);
+            //         } else {
+            //             resolve(null);
+            //         }
+            //     })
+            // }).catch((err) => {
+            //     errmsg = "error happened in ScheduleController.EditScheduleBox.getCurrentBox"
+            // })
+            // var oldboxdate = new Date(CurrentBox.boxdate);
+            // var oldboxdatestring = oldboxdate.toLocaleDateString("en-GB").split("/");
+            // var oldboxendtime;
+            // if (req.body.type == "final") {
+            //     oldboxendtime = new Date(oldboxdate.getTime() + 60 * 60 * 1000);
+            // } else {
+            //     oldboxendtime = new Date(oldboxdate.getTime() + 30 * 60 * 1000);
+            // }
+            var updatequery = "Update allschedulebox set boxdate = \"" + req.body.date + " " + req.body.time + "\" , Campus = \"" + req.body.Campus + "\", RID = \"" + req.body.RID + "\",LastUpdate = now() where boxID = \"" + req.body.boxID + "\";";
+
+            db.query(updatequery, (err, res) => {
+                try { console.log("updated") } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
             })
-            var oldboxdate = new Date(CurrentBox.boxdate);
-            var oldboxdatestring = oldboxdate.toLocaleDateString("en-GB").split("/");
-            var oldboxendtime;
-            if (req.body.type == "final") {
-                oldboxendtime = new Date(oldboxdate.getTime() + 60 * 60 * 1000);
-            } else {
-                oldboxendtime = new Date(oldboxdate.getTime() + 30 * 60 * 1000);
-            }
-            var query = ["Update allschedulebox set boxdate = \"" + req.body.date + " " + req.body.time + "\" , Campus = \"" + req.body.Campus + "\", RID = \"" + req.body.RID + "\",LastUpdate = now() where boxID = \"" + req.body.boxID + "\";",
-            "insert into supervisoravailable values('" + req.body.TID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
-            "insert into supervisoravailable values('" + req.body.OID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
-            "insert into studentavailable values('" + req.body.SID + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxdate.toLocaleTimeString("en-GB") + "','" + oldboxdatestring[2] + "-" + oldboxdatestring[1] + "-" + oldboxdatestring[0] + " " + oldboxendtime.toLocaleTimeString("en-GB") + "');",
-            "Delete from supervisoravailable where tid = \"" + req.body.TID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            "Delete from supervisoravailable where tid = \"" + req.body.OID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            "Delete from studentavailable where sid = \"" + req.body.SID + "\" and availabledate = \"" + req.body.date + "\" and availablestarttime = \"" + req.body.date + " " + req.body.time + "\";",
-            ]
-            query.forEach(element => {
-                db.query(element, (err, res) => {
-                    try { } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
-                })
-            });
-
-            return res.status(200).json("done");
 
 
+            return res.redirect("/scheduledesign/scheduleList?planNo=" + req.body.planNo)
             // update the box
 
         }
@@ -3632,48 +2361,28 @@ module.exports = {
         return res.status(200).json("ok");
     },
 
-    EditRecords: async function (req, res) {
+    removeRecord : async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
         if (req.body.command = "delete") {
 
             var query = ["delete from allschedulebox where boxid = '" + req.body.boxid + "';",
-            "insert into supervisoravailable values('" + req.body.tid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
-            "insert into supervisoravailable values('" + req.body.oid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
-            "insert into studentavailable values('" + req.body.sid + "','" + req.body.date + "','" + req.body.date + " " + req.body.starttime + "','" + req.body.date + " " + req.body.endtime + "');",
-            "insert into manualhandlecase values('" + req.body.sid + "','" + req.body.tid + "','" + req.body.oid + "');"]
-
+        "update allschedulebox set planStatus = \"Manual Handling\" where planNo = "+req.body.planNo];
             query.forEach(element => {
                 db.query(element, (err, results) => {
                     try { } catch (err) {
-                        return res.status(401).json("Error happened when excuting ScheduleController.EditRecords.delete")
+                        return res.status(401).json("Error happened when excuting ScheduleController.removeRecord")
                     }
                 });
             });
-
-
-        } else {
-
+                
+    
         }
         return res.status(200).json("ok");
     },
 
     outputCSV: async function (req, res) {
-        // const csvmaker = function (wholefile) {
-        //     csvRows = [];
-        //     const headers = Object.keys(wholefile[0]);
-        //     csvRows.push(headers.join(','));
-        //     wholefile.forEach(element => {
-        //         const values = Object.values(element).join(',');
-        //         csvRows.push(values)
-        //         csvRows.join('\n');
-        //     });
-        //     console.log(csvRows);
-        //     return csvRows;
-        // }
-       
-
         var db = await sails.helpers.database();
         var getPlanBox = await new Promise((resolve) => {
             db.query("select Date(boxdate)as Date , Time(boxdate) as Time,allschedulebox.sid as StuID,supervisor.supname as SupName,  student.stdname as StuName, observerpairstudent.obsname as ObsName , rid as Classroom, Topic from allschedulebox left join supervisor on supervisor.tid = allschedulebox.TID left join observerpairstudent on allschedulebox.sid = observerpairstudent.sid left join student on allschedulebox.sid = student.SID left join supervisorpairstudent on allschedulebox.sid = supervisorpairstudent.sid where planNo = " + req.body.planNo + " order by boxdate asc, RID asc", (err, res) => {
@@ -3693,11 +2402,11 @@ module.exports = {
             element.Date = date.toLocaleDateString("en-GB");
         });
 
-       
+
         const opts = {};
-  const parser = new Parser(opts);
-  const csv = parser.parse(getPlanBox);
-  console.log(csv);
+        const parser = new Parser(opts);
+        const csv = parser.parse(getPlanBox);
+        console.log(csv);
         return res.json(csv);
     },
 }

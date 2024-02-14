@@ -36,7 +36,7 @@ create table allsupersetting( STID	varchar(20) not null, Creator		varchar(10) No
 
 create table allpreffromsup(TID varchar(10) not null, daypref boolean default true, movementpref boolean default true, LastUpdate timestamp not null, primary key (TID) );
 
-create table allschedulebox( boxID varchar(30)not null, planNo int not null,planStatus bool default false ,boxdate Timestamp not null, TYPE varchar(10) not null, TID varchar(10) not null, SID varchar(10)not null, OID varchar(50)not null, Campus varchar(10) not null, RID		varchar(10) Not null, LastUpdate timestamp not null, primary key (boxID) );
+create table allschedulebox( boxID varchar(30)not null, planNo int not null,planStatus varchar(20) default "Unsuccessful" ,boxdate Timestamp not null, TYPE varchar(10) not null, TID varchar(10) not null, SID varchar(10)not null, OID varchar(50)not null, Campus varchar(10) not null, RID		varchar(10) Not null, LastUpdate timestamp not null, primary key (boxID) );
 
 create table supervisoravailable( TID varchar(10) not null, availabledate DATE, availablestartTime timestamp, availableendTime timestamp, primary key(tid,availabledate,availablestarttime) );
 

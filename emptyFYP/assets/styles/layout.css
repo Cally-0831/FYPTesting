@@ -100,11 +100,22 @@
 }
 .redbutton {
   background-color: salmon;
+  border-width: 1;
+  border-color: black;
 }
 
 .greenbutton {
   background-color: lightgreen;
+  border-width: 1;
+  border-color: black;
 }
+
+.bluebutton {
+  background-color: rgb(155, 200, 239);
+  border-width: 1;
+  border-color: black;
+}
+
 .title {
   /* font-size: 20px; */
   font-size: calc(25px + 0.390625vw);
@@ -502,4 +513,3 @@ img {
 .selectobs {
   width: 80px;
 }
-

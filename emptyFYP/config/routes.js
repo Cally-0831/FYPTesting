@@ -34,8 +34,15 @@ module.exports.routes = {
 
   //admin modify scheduling
   "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
-  "POST /supervisorschedulelist/modifyschedule":  "ScheduleController.EditRecords",
-  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
+  "POST /scheduledesign/scheduleList/removeRecord":  "ScheduleController.removeRecord",
+  "GET /scheduledesign/scheduleList/modifyschedule": "ScheduleController.HandleManualCase",
+  'GET /scheduledesign/scheduleList/modifyschedule/HandleManualCase/getdata': "ScheduleController.GetData",
+  "POST /scheduledesign/scheduleList/modifyschedule/HandleManualCase": "ScheduleController.EditScheduleBox",
+
+
+
+
+  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist", 
   "GET /supervisorschedulelist/modifyschedule/:tid/:Page": "ScheduleController.retrievesinglesupervisorschedule",
   "GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.HandleManualCase",
   'GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata': "ScheduleController.GetData",
