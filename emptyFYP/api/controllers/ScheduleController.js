@@ -1154,7 +1154,7 @@ module.exports = {
                 counter += 1;
             }
 
-            var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + element.planNo + "\",false,\"" + sqldatestring + " " + sessionstarttime.toLocaleTimeString("en-GB") + "\",\"" + element.type + "\","
+            var insertscheduleboxquery = "insert into allschedulebox values(\"" + boxid + "\",\"" + element.planNo + "\",\"Unsuccessful\",\"" + sqldatestring + " " + sessionstarttime.toLocaleTimeString("en-GB") + "\",\"" + element.type + "\","
                 + "\"" + element.tid + "\",\"" + element.sid + "\",\"" + element.oid + "\","
                 + "\"" + element.campus + "\",\"" + element.rid + "\", now()) ;"
             // console.log(insertscheduleboxquery)
@@ -1430,7 +1430,7 @@ module.exports = {
 
         // var a  == looping in possible plans
         // for (var a = 0; a < possibledatecombination.length; a++) {
-        for (var a = 5; a < 6; a++) {
+        for (var a = 0; a < 8; a++) {
             var scheduleforthisplan = new Array();
             var manualhandlecase = new Array();
             console.log(">>plan ", a, " ", possibledatecombination[a])
@@ -1602,7 +1602,7 @@ module.exports = {
                 });
             }
         }
-        console.log(successschedule)
+        console.log(successschedule.sort())
         // return res.redirect("/scheduledesign/startschedule?typeOfPresent=" + req.body.typeofpresent)
 
         return res.redirect("/scheduledesign/scheduleList?planNo=" + successschedule[0]);
@@ -1740,7 +1740,7 @@ module.exports = {
         var pool = await sails.helpers.database2();
         // console.log("hello")
         var plannumber = await new Promise((resolve) => {
-            db.query("select distinct(planno) as planNo , planStatus from allschedulebox where planStatus != \"Unsuccessful\";", (err, res) => {
+            db.query("select distinct(planno) as planNo , planStatus from allschedulebox where planStatus != \"Unsuccessful\" order by planNo asc;", (err, res) => {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
@@ -1773,6 +1773,24 @@ module.exports = {
             errmsg = "error happened in ScheduleController.scheduleList"
         })
 
+        var planhandlecase = await new Promise((resolve) => {
+            var queryline = "select t1.sid, student.stdname , t1.tid, supervisor.supname,t1.oid,observerpairstudent.obsname from manualhandlecase as t1 left join student on student.sid = t1.sid left join supervisor on supervisor.tid = t1.tid left join observerpairstudent on observerpairstudent.sid = t1.sid where planno = " + req.query.planNo;
+            console.log(queryline);
+            db.query(queryline, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (json.length == 0) {
+                    resolve(null);
+                } else {
+                    resolve(ans);
+                }
+
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.scheduleList"
+        })
+        console.log(planhandlecase)
         /** get plan dates from plandetails */
 
 
@@ -1821,7 +1839,7 @@ module.exports = {
         // plandatecountbox = plandatecountboxfc();
         // // console.log(plandatecountbox);
 
-        return res.view("user/admin/scheduleList", { plandetails: plandetails, plannumber: plannumber })
+        return res.view("user/admin/scheduleList", { plandetails: plandetails, plannumber: plannumber, planhandlecase: planhandlecase })
         // return res.view("user/admin/supervisorschedulelist", { allsuplist: ans, manualhandlecase: manualhandlecase })
 
     },
@@ -2234,6 +2252,7 @@ module.exports = {
     },
 
     EditScheduleBox: async function (req, res) {
+        console.log("enter EditScheduleBox")
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
 
@@ -2262,14 +2281,14 @@ module.exports = {
         console.log("check here midterm", req.body.TYPE == "midterm");
         console.log("check here final", req.body.TYPE == "final");
 
-        var type = await new Promise((resolve) => {
-            pool.query("select distinct(TYPE) as TYPE from allschedulebox", (err, res) => {
+        var planinfo = await new Promise((resolve) => {
+            pool.query("select distinct(TYPE) as TYPE ,planStatus from allschedulebox", (err, res) => {
                 if (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.getCurrentBox") }
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
-                console.log("check here 2 ", json[0].TYPE);
+                console.log("check here 2 ", json[0]);
                 if (json.length > 0) {
-                    resolve(json[0].TYPE);
+                    resolve(json[0]);
                 } else {
                     resolve(null);
                 }
@@ -2277,12 +2296,12 @@ module.exports = {
         }).catch((err) => {
             errmsg = "error happened in ScheduleController.EditScheduleBox.gettype"
         })
-        req.body.TYPE = type;
+        req.body.TYPE = planinfo.TYPE;
 
 
 
         console.log("check here 3", req.body.TYPE);
-        if (req.body.boxID == "") {
+        if (req.body.boxID == "" || req.body.boxID == null) {
             //create a new schedulebox by insert 
             let boxid = 'boxID';
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -2294,11 +2313,52 @@ module.exports = {
             }
             req.body.boxID = boxid;
             console.log(req.body);
-            var insertquery = "insert allschedulebox values (\"" + req.body.boxID + "\","+req.body.planNo+","+"(select distinct(planStatus) as planStatus from allschedulebox where planNo = "+req.body.planNo+")"+",\"" + req.body.date + " " + req.body.time + "\",\"" + req.body.TYPE + "\",\"" + req.body.TID + "\",\"" + req.body.SID + "\",\"" + req.body.OID + "\",\"" + req.body.Campus + "\",\"" + req.body.RID + "\",now());";
+            var querys = ["insert allschedulebox values (\"" + req.body.boxID + "\"," + req.body.planNo + ",\"" + planinfo.planStatus + "\",\"" + req.body.date + " " + req.body.time + "\",\"" + req.body.TYPE + "\",\"" + req.body.TID + "\",\"" + req.body.SID + "\",\"" + req.body.OID + "\",\"" + req.body.Campus + "\",\"" + req.body.RID + "\",now());",
+            "delete from manualhandlecase where sid = \"" + req.body.SID + "\";"]
 
-            db.query(insertquery, (err, res) => {
-                try { console.log("inserted")} catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+
+            querys.forEach(element => {
+                db.query(element, (err, res) => {
+                    try { console.log("inserted as new box") } catch (err) { return res.status(401).json("error happened in ScheduleController.EditScheduleBox.UpdateQuery") }
+                })
+            });
+            var getPlanBoxnumber = await new Promise((resolve) => {
+                db.query("select count(*) as counting from allschedulebox where planNo = " + req.body.planNo + ";", (err, res) => {
+                    try {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        console.log(json)
+                        var ans = json[0].counting;
+                        resolve(ans)
+                    } catch (err) { console.log(err) }
+    
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.outputCSV.getPlanBox"
             })
+            var getStunumber = await new Promise((resolve) => {
+                db.query("select count(*) as counting from student;", (err, res) => {
+                    try {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        console.log(json)
+                        var ans = json[0].counting;
+                        resolve(ans)
+                    } catch (err) { console.log(err) }
+    
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.outputCSV.getPlanBox"
+            })
+
+            if(getPlanBoxnumber == getStunumber){
+                db.query("update allschedulebox set planStatus =\"Successful\" where planNo= "+req.body.planNo, (err, res) => {
+                    try {
+                        console.log("updated status")
+                    } catch (err) { console.log(err) }
+    
+                })
+            }
 
 
             // return res.status(200).json("done");
@@ -2361,14 +2421,34 @@ module.exports = {
         return res.status(200).json("ok");
     },
 
-    removeRecord : async function (req, res) {
+    removeRecord: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
+        console.log(req.body);
 
-        if (req.body.command = "delete") {
+        if (req.body.command == "delete") {
+            var getline = "select tid,oid,sid from allschedulebox where boxid = \"" + req.body.boxid + "\";";
+            var getPairInfo = await new Promise((resolve) => {
+
+                db.query(getline, (err, res) => {
+                    try {
+                        var string = JSON.stringify(res);
+                        var json = JSON.parse(string);
+                        console.log(json);
+                        var ans = json[0];
+                        resolve(ans)
+                    } catch (err) { console.log(err) }
+
+                })
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.removeRecord.getPairInfo"
+            })
+            console.log(getPairInfo)
+
 
             var query = ["delete from allschedulebox where boxid = '" + req.body.boxid + "';",
-        "update allschedulebox set planStatus = \"Manual Handling\" where planNo = "+req.body.planNo];
+            "update allschedulebox set planStatus = \"Manual Handling\" where planNo = " + req.body.planNo + ";",
+            "insert into manualhandlecase values(\"" + getPairInfo.sid + "\",\"" + getPairInfo.tid + "\",\"" + getPairInfo.oid + "\"," + req.body.planNo + ") "];
             query.forEach(element => {
                 db.query(element, (err, results) => {
                     try { } catch (err) {
@@ -2376,8 +2456,8 @@ module.exports = {
                     }
                 });
             });
-                
-    
+
+
         }
         return res.status(200).json("ok");
     },
