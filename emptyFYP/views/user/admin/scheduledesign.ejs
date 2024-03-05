@@ -8,6 +8,7 @@
         </div>
     </div>
     <br>
+    
     <%if(erray.includes("A")){%>
         <div class="columns is-centered">
             <div class="column is-half">
@@ -43,6 +44,7 @@
                 <%}else{%>
                     <div class="columns is-centered">
                         <div id="create" class="column is-half">
+                            
                             <div class="scheduledesignchecking">
                                 <div class="row">
                                     <div style="font-size: 25px; font-weight: bold;">
@@ -55,28 +57,31 @@
                                 <div class="row">
                                     <div style="font-size: 20px; ">
                                         Present Period = <u>
-                                            <%=presentstartday.toLocaleDateString()%>
-                                                <%=presentstartday.toLocaleTimeString("en-US")%>
+                                            <%=presentstartday.toLocaleDateString("en-GB")%>
+                                                <%=presentstartday.toLocaleTimeString("en-GB")%>
                                         </u> to <u>
-                                            <%=presentendday.toLocaleDateString()%>
-                                                <%=presentendday.toLocaleTimeString("en-US")%>
+                                            <%=presentendday.toLocaleDateString("en-GB")%>
+                                                <%=presentendday.toLocaleTimeString("en-GB")%>
                                         </u>
                                     </div>
                                     <br>
-                                    <div class="control" id="typeofpresentation">
+                                    <div class="control" id="typeOfPresentation">
                                         <label class="radio">
-                                            <input type="radio" name="typeofpresent" value="midterm">
+                                            <input type="radio" name="typeOfPresent" value="midterm">
                                             Midterm Present
                                         </label>
                                         <label class="radio">
-                                            <input type="radio" name="typeofpresent" value="final" checked>
+                                            <input type="radio" name="typeOfPresent" value="final" checked>
                                             Final Present
                                         </label>
                                     </div>
+                                    <br>
                                     <div class="buttons is-right">
 
-                                        <div class="button buttonlogout is-responsive"
+                                        <div id="createdraftbtn" class="button is-warning is-medium is-responsive"
+                                        style="border-color: black;"
                                             onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
+                                        
                                             Create Draft
                                         </div>
                                     </div>
@@ -98,19 +103,24 @@
     }
 
     async function confirmcreate(startdaydatetype, enddaydatetype) {
-        var r = confirm("Confirm to create ?");
+        var r = confirm("Confirm to create?");
         var boxlist = [];
 
         if (r) {
-            var typeofpresentlist = document.getElementsByName("typeofpresent");
-            var typeofpresent;
+            alert("The Schedule takes time for generation.\n\nDO NOT leave the page or refresh the page while generating.\n\nOr else, the generation process may requires to start over again");
+            // document.getElementById("createdraftbtn").innerText = "";
+            // document.getElementById("createdraftbtn").classList.add("is-loading");
+            document.getElementById("createdraftbtn").innerHTML = "<div class=\"loader\" id=\"loader\" style=\"visibility:visible; align-self: center;\"></div>";
+            document.getElementById("createdraftbtn").setAttribute("disabled","");
+            var typeOfPresentlist = document.getElementsByName("typeOfPresent");
+            var typeOfPresent;
 
-            for (var i = 0; i < typeofpresentlist.length; i++) {
-                if (typeofpresentlist[i].checked) {
-                    typeofpresent = typeofpresentlist[i].value;
+            for (var i = 0; i < typeOfPresentlist.length; i++) {
+                if (typeOfPresentlist[i].checked) {
+                    typeOfPresent = typeOfPresentlist[i].value;
                 }
             }
-            var requestbody = JSON.stringify({ typeofpresent: typeofpresent })
+            var requestbody = JSON.stringify({ typeOfPresent: typeOfPresent })
            
             var response = await fetch("/scheduledesign/genAvailable", {
                 method: "POST",
@@ -118,6 +128,7 @@
             });
     
             if (response.ok) {
+                document.getElementById("loader").style.visibility = "hidden";
                 location.assign(response.url);
                 
             }else{

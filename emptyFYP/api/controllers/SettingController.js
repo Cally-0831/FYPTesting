@@ -146,7 +146,7 @@ module.exports = {
                 var string = JSON.stringify(res);
                 var json = JSON.parse(string);
                 var ans = json;
-                console.log(ans)
+                
                 if (ans.length > 0) {
 
                     var settingstartday = new Date(ans[0].startdate).toDateString();
@@ -169,13 +169,13 @@ module.exports = {
             errmsg = "Error happened in SettingController. nodraft.setting3"
         })
 
-        //console.log(">>setting1", setting1)
-        //console.log(">>setting3", setting3)
+        // console.log(">>setting1", setting1)
+        // console.log(">>setting3", setting3)
 
         var today = new Date();
         var errormsg = ""
         for (var a = 0; a < setting1.length; a++) {
-            console.log("handling   " + setting1[a].typeofsetting)
+           
             if (setting1[a].typeofsetting == 4 && a != setting1.length - 1) {
                 setting1.push(setting1.splice(a, 1)[0])
             } else if (setting1[a].typeofsetting == 4 && a == setting1.length - 1) {
@@ -187,14 +187,14 @@ module.exports = {
                 }
 
 
-                if (setting1[a].deadlinedate > today) {
+                if (setting1[a].deadlinedate < today) {
                     checking = true;
                 } else {
                     checking = false;
                     errormsg += setting1[a].typeofsetting + "&";
 
                 }
-
+                // console.log("handling   " + setting1[a].typeofsetting,"   checking1  ",checking,"  errormsg1  ",errormsg)
 
             }
             //console.log("handling now  " + setting1[a].typeofsetting)
@@ -205,13 +205,14 @@ module.exports = {
                 errormsg += setting1[a].typeofsetting + "&"
 
             }
+            // console.log("handling   " + setting1[a].typeofsetting,"   checking2  ",checking,"  errormsg2  ",errormsg)
         }
         var warning;
         var erray = errormsg.split("&");
         erray = erray.filter((word) => word.length > 0);
 
 
-        //console.log(arranged + "    " + erray)
+        // console.log(arranged + "    " + erray)
         if (arranged) {
             if (erray.length == 1 && erray.includes("4")) {
                 warning = "200";
@@ -226,7 +227,7 @@ module.exports = {
             erray.push("A");
             //console.log("here3")
         }
-        //console.log("erray", erray);
+        // console.log("erray", erray);
 
         return res.view("user/admin/scheduledesign", {
             havedraft: "N",
