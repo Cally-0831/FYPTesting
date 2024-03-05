@@ -1344,10 +1344,10 @@ module.exports = {
                             previousList = copyarray(thisscheduleplan.slice(timeslots - 3, timeslots - 1));
                         }
                         // console.log(">>previousList   ", previousList)
-                        PresentationList = (reduceConsec3Session(previousList, PresentationList)).sort(() => Math.random() - 0.5);;
+                        PresentationList = (reduceConsec3Session(previousList, PresentationList))
                         // console.log(">>PresentationList   ", PresentationList)
                         if (!(possibleplan % 2 == 0) || possibleplan == 0) {
-                           PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat()).sort(() => Math.random() - 0.5);;
+                           PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat())
                             // console.log(">>PriorityList   ", PriorityList) 
                             if (PriorityList.length > 0) {
                                 var randomNumber = randomNum(PriorityList);
