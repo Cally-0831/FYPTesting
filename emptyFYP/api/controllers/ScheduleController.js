@@ -1271,6 +1271,9 @@ module.exports = {
                 return null;
             }
         }
+        function sort(array) {
+            array.sort(() => Math.random() - 0.5);
+          }
 
         var totalStudNum = await getStudentnum();
         var finalResultOfPlans = new Array();
@@ -1345,9 +1348,11 @@ module.exports = {
                         }
                         // console.log(">>previousList   ", previousList)
                         PresentationList = (reduceConsec3Session(previousList, PresentationList))
+                        sort(PresentationList);
                         // console.log(">>PresentationList   ", PresentationList)
                         if (!(possibleplan % 2 == 0) || possibleplan == 0) {
                            PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat())
+                           sort(PriorityList);
                             // console.log(">>PriorityList   ", PriorityList) 
                             if (PriorityList.length > 0) {
                                 var randomNumber = randomNum(PriorityList);
