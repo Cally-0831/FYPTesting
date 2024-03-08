@@ -810,7 +810,7 @@ module.exports = {
 
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        // console.log(req.query);
+        console.log(req.query);
 
         var setting3 = await new Promise((resolve) => {
             pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
@@ -1271,9 +1271,6 @@ module.exports = {
                 return null;
             }
         }
-        function sort(array) {
-            array.sort(() => Math.random() - 0.5);
-          }
 
         var totalStudNum = await getStudentnum();
         var finalResultOfPlans = new Array();
@@ -1293,7 +1290,10 @@ module.exports = {
                 // console.log("working on possibleplan for one date  ", possibleplan, "/", combinations(totalStudNum, 4), "  ----------  ", calcPercentage(possibleplan, combinations(totalStudNum, 4)), " ------- ", Successfulplannum);
                 var thisscheduleplan = new Array(uniquetimeslotcounts.length);
                 var selectedAy = new Array();
+                var pref = false;
+                if (!(possibleplan % 2 == 0) || possibleplan == 0) { pref = true; }
                 for (var timeslots = 0; timeslots < uniquetimeslotcounts.length; timeslots++) {
+
                     // for (var timeslots = 0; timeslots < 5; timeslots++) {
                     var sessionstarttime = new Date(uniquetimeslotcounts[timeslots].availablestarttime);
                     var sessionendtime = resetsessionendtime(sessionstarttime);
@@ -1325,7 +1325,7 @@ module.exports = {
 
                     // console.log(randomAY);
                     for (var availableroom = 0; availableroom < availableclassroomlist.length; availableroom++) {
-                        PresentationList = reducePairBySupObs(thisscheduleplan[timeslots], PresentationList);
+                        PresentationList = (reducePairBySupObs(thisscheduleplan[timeslots], PresentationList))
                         //PresentationList = reduceByCombination(SchedulesforThisDateCombin,PresentationList,timeslots,thisscheduleplan[timeslots])
                         var previousList;
                         var PriorityList;
@@ -1347,12 +1347,10 @@ module.exports = {
                             previousList = copyarray(thisscheduleplan.slice(timeslots - 3, timeslots - 1));
                         }
                         // console.log(">>previousList   ", previousList)
-                        PresentationList = (reduceConsec3Session(previousList, PresentationList))
-                        sort(PresentationList);
+                        PresentationList = reduceConsec3Session(previousList, PresentationList);
                         // console.log(">>PresentationList   ", PresentationList)
                         if (!(possibleplan % 2 == 0) || possibleplan == 0) {
-                           PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat())
-                           sort(PriorityList);
+                           PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat());
                             // console.log(">>PriorityList   ", PriorityList) 
                             if (PriorityList.length > 0) {
                                 var randomNumber = randomNum(PriorityList);
@@ -1381,14 +1379,18 @@ module.exports = {
                 }
                 // console.log(selectedAy.length);
                 var untacklednum = (totalStudNum - selectedAy.length)
-                if (untacklednum == 0) {
-                    Successfulplannum++;
-                }
-                var pref = false;
-                if (!(possibleplan % 2 == 0) || possibleplan == 0) { pref = true; }
+                if (untacklednum == 0) { Successfulplannum++; }
                 var ScheduleJSON = JSON.parse(JSON.stringify({ Schd: thisscheduleplan, Length: selectedAy.length, Untackle: untacklednum, Preference: pref }))
                 // console.log(ScheduleJSON);
-                SchedulesforThisDateCombin.push(ScheduleJSON);
+                SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
+                // console.log(SchedulesforThisDateCombin,"   ",ScheduleJSON)
+                if(SchedulesforThisDateCombin.length == 0){
+                    SchedulesforThisDateCombin.push(ScheduleJSON);
+                }else if(SchedulesforThisDateCombin[0].Untackle >= ScheduleJSON.Untackle){
+                    SchedulesforThisDateCombin.push(ScheduleJSON);
+                    SchedulesforThisDateCombin = copyarray(SchedulesforThisDateCombin.filter((element)=> element.Untackle == ScheduleJSON.Untackle));
+                }
+                
                 // if (Successfulplannum > 0.005 * (combinations(totalStudNum, 4))) { //case for many No untackled plans
                     if (ScheduleJSON.Untackle ==0) { //case for getting the first Successful Plan
                     // console.log("Having this number of successful plan", Successfulplannum)
