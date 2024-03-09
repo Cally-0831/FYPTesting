@@ -1451,7 +1451,8 @@ module.exports = {
             console.log("Plan Excecution Time  ", ((PlanProcessEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
             /** change the SelectedPlan insert to SQL */
             SelectedPlan = SchedulesforThisDateCombin[SelectedPlan];
-            console.log("For datecombination: ", (datecombin + 1), "  Untackle Case Count:  ", SelectedPlan.Untackle, "   Successful rate:  ", calcPercentage((totalStudNum - SelectedPlan.Untackle), totalStudNum))
+            console.log(SelectedPlan)
+            console.log("For datecombination: ", (datecombin + 1), "  Untackle Case Count:  ", SchedulesforThisDateCombin[SelectedPlan].Untackle, "   Successful rate:  ", calcPercentage((totalStudNum - SelectedPlan.Untackle), totalStudNum))
 
             async function insertbox(planNo, element, sqldatestring, sessionstarttime, planStatus, typeOfPresent) {
 
