@@ -1409,8 +1409,10 @@ module.exports = {
 
                     SelectedPlan = ScheduleJSON;
                     break;
-                } else if ((0.05 * (combinations(totalStudNum, 4)))+1  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 0.05 * (combinations(totalStudNum, 4))){
-                    SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
+                // } else if ((0.05 * (combinations(totalStudNum, 4)))+1  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 0.05 * (combinations(totalStudNum, 4))){
+                } else if (1001  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 1000){
+                    
+                SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
                     var CurrentEnd =  new Date();
                     console.log("Current Excecution Time  ", ((CurrentEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
@@ -1423,7 +1425,7 @@ module.exports = {
                     // });
                     // console.log(">> CheckPoint 5% this plan has the following untackle values", uniqueUntackle);
 
-                }else if (SchedulesforThisDateCombin.length >= 0.1 * (combinations(totalStudNum, 4))) {
+                }else if (SchedulesforThisDateCombin.length >= 2000) {
                     SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
 
