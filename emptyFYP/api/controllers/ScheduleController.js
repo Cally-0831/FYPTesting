@@ -802,7 +802,543 @@ module.exports = {
         console.log("\n\nGeneration of available timeslots for 3-parties was completed\n\n")
 
         //return res.redirect("/scheduledesign/startschedule?typeOfPresent=" + req.body.typeOfPresent)
-        return res.redirect("/scheduledesign/nqueenversion?typeOfPresent=" + req.body.typeOfPresent)
+        // return res.redirect("/scheduledesign/nqueenversion?typeOfPresent=" + req.body.typeOfPresent)
+
+        /**using combin version */
+        return res.status(200).json("ok");
+    },
+
+    Combinversion: async function (req, res) {
+        console.log("\n\nStart Processing with Combination version");
+
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        console.log(req.body);
+        var setting3 = await new Promise((resolve) => {
+            pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans;
+                if (json.length > 0) {
+                    var presentstartdate = new Date(json[0].startdate);
+                    var presentenddate = new Date(json[0].enddate);
+                    var presentstarttime = json[0].starttime;
+                    var presentendtime = json[0].endtime;
+                    ans = JSON.parse(JSON.stringify({
+                        presentstartdate: presentstartdate,
+                        presentenddate: presentenddate,
+                        presentstarttime: presentstarttime,
+                        presentendtime: presentendtime
+                    }))
+                }
+                ans.presentstartdate = new Date(ans.presentstartdate);
+                ans.presentenddate = new Date(ans.presentenddate);
+                resolve(ans)
+            })
+        }).catch((err) => {
+            errmsg = "error happened in ScheduleController.Combinversion.setting3"
+        })
+        // console.log(setting3)
+        function copyarray(array1) {
+            var ans = new Array();
+            ans = array1.slice();
+            return ans;
+        }
+
+        // gen combination of date for possible plans
+        var presentperiod = new Array();
+        var possibledatecombination = new Array();
+        var designdate = new Date();
+        designdate.setTime(setting3.presentstartdate.getTime());
+        // console.log(">>designdate", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+        while (designdate.toLocaleDateString("en-GB") != setting3.presentenddate.toLocaleDateString("en-GB")) {
+            // console.log(">>designdate2", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+            if (designdate.getDay() != 0) {
+                presentperiod.push(designdate);
+            }
+
+            // console.log(">>presentperiod ",presentperiod);
+            // presentperiod.forEach(item=>{
+            //     console.log(">>designdate3 ", item.toLocaleDateString("en-GB")," ",item.toLocaleTimeString("en-GB"));
+            // })
+            // console.log("\n");
+            designdate = new Date(designdate.getTime() + 60 * 60 * 24 * 1000);
+            // console.log(">>designdate", designdate.toLocaleDateString("en-GB")," ",designdate.toLocaleTimeString("en-GB"));
+        }
+        for (var a = 0; a < presentperiod.length; a++) {
+            var ans = copyarray(presentperiod);
+            var combinationforthisday = new Array();
+            for (var b = 0; b < a; b++) {
+                ans.shift(ans[b]);
+            }
+            // console.log(">>after cutting top ",ans,"\n")
+            for (var b = presentperiod.length - 1; b >= a; b--) {
+                // console.log(">>cutting bottom ",ans,"\n")
+                var copycopy = copyarray(ans);
+                combinationforthisday.push(copycopy)
+                // console.log(">>combinationforthisday ",combinationforthisday)
+                ans.pop(ans[b]);
+
+            }
+            // console.log(">>final combinationforthisday ",combinationforthisday)
+            combinationforthisday.forEach(item => { possibledatecombination.push(item); })
+        }
+        possibledatecombination.sort((a, b) => a.length - b.length);
+        var preSetClassroomList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'FSC901E', 'RRS638', 'RRS735']
+
+        async function getStudentnum() {
+            var studentnum = await new Promise((resolve) => {
+                pool.query("select count(*) as counting from student", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            resolve(json[0].counting);
+                        }
+
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.Combinversion.getStudentnum()"
+            })
+            if (studentnum != "err") { return studentnum; } else { return false; }
+        }
+
+        async function checkuniquetimeslotcountforoneday(plan) {
+            function getallplandate(plan) {
+                var ans = "";
+
+                for (var a = 0; a < plan.length; a++) {
+
+                    var datestring = plan[a].toLocaleDateString("en-GB").split("/");
+                    datestring = datestring[2] + "-" + datestring[1] + "-" + datestring[0];
+                    if (a != plan.length - 1) {
+                        ans += " availabledate = \"" + datestring + "\" or ";
+                    } else {
+                        ans += " availabledate = \"" + datestring + "\" ";
+                    }
+                }
+                // console.log(ans)
+                return ans;
+            }
+            // var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
+            var queryline = "SELECT distinct(availablestarttime),COUNT(*)  from  threeparty where " + getallplandate(plan) + " GROUP BY availablestarttime order by availablestarttime asc;"
+            // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
+            // console.log("\n\n>>checkuniquetimeslotcountforoneday()    ", queryline);
+            var uniquetimeslotcounts = await new Promise((resolve) => {
+                db.query(queryline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.checkuniquetimeslotcountforoneday()"
+            })
+            if (uniquetimeslotcounts != "err") { return uniquetimeslotcounts; } else { return false; }
+        }
+        function resetsessionendtime(sessionstarttime) {
+            var sessionend;
+            if (req.query.typeOfPresent == "final") {
+                sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
+            } else {
+                sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
+            }
+            return sessionend;
+        }
+        async function checkclassroomttb(classroom, weekday, starttime, endtime) {
+            // console.log("select * from  allclass where RID =\"" + classroom + "\" and weekdays = " + weekday + " and !(Time(\"" + starttime + "\") >= endTime || Time(\"" + endtime + "\") <= startTime);")
+            var checking = await new Promise((resolve) => {
+                pool.query("select * from  allclass where RID =\"" + classroom + "\" and weekdays = " + weekday + " and !(Time(\"" + starttime + "\") >= endTime || Time(\"" + endtime + "\") <= startTime);", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            //have class during the time => cant use
+                            resolve(false);
+                        } else {
+                            //no class during the time => can use
+                            resolve(true);
+                        }
+                    } catch (err) {
+                        resolve("err");
+                    }
+                });
+            }).catch((err) => {
+                return res.status(401).json("Error happened when excuting ScheduleController,startschedule.checkclassroomttb()")
+            })
+            if (checking != "err") { return checking; } else { return false; }
+        }
+
+        async function checkclassroomtimeslot(classroom, dateoftoday, starttime, endtime) {
+            var checking = await new Promise((resolve) => {
+                pool.query("select * from  allclassroomtimeslot where RID = \"" + classroom + "\" and (time(\"" + dateoftoday + " " + starttime + "\") >= time(concat(startdate,\" \",starttime)) && time(\"" + dateoftoday + " " + endtime + "\") <= time(concat(enddate,\" \",endtime)) );", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            //have class during the time => cant use
+                            resolve(false);
+                        } else {
+                            //no class during the time => can use
+                            resolve(true);
+                        }
+                    } catch (err) {
+                        resolve("err");
+                    }
+                });
+            }).catch((err) => {
+                return res.status(401).json("Error happened when excuting ScheduleController,startschedule.checkclassroomtimeslot()")
+            })
+            if (checking != "err") { return checking; } else { return false; }
+        }
+        async function availblepairsforthistimeslot(plandate, starttime) {
+            // var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
+            var queryline = "Select * from threeparty where availabledate = \"" + plandate + "\" and availablestarttime = \"" + plandate + " " + starttime + "\" ;"
+            // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
+            // console.log("\n\n>>checkuniquetimeslotcountforoneday()    ", queryline);
+            var availablepairs = await new Promise((resolve) => {
+                db.query(queryline, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        resolve(json);
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.nqueenversion.availblepairsforthistimeslot()"
+            })
+            if (availablepairs != "err") { return availablepairs; } else { return false; }
+        }
+
+        function reducePairBySupObs(selectedArray, PresentationList) {
+            // console.log("org presentlistlenght", PresentationList.length)
+            var ans;
+
+            selectedArray.forEach(element => {
+                while (PresentationList.find((element2) => element.TID == element2.TID)) {
+                    var id = PresentationList.find((element2) => element.TID == element2.TID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case1")
+                    var removed = PresentationList.splice(index, 1);
+                    ans = copyarray(PresentationList);
+                    PresentationList = ans;
+                }
+                while (PresentationList.find((element2) => element.TID == element2.OID)) {
+                    var id = PresentationList.find((element2) => element.TID == element2.OID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case 2")
+
+                    var removed = PresentationList.splice(index, 1);
+                    // console.log(removed)
+
+                    ans = copyarray(PresentationList);
+                    // console.log(ans);
+                    PresentationList = ans;
+                }
+                while (PresentationList.find((element2) => element.OID == element2.TID)) {
+                    var id = PresentationList.find((element2) => element.OID == element2.TID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case 3")
+                    var removed = PresentationList.splice(index, 1);
+                    // console.log(removed)
+
+                    ans = copyarray(PresentationList);
+                    // console.log(ans);
+                    PresentationList = ans;
+                }
+                while (PresentationList.find((element2) => element.OID == element2.OID)) {
+                    var id = PresentationList.find((element2) => element.OID == element2.OID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case 4")
+
+                    var removed = PresentationList.splice(index, 1);
+                    // console.log(removed)
+
+                    ans = copyarray(PresentationList);
+                    // console.log(ans);
+                    PresentationList = ans;
+                }
+
+            });
+            // console.log(">> reduce Pair from selected ", PresentationList.length)
+            return PresentationList;
+        }
+        function reducePairBySID(selectedArray, PresentationList) {
+            // console.log("org presentlistlenght", selectedArray)
+            var ans;
+            if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
+
+            selectedArray.forEach(element => {
+
+                if (PresentationList.find((element2) => element.SID == element2.SID)) {
+
+                    var stuid = PresentationList.find((element2) => element.SID == element2.SID);
+                    var index = PresentationList.indexOf(stuid);
+                    // console.log("have this person reduce sin", index)
+
+                    var removed = PresentationList.splice(index, 1);
+                    // console.log(removed)
+
+                    ans = copyarray(PresentationList);
+                    // console.log(ans);
+                    PresentationList = ans;
+                }
+            });
+            // console.log(">> reduce Pair from selected ", PresentationList.length)
+            return PresentationList;
+        }
+
+        async function genCombinationfortimeslots(sqldatestring, timeslot, requirescombinlength) {
+            var PresentationList = await availblepairsforthistimeslot(sqldatestring, timeslot);
+            var combinay = new Array();
+            if (requirescombinlength > 0) {
+                for (var stu = 0; stu < PresentationList.length; stu++) {
+                    var combin = new Array();
+                    combin.push(PresentationList[stu]);
+                    combinay.push(combin);
+                    if (stu + 1 < PresentationList.length) {
+                        var remainingcombin = combinationForPattern(combinay, combin, PresentationList.slice(stu + 1), requirescombinlength - 1);
+                        // combinay.sort((a, b) => a.length - b.length);
+
+                        combinay.concat(remainingcombin);
+                    }
+
+                }
+
+            }
+
+            // console.log(combinay);
+            // combinay.forEach(element => {
+            //     console.log("\n\n");
+            //     element.forEach(element2 => {
+            //         console.log(element2.TID, "  ", element2.SID, "  ", element2.OID);
+            //     })
+            // });
+            combinay = combinay.filter((element) => element.length == requirescombinlength);
+            console.log(combinay.length)
+            return combinay;
+        }
+        function combinationForPattern(combinay, pattern, studlist, requirescombinlength) {
+
+            if (requirescombinlength == 0) { return combinay; }
+            // console.log(pattern);
+
+
+            // checking of duplicated tid and oid in pattern;
+            studlist = reducePairBySupObs(pattern, studlist);
+            studlist = reducePairBySID(pattern, studlist);
+            studlist.forEach(element => {
+                var newpattern = copyarray(pattern);
+                // console.log("hello1   ",newpattern);
+                newpattern.push(element);
+                // console.log("hello1   ");
+                combinay.push(newpattern)
+                if (requirescombinlength != 0) {
+                    return combinationForPattern(combinay, newpattern, studlist, requirescombinlength - 1);
+                }
+            });
+
+            return combinay;
+        }
+
+        function LinkToNextTimeslot(scheduleforthisplan, thiscombination, scheduleForThisPath, timecount, handledNum, totalStudNum) {
+
+            // console.log(scheduleForThisPath);
+            if (scheduleforthisplan[timecount] == undefined) {
+                scheduleForThisPath.Untackle = totalStudNum - handledNum;
+                // console.log(timecount, " no more time can use return  ", scheduleForThisPath.Untackle);
+                return scheduleForThisPath;
+            }
+            if (totalStudNum - handledNum == 0) {
+                scheduleForThisPath.Untackle = totalStudNum - handledNum;
+                // console.log(timecount, " perfect mactch return  ", scheduleForThisPath.Untackle);
+                return scheduleForThisPath;
+            }
+
+            var thisLayer = new Array();
+            var selectionarea = new Array();
+            var copyCombination = JSON.parse(JSON.stringify(scheduleforthisplan[timecount].combination));
+
+
+            // reducing presentations appears before
+            for (var a = 0; a < copyCombination.length; a++) {
+                // for (var a = 200; a < 205; a++) {
+                var checkcountLastLayer = 0;
+                var checkcountPrevLayer = 0;
+                var checkedLayer = 0;
+                var totalLengthofOneLayer = 0;
+                var totalLayers = 0;
+                // console.log("\n\n @@  ", copyCombination[a], " ", thiscombination, " @@")
+                // thiscombination.forEach(FixedPresentation => {
+                //     if (copyCombination[a].find((element) => element.SID == FixedPresentation.SID)) {
+                //         // console.log("can't add\n\n")
+                //     } else {
+                //         // console.log("look good for ", FixedPresentation.SID, "\n\n")
+                //         checkcountLastLayer++;
+                //     }
+                // });
+                scheduleForThisPath.forEach((element) => {
+                    // console.log(element.combination)
+                    if (element.combination.length != 0) { totalLayers++; }
+                    totalLengthofOneLayer = element.combination.length;
+                    var checkcountPrevLayer = 0;
+                    element.combination.forEach(element2 => {
+
+
+                        if (copyCombination[a].find((element) => element.SID == element2.SID)) {
+                            // console.log("can't add")
+                        } else {
+                            // console.log("look good for ", element2.SID, "")
+                            checkcountPrevLayer++;
+                        }
+                        if (checkcountPrevLayer == totalLengthofOneLayer) { checkedLayer++; }
+                    });
+                });
+                // console.log(checkedLayer, "   ", totalLayers)
+                // if (checkcountLastLayer == thiscombination.length && checkedLayer == totalLayers) {
+                if (checkedLayer == totalLayers) {
+                    selectionarea.push(copyCombination[a]);
+                    // selectionarea.concat(nextTimeslot.combination[a]);
+                }
+                // console.log(selectionarea[30])
+            }
+            selectionarea.sort((a, b) => b.length - a.length)
+            // console.log(copyCombination.length, "    ", selectionarea.length);
+            if (selectionarea.length == 0) {
+                var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[timecount]));
+                scheduleOfThisTimeslot.combination = new Array();
+                // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
+                scheduleForThisPath[timecount] = (scheduleOfThisTimeslot);
+
+                // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
+                // console.log("infunction scheduleForThisPath",scheduleForThisPath);
+                var plans = (LinkToNextTimeslot(scheduleforthisplan, scheduleOfThisTimeslot.combination,
+                    scheduleForThisPath, timecount + 1, handledNum, totalStudNum)).flat();
+                // thisLayer.push(plans)
+                plans.sort((a, b) => a.Untackle - b.Untackle);
+                // console.log(timecount," case 1 this layer min",thisLayer[0].Untackle)
+                // return thisLayer[0];
+                thisLayer = plans;
+            } else {
+                for (var b = 0; b < selectionarea.length; b++) {
+                    // for (var b = 0; b < Math.min(selectionarea.length,10); b++) {
+                    // for (var b = 0; b < 10; b++) {
+                    console.log(timecount,"  selection area ",b,"   ",selectionarea.length)
+                    var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[timecount]));
+                    // console.log(selectionarea[b])
+                    scheduleOfThisTimeslot.combination = selectionarea[b].slice();
+                    scheduleForThisPath[timecount] = (scheduleOfThisTimeslot);
+
+                    // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
+                    // console.log("infunction scheduleForThisPath",scheduleForThisPath);
+                    var plans = LinkToNextTimeslot(scheduleforthisplan, selectionarea[b],
+                        scheduleForThisPath, timecount + 1, (selectionarea[b].length + handledNum), totalStudNum);
+                    // console.log(plans)
+                    // thisLayer.push(plans)
+                }
+                plans.sort((a, b) => a.Untackle - b.Untackle);
+                thisLayer = plans;
+                // console.log(timecount," case 2 this layer min",thisLayer[0].Untackle)
+                // return thisLayer[0];
+            }
+
+            var alluntackle = new Array();
+            thisLayer.forEach(element => {
+                alluntackle.push(element.Untackle)
+            });
+            // console.log("see see this layer all plans all untackle  ", timecount, "  ", alluntackle);
+            var ans = copyarray(thisLayer.filter((plans) => plans.Untackle == thisLayer[0].Untackle));
+            // console.log(ans)
+            // console.log("why enter here");
+            return ans;
+        }
+
+        var totalStudNum = await getStudentnum();
+        var finalResultOfPlans = new Array(); // use for final outputs
+        console.log("Total plans requires process", possibledatecombination.length, "\n\n")
+        var ProcessStart = new Date();
+        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 6; datecombin < 7; datecombin++) {
+            var scheduleforthisplan = new Array();
+            var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
+            // for (var timeslots = 0; timeslots < uniquetimeslotcounts.length; timeslots++) {
+            for (var timeslots = 0; timeslots < 5; timeslots++) {
+                var sessionstarttime = new Date(uniquetimeslotcounts[timeslots].availablestarttime);
+                var sessionendtime = resetsessionendtime(sessionstarttime);
+                var sqldatestring = sessionstarttime.toLocaleDateString("en-GB").split("/");
+                sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
+                sqldatestring.trim();
+                var availableclassroomlist = new Array();;
+                for (var room = 0; room < 4; room++) {
+                    if (req.body.typeOfPresent == "final") {
+                        var roomttbresult = await checkclassroomttb(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        if (roomttbresult && roomtimeslotresult) {
+                            availableclassroomlist.push(preSetClassroomList[room]);
+                        }
+                    } else {
+                        var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
+                        if (roomtimeslotresult) {
+                            availableclassroomlist.push(preSetClassroomList[room]);
+                        }
+                    }
+                }
+
+                var combin = await genCombinationfortimeslots(sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"), availableclassroomlist.length);
+                //    console.log(combin)
+                // combin.forEach(element => {
+                //     console.log("\n\n");
+                //     var string = "";
+                //     element.forEach(element2 => {
+                //         string += (element2.TID, "  ", element2.OID, "  ", element2.SID, " ");
+                //     })
+                //     console.log(string);
+                // });
+                // console.log(combin[combin.length-1])
+                scheduleforthisplan.push(JSON.parse(JSON.stringify({
+                    SQLDate: sqldatestring,
+                    timeslot: new Date(uniquetimeslotcounts[timeslots].availablestarttime),
+                    room: availableclassroomlist,
+                    combination: combin
+                })));
+            }
+            // console.log(scheduleforthisplan)
+            // scheduleforthisplan.forEach(element => {
+            //     console.log(element.timeslot, "   ", element.room.length);
+            // });
+
+            // console.log(scheduleforthisplan[0].combination.length);
+
+            // for (var a = 0; a < scheduleforthisplan[0].combination.length; a++) {
+            for (var a = 0; a < 1; a++) {
+                console.log(">> running combination ", a)
+                var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[0]));
+                scheduleOfThisTimeslot.combination = scheduleforthisplan[0].combination[a].slice();
+                var scheduleForThisPath = new Array();
+                // console.log("in large",scheduleOfThisTimeslot);
+                scheduleForThisPath.push(scheduleOfThisTimeslot);
+                // console.log("scheduleForThisPath    ", scheduleForThisPath[0]);
+                var minUntackledscheduleOfThisCombination = LinkToNextTimeslot(scheduleforthisplan, scheduleforthisplan[0].combination[a],
+                    scheduleForThisPath, a + 1, scheduleforthisplan[0].combination[a].length, totalStudNum)
+                console.log("minUntackledscheduleOfThisCombination    ", minUntackledscheduleOfThisCombination);
+            }
+            // console.log(scheduleforthisplan);
+        }
+
+
+        var ProcessEnd = new Date();
+
+        console.log("Whole Excecution Time  ", ((ProcessEnd.getTime() - ProcessStart.getTime()) / 1000), " Seconds");
+
+
     },
 
     nqueenversion: async function (req, res) {
@@ -1583,6 +2119,7 @@ module.exports = {
         finalResultOfPlans.sort((a, b) => a.planStatus - b.planStatus)
         return res.redirect("/scheduledesign/scheduleList?planNo=" + finalResultOfPlans.sort()[0].planNo);
     },
+
     startScheduling: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
