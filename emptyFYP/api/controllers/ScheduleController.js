@@ -1285,7 +1285,7 @@ module.exports = {
             var SelectedPlan;
             var PlanProcessStart = new Date();
             // console.log(uniquetimeslotcounts);
-            for (var possibleplan = 0; possibleplan < combinations(totalStudNum, 4); possibleplan++) {
+            for (var possibleplan = 0; possibleplan < 2000; possibleplan++) {
                 // for (var possibleplan = 0; possibleplan < 1; possibleplan++) {
                 // console.log("working on possibleplan for one date  ", possibleplan, "/", combinations(totalStudNum, 4), "  ----------  ", calcPercentage(possibleplan, combinations(totalStudNum, 4)), " ------- ", Successfulplannum);
                 var thisscheduleplan = new Array(uniquetimeslotcounts.length);
