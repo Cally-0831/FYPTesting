@@ -810,7 +810,7 @@ module.exports = {
 
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        console.log(req.query);
+        console.log(req.body);
 
         var setting3 = await new Promise((resolve) => {
             pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
@@ -1285,7 +1285,7 @@ module.exports = {
             var SelectedPlan;
             var PlanProcessStart = new Date();
             // console.log(uniquetimeslotcounts);
-            for (var possibleplan = 0; possibleplan < 2000; possibleplan++) {
+            for (var possibleplan = 0; possibleplan < 5000; possibleplan++) {
                 // for (var possibleplan = 0; possibleplan < 1; possibleplan++) {
                 // console.log("working on possibleplan for one date  ", possibleplan, "/", combinations(totalStudNum, 4), "  ----------  ", calcPercentage(possibleplan, combinations(totalStudNum, 4)), " ------- ", Successfulplannum);
                 var thisscheduleplan = new Array(uniquetimeslotcounts.length);
@@ -1307,7 +1307,7 @@ module.exports = {
                     //get the classroomlist that available for the time
                     var availableclassroomlist = new Array();;
                     for (var room = 0; room < 4; room++) {
-                        if (req.query.typeOfPresent == "final") {
+                        if (req.body.typeOfPresent == "final") {
                             var roomttbresult = await checkclassroomttb(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                             var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                             if (roomttbresult && roomtimeslotresult) {
@@ -1390,7 +1390,7 @@ module.exports = {
                     SchedulesforThisDateCombin.push(ScheduleJSON);
                     SchedulesforThisDateCombin = copyarray(SchedulesforThisDateCombin.filter((element)=> element.Untackle == ScheduleJSON.Untackle));
                 }
-                
+              
                 // if (Successfulplannum > 0.005 * (combinations(totalStudNum, 4))) { //case for many No untackled plans
                     if (ScheduleJSON.Untackle ==0) { //case for getting the first Successful Plan
                     // console.log("Having this number of successful plan", Successfulplannum)
@@ -1408,15 +1408,16 @@ module.exports = {
 
 
                     SelectedPlan = ScheduleJSON;
+                    console.log("case 1")
                     break;
                 // } else if ((0.05 * (combinations(totalStudNum, 4)))+1  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 0.05 * (combinations(totalStudNum, 4))){
-                } else if (1001  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 1000){
+                } else if (possibleplan%1000 ==0 ){
                     
                 SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
                     var CurrentEnd =  new Date();
                     console.log("Current Excecution Time  ", ((CurrentEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
-                    console.log(">> chech point 5% Min untacklecd == ", untackledMinIndex)
+                    console.log(">> check point ",possibleplan," Min untacklecd == ", untackledMinIndex)
                     // var uniqueUntackle = new Array();
                     // SchedulesforThisDateCombin.forEach(element => {
                     //     if (!uniqueUntackle.find((number) => number == element.Untackle)) {
@@ -1424,8 +1425,9 @@ module.exports = {
                     //     }
                     // });
                     // console.log(">> CheckPoint 5% this plan has the following untackle values", uniqueUntackle);
-
-                }else if (SchedulesforThisDateCombin.length >= 2000) {
+                    console.log("case 2")
+                }else if ( possibleplan == 4999) {
+                    console.log("case 3")
                     SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
 
@@ -1447,15 +1449,18 @@ module.exports = {
                     }
                     SelectedPlan = randomNum(SchedulesforThisDateCombin);
                     console.log("Selected Plan here ", SelectedPlan);
+                    SelectedPlan = SchedulesforThisDateCombin[SelectedPlan];
                     break;
                 }
+               
             }
             var PlanProcessEnd = new Date();
             console.log("Plan Excecution Time  ", ((PlanProcessEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
             /** change the SelectedPlan insert to SQL */
-            SelectedPlan = SchedulesforThisDateCombin[SelectedPlan];
+            
+            
             console.log(SelectedPlan)
-            console.log("For datecombination: ", (datecombin + 1), "  Untackle Case Count:  ", SchedulesforThisDateCombin[SelectedPlan].Untackle, "   Successful rate:  ", calcPercentage((totalStudNum - SelectedPlan.Untackle), totalStudNum))
+            console.log("For datecombination: ", (datecombin + 1), "  Untackle Case Count:  ", SelectedPlan.Untackle, "   Successful rate:  ", calcPercentage((totalStudNum - SelectedPlan.Untackle), totalStudNum))
 
             async function insertbox(planNo, element, sqldatestring, sessionstarttime, planStatus, typeOfPresent) {
 
@@ -1578,7 +1583,6 @@ module.exports = {
         finalResultOfPlans.sort((a, b) => a.planStatus - b.planStatus)
         return res.redirect("/scheduledesign/scheduleList?planNo=" + finalResultOfPlans.sort()[0].planNo);
     },
-
     startScheduling: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();

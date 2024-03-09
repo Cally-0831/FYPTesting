@@ -126,13 +126,20 @@
                 method: "POST",
                 body: requestbody
             });
-    
             if (response.ok) {
-                document.getElementById("loader").style.visibility = "hidden";
-                location.assign(response.url);
+                response = await fetch("/scheduledesign/nqueenversion", {
+                    method: "POST",
+                    body: requestbody
+                });
+                if (response.ok) {
+                    document.getElementById("loader").style.visibility = "hidden";
+                    location.redirect(response.url)
+                }else{
+                    alert("Error exists when using combination version")
+                }
                 
             }else{
-               alert("Error exists")
+               alert("Error exists when generating")
             }
         }
 

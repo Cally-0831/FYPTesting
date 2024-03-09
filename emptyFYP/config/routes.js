@@ -51,7 +51,9 @@ module.exports.routes = {
   //admin click scheduling
   'GET /scheduledesign': "SettingController.nodraft",
   "POST /scheduledesign/genAvailable": "ScheduleController.genAvailable",
-  'GET /scheduledesign/nqueenversion': "ScheduleController.nqueenversion",
+  'POST /scheduledesign/nqueenversion': "ScheduleController.nqueenversion",
+  // 'GET /scheduledesign/Combinversion': "ScheduleController.nqueenversion",
+  'POST /scheduledesign/Combinversion': "ScheduleController.Combinversion",
   //'GET /scheduledesign/startschedule': "ScheduleController.startScheduling",
   'GET /scheduledesign/scheduleList': "ScheduleController.scheduleList",
   'GET /checkdraft': "ScheduleController.checksetting",
