@@ -1446,6 +1446,7 @@ module.exports = {
                         SchedulesforThisDateCombin = SchedulesforThisDateCombin.filter((plans) => plans.Preference == true);
                     }
                     SelectedPlan = randomNum(SchedulesforThisDateCombin);
+                    console.log("Selected Plan here ", SelectedPlan);
                     break;
                 }
             }
