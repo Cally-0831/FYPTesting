@@ -809,11 +809,12 @@ module.exports = {
     },
 
     Combinversion: async function (req, res) {
-        console.log("\n\nStart Processing with Combination version");
+        console.log("\n\nStart Processing with N-queen version");
 
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         console.log(req.body);
+
         var setting3 = await new Promise((resolve) => {
             pool.query("select * from  allsupersetting where typeofsetting = 3 and Announcetime is not null;", (err, res) => {
                 var string = JSON.stringify(res);
@@ -836,7 +837,7 @@ module.exports = {
                 resolve(ans)
             })
         }).catch((err) => {
-            errmsg = "error happened in ScheduleController.Combinversion.setting3"
+            errmsg = "error happened in ScheduleController.startScheduling.setting3"
         })
         // console.log(setting3)
         function copyarray(array1) {
@@ -885,6 +886,10 @@ module.exports = {
         }
         possibledatecombination.sort((a, b) => a.length - b.length);
         var preSetClassroomList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'FSC901E', 'RRS638', 'RRS735']
+        var preSetFSCList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'FSC901E'];
+        var preSetFSC8thList = ['FSC801C', 'FSC801D', 'FSC801E'];
+        var preSetFSC9thList = ['FSC901C', 'FSC901D', 'FSC901E'];
+        var preSetRRSList = ['RRS638', 'RRS735'];
 
         async function getStudentnum() {
             var studentnum = await new Promise((resolve) => {
@@ -901,28 +906,98 @@ module.exports = {
                     }
                 });
             }).catch((err) => {
-                errmsg = "error happened in ScheduleController.Combinversion.getStudentnum()"
+                errmsg = "error happened in ScheduleController.startschedule.getStudentnum()"
             })
             if (studentnum != "err") { return studentnum; } else { return false; }
         }
+        async function getPairingList() {
+            var studentList = await new Promise((resolve) => {
+                pool.query("select t1.* ,t2.oid from observerpairstudent as t2 left join (select sid , tid from supervisorpairstudent) as t1 on t1.sid = t2.sid", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            // console.log(json);
+                            resolve(json);
+                        }
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getPairingList()"
+            })
+            if (studentList != "err") { return studentList; } else { return false; }
+        }
+        async function getTeachingList() {
+            var TeachingList = await new Promise((resolve) => {
+                pool.query("select tid from supervisor", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            // console.log(json);
+                            resolve(json);
+                        }
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.startschedule.getTeachingList()"
+            })
+            if (TeachingList != "err") { return TeachingList; } else { return false; }
+        }
+
+        async function getPrefList(TeachingList) {
+            var PrefList = await new Promise((resolve) => {
+                pool.query("select * from allpreffromsup", (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        if (json.length > 0) {
+                            // console.log(json);
+                            resolve(json);
+                        }
+                    } catch (err) {
+                        resolve("err")
+                    }
+                });
+            }).catch((err) => {
+                errmsg = "error happened in ScheduleController.Combinversion.getPrefList()"
+            })
+            TeachingList.forEach(staff => {
+                var index = PrefList.findIndex((teacher) => teacher.TID == staff.tid)
+                if (index > 0) {
+                    staff.daypref = PrefList[index].daypref;
+                    staff.movementpref = PrefList[index].movementpref;
+                } else {
+                    staff.daypref = 1;
+                    staff.movementpref = 1;
+                }
+            });
+
+            if (PrefList != "err") { return TeachingList; } else { return false; }
+        }
+
+        function getallplandate(plan) {
+            var ans = "";
+
+            for (var a = 0; a < plan.length; a++) {
+
+                var datestring = plan[a].toLocaleDateString("en-GB").split("/");
+                datestring = datestring[2] + "-" + datestring[1] + "-" + datestring[0];
+                if (a != plan.length - 1) {
+                    ans += " availabledate = \"" + datestring + "\" or ";
+                } else {
+                    ans += " availabledate = \"" + datestring + "\" ";
+                }
+            }
+            // console.log(ans)
+            return ans;
+        }
 
         async function checkuniquetimeslotcountforoneday(plan) {
-            function getallplandate(plan) {
-                var ans = "";
-
-                for (var a = 0; a < plan.length; a++) {
-
-                    var datestring = plan[a].toLocaleDateString("en-GB").split("/");
-                    datestring = datestring[2] + "-" + datestring[1] + "-" + datestring[0];
-                    if (a != plan.length - 1) {
-                        ans += " availabledate = \"" + datestring + "\" or ";
-                    } else {
-                        ans += " availabledate = \"" + datestring + "\" ";
-                    }
-                }
-                // console.log(ans)
-                return ans;
-            }
             // var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
             var queryline = "SELECT distinct(availablestarttime),COUNT(*)  from  threeparty where " + getallplandate(plan) + " GROUP BY availablestarttime order by availablestarttime asc;"
             // var queryline = "select tid, count(sid) from supervisorpairstudent group by tid order by count(sid) desc;"
@@ -942,15 +1017,7 @@ module.exports = {
             })
             if (uniquetimeslotcounts != "err") { return uniquetimeslotcounts; } else { return false; }
         }
-        function resetsessionendtime(sessionstarttime) {
-            var sessionend;
-            if (req.query.typeOfPresent == "final") {
-                sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
-            } else {
-                sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
-            }
-            return sessionend;
-        }
+
         async function checkclassroomttb(classroom, weekday, starttime, endtime) {
             // console.log("select * from  allclass where RID =\"" + classroom + "\" and weekdays = " + weekday + " and !(Time(\"" + starttime + "\") >= endTime || Time(\"" + endtime + "\") <= startTime);")
             var checking = await new Promise((resolve) => {
@@ -997,6 +1064,17 @@ module.exports = {
             })
             if (checking != "err") { return checking; } else { return false; }
         }
+
+        function resetsessionendtime(sessionstarttime) {
+            var sessionend;
+            if (req.body.typeOfPresent == "final") {
+                sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
+            } else {
+                sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
+            }
+            return sessionend;
+        }
+
         async function availblepairsforthistimeslot(plandate, starttime) {
             // var queryline = "select count(*) from threeparty where availabledate = \"2024-02-19\""
             var queryline = "Select * from threeparty where availabledate = \"" + plandate + "\" and availablestarttime = \"" + plandate + " " + starttime + "\" ;"
@@ -1018,10 +1096,35 @@ module.exports = {
             if (availablepairs != "err") { return availablepairs; } else { return false; }
         }
 
+        function reducePairBySID(selectedArray, PresentationList) {
+            // console.log("org presentlistlenght", selectedArray)
+            var ans;
+            if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
+
+            selectedArray.forEach(element => {
+
+                if (PresentationList.find((element2) => element.SID == element2.SID)) {
+
+                    var stuid = PresentationList.find((element2) => element.SID == element2.SID);
+                    var index = PresentationList.indexOf(stuid);
+                    // console.log("have this person reduce sin", index)
+
+                    var removed = PresentationList.splice(index, 1);
+                    // console.log(removed)
+
+                    ans = copyarray(PresentationList);
+                    // console.log(ans);
+                    PresentationList = ans;
+                }
+            });
+            // console.log(">> reduce Pair from selected ", PresentationList.length)
+            return PresentationList;
+        }
+
         function reducePairBySupObs(selectedArray, PresentationList) {
             // console.log("org presentlistlenght", PresentationList.length)
             var ans;
-
+            if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
             selectedArray.forEach(element => {
                 while (PresentationList.find((element2) => element.TID == element2.TID)) {
                     var id = PresentationList.find((element2) => element.TID == element2.TID);
@@ -1071,18 +1174,24 @@ module.exports = {
             // console.log(">> reduce Pair from selected ", PresentationList.length)
             return PresentationList;
         }
-        function reducePairBySID(selectedArray, PresentationList) {
-            // console.log("org presentlistlenght", selectedArray)
+
+        function reducePairByTeachingStaff(StaffList, PresentationList) {
+            // console.log("StaffList requires removal", StaffList)
             var ans;
-            if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
 
-            selectedArray.forEach(element => {
-
-                if (PresentationList.find((element2) => element.SID == element2.SID)) {
-
-                    var stuid = PresentationList.find((element2) => element.SID == element2.SID);
-                    var index = PresentationList.indexOf(stuid);
-                    // console.log("have this person reduce sin", index)
+            StaffList.forEach(staff => {
+                while (PresentationList.find((element2) => staff.ID == element2.TID)) {
+                    var id = PresentationList.find((element2) => staff.ID == element2.TID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case1")
+                    var removed = PresentationList.splice(index, 1);
+                    ans = copyarray(PresentationList);
+                    PresentationList = ans;
+                }
+                while (PresentationList.find((element2) => staff.ID == element2.OID)) {
+                    var id = PresentationList.find((element2) => staff.ID == element2.OID);
+                    var index = PresentationList.indexOf(id);
+                    // console.log("have this person reduce sin case 2")
 
                     var removed = PresentationList.splice(index, 1);
                     // console.log(removed)
@@ -1091,254 +1200,1052 @@ module.exports = {
                     // console.log(ans);
                     PresentationList = ans;
                 }
+
+
             });
-            // console.log(">> reduce Pair from selected ", PresentationList.length)
+            // console.log(">> reduce Pair from TeachingStaff ", PresentationList)
             return PresentationList;
         }
 
-        async function genCombinationfortimeslots(sqldatestring, timeslot, requirescombinlength) {
-            var PresentationList = await availblepairsforthistimeslot(sqldatestring, timeslot);
-            var combinay = new Array();
-            if (requirescombinlength > 0) {
-                for (var stu = 0; stu < PresentationList.length; stu++) {
-                    var combin = new Array();
-                    combin.push(PresentationList[stu]);
-                    combinay.push(combin);
-                    if (stu + 1 < PresentationList.length) {
-                        var remainingcombin = combinationForPattern(combinay, combin, PresentationList.slice(stu + 1), requirescombinlength - 1);
-                        // combinay.sort((a, b) => a.length - b.length);
+        function retrieveConsecList(PreviousList, PresentationList) {
+            /** PreviousList == previous 3 timeslot
+            *  return a list that teaching staff exist in previous timeslot before
+            */
+            var priorityList = new Array();
+            if (PreviousList.length == 0) { return priorityList; }
 
-                        combinay.concat(remainingcombin);
-                    }
-
-                }
-
-            }
-
-            // console.log(combinay);
-            // combinay.forEach(element => {
-            //     console.log("\n\n");
-            //     element.forEach(element2 => {
-            //         console.log(element2.TID, "  ", element2.SID, "  ", element2.OID);
-            //     })
-            // });
-            combinay = combinay.filter((element) => element.length == requirescombinlength);
-            console.log(combinay.length)
-            return combinay;
-        }
-        function combinationForPattern(combinay, pattern, studlist, requirescombinlength) {
-
-            if (requirescombinlength == 0) { return combinay; }
-            // console.log(pattern);
-
-
-            // checking of duplicated tid and oid in pattern;
-            studlist = reducePairBySupObs(pattern, studlist);
-            studlist = reducePairBySID(pattern, studlist);
-            studlist.forEach(element => {
-                var newpattern = copyarray(pattern);
-                // console.log("hello1   ",newpattern);
-                newpattern.push(element);
-                // console.log("hello1   ");
-                combinay.push(newpattern)
-                if (requirescombinlength != 0) {
-                    return combinationForPattern(combinay, newpattern, studlist, requirescombinlength - 1);
-                }
-            });
-
-            return combinay;
-        }
-
-        function LinkToNextTimeslot(scheduleforthisplan, thiscombination, scheduleForThisPath, timecount, handledNum, totalStudNum) {
-
-            // console.log(scheduleForThisPath);
-            if (scheduleforthisplan[timecount] == undefined) {
-                scheduleForThisPath.Untackle = totalStudNum - handledNum;
-                // console.log(timecount, " no more time can use return  ", scheduleForThisPath.Untackle);
-                return scheduleForThisPath;
-            }
-            if (totalStudNum - handledNum == 0) {
-                scheduleForThisPath.Untackle = totalStudNum - handledNum;
-                // console.log(timecount, " perfect mactch return  ", scheduleForThisPath.Untackle);
-                return scheduleForThisPath;
-            }
-
-            var thisLayer = new Array();
-            var selectionarea = new Array();
-            var copyCombination = JSON.parse(JSON.stringify(scheduleforthisplan[timecount].combination));
-
-
-            // reducing presentations appears before
-            for (var a = 0; a < copyCombination.length; a++) {
-                // for (var a = 200; a < 205; a++) {
-                var checkcountLastLayer = 0;
-                var checkcountPrevLayer = 0;
-                var checkedLayer = 0;
-                var totalLengthofOneLayer = 0;
-                var totalLayers = 0;
-                // console.log("\n\n @@  ", copyCombination[a], " ", thiscombination, " @@")
-                // thiscombination.forEach(FixedPresentation => {
-                //     if (copyCombination[a].find((element) => element.SID == FixedPresentation.SID)) {
-                //         // console.log("can't add\n\n")
-                //     } else {
-                //         // console.log("look good for ", FixedPresentation.SID, "\n\n")
-                //         checkcountLastLayer++;
-                //     }
-                // });
-                scheduleForThisPath.forEach((element) => {
-                    // console.log(element.combination)
-                    if (element.combination.length != 0) { totalLayers++; }
-                    totalLengthofOneLayer = element.combination.length;
-                    var checkcountPrevLayer = 0;
-                    element.combination.forEach(element2 => {
-
-
-                        if (copyCombination[a].find((element) => element.SID == element2.SID)) {
-                            // console.log("can't add")
-                        } else {
-                            // console.log("look good for ", element2.SID, "")
-                            checkcountPrevLayer++;
-                        }
-                        if (checkcountPrevLayer == totalLengthofOneLayer) { checkedLayer++; }
-                    });
+            PreviousList.forEach(ScheduledTimeslots => {
+                ScheduledTimeslots.forEach(ScheduledPresent => {
+                    var foundTID = PresentationList.filter((element) => element.TID == ScheduledPresent.TID || element.OID == ScheduledPresent.TID)
+                    var foundOID = PresentationList.filter((element) => element.TID == ScheduledPresent.OID || element.OID == ScheduledPresent.OID)
+                    priorityList.push(foundTID)
+                    priorityList.push(foundOID)
                 });
-                // console.log(checkedLayer, "   ", totalLayers)
-                // if (checkcountLastLayer == thiscombination.length && checkedLayer == totalLayers) {
-                if (checkedLayer == totalLayers) {
-                    selectionarea.push(copyCombination[a]);
-                    // selectionarea.concat(nextTimeslot.combination[a]);
-                }
-                // console.log(selectionarea[30])
-            }
-            selectionarea.sort((a, b) => b.length - a.length)
-            // console.log(copyCombination.length, "    ", selectionarea.length);
-            if (selectionarea.length == 0) {
-                var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[timecount]));
-                scheduleOfThisTimeslot.combination = new Array();
-                // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
-                scheduleForThisPath[timecount] = (scheduleOfThisTimeslot);
 
-                // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
-                // console.log("infunction scheduleForThisPath",scheduleForThisPath);
-                var plans = (LinkToNextTimeslot(scheduleforthisplan, scheduleOfThisTimeslot.combination,
-                    scheduleForThisPath, timecount + 1, handledNum, totalStudNum)).flat();
-                // thisLayer.push(plans)
-                plans.sort((a, b) => a.Untackle - b.Untackle);
-                // console.log(timecount," case 1 this layer min",thisLayer[0].Untackle)
-                // return thisLayer[0];
-                thisLayer = plans;
-            } else {
-                for (var b = 0; b < selectionarea.length; b++) {
-                    // for (var b = 0; b < Math.min(selectionarea.length,10); b++) {
-                    // for (var b = 0; b < 10; b++) {
-                    console.log(timecount,"  selection area ",b,"   ",selectionarea.length)
-                    var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[timecount]));
-                    // console.log(selectionarea[b])
-                    scheduleOfThisTimeslot.combination = selectionarea[b].slice();
-                    scheduleForThisPath[timecount] = (scheduleOfThisTimeslot);
 
-                    // console.log("infunction scheduleOfThisTimeslot",scheduleOfThisTimeslot);
-                    // console.log("infunction scheduleForThisPath",scheduleForThisPath);
-                    var plans = LinkToNextTimeslot(scheduleforthisplan, selectionarea[b],
-                        scheduleForThisPath, timecount + 1, (selectionarea[b].length + handledNum), totalStudNum);
-                    // console.log(plans)
-                    // thisLayer.push(plans)
-                }
-                plans.sort((a, b) => a.Untackle - b.Untackle);
-                thisLayer = plans;
-                // console.log(timecount," case 2 this layer min",thisLayer[0].Untackle)
-                // return thisLayer[0];
-            }
-
-            var alluntackle = new Array();
-            thisLayer.forEach(element => {
-                alluntackle.push(element.Untackle)
             });
-            // console.log("see see this layer all plans all untackle  ", timecount, "  ", alluntackle);
-            var ans = copyarray(thisLayer.filter((plans) => plans.Untackle == thisLayer[0].Untackle));
-            // console.log(ans)
-            // console.log("why enter here");
-            return ans;
+            priorityList = (uniquePresentationList(priorityList));
+            // console.log(">>priorityList in retrieveConsecList",priorityList);
+            return priorityList;
         }
 
-        var totalStudNum = await getStudentnum();
-        var finalResultOfPlans = new Array(); // use for final outputs
-        console.log("Total plans requires process", possibledatecombination.length, "\n\n")
-        var ProcessStart = new Date();
-        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
-        for (var datecombin = 6; datecombin < 7; datecombin++) {
-            var scheduleforthisplan = new Array();
-            var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
-            // for (var timeslots = 0; timeslots < uniquetimeslotcounts.length; timeslots++) {
-            for (var timeslots = 0; timeslots < 5; timeslots++) {
+        function uniquePresentationList(PresentationList) {
+            if (PresentationList.length == 0) { return PresentationList; }
+            var uniqueList = new Array();
+            PresentationList.forEach(element => {
+                if (!uniqueList.find((present) => present.SID == element.SID)) {
+                    uniqueList.push(element);
+                }
+            });
+            PresentationList = uniqueList;
+            return PresentationList;
+        }
+
+        function reduceConsec4Session(schedulePlan, PresentationList) {
+            /** only getting previous 3 timeslot
+             *  By default should not have a teaching staff sit for 4 session
+             */
+
+            var teacherList = new Array();
+            if (schedulePlan.length == 0) { return PresentationList; }
+            schedulePlan.forEach(timeslot => {
+                timeslot.forEach(room => {
+                    if (!teacherList.find((element) => element.ID == room.TID)) {
+                        var obj = JSON.parse(JSON.stringify({ ID: room.TID, count: 0 }))
+                        teacherList.push(obj)
+                    }
+                    if (!teacherList.find((element) => element.ID == room.OID)) {
+                        var obj = JSON.parse(JSON.stringify({ ID: room.OID, count: 0 }))
+                        teacherList.push(obj)
+                    }
+                });
+            });
+
+            var countingForSitting = 0;
+            teacherList.forEach(teachingstaff => {
+                schedulePlan.forEach(timeslot => {
+                    var found = false;
+                    timeslot.forEach(room => {
+                        if (room.TID == teachingstaff.ID || room.OID == teachingstaff.ID) {
+                            countingForSitting++;
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        countingForSitting = 0;
+                    } else {
+                        teachingstaff.count = countingForSitting;
+                    }
+                });
+            });
+            // console.log("teacherList   " ,teacherList.filter((staff) => staff.count >= 3))
+
+            //first reduce those staff already sit for 3 session
+            PresentationList = reducePairByTeachingStaff(teacherList.filter((staff) => staff.count >= 4), PresentationList);
+            // console.log("PriorityList  1   ", PresentationList);
+            // PresentationList = retrieveConsecList(schedulePlan, PresentationList);
+            // console.log("PriorityList  2   ", PresentationList);
+            return PresentationList;
+        }
+
+        function Consec3Session(schedulePlan, PresentationList) {
+            /** only getting previous 3 timeslot
+             *  By default should not have a teaching staff sit for 4 session
+             */
+
+            var teacherList = new Array();
+            if (schedulePlan.length == 0) { return PresentationList; }
+            schedulePlan.forEach(timeslot => {
+                timeslot.forEach(room => {
+                    if (!teacherList.find((element) => element.ID == room.TID)) {
+                        var obj = JSON.parse(JSON.stringify({ ID: room.TID, count: 0 }))
+                        teacherList.push(obj)
+                    }
+                    if (!teacherList.find((element) => element.ID == room.OID)) {
+                        var obj = JSON.parse(JSON.stringify({ ID: room.OID, count: 0 }))
+                        teacherList.push(obj)
+                    }
+                });
+            });
+
+            var countingForSitting = 0;
+            teacherList.forEach(teachingstaff => {
+                schedulePlan.forEach(timeslot => {
+                    var found = false;
+                    timeslot.forEach(room => {
+                        if (room.TID == teachingstaff.ID || room.OID == teachingstaff.ID) {
+                            countingForSitting++;
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        countingForSitting = 0;
+                    } else {
+                        teachingstaff.count = countingForSitting;
+                    }
+                });
+            });
+
+            return teacherList;
+        }
+
+        function reduceByCombination(SchedulePlans, PresentationList, thistimeslot, timeslotCombin) {
+            var needremoval = false;
+            var count = 0;
+            // console.log("reduceByCombinationProblem")
+            var removeElement = new Array();
+            SchedulePlans.forEach(plans => {
+                var count = 0;
+                plans.Schd[thistimeslot].forEach(ScheduledPresent => {
+                    if (timeslotCombin.find((element) => element.SID == ScheduledPresent.SID)) {
+                        count++;
+                    } else {
+
+                        removeElement.push(ScheduledPresent);
+                    }
+                });
+                if (count == timeslotCombin.length) {
+                    needremoval = true;
+                }
+            });
+            removeElement = uniquePresentationList(removeElement);
+
+            PresentationList = reducePairBySID(removeElement, PresentationList);
+            return PresentationList;
+        }
+
+        function randomNum(arrayList) {
+
+            return Math.floor(Math.random() * arrayList.length);
+
+        }
+
+        function product_Range(a, b) {
+            var prd = a, i = a;
+
+            while (i++ < b) {
+                prd *= i;
+            }
+            return prd;
+        }
+
+        function combinations(n, r) {
+            if (n == r || r == 0) {
+                return 1;
+            }
+            else {
+                r = (r < n - r) ? n - r : r;
+                return product_Range(r + 1, n) / product_Range(1, n - r);
+            }
+        }
+
+        function calcPercentage(x, y, fixed = 2) {
+            const percent = (x / y) * 100;
+
+            if (!isNaN(percent)) {
+                return (Number(percent.toFixed(fixed)) + "%");
+            } else {
+                return null;
+            }
+        }
+
+        async function InitialArrayTemplate(StudentList, TeachingList, TotalTimeslots, preSetClassroomList) {
+            var Schedule = new Array();
+            var checkRoomcounts;
+            for (var timeslots = 0; timeslots < TotalTimeslots.length; timeslots++) {
                 var sessionstarttime = new Date(uniquetimeslotcounts[timeslots].availablestarttime);
                 var sessionendtime = resetsessionendtime(sessionstarttime);
                 var sqldatestring = sessionstarttime.toLocaleDateString("en-GB").split("/");
                 sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
                 sqldatestring.trim();
-                var availableclassroomlist = new Array();;
+                var roomcount = 0;
+                var availableclassroomlist = new Array();
                 for (var room = 0; room < 4; room++) {
                     if (req.body.typeOfPresent == "final") {
                         var roomttbresult = await checkclassroomttb(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         if (roomttbresult && roomtimeslotresult) {
-                            availableclassroomlist.push(preSetClassroomList[room]);
+                            roomcount++;
+                            availableclassroomlist.push(preSetClassroomList[room])
                         }
                     } else {
                         var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[room], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         if (roomtimeslotresult) {
-                            availableclassroomlist.push(preSetClassroomList[room]);
+                            roomcount++;
+                            availableclassroomlist.push(preSetClassroomList[room])
                         }
                     }
                 }
+                var PresentationList = await availblepairsforthistimeslot(sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
+                var copyStudentAy = copyarray(StudentList);
+                var copyTeachingAy = copyarray(TeachingList);
+                PresentationList.forEach(element => {
+                    var index = copyStudentAy.findIndex((student) => student.sid == element.SID)
+                    if (index > 0) {
+                        copyStudentAy[index].appears = 0
+                        var tid = copyStudentAy[index].tid;
+                        var oid = copyStudentAy[index].oid;
+                        copyTeachingAy[copyTeachingAy.findIndex((staff) => staff.tid == tid)].appears = 0;
+                        copyTeachingAy[copyTeachingAy.findIndex((staff) => staff.tid == oid)].appears = 0;
+                    }
+                });
 
-                var combin = await genCombinationfortimeslots(sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"), availableclassroomlist.length);
-                //    console.log(combin)
-                // combin.forEach(element => {
-                //     console.log("\n\n");
-                //     var string = "";
-                //     element.forEach(element2 => {
-                //         string += (element2.TID, "  ", element2.OID, "  ", element2.SID, " ");
-                //     })
-                //     console.log(string);
+                availableclassroomlist.forEach(element => {
+                    var ScheduleTimeslot = JSON.parse(JSON.stringify({
+                        SQLdate: sqldatestring,
+                        SQLtime: sessionstarttime.toLocaleTimeString("en-GB"),
+                        timeslot: sessionstarttime,
+                        roomcount: roomcount,
+                        room: element,
+                        StudentAy: copyStudentAy,
+                        TeachingAy: copyTeachingAy
+
+                    }))
+                    Schedule.push(ScheduleTimeslot);
+                });
+
+            }
+            Schedule.sort((a, b) => a.timeslot - b.timeslot && a.room - b.room)
+            if (Schedule.length < StudentList.length) {
+                checkRoomcounts = false;
+            } else {
+                checkRoomcounts = true;
+            }
+            Template = JSON.parse(JSON.stringify({
+                Schedule: Schedule,
+                tacklecount: 0,
+                Penalty: 0,
+                ableOnlyFSC: checkRoomcounts
+            }))
+            console.log("Complete Generating Initial Template");
+            return Template
+
+        }
+
+        function checkDuplicateStudentAy(arr1, arr2) {
+
+            const objectsEqual = (o1, o2) => {
+                if (o2 === null && o1 !== null) return false;
+                return o1 !== null && typeof o1 === 'object' && Object.keys(o1).length > 0 ?
+                    Object.keys(o1).length === Object.keys(o2).length &&
+                    Object.keys(o1).every(p => objectsEqual(o1[p], o2[p]))
+                    : (o1 !== null && Array.isArray(o1) && Array.isArray(o2) && !o1.length &&
+                        !o2.length) ? true : o1 === o2;
+            }
+            return objectsEqual(arr1, arr2);
+        }
+
+        function setAppear(Schedule, pairs, setNum) {
+            Schedule.StudentAy[Schedule.StudentAy.findIndex((student) => student.sid == pairs.SID)].appears = setNum;
+            Schedule.TeachingAy[Schedule.TeachingAy.findIndex((staff) => staff.tid == pairs.TID)].appears = setNum;
+            Schedule.TeachingAy[Schedule.TeachingAy.findIndex((staff) => staff.tid == pairs.OID)].appears = setNum;
+        }
+
+        async function InitialGeneration(Population, Template) {
+            /**
+             *   Must FullFill Constraints:
+             * 
+             * - No Sup or Obs duplication in all presentaions in the timeslot
+             * - All Presentation must be scheduled and only happened once
+             * - No Teaching Staff can have 4 consec session
+             */
+            function reduceDuplicate(Population, currentPop) {
+                for (var PopNum = 0; PopNum < Population.length; PopNum++) {
+                    var checkcount = 0;
+                    var checkroomcount = 0;
+                    // console.log("checking PopNum ", PopNum)
+                    for (var time = 0; time < Population[PopNum].Schedule.length;) {
+                        var thistimeslotCombin = Population[PopNum].Schedule.filter((timeslot) => timeslot.timeslot == Population[PopNum].Schedule[time].timeslot);
+                        var currenttimeslotCombin = currentPop.Schedule.filter((timeslot) => timeslot.timeslot == currentPop.Schedule[time].timeslot);
+
+
+                        for (var roomcount = 0; roomcount < Population[PopNum].Schedule[time].roomcount; roomcount++) {
+                            var result = checkDuplicateStudentAy(thistimeslotCombin[roomcount].StudentAy, currenttimeslotCombin[roomcount].StudentAy);
+                            if (result) {
+                                // console.log("oops in room   ",thistimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid, "  ",currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid)
+                                checkroomcount++;
+                            } else {
+                                // console.log(thistimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid, "  ",currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid)
+                                // console.log(currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1))
+
+                            }
+                        };
+                        // var result = checkDuplicateStudentAy(Population[PopNum].Schedule[time].StudentAy, currentPop.Schedule[time].StudentAy);
+                        if (checkroomcount == Population[PopNum].Schedule[time].roomcount) {
+                            // console.log("\n\noops  ",Population[PopNum].Schedule[time].StudentAy,"\n",currentPop.Schedule[time].StudentAy)
+                            // console.log("oops in timeslot")
+                            checkcount++;
+                        } else {
+                            // console.log("PopNum can break", PopNum)
+                            break;
+                        }
+                        // console.log("  check time ", time, "  check combinlength   ", thistimeslotCombin.length)
+                        time += thistimeslotCombin.length;
+                    };
+                    if (checkcount == Population[PopNum].Schedule[0].StudentAy.length) {
+                        // console.log("this case need to be reduced");
+                        return true;;
+                    }
+                };
+                return false;
+            }
+            var AllPopulation = new Array();
+            var generationcount = 0;
+            while (AllPopulation.length < Population) {
+                var WholePlanAccordingtoTime = new Array();
+                var WholePlanSelectedAy = new Array();
+                var copyTemplate = JSON.parse(JSON.stringify(Template))
+                var copyTemplatecount = 0;
+                var sameTimeslotinsertcount = 0;
+                var thisTimeslotSelectedAy = new Array();
+
+                for (var timeslot = 0; timeslot < copyTemplate.Schedule.length; timeslot++) {
+                    // console.log(">> this timeslote needs ", copyTemplate.Schedule[timeslot].roomcount);
+                    var PresentationList = await availblepairsforthistimeslot(copyTemplate.Schedule[timeslot].SQLdate, copyTemplate.Schedule[timeslot].SQLtime);
+
+                    PresentationList = reducePairBySID(WholePlanSelectedAy, PresentationList);
+                    // console.log("after reduce SID",PresentationList.length)
+                    if (sameTimeslotinsertcount.length != 0) {
+                        PresentationList = reducePairBySupObs(thisTimeslotSelectedAy, PresentationList);
+                    }
+
+                    // var previousList;
+                    // if (WholePlanAccordingtoTime.length == 0) {
+                    //     previousList = [];
+                    // } else if (0 < WholePlanAccordingtoTime.length <= 3) {
+                    //     /**
+                    //      *  when timeslots = 1  , getting schdule[time 0]
+                    //      *  when timeslots = 2  , getting schdule[time 0] ,schdule[time 1] 
+                    //      *   
+                    //      */
+                    //     previousList = copyarray(WholePlanAccordingtoTime.slice(0, WholePlanAccordingtoTime.length));
+                    //     // console.log(">>enter here thisscheduleplan ", thisscheduleplan)
+                    //     // console.log(">>enter here previousList ", previousList)
+                    // } else {
+                    //     /**
+                    //      *  when timeslots = 3  , getting schdule[time 0] ,schdule[time 1] ,schdule[time 2]
+                    //      */
+                    //     previousList = copyarray(WholePlanAccordingtoTime.slice(WholePlanAccordingtoTime.length - 4, WholePlanAccordingtoTime.length - 1));
+                    // }
+                    // // console.log(">>previousList   ", previousList)
+                    // PresentationList = reduceConsec4Session(previousList, PresentationList);
+
+                    // console.log(PresentationList.length)
+                    if (PresentationList.length > 0) {
+
+                        var index = randomNum(PresentationList);
+                        var indexInArray = (copyTemplate.Schedule[timeslot].StudentAy).findIndex((element) => element.sid == PresentationList[index].SID);
+                        setAppear(copyTemplate.Schedule[timeslot], PresentationList[index], 1);
+                        // console.log(timeslot,"   ",copyTemplate.Schedule[timeslot].room,"    ", copyTemplate.Schedule[timeslot].SQLdate," ",copyTemplate.Schedule[timeslot].SQLtime , "    ", copyTemplate.Schedule[timeslot].StudentAy.filter((student)=> student.appears ==1)[0])
+                        // copyTemplate.Schedule[timeslot].StudentAy[indexInArray].appears = 1;
+                        // console.log(">> Selected ", PresentationList[index].SID, " checking ", copyTemplate.Schedule[timeslot].StudentAy[indexInArray]);
+                        copyTemplatecount++;
+                        // console.log("adding tackle count in pop ", pop, "    ", copyTemplatecount)
+                        WholePlanSelectedAy.push(PresentationList[index]);
+                        thisTimeslotSelectedAy.push(PresentationList[index]);
+                        sameTimeslotinsertcount++;
+                        if (sameTimeslotinsertcount == copyTemplate.Schedule[timeslot].roomcount) {
+                            WholePlanAccordingtoTime.push(thisTimeslotSelectedAy);
+                            sameTimeslotinsertcount = 0;
+                            thisTimeslotSelectedAy = [];
+                        }
+
+                    }
+                    // } console.log(">> SelectedAY ", WholePlanSelectedAy.length);
+                    // console.log(PresentationList);
+
+                    // WholePlanSelectedAy.push(thisTimeslotSelectedAy);
+                }
+                copyTemplate.tacklecount = copyTemplatecount;
+                if (copyTemplate.tacklecount == Template.Schedule[0].StudentAy.length) {
+                    if (!reduceDuplicate(AllPopulation, copyTemplate)) {
+                        // console.log(copyTemplate.Schedule[0].StudentAy.filter((student)=> student.appears ==1));
+                        copyTemplate.Penalty = await Penalty(copyTemplate.Schedule)
+
+                        AllPopulation.push(copyTemplate);
+                        console.log("current population count  ", AllPopulation.length, " after ", generationcount, " times ")
+
+                    } else {
+                        console.log("Pity case")
+                    }
+                    generationcount = 0;
+                } else {
+                    generationcount++;
+                    // console.log("final tackle count ", copyTemplate.tacklecount, "  current generating count  ", generationcount)
+
+                }
+
+                if (generationcount >= 400 && AllPopulation.length % 2 == 0 && AllPopulation.length != 0) {
+                    break;
+                } else if (generationcount >= 600) {
+                    break;
+                }
+            }
+            console.log("Complete Generating Initial Generation");
+            return AllPopulation;
+        }
+
+        async function Penalty(Schedule) {
+            /**
+             *  Calaculting the Pentaly marks for the plan that Not fulfilling the requirements
+             * 
+             *  - Supervisor can have maximum 4 consecutive session only
+             *  - Supervisors preferences on movements
+             *  - Supervisors preferences on days (minimizing)
+             */
+            // console.log("calculate Penalty")
+            // console.log(Schedule[0].StudentAy.filter((student)=> student.appears ==1))
+            var Penaltymark = 0;
+            var WholePlanAccordingtoTime = new Array();
+
+            for (var a = 0; a < Schedule.length;) {
+                var thistimeslotAy = new Array();
+                var thistimeslotCombin = Schedule.filter((timeslot) => timeslot.timeslot == Schedule[a].timeslot)
+
+                thistimeslotCombin.forEach(element => {
+                    // console.log(element.StudentAy.filter((student) => student.appears == 1));
+                    if (element.StudentAy.filter((student) => student.appears == 1).length > 0) {
+                        var obj = JSON.parse(JSON.stringify(element.StudentAy.filter((student) => student.appears == 1)[0]))
+                        obj.room = element.room;
+                        obj.SQLdate = element.SQLdate;
+                        obj.SQLtime = element.SQLtime;
+                        thistimeslotAy.push(obj)
+                    }
+                });
+                if (thistimeslotAy.length > 0) {
+                    WholePlanAccordingtoTime.push(thistimeslotAy);
+                }
+                a += thistimeslotCombin.length;
+            }
+
+            var teachingList = copyarray(Schedule[0].TeachingAy);
+            var PrefList = await getPrefList(await getTeachingList());
+            // counting marks for consective sessions
+            PrefList.forEach(staff => {
+                var roomPen = 0;
+                var conseccount = 0;
+                var isConsec = 0;
+                var sitcount = 0;
+                var movementCount = 0;
+                var usedRoom;
+                var currentdate;
+                var firstPresentationDate;
+                var lastPresentationDate;
+                var dayPen = 0;
+                WholePlanAccordingtoTime.forEach(timeslot => {
+                    if (currentdate == null || currentdate == undefined) {
+                        currentdate = timeslot[0].SQLdate;
+                    } else if (currentdate != timeslot[0].SQLdate) {
+                        roomPen = 0;
+                        if (conseccount >= 4) { isConsec++; }
+                        conseccount = 0;
+                        // isConsec = 0;
+                        sitcount = 0;
+                        movementCount = 0;
+                        usedRoom;
+                        currentdate = timeslot[0].SQLdate;
+                    }
+                    var index = timeslot.findIndex((present) => present.tid == staff.tid || present.oid == staff.tid);
+                    if (index >= 0) {
+                        conseccount++;
+                        if (firstPresentationDate == null || firstPresentationDate == undefined) {
+                            firstPresentationDate = timeslot[index].SQLdate;
+                        }
+                        // console.log(index)
+                        if (usedRoom == null || usedRoom == undefined) {
+                            // console.log("case 0     ", timeslot[index].SQLdate + "  " + timeslot[index].SQLtime, "   ", staff.tid, "  ", movementCount, "  ", conseccount, "  ", sitcount, "    ", usedRoom, "  set  ", timeslot[index].room)
+                            usedRoom = timeslot[index].room;
+                        } else if (usedRoom == timeslot[index].room) {
+                            // console.log("case 1     ", timeslot[index].SQLdate + "  " + timeslot[index].SQLtime, "   ", staff.tid, "  ", movementCount, "change to 0  ", conseccount, "  ", sitcount + 1, "    ", usedRoom, "  same  ", timeslot[index].room, "  roomPen  ", roomPen)
+                            sitcount++;
+                            movementCount = 0;
+                        } else {
+
+                            if ((preSetFSC8thList.find((room) => room == usedRoom) && preSetFSC8thList.find((room) => room == timeslot[index].room))
+                                || (preSetFSC9thList.find((room) => room == usedRoom) && preSetFSC9thList.find((room) => room == timeslot[index].room))
+                                || (preSetRRSList.find((room) => room == usedRoom) && preSetRRSList.find((room) => room == timeslot[index].room))) {
+                                // console.log("case 1")
+                                roomPen += 0.5;
+                            } else if ((preSetFSCList.find((room) => room == usedRoom) && preSetFSCList.find((room) => room == timeslot[index].room))
+                                || (preSetRRSList.find((room) => room == usedRoom) && preSetRRSList.find((room) => room == timeslot[index].room))) {
+                                // console.log("case 2")
+                                roomPen += 1;
+                            } else {
+                                // console.log("case 3")
+                                roomPen += 2;
+                            }
+                            // console.log("case 2     ", timeslot[index].SQLdate + "  " + timeslot[index].SQLtime, "   ", staff.tid, "  ", movementCount + 1, "  ", conseccount, "  ", sitcount, "    ", usedRoom, "  changed  ", timeslot[index].room, "  roomPen  ", roomPen)
+                            sitcount = 0;
+                            movementCount++;
+                            usedRoom = timeslot[index].room
+                        }
+                        // 
+                        // console.log("conseccount for tid ", staff.tid, "  ", conseccount);
+                        lastPresentationDate = timeslot[index].SQLdate;
+                    } else {
+                        // console.log("oh no consec?", conseccount, "  ", isConsec);
+                        if (conseccount >= 4) { isConsec++; }
+                        // movementCount += conseccount;
+                        usedRoom = undefined;
+                        conseccount = 0;
+                        sitcount = 0;
+                    }
+
+                });
+                // console.log("\n\n\n");
+
+                if (staff.movementpref == 0) {
+                    roomPen = roomPen * 0.5
+                }
+                dayPen = ((new Date(lastPresentationDate)) - (new Date(firstPresentationDate))) / (60 * 60 * 24 * 1000);
+                if (staff.daypref == 0) {
+                    dayPen = dayPen * 0.5
+                }
+                // console.log(staff, "   ", sitcount, "   ", isConsec, "    ", movementCount, "   ", roomPen, "   ", dayPen,"\n")
+                Penaltymark += isConsec * 10 + roomPen * 5 + dayPen * 2
+            });
+
+            // console.log(Penaltymark)
+
+
+            // console.log(PrefList);
+            return Penaltymark;
+        }
+
+        function SelectForMixing(Genes, size) {
+            var pairs = new Array();
+            var count = 0;
+
+            while (count != size) {
+
+                var GeneA = randomNum(Genes);
+                var GeneB = randomNum(Genes);
+                while (GeneA == GeneB) {
+                    GeneB = randomNum(Genes);
+                }
+                if (GeneA.Penalty <= GeneB.Penalty) {
+                    if (!pairs.find((inserted) => inserted == Genes[GeneA])) {
+                        pairs.push(Genes[GeneA]);
+                        count++;
+                    }
+                } else {
+                    if (!pairs.find((inserted) => inserted == Genes[GeneB])) {
+                        pairs.push(Genes[GeneB]);
+                        count++;
+                    }
+                }
+
+            }
+
+            return pairs.sort((a, b) => a.Penalty - b.Penalty);
+        }
+
+        function MixingGene(Pairs) {
+
+            var randomMethod = Math.random();
+            randomMethod = 0.6;
+            if (randomMethod >= 0.5) {
+                //changeByStudent();
+                var randomStudentA = randomNum(Pairs[0].Schedule[0].StudentAy)
+                var randomStudentB = randomNum(Pairs[0].Schedule[0].StudentAy)
+                // console.log(randomStudentA, " ", randomStudentB, "   ", randomStudentA == randomStudentB)
+                while (randomStudentA == randomStudentB) {
+                    randomStudentB = randomNum(Pairs[0].Schedule[0].StudentAy);
+                    // console.log("regened   ", randomStudentA, " ", randomStudentB, "   ", randomStudentA == randomStudentB)
+                }
+                /**
+                 *  Ensuring the slot selected by random method randomStudentA will be the student index that earlier than randomStudentB
+                 */
+                if (randomStudentA > randomStudentB) {
+                    var temp = randomStudentA;
+                    randomStudentA = randomStudentB;
+                    randomStudentB = temp;
+                }
+                // console.log(randomStudentA, "  ", randomStudentB);
+                // console.log(Pairs[0].Schedule[0].StudentAy, "  ", Pairs[1].Schedule[0].StudentAy)
+
+                MixByStudent(Pairs, randomStudentA, randomStudentB);
+
+
+            } else {
+                //changeByTimeslot();
+                var randomSlotA = randomNum(Pairs[0].Schedule)
+                var randomSlotB = randomNum(Pairs[0].Schedule)
+                while (randomSlotA == randomSlotB) {
+                    randomSlotB = randomNum(Pairs[0].Schedule);
+                }
+                /**
+                 *  Ensuring the slot selected by random method randomslotA will be the timeslot that earlier than randomslotB
+                 */
+                if (randomSlotA > randomSlotB) {
+                    var temp = randomSlotB;
+                    randomSlotA = randomSlotB;
+                    randomSlotB = temp
+                }
+
+                // var randomSlot = Pairs[0].Schedule.length-1;
+                var firstTimeslot = Pairs[0].Schedule.findIndex((times) => time.timeslot == Pairs[0].Schedule[randomSlotA].timeslot);
+                var LastTimeslot = Pairs[0].Schedule.findLastIndex()((times) => time.timeslot == Pairs[0].Schedule[randomSlotB].timeslot);
+
+                var PairAWholeRangeSlot = Pairs[0].Schedule.filter((times) => times.timeslot >= Pairs[0].Schedule[randomSlotA].timeslot && times.timeslot <= Pairs[0].Schedule[randomSlotB].timeslot);
+                var PairBWholeRangeSlot = Pairs[0].Schedule.filter((times) => times.timeslot >= Pairs[1].Schedule[randomSlotA].timeslot && times.timeslot <= Pairs[1].Schedule[randomSlotB].timeslot);
+
+                // var PairAWholeRangeSlot = Pairs[0].Schedule.filter((times) => times.timeslot == Pairs[0].Schedule[randomSlot].timeslot);
+                // var PairBWholeRangeSlot = Pairs[1].Schedule.filter((times) => times.timeslot == Pairs[1].Schedule[randomSlot].timeslot);
+                // // console.log(PairAWholeRangeSlot);
+                // console.log(PairBWholeRangeSlot);
+
+                /**
+                 *  Ensuring the slot selected by random method exists a presentation
+                 */
+                var PairA = false;
+                var PairB = false;
+                for (var check = 0; check < PairAWholeRangeSlot.length; check++) {
+                    if (PairAWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1)) {
+                        // console.log(">>PairA has 1",PairAWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1))
+                        PairA = true;
+                    };
+                    if (PairA) { break; }
+                };
+                for (var check = 0; check < PairBWholeRangeSlot.length; check++) {
+                    if (PairBWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1)) {
+                        // console.log(">>PairB has 1",PairBWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1))
+                        PairB = true;
+                    };
+                    if (PairB) { break; }
+                };
+                // 
+                if (PairA == false && PairB == false) {
+                    while (PairA == false) {
+                        // console.log("enter here")
+                        randomSlotA = randomNum(Pairs[0].Schedule)
+                        randomSlotB = randomNum(Pairs[0].Schedule)
+                        while (randomSlotA == randomSlotB) {
+                            randomSlotB = randomNum(Pairs[0].Schedule);
+                        }
+                        if (randomSlotA > randomSlotB) {
+                            var temp = randomSlotB;
+                            randomSlotA = randomSlotB;
+                            randomSlotB = temp
+                        }
+                        PairAWholeRangeSlot = Pairs[0].Schedule.filter((times) => times.timeslot >= Pairs[0].Schedule[randomSlotA].timeslot && times.timeslot <= Pairs[0].Schedule[randomSlotB].timeslot);
+                        PairBWholeRangeSlot = Pairs[0].Schedule.filter((times) => times.timeslot >= Pairs[1].Schedule[randomSlotA].timeslot && times.timeslot <= Pairs[1].Schedule[randomSlotB].timeslot);
+                        for (var check = 0; check < PairAWholeRangeSlot.length; check++) {
+                            if (PairAWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1)) {
+                                // console.log(">>PairA has 1 in regen",PairAWholeRangeSlot[check].StudentAy.find((student) => student.appears == 1))
+                                PairA = true;
+                            };
+                            if (PairA) { break; }
+                        };
+
+                    }
+                }
+
+                MixByTimeslot(Pairs, randomSlotA, randomSlotB)
+            }
+
+        }
+
+        async function MixByStudent(Pairs, StudentStart, StudentEnd) {
+            StudentStart = 10;
+            StudentEnd = 13;
+            var ChildA = JSON.parse(JSON.stringify(Pairs[0]));
+            var ChildB = JSON.parse(JSON.stringify(Pairs[1]));
+
+            var AChangetoB = new Array();
+            var BChangetoA = new Array();
+
+            /**
+             * Copying the changes
+            */
+            Pairs[0].Schedule.forEach(timeslot => {
+                // console.log(copyarray(timeslot.StudentAy.slice(StudentStart, StudentEnd)));
+                var Obj = JSON.parse(JSON.stringify({
+                    timeslot: timeslot.timeslot,
+                    room: timeslot.room,
+                    StudentAy: copyarray(timeslot.StudentAy.slice(StudentStart, StudentEnd)),
+
+                }))
+                AChangetoB.push(Obj);
+            });
+            Pairs[1].Schedule.forEach(timeslot => {
+                var Obj = JSON.parse(JSON.stringify({
+                    timeslot: timeslot.timeslot,
+                    room: timeslot.room,
+                    StudentAy: copyarray(timeslot.StudentAy.slice(StudentStart, StudentEnd)),
+
+                }))
+                BChangetoA.push(Obj);
+            });
+
+            // console.log(AChangetoB[0].StudentAy);
+            var count = 0;
+            /** 
+             * replacing the changings
+             */
+            ChildB.Schedule.forEach(timeslot => {
+                console.log()
+
+
+
+
+
+
+                // (timeslot.TeachingAy.filter((orgSupObs) => orgSupObs.appears ==1)).forEach(staff => {
+                //     staff.appears = 0;
                 // });
-                // console.log(combin[combin.length-1])
-                scheduleforthisplan.push(JSON.parse(JSON.stringify({
-                    SQLDate: sqldatestring,
-                    timeslot: new Date(uniquetimeslotcounts[timeslots].availablestarttime),
-                    room: availableclassroomlist,
-                    combination: combin
-                })));
-            }
-            // console.log(scheduleforthisplan)
-            // scheduleforthisplan.forEach(element => {
-            //     console.log(element.timeslot, "   ", element.room.length);
+
+                // AChangetoB[count].StudentAy.forEach(pairs => {
+                //     var orgStudent = timeslot.StudentAy.filter((student) => student.sid != pairs.sid && student.appears == 1);
+                //     console.log(orgStudent)
+                //     if (pairs.appears == 1) {
+                //         if (orgStudent.length > 0) {
+                //             var orgSupObs = (timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.tid)).concat(timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.oid))
+                //             timeslot.StudentAy.filter((student) => student.sid == orgStudent[0].sid)[0].appears = 0;
+                //             timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent[0].tid)[0].appears = 0;
+                //             timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent[0].oid)[0].appears = 0;
+
+                //             timeslot.StudentAy.filter((student) => student.sid == pairs.sid)[0].appears = 1;
+                //             (timeslot.TeachingAy.filter((staff) => staff.tid == pairs.tid).concat(timeslot.TeachingAy.filter((staff) => staff.tid == pairs.oid))).forEach((changes) => changes.appears = 1);
+                //             console.log("case 1  ", timeslot.StudentAy.filter((student) => student.appears == 1), " ", timeslot.TeachingAy.filter((staff) => staff.appears == 1))
+
+                //         } else {
+                //             console.log("case 3 ", pairs, "  ", orgStudent)
+                //         }
+                //     } else {
+                //         if (orgStudent.length > 0) {
+                //             var orgSupObs = timeslot.TeachingAy.filter((staff) => staff.appears == 1)
+                //             timeslot.StudentAy.filter((student) => student.sid == orgStudent[0].sid)[0].appears = 1;
+                //             // orgSupObs.forEach(element => {
+                //             //     element.appears = 0;
+                //             // });
+                //             console.log("case 2  ", timeslot.StudentAy.filter((student) => student.appears == 1), " ", orgSupObs)
+                //         } else {
+                //             console.log("case 4 ", pairs, "  ", orgStudent)
+                //         }
+                //     }
+
+                //     console.log("after  ", timeslot.StudentAy.filter((student) => student.appears == 1), "  ", timeslot.TeachingAy.filter((student) => student.appears == 1));
+                // });
+                var newStudent = AChangetoB[count].StudentAy.find((student) => student.appears == 1);
+                // console.log(">>new ", newStudent)
+                if (newStudent != undefined) {
+                    var orgStudent = timeslot.StudentAy.find((student) => student.appears == 1);
+                    // console.log(">>old ", orgStudent)
+                    if (orgStudent != undefined) {
+                        // change orgstu orgSup and orgOb appears to 0
+                        // console.log("case1")
+                        // console.log(timeslot.StudentAy.find((student) => student.appears == 1));
+                        timeslot.StudentAy.find((student) => student.sid == orgStudent.sid).appears = 0;
+                        // console.log(timeslot.StudentAy.find((student) => student.appears == 1));
+                        var orgSupObs = timeslot.TeachingAy.filter((staff) => staff.appears == 1)
+                        // console.log(timeslot.TeachingAy.filter((staff) => staff.appears == 1));
+                        orgSupObs.forEach(staff2 => {
+                            timeslot.TeachingAy.find((staff) => staff.tid == staff2.tid).appears = 0;
+                        });
+                        // console.log(timeslot.TeachingAy.find((staff) => staff.appears == 1));
+                        var newSupObs = timeslot.TeachingAy.filter((staff) => staff.tid == newStudent.tid).concat(timeslot.TeachingAy.filter((staff) => staff.tid == newStudent.oid))
+                        //change newstu newSup and newobs appears to 1
+                        newSupObs.forEach(staff2 => {
+                            timeslot.TeachingAy.find((staff) => staff.tid == staff2.tid).appears = 1;
+                        });
+                        timeslot.StudentAy.find((student) => student.sid == newStudent.sid).appears = 1;
+                        // console.log(timeslot.StudentAy.filter((student) => student.appears == 1));
+                        // console.log(timeslot.TeachingAy.filter((staff) => staff.appears == 1));
+                        // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+
+                    } else {
+                        // console.log("case2")
+
+                        // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+
+                    }
+                } else {
+                    var orgStudent = timeslot.StudentAy.find((student) => student.appears == 1);
+                    // console.log(">>old ", orgStudent)
+                    if (orgStudent != undefined) {
+                        // console.log("case3")
+                    } else {
+                        // console.log("case4")
+
+                    }
+                }
+                // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+                // (timeslot.TeachingAy.find((staff) => staff.tid == newSupObs.tid || staff.tid == newSupObs.oid )).forEach(staff => {
+                //     staff.appears = 1;
+                // });
+                // console.log("after  ", timeslot.StudentAy.filter((student) => student.appears == 1), "  ", timeslot.TeachingAy.filter((student) => student.appears == 1));
+                // console.log("after  ", timeslot.TeachingAy);
+                count++;
+            });
+
+            count = 0;
+            // ChildA.Schedule.forEach(timeslot => {
+            //     // console.log("\n\nbefore  ", timeslot.StudentAy.slice(StudentStart, StudentEnd));
+            //     // console.log("change to  ", BChangetoA[count].StudentAy);
+            //     timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(BChangetoA[count].StudentAy));
+            //     // console.log("after  ", timeslot.StudentAy.slice(StudentStart, StudentEnd));
+            //     BChangetoA[count].StudentAy.forEach(pairs => {
+            //         var orgStudent = timeslot.StudentAy.filter((student) => student.sid != pairs.sid && student.appears == 1);
+
+            //         if (pairs.appears == 1 && orgStudent.length > 0) {
+            //             var orgSupObs = (timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.tid)).concat(timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.oid))
+            //             orgStudent.appears = 0;
+            //             orgSupObs.forEach(element => {
+            //                 element.appears = 0;
+            //             });
+            //         }
+            //         (timeslot.TeachingAy.filter((staff) => staff.tid == pairs.tid || staff.tid == pairs.oid)).forEach((changes) => changes.appears = pairs.appears);
+            //     });
+            //     count++;
             // });
+            ChildA.Schedule.forEach(timeslot => {
+                // console.log()
+                // (timeslot.TeachingAy.filter((orgSupObs) => orgSupObs.appears ==1)).forEach(staff => {
+                //     staff.appears = 0;
+                // });
 
-            // console.log(scheduleforthisplan[0].combination.length);
+                // AChangetoB[count].StudentAy.forEach(pairs => {
+                //     var orgStudent = timeslot.StudentAy.filter((student) => student.sid != pairs.sid && student.appears == 1);
+                //     console.log(orgStudent)
+                //     if (pairs.appears == 1) {
+                //         if (orgStudent.length > 0) {
+                //             var orgSupObs = (timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.tid)).concat(timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent.oid))
+                //             timeslot.StudentAy.filter((student) => student.sid == orgStudent[0].sid)[0].appears = 0;
+                //             timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent[0].tid)[0].appears = 0;
+                //             timeslot.TeachingAy.filter((staff) => staff.tid == orgStudent[0].oid)[0].appears = 0;
 
-            // for (var a = 0; a < scheduleforthisplan[0].combination.length; a++) {
-            for (var a = 0; a < 1; a++) {
-                console.log(">> running combination ", a)
-                var scheduleOfThisTimeslot = JSON.parse(JSON.stringify(scheduleforthisplan[0]));
-                scheduleOfThisTimeslot.combination = scheduleforthisplan[0].combination[a].slice();
-                var scheduleForThisPath = new Array();
-                // console.log("in large",scheduleOfThisTimeslot);
-                scheduleForThisPath.push(scheduleOfThisTimeslot);
-                // console.log("scheduleForThisPath    ", scheduleForThisPath[0]);
-                var minUntackledscheduleOfThisCombination = LinkToNextTimeslot(scheduleforthisplan, scheduleforthisplan[0].combination[a],
-                    scheduleForThisPath, a + 1, scheduleforthisplan[0].combination[a].length, totalStudNum)
-                console.log("minUntackledscheduleOfThisCombination    ", minUntackledscheduleOfThisCombination);
-            }
-            // console.log(scheduleforthisplan);
+                //             timeslot.StudentAy.filter((student) => student.sid == pairs.sid)[0].appears = 1;
+                //             (timeslot.TeachingAy.filter((staff) => staff.tid == pairs.tid).concat(timeslot.TeachingAy.filter((staff) => staff.tid == pairs.oid))).forEach((changes) => changes.appears = 1);
+                //             console.log("case 1  ", timeslot.StudentAy.filter((student) => student.appears == 1), " ", timeslot.TeachingAy.filter((staff) => staff.appears == 1))
+
+                //         } else {
+                //             console.log("case 3 ", pairs, "  ", orgStudent)
+                //         }
+                //     } else {
+                //         if (orgStudent.length > 0) {
+                //             var orgSupObs = timeslot.TeachingAy.filter((staff) => staff.appears == 1)
+                //             timeslot.StudentAy.filter((student) => student.sid == orgStudent[0].sid)[0].appears = 1;
+                //             // orgSupObs.forEach(element => {
+                //             //     element.appears = 0;
+                //             // });
+                //             console.log("case 2  ", timeslot.StudentAy.filter((student) => student.appears == 1), " ", orgSupObs)
+                //         } else {
+                //             console.log("case 4 ", pairs, "  ", orgStudent)
+                //         }
+                //     }
+
+                //     console.log("after  ", timeslot.StudentAy.filter((student) => student.appears == 1), "  ", timeslot.TeachingAy.filter((student) => student.appears == 1));
+                // });
+                var newStudent = BChangetoA[count].StudentAy.find((student) => student.appears == 1);
+                // console.log(">>new ", newStudent)
+                if (newStudent != undefined) {
+                    var orgStudent = timeslot.StudentAy.find((student) => student.appears == 1);
+                    // console.log(">>old ", orgStudent)
+                    if (orgStudent != undefined) {
+                        // change orgstu orgSup and orgOb appears to 0
+                        // console.log("case1")
+                        // console.log(timeslot.StudentAy.find((student) => student.appears == 1));
+                        timeslot.StudentAy.find((student) => student.sid == orgStudent.sid).appears = 0;
+                        // console.log(timeslot.StudentAy.find((student) => student.appears == 1));
+                        var orgSupObs = timeslot.TeachingAy.filter((staff) => staff.appears == 1)
+                        // console.log(timeslot.TeachingAy.filter((staff) => staff.appears == 1));
+                        orgSupObs.forEach(staff2 => {
+                            timeslot.TeachingAy.find((staff) => staff.tid == staff2.tid).appears = 0;
+                        });
+                        // console.log(timeslot.TeachingAy.find((staff) => staff.appears == 1));
+                        var newSupObs = timeslot.TeachingAy.filter((staff) => staff.tid == newStudent.tid).concat(timeslot.TeachingAy.filter((staff) => staff.tid == newStudent.oid))
+                        //change newstu newSup and newobs appears to 1
+                        newSupObs.forEach(staff2 => {
+                            timeslot.TeachingAy.find((staff) => staff.tid == staff2.tid).appears = 1;
+                        });
+                        timeslot.StudentAy.find((student) => student.sid == newStudent.sid).appears = 1;
+                        // console.log(timeslot.StudentAy.filter((student) => student.appears == 1));
+                        // console.log(timeslot.TeachingAy.filter((staff) => staff.appears == 1));
+                        // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+
+                    } else {
+                        // console.log("case2")
+
+                        // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+
+                    }
+                } else {
+                    var orgStudent = timeslot.StudentAy.find((student) => student.appears == 1);
+                    // console.log(">>old ", orgStudent)
+                    if (orgStudent != undefined) {
+                        // console.log("case3")
+                    } else {
+                        // console.log("case4")
+
+                    }
+                }
+                // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+                // (timeslot.TeachingAy.find((staff) => staff.tid == newSupObs.tid || staff.tid == newSupObs.oid )).forEach(staff => {
+                //     staff.appears = 1;
+                // });
+                // console.log("after  ", timeslot.StudentAy.filter((student) => student.appears == 1), "  ", timeslot.TeachingAy.filter((student) => student.appears == 1));
+                // console.log("after  ", timeslot.TeachingAy);
+                count++;
+            });
+            console.log(Pairs[0].Penalty + "  " + Pairs[1].Penalty)
+            ChildA = await Repair(ChildA);
+            ChildB = await Repair(ChildB);
+            console.log(ChildA.Penalty + "  " + ChildB.Penalty)
+
+        }
+
+        function MixByTimeslot(Pairs, TimeslotStart, TimeslotEnd) {
+            var ChildA = JSON.parse(JSON.stringify(Pairs[0]));
+            var ChildB = JSON.parse(JSON.stringify(Pairs[1]));
+
+            // console.log(copyarray(timeslot.StudentAy.slice(StudentStart, StudentEnd)));
+
+            var AChangetoB = copyarray(Pairs[0].Schedule.slice(TimeslotStart, TimeslotEnd))
+            var BChangetoA = copyarray(Pairs[1].Schedule.slice(TimeslotStart, TimeslotEnd))
+
+
+
+
+        }
+
+        async function Repair(Plan) {
+            /**
+             *  To check any Hard Constraints has been violated for Child Plan
+             */
+            var count = 0;
+            var tacklecount = 0;
+            Plan.Schedule.forEach(timeslot => {
+                var printA = timeslot.StudentAy.filter((student) => student.appears == 1)
+                var printB = timeslot.TeachingAy.filter((staff) => staff.appears == 1);
+                if (printA.length == 0) { printA = "empty" }
+                if (printB.length == 0) { printB = "empty" }
+                if (printA != "empty" && printB != "empty") {
+                    tacklecount++;
+                    // console.log(count," ",printA, "   ", printB ,"   ",tacklecount)
+                } else
+                    // {console.log(count)}
+                    count++
+            });
+            Plan.tacklecount = tacklecount;
+            Plan.Penalty = await Penalty(Plan.Schedule);
+           
+            return Plan;
+        }
+
+        function NewGenReplaceOldGen(oldGen, NewGen) {
+            NewGen.forEach(child => {
+                oldGen.sort((a, b) => a.Penalty - b.Penalty);
+                oldGen.pop();
+                oldGen.push(child);
+            });
+            return oldGen;
+        }
+        function SelectionForMutation(PlanA, PlanB) {
+
         }
 
 
-        var ProcessEnd = new Date();
 
+        var totalStudNum = await getStudentnum();
+        var studenList = await getPairingList();
+        var teachingList = await getTeachingList();
+        var StudentList = new Array();
+        var TeachingList = new Array();
+        studenList.forEach(element => {
+            var Obj = JSON.parse(JSON.stringify({
+                sid: element.sid,
+                tid: element.tid,
+                oid: element.oid,
+                appears: -1
+            }))
+            StudentList.push(Obj);
+        });
+        teachingList.forEach(element => {
+            var Obj = JSON.parse(JSON.stringify({
+                tid: element.tid,
+                appears: -1
+            }))
+            TeachingList.push(Obj)
+        });
+        var finalResultOfPlans = new Array();
+        console.log("Total plans requires process", possibledatecombination.length, "\n\n")
+        var ProcessStart = new Date();
+        var PlansRequiresRRSRoom = new Array();
+        var PlansCanSetinFSCRooms = new Array();
+        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 6; datecombin < 7; datecombin++) {
+
+            var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
+            var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
+            if (Template.ableOnlyFSC) {
+
+
+                // console.log( Template.Schedule[0].StudentAy);
+                // console.log( Template.Schedule[0].TeachingAy);
+                // var AllPopulation = await InitialGeneration(10, Template);
+                var AllPopulation = await InitialGeneration(2, Template);
+                AllPopulation.sort((GeneA, GeneB) => GeneA.Penalty - GeneB.Penalty);
+                AllPopulation.forEach(element => {
+                    console.log(element.Penalty);
+                });
+
+                // this need to be done in while loops
+                var pairs = SelectForMixing(AllPopulation, 2);
+                // console.log(pairs)
+                MixingGene(pairs)
+            } else {
+                PlansRequiresRRSRoom.push(Template);
+                // not enough rooms for the presentation
+            }
+
+        }
+        var ProcessEnd = new Date();
         console.log("Whole Excecution Time  ", ((ProcessEnd.getTime() - ProcessStart.getTime()) / 1000), " Seconds");
 
 
+
+        return res.status(200).json("ok");
     },
 
     nqueenversion: async function (req, res) {
@@ -1418,7 +2325,7 @@ module.exports = {
             combinationforthisday.forEach(item => { possibledatecombination.push(item); })
         }
         possibledatecombination.sort((a, b) => a.length - b.length);
-        var preSetClassroomList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D','FSC901E', 'RRS638','RRS735']
+        var preSetClassroomList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'FSC901E', 'RRS638', 'RRS735']
 
         async function getStudentnum() {
             var studentnum = await new Promise((resolve) => {
@@ -1527,7 +2434,7 @@ module.exports = {
 
         function resetsessionendtime(sessionstarttime) {
             var sessionend;
-            if (req.query.typeOfPresent == "final") {
+            if (req.body.typeOfPresent == "final") {
                 sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
             } else {
                 sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
@@ -1559,7 +2466,7 @@ module.exports = {
         function reducePairBySID(selectedArray, PresentationList) {
             // console.log("org presentlistlenght", selectedArray)
             var ans;
-            if(selectedArray.length == 0 || selectedArray == null ){return PresentationList;}
+            if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
 
             selectedArray.forEach(element => {
 
@@ -1748,28 +2655,28 @@ module.exports = {
             return PresentationList;
         }
 
-        function reduceByCombination(SchedulePlans, PresentationList, thistimeslot, timeslotCombin){
+        function reduceByCombination(SchedulePlans, PresentationList, thistimeslot, timeslotCombin) {
             var needremoval = false;
-            var count =0;
+            var count = 0;
             // console.log("reduceByCombinationProblem")
             var removeElement = new Array();
             SchedulePlans.forEach(plans => {
-                var count =0;
+                var count = 0;
                 plans.Schd[thistimeslot].forEach(ScheduledPresent => {
-                    if(timeslotCombin.find((element)=> element.SID == ScheduledPresent.SID)){
+                    if (timeslotCombin.find((element) => element.SID == ScheduledPresent.SID)) {
                         count++;
-                    }else{
-                        
+                    } else {
+
                         removeElement.push(ScheduledPresent);
                     }
                 });
-                if(count == timeslotCombin.length){
-                    needremoval=true;
+                if (count == timeslotCombin.length) {
+                    needremoval = true;
                 }
             });
             removeElement = uniquePresentationList(removeElement);
-           
-            PresentationList = reducePairBySID(removeElement,PresentationList);
+
+            PresentationList = reducePairBySID(removeElement, PresentationList);
             return PresentationList;
         }
 
@@ -1807,13 +2714,24 @@ module.exports = {
                 return null;
             }
         }
+        function checkDuplicate(arr1, arr2) {
 
+            const objectsEqual = (o1, o2) => {
+                if (o2 === null && o1 !== null) return false;
+                return o1 !== null && typeof o1 === 'object' && Object.keys(o1).length > 0 ?
+                    Object.keys(o1).length === Object.keys(o2).length &&
+                    Object.keys(o1).every(p => objectsEqual(o1[p], o2[p]))
+                    : (o1 !== null && Array.isArray(o1) && Array.isArray(o2) && !o1.length &&
+                        !o2.length) ? true : o1 === o2;
+            }
+            return objectsEqual(arr1, arr2);
+        }
         var totalStudNum = await getStudentnum();
         var finalResultOfPlans = new Array();
-        console.log("Total plans requires process", possibledatecombination.length,"\n\n")
+        console.log("Total plans requires process", possibledatecombination.length, "\n\n")
         var ProcessStart = new Date();
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
-            // for (var datecombin = 5; datecombin < 6; datecombin++) {
+        // for (var datecombin = 14; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 6; datecombin < 7; datecombin++) {
             var SchedulesforThisDateCombin = new Array();
             console.log("Current process status ", calcPercentage((datecombin + 1), possibledatecombination.length))
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
@@ -1821,7 +2739,7 @@ module.exports = {
             var SelectedPlan;
             var PlanProcessStart = new Date();
             // console.log(uniquetimeslotcounts);
-            for (var possibleplan = 0; possibleplan < 5000; possibleplan++) {
+            for (var possibleplan = 0; possibleplan < 15000; possibleplan++) {
                 // for (var possibleplan = 0; possibleplan < 1; possibleplan++) {
                 // console.log("working on possibleplan for one date  ", possibleplan, "/", combinations(totalStudNum, 4), "  ----------  ", calcPercentage(possibleplan, combinations(totalStudNum, 4)), " ------- ", Successfulplannum);
                 var thisscheduleplan = new Array(uniquetimeslotcounts.length);
@@ -1886,7 +2804,7 @@ module.exports = {
                         PresentationList = reduceConsec3Session(previousList, PresentationList);
                         // console.log(">>PresentationList   ", PresentationList)
                         if (!(possibleplan % 2 == 0) || possibleplan == 0) {
-                           PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat());
+                            PriorityList = ((retrieveConsecList(previousList, PresentationList)).flat());
                             // console.log(">>PriorityList   ", PriorityList) 
                             if (PriorityList.length > 0) {
                                 var randomNumber = randomNum(PriorityList);
@@ -1918,17 +2836,18 @@ module.exports = {
                 if (untacklednum == 0) { Successfulplannum++; }
                 var ScheduleJSON = JSON.parse(JSON.stringify({ Schd: thisscheduleplan, Length: selectedAy.length, Untackle: untacklednum, Preference: pref }))
                 // console.log(ScheduleJSON);
+
                 SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                 // console.log(SchedulesforThisDateCombin,"   ",ScheduleJSON)
-                if(SchedulesforThisDateCombin.length == 0){
+                if (SchedulesforThisDateCombin.length == 0) {
                     SchedulesforThisDateCombin.push(ScheduleJSON);
-                }else if(SchedulesforThisDateCombin[0].Untackle >= ScheduleJSON.Untackle){
+                } else if (SchedulesforThisDateCombin[0].Untackle >= ScheduleJSON.Untackle) {
                     SchedulesforThisDateCombin.push(ScheduleJSON);
-                    SchedulesforThisDateCombin = copyarray(SchedulesforThisDateCombin.filter((element)=> element.Untackle == ScheduleJSON.Untackle));
+                    SchedulesforThisDateCombin = copyarray(SchedulesforThisDateCombin.filter((element) => element.Untackle == ScheduleJSON.Untackle));
                 }
-              
+
                 // if (Successfulplannum > 0.005 * (combinations(totalStudNum, 4))) { //case for many No untackled plans
-                    if (ScheduleJSON.Untackle ==0) { //case for getting the first Successful Plan
+                if (ScheduleJSON.Untackle == 0) { //case for getting the first Successful Plan
                     // console.log("Having this number of successful plan", Successfulplannum)
 
 
@@ -1946,14 +2865,14 @@ module.exports = {
                     SelectedPlan = ScheduleJSON;
                     console.log("case 1")
                     break;
-                // } else if ((0.05 * (combinations(totalStudNum, 4)))+1  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 0.05 * (combinations(totalStudNum, 4))){
-                } else if (possibleplan%1000 ==0 ){
-                    
-                SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
+                    // } else if ((0.05 * (combinations(totalStudNum, 4)))+1  >= SchedulesforThisDateCombin.length && SchedulesforThisDateCombin.length >= 0.05 * (combinations(totalStudNum, 4))){
+                } else if (possibleplan % 1000 == 0) {
+
+                    SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
-                    var CurrentEnd =  new Date();
+                    var CurrentEnd = new Date();
                     console.log("Current Excecution Time  ", ((CurrentEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
-                    console.log(">> check point ",possibleplan," Min untacklecd == ", untackledMinIndex)
+                    console.log(">> check point ", possibleplan, " Min untacklecd == ", untackledMinIndex)
                     // var uniqueUntackle = new Array();
                     // SchedulesforThisDateCombin.forEach(element => {
                     //     if (!uniqueUntackle.find((number) => number == element.Untackle)) {
@@ -1962,7 +2881,7 @@ module.exports = {
                     // });
                     // console.log(">> CheckPoint 5% this plan has the following untackle values", uniqueUntackle);
                     console.log("case 2")
-                }else if ( possibleplan == 4999) {
+                } else if (possibleplan == 14999) {
                     console.log("case 3")
                     SchedulesforThisDateCombin.sort(function (a, b) { return a.Untackle - b.Untackle; })
                     var untackledMinIndex = SchedulesforThisDateCombin[0].Untackle;
@@ -1988,13 +2907,13 @@ module.exports = {
                     SelectedPlan = SchedulesforThisDateCombin[SelectedPlan];
                     break;
                 }
-               
+
             }
             var PlanProcessEnd = new Date();
             console.log("Plan Excecution Time  ", ((PlanProcessEnd.getTime() - PlanProcessStart.getTime()) / 1000), " Seconds");
             /** change the SelectedPlan insert to SQL */
-            
-            
+
+
             console.log(SelectedPlan)
             console.log("For datecombination: ", (datecombin + 1), "  Untackle Case Count:  ", SelectedPlan.Untackle, "   Successful rate:  ", calcPercentage((totalStudNum - SelectedPlan.Untackle), totalStudNum))
 
@@ -2066,7 +2985,7 @@ module.exports = {
                         var sqldatestring = sessionstarttime.toLocaleDateString("en-GB").split("/");
                         sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
                         sqldatestring.trim();
-                        insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Successful", req.query.typeOfPresent);
+                        insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Successful", req.body.typeOfPresent);
                     }
                 }
             } else {
@@ -2079,7 +2998,7 @@ module.exports = {
                         sqldatestring = sqldatestring[2] + "-" + sqldatestring[1] + "-" + sqldatestring[0];
                         sqldatestring.trim();
 
-                        insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Manual Handling", req.query.typeOfPresent);
+                        insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Manual Handling", req.body.typeOfPresent);
                         var ManualCaseList = await retrieveUntackledCase((datecombin + 1), SelectedPlan.Schd);
                         for (var maualhandlecases = 0; maualhandlecases < ManualCaseList.length; maualhandlecases++) {
                             await insertManualCasebox((datecombin + 1), ManualCaseList[maualhandlecases]);
@@ -2099,10 +3018,10 @@ module.exports = {
             //         sqldatestring.trim();
             //         if (SelectedPlan.Untackle == 0) {
             //             finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: (datecombin + 1), planStatus: 0 })))
-            //             insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Successful", req.query.typeOfPresent);
+            //             insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Successful", req.body.typeOfPresent);
             //         } else {
             //             finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: (datecombin + 1), planStatus: 1 })))
-            //             insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Manual Handling", req.query.typeOfPresent);
+            //             insertbox((datecombin + 1), SelectedPlan.Schd[timeslot][room], sqldatestring, sessionstarttime, "Manual Handling", req.body.typeOfPresent);
             //             var ManualCaseList = await retrieveUntackledCase((datecombin + 1), SelectedPlan.Schd);
             //             for (var maualhandlecases = 0; maualhandlecases < ManualCaseList.length; maualhandlecases++) {
             //                 await insertManualCasebox((datecombin + 1), ManualCaseList[maualhandlecases]);
@@ -2215,7 +3134,7 @@ module.exports = {
         }
         function resetsessionendtime(sessionstarttime) {
             var sessionend;
-            if (req.query.typeOfPresent == "final") {
+            if (req.body.typeOfPresent == "final") {
                 sessionend = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
             } else {
                 sessionend = new Date(sessionstarttime.getTime() + 25 * 60 * 1000);
@@ -2430,7 +3349,7 @@ module.exports = {
                 boxID: "",
                 planNo: planNo,
                 boxdate: thetime,
-                type: req.query.typeOfPresent,
+                type: req.body.typeOfPresent,
                 tid: tid,
                 sid: sid,
                 oid: oid,
@@ -2592,7 +3511,7 @@ module.exports = {
             var nextval;
             var pre2val;
             var next2val;
-            if (req.query.typeOfPresent == "final") {
+            if (req.body.typeOfPresent == "final") {
                 preval = new Date(sessionstarttime.getTime() - 45 * 60 * 1000);
                 nextval = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
                 pre2val = new Date(sessionstarttime.getTime() - 2 * 45 * 60 * 1000);
@@ -2639,7 +3558,7 @@ module.exports = {
             var nextval;
             var pre2val;
             var next2val;
-            if (req.query.typeOfPresent == "final") {
+            if (req.body.typeOfPresent == "final") {
                 preval = new Date(sessionstarttime.getTime() - 45 * 60 * 1000);
                 nextval = new Date(sessionstarttime.getTime() + 45 * 60 * 1000);
                 pre2val = new Date(sessionstarttime.getTime() - 2 * 45 * 60 * 1000);
@@ -2720,7 +3639,7 @@ module.exports = {
 
         // var a  == looping in possible plans
         // for (var a = 0; a < possibledatecombination.length; a++) {
-        for (var a = 0; a < 8; a++) {
+        for (var a = 0; a < 1; a++) {
             var scheduleforthisplan = new Array();
             var manualhandlecase = new Array();
             console.log(">>plan ", a, " ", possibledatecombination[a])
@@ -2741,7 +3660,7 @@ module.exports = {
                 //get the classroomlist that available for the time
                 var availableclassroomlist = new Array();;
                 for (var d = 0; d < 4; d++) {
-                    if (req.query.typeOfPresent == "final") {
+                    if (req.body.typeOfPresent == "final") {
                         var roomttbresult = await checkclassroomttb(preSetClassroomList[d], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         var roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[d], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         if (roomttbresult && roomtimeslotresult) {
@@ -2805,7 +3724,7 @@ module.exports = {
                 manualhandlecase.push(element);
             });
 
-            // console.log("maualhandlecase ", manualhandlecase)
+            console.log("maualhandlecase ", manualhandlecase)
 
             /**handle manualcase by checking RRS first */
             for (var e = 0; e < manualhandlecase.length; e++) {
@@ -2819,7 +3738,7 @@ module.exports = {
                     var roomttbresult;
                     var roomtimeslotresult;
                     var availablemanualhandlecase = await sortAvaforManualCase(a, sqldatestring, sessionstarttime.toLocaleTimeString("en-GB"));
-                    if (req.query.typeOfPresent == "final") {
+                    if (req.body.typeOfPresent == "final") {
                         roomttbresult = await checkclassroomttb(preSetClassroomList[4], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
                         roomtimeslotresult = await checkclassroomtimeslot(preSetClassroomList[4], sessionstarttime.getDay(), sessionstarttime.toLocaleTimeString("en-GB"), sessionendtime.toLocaleTimeString("en-GB"));
 

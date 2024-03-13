@@ -127,13 +127,17 @@
                 body: requestbody
             });
             if (response.ok) {
-                response = await fetch("/scheduledesign/nqueenversion", {
+                // response = await fetch("/scheduledesign/nqueenversion", {
+                //     method: "POST",
+                //     body: requestbody
+                // });
+                response = await fetch("/scheduledesign/Combinversion", {
                     method: "POST",
                     body: requestbody
                 });
                 if (response.ok) {
                     document.getElementById("loader").style.visibility = "hidden";
-                    location.redirect(response.url)
+                    location.assign(response.url)
                 }else{
                     alert("Error exists when using combination version")
                 }

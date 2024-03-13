@@ -54,7 +54,7 @@ module.exports.routes = {
   'POST /scheduledesign/nqueenversion': "ScheduleController.nqueenversion",
   // 'GET /scheduledesign/Combinversion': "ScheduleController.nqueenversion",
   'POST /scheduledesign/Combinversion': "ScheduleController.Combinversion",
-  //'GET /scheduledesign/startschedule': "ScheduleController.startScheduling",
+  'POST /scheduledesign/startschedule': "ScheduleController.startScheduling",
   'GET /scheduledesign/scheduleList': "ScheduleController.scheduleList",
   'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
