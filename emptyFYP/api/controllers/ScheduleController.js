@@ -3507,9 +3507,9 @@ module.exports = {
 
 
 
-        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
 
-        for (var datecombin = 25; datecombin < 28; datecombin++) {
+        // for (var datecombin = 25; datecombin < 28; datecombin++) {
             // for (var datecombin = 4; datecombin < 5; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
