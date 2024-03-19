@@ -3454,7 +3454,7 @@ module.exports = {
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
             // console.log(uniquetimeslotcounts.length)
             var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
-console.log(Template)
+// console.log(Template)
             // Print(Template)
             if (Template.able) {
                 console.log("\nhere Table.able",);
