@@ -305,17 +305,17 @@
                         pplTimeslot = pplTimeslot[i].value;
                     }
                 }
-                ClassroomTTB= "No"
-                        pplTTB= "Yes"
-                        pplTimeslot= "Yes",
-                        roomList= [
-                            "FSC801C",
-                            "FSC801D",
-                            "FSC901C",
-                            "FSC901D",
-                            "FSC901E",
-                            "RRS638",
-                            "RRS735"];
+                // ClassroomTTB= "No"
+                //         pplTTB= "Yes"
+                //         pplTimeslot= "Yes",
+                //         roomList= [
+                //             "FSC801C",
+                //             "FSC801D",
+                //             "FSC901C",
+                //             "FSC901D",
+                //             "FSC901E",
+                //             "RRS638",
+                //             "RRS735"];
                 roomList.sort();
                 // console.log(ClassroomTTB)
                 var r = confirm("Confirm to create with following deatils?\n"
@@ -338,28 +338,28 @@
                             typeOfPresent = typeOfPresentlist[i].value;
                         }
                     }
-                    // var requestbody = JSON.stringify({
-                    //     typeOfPresent: typeOfPresent,
-                    //     ClassroomTTB: ClassroomTTB,
-                    //     pplTTB: pplTTB,
-                    //     pplTimeslot: pplTimeslot,
-                    //     roomList: roomList
-                    // })
                     var requestbody = JSON.stringify({
                         typeOfPresent: typeOfPresent,
-                        ClassroomTTB: "No",
-                        pplTTB: "Yes",
-                        pplTimeslot: "Yes",
-                        roomList: [
-                            "FSC801C",
-                            "FSC801D",
-                            "FSC901C",
-                            "FSC901D",
-                            "FSC901E",
-                            "RRS638",
-                            "RRS735"
-                        ]
+                        ClassroomTTB: ClassroomTTB,
+                        pplTTB: pplTTB,
+                        pplTimeslot: pplTimeslot,
+                        roomList: roomList
                     })
+                    // var requestbody = JSON.stringify({
+                    //     typeOfPresent: typeOfPresent,
+                    //     ClassroomTTB: "No",
+                    //     pplTTB: "Yes",
+                    //     pplTimeslot: "Yes",
+                    //     roomList: [
+                    //         "FSC801C",
+                    //         "FSC801D",
+                    //         "FSC901C",
+                    //         "FSC901D",
+                    //         "FSC901E",
+                    //         "RRS638",
+                    //         "RRS735"
+                    //     ]
+                    // })
 
                     var response = await fetch("/scheduledesign/genAvailable", {
                         method: "POST",
