@@ -1392,16 +1392,22 @@ module.exports = {
             var ans;
             if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
             selectedArray.forEach(element => {
+// console.log("org length",PresentationList.length)
                 var foundSup = PresentationList.filter((Sup) => Sup.TID == element.TID || Sup.OID == element.TID);
-                // console.log(">>fundSup" , foundSup)
+                // console.log(">>fundSup" ,element.TID ," ",foundSup.length)
                 foundSup.forEach(removelist => {
-                    PresentationList.splice(PresentationList.find((Sup) => Sup == removelist))
+                    // PresentationList.splice(PresentationList.find((Sup) => Sup == removelist))
+                   var index = PresentationList.findIndex((present)=> present == removelist);
+                //    console.log("index check",index)
+                   PresentationList.splice(index,1)
                 });
-                // console.log(">>Prexse  1" , PresentationList)
+                // console.log(">>Prexse  1" , PresentationList.length)
                 var foundObs = PresentationList.filter((Obs) => Obs.TID == element.OID || Obs.OID == element.OID);
-                // console.log(">>fundObs" , foundObs)
+            //    console.log(">>fundObs" ,element.OID ," ",foundSup.length)
                 foundObs.forEach(removelist => {
-                    PresentationList.splice(PresentationList.find((Obs) => Obs == removelist))
+                    // PresentationList.splice(PresentationList.find((Obs) => Obs == removelist))
+                    var index = PresentationList.findIndex((present)=> present == removelist);
+                    PresentationList.splice(index,1)
                 });
                 // console.log(">>Prexse 2" , PresentationList)
                 // while (PresentationList.find((element2) => element.TID == element2.TID)) {
@@ -1906,49 +1912,60 @@ module.exports = {
                 var copyTemplatecount = 0;
                 var sameTimeslotinsertcount = 0;
                 var thisTimeslotSelectedAy = new Array();
-                copyTemplate.Schedule.sort((a, b) => a.timeslot-b.timeslot || a.room - b.room);
+                copyTemplate.Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
                 // console.log(copyTemplate.Schedule.length)
                 // for (var timeslot = 10; timeslot < 20; timeslot++) {
                 for (var timeslot = 0; timeslot < copyTemplate.Schedule.length; timeslot++) {
-                    
+                    // console.log()
+
                     var PresentationList = await availblepairsforthistimeslot(copyTemplate.Schedule[timeslot].SQLdate, copyTemplate.Schedule[timeslot].SQLtime);
-                    // console.log(copyTemplate.Schedule[timeslot].SQLdate,"  ",copyTemplate.Schedule[timeslot].SQLtime)
+                    // console.log(copyTemplate.Schedule[timeslot].SQLdate, "  ", copyTemplate.Schedule[timeslot].SQLtime)
+                    // console.log("before reduce ", PresentationList.length)
                     PresentationList = reduceByCurrentExistingStudent(copyTemplate.Schedule[timeslot].StudentAy, PresentationList);
                     PresentationList = reducePairBySID(WholePlanSelectedAy, PresentationList);
                     var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length;
                     // console.log(sameTimeslotinsertcount," the total caninsert count");
                     var insertedroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1));
-                    themostFirstroom = themostFirstroom.filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
+                    themostFirstroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
                     // insertedroom.forEach(element => {
                     //     console.log(element.StudentAy.filter((stu)=>stu.appears == 1))
                     // });
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length - insertedroom.length;
                     // console.log(sameTimeslotinsertcount," after minus the emptyroom num count");
-                    themostFirstroom = themostFirstroom[0];
+                    themostFirstroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom)))[0];
                     themostFirstroom = copyTemplate.Schedule.findIndex((room) => room.timeslot == themostFirstroom.timeslot && room.room == themostFirstroom.room)
-                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].timeslot)
-                //   console.log(WholePlanSelectedAy)
-
-
-                    // console.log("after reduce SID", PresentationList)
+                    // console.log("check timeslot count", timeslot, "  ", themostFirstroom);
+                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present) => present.availablestarttime == copyTemplate.Schedule[themostFirstroom].timeslot)
+                    //   console.log(WholePlanSelectedAy)
+var checkingbeforeredue = 0;
+checkingbeforeredue = PresentationList.length;
+                    // console.log("after reduce SID", PresentationList.length)
                     // console.log(thisTimeslotSelectedAy)
-                    if (sameTimeslotinsertcount!= 0 && sameTimeslotinsertcount != undefined) {
-// thisTimeslotSelectedAy == WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
+                    if (sameTimeslotinsertcount != 0 && sameTimeslotinsertcount != undefined) {
+                        
+                        // thisTimeslotSelectedAy == WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
                         PresentationList = reducePairBySupObs(thisTimeslotSelectedAy, PresentationList);
                     }
-                   
-                    // console.log("after reduce reducePairBySupObs", PresentationList)
+                    // if (copyTemplate.Schedule[timeslot].SQLdate == "2024-04-12") {
+                    //     console.log(thisTimeslotSelectedAy)
+                    //     console.log( checkingbeforeredue," after reduce reducePairBySupObs", PresentationList.length," ",copyTemplate.Schedule[timeslot].SQLdate,"  ",copyTemplate.Schedule[timeslot].SQLtime)
+                    // }
+                    // console.log("after reduce reducePairBySupObs", PresentationList.length)
                     // console.log("check time array ", WholePlanAccordingtoTime.length, " ", thisTimeslotSelectedAy.length, " ", sameTimeslotinsertcount)
                     if (PresentationList.length > 0) {
+                        // console.log("have presentation candidates")
+                        // console.log(copyTemplate.Schedule[timeslot].SQLdate, " ", copyTemplate.Schedule[timeslot].SQLtime, "  ", copyTemplate.Schedule[themostFirstroom].SQLdate, "  ", copyTemplate.Schedule[themostFirstroom].SQLtime, " ", copyTemplate.Schedule[themostFirstroom].room, " ", copyTemplate.Schedule[themostFirstroom].roomcount)
+
                         // console.log(sameTimeslotinsertcount," for this slot ", copyTemplate.Schedule[timeslot].SQLdate,"   ",copyTemplate.Schedule[timeslot].SQLtime)
+
                         var index = randomNum(PresentationList);
                         // var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
                         // themostFirstroom = themostFirstroom.filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
                         // if(themostFirstroom[0].SQLdate == "2024-04-12"){
                         //     console.log(themostFirstroom)
                         // }
-                        
+
                         // themostFirstroom = themostFirstroom[0];
                         // if(themostFirstroom.SQLdate == "2024-04-12"){
                         //     console.log(themostFirstroom.room)
@@ -1965,10 +1982,11 @@ module.exports = {
                         // console.log(indexInArray)
                         // setAppear(copyTemplate.Schedule[timeslot], PresentationList[index], 1);
                         setAppear(copyTemplate.Schedule[themostFirstroom], PresentationList[index], 1);
+                        // console.log(PresentationList[index].SID, "   ", PresentationList[index].TID, "   ", PresentationList[index].OID)
 
-
-
-                        // console.log(timeslot,"   ",copyTemplate.Schedule[timeslot].room,"    ", copyTemplate.Schedule[timeslot].SQLdate," ",copyTemplate.Schedule[timeslot].SQLtime , "    ", copyTemplate.Schedule[timeslot].StudentAy.filter((student)=> student.appears ==1)[0])
+                        // if (copyTemplate.Schedule[themostFirstroom].SQLdate == "2024-04-12" || copyTemplate.Schedule[timeslot].SQLdate == "2024-04-12") {
+                        //     console.log(themostFirstroom, "   ", copyTemplate.Schedule[themostFirstroom].room, "    ", copyTemplate.Schedule[themostFirstroom].SQLdate, " ", copyTemplate.Schedule[themostFirstroom].SQLtime, "    ", copyTemplate.Schedule[themostFirstroom].StudentAy.filter((student) => student.appears == 1)[0])
+                        // }
                         // copyTemplate.Schedule[timeslot].StudentAy[indexInArray].appears = 1;
                         // console.log(">> Selected ", PresentationList[index].SID, " checking ", copyTemplate.Schedule[timeslot].StudentAy[indexInArray]);
                         copyTemplatecount++;
@@ -1982,14 +2000,9 @@ module.exports = {
                         // console.log(">> WholePlanAccordingtoTime ", WholePlanAccordingtoTime.length)
                         // console.log(">> thisTimeslotSelectedAy ", thisTimeslotSelectedAy.length)
                         // console.log(thisTimeslotSelectedAy)
-                        if (WholePlanSelectedAy.length != 0) {
-                            // console.log(">> checkherer 3")
-                            if (WholePlanSelectedAy[WholePlanSelectedAy.length - 1].hasOwnProperty('availablestarttime')) {
-                                // console.log(">> checkherer 1")
-                                lastdate = WholePlanSelectedAy[WholePlanSelectedAy.length - 1].availablestarttime;
-                            } else {
-                                // console.log(">> checkherer 2")
-                            }
+                        if (WholePlanSelectedAy.length >= 0) {
+
+                            lastdate = WholePlanSelectedAy[WholePlanSelectedAy.length - 1].availablestarttime;
 
 
                             // lastdate = WholePlanAccordingtoTime[WholePlanAccordingtoTime.length-1][0].availablestarttime;
@@ -2014,7 +2027,7 @@ module.exports = {
                         } else {
                             // console.log("case 1 3 ", sameTimeslotinsertcount, " ", copyTemplate.Schedule[themostFirstroom].roomcount, " ", lastdate, "  ", currentdate)
                             //     WholePlanAccordingtoTime.push(thisTimeslotSelectedAy);
-                       
+
                         }
 
                     } else {
@@ -2120,7 +2133,7 @@ module.exports = {
                 console.log("case 2 have population but gencount == limit ", (AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount))[0].tacklecount)
 
                 if (AllGenedVersion.length > Population) {
-                    AllGenedVersion.sort((a,b) => b.tacklecount - a.tacklecount);
+                    AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount);
                     AllGenedVersion.forEach(element => {
                         console.log(element.tacklecount);
                     });
@@ -2136,7 +2149,7 @@ module.exports = {
                 Obj = JSON.parse(JSON.stringify({ AllPopulation: AllGenedVersion, status: 0 }))
             } else if (generationcount == limit && (AllPopulation.length == 0)) {
                 console.log("case 3 no population but gencount == limit", AllGenedVersion.length);
-                AllGenedVersion.sort((a,b) => b.tacklecount - a.tacklecount);
+                AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount);
                 AllGenedVersion.forEach(element => {
                     console.log(element.tacklecount);
                 });
@@ -3446,15 +3459,15 @@ module.exports = {
 
 
 
-        for (var datecombin = 20; datecombin < possibledatecombination.length; datecombin++) {
+        // for (var datecombin = 20; datecombin < possibledatecombination.length; datecombin++) {
 
-        // for (var datecombin = 22; datecombin < 2; datecombin++) {
+        for (var datecombin = 20; datecombin < 25; datecombin++) {
             // for (var datecombin = 4; datecombin < 5; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
             // console.log(uniquetimeslotcounts.length)
             var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
-// console.log(Template)
+            // console.log(Template)
             // Print(Template)
             if (Template.able) {
                 console.log("\nhere Table.able",);
@@ -3492,6 +3505,7 @@ module.exports = {
                 if (AllPopulation.status == 1) {
                     console.log("enter  Template.able && AllPopulation.status != 0")
                     AllPopulation = AllPopulation.AllPopulation
+                    // Print(AllPopulation[0])
                     // AllPopulation.forEach(element => {
                     //     Print(element)
                     // });
@@ -3741,12 +3755,12 @@ module.exports = {
                     console.log("\noops",);
                 }
             }
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
         }
 
 

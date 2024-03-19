@@ -235,6 +235,8 @@ insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa11","Sin Hang","FSC8
 insert into allclassroomtimeslot values("Sin_Hang_FSC801C_o14N2","Sin Hang","FSC801C","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o15N1","Sin Hang","FSC801D","2024-04-16","2024-04-16","08:30","14:30","Check aircon");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o16N2","Sin Hang","FSC801D","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_qa11","Sin Hang","FSC901C","2024-04-16","2024-04-16","08:30","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_c14N2","Sin Hang","FSC901D","2024-04-16","2024-04-16","08:30","18:30","Check aircon");
 insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa17N1","Sin Hang","FSC901E","2024-04-16","2024-04-16","08:30","14:00","Check aircon");
 insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa0N18","Sin Hang","FSC901E","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N19","Sin Hang","RRS638","2024-04-16","2024-04-16","08:30","12:30","Check aircon");
