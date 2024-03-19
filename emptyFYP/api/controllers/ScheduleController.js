@@ -1917,18 +1917,18 @@ module.exports = {
                     PresentationList = reducePairBySID(WholePlanSelectedAy, PresentationList);
                     var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length;
-                    console.log(sameTimeslotinsertcount," the total caninsert count");
+                    // console.log(sameTimeslotinsertcount," the total caninsert count");
                     var insertedroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1));
                     themostFirstroom = themostFirstroom.filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
-                    insertedroom.forEach(element => {
-                        console.log(element.StudentAy.filter((stu)=>stu.appears == 1))
-                    });
+                    // insertedroom.forEach(element => {
+                    //     console.log(element.StudentAy.filter((stu)=>stu.appears == 1))
+                    // });
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length - insertedroom.length;
-                    console.log(sameTimeslotinsertcount," after minus the emptyroom num count");
+                    // console.log(sameTimeslotinsertcount," after minus the emptyroom num count");
                     themostFirstroom = themostFirstroom[0];
                     themostFirstroom = copyTemplate.Schedule.findIndex((room) => room.timeslot == themostFirstroom.timeslot && room.room == themostFirstroom.room)
-                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
-                  
+                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].timeslot)
+                //   console.log(WholePlanSelectedAy)
 
 
                     // console.log("after reduce SID", PresentationList)
@@ -1941,7 +1941,7 @@ module.exports = {
                     // console.log("after reduce reducePairBySupObs", PresentationList)
                     // console.log("check time array ", WholePlanAccordingtoTime.length, " ", thisTimeslotSelectedAy.length, " ", sameTimeslotinsertcount)
                     if (PresentationList.length > 0) {
-                        console.log(sameTimeslotinsertcount," for this slot ", copyTemplate.Schedule[timeslot].SQLdate,"   ",copyTemplate.Schedule[timeslot].SQLtime)
+                        // console.log(sameTimeslotinsertcount," for this slot ", copyTemplate.Schedule[timeslot].SQLdate,"   ",copyTemplate.Schedule[timeslot].SQLtime)
                         var index = randomNum(PresentationList);
                         // var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
                         // themostFirstroom = themostFirstroom.filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
@@ -1998,7 +1998,7 @@ module.exports = {
                             // console.log(">> checkherer 5")
                             lastdate = currentdate;
                         }
-                        console.log(sameTimeslotinsertcount," for this slot ", copyTemplate.Schedule[timeslot].SQLdate,"   ",copyTemplate.Schedule[timeslot].SQLtime)
+                        // console.log(sameTimeslotinsertcount," for this slot ", copyTemplate.Schedule[timeslot].SQLdate,"   ",copyTemplate.Schedule[timeslot].SQLtime)
                         // console.log("check time array ", lastdate, " ", currentdate, " ")
                         if (sameTimeslotinsertcount == copyTemplate.Schedule[themostFirstroom].roomcount) {
                             // console.log("case 1 1 ", sameTimeslotinsertcount, " ", copyTemplate.Schedule[themostFirstroom].roomcount, " ", lastdate, "  ", currentdate)
@@ -2120,8 +2120,12 @@ module.exports = {
                 console.log("case 2 have population but gencount == limit ", (AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount))[0].tacklecount)
 
                 if (AllGenedVersion.length > Population) {
-                    AllGenedVersion = AllGenedVersion.filter((plans) => plans.tacklecount == (AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount))[0].tacklecount)
-
+                    AllGenedVersion.sort((a,b) => b.tacklecount - a.tacklecount);
+                    AllGenedVersion.forEach(element => {
+                        console.log(element.tacklecount);
+                    });
+                    var max = AllGenedVersion[0].tacklecount;
+                    AllGenedVersion = AllGenedVersion.filter((plans) => plans.tacklecount == max)
                     console.log("case 2 1have population but gencount == limit ", AllGenedVersion.length)
                     AllGenedVersion = AllGenedVersion.splice(0, Population);
                 } else {
@@ -2131,8 +2135,13 @@ module.exports = {
 
                 Obj = JSON.parse(JSON.stringify({ AllPopulation: AllGenedVersion, status: 0 }))
             } else if (generationcount == limit && (AllPopulation.length == 0)) {
-                console.log("case 3 no population but gencount == limit");
-                AllGenedVersion = AllGenedVersion.filter((plans) => plans.tacklecount == (AllGenedVersion.sort((a, b) => b.tacklecount - a.tacklecount))[0].tacklecount)
+                console.log("case 3 no population but gencount == limit", AllGenedVersion.length);
+                AllGenedVersion.sort((a,b) => b.tacklecount - a.tacklecount);
+                AllGenedVersion.forEach(element => {
+                    console.log(element.tacklecount);
+                });
+                var max = AllGenedVersion[0].tacklecount;
+                AllGenedVersion = AllGenedVersion.filter((plans) => plans.tacklecount == max)
                 Obj = JSON.parse(JSON.stringify({ AllPopulation: AllGenedVersion, status: 0 }))
             }
 
@@ -3437,15 +3446,15 @@ module.exports = {
 
 
 
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 20; datecombin < possibledatecombination.length; datecombin++) {
 
-        // for (var datecombin = 22; datecombin < 23; datecombin++) {
-            // for (var datecombin = 11; datecombin < 20; datecombin++) {
+        // for (var datecombin = 22; datecombin < 2; datecombin++) {
+            // for (var datecombin = 4; datecombin < 5; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
             // console.log(uniquetimeslotcounts.length)
             var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
-// console.log(Template)
+console.log(Template)
             // Print(Template)
             if (Template.able) {
                 console.log("\nhere Table.able",);
