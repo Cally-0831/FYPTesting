@@ -163,6 +163,39 @@ module.exports = {
             console.log("Error happened in ScheduleController. nodraft.getCampus")
         })
 
+        var isGenerating = await new Promise((resolve) => {
+            db.query("select * from threeparty", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (json.length > 0) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            console.log("Error happened in ScheduleController. nodraft.getCampus")
+        })
+        var isGenerating2 = await new Promise((resolve) => {
+            db.query("select * from allschedulebox", (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans = json;
+                if (json.length > 0) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+                resolve(ans)
+            })
+        }).catch((err) => {
+            console.log("Error happened in ScheduleController. nodraft.getCampus")
+        })
+
+        console.log(isGenerating, " ", warning, " ", isGenerating2)
+
 
         return res.view("user/admin/scheduledesign", {
             havedraft: "N",
@@ -1145,10 +1178,25 @@ module.exports = {
         }
         possibledatecombination.sort((a, b) => a.length - b.length);
         var preSetClassroomList = req.body.roomList
+        var firstList = new Array();
+        var SecondList = new Array();
+
+
+
+
         var preSetFSCList = ['FSC801C', 'FSC801D', 'FSC901C', 'FSC901D', 'FSC901E'];
         var preSetFSC8thList = ['FSC801C', 'FSC801D', 'FSC801E'];
         var preSetFSC9thList = ['FSC901C', 'FSC901D', 'FSC901E'];
         var preSetRRSList = ['RRS638', 'RRS735'];
+
+        preSetClassroomList.forEach(element => {
+            if (preSetFSCList.find((room) => room === element) != undefined) {
+                firstList.push(element)
+            }
+            if (preSetRRSList.find((room) => room === element) != undefined) {
+                SecondList.push(element)
+            }
+        });
 
         async function getStudentnum() {
             var studentnum = await new Promise((resolve) => {
@@ -1392,22 +1440,22 @@ module.exports = {
             var ans;
             if (selectedArray.length == 0 || selectedArray == null) { return PresentationList; }
             selectedArray.forEach(element => {
-// console.log("org length",PresentationList.length)
+                // console.log("org length",PresentationList.length)
                 var foundSup = PresentationList.filter((Sup) => Sup.TID == element.TID || Sup.OID == element.TID);
                 // console.log(">>fundSup" ,element.TID ," ",foundSup.length)
                 foundSup.forEach(removelist => {
                     // PresentationList.splice(PresentationList.find((Sup) => Sup == removelist))
-                   var index = PresentationList.findIndex((present)=> present == removelist);
-                //    console.log("index check",index)
-                   PresentationList.splice(index,1)
+                    var index = PresentationList.findIndex((present) => present == removelist);
+                    //    console.log("index check",index)
+                    PresentationList.splice(index, 1)
                 });
                 // console.log(">>Prexse  1" , PresentationList.length)
                 var foundObs = PresentationList.filter((Obs) => Obs.TID == element.OID || Obs.OID == element.OID);
-            //    console.log(">>fundObs" ,element.OID ," ",foundSup.length)
+                //    console.log(">>fundObs" ,element.OID ," ",foundSup.length)
                 foundObs.forEach(removelist => {
                     // PresentationList.splice(PresentationList.find((Obs) => Obs == removelist))
-                    var index = PresentationList.findIndex((present)=> present == removelist);
-                    PresentationList.splice(index,1)
+                    var index = PresentationList.findIndex((present) => present == removelist);
+                    PresentationList.splice(index, 1)
                 });
                 // console.log(">>Prexse 2" , PresentationList)
                 // while (PresentationList.find((element2) => element.TID == element2.TID)) {
@@ -1938,12 +1986,12 @@ module.exports = {
                     // console.log("check timeslot count", timeslot, "  ", themostFirstroom);
                     thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present) => present.availablestarttime == copyTemplate.Schedule[themostFirstroom].timeslot)
                     //   console.log(WholePlanSelectedAy)
-var checkingbeforeredue = 0;
-checkingbeforeredue = PresentationList.length;
+                    var checkingbeforeredue = 0;
+                    checkingbeforeredue = PresentationList.length;
                     // console.log("after reduce SID", PresentationList.length)
                     // console.log(thisTimeslotSelectedAy)
                     if (sameTimeslotinsertcount != 0 && sameTimeslotinsertcount != undefined) {
-                        
+
                         // thisTimeslotSelectedAy == WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
                         PresentationList = reducePairBySupObs(thisTimeslotSelectedAy, PresentationList);
                     }
@@ -3459,14 +3507,21 @@ checkingbeforeredue = PresentationList.length;
 
 
 
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
 
-        // for (var datecombin = 20; datecombin < 25; datecombin++) {
+        for (var datecombin = 25; datecombin < 28; datecombin++) {
             // for (var datecombin = 4; datecombin < 5; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
             // console.log(uniquetimeslotcounts.length)
-            var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
+            var useList = new Array();
+            if (firstList.length > 0) {
+                useList = copyarray(firstList);
+            }
+            var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, useList);
+            if (!Template.able) {
+                Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
+            }
             // console.log(Template)
             // Print(Template)
             if (Template.able) {
@@ -3615,7 +3670,7 @@ checkingbeforeredue = PresentationList.length;
 
 
             } else {
-
+                // var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
                 var AllPopulation = await InitialGeneration(InitialGenNum, Template);
                 // AllPopulation = AllPopulation.AllPopulation
                 // console.log(AllPopulation)
