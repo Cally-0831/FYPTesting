@@ -47,11 +47,13 @@ module.exports.policies = {
     '*': "isAdmin"
   },
   ScheduleController:{
+    '*': "isAdmin"
     //viewfinalschdule :"isLUser"
   },
 
   LessonListController:{
-   // '*': "isAdmin"
+    "*":"isLoggedin",
+   '*': "isAdmin"
   }
 
   

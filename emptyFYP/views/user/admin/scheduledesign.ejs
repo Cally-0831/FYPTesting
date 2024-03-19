@@ -8,7 +8,7 @@
         </div>
     </div>
     <br>
-    
+
     <%if(erray.includes("A")){%>
         <div class="columns is-centered">
             <div class="column is-half">
@@ -44,7 +44,7 @@
                 <%}else{%>
                     <div class="columns is-centered">
                         <div id="create" class="column is-half">
-                            
+
                             <div class="scheduledesignchecking">
                                 <div class="row">
                                     <div style="font-size: 25px; font-weight: bold;">
@@ -76,76 +76,319 @@
                                         </label>
                                     </div>
                                     <br>
-                                    <div class="buttons is-right">
+                                    <div id="PresetRoomList" style="align-content: center;">
 
-                                        <div id="createdraftbtn" class="button is-warning is-medium is-responsive"
+                                        <aside class="menu" id="showRoom" style="vertical-align: middle;">
+                                            <p class="menu-label" style="font-size: 20px; font-weight: bold;">
+                                                Classrooms for Presentation
+                                            </p>
+
+                                            <ul class="roomlist" id="roomlist">
+
+                                            </ul>
+
+                                            <br>
+                                            <ul>
+                                                <table class="table" style="align-items: center">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="vertical-align: middle; align-items: center;">
+                                                                <div class="select is-primary">
+
+                                                                    <select name="time" id="UpdateCampusSelect"
+                                                                        onchange="getRoomForThisCampus()">
+                                                                        <option value="null">Campus</option>
+                                                                        <%for( var a=0 ;a < Campus.length;a++){%>
+                                                                            <option value="<%=Campus[a].Campus%>">
+                                                                                <%=Campus[a].Campus%>
+                                                                            </option>
+                                                                            <%}%>
+
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+                                                            <td style="vertical-align: middle; align-items: center;">
+                                                                <div class="select is-primary">
+                                                                    <select id="UpdateRoomSelect">
+                                                                        <option value="null">Room</option>
+                                                                        <option>With options</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+                                                            <td style="vertical-align: middle; align-items: center;">
+                                                                <button class="buttion greenbutton"
+                                                                    onclick="addRoom(document.getElementById('UpdateRoomSelect').value)">
+                                                                    add
+                                    </div>
+                                    </td>
+                                    </tr>
+                                    </tbody>
+                                    </table>
+                                    <br>
+                                    </ul>
+                                    <ul class="menu-list">
+                                        <li>
+                                            <a class="is-active">
+                                                Consider Timeable of Classroom
+                                            </a>
+                                            <ul>
+                                                <div class="control" id="RoomTTBConsideration">
+                                                    <label class="radio">
+                                                        <input type="radio" name="RoomTTBConsideration" value="Yes">
+                                                        Yes
+                                                    </label>
+                                                    <label class="radio">
+                                                        <input type="radio" name="RoomTTBConsideration" value="No"
+                                                            checked>
+                                                        No
+                                                    </label>
+                                                </div>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                    <ul class="menu-list">
+                                        <li>
+                                            <a class="is-active" style=>
+                                                Consider Timeable of Supervisors and Students
+                                            </a>
+                                            <ul>
+                                                <div class="control" id="pplTTBConsideration">
+                                                    <label class="radio">
+                                                        <input type="radio" name="pplTTBConsideration" value="Yes">
+                                                        Yes
+                                                    </label>
+                                                    <label class="radio">
+                                                        <input type="radio" name="pplTTBConsideration" value="No"
+                                                            checked>
+                                                        No
+                                                    </label>
+                                                </div>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="menu-list">
+                                        <li>
+                                            <a class="is-active">
+                                                Consider Unavailable Timeslot of Supervisors and Students
+                                            </a>
+                                            <ul>
+                                                <div class="control" id="pplTimeSlotConsideration">
+                                                    <label class="radio">
+                                                        <input type="radio" name="pplTimeSlotConsideration" value="Yes">
+                                                        Yes
+                                                    </label>
+                                                    <label class="radio">
+                                                        <input type="radio" name="pplTimeSlotConsideration" value="No"
+                                                            checked>
+                                                        No
+                                                    </label>
+                                                </div>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+
+
+                                    </aside>
+                                    <br>
+
+
+                                </div>
+                                <br>
+                                <div class="buttons is-right">
+
+                                    <div id="createdraftbtn" class="button is-warning is-medium is-responsive"
                                         style="border-color: black;"
-                                            onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
-                                        
-                                            Create Draft
-                                        </div>
+                                        onclick="confirmcreate('<%=presentstartday%>','<%=presentendday%>')">
+                                        Create Draft
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <%}%>
-                        <%}%>
-
-
-
 
 </div>
-<script>
-    function backback() {
-        location.assign("/home");
-    }
+<%}%>
+    <%}%>
 
-    async function confirmcreate(startdaydatetype, enddaydatetype) {
-        var r = confirm("Confirm to create?");
-        var boxlist = [];
 
-        if (r) {
-            alert("The Schedule takes time for generation.\n\nDO NOT leave the page or refresh the page while generating.\n\nOr else, the generation process may requires to start over again");
-            // document.getElementById("createdraftbtn").innerText = "";
-            // document.getElementById("createdraftbtn").classList.add("is-loading");
-            document.getElementById("createdraftbtn").innerHTML = "<div class=\"loader\" id=\"loader\" style=\"visibility:visible; align-self: center;\"></div>";
-            document.getElementById("createdraftbtn").setAttribute("disabled","");
-            var typeOfPresentlist = document.getElementsByName("typeOfPresent");
-            var typeOfPresent;
 
-            for (var i = 0; i < typeOfPresentlist.length; i++) {
-                if (typeOfPresentlist[i].checked) {
-                    typeOfPresent = typeOfPresentlist[i].value;
+
+        </div>
+        <script>
+            var roomList = new Array();
+            function backback() {
+                location.assign("/home");
+            }
+            function addRoom(value) {
+
+                if (value != "null" && roomList.find((rm) => rm == value) == undefined) {
+                    document.getElementById("roomlist").innerHTML += "<li class = \"SelectedRooms\" id = \"" + value + "\"><a>" + value + ""
+                        + "<span class=\"tab\"></span><button class = \"buttions is-right redbutton\" onclick =\"removeRoom('" + value + "')\">Remove</button></a></li>"
+
+                    roomList.push(value);
+                    console.log("current Roomlist", roomList)
+
+                }
+                document.getElementById("UpdateRoomSelect").innerHTML = defaulthtml("room");
+                document.getElementById("UpdateCampusSelect").innerHTML = defaulthtml("campus");
+            }
+            function removeRoom(value) {
+                roomList.sort((a, b) => a - b)
+                var index = roomList.findIndex((rm) => rm == value);
+
+                document.getElementById(value).innerHTML = "";
+
+                let spliced = roomList.splice(index, 1);
+                console.log("removed list", roomList, "  ", index, "  ", spliced)
+            }
+            function getRoomForThisCampus() {
+                if (document.getElementById("UpdateCampusSelect").value != "null") {
+                    var variable = JSON.parse(JSON.stringify({
+                        Campus: document.getElementById("UpdateCampusSelect").value
+                    }))
+                    fetch_data(variable)
+                } else {
+                    document.getElementById("UpdateRoomSelect").innerHTML = defaulthtml;
+
                 }
             }
-            var requestbody = JSON.stringify({ typeOfPresent: typeOfPresent })
-           
-            var response = await fetch("/scheduledesign/genAvailable", {
-                method: "POST",
-                body: requestbody
-            });
-            if (response.ok) {
-                // response = await fetch("/scheduledesign/nqueenversion", {
-                //     method: "POST",
-                //     body: requestbody
-                // });
-                response = await fetch("/scheduledesign/Combinversion", {
-                    method: "POST",
-                    body: requestbody
-                });
-                if (response.ok) {
-                    document.getElementById("loader").style.visibility = "hidden";
-                    location.assign(response.url)
-                }else{
-                    alert("Error exists when using combination version")
+            function defaulthtml(command) {
+                if (command == "room") {
+                    return "\<option value=\"null\"\>Room</option\>\n";
+                } else {
+                    return "<option value=\"null\">Campus</option><%for( var a=0 ;a < Campus.length;a++){%>"
+                        + "<option value=\"<%=Campus[a].Campus%>\"><%=Campus[a].Campus%> </option><%}%>"
+                    //"\<option value=\"null\"\>Campus</option\>\n";
                 }
-                
-            }else{
-               alert("Error exists when generating")
-            }
-        }
 
-    }
-</script>
+            }
+
+            function fetch_data(variable) {
+                console.log(variable)
+
+                fetch("/scheduledesign/getdata?Campus=" + variable.Campus).then(function (response) {
+                    return response.json();
+                }).then(function (responseData) {
+                    var html = "";
+                    html += "\<option value=\"null\"\>Room</option\>\n";
+                    responseData.forEach(element => {
+                        html += "<option value=\"" + element.rid + "\">" + element.rid + "</option> \n";
+                    });
+                    document.getElementById("UpdateRoomSelect").innerHTML = "";
+                    document.getElementById("UpdateRoomSelect").innerHTML = html;
+                })
+
+
+            }
+
+            async function confirmcreate(startdaydatetype, enddaydatetype) {
+
+                var ClassroomTTB = document.getElementsByName("RoomTTBConsideration");
+                var pplTTB = document.getElementsByName("pplTTBConsideration");
+                var pplTimeslot = document.getElementsByName("pplTimeSlotConsideration");
+
+
+                for (var i = 0; i < ClassroomTTB.length; i++) {
+                    if (ClassroomTTB[i].checked) {
+                        ClassroomTTB = ClassroomTTB[i].value;
+                    }
+                }
+                for (var i = 0; i < pplTTB.length; i++) {
+                    if (pplTTB[i].checked) {
+                        pplTTB = pplTTB[i].value;
+                    }
+                }
+                for (var i = 0; i < pplTimeslot.length; i++) {
+                    if (pplTimeslot[i].checked) {
+                        pplTimeslot = pplTimeslot[i].value;
+                    }
+                }
+                ClassroomTTB= "No"
+                        pplTTB= "Yes"
+                        pplTimeslot= "Yes",
+                        roomList= [
+                            "FSC801C",
+                            "FSC801D",
+                            "FSC901C",
+                            "FSC901D",
+                            "FSC901E",
+                            "RRS638",
+                            "RRS735"];
+                roomList.sort();
+                // console.log(ClassroomTTB)
+                var r = confirm("Confirm to create with following deatils?\n"
+                    + "Classrooms for arragenment : " + roomList + "\n\nConsidering Timetable of Classrooms : " + ClassroomTTB
+                    + "\n\nConsidering Timetable of Staff and Students : " + pplTTB
+                    + "\n\nConsidering Unavailable Timeslots of Staff and Students : " + pplTimeslot);
+                var boxlist = [];
+
+                if (r) {
+                    alert("The Schedule takes time for generation.\n\nDO NOT leave the page or refresh the page while generating.\n\nOr else, the generation process may requires to start over again");
+                    // document.getElementById("createdraftbtn").innerText = "";
+                    // document.getElementById("createdraftbtn").classList.add("is-loading");
+                    document.getElementById("createdraftbtn").innerHTML = "<div class=\"loader\" id=\"loader\" style=\"visibility:visible; align-self: center;\"></div>";
+                    document.getElementById("createdraftbtn").setAttribute("disabled", "");
+                    var typeOfPresentlist = document.getElementsByName("typeOfPresent");
+                    var typeOfPresent;
+
+                    for (var i = 0; i < typeOfPresentlist.length; i++) {
+                        if (typeOfPresentlist[i].checked) {
+                            typeOfPresent = typeOfPresentlist[i].value;
+                        }
+                    }
+                    // var requestbody = JSON.stringify({
+                    //     typeOfPresent: typeOfPresent,
+                    //     ClassroomTTB: ClassroomTTB,
+                    //     pplTTB: pplTTB,
+                    //     pplTimeslot: pplTimeslot,
+                    //     roomList: roomList
+                    // })
+                    var requestbody = JSON.stringify({
+                        typeOfPresent: typeOfPresent,
+                        ClassroomTTB: "No",
+                        pplTTB: "Yes",
+                        pplTimeslot: "Yes",
+                        roomList: [
+                            "FSC801C",
+                            "FSC801D",
+                            "FSC901C",
+                            "FSC901D",
+                            "FSC901E",
+                            "RRS638",
+                            "RRS735"
+                        ]
+                    })
+
+                    var response = await fetch("/scheduledesign/genAvailable", {
+                        method: "POST",
+                        body: requestbody
+                    });
+                    if (response.ok) {
+                        // response = await fetch("/scheduledesign/nqueenversion", {
+                        //     method: "POST",
+                        //     body: requestbody
+                        // });
+                        // response = await fetch("/scheduledesign/startschedule", {
+                        //     method: "POST",
+                        //     body: requestbody
+                        // });
+                        response = await fetch("/scheduledesign/Combinversion", {
+                            method: "POST",
+                            body: requestbody
+                        });
+                        if (response.ok) {
+                            document.getElementById("loader").style.visibility = "hidden";
+                            location.assign(response.url)
+                        } else {
+                            alert("Error exists when using combination version")
+                        }
+
+                    } else {
+                        alert("Error exists when generating")
+                    }
+                }
+
+            }
+        </script>

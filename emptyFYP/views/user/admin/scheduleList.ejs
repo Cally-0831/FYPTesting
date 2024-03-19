@@ -50,7 +50,7 @@
                                 <tr>
                                     <th colspan="5"
                                         style="text-align:center; font-size: calc(15px + 0.390625vw); background-color: rgb(250, 81, 81);">
-                                        Untackled Cases
+                                        Untackled Cases : <%=planhandlecase.length%>
                                     </th>
                                 </tr>
                                 <tr>
@@ -104,7 +104,7 @@
                                     <tr>
                                         <th colspan="9"
                                             style="text-align:center; font-size: calc(20px + 0.390625vw); background-color: bisque;">
-                                            Plan Number : <%=req.query.planNo%>
+                                            Plan Number : <%=req.query.planNo%> (Handled : <%=plandetails.length%>)
                                                 <div class="buttons is-responsive is-right is-bordered">
                                                     <div class="button greenbutton"
                                                         onclick="output('<%=req.query.planNo%>')">
@@ -195,6 +195,12 @@
                                                                             <%=element.Classroom%>
                                                                         </td>
                                                                         <%break;%>
+                                                                        <%case "FSC901E" :%>
+                                                                <td
+                                                                    style="background-color: rgb(57, 111, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                    <%=element.Classroom%>
+                                                                </td>
+                                                                <%break;%>
                                                                             <%case "RRS638" :%>
                                                                                 <td
                                                                                     style="background-color: rgb(147, 249, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">

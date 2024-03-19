@@ -660,104 +660,7 @@ module.exports = {
         }
         return res.ok();
     },
-    /** 
-        uploadpairlist: async function (req, res) {
-            var db = await sails.helpers.database();
-            var pool = await sails.helpers.database2();
-            (req.body).forEach(i => {
-                if (req.body[i].sid == "undefined" || req.body[i].studentname == "undefined" || req.body[i].stupassword == "undefined") { return res.status(401).json("Invalid Input") }
-            });
-    
-            for (var i = 0; i < req.body.length; i++) {
-                console.log("\n\n\n\n\n")
-                console.log(req.body[i]);
-    
-    
-                thisistheline = "insert IGNORE into allusers values(\"" +
-                    req.body[i].studentname + "\"\,\""
-                    + req.body[i].sid + "\"\,\"" +
-                    req.body[i].stupassword + "\"\,\"ACTIVE\"\,\"0\"\,\"stu\"\)\;\n";
-                console.log(thisistheline);
-                db.query(thisistheline, function (err, result) {
-                    if (err) {
-                        console.log("error happened at StudentListContorller: uploadpairlist");
-                        res.status(401).json("Error happened when excuting : " + thisistheline);
-                    };
-                    console.log("1 stu record inserted");
-    
-    
-                });
-                thisistheline = "insert IGNORE into supervisorpairstudent values(\"" +
-                    req.session.userid + "\"\,\""
-                    + req.body[i].sid + "\"\,\"" +
-                    req.body[i].topic + "\"\);";
-                db.query(thisistheline, function (err, result) {
-                    if (err) {
-                        console.log("error happened at StudentListContorller: uploadpairlist");
-                        res.status(401).json("Error happened when excuting : " + thisistheline);
-    
-                    };
-                    console.log("1 suppairstu record inserted");
-                });
-    
-            }
-    
-    
-    
-    
-    
-            for (var i = 0; i < req.body.length; i++) {
-    
-    
-                thisistheline = "insert IGNORE into allusers values(\"" +
-                    req.body[i].observername + "\"\,\""
-                    + req.body[i].oid + "\"\,\"" +
-                    req.body[i].obspassword + "\"\,\"ACTIVE\"\,\"0\"\,\"obs\"\)\;\n";
-                console.log(thisistheline);
-                db.query(thisistheline, function (err, result) {
-                    console.log(thisistheline);
-                    if (err) {
-                        console.log("error happened at StudentListContorller: uploadpairlist");
-                        res.status(401).json("Error happened when excuting : " + thisistheline);
-                    };
-                    console.log("1 obs record inserted");
-                });
-                thisistheline = "insert IGNORE into supervisorpairobserver values(\"" +
-                    req.session.userid + "\"\,\""
-                    + req.body[i].oid + "\"\);";
-                db.query(thisistheline, function (err, result) {
-                    if (err) {
-                        console.log("error happened at StudentListContorller: uploadpairlist");
-                        res.status(401).json("Error happened when excuting : " + thisistheline);
-    
-                    };
-                    console.log("1 suppairobs record inserted");
-                });
-    
-            }
-            console.log("\n\n\n\n\n")
-    
-            for (var i = 0; i < req.body.length; i++) {
-    
-                thisistheline = "insert IGNORE into observerpairstudent values(\"" +
-                    req.body[i].oid + "\"\,\""
-                    + req.body[i].sid + "\"\);";
-                db.query(thisistheline, function (err, result) {
-                    if (err) {
-                        console.log("error happened at StudentListContorller: uploadpairlist");
-                        res.status(401).json("Error happened when excuting : " + thisistheline);
-    
-                    };
-                    console.log("1 obspairstud record inserted");
-                });
-    
-            }
-    
-            return res.ok();
-    
-    
-        },
-    */
+   
     checkuploadstudentlistdeadline: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -814,7 +717,7 @@ module.exports = {
         // step 1 pair according to the number of supervising
         for(var i = 0 ; i < descSupervisingNumList.length ; i ++){
             var supervisor = descSupervisingNumList[i];
-            var getnotPairedStudentlist = "select supervisorpairstudent.sid from student left join supervisorpairstudent on supervisorpairstudent.sid = student.sid where supervisorpairstudent.tid != \""+supervisor.tid+"\" and student.sid not in(select sid from observerpairstudent where observerpairstudent.oid != \"null\")"
+            var getnotPairedStudentlist = "select supervisorpairstudent.sid from student left join supervisorpairstudent on supervisorpairstudent.sid = student.sid where supervisorpairstudent.tid != \""+supervisor.tid+"\" and student.sid not in(select sid from observerpairstudent where observerpairstudent.oid != null)"
             console.log(">>getnotPairedStudentlist ",getnotPairedStudentlist)
             var notPairedStudentlist = await new Promise((resolve) => {
                 pool.query(getnotPairedStudentlist, (err, res) => {

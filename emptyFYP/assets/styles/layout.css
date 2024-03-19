@@ -520,7 +520,10 @@ img {
   border-bottom: 16px solid red;
   border-left: 16px solid pink;
 }
-
+.tab {
+  display: inline-block;
+  margin-left: 40px;
+}
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
