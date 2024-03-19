@@ -793,7 +793,7 @@ module.exports = {
                                 var json = JSON.parse(string);
                                 var ans = json;
                                 if (ans.length > 0) {
-                                    
+
                                     resolve(ans)
                                 } else {
                                     // console.log("no timeslot")
@@ -1906,7 +1906,7 @@ module.exports = {
                 var copyTemplatecount = 0;
                 var sameTimeslotinsertcount = 0;
                 var thisTimeslotSelectedAy = new Array();
-                copyTemplate.Schedule.sort((a,b) => a.room-b.room);
+                copyTemplate.Schedule.sort((a, b) => a.room - b.room);
                 // for (var timeslot = 0; timeslot < 10; timeslot++) {
                 for (var timeslot = 0; timeslot < copyTemplate.Schedule.length; timeslot++) {
                     // console.log("\n>> this timeslote needs ", copyTemplate.Schedule[timeslot].roomcount, "   ", copyTemplate.Schedule[timeslot].timeslot);
@@ -1925,9 +1925,25 @@ module.exports = {
                     if (PresentationList.length > 0) {
 
                         var index = randomNum(PresentationList);
-                        var indexInArray = (copyTemplate.Schedule[timeslot].StudentAy).findIndex((element) => element.sid == PresentationList[index].SID);
+                        var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
+                        themostFirstroom = themostFirstroom.filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
+                        themostFirstroom = themostFirstroom[0];
 
-                        setAppear(copyTemplate.Schedule[timeslot], PresentationList[index], 1);
+                        // console.log(themostFirstroom)
+
+                        themostFirstroom = copyTemplate.Schedule.findIndex((room) => room.timeslot == themostFirstroom.timeslot && room.room == themostFirstroom.room)
+                        // console.log(themostFirstroom)
+
+
+                        // var indexInArray = (copyTemplate.Schedule[timeslot].StudentAy).findIndex((element) => element.sid == PresentationList[index].SID);
+                        // console.log(indexInArray)
+                        var indexInArray = copyTemplate.Schedule[themostFirstroom].StudentAy.findIndex((element) => element.sid == PresentationList[index].SID)
+                        // console.log(indexInArray)
+                        // setAppear(copyTemplate.Schedule[timeslot], PresentationList[index], 1);
+                        setAppear(copyTemplate.Schedule[themostFirstroom], PresentationList[index], 1);
+
+
+
                         // console.log(timeslot,"   ",copyTemplate.Schedule[timeslot].room,"    ", copyTemplate.Schedule[timeslot].SQLdate," ",copyTemplate.Schedule[timeslot].SQLtime , "    ", copyTemplate.Schedule[timeslot].StudentAy.filter((student)=> student.appears ==1)[0])
                         // copyTemplate.Schedule[timeslot].StudentAy[indexInArray].appears = 1;
                         // console.log(">> Selected ", PresentationList[index].SID, " checking ", copyTemplate.Schedule[timeslot].StudentAy[indexInArray]);
@@ -3395,9 +3411,9 @@ module.exports = {
 
 
 
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        // for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
 
-            // for (var datecombin = 10; datecombin < 20; datecombin++) {
+        for (var datecombin = 22; datecombin < 23; datecombin++) {
             // for (var datecombin = 11; datecombin < 20; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
             var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
