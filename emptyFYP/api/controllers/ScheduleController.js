@@ -3555,11 +3555,17 @@ module.exports = {
 
         async function checkAnyManalHandling(Plan, PlanNo) {
             var TotalStudentList = await getPairingList();
-            if (TotalStudentList.length > Plan.Schedule[0].StudentAy.length) {
+            var appeared = new Array();
+            Plan.Schedule.forEach(element => {
+                if(element.StudentAy.find((present)=> present.appears ==1) != undefined){
+                    appeared.push(element.StudentAy.find((present)=> present.appears ==1))
+                }
+            });
+            if (TotalStudentList.length >= appeared.length) {
                 var needtoTackle = new Array();
                 var count = 0;
                 TotalStudentList.forEach(Student => {
-                    if (Plan.Schedule[0].StudentAy.find((presentor) => presentor.sid == Student.sid) == undefined) {
+                    if (appeared.find((presentor) => presentor.sid == Student.sid) == undefined) {
                         needtoTackle.push(Student)
                     }
                 });
@@ -3985,7 +3991,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                     var bestresults = AllPopulation.filter((Plans) => Plans.Penalty == AllPopulation[0].Penalty);
                     var bestPlan = bestresults[randomNum(bestresults)];
                     var checkSuccess = false;
-                    if (bestPlan.tacklecount == AllPopulation[0].Schedule[0].StudentAy.length) {
+                    if (bestPlan.tacklecount == totalStudNum) {
                         checkSuccess = true;
                     }
                     changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
@@ -3996,7 +4002,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
                                     bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
                             } else {
-                                // checkAnyManalHandling(bestPlan,datecombin)
+                                // await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
                                     bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Manual Handling", req.body.typeOfPresent)
 
@@ -4004,6 +4010,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
 
                         }
                     }
+                    console.log(checkSuccess," here")
                     if (checkSuccess) {
 
                         finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: datecombin, planStatus: 0, Penalty: bestPlan.Penalty, tacklecount: bestPlan.tacklecount })))
@@ -6628,8 +6635,8 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
             var newdatestring = newdate.toLocaleDateString("en-GB").split("/");
             var timestampstring = newdatestring[2] + "-" + newdatestring[1] + "-" + newdatestring[0] + " " + newdate.toLocaleTimeString("en-GB");
             var getRoomquery = "select distinct(rid) as Room from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid != \"\" "
-                + " and (rid not in (select rid from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (endtime >= time(\"" + newdate.toLocaleTimeString("en-GB") + "\") and time(\"" + newdate.toLocaleTimeString("en-GB") + "\") >= starttime)) "
-                + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) <= timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) >= timestamp(\"" + timestampstring + "\")))"
+                + " and (rid not in (select rid from allclass where Campus = \"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (endtime > time(\"" + newdate.toLocaleTimeString("en-GB") + "\") and time(\"" + newdate.toLocaleTimeString("en-GB") + "\") > starttime)) "
+                + " and rid not in (select rid from allclassroomtimeslot where Campus =  \"" + req.query.Campus + "\" and (timestamp(concat(StartDate,\" \",startTime)) < timestamp(\"" + timestampstring + "\") and timestamp(concat(endDate,\" \",endTime)) > timestamp(\"" + timestampstring + "\")))"
                 + " and concat(campus,rid) not in (select concat(campus,rid) from allschedulebox where boxdate = \"" + timestampstring + "\"));"
                 ;
             console.log(getRoomquery)
