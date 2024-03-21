@@ -1805,7 +1805,8 @@ module.exports = {
                 Schedule: Schedule,
                 tacklecount: 0,
                 Penalty: 0,
-                able: checkRoomcounts
+                able: checkRoomcounts,
+                List: preSetClassroomList
             }))
             // console.log(TotalTimeslots)
             var starttime = TotalTimeslots.sort((a, b) => a.availablestarttime - b.availablestarttime)[0].availablestarttime;
@@ -1882,6 +1883,56 @@ module.exports = {
 
         }
 
+        function DeternminWhichCampusFirst(sameTimeslot) {
+            var usedFSCRoom = 0;
+            var usedRRSRoom = 0;
+
+
+            sameTimeslot.forEach(element => {
+                if (preSetFSCList.find((room) => room == element.room)) {
+                    usedFSCRoom++;
+                } else if (preSetRRSList.find((room) => room == element.room)) {
+                    usedRRSRoom++;
+                }
+            });
+            // console.log(sameTimeslot.filter((room) => room.StudentAy.find((present) => present.appears == 1) == undefined))
+
+            if (usedFSCRoom >= usedRRSRoom) {
+                if (sameTimeslot.find((room) => preSetFSCList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined)) == undefined) {
+                    // console.log("case 1 in determin")
+                    return sameTimeslot.find((room) => preSetRRSList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined))
+                } else {
+                    // console.log("case 2 in determin")
+                    return sameTimeslot.find((room) => preSetFSCList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined));
+                }
+
+            } else {
+                if (sameTimeslot.find((room) => preSetRRSList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined)) == undefined) {
+                    // console.log("case 3 in determin")
+                    return sameTimeslot.find((room) => preSetFSCList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined));
+                } else {
+                    // console.log("case 4 in determin")
+                    return sameTimeslot.find((room) => preSetRRSList.find((room2) => room2 == room.room) && (room.StudentAy.find((present) => present.appears == 1) == undefined))
+                }
+            }
+        }
+
+        function sortTimeslotInOrder(Template) {
+            Template.Schedule = Template.Schedule.sort((a, b) => a.timeslot - b.timeslot)
+            return Template;
+        }
+
+        function sortTimeslotInPivot(Template) {
+            var pivot = (new Date(Template.Schedule[Math.round((randomNum(Template.Schedule)) * 0.5)].timeslot)).getTime();
+            Template.Schedule = copyarray(Template.Schedule.sort((a, b) => Math.abs((new Date(a.timeslot)).getTime() - pivot) - Math.abs((new Date(b.timeslot)).getTime() - pivot) || a.room - b.room));
+            return Template
+        }
+
+        function sortTimeslotInRandom() {
+            Template.Schedule = Template.Schedule.sort(() => 0.5 - Math.random())
+            return Template
+        }
+
         async function InitialGeneration(Population, Template) {
             /**
              *   Must FullFill Constraints:
@@ -1901,8 +1952,8 @@ module.exports = {
                     // console.log("checking PopNum ", PopNum)
                     for (var time = 0; time < Population[PopNum].Schedule.length;) {
                         var thistimeslotCombin = Population[PopNum].Schedule.filter((timeslot) => timeslot.timeslot == Population[PopNum].Schedule[time].timeslot);
-                        var currenttimeslotCombin = currentPop.Schedule.filter((timeslot) => timeslot.timeslot == currentPop.Schedule[time].timeslot);
-
+                        var currenttimeslotCombin = currentPop.Schedule.filter((timeslot) => timeslot.timeslot == Population[PopNum].Schedule[time].timeslot);
+                        // console.log("thistimeslotCombin ",currenttimeslotCombin)
 
                         for (var roomcount = 0; roomcount < Population[PopNum].Schedule[time].roomcount; roomcount++) {
                             var result = checkDuplicateStudentAy(thistimeslotCombin[roomcount].StudentAy, currenttimeslotCombin[roomcount].StudentAy);
@@ -1934,11 +1985,8 @@ module.exports = {
                 };
                 return false;
             }
-            var AllGenedVersion = new Array();
-            var AllPopulation = new Array();
-            var generationcount = 0;
-            var limit = 20;
 
+            var limit = 200;
             var progressbarA = multi.newBar("Initital Generation Progress: [:bar] :percent :etas", {
                 complete: "=",
                 incomplete: " ",
@@ -1952,51 +2000,124 @@ module.exports = {
                 width: 50,
                 total: Population
             })
+
+            // while (AllPopulation.length < 1) {
+
+            // copyTemplate.Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
+            // copyTemplate.Schedule.sort(() => 0.5 - Math.random())
+            // console.log(copyTemplate.Schedule[(copyTemplate.Schedule.length-1)*0.5])
+            // console.log(Math.round((copyTemplate.Schedule.length-1)*0.5))
+            // var pivot = (new Date(copyTemplate.Schedule[Math.round((randomNum(copyTemplate.Schedule)) * 0.5)].timeslot)).getTime();
+            // copyTemplate.Schedule = copyarray(copyTemplate.Schedule.sort((a, b) => Math.abs((new Date(a.timeslot)).getTime() - pivot) - Math.abs((new Date(b.timeslot)).getTime() - pivot) || a.room - b.room ));
+            // copyTemplate.Schedule.sort(() => 0.5 - Math.random())
+            // console.log(copyTemplate.Schedule[0].timeslot)
+            // for (var timeslot = 10; timeslot < 20; timeslot++) {
+            // copyTemplate.Schedule.forEach(element => {
+            //     console.log(element.room,"  ",element.SQLdate,"  ",element.SQLtime)
+            // });
+
+            var AllPopulation = new Array();
+            var copyTemplate = JSON.parse(JSON.stringify(Template))
+            var AllGenedVersion = new Array();
+
+            var generationcount = 0;
+
+            var WholePlanAccordingtoTime = new Array();
+            var WholePlanSelectedAy = new Array();
+            var copyTemplatecount = 0;
+            var sameTimeslotinsertcount = 0;
+            var thisTimeslotSelectedAy = new Array();
+
+
+
             while (AllPopulation.length < Population) {
-                // while (AllPopulation.length < 1) {
-                var WholePlanAccordingtoTime = new Array();
-                var WholePlanSelectedAy = new Array();
-                var copyTemplate = JSON.parse(JSON.stringify(Template))
-                var copyTemplatecount = 0;
-                var sameTimeslotinsertcount = 0;
-                var thisTimeslotSelectedAy = new Array();
-                copyTemplate.Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
-                // console.log(copyTemplate.Schedule.length)
-                // for (var timeslot = 10; timeslot < 20; timeslot++) {
+
                 for (var timeslot = 0; timeslot < copyTemplate.Schedule.length; timeslot++) {
                     // console.log()
-
+                    var themostFirstroom;
                     var PresentationList = await availblepairsforthistimeslot(copyTemplate.Schedule[timeslot].SQLdate, copyTemplate.Schedule[timeslot].SQLtime);
                     // console.log(copyTemplate.Schedule[timeslot].SQLdate, "  ", copyTemplate.Schedule[timeslot].SQLtime)
                     // console.log("before reduce ", PresentationList.length)
                     PresentationList = reduceByCurrentExistingStudent(copyTemplate.Schedule[timeslot].StudentAy, PresentationList);
                     PresentationList = reducePairBySID(WholePlanSelectedAy, PresentationList);
                     var themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
+
+
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length;
                     // console.log(sameTimeslotinsertcount," the total caninsert count");
+
                     var insertedroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1));
                     themostFirstroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
-                    // insertedroom.forEach(element => {
-                    //     console.log(element.StudentAy.filter((stu)=>stu.appears == 1))
-                    // });
                     sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length - insertedroom.length;
                     // console.log(sameTimeslotinsertcount," after minus the emptyroom num count");
-                    themostFirstroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom)))[0];
-                    themostFirstroom = copyTemplate.Schedule.findIndex((room) => room.timeslot == themostFirstroom.timeslot && room.room == themostFirstroom.room)
-                    // console.log("check timeslot count", timeslot, "  ", themostFirstroom);
-                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present) => present.availablestarttime == copyTemplate.Schedule[themostFirstroom].timeslot)
-                    //   console.log(WholePlanSelectedAy)
-                    var checkingbeforeredue = 0;
-                    checkingbeforeredue = PresentationList.length;
-                    // console.log("after reduce SID", PresentationList.length)
-                    // console.log(thisTimeslotSelectedAy)
+
+                    themostFirstroom = DeternminWhichCampusFirst(copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room))
+                    thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present) => present.availablestarttime == copyTemplate.Schedule[timeslot].timeslot)
                     if (sameTimeslotinsertcount != 0 && sameTimeslotinsertcount != undefined) {
 
                         // thisTimeslotSelectedAy == WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
                         PresentationList = reducePairBySupObs(thisTimeslotSelectedAy, PresentationList);
                     }
-                    // if (copyTemplate.Schedule[timeslot].SQLdate == "2024-04-12") {
-                    //     console.log(thisTimeslotSelectedAy)
+                    // console.log(PresentationList.length,"  hellop")
+                    // if (PresentationList.length != 0) {
+                    //     while (themostFirstroom == undefined) {
+                    //         if (timeslot != copyTemplate.Schedule.length - 1) {
+                    //             timeslot++;
+                    //             console.log(method," ",timeslot, "/", copyTemplate.Schedule.length, " addind timeslot ")
+                    //             PresentationList = await availblepairsforthistimeslot(copyTemplate.Schedule[timeslot].SQLdate, copyTemplate.Schedule[timeslot].SQLtime);
+                    //             // console.log(copyTemplate.Schedule[timeslot].SQLdate, "  ", copyTemplate.Schedule[timeslot].SQLtime)
+                    //             // console.log("before reduce ", PresentationList.length)
+                    //             PresentationList = reduceByCurrentExistingStudent(copyTemplate.Schedule[timeslot].StudentAy, PresentationList);
+                    //             PresentationList = reducePairBySID(WholePlanSelectedAy, PresentationList);
+                    //             themostFirstroom = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room)
+
+
+                    //             sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length;
+                    //             // console.log(sameTimeslotinsertcount," the total caninsert count");
+
+                    //             insertedroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1));
+                    //             themostFirstroom = copyarray(JSON.parse(JSON.stringify(themostFirstroom))).filter((emptyroom) => emptyroom.StudentAy.find((present) => present.appears == 1) == undefined);
+                    //             sameTimeslotinsertcount = copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room).length - insertedroom.length;
+                    //             // console.log(sameTimeslotinsertcount," after minus the emptyroom num count");
+
+                    //             themostFirstroom = DeternminWhichCampusFirst(copyTemplate.Schedule.filter((time) => time.timeslot == copyTemplate.Schedule[timeslot].timeslot).sort((a, b) => a.room - b.room))
+                    //             thisTimeslotSelectedAy = WholePlanSelectedAy.filter((present) => present.availablestarttime == copyTemplate.Schedule[timeslot].timeslot)
+                    //             if (sameTimeslotinsertcount != 0 && sameTimeslotinsertcount != undefined) {
+
+                    //                 // thisTimeslotSelectedAy == WholePlanSelectedAy.filter((present)=> present.availablestarttime == copyTemplate.Schedule[themostFirstroom].startTime)
+                    //                 PresentationList = reducePairBySupObs(thisTimeslotSelectedAy, PresentationList);
+                    //             }
+                    //             // console.log(themostFirstroom)
+                    //         } else {
+                    //             break;
+                    //         }
+
+                    //     }
+                    // }
+
+
+                    //    if(copyTemplate.Schedule[timeslot].SQLdate == "2024-04-17"){
+                    //      console.log("check here first",themostFirstroom)
+                    //    }
+
+                    // insertedroom.forEach(element => {
+                    //     console.log(element.StudentAy.filter((stu)=>stu.appears == 1))
+                    // });
+
+                    if (themostFirstroom != undefined) {
+                        themostFirstroom = copyTemplate.Schedule.findIndex((room) => room.timeslot == themostFirstroom.timeslot && room.room == themostFirstroom.room)
+                        // console.log("check timeslot count", timeslot, "  ", themostFirstroom);
+
+                        //   console.log(WholePlanSelectedAy)
+                        var checkingbeforeredue = 0;
+                        checkingbeforeredue = PresentationList.length;
+                    }
+
+                    // console.log("after reduce SID", PresentationList.length)
+                    // console.log(thisTimeslotSelectedAy)
+
+                    // if (copyTemplate.Schedule[timeslot].SQLdate == "2024-04-17") {
+                    //     console.log(themostFirstroom)
                     //     console.log( checkingbeforeredue," after reduce reducePairBySupObs", PresentationList.length," ",copyTemplate.Schedule[timeslot].SQLdate,"  ",copyTemplate.Schedule[timeslot].SQLtime)
                     // }
                     // console.log("after reduce reducePairBySupObs", PresentationList.length)
@@ -2032,8 +2153,10 @@ module.exports = {
                         setAppear(copyTemplate.Schedule[themostFirstroom], PresentationList[index], 1);
                         // console.log(PresentationList[index].SID, "   ", PresentationList[index].TID, "   ", PresentationList[index].OID)
 
-                        // if (copyTemplate.Schedule[themostFirstroom].SQLdate == "2024-04-12" || copyTemplate.Schedule[timeslot].SQLdate == "2024-04-12") {
+                        // if (copyTemplate.Schedule[themostFirstroom].SQLdate == "2024-04-17" || copyTemplate.Schedule[timeslot].SQLdate == "2024-04-17") {
                         //     console.log(themostFirstroom, "   ", copyTemplate.Schedule[themostFirstroom].room, "    ", copyTemplate.Schedule[themostFirstroom].SQLdate, " ", copyTemplate.Schedule[themostFirstroom].SQLtime, "    ", copyTemplate.Schedule[themostFirstroom].StudentAy.filter((student) => student.appears == 1)[0])
+                        //     console.log(">> Selected ", PresentationList[index].SID, " checking ", copyTemplate.Schedule[timeslot].StudentAy[indexInArray]);
+
                         // }
                         // copyTemplate.Schedule[timeslot].StudentAy[indexInArray].appears = 1;
                         // console.log(">> Selected ", PresentationList[index].SID, " checking ", copyTemplate.Schedule[timeslot].StudentAy[indexInArray]);
@@ -2079,7 +2202,7 @@ module.exports = {
                         }
 
                     } else {
-                        var currentdate = copyTemplate.Schedule[themostFirstroom].timeslot;
+                        var currentdate = copyTemplate.Schedule[timeslot].timeslot;
                         var lastdate;
                         // console.log(WholePlanAccordingtoTime.length)
                         if (WholePlanSelectedAy.length != 0) {
@@ -2127,8 +2250,9 @@ module.exports = {
                     // WholePlanSelectedAy.push(thisTimeslotSelectedAy);
                 }
                 copyTemplate.tacklecount = copyTemplatecount;
-                // console.log("here ", copyTemplate.tacklecount)
+                console.log("here ", copyTemplate.tacklecount)
                 if (copyTemplate.tacklecount == Template.Schedule[0].StudentAy.length) {
+                    // console.log(copyTemplate)
                     if (!reduceDuplicate(AllPopulation, copyTemplate)) {
                         // console.log(copyTemplate.Schedule[0].StudentAy.filter((student)=> student.appears ==1));
                         copyTemplate.Penalty = await Penalty(copyTemplate.Schedule)
@@ -2205,6 +2329,9 @@ module.exports = {
                 AllGenedVersion = AllGenedVersion.filter((plans) => plans.tacklecount == max)
                 Obj = JSON.parse(JSON.stringify({ AllPopulation: AllGenedVersion, status: 0 }))
             }
+
+
+            console.log(Obj)
 
             var ProcessEnd = new Date()
             console.log("Complete Generating Initial Generation with status :", Obj.status, " ", Obj.AllPopulation[0].tacklecount);
@@ -2423,7 +2550,7 @@ module.exports = {
                     appearingcount = 0
                 }
                 // console.log(staff, "   ", sitcount, "  ", reward, "   ", isConsec, "    ", movementCount, "   ", roomPen, "   ", dayPen, " ", appearingcount, "\n")
-                Penaltymark += isConsec * 10 + roomPen * 5 + dayPen * 2 - reward * 1.5 + appearingcount * 100
+                Penaltymark += isConsec * 10 + roomPen * 5 + dayPen * 2 - reward + appearingcount * 100
             });
 
             // console.log(Penaltymark)
@@ -2570,6 +2697,8 @@ module.exports = {
 
         async function MixByStudent(Pairs, StudentStart, StudentEnd) {
 
+            // console.log(Pairs[0].tacklecount + " before1 " + Pairs[1].tacklecount)
+            // console.log(Pairs[0].Schedule[S] + " before1 " + Pairs[1].tacklecount)
             var ChildA = JSON.parse(JSON.stringify(Pairs[0]));
             var ChildB = JSON.parse(JSON.stringify(Pairs[1]));
 
@@ -2613,9 +2742,9 @@ module.exports = {
                 // console.log("check here",timeslot.StudentAy.length)
                 var orgStudent = timeslot.StudentAy.find((student) => student.appears == 1);
 
-                // console.log(">>old ", orgStudent)
-                var newStudent = AChangetoB[count].StudentAy.find((student) => student.appears == 1);
 
+                var newStudent = AChangetoB[count].StudentAy.find((student) => student.appears == 1);
+                // console.log(">>old ", orgStudent)
                 // console.log(">>new ", newStudent)
                 if (newStudent != undefined) {
 
@@ -2625,6 +2754,7 @@ module.exports = {
                             setAppear(timeslot, orgStudent, 0)
                             setAppear(timeslot, newStudent, 1)
                         } else {
+                            // console.log("case2", orgStudent, " ", newStudent);
                             setAppear(timeslot, newStudent, 1)
                         }
                         // change orgstu orgSup and orgOb appears to 0
@@ -2670,17 +2800,18 @@ module.exports = {
                         // Print(ChildB)
 
                     } else {
-                        // console.log("case2", orgStudent, " ", newStudent)
+                        // console.log("case3", orgStudent, " ", newStudent)
                         setAppear(timeslot, newStudent, 1)
                         // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
                     }
                 } else {
 
                     if (orgStudent != undefined) {
-                        // console.log("case3", orgStudent, " ", newStudent)
+                        // console.log("case 4", orgStudent, " ", newStudent)
 
                         // console.log("checking", removeListA.find((stu) => stu.sid == orgStudent.sid))
                         if (removeListA.find((stu) => stu.sid == orgStudent.sid) != undefined) {
+                            // console.log("case 5", orgStudent, " ", newStudent);
                             setAppear(timeslot, removeListA.find((stu) => stu.sid == orgStudent.sid), 0);
                             var removeindex = removeListA.findIndex((stu) => stu.sid == orgStudent.sid);
                             removeListA.slice(removeindex, 1)
@@ -2688,7 +2819,7 @@ module.exports = {
 
 
                     } else {
-                        // console.log("case4", orgStudent, " ", newStudent)
+                        // console.log("case 6", orgStudent, " ", newStudent)
 
                     }
                 }
@@ -2808,11 +2939,11 @@ module.exports = {
                 count++;
             });
 
-            // console.log(Pairs[0].Penalty + "  " + Pairs[1].Penalty)
+            console.log(ChildA.tacklecount + " before " + ChildB.tacklecount)
 
             ChildA = await Repair(ChildA);
             ChildB = await Repair(ChildB);
-
+            console.log(ChildA.tacklecount + " after " + ChildB.tacklecount)
             // console.log(ChildA.Penalty + "  " + ChildB.Penalty)
             return [ChildA, ChildB];
         }
@@ -2873,9 +3004,9 @@ module.exports = {
              *  - All presentation need to be scheduled and no repeat
              *  - no Sup or Obs will be appear in more than one room in the same time.
              */
+            countTackle(Plan)
+            var beforecount = Plan.tacklecount;
 
-
-            // Print(Plan)
             var pairinglist = await getPairingList();
             pairinglist = reduceByCurrentExistingStudent(Plan.Schedule[0].StudentAy, pairinglist)
             var WholePlanAccordingtoTime = new Array();
@@ -3056,13 +3187,12 @@ module.exports = {
 
             countTackle(Plan);
             // Print(Plan)
+            console.log(beforecount, " check after ", Plan.tacklecount)
             Plan.Penalty = await Penalty(Plan.Schedule);
 
 
             return Plan;
         }
-
-
 
         function NewGenReplaceOldGen(oldGen, NewGen) {
 
@@ -3071,15 +3201,19 @@ module.exports = {
 
                 // console.log(">>check in new gen",child.tacklecount)
                 oldGen.sort((a, b) => a.Penalty - b.Penalty);
-                if (oldGen[oldGen.length - 1].Penalty >= child.Penalty && child.tacklecount == oldGen[oldGen.length - 1].tacklecount) {
-                    oldGen.pop();
-                    oldGen.push(child);
+                if (oldGen[oldGen.length - 1].Penalty >= child.Penalty && child.tacklecount >= oldGen[oldGen.length - 1].tacklecount) {
+                    console.log("replaced by newGen", oldGen[oldGen.length - 1].Penalty, " ", child.Penalty)
                 }
+                oldGen.pop();
+                oldGen.push(child);
+
             });
             return oldGen;
         }
 
         async function Mutation(Plan) {
+
+            // console.log("before Mutation ", Plan.tacklecount)
             var copyPlan = JSON.parse(JSON.stringify(Plan))
             // Print(Plan);
             var swapped = false;
@@ -3207,7 +3341,7 @@ module.exports = {
             // console.log(Plan);
             // Print(Plan);
             countTackle(Plan);
-            // console.log(Plan.tacklecount);
+            // console.log("After Mutation ", Plan.tacklecount)
             if (Plan.tacklecount < copyPlan) {
                 Plan = copyPlan
             } else {
@@ -3473,12 +3607,172 @@ module.exports = {
 
         }
 
+        function reduceTemplateDates(BigTemplate, datecombin) {
+            var smallTemplate = new Array();
+            datecombin.forEach((datetime) => {
+
+                if (BigTemplate.Schedule.find((timeslot) => ((new Date(timeslot.timeslot)).toLocaleDateString('en-GB')) == ((new Date(datetime)).toLocaleDateString('en-GB'))) != undefined) {
+
+                    //  console.log(BigTemplate.Schedule.filter((timeslot)=> ((new Date(timeslot.timeslot)).toLocaleDateString('en-GB')) == ((new Date(datetime)).toLocaleDateString('en-GB'))))
+
+                    smallTemplate.push(copyarray(BigTemplate.Schedule.filter((timeslot) => ((new Date(timeslot.timeslot)).toLocaleDateString('en-GB')) == ((new Date(datetime)).toLocaleDateString('en-GB')))).flat())
+                }
+            })
+            smallTemplate = smallTemplate.flat(Infinity);
+            // console.log(smallTemplate)
+            var NewTemplate = JSON.parse(JSON.stringify(BigTemplate));
+            NewTemplate.Schedule = smallTemplate.flat();
+            var checkroomcount = 0;
+            NewTemplate.Schedule.forEach(element => {
+                checkroomcount += element
+            });
+            // console.log(NewTemplate.Schedule[0])
+            return NewTemplate;
+        }
+
+        function changeRoom(Plan, datecombin) {
+Plan.sort((a,b)=> a.timeslot-b.timeslot)
+            datecombin.forEach(element => {
+                var count = 0;
+ var thisdatelist = Plan.filter((present) => ((new Date(present.timeslot)).toLocaleDateString('en-GB')) == ((new Date(element)).toLocaleDateString("en-GB"))).sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
+                    var copythisdate = copyarray(thisdatelist)
+                   
+                while (count <= copythisdate.length-1) {
+                    var appearedList = new Array();
+                    var usedRoomList = new Array();
+                    // console.log(Plan.filter((present) => ((new Date(present.timeslot)).toLocaleDateString('en-GB')) == ((new Date(element)).toLocaleDateString("en-GB"))));
+                    // console.log(count, " ",copythisdate.length)
+                    var thisslot;
+                    var thisslot_Add1;
+                    var thisslot_Add2
+                    if (count < copythisdate .length-1) {
+                        // console.log(thisdatelist[count])
+                        thisslot = thisdatelist.filter((present) => present.timeslot == copythisdate[count].timeslot);
+                        count += thisslot.length 
+                    }
+                    
+                    console.log(thisslot[0].SQLdate," ",thisslot[0].SQLtime)
+                    if (count < copythisdate .length-1) {
+                        thisslot_Add1 = thisdatelist.filter((present) => present.timeslot ==  copythisdate[thisslot.length].timeslot)
+                        count += thisslot_Add1.length 
+                    }
+                    console.log( copythisdate[thisslot.length].SQLtime , " ", copythisdate[thisslot.length-1].SQLtime)
+                    if (count < copythisdate .length-1) {
+                        thisslot_Add2 = thisdatelist.filter((present) => present.timeslot ==  copythisdate[thisslot_Add1.length].timeslot)
+                        count += thisslot_Add1.length 
+                    }
+
+
+
+
+                    if (thisslot.length > 0) {
+                        thisslot.forEach(present => {
+                            var stafflist = present.TeachingAy.filter((staff) => staff.appears == 1)
+                            stafflist.forEach(staff => {
+                                appearedList.push(staff.tid);
+                                var obj = JSON.parse(JSON.stringify({
+                                    tid: staff.tid,
+                                    timeslot: present.timeslot,
+                                    room: present.room,
+                                    sitcount: 1,
+                                    nextroom: undefined
+                                }))
+                                usedRoomList.push(obj)
+                            });
+                        });
+                    }
+                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
+
+                    if (thisslot_Add1.length > 0) {
+                        thisslot_Add1.forEach(present => {
+                            var stafflist = present.TeachingAy.filter((staff) => staff.appears == 1)
+                            stafflist.forEach(staff => {
+                                if (appearedList.find((staffappeared) => staffappeared == staff.tid) == undefined) {
+                                    appearedList.push(staff.tid);
+                                    var obj = JSON.parse(JSON.stringify({
+                                        tid: staff.tid,
+                                        timeslot: present.timeslot,
+                                        room: present.room,
+                                        sitcount: 1,
+                                        nextroom: undefined
+                                    }))
+                                    // console.log("adding staff 1", appearedList)
+                                    usedRoomList.push(obj)
+                                } else {
+                                    if (usedRoomList.find((room) => room.tid == staff.id && room.room == present.room) != undefined) {
+                                        var index = usedRoomList.findIndex((room) => room.tid == staff.tid && room.room == present.room)
+                                        usedRoomList[index].sitcount++;
+                                    } else {
+                                        var index = usedRoomList.findIndex((room) => room.tid == staff.tid)
+                                        usedRoomList[index].nextroom = usedRoomList.length;
+                                        var obj = JSON.parse(JSON.stringify({
+                                            tid: staff.tid,
+                                            timeslot: present.timeslot,
+                                            room: present.room,
+                                            sitcount: 1,
+                                            nextroom: undefined
+                                        }))
+                                        usedRoomList.push(obj)
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
+                    if (thisslot_Add2.length > 0) {
+                        thisslot_Add2.forEach(present => {
+                            var stafflist = present.TeachingAy.filter((staff) => staff.appears == 1)
+                            stafflist.forEach(staff => {
+                                if (appearedList.find((staffappeared) => staffappeared == staff.tid) == undefined) {
+                                    appearedList.push(staff.tid);
+                                    var obj = JSON.parse(JSON.stringify({
+                                        tid: staff.tid,
+                                        timeslot: present.timeslot,
+                                        room: present.room,
+                                        sitcount: 1,
+                                        nextroom: undefined
+                                    }))
+                                    usedRoomList.push(obj)
+                                } else {
+                                    if (usedRoomList.find((room) => room.tid == staff.id && room.room == present.room) != undefined) {
+                                        var index = usedRoomList.findIndex((room) => room.tid == staff.tid && room.room == present.room)
+                                        usedRoomList[index].sitcount++;
+                                    } else {
+                                        var index = usedRoomList.reverse().findIndex((room) => room.tid == staff.tid)
+                                        // console.log(index);
+                                        // var index = usedRoomList.findIndex((room) => room.tid == staff.tid )
+                                        usedRoomList[index].nextroom = index;
+                                        usedRoomList[index].nextroom = usedRoomList.length;
+                                        var obj = JSON.parse(JSON.stringify({
+                                            tid: staff.tid,
+                                            timeslot: present.timeslot,
+                                            room: present.room,
+                                            sitcount: 1,
+                                            nextroom: undefined
+                                        }))
+                                        usedRoomList.push(obj)
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
+                    console.log("appearedList ", appearedList)
+                    console.log("usedRoomList ", usedRoomList)
+                }
+
+            });
+
+
+
+        }
+
         var totalStudNum = await getStudentnum();
         var studenList = await getPairingList();
         var teachingList = await getTeachingList();
         var StudentList = new Array();
         var TeachingList = new Array();
-        var Generation = 100;
+        var Generation = 200;
         studenList.forEach(element => {
             var Obj = JSON.parse(JSON.stringify({
                 sid: element.sid,
@@ -3501,27 +3795,78 @@ module.exports = {
         var ProcessStart = new Date();
         var PlansRequiresRRSRoom = new Array();
         var PlansCanSetinFSCRooms = new Array();
-        var InitialGenNum = 10
+        var InitialGenNum = 16
         var countingshuffledate = 0;
+        var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[possibledatecombination.length - 1]);
+        // console.log(StudentList.Length, " ", TeachingList.length, " ", possibledatecombination[possibledatecombination.length - 1], " ", req.body.roomList)
+        var BigTemplate = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, req.body.roomList);
 
 
 
+        // for (var datecombin = 25; datecombin < possibledatecombination.length; datecombin++) {
 
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
-
-        // for (var datecombin = 25; datecombin < 28; datecombin++) {
-            // for (var datecombin = 4; datecombin < 5; datecombin++) {
+        for (var datecombin = 20; datecombin < 23; datecombin++) {
+            // for (var datecombin = 10; datecombin < 15; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
-            var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[datecombin]);
+
             // console.log(uniquetimeslotcounts.length)
             var useList = new Array();
             if (firstList.length > 0) {
                 useList = copyarray(firstList);
             }
-            var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, useList);
-            if (!Template.able) {
-                Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
-            }
+
+
+            // var Template1 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, useList);
+            // var Template2 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, SecondList);
+            // var totalTemplate = new Array();
+
+            // totalTemplate.push(Template1)
+            // totalTemplate.push(Template2)
+
+            // var copySecond = copyarray(SecondList);
+            // var copyFirst = copyarray(firstList);
+            // // var Template1Concat2 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, firstList.concat(copySecond.shift()));
+            // // var Template2Concat1 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, SecondList.concat(copyFirst.shift()));
+            // // var totalTemplate = new Array();
+            // while (copySecond.length != 0 && copyFirst.length != 0) {
+            //     var Template1Concat2 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, firstList.concat(copySecond.shift()));
+            //     var Template2Concat1 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, SecondList.concat(copyFirst.shift()));
+
+
+            //     if (copySecond.length > 0) {
+            //         Template1Concat2 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, firstList.concat(copySecond.shift()));
+            //         totalTemplate.push(Template1Concat2)
+            //     }
+            //     if (copyFirst.length > 0) {
+            //         Template2Concat1 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, SecondList.concat(copyFirst.shift()));
+            //         totalTemplate.push(Template2Concat1)
+            //     }
+            //     // var Template1Concat2 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, firstList.concat(copySecond.shift()));
+
+            //     // console.log("return in main", Template.able, " ", SecondList.length)
+
+            // }
+
+            // // console.log(totalTemplate.filter((tables)=> tables.able == true))
+            // totalTemplate.forEach(element => {
+            //     console.log(element.Schedule.length, " ", element.List.length, " ", element.able)
+            // });
+            // var ableList = copyarray(totalTemplate.filter((tables) => tables.able == true));
+
+            // if (ableList.length > 0) {
+            //     ableList.sort((a, b) => b.Schedule.Length - a.Schedule.Length && a.List.length - b.List.length);
+            //     Template = JSON.parse(JSON.stringify(ableList[0]));
+            // } else {
+            //     ableList = copyarray(totalTemplate.filter((tables) => tables.able == false));
+            //     // console.log(ableList)
+            //     ableList.sort((a, b) => b.Schedule.Length - a.Schedule.Length && a.List.length - b.List.length);
+            //     // console.log(ableList)
+            //     Template = JSON.parse(JSON.stringify(ableList[0]));
+            // }
+            // var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, SecondList);
+            var Template = reduceTemplateDates(Template, possibledatecombination[datecombin])
+
+
             // console.log(Template)
             // Print(Template)
             if (Template.able) {
@@ -3529,10 +3874,14 @@ module.exports = {
 
                 // console.log( Template.Schedule[0].StudentAy);
                 // console.log( Template.Schedule[0].TeachingAy);
+                var allpossiblePopulation = new Array();
+
                 var AllPopulation = await InitialGeneration(InitialGenNum, Template);
+
                 while (AllPopulation.status != 1) {
+
                     AllPopulation = AllPopulation.AllPopulation
-                    console.log(AllPopulation)
+                    // console.log(AllPopulation)
                     var newStudentList = new Array();
                     var SelectedOne;
                     if (AllPopulation.length > 1) {
@@ -3551,16 +3900,18 @@ module.exports = {
                         }
                     });
                     // console.log(newStudentList)
-                    Template = await InitialArrayTemplate(newStudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList)
                     // console.log("Template length ", Template.length)
                     AllPopulation = await InitialGeneration(InitialGenNum, Template);
-                    // console.log(AllPopulation)
 
                 }
+
+
+                // console.log(allpossiblePopulation[alltimediff[0].Index].List)
+
                 if (AllPopulation.status == 1) {
                     console.log("enter  Template.able && AllPopulation.status != 0")
                     AllPopulation = AllPopulation.AllPopulation
-                    // Print(AllPopulation[0])
+                    // Print(AllPopulation.tacklecount)
                     // AllPopulation.forEach(element => {
                     //     Print(element)
                     // });
@@ -3634,9 +3985,10 @@ module.exports = {
                     var bestresults = AllPopulation.filter((Plans) => Plans.Penalty == AllPopulation[0].Penalty);
                     var bestPlan = bestresults[randomNum(bestresults)];
                     var checkSuccess = false;
-                    if (bestPlan.tacklecount == totalStudNum) {
+                    if (bestPlan.tacklecount == AllPopulation[0].Schedule[0].StudentAy.length) {
                         checkSuccess = true;
                     }
+                    changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
                     // finalResultOfPlans.push(bestPlan);
                     for (var timeslot = 0; timeslot < bestPlan.Schedule.length; timeslot++) {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
@@ -3653,6 +4005,7 @@ module.exports = {
                         }
                     }
                     if (checkSuccess) {
+
                         finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: datecombin, planStatus: 0, Penalty: bestPlan.Penalty, tacklecount: bestPlan.tacklecount })))
                     } else {
                         //                         var checkNewPatched = await checkAnyManalHandling(bestPlan, datecombin)
@@ -3670,14 +4023,15 @@ module.exports = {
 
 
             } else {
-                // var Template = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList);
+                var allpossiblePopulation = new Array();
+
+
                 var AllPopulation = await InitialGeneration(InitialGenNum, Template);
-                // AllPopulation = AllPopulation.AllPopulation
-                // console.log(AllPopulation)
-                // Print(AllPopulation[0])
+
                 while (AllPopulation.status != 1) {
+
                     AllPopulation = AllPopulation.AllPopulation
-                    console.log(AllPopulation)
+                    // console.log(AllPopulation)
                     var newStudentList = new Array();
                     var SelectedOne;
                     if (AllPopulation.length > 1) {
@@ -3696,12 +4050,11 @@ module.exports = {
                         }
                     });
                     // console.log(newStudentList)
-                    Template = await InitialArrayTemplate(newStudentList, TeachingList, uniquetimeslotcounts, preSetClassroomList)
                     // console.log("Template length ", Template.length)
                     AllPopulation = await InitialGeneration(InitialGenNum, Template);
-                    // console.log(AllPopulation)
 
                 }
+
 
 
                 if (AllPopulation.status == 1) {

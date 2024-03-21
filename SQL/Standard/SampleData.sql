@@ -175,27 +175,28 @@ insert IGNORE into supervisorpairstudent values("tid00016","sid161111","Nil");
 #insert into allrequestfromsupervisor values("tid00001FsId5","tid00001","2024-01-19","00:00", "23:59");
 #supevisorday
 insert into allrequestfromsupervisor values("tid00001FsId5","tid00001","2024-04-13","16:00", "18:00");
-insert into allrequestfromsupervisor values("tid00001nKCo9","tid00001","2024-04-15","14:00", "16:00");
+insert into allrequestfromsupervisor values("tid00001nKCo9","tid00001","2024-04-17","14:00", "16:00");
 insert into allrequestfromsupervisor values("tid00010dKCo1","tid00010","2024-04-12","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00010dKCo2","tid00010","2024-04-12","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00010nKCo3","tid00010","2024-04-13","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00010dKCo4","tid00010","2024-04-13","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00010nKCo5","tid00010","2024-04-16","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00010dKCo6","tid00010","2024-04-16","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00010dKCo7","tid00010","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00010dKCo8","tid00010","2024-04-16","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00007nKCo1","tid00007","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00007dKCo2","tid00007","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00007nKCo3","tid00007","2024-04-16","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00007dKCo4","tid00007","2024-04-16","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00007nKCo5","tid00007","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00007dKCo6","tid00007","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00007nKCo7","tid00007","2024-04-16","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00007dKCo8","tid00007","2024-04-16","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00007nKCo9","tid00007","2024-04-11","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00007dKC10","tid00007","2024-04-11","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00007nKC11","tid00007","2024-04-12","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00007dKC12","tid00007","2024-04-12","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00007nKCo1","tid00007","2024-04-15","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00007dKCo2","tid00007","2024-04-15","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00007nKCo3","tid00007","2024-04-16","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00007dKCo4","tid00007","2024-04-16","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00007nKCo5","tid00007","2024-04-17","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00007dKCo6","tid00007","2024-04-17","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00007nKCo7","tid00007","2024-04-18","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00007dKCo8","tid00007","2024-04-18","14:00", "18:00");
+
+
+
 insert into allrequestfromsupervisor values("tid00006nKCo1","tid00006","2024-04-11","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00006nKCo2","tid00006","2024-04-11","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00006nKCo3","tid00006","2024-04-12","09:00", "13:00");
@@ -205,51 +206,62 @@ insert into allrequestfromsupervisor values("tid00006nKCo6","tid00006","2024-04-
 insert into allrequestfromsupervisor values("tid00006nKCo7","tid00006","2024-04-15","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00006nKCo8","tid00006","2024-04-15","14:00", "16:00");
 insert into allrequestfromsupervisor values("tid00006nKCo9","tid00006","2024-04-16","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00006nKC10","tid00006","2024-04-15","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00006nKC11","tid00006","2024-04-16","09:00", "11:00");
+insert into allrequestfromsupervisor values("tid00006nKC10","tid00006","2024-04-17","09:00", "11:00");
+insert into allrequestfromsupervisor values("tid00006nKC11","tid00006","2024-04-18","09:00", "11:00");
+
+
 insert into allrequestfromsupervisor values("tid00014nKCo1","tid00014","2024-04-11","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00014nKCo2","tid00014","2024-04-12","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00014nKCo3","tid00014","2024-04-13","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00014nKCo4","tid00014","2024-04-13","14:00", "16:00");
 insert into allrequestfromsupervisor values("tid00014nKCo5","tid00014","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00014nKCo6","tid00014","2024-04-16","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00014nKCo6","tid00014","2024-04-18","14:00", "18:00");
+
+
 insert into allrequestfromsupervisor values("tid00012nKCo1","tid00012","2024-04-11","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00012nKCo2","tid00012","2024-04-11","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00012nKCo3","tid00012","2024-04-16","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00012nKCo4","tid00012","2024-04-16","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00012nKCo5","tid00012","2024-04-12","09:00", "11:00");
 insert into allrequestfromsupervisor values("tid00012nKCo6","tid00012","2024-04-12","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00012nKCo7","tid00012","2024-04-13","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00012nKCo8","tid00012","2024-04-15","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00012nKCo9","tid00012","2024-04-16","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00012nKC10","tid00012","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00012nKC11","tid00012","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00003nKCo1","tid00003","2024-04-11","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00003nKCo2","tid00003","2024-04-12","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00003nKCo3","tid00003","2024-04-12","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00003nKCo4","tid00003","2024-04-13","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00003nKCo5","tid00003","2024-04-13","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00003nKCo6","tid00003","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00003nKCo7","tid00003","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00003nKCo8","tid00003","2024-04-16","09:00", "11:00");
-insert into allrequestfromsupervisor values("tid00003nKCo9","tid00003","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00003nKC10","tid00003","2024-04-16","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00012nKCo3","tid00012","2024-04-16","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00012nKC10","tid00012","2024-04-17","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00012nKC11","tid00012","2024-04-17","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00012nKC13","tid00012","2024-04-18","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00012nKC14","tid00012","2024-04-18","14:00", "18:00");
+
+insert into allrequestfromsupervisor values("tid00003nKCo1","tid00003","2024-04-11","16:00", "18:00");
+insert into allrequestfromsupervisor values("tid00003nKCo2","tid00003","2024-04-15","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00003nKCo3","tid00003","2024-04-16","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00003nKCo4","tid00003","2024-04-17","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00003nKCo5","tid00003","2024-04-18","14:00", "18:00");
+
+insert into allrequestfromsupervisor values("tid00005nKCo1","tid00005","2024-04-11","09:00", "11:00");
+insert into allrequestfromsupervisor values("tid00005nKCo2","tid00005","2024-04-12","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00005nKCo3","tid00005","2024-04-12","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00005nKCo4","tid00005","2024-04-13","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00005nKCo5","tid00005","2024-04-13","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00005nKCo6","tid00005","2024-04-15","09:00", "11:00");
+insert into allrequestfromsupervisor values("tid00005nKCo7","tid00005","2024-04-15","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00005nKCo8","tid00005","2024-04-16","09:00", "11:00");
+insert into allrequestfromsupervisor values("tid00005nKCo9","tid00005","2024-04-17","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00005nKC10","tid00005","2024-04-18","14:00", "18:00");
+
+
 insert into allrequestfromsupervisor values("tid00004nKC01","tid00004","2024-04-11","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00004nKC02","tid00004","2024-04-12","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00004nKC03","tid00004","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00004nKC04","tid00004","2024-04-16","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00004nKC03","tid00004","2024-04-17","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00004nKC04","tid00004","2024-04-18","14:00", "16:00");
+
 insert into allrequestfromsupervisor values("tid00009nKCo1","tid00009","2024-04-11","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00009nKCo2","tid00009","2024-04-16","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00009nKC03","tid00009","2024-04-16","14:00", "16:00");
+
 insert into allrequestfromsupervisor values("tid00008nKCo1","tid00008","2024-04-15","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00008nKCo2","tid00008","2024-04-15","14:00", "18:00");
+
 insert into allrequestfromsupervisor values("tid00015nKCo1","tid00015","2024-04-15","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00016nKCo1","tid00016","2024-04-15","14:00", "16:00");
-insert into allrequestfromsupervisor values("tid00016nKCo2","tid00016","2024-04-11","11:00", "13:00");
-insert into allrequestfromsupervisor values("tid00013nKCo1","tid00013","2024-04-15","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00013nKCo2","tid00013","2024-04-12","09:00", "13:00");
-insert into allrequestfromsupervisor values("tid00013nKCo3","tid00013","2024-04-12","14:00", "18:00");
-insert into allrequestfromsupervisor values("tid00013nKCo4","tid00013","2024-04-15","16:00", "18:00");
+
 insert into allrequestfromsupervisor values("tid00011nKCo1","tid00011","2024-04-11","09:00", "13:00");
 insert into allrequestfromsupervisor values("tid00011nKCo2","tid00011","2024-04-11","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00011nKCo3","tid00011","2024-04-12","09:00", "13:00");
@@ -259,10 +271,21 @@ insert into allrequestfromsupervisor values("tid00011nKCo6","tid00011","2024-04-
 insert into allrequestfromsupervisor values("tid00011nKCo7","tid00011","2024-04-15","14:00", "18:00");
 insert into allrequestfromsupervisor values("tid00011nKCo8","tid00011","2024-04-16","09:00", "13:00");
 
+insert into allrequestfromsupervisor values("tid00013nKCo2","tid00013","2024-04-12","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00013nKCo3","tid00013","2024-04-12","14:00", "18:00");
+insert into allrequestfromsupervisor values("tid00013nKCo1","tid00013","2024-04-15","09:00", "13:00");
+insert into allrequestfromsupervisor values("tid00013nKCo4","tid00013","2024-04-17","16:00", "18:00");
+
+insert into allrequestfromsupervisor values("tid00016nKCo1","tid00016","2024-04-15","14:00", "16:00");
+insert into allrequestfromsupervisor values("tid00016nKCo2","tid00016","2024-04-11","11:00", "13:00");
 
 
 
-insert into allrequestfromstudent values("sid011111dSlOu","sid011111","2024-04-23","08:30", "10:00","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
+
+
+
+
+insert into allrequestfromstudent values("sid011111dSlOu","sid011111","2024-04-11","08:30", "10:00","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
 insert into allrequestfromstudent values("sid021111dSlOu","sid021111","2024-04-19","13:30", "14:30","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
 insert into allrequestfromstudent values("sid072222dSlOu","sid072222","2024-04-20","14:30", "16:30","sadfgasdf",null,"Enforce Approved","Approve for Demo",now());
 
