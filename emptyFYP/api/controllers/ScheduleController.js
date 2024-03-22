@@ -6,6 +6,7 @@ const { timeStamp } = require("console");
 
 const ProgressBar = require('progress');
 var Multiprogress = require('multi-progress');
+const { emitWarning } = require("process");
 
 module.exports = {
 
@@ -2028,7 +2029,7 @@ module.exports = {
             var sameTimeslotinsertcount = 0;
             var thisTimeslotSelectedAy = new Array();
 
-
+            copyTemplate.Schedule.sort(() => 0.6 - Math.random())
 
             while (AllPopulation.length < Population) {
 
@@ -2590,7 +2591,9 @@ module.exports = {
         }
 
         async function MixingGene(Pairs) {
+            Pairs[0].Schedule = Pairs[0].Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room)
 
+            Pairs[1].Schedule = Pairs[1].Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room)
             // var randomMethod = Math.random();
             // randomMethod = 0.6;
             // if (randomMethod >= 0.5) {
@@ -2696,8 +2699,11 @@ module.exports = {
         }
 
         async function MixByStudent(Pairs, StudentStart, StudentEnd) {
-
-            // console.log(Pairs[0].tacklecount + " before1 " + Pairs[1].tacklecount)
+            Pairs[0].Schedule = Pairs[0].Schedule.sort((a,b)=> a.timeslot - b.timeslot || a.room - b.room)
+            Pairs[1].Schedule = Pairs[1].Schedule.sort((a,b)=> a.timeslot - b.timeslot || a.room - b.room)
+            countTackle(Pairs[0])
+            countTackle(Pairs[1])
+            console.log(Pairs[0].tacklecount + " Pairs before1 " + Pairs[1].tacklecount)
             // console.log(Pairs[0].Schedule[S] + " before1 " + Pairs[1].tacklecount)
             var ChildA = JSON.parse(JSON.stringify(Pairs[0]));
             var ChildB = JSON.parse(JSON.stringify(Pairs[1]));
@@ -2750,12 +2756,44 @@ module.exports = {
 
                     if (orgStudent != undefined) {
                         if (newStudent.sid != orgStudent.sid) {
-                            // console.log("case1", orgStudent, " ", newStudent);
+                            // console.log("ChildB case1", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             setAppear(timeslot, orgStudent, 0)
                             setAppear(timeslot, newStudent, 1)
+                            var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                            if(anyotherroom.length >0){
+                                anyotherroom.forEach(element => {
+                                    // console.log(element)
+                                    setAppear(element, newStudent, 0);
+                                });
+                            }
+                            var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                            if(anyotherroom.length >0){
+                                anyotherroom.forEach(element => {
+                                    // console.log(element)
+                                    setAppear(element, orgStudent, 0);
+                                });
+                            }
                         } else {
-                            // console.log("case2", orgStudent, " ", newStudent);
+                            // console.log("ChildB case2", orgStudent, " ", newStudent , " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
+                            // console.log(ChildB.Schedule.find((orgrm)=> orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears ==1) != undefined))
+                            // var orgroom = 
                             setAppear(timeslot, newStudent, 1)
+                            var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                            if(anyotherroom.length >0){
+                                anyotherroom.forEach(element => {
+                                    // console.log(element)
+                                    setAppear(element, newStudent, 0);
+                                });
+                            }
+                            var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                            if(anyotherroom.length >0){
+                                anyotherroom.forEach(element => {
+                                    // console.log(element)
+                                    setAppear(element, orgStudent, 0);
+                                });
+                            }
+                            // setAppear(orgroom,newStudent,0)
+                            // console.log("case 2 room ",orgroom.SQLdate," ",orgroom.SQLtime," ",orgroom.room)
                         }
                         // change orgstu orgSup and orgOb appears to 0
                         // console.log("case1",orgStudent , " ",newStudent)
@@ -2800,21 +2838,44 @@ module.exports = {
                         // Print(ChildB)
 
                     } else {
-                        // console.log("case3", orgStudent, " ", newStudent)
+                        // console.log("ChildB case3", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime)
                         setAppear(timeslot, newStudent, 1)
+                        var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, newStudent, 0);
+                            });
+                        }
                         // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
                     }
+                    
                 } else {
 
                     if (orgStudent != undefined) {
-                        // console.log("case 4", orgStudent, " ", newStudent)
+                        // console.log("ChildB case4", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime)
 
+                        var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, orgStudent, 0);
+                            });
+                        }
                         // console.log("checking", removeListA.find((stu) => stu.sid == orgStudent.sid))
                         if (removeListA.find((stu) => stu.sid == orgStudent.sid) != undefined) {
-                            // console.log("case 5", orgStudent, " ", newStudent);
+                            // console.log("ChildB case5", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             setAppear(timeslot, removeListA.find((stu) => stu.sid == orgStudent.sid), 0);
                             var removeindex = removeListA.findIndex((stu) => stu.sid == orgStudent.sid);
-                            removeListA.slice(removeindex, 1)
+                            removeListA = removeListA.filter((stu)=> stu.sid != removeListA[removeindex].sid)
+                            var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, orgStudent, 0);
+                            });
+                        }
+                            
                         }
 
 
@@ -2825,7 +2886,11 @@ module.exports = {
                 }
                 // console.log("check here 2",timeslot.StudentAy.length)
                 // console.log(timeslot.StudentAy)
-                timeslot.StudentAy.splice(StudentStart, StudentEnd - StudentStart, copyarray(AChangetoB[count].StudentAy))
+
+
+                // timeslot.StudentAy.splice(StudentStart, StudentEnd - StudentStart, copyarray(AChangetoB[count].StudentAy))
+
+
                 timeslot.StudentAy = timeslot.StudentAy.flat(Infinity);
                 // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
                 // (timeslot.TeachingAy.find((staff) => staff.tid == newSupObs.tid || staff.tid == newSupObs.oid )).forEach(staff => {
@@ -2853,11 +2918,33 @@ module.exports = {
 
                     if (orgStudent != undefined) {
                         if (newStudent.sid != orgStudent.sid) {
-                            // console.log("case1",orgStudent , " ",newStudent);
+                            // console.log("ChildA case1", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             setAppear(timeslot, orgStudent, 0)
                             setAppear(timeslot, newStudent, 1)
+                            var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, newStudent, 0);
+                            });
+                        }
+                        var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, orgStudent, 0);
+                            });
+                        }
                         } else {
+                            // console.log("ChildA case2", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             setAppear(timeslot, newStudent, 1)
+                            var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, newStudent, 0);
+                            });
+                        }
                         }
                         // change orgstu orgSup and orgOb appears to 0
                         // console.log("case1",orgStudent , " ",newStudent)
@@ -2902,20 +2989,43 @@ module.exports = {
                         // Print(ChildA)
 
                     } else {
-                        // console.log("case2",orgStudent , " ",newStudent)
+                        // console.log("ChildA case3", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                         setAppear(timeslot, newStudent, 1)
                         // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
+                        var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, newStudent, 0);
+                            });
+                        }
                     }
                 } else {
 
                     if (orgStudent != undefined) {
-                        // console.log("case3",orgStudent , " ",newStudent)
-
+                        // console.log("ChildA case4", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
+                        var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, orgStudent, 0);
+                            });
+                        }
                         // console.log("checking",removeListB.find((stu)=> stu.sid == orgStudent.sid))
-                        if (removeListA.find((stu) => stu.sid == orgStudent.sid) != undefined) {
-                            setAppear(timeslot, removeListB.find((stu) => stu.sid == orgStudent.sid), 0);
+                        if (removeListB.find((stu) => stu.sid == orgStudent.sid) != undefined) {
+                            // console.log("ChildA case5", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
+                            setAppear(timeslot, orgStudent, 0);
+                            // console.log("ChildA case5 romved", timeslot.StudentAy.filter((present)=>present.sid == orgStudent.sid),timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             var removeindex = removeListB.findIndex((stu) => stu.sid == orgStudent.sid);
-                            removeListB.slice(removeindex, 1)
+                            // console.log(removeListB[removeindex])
+                            removeListB = removeListB.filter((stu)=> stu.sid != removeListB[removeindex].sid)
+                            var anyotherroom = ChildA.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == orgStudent.sid && present.appears == 1) != undefined)
+                        if(anyotherroom.length >0){
+                            anyotherroom.forEach(element => {
+                                // console.log(element)
+                                setAppear(element, orgStudent, 0);
+                            });
+                        }
                         }
 
 
@@ -2926,7 +3036,11 @@ module.exports = {
                 }
                 // console.log("check here 2",timeslot.StudentAy.length)
                 // console.log(timeslot.StudentAy)
-                timeslot.StudentAy.splice(StudentStart, StudentEnd - StudentStart, copyarray(BChangetoA[count].StudentAy))
+
+
+                // timeslot.StudentAy.splice(StudentStart, StudentEnd - StudentStart, copyarray(BChangetoA[count].StudentAy))
+
+
                 timeslot.StudentAy = timeslot.StudentAy.flat(Infinity);
                 // timeslot.StudentAy.splice.apply(timeslot.StudentAy, [StudentStart, StudentEnd].concat(copyarray(AChangetoB[count].StudentAy)));
                 // (timeslot.TeachingAy.find((staff) => staff.tid == newSupObs.tid || staff.tid == newSupObs.oid )).forEach(staff => {
@@ -2938,12 +3052,22 @@ module.exports = {
                 // console.log(timeslot.StudentAy)
                 count++;
             });
-
-            console.log(ChildA.tacklecount + " before " + ChildB.tacklecount)
+            var childAbefore = ChildA.tacklecount;
+            var childBbefore = ChildB.tacklecount;
+            // console.log(ChildA.tacklecount + " child before " + ChildB.tacklecount)
 
             ChildA = await Repair(ChildA);
             ChildB = await Repair(ChildB);
-            console.log(ChildA.tacklecount + " after " + ChildB.tacklecount)
+
+            if(ChildA.tacklecount > childAbefore){
+                console.log("child A problem")
+                Print(ChildA)
+            }
+            if(ChildB.tacklecount > childBbefore ){
+                console.log("child B problem")
+                Print(ChildB)
+            }
+            console.log(childAbefore, " & ", childBbefore, "  =>  ", ChildA.tacklecount + " after " + ChildB.tacklecount)
             // console.log(ChildA.Penalty + "  " + ChildB.Penalty)
             return [ChildA, ChildB];
         }
@@ -2986,6 +3110,8 @@ module.exports = {
                 if (printA != "empty" && printB != "empty") {
                     tacklecount++;
                     console.log(count, " ", printA[0].sid, "   ", printB, "   ", tacklecount, "  ", timeslot.room, "  ", timeslot.roomcount, "  ", timeslot.SQLdate, "  ", timeslot.SQLtime)
+                } else if (printA == "empty" && printB == "empty") {
+
                 } else if (printA == "empty") {
                     console.log(count, "  empty  ", printB, "   ", timeslot.room, "  ", timeslot.roomcount, "  ", timeslot.SQLdate, "  ", timeslot.SQLtime)
 
@@ -3004,9 +3130,10 @@ module.exports = {
              *  - All presentation need to be scheduled and no repeat
              *  - no Sup or Obs will be appear in more than one room in the same time.
              */
+            // countTackle(Plan)
+            Plan.Schedule = Plan.Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room)
             countTackle(Plan)
             var beforecount = Plan.tacklecount;
-
             var pairinglist = await getPairingList();
             pairinglist = reduceByCurrentExistingStudent(Plan.Schedule[0].StudentAy, pairinglist)
             var WholePlanAccordingtoTime = new Array();
@@ -3141,11 +3268,20 @@ module.exports = {
 
                                 // console.log(CheckSupAva, " ", CheckStuAva, " ", CheckObsAva)
                                 if (CheckSupAva != undefined && CheckObsAva != undefined && CheckStuAva != undefined) {
-                                    (Plan.Schedule.find((timeslot) => timeslot.timeslot == emptyroom.timeslot && timeslot.room == emptyroom.room)).StudentAy.find((stud) => stud.sid == inputPairs.sid).appears = 1;
+
                                     // console.log(emptyroom.TeachingAy)
                                     setAppear(emptyroom, inputPairs, 1);
-                                    // console.log(emptyroom.TeachingAy)
-                                    // console.log("inserted 1")
+                                    var orgroom = Plan.Schedule.filter((orgroom) => orgroom.StudentAy.find((present) => inputPairs.sid == present.sid && present.appears == 1) != undefined && orgroom.room != emptyroom.room && orgroom.timeslot != emptyroom.timeslot)
+
+                                    if (orgroom.length > 0) {
+                                        orgroom.forEach(element => {
+                                            // console.log("inserted 1 0", element.SQLdate, " ", element.SQLtime, " ", element.room, " ", element.StudentAy.filter((present) => present.appears == 1))
+                                            setAppear(element, inputPairs, 0);
+                                        });
+
+                                    }
+
+                                    // console.log("inserted 1", emptyroom.SQLdate, " ", emptyroom.SQLtime, " ", emptyroom.room, " ", inputPairs)
                                     //    console.log(Plan.Schedule.find((timeslot) => timeslot.timeslot == emptyroom.timeslot && timeslot.room == emptyroom.room))
                                     break;
                                 }
@@ -3161,8 +3297,13 @@ module.exports = {
                         // console.log("need to used timeslote never used before in this time", WholePlanAccordingtoTime[a].timeslot)
                         var AvaRoom = Plan.Schedule.find((presentation) => presentation.timeslot == WholePlanAccordingtoTime[a].timeslot);
                         // console.log(AvaRoom.TeachingAy)
+                        var orgroom = Plan.Schedule.find((orgroom) => orgroom.StudentAy.find((present) => inputPairs.sid == present.sid && present.appears == 1) != undefined && orgroom.room != AvaRoom.room && orgroom.timeslot != AvaRoom.timeslot)
+                        if (orgroom != undefined) {
+                            // console.log("inserted 1 0",orgroom.SQLdate," ",orgroom.SQLtime," ",orgroom.room," ",orgroom.StudentAy.filter((present)=> present.appears == 1))
+                            setAppear(orgroom, inputPairs, 0);
+                        }
                         setAppear(AvaRoom, inputPairs, 1);
-                        // console.log(AvaRoom.TeachingAy)
+                        console.log("inserted 2", AvaRoom.SQLdate, " ", AvaRoom.SQLtime, " ", AvaRoomroom, " ", inputPairs)
                         var obj = JSON.parse(JSON.stringify(AvaRoom.StudentAy.filter((student) => student.appears == 1)[0]))
                         obj.room = AvaRoom.room;
                         obj.roomcount = AvaRoom.roomcount
@@ -3186,8 +3327,12 @@ module.exports = {
 
 
             countTackle(Plan);
-            // Print(Plan)
-            console.log(beforecount, " check after ", Plan.tacklecount)
+
+            if (beforecount != Plan.tacklecount) {
+                // Print(Plan)
+                console.log(beforecount, " check after ", Plan.tacklecount)
+            }
+
             Plan.Penalty = await Penalty(Plan.Schedule);
 
 
@@ -3195,13 +3340,52 @@ module.exports = {
         }
 
         function NewGenReplaceOldGen(oldGen, NewGen) {
+            function reduceDuplicate(Population, currentPop) {
+                for (var PopNum = 0; PopNum < Population.length; PopNum++) {
+                    var checkcount = 0;
+                    var checkroomcount = 0;
+                    // console.log("checking PopNum ", PopNum)
+                    for (var time = 0; time < Population[PopNum].Schedule.length;) {
+                        var thistimeslotCombin = Population[PopNum].Schedule.filter((timeslot) => timeslot.timeslot == Population[PopNum].Schedule[time].timeslot);
+                        var currenttimeslotCombin = currentPop.Schedule.filter((timeslot) => timeslot.timeslot == Population[PopNum].Schedule[time].timeslot);
+                        // console.log("thistimeslotCombin ",currenttimeslotCombin)
 
+                        for (var roomcount = 0; roomcount < Population[PopNum].Schedule[time].roomcount; roomcount++) {
+                            var result = checkDuplicateStudentAy(thistimeslotCombin[roomcount].StudentAy, currenttimeslotCombin[roomcount].StudentAy);
+                            if (result) {
+                                // console.log("oops in room   ",thistimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid, "  ",currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid)
+                                checkroomcount++;
+                            } else {
+                                // console.log(thistimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid, "  ",currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1)[0].sid)
+                                // console.log(currenttimeslotCombin[roomcount].StudentAy.filter((student)=> student.appears == 1))
+
+                            }
+                        };
+                        // var result = checkDuplicateStudentAy(Population[PopNum].Schedule[time].StudentAy, currentPop.Schedule[time].StudentAy);
+                        if (checkroomcount == Population[PopNum].Schedule[time].roomcount) {
+                            // console.log("\n\noops  ",Population[PopNum].Schedule[time].StudentAy,"\n",currentPop.Schedule[time].StudentAy)
+                            // console.log("oops in timeslot")
+                            checkcount++;
+                        } else {
+                            // console.log("PopNum can break", PopNum)
+                            break;
+                        }
+                        // console.log("  check time ", time, "  check combinlength   ", thistimeslotCombin.length)
+                        time += thistimeslotCombin.length;
+                    };
+                    if (checkcount == Population[PopNum].Schedule[0].StudentAy.length) {
+                        console.log("this case need to be reduced");
+                        return true;;
+                    }
+                };
+                return false;
+            }
             NewGen.sort((a, b) => a.Penalty - b.Penalty);
             NewGen.forEach(child => {
-
+                console.log(reduceDuplicate(oldGen, child))
                 // console.log(">>check in new gen",child.tacklecount)
                 oldGen.sort((a, b) => a.Penalty - b.Penalty);
-                if (oldGen[oldGen.length - 1].Penalty >= child.Penalty && child.tacklecount >= oldGen[oldGen.length - 1].tacklecount) {
+                if (!reduceDuplicate(oldGen, child) && oldGen[oldGen.length - 1].Penalty > child.Penalty && child.tacklecount >= oldGen[oldGen.length - 1].tacklecount) {
                     console.log("replaced by newGen", oldGen[oldGen.length - 1].Penalty, " ", child.Penalty)
                 }
                 oldGen.pop();
@@ -3212,8 +3396,9 @@ module.exports = {
         }
 
         async function Mutation(Plan) {
+            Plan.Schedule = Plan.Schedule.sort((a, b) => a.timeslot - b.timeslot || a.room - b.room)
 
-            // console.log("before Mutation ", Plan.tacklecount)
+            console.log("before Mutation ", Plan.tacklecount)
             var copyPlan = JSON.parse(JSON.stringify(Plan))
             // Print(Plan);
             var swapped = false;
@@ -3341,13 +3526,13 @@ module.exports = {
             // console.log(Plan);
             // Print(Plan);
             countTackle(Plan);
-            // console.log("After Mutation ", Plan.tacklecount)
+            console.log("After Mutation ", Plan.tacklecount)
             if (Plan.tacklecount < copyPlan) {
                 Plan = copyPlan
             } else {
                 Plan.Penalty = await Penalty(Plan.Schedule);
             }
-            // console.log(">>checktackle in mutation ", Plan.tacklecount)
+            console.log(">>checktackle in mutation ", Plan.tacklecount)
 
             // Print(Plan);
         }
@@ -3557,8 +3742,8 @@ module.exports = {
             var TotalStudentList = await getPairingList();
             var appeared = new Array();
             Plan.Schedule.forEach(element => {
-                if(element.StudentAy.find((present)=> present.appears ==1) != undefined){
-                    appeared.push(element.StudentAy.find((present)=> present.appears ==1))
+                if (element.StudentAy.find((present) => present.appears == 1) != undefined) {
+                    appeared.push(element.StudentAy.find((present) => present.appears == 1))
                 }
             });
             if (TotalStudentList.length >= appeared.length) {
@@ -3637,13 +3822,13 @@ module.exports = {
         }
 
         function changeRoom(Plan, datecombin) {
-Plan.sort((a,b)=> a.timeslot-b.timeslot)
+            Plan.sort((a, b) => a.timeslot - b.timeslot)
             datecombin.forEach(element => {
                 var count = 0;
- var thisdatelist = Plan.filter((present) => ((new Date(present.timeslot)).toLocaleDateString('en-GB')) == ((new Date(element)).toLocaleDateString("en-GB"))).sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
-                    var copythisdate = copyarray(thisdatelist)
-                   
-                while (count <= copythisdate.length-1) {
+                var thisdatelist = Plan.filter((present) => ((new Date(present.timeslot)).toLocaleDateString('en-GB')) == ((new Date(element)).toLocaleDateString("en-GB"))).sort((a, b) => a.timeslot - b.timeslot || a.room - b.room);
+                var copythisdate = copyarray(thisdatelist)
+
+                while (count <= copythisdate.length - 1) {
                     var appearedList = new Array();
                     var usedRoomList = new Array();
                     // console.log(Plan.filter((present) => ((new Date(present.timeslot)).toLocaleDateString('en-GB')) == ((new Date(element)).toLocaleDateString("en-GB"))));
@@ -3651,21 +3836,27 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                     var thisslot;
                     var thisslot_Add1;
                     var thisslot_Add2
-                    if (count < copythisdate .length-1) {
+                    if (count < copythisdate.length - 1) {
                         // console.log(thisdatelist[count])
                         thisslot = thisdatelist.filter((present) => present.timeslot == copythisdate[count].timeslot);
-                        count += thisslot.length 
+                        count += thisslot.length
+                    } else {
+                        count++;
                     }
-                    
-                    console.log(thisslot[0].SQLdate," ",thisslot[0].SQLtime)
-                    if (count < copythisdate .length-1) {
-                        thisslot_Add1 = thisdatelist.filter((present) => present.timeslot ==  copythisdate[thisslot.length].timeslot)
-                        count += thisslot_Add1.length 
+
+                    // console.log(thisslot[0].SQLdate," ",thisslot[0].SQLtime)
+                    if (count < copythisdate.length - 1) {
+                        thisslot_Add1 = thisdatelist.filter((present) => present.timeslot == copythisdate[thisslot.length].timeslot)
+                        count += thisslot_Add1.length
+                    } else {
+                        count++;
                     }
-                    console.log( copythisdate[thisslot.length].SQLtime , " ", copythisdate[thisslot.length-1].SQLtime)
-                    if (count < copythisdate .length-1) {
-                        thisslot_Add2 = thisdatelist.filter((present) => present.timeslot ==  copythisdate[thisslot_Add1.length].timeslot)
-                        count += thisslot_Add1.length 
+                    // console.log( copythisdate[thisslot.length].SQLtime , " ", copythisdate[thisslot.length-1].SQLtime)
+                    if (count < copythisdate.length - 1) {
+                        thisslot_Add2 = thisdatelist.filter((present) => present.timeslot == copythisdate[thisslot_Add1.length].timeslot)
+                        count += thisslot_Add1.length
+                    } else {
+                        count++;
                     }
 
 
@@ -3687,7 +3878,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                             });
                         });
                     }
-                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
+                    usedRoomList.sort((a, b) => a.timeslot - b.timeslot)
 
                     if (thisslot_Add1.length > 0) {
                         thisslot_Add1.forEach(present => {
@@ -3724,7 +3915,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                             });
                         });
                     }
-                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
+                    usedRoomList.sort((a, b) => a.timeslot - b.timeslot)
                     if (thisslot_Add2.length > 0) {
                         thisslot_Add2.forEach(present => {
                             var stafflist = present.TeachingAy.filter((staff) => staff.appears == 1)
@@ -3762,9 +3953,9 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                             });
                         });
                     }
-                    usedRoomList.sort((a,b)=> a.timeslot-b.timeslot)
-                    console.log("appearedList ", appearedList)
-                    console.log("usedRoomList ", usedRoomList)
+                    usedRoomList.sort((a, b) => a.timeslot - b.timeslot)
+                    // console.log("appearedList ", appearedList)
+                    // console.log("usedRoomList ", usedRoomList)
                 }
 
             });
@@ -3811,15 +4002,12 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
 
         // for (var datecombin = 25; datecombin < possibledatecombination.length; datecombin++) {
 
-        for (var datecombin = 20; datecombin < 23; datecombin++) {
+        for (var datecombin = 20; datecombin < 25; datecombin++) {
             // for (var datecombin = 10; datecombin < 15; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
 
             // console.log(uniquetimeslotcounts.length)
-            var useList = new Array();
-            if (firstList.length > 0) {
-                useList = copyarray(firstList);
-            }
+
 
 
             // var Template1 = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, useList);
@@ -3950,29 +4138,18 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                         }
 
                         await Mutation(AllPopulation[randomNum(AllPopulation)]);
-                        // console.log("\nhere  for mutation 1");
-                        // AllPopulation.sort((GeneA, GeneB) => GeneA.Penalty - GeneB.Penalty);
-                        // var total = 0;
-                        // AllPopulation.forEach(element => {
-                        //     String += element.Penalty + "  "
-                        //     total += element.Penalty
-                        // });
-                        // console.log("before : ", String)
+
+
+
+
+
 
                         if (newGeneration != undefined) {
                             AllPopulation = NewGenReplaceOldGen(AllPopulation, newGeneration);
                         }
-                        // console.log("\nhere  for replacement 1");
-                        // console.log("total: ", total)
-                        // total = 0;
-                        // String = "";
-                        // AllPopulation.sort((GeneA, GeneB) => GeneA.Penalty - GeneB.Penalty);
-                        // AllPopulation.forEach(element => {
-                        //     String += element.Penalty + "  "
-                        //     total += element.Penalty
-                        // });
-                        // console.log("After : ", String)
-                        // console.log("total: ", total)
+
+
+
                         counter++;
 
                     }
@@ -3989,7 +4166,9 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
                     console.log("Plan ", datecombin, "'s tackle  After : ", String2)
                     console.log("total: ", total, "\n")
                     var bestresults = AllPopulation.filter((Plans) => Plans.Penalty == AllPopulation[0].Penalty);
+                    console.log(" here")
                     var bestPlan = bestresults[randomNum(bestresults)];
+                    console.log(" here")
                     var checkSuccess = false;
                     if (bestPlan.tacklecount == totalStudNum) {
                         checkSuccess = true;
@@ -4010,7 +4189,7 @@ Plan.sort((a,b)=> a.timeslot-b.timeslot)
 
                         }
                     }
-                    console.log(checkSuccess," here")
+                    console.log(checkSuccess, " here")
                     if (checkSuccess) {
 
                         finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: datecombin, planStatus: 0, Penalty: bestPlan.Penalty, tacklecount: bestPlan.tacklecount })))
