@@ -2759,6 +2759,7 @@ module.exports = {
                             // console.log("ChildB case1", orgStudent, " ", newStudent, " ",timeslot.room," ",timeslot.SQLdate," ",timeslot.SQLtime);
                             setAppear(timeslot, orgStudent, 0)
                             setAppear(timeslot, newStudent, 1)
+                           
                             var anyotherroom = ChildB.Schedule.filter((orgrm)=> orgrm.timeslot != timeslot.timeslot && orgrm.StudentAy.find((present)=> present.sid == newStudent.sid && present.appears == 1) != undefined)
                             if(anyotherroom.length >0){
                                 anyotherroom.forEach(element => {
@@ -4000,9 +4001,9 @@ module.exports = {
 
 
 
-        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
+        // for (var datecombin = ; datecombin < possibledatecombination.length; datecombin++) {
 
-        // for (var datecombin = 20; datecombin < 25; datecombin++) {
+        for (var datecombin = 20; datecombin < 25; datecombin++) {
             // for (var datecombin = 10; datecombin < 15; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
 
