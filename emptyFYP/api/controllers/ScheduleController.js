@@ -4000,9 +4000,9 @@ module.exports = {
 
 
 
-        // for (var datecombin = 25; datecombin < possibledatecombination.length; datecombin++) {
+        for (var datecombin = 0; datecombin < possibledatecombination.length; datecombin++) {
 
-        for (var datecombin = 20; datecombin < 25; datecombin++) {
+        // for (var datecombin = 20; datecombin < 25; datecombin++) {
             // for (var datecombin = 10; datecombin < 15; datecombin++) {
             console.log("For Plan", datecombin, possibledatecombination[datecombin])
 
