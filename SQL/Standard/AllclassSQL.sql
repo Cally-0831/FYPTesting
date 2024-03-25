@@ -85,184 +85,211 @@ insert ignore  into alltakecourse values("COMP1006_20002","tid00008");
 
 
 
-insert ignore  into alltakecourse values("GCAP3205_00001","sid011111");
-insert ignore  into alltakecourse values("COMP2037_00001","sid011111");
-insert ignore  into alltakecourse values("COMP1007_00001","sid012222");
-insert ignore  into alltakecourse values("COMP1015_00001","sid013333");
-insert ignore  into alltakecourse values("COMP2037_00001","sid014444");
-insert ignore  into alltakecourse values("COMP1007_00001","sid021111");
-insert ignore  into alltakecourse values("COMP1015_00001","sid021111");
-insert ignore  into alltakecourse values("COMP2037_00001","sid022222");
-insert ignore  into alltakecourse values("COMP4107_00001","sid023333");
-insert ignore  into alltakecourse values("COMP3005_00001","sid023333");
+-- insert ignore  into alltakecourse values("GCAP3205_00001","sid011111");
+-- insert ignore  into alltakecourse values("COMP2037_00001","sid011111");
+-- insert ignore  into alltakecourse values("COMP1007_00001","sid012222");
+-- insert ignore  into alltakecourse values("COMP1015_00001","sid013333");
+-- insert ignore  into alltakecourse values("COMP2037_00001","sid014444");
+-- insert ignore  into alltakecourse values("COMP1007_00001","sid021111");
+-- insert ignore  into alltakecourse values("COMP1015_00001","sid021111");
+-- insert ignore  into alltakecourse values("COMP2037_00001","sid022222");
+-- insert ignore  into alltakecourse values("COMP4107_00001","sid023333");
+-- insert ignore  into alltakecourse values("COMP3005_00001","sid023333");
 
-insert ignore into alltakecourse values("COMP4025_00001","sid031111");
-insert ignore  into alltakecourse values("COMP4025_10001","sid031111");
-insert ignore  into alltakecourse values("COMP4097_00001","sid032222");
-insert ignore  into alltakecourse values("COMP2035_00001","sid032222");
+-- insert ignore into alltakecourse values("COMP4025_00001","sid031111");
+-- insert ignore  into alltakecourse values("COMP4025_10001","sid031111");
+-- insert ignore  into alltakecourse values("COMP4097_00001","sid032222");
+-- insert ignore  into alltakecourse values("COMP2035_00001","sid032222");
 
-insert ignore  into alltakecourse values("COMP3005_00001","sid041111");
-insert ignore into alltakecourse values("COMP2026_00001","sid043333");
-insert ignore  into alltakecourse values("COMP2026_20101","sid043333");
+-- insert ignore  into alltakecourse values("COMP3005_00001","sid041111");
+-- insert ignore into alltakecourse values("COMP2026_00001","sid043333");
+-- insert ignore  into alltakecourse values("COMP2026_20101","sid043333");
 
-insert ignore into alltakecourse values("COMP3015_00001","sid052222");
-insert ignore  into alltakecourse values("COMP3015_10001","sid052222");
-insert ignore  into alltakecourse values("COMP2027_00001","sid052222");
-insert ignore into alltakecourse values("COMP2045_00002","sid051111");
-insert ignore  into alltakecourse values("COMP2045_20201","sid051111");
+-- insert ignore into alltakecourse values("COMP3015_00001","sid052222");
+-- insert ignore  into alltakecourse values("COMP3015_10001","sid052222");
+-- insert ignore  into alltakecourse values("COMP2027_00001","sid052222");
+-- insert ignore into alltakecourse values("COMP2045_00002","sid051111");
+-- insert ignore  into alltakecourse values("COMP2045_20201","sid051111");
 
 
-insert ignore  into alltakecourse values("COMP2035_00001","sid072222");
-insert ignore  into alltakecourse values("COMP2037_00001","sid072222");
-insert ignore  into alltakecourse values("COMP3057_00001","sid071111");
-insert ignore  into alltakecourse values("COMP3057_10001","sid071111");
-insert ignore  into alltakecourse values("COMP4057_00001","sid071111");
-insert ignore into alltakecourse values("COMP3015_00001","sid073333");
-insert ignore  into alltakecourse values("COMP3015_10001","sid073333");
+-- insert ignore  into alltakecourse values("COMP2035_00001","sid072222");
+-- insert ignore  into alltakecourse values("COMP2037_00001","sid072222");
+-- insert ignore  into alltakecourse values("COMP3057_00001","sid071111");
+-- insert ignore  into alltakecourse values("COMP3057_10001","sid071111");
+-- insert ignore  into alltakecourse values("COMP4057_00001","sid071111");
+-- insert ignore into alltakecourse values("COMP3015_00001","sid073333");
+-- insert ignore  into alltakecourse values("COMP3015_10001","sid073333");
 
-insert ignore  into alltakecourse values("COMP4057_00001","sid081111");
-insert ignore  into alltakecourse values("GCAP3205_00001","sid081111");
-insert ignore into alltakecourse values("COMP3015_00001","sid082222");
-insert ignore  into alltakecourse values("COMP3015_10002","sid082222");
-insert ignore  into alltakecourse values("COMP2027_00001","sid082222");
+-- insert ignore  into alltakecourse values("COMP4057_00001","sid081111");
+-- insert ignore  into alltakecourse values("GCAP3205_00001","sid081111");
+-- insert ignore into alltakecourse values("COMP3015_00001","sid082222");
+-- insert ignore  into alltakecourse values("COMP3015_10002","sid082222");
+-- insert ignore  into alltakecourse values("COMP2027_00001","sid082222");
 
-insert ignore  into alltakecourse values("COMP1007_00001","sid092222");
-insert ignore  into alltakecourse values("COMP1015_00001","sid092222");
+-- insert ignore  into alltakecourse values("COMP1007_00001","sid092222");
+-- insert ignore  into alltakecourse values("COMP1015_00001","sid092222");
 
-insert ignore  into alltakecourse values("COMP3057_00001","sid101111");
-insert ignore  into alltakecourse values("COMP3057_10001","sid101111");
-insert ignore  into alltakecourse values("GCAP3205_00001","sid102222");
+-- insert ignore  into alltakecourse values("COMP3057_00001","sid101111");
+-- insert ignore  into alltakecourse values("COMP3057_10001","sid101111");
+-- insert ignore  into alltakecourse values("GCAP3205_00001","sid102222");
 
-insert ignore into alltakecourse values("COMP2045_00002","sid111111");
-insert ignore  into alltakecourse values("COMP2045_20201","sid111111");
-insert ignore  into alltakecourse values("COMP1007_00001","sid122222");
-insert ignore  into alltakecourse values("COMP1015_00001","sid122222");
-insert ignore into alltakecourse values("COMP2026_00001","sid123333");
-insert ignore  into alltakecourse values("COMP2026_20101","sid123333");
-insert ignore  into alltakecourse values("COMP3057_00001","sid124444");
-insert ignore  into alltakecourse values("COMP3057_10001","sid124444");
+-- insert ignore into alltakecourse values("COMP2045_00002","sid111111");
+-- insert ignore  into alltakecourse values("COMP2045_20201","sid111111");
+-- insert ignore  into alltakecourse values("COMP1007_00001","sid122222");
+-- insert ignore  into alltakecourse values("COMP1015_00001","sid122222");
+-- insert ignore into alltakecourse values("COMP2026_00001","sid123333");
+-- insert ignore  into alltakecourse values("COMP2026_20101","sid123333");
+-- insert ignore  into alltakecourse values("COMP3057_00001","sid124444");
+-- insert ignore  into alltakecourse values("COMP3057_10001","sid124444");
  
-insert ignore  into alltakecourse values("COMP2037_00001","sid131111");
-insert ignore  into alltakecourse values("COMP3057_00001","sid133333");
-insert ignore  into alltakecourse values("COMP3057_10001","sid133333");
+-- insert ignore  into alltakecourse values("COMP2037_00001","sid131111");
+-- insert ignore  into alltakecourse values("COMP3057_00001","sid133333");
+-- insert ignore  into alltakecourse values("COMP3057_10001","sid133333");
 
-insert ignore into alltakecourse values("COMP4025_00001","sid141111");
-insert ignore  into alltakecourse values("COMP4025_10001","sid141111");
-insert ignore  into alltakecourse values("COMP4097_00001","sid142222");
-insert ignore  into alltakecourse values("COMP2035_00001","sid142222");
+-- insert ignore into alltakecourse values("COMP4025_00001","sid141111");
+-- insert ignore  into alltakecourse values("COMP4025_10001","sid141111");
+-- insert ignore  into alltakecourse values("COMP4097_00001","sid142222");
+-- insert ignore  into alltakecourse values("COMP2035_00001","sid142222");
 
-insert ignore into alltakecourse values("COMP3015_00001","sid152222");
-insert ignore  into alltakecourse values("COMP3015_10002","sid152222");
-insert ignore  into alltakecourse values("COMP2027_00001","sid152222");
+-- insert ignore into alltakecourse values("COMP3015_00001","sid152222");
+-- insert ignore  into alltakecourse values("COMP3015_10002","sid152222");
+-- insert ignore  into alltakecourse values("COMP2027_00001","sid152222");
 
-insert ignore into alltakecourse values("COMP2045_00002","sid161111");
-insert ignore  into alltakecourse values("COMP2045_20201","sid161111");
+-- insert ignore into alltakecourse values("COMP2045_00002","sid161111");
+-- insert ignore  into alltakecourse values("COMP2045_20201","sid161111");
 
-#Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid011111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid012222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid013333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid014444";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid021111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid022222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid023333";
-#Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid033333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid031111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid032222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid041111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid053333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid043333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid082222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid052222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid051111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid073333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid081111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid072222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid071111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid092222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid102222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid101111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid111111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid133333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid122222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid123333";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid124444";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid131111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid141111";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid142222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid152222";
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid161111";
-
-
+-- #Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid011111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid012222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid013333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid014444";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid021111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid022222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid023333";
+-- #Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid033333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid031111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid032222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid041111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid053333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid043333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid082222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid052222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid051111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid073333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid081111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid072222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid071111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid092222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid102222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid101111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid111111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid133333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid122222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid123333";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid124444";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid131111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid141111";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid142222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid152222";
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid161111";
 
 
 
-update allsupertakecourse set confirmation = "1" , submissiontime = now();
+
+
+-- update allsupertakecourse set confirmation = "1" , submissiontime = now();
 
 -- 13 >> 11
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa0N1","Sin Hang","FSC901E","2024-04-11","2024-04-11","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa0N2","Sin Hang","FSC901E","2024-04-11","2024-04-11","15:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_yDbh3","Sin Hang","RRS638","2024-04-11","2024-04-11","08:30","09:00","aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_yDbh4","Sin Hang","RRS638","2024-04-11","2024-04-11","15:30","18:30","aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa0N5","Sin Hang","RRS735","2024-04-11","2024-04-11","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa0N6","Sin Hang","RRS735","2024-04-11","2024-04-11","18:00","20:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa011","Sin Hang","FSC801C","2024-04-11","2024-04-11","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa012","Sin Hang","FSC801D","2024-04-11","2024-04-11","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa013","Sin Hang","FSC901C","2024-04-11","2024-04-11","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa014","Sin Hang","FSC901D","2024-04-11","2024-04-11","08:30","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa0N1","Sin Hang","FSC901C","2024-04-11","2024-04-11","11:15","12:00","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa0N2","Sin Hang","FSC901D","2024-04-11","2024-04-11","11:15","12:00","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa0N3","Sin Hang","FSC801C","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa0N4","Sin Hang","FSC801D","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa0N5","Sin Hang","FSC901C","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa0N6","Sin Hang","FSC901D","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801E_oa0N7","Sin Hang","FSC901E","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N8","Sin Hang","RRS638","2024-04-11","2024-04-11","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N9","Sin Hang","RRS638","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_oa010","Sin Hang","RRS732","2024-04-11","2024-04-11","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa111","Sin Hang","FSC801D","2024-04-11","2024-04-11","13:30","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa121","Sin Hang","FSC801C","2024-04-11","2024-04-11","13:30","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa131","Sin Hang","FSC901E","2024-04-11","2024-04-11","13:30","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa141","Sin Hang","FSC901C","2024-04-11","2024-04-11","15:30","18:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa151","Sin Hang","FSC901D","2024-04-11","2024-04-11","15:30","18:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa016","Sin Hang","RRS638","2024-04-11","2024-04-11","15:30","18:15","Lunch");
+
 
 -- 14 >> 12
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa015","Sin Hang","RRS638","2024-04-12","2024-04-12","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa016","Sin Hang","RRS735","2024-04-12","2024-04-12","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa712","Sin Hang","FSC901C","2024-04-12","2024-04-12","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa812","Sin Hang","FSC901D","2024-04-12","2024-04-12","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa712","Sin Hang","FSC801C","2024-04-12","2024-04-12","08:30","11:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oqe12","Sin Hang","FSC801D","2024-04-12","2024-04-12","08:30","11:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa713","Sin Hang","FSC801C","2024-04-12","2024-04-12","16:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oqe14","Sin Hang","FSC801D","2024-04-12","2024-04-12","16:30","18:30","Check aircon");
-
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa713","Sin Hang","FSC801C","2024-04-12","2024-04-12","09:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oqe14","Sin Hang","FSC801D","2024-04-12","2024-04-12","09:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa713","Sin Hang","FSC901C","2024-04-12","2024-04-12","09:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oqe14","Sin Hang","FSC901D","2024-04-12","2024-04-12","09:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oqe14","Sin Hang","FSC901E","2024-04-12","2024-04-12","11:15","12:00","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oqe14","Sin Hang","RRS638","2024-04-12","2024-04-12","11:15","12:00","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa0N7","Sin Hang","FSC901E","2024-04-12","2024-04-12","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0q9","Sin Hang","RRS638","2024-04-12","2024-04-12","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_oa0z0","Sin Hang","RRS732","2024-04-12","2024-04-12","12:00","13:30","Lunch");
 
 -- 15>> 13 sat
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_o80N3","Sin Hang","FSC801C","2024-04-13","2024-04-13","13:30","16:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o90N4","Sin Hang","FSC801D","2024-04-13","2024-04-13","13:30","16:15","Lunch");
+
+
+
 -- 16 >> 14 sun
 -- 17 >> 15 mon
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_1a17N1","Sin Hang","FSC901E","2024-04-15","2024-04-15","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_2a0N18","Sin Hang","FSC901E","2024-04-15","2024-04-15","12:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_xa020","Sin Hang","RRS638","2024-04-15","2024-04-15","08:30","09:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_2a0N18","Sin Hang","RRS638","2024-04-15","2024-04-15","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_1a042","Sin Hang","RRS735","2024-04-15","2024-04-15","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_ob122","Sin Hang","RRS735","2024-04-15","2024-04-15","14:30","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1assd3","Sin Hang","FSC801C","2024-04-15","2024-04-15","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0sdf4","Sin Hang","FSC801D","2024-04-15","2024-04-15","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3asd5","Sin Hang","FSC901C","2024-04-15","2024-04-15","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4sdN6","Sin Hang","FSC901D","2024-04-15","2024-04-15","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5sdN7","Sin Hang","FSC901E","2024-04-15","2024-04-15","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o6cs9","Sin Hang","RRS638","2024-04-15","2024-04-15","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_3e010","Sin Hang","RRS732","2024-04-15","2024-04-15","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_va0N9","Sin Hang","RRS638","2024-04-15","2024-04-15","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1gaN3","Sin Hang","FSC801C","2024-04-15","2024-04-15","13:30","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2abd4","Sin Hang","FSC801D","2024-04-15","2024-04-15","13:30","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60ba","Sin Hang","RRS638","2024-04-15","2024-04-15","15:30","18:30","Lunch");
+
 -- 18>>16 tue
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa11","Sin Hang","FSC801C","2024-04-16","2024-04-16","08:30","14:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_o14N2","Sin Hang","FSC801C","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o15N1","Sin Hang","FSC801D","2024-04-16","2024-04-16","08:30","14:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o16N2","Sin Hang","FSC801D","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_qa11","Sin Hang","FSC901C","2024-04-16","2024-04-16","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_c14N2","Sin Hang","FSC901D","2024-04-16","2024-04-16","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa17N1","Sin Hang","FSC901E","2024-04-16","2024-04-16","08:30","14:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa0N18","Sin Hang","FSC901E","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N19","Sin Hang","RRS638","2024-04-16","2024-04-16","08:30","12:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa020","Sin Hang","RRS638","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa042","Sin Hang","RRS735","2024-04-16","2024-04-16","08:30","14:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa122","Sin Hang","RRS735","2024-04-16","2024-04-16","18:00","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-16","2024-04-16","12:00","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","09:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","09:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","13:30","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","13:30","14:15","Lunch");
 
 
 -- 19>> 17
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_134N1","Sin Hang","FSC901E","2024-04-17","2024-04-17","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_o54N2","Sin Hang","FSC901E","2024-04-17","2024-04-17","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa421","Sin Hang","RRS638","2024-04-17","2024-04-17","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa252","Sin Hang","RRS638","2024-04-17","2024-04-17","18:00","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oan12","Sin Hang","FSC801C","2024-04-17","2024-04-17","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa0m12","Sin Hang","FSC801D","2024-04-17","2024-04-17","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa0k2","Sin Hang","FSC901C","2024-04-17","2024-04-17","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa0l2","Sin Hang","FSC901D","2024-04-17","2024-04-17","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa01p","Sin Hang","RRS735","2024-04-17","2024-04-17","08:30","18:30","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS901E","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS638","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS638","2024-04-16","2024-04-16","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-16","2024-04-16","13:30","18:30","Lunch");
 
 -- 20>> 18
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_o6eN1","Sin Hang","FSC901E","2024-04-18","2024-04-18","08:30","09:00","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oadf2","Sin Hang","FSC901E","2024-04-18","2024-04-18","15:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0df","Sin Hang","RRS638","2024-04-18","2024-04-18","08:30","09:00","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0rz","Sin Hang","RRS638","2024-04-18","2024-04-18","09:00","11:15","Check aircon");
+
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","11:15","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","11:15","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","11:15","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","11:15","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","12:00","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","10:30","11:15","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0rz","Sin Hang","RRS638","2024-04-18","2024-04-18","15:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa0zx","Sin Hang","FSC801C","2024-04-18","2024-04-18","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa0sd","Sin Hang","FSC801D","2024-04-18","2024-04-18","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_oa0rw","Sin Hang","FSC901C","2024-04-18","2024-04-18","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_oa0qq","Sin Hang","FSC901D","2024-04-18","2024-04-18","08:30","18:30","Check aircon");
-insert into allclassroomtimeslot values("Sin_Hang_RRS735_oa0qr","Sin Hang","RRS735","2024-04-18","2024-04-18","08:30","18:30","Check aircon");
+
