@@ -2092,7 +2092,7 @@ module.exports = {
                 return false;
             }
 
-            var limit = 50;
+            var limit = 100;
             var progressbarA = multi.newBar("Initital Generation Progress: [:bar] :percent :etas", {
                 complete: "=",
                 incomplete: " ",
@@ -3260,7 +3260,7 @@ module.exports = {
 
             var appear = new Array();
             Plan.Schedule.forEach(element => {
-                var thisslot = Plan.Schedule.filter((times) => times.timeslot == Plan.Schedule[a].timeslot).sort((a,b)=> a.room-b.room);
+                var thisslot = Plan.Schedule.filter((times) => times.timeslot == element.timeslot).sort((a,b)=> a.room-b.room);
                 var inserted = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) != undefined)
                 var empty = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) == undefined)
                 inserted.forEach(element => {
