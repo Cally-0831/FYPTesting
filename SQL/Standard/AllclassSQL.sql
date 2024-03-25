@@ -69,6 +69,7 @@ insert ignore into allclass values("COMP","4096","00001","","Sin Hang","LMC509",
 insert ignore into allclass values("COMP","4097","00001","","AAB","AAB509","5","14:30","17:20","0");
 
 insert into classroom values("Sin Hang","FSC901E","OPEN");
+insert into classroom values("Sin Hang","RRS732","OPEN");
 
 insert into alltakecourse values("COMP4096_00001","tid00001");
 insert into alltakecourse values("COMP4025_00001","tid00004");
