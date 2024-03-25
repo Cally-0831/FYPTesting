@@ -232,10 +232,10 @@ insert into allclassroomtimeslot values("Sin_Hang_RRS732_oa0z0","Sin Hang","RRS7
 insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-13","2024-04-13","12:00","13:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-13","2024-04-13","12:00","13:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-13","2024-04-13","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-13","2024-04-13","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-13","2024-04-13","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-13","2024-04-13","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4etN6","Sin Hang","FSC901D","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a347","Sin Hang","FSC901E","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o6erfg","Sin Hang","RRS638","2024-04-13","2024-04-13","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7asdf0","Sin Hang","RRS732","2024-04-13","2024-04-13","12:00","13:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801C_o80N3","Sin Hang","FSC801C","2024-04-13","2024-04-13","13:30","16:15","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801D_o90N4","Sin Hang","FSC801D","2024-04-13","2024-04-13","13:30","16:15","Lunch");
 
@@ -256,40 +256,40 @@ insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2abd4","Sin Hang","FSC
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60ba","Sin Hang","RRS638","2024-04-15","2024-04-15","15:30","18:30","Lunch");
 
 -- 18>>16 tue
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-16","2024-04-16","12:00","14:15","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","09:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","09:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","13:30","14:15","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","13:30","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1acsN3","Sin Hang","FSC801C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_120N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3agsN5","Sin Hang","FSC901C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4fhgN6","Sin Hang","FSC901D","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_afg0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o6vee","Sin Hang","RRS638","2024-04-16","2024-04-16","12:00","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7assdf","Sin Hang","RRS732","2024-04-16","2024-04-16","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3absN5","Sin Hang","FSC901C","2024-04-16","2024-04-16","09:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4avbN6","Sin Hang","FSC901D","2024-04-16","2024-04-16","09:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1dfN3","Sin Hang","FSC801C","2024-04-16","2024-04-16","13:30","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a4N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","13:30","14:15","Lunch");
 
 
 -- 19>> 17
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","09:00","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","09:00","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","09:00","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","09:00","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","09:00","11:15","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS901E","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS638","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS732","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_o7010","Sin Hang","RRS638","2024-04-16","2024-04-16","09:00","11:15","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_o60N9","Sin Hang","RRS638","2024-04-16","2024-04-16","13:30","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1aaN3","Sin Hang","FSC801C","2024-04-17","2024-04-17","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a2N4","Sin Hang","FSC801D","2024-04-17","2024-04-17","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3adv5","Sin Hang","FSC901C","2024-04-17","2024-04-17","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4aaeN6","Sin Hang","FSC901D","2024-04-17","2024-04-17","09:00","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5adfgN7","Sin Hang","FSC901E","2024-04-17","2024-04-17","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_4t010","Sin Hang","FSC901E","2024-04-17","2024-04-17","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_h6010","Sin Hang","RRS638","2024-04-17","2024-04-17","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_gfh010","Sin Hang","RRS732","2024-04-17","2024-04-17","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_oyu10","Sin Hang","RRS638","2024-04-17","2024-04-17","09:00","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_o6rty","Sin Hang","RRS638","2024-04-17","2024-04-17","13:30","18:30","Lunch");
 
 -- 20>> 18
-insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0rz","Sin Hang","RRS638","2024-04-18","2024-04-18","09:00","11:15","Check aircon");
+insert into allclassroomtimeslot values("Sin_Hang_RRS638_oaasz","Sin Hang","RRS638","2024-04-18","2024-04-18","09:00","11:15","Check aircon");
 
-insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0N3","Sin Hang","FSC801C","2024-04-16","2024-04-16","11:15","15:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a0N4","Sin Hang","FSC801D","2024-04-16","2024-04-16","11:15","15:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","11:15","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","11:15","18:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5a0N7","Sin Hang","FSC901E","2024-04-16","2024-04-16","12:00","14:15","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a0N5","Sin Hang","FSC901C","2024-04-16","2024-04-16","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0N6","Sin Hang","FSC901D","2024-04-16","2024-04-16","10:30","11:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801C_1a0va","Sin Hang","FSC801C","2024-04-18","2024-04-18","11:15","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC801D_2a7N4","Sin Hang","FSC801D","2024-04-18","2024-04-18","11:15","15:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a075","Sin Hang","FSC901C","2024-04-18","2024-04-18","11:15","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4a0tq6","Sin Hang","FSC901D","2024-04-18","2024-04-18","11:15","18:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901E_5avcb7","Sin Hang","FSC901E","2024-04-18","2024-04-18","12:00","14:15","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901C_3a055","Sin Hang","FSC901C","2024-04-18","2024-04-18","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_FSC901D_4ahr0N6","Sin Hang","FSC901D","2024-04-18","2024-04-18","10:30","11:15","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0rz","Sin Hang","RRS638","2024-04-18","2024-04-18","15:30","18:30","Check aircon");
 
