@@ -3260,6 +3260,23 @@ module.exports = {
 
             var appear = new Array();
             Plan.Schedule.forEach(element => {
+                var thisslot = Plan.Schedule.filter((times) => times.timeslot == Plan.Schedule[a].timeslot).sort((a,b)=> a.room-b.room);
+                var inserted = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) != undefined)
+                var empty = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) == undefined)
+                inserted.forEach(element => {
+                    var pairs = element.StudentAy.find((present)=> present.appears == 1)
+                    var Supappear = thisslot.filter((rooms)=> rooms.TeachingAy.find((staff)=> staff.tid == pairs.tid && staff.appears ==1) != undefined)
+                    
+                    if(Supappear.length > 1){
+                        setAppear(element, pairs, 0)
+                    }
+                    var Obsappear = thisslot.filter((rooms)=> rooms.TeachingAy.find((staff)=> staff.tid == pairs.oid && staff.appears ==1) != undefined)
+                    if(Obsappear.length >1){
+                        setAppear(element, pairs, 0)
+                    }
+                
+                });
+
                 if (element.StudentAy.find((present) => present.appears == 1) != undefined) {
                     var presentor = element.StudentAy.find((present) => present.appears == 1)
                     if (appear.length == 0) {
