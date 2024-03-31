@@ -29,12 +29,13 @@ module.exports.routes = {
 
   //homepage
   'GET /home': 'UserController.home',
-  
+
 
 
   //admin modify scheduling
-  "POST /scheduledesign/removerecords":  "ScheduleController.RemoveRecords",
-  "POST /scheduledesign/scheduleList/removeRecord":  "ScheduleController.removeRecord",
+  "POST /scheduledesign/ReGen": "ScheduleController.ReGen",
+  "POST /scheduledesign/removerecords": "ScheduleController.RemoveRecords",
+  "POST /scheduledesign/scheduleList/removeRecord": "ScheduleController.removeRecord",
   "GET /scheduledesign/scheduleList/modifyschedule": "ScheduleController.HandleManualCase",
   'GET /scheduledesign/scheduleList/modifyschedule/HandleManualCase/getdata': "ScheduleController.GetData",
   "POST /scheduledesign/scheduleList/modifyschedule/HandleManualCase": "ScheduleController.EditScheduleBox",
@@ -42,7 +43,7 @@ module.exports.routes = {
 
 
 
-  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist", 
+  "GET /supervisorschedulelist": "ScheduleController.supervisorschedulelist",
   "GET /supervisorschedulelist/modifyschedule/:tid/:Page": "ScheduleController.retrievesinglesupervisorschedule",
   "GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase": "ScheduleController.HandleManualCase",
   'GET /supervisorschedulelist/modifyschedule/:tid/:Page/HandleManualCase/getdata': "ScheduleController.GetData",
@@ -60,35 +61,35 @@ module.exports.routes = {
   'GET /checkdraft': "ScheduleController.checksetting",
   "GET /checkschedule": "ScheduleController.viewfinalschedule",
   "POST /scheduledesign/output": "ScheduleController.outputCSV",
-  
-  
+
+
 
   //admin setting
   "GET /setting": "SettingController.getsetting",
   "POST /setting": "SettingController.submitsetting",
-  "GET /FastUpdateSetting" : "SettingController.FastUpdateSetting",
+  "GET /FastUpdateSetting": "SettingController.FastUpdateSetting",
 
   //admin classroom
-  "GET /uploadclassroomlist" : { view: 'user/admin/uploadclassroomlist' },
-  "POST /uploadclassroomlist" : "ClassroomListController.uploadclassroom",
+  "GET /uploadclassroomlist": { view: 'user/admin/uploadclassroomlist' },
+  "POST /uploadclassroomlist": "ClassroomListController.uploadclassroom",
 
   //admin listuser
-  "POST /listuser/uploadobssql":"StudentListController.uploadobssql",
+  "POST /listuser/uploadobssql": "StudentListController.uploadobssql",
   'GET /listuser': "StudentListController.liststudent",
   'POST /listuser': "StudentListController.liststudent",
   'POST /listuser/genobs': "StudentListController.generateobs",
   'DELETE /listuser/:id': "StudentListController.deletestudent",
 
   //admin dbmanagement
-  "GET /dbmanagement" :  "DatabaseController.viewdbmanagement",
-  "POST /dbmanagement" :  "DatabaseController.removeData",
+  "GET /dbmanagement": "DatabaseController.viewdbmanagement",
+  "POST /dbmanagement": "DatabaseController.removeData",
   'POST /resetDB': "DatabaseController.resetDB",
 
   "GET /usermanagement": { view: 'user/admin/usermanagement' },
 
   'GET /hello': { view: 'user/hello' },
-  
-  
+
+
 
 
   "GET /scheduledesign/getpairing": "ScheduleController.getpairing",
@@ -178,7 +179,7 @@ module.exports.routes = {
   //'POST /uploadpairlist': "StudentListController.uploadpairlist",
 
 
- 
+
 
   'GET /createnewstudent': "StudentListController.gettopic",
   'POST /createnewstudent': "StudentListController.createnewstudent",
@@ -193,11 +194,11 @@ module.exports.routes = {
   "GET /preference": "RequestController.getpreference",
   "POST /preference": "RequestController.submitpreference",
 
-  
+
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
   "GET /viewFinalSchedule": "ScheduleController.viewFinalSchedule",
- 
+
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *

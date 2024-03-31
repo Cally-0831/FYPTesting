@@ -378,6 +378,7 @@
                             method: "POST",
                             body: requestbody
                         });
+                        alert("Please comback after 15 mintues, the plans will be appeared after generation")
                         if (response.ok) {
                             document.getElementById("loader").style.visibility = "hidden";
                             location.assign(response.url)

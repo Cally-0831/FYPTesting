@@ -588,7 +588,7 @@ module.exports = {
                     // if (boolcheckreq && boolcheckttb) {
                     if (boolcheckttb && boolcheckreq) {
                         var insertavability = "insert into studentavailable value(\"" + studentlist[a].sid + "\",Date(\"" + datestring + "\"),timestamp(\"" + datestring + " " + currentgeneratedate.toLocaleTimeString("en-GB") + "\"),timestamp(\"" + datestring + " " + currentgeneratedateend.toLocaleTimeString("en-GB") + "\"))"
-                        console.log(insertavability)
+                        // console.log(insertavability)
                         var studentavailbilityinsert = await new Promise((resolve) => {
                             pool.query(insertavability, (err, res) => {
                                 resolve(res);
@@ -613,25 +613,26 @@ module.exports = {
 
                     // console.log(checkdate1.toLocaleTimeString("en-GB") ,"  ", checkdate2.toLocaleTimeString("en-GB") , "endend")
 
-                    // console.log(checkdate1.getTime() - 30*60*1000 - checkdate2.getTime()<=30*60*1000  , "endend")
+                    // console.log((checkdate1.getTime() - 30*60*1000) - checkdate2.getTime()<=30*60*1000 , "endend")
 
-                    if (checkdate1.getTime() - checkdate2.getTime() <= 45 * 60 * 1000) {
+                    if (checkdate1.getTime() - 25 * 60 * 1000 - checkdate2.getTime() < 25 * 60 * 1000) {
+
+                        // if (currentgeneratedate.toLocaleTimeString("en-GB") == "18:00:00") {
                         if (currentgeneratedate.getDay() != 6) {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 24 * 60 * 60 * 1000);
                             currentgeneratedate = new Date(currentgeneratedate);
-                            currentgeneratedate.setHours(9);
-                            currentgeneratedate.setMinutes(30);
-                            currentgeneratedate.setSeconds(0);
-                            // console.log(currentgeneratedate)
+                            currentgeneratedate.setHours((new Date(setting3.startday).getHours()));
+                            currentgeneratedate.setMinutes((new Date(setting3.startday).getMinutes()));
+                            currentgeneratedate.setSeconds((new Date(setting3.startday).getSeconds()));
                             // currentgeneratedate.setHours(setting3.startday.getHours());
                             // currentgeneratedate.setMinutes(setting3.startday.getMinutes());
                             // currentgeneratedate.setSeconds(setting3.startday.getSeconds())
                         } else {
                             currentgeneratedate.setTime(currentgeneratedate.getTime() + 2 * 24 * 60 * 60 * 1000);
                             currentgeneratedate = new Date(currentgeneratedate);
-                            currentgeneratedate.setHours(9);
-                            currentgeneratedate.setMinutes(30);
-                            currentgeneratedate.setSeconds(0);
+                            currentgeneratedate.setHours((new Date(setting3.startday).getHours()));
+                            currentgeneratedate.setMinutes((new Date(setting3.startday).getMinutes()));
+                            currentgeneratedate.setSeconds((new Date(setting3.startday).getSeconds()));
                             // currentgeneratedate.setHours(setting3.startday.getHours());
                             // currentgeneratedate.setMinutes(setting3.startday.getMinutes());
                             // currentgeneratedate.setSeconds(setting3.startday.getSeconds())
@@ -643,7 +644,6 @@ module.exports = {
                         currentgeneratedate.setTime(currentgeneratedate.getTime() + 25 * 60 * 1000);
                     }
                     // console.log("midterm check ",currentgeneratedate.toLocaleString(),"  ",currentgeneratedateend.toLocaleString())
-
 
 
 
@@ -2092,7 +2092,7 @@ module.exports = {
                 return false;
             }
 
-            var limit = 100;
+            var limit = 50;
             var progressbarA = multi.newBar("Initital Generation Progress: [:bar] :percent :etas", {
                 complete: "=",
                 incomplete: " ",
@@ -2446,7 +2446,7 @@ module.exports = {
                     }
                 }
                 copyTemplate.tacklecount = copyTemplatecount;
-                console.log("here ", copyTemplate.tacklecount, "/", Template.Schedule[0].StudentAy.length)
+                // console.log("here ", copyTemplate.tacklecount, "/", Template.Schedule[0].StudentAy.length)
                 // Print(copyTemplate)
                 // if (copyTemplate.Schedule.find((present) => present.StudentAy.find((stu) => stu.appears == 1) != undefined) != undefined) {
                 //     // console.log("good")
@@ -2462,6 +2462,7 @@ module.exports = {
                         // console.log(copyTemplate.Schedule[0].StudentAy.filter((student)=> student.appears ==1));
                         copyTemplate.Penalty = await Penalty(copyTemplate.Schedule)
                         progressbarB.tick();
+                        console.log("final tackle count ", copyTemplate.tacklecount, " current generating count", generationcount)
                         progressbarA = multi.newBar("Restart Initital Generation Progress: [:bar] :percent :etas", {
                             complete: "=",
                             incomplete: " ",
@@ -2469,7 +2470,7 @@ module.exports = {
                             total: limit
                         })
                         AllPopulation.push(copyTemplate);
-                        // console.log("current population count  ", AllPopulation.length, " after ", generationcount, " times ")
+                        console.log("current population count  ", AllPopulation.length, " after ", generationcount, " times ")
 
                     } else {
                         console.log("Pity case")
@@ -2483,7 +2484,7 @@ module.exports = {
                     // Print(AllGenedVersion[AllGenedVersion.length-1])
                     generationcount++;
                     progressbarA.tick();
-                    console.log("final tackle count ", copyTemplate.tacklecount, "  current generating count  ", generationcount)
+                    console.log("final tackle count ", copyTemplate.tacklecount, " current generating count", generationcount)
                     // console.log(AllGenedVersion[AllGenedVersion.length-1].Schedule[0].timeslot)
                 }
                 if (AllPopulation.length == Population) {
@@ -2591,7 +2592,7 @@ module.exports = {
             // }
             var WholePlanAccordingtoTime = new Array();
             var orgPlaninorder = copyarray(Schedule);
-            orgPlaninorder = orgPlaninorder.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) || a.room-b.room);
+            orgPlaninorder = orgPlaninorder.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) || a.room - b.room);
 
             for (var a = 0; a < orgPlaninorder.length;) {
                 var thistimeslotAy = new Array();
@@ -2765,7 +2766,7 @@ module.exports = {
                     appearingcount = 0
                 }
                 // console.log(staff, "   ", sitcount, "  ", reward, "   ", isConsec, "    ", movementCount, "   ", roomPen, "   ", dayPen, " ", appearingcount, "\n")
-                Penaltymark += isConsec * 10 + roomPen * 5 + dayPen * 2 - reward + appearingcount * 100
+                Penaltymark += isConsec * 10 + roomPen * 5 + dayPen * 8 - reward + appearingcount * 100
             });
 
             // console.log(Penaltymark)
@@ -2839,7 +2840,7 @@ module.exports = {
             Pairs[1].Schedule = Pairs[1].Schedule.sort((a, b) => (new Date(a.timeslot) - new Date(b.timeslot) && a.room - b.room))
             countTackle(Pairs[0])
             countTackle(Pairs[1])
-            console.log(Pairs[0].Schedule[0].SQLdate + " ", Pairs[1].Schedule[0].SQLtime + " Pairs before1 " + Pairs[1].Schedule[0].SQLdate + " ", Pairs[1].Schedule[0].SQLtime)
+            // console.log(Pairs[0].Schedule[0].SQLdate + " ", Pairs[1].Schedule[0].SQLtime + " Pairs before1 " + Pairs[1].Schedule[0].SQLdate + " ", Pairs[1].Schedule[0].SQLtime)
             // console.log(Pairs[0].Schedule[S] + " before1 " + Pairs[1].tacklecount)
             var ChildA = JSON.parse(JSON.stringify(Pairs[0]));
             var ChildB = JSON.parse(JSON.stringify(Pairs[1]));
@@ -3175,7 +3176,7 @@ module.exports = {
             });
             var childAbefore = ChildA.tacklecount;
             var childBbefore = ChildB.tacklecount;
-            console.log(ChildA.tacklecount + " child before " + ChildB.tacklecount)
+            // console.log(ChildA.tacklecount + " child before " + ChildB.tacklecount)
 
             ChildA = await Repair(ChildA);
             ChildB = await Repair(ChildB);
@@ -3191,7 +3192,7 @@ module.exports = {
                 // Print(Pairs[0])
                 // Print(ChildB)
             }
-            console.log(childAbefore, " & ", childBbefore, "  =>  ", ChildA.tacklecount + " after " + ChildB.tacklecount)
+            // console.log(childAbefore, " & ", childBbefore, "  =>  ", ChildA.tacklecount + " after " + ChildB.tacklecount)
             // console.log(ChildA.Penalty + "  " + ChildB.Penalty)
             return [ChildA, ChildB];
         }
@@ -3260,21 +3261,21 @@ module.exports = {
 
             var appear = new Array();
             Plan.Schedule.forEach(element => {
-                var thisslot = Plan.Schedule.filter((times) => times.timeslot == element.timeslot).sort((a,b)=> a.room-b.room);
+                var thisslot = Plan.Schedule.filter((times) => times.timeslot == element.timeslot).sort((a, b) => a.room - b.room);
                 var inserted = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) != undefined)
                 var empty = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) == undefined)
                 inserted.forEach(element => {
-                    var pairs = element.StudentAy.find((present)=> present.appears == 1)
-                    var Supappear = thisslot.filter((rooms)=> rooms.TeachingAy.find((staff)=> staff.tid == pairs.tid && staff.appears ==1) != undefined)
-                    
-                    if(Supappear.length > 1){
+                    var pairs = element.StudentAy.find((present) => present.appears == 1)
+                    var Supappear = thisslot.filter((rooms) => rooms.TeachingAy.find((staff) => staff.tid == pairs.tid && staff.appears == 1) != undefined)
+
+                    if (Supappear.length > 1) {
                         setAppear(element, pairs, 0)
                     }
-                    var Obsappear = thisslot.filter((rooms)=> rooms.TeachingAy.find((staff)=> staff.tid == pairs.oid && staff.appears ==1) != undefined)
-                    if(Obsappear.length >1){
+                    var Obsappear = thisslot.filter((rooms) => rooms.TeachingAy.find((staff) => staff.tid == pairs.oid && staff.appears == 1) != undefined)
+                    if (Obsappear.length > 1) {
                         setAppear(element, pairs, 0)
                     }
-                
+
                 });
 
                 if (element.StudentAy.find((present) => present.appears == 1) != undefined) {
@@ -3287,7 +3288,7 @@ module.exports = {
                             appear.push(presentor)
                             // console.log("inserted ", presentor, " ", appear.length)
                         } else if (appear.find((stu) => stu.sid == presentor.sid) != undefined) {
-                            var appearedlist = Plan.Schedule.filter((presents)=> presents.StudentAy.find((stu)=> stu.sid == presentor.sid && stu.appears==1)!= undefined)
+                            var appearedlist = Plan.Schedule.filter((presents) => presents.StudentAy.find((stu) => stu.sid == presentor.sid && stu.appears == 1) != undefined)
                             setAppear(appearedlist[randomNum(appearedlist)], presentor, 0)
                             // console.log("removed this ", presentor)
                         }
@@ -3297,7 +3298,7 @@ module.exports = {
                 }
             });
             countTackle(Plan)
-            console.log(Plan.tacklecount, " In repair")
+            // console.log(Plan.tacklecount, " In repair")
             var beforecount = Plan.tacklecount;
             var pairinglist = await getPairingList();
             pairinglist = reduceByCurrentExistingStudent(Plan.Schedule[0].StudentAy, pairinglist)
@@ -3413,8 +3414,8 @@ module.exports = {
 
             // Print(Plan)
             // // console.log(WholePlanAccordingtoTime)
-            
-       
+
+
 
             WholePlanAccordingtoTime.forEach(timeslot => {
                 if (!timeslot.hasOwnProperty("empty")) {
@@ -3505,31 +3506,31 @@ module.exports = {
 
 
             notTackledPresentation.forEach(inputPairs => {
-            //     var method = Math.floor(Math.random() * 3)
-            // WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => new Date(a[0].timeslot) - new Date(b[0].timeslot))
-            // switch (method) {
-            //     case 0:
-            //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => new Date(a[0].timeslot) - new Date(b[0].timeslot))
-            //         break;
-            //     case 1:
-            //         var pivot = (new Date(WholePlanAccordingtoTime[Math.round((randomNum(WholePlanAccordingtoTime)) * 0.5)][0].timeslot)).getTime();
-            //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => Math.abs((new Date(a[0].timeslot)).getTime() - pivot) - Math.abs((new Date(b[0].timeslot)).getTime() - pivot));
+                //     var method = Math.floor(Math.random() * 3)
+                // WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => new Date(a[0].timeslot) - new Date(b[0].timeslot))
+                // switch (method) {
+                //     case 0:
+                //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => new Date(a[0].timeslot) - new Date(b[0].timeslot))
+                //         break;
+                //     case 1:
+                //         var pivot = (new Date(WholePlanAccordingtoTime[Math.round((randomNum(WholePlanAccordingtoTime)) * 0.5)][0].timeslot)).getTime();
+                //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort((a, b) => Math.abs((new Date(a[0].timeslot)).getTime() - pivot) - Math.abs((new Date(b[0].timeslot)).getTime() - pivot));
 
-            //         break;
-            //     case 2:
-            //         // WholePlanAccordingtoTime = copyTemplate.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) && a.room - b.room);
-            //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort(() => 0.5 - Math.random())
-            //         break;
-            //     default:
-            //         break;
+                //         break;
+                //     case 2:
+                //         // WholePlanAccordingtoTime = copyTemplate.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) && a.room - b.room);
+                //         WholePlanAccordingtoTime = WholePlanAccordingtoTime.sort(() => 0.5 - Math.random())
+                //         break;
+                //     default:
+                //         break;
 
-            // }
+                // }
 
 
 
                 var currenttime = Plan.Schedule[0].timeslot;
                 for (var a = 0; a < WholePlanAccordingtoTime.length; a++) {
-                    WholePlanAccordingtoTime[a] = WholePlanAccordingtoTime[a].sort((a,b)=> a.room - b.room)
+                    WholePlanAccordingtoTime[a] = WholePlanAccordingtoTime[a].sort((a, b) => a.room - b.room)
                     // console.log(WholePlanAccordingtoTime[a])
                     if (WholePlanAccordingtoTime[a][0].roomcount != WholePlanAccordingtoTime[a].length) {
 
@@ -3671,7 +3672,7 @@ module.exports = {
             removeadded = [];
 
             // var method = Math.floor(Math.random() * 3)
-            Plan.Schedule = Plan.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot)|| a.room - b.room)
+            Plan.Schedule = Plan.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) || a.room - b.room)
             // switch (method) {
             //     case 0:
             //         Plan.Schedule = Plan.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) || a.room-b.room)
@@ -3694,7 +3695,7 @@ module.exports = {
 
             notTackledPresentation.forEach(inputPairs => {
                 for (var a = 0; a < Plan.Schedule.length; a++) {
-                    var thisslot = Plan.Schedule.filter((times) => times.timeslot == Plan.Schedule[a].timeslot).sort((a,b)=> a.room-b.room);
+                    var thisslot = Plan.Schedule.filter((times) => times.timeslot == Plan.Schedule[a].timeslot).sort((a, b) => a.room - b.room);
                     var inserted = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) != undefined)
                     var empty = thisslot.filter((rooms) => rooms.StudentAy.find((present) => present.appears == 1) == undefined)
 
@@ -3738,7 +3739,7 @@ module.exports = {
 
             if (beforecount != Plan.tacklecount) {
                 // Print(Plan)
-                console.log(beforecount, " check after ", Plan.tacklecount)
+                // console.log(beforecount, " check after ", Plan.tacklecount)
             }
 
             Plan.Penalty = await Penalty(Plan.Schedule);
@@ -3790,11 +3791,11 @@ module.exports = {
             }
             NewGen.sort((a, b) => a.Penalty - b.Penalty);
             NewGen.forEach(child => {
-                console.log(reduceDuplicate(oldGen, child))
+                // console.log(reduceDuplicate(oldGen, child))
                 // console.log(">>check in new gen",child.tacklecount)
                 oldGen.sort((a, b) => a.Penalty - b.Penalty);
                 if (!reduceDuplicate(oldGen, child) && oldGen[oldGen.length - 1].Penalty > child.Penalty && child.tacklecount >= oldGen[oldGen.length - 1].tacklecount) {
-                    console.log("replaced by newGen", oldGen[oldGen.length - 1].Penalty, " ", child.Penalty)
+                    // console.log("replaced by newGen", oldGen[oldGen.length - 1].Penalty, " ", child.Penalty)
                 }
                 oldGen.pop();
                 oldGen.push(child);
@@ -3806,7 +3807,7 @@ module.exports = {
         async function Mutation(Plan) {
             Plan.Schedule = Plan.Schedule.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot) || a.room - b.room)
 
-            console.log("before Mutation ", Plan.tacklecount)
+            // console.log("before Mutation ", Plan.tacklecount)
             var copyPlan = JSON.parse(JSON.stringify(Plan))
             // Print(Plan);
             var swapped = false;
@@ -3925,7 +3926,7 @@ module.exports = {
                         setAppear(Plan.Schedule[randomA], selectedAPresentation, 0)
                     }
                     setAppear(Plan.Schedule[randomA], selectedBPresentation, 1)
-                    console.log("Swapped in Mutation")
+                    // console.log("Swapped in Mutation")
                     swapped = true;
                 }
                 count++;
@@ -3933,13 +3934,13 @@ module.exports = {
             // console.log(Plan);
             // Print(Plan);
             countTackle(Plan);
-            console.log("After Mutation ", Plan.tacklecount)
+            // console.log("After Mutation ", Plan.tacklecount)
             if (Plan.tacklecount < copyPlan) {
                 Plan = copyPlan
             } else {
                 Plan.Penalty = await Penalty(Plan.Schedule);
             }
-            console.log(">>checktackle in mutation ", Plan.tacklecount)
+            // console.log(">>checktackle in mutation ", Plan.tacklecount)
 
             // Print(Plan);
         }
@@ -4400,7 +4401,7 @@ module.exports = {
         var ProcessStart = new Date();
         var PlansRequiresRRSRoom = new Array();
         var PlansCanSetinFSCRooms = new Array();
-        var InitialGenNum = 20
+        var InitialGenNum = 10
         var countingshuffledate = 0;
         var uniquetimeslotcounts = await checkuniquetimeslotcountforoneday(possibledatecombination[possibledatecombination.length - 1]);
         // console.log(StudentList.Length, " ", TeachingList.length, " ", possibledatecombination[possibledatecombination.length - 1], " ", req.body.roomList)
@@ -4414,16 +4415,49 @@ module.exports = {
             }
         })
         console.log(checking)
+        var finalduration = possibledatecombination[possibledatecombination.length - 1]
 
-        for (var datecombin = 27; datecombin < possibledatecombination.length; datecombin++) {
+        var plans = 10;
+
+        for (var datecombin = 0; datecombin < plans; datecombin++) {
 
             // for (var datecombin = 20; datecombin < 25; datecombin++) {
             // for (var datecombin = 10; datecombin < 15; datecombin++) {
-            console.log("For Plan", datecombin, possibledatecombination[datecombin])
+            // console.log("For Plan", datecombin, possibledatecombination[datecombin])
+            console.log("For Plan", datecombin, finalduration)
+            var totalStudNum = await getStudentnum();
+            var studenList = await getPairingList();
+            var teachingList = await getTeachingList();
+            var StudentList = new Array();
+            var TeachingList = new Array();
+            var Generation = 1000;
+            studenList.forEach(element => {
+                var Obj = JSON.parse(JSON.stringify({
+                    sid: element.sid,
+                    tid: element.tid,
+                    oid: element.oid,
+                    appears: -1
+                }))
+                StudentList.push(Obj);
+            });
+            teachingList.forEach(element => {
+                var Obj = JSON.parse(JSON.stringify({
+                    tid: element.tid,
+                    appears: -1
+                }))
+                TeachingList.push(Obj)
+            });
+            var BigTemplate = await InitialArrayTemplate(StudentList, TeachingList, uniquetimeslotcounts, req.body.roomList);
 
+            var checking = new Array();
+            BigTemplate.Schedule.forEach((room) => {
+                if (checking.length == 0 || checking.find((ex) => ex == room.room) == undefined) {
+                    checking.push(room.room);
 
-            var Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
-
+                }
+            })
+            // var Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
+            var Template = reduceTemplateDates(BigTemplate, finalduration)
 
             // console.log(Template)
 
@@ -4460,7 +4494,8 @@ module.exports = {
                     // console.log(newStudentList)
                     // console.log("Template length ", Template.length)
                     BigTemplate = await InitialArrayTemplate(newStudentList, TeachingList, uniquetimeslotcounts, req.body.roomList);
-                    Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
+                    // Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
+                    Template = reduceTemplateDates(BigTemplate, finalduration)
                     // console.log(Template.Schedule[0].length)
                     AllPopulation = await InitialGeneration(InitialGenNum, Template);
 
@@ -4611,7 +4646,8 @@ module.exports = {
                     // console.log(newStudentList)
                     // console.log("Template length ", Template.length)
                     BigTemplate = await InitialArrayTemplate(newStudentList, TeachingList, uniquetimeslotcounts, req.body.roomList);
-                    Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
+                    // Template = reduceTemplateDates(BigTemplate, possibledatecombination[datecombin])
+                    Template = reduceTemplateDates(BigTemplate, finalduration)
                     // console.log(Template.Schedule[0].length)
                     AllPopulation = await InitialGeneration(InitialGenNum, Template);
 
@@ -4695,7 +4731,8 @@ module.exports = {
                         checkSuccess = true;
                     }
 
-                    changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
+                    // changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
+                    changeRoom(bestPlan.Schedule, finalduration)
                     // finalResultOfPlans.push(bestPlan);
                     for (var timeslot = 0; timeslot < bestPlan.Schedule.length; timeslot++) {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
@@ -4722,7 +4759,7 @@ module.exports = {
                         //                         checkNewPatched.Penaltymark = await Penalty(checkNewPatched)
                         //                         bestPlan = checkNewPatched;
                         await checkAnyManalHandling(bestPlan, datecombin)
-                        // bestPlan = await checkAnyManalHandling(bestPlan, datecombin)
+                        bestPlan = await checkAnyManalHandling(bestPlan, datecombin)
                         finalResultOfPlans.push(JSON.parse(JSON.stringify({ planNo: datecombin, planStatus: 1, Penalty: bestPlan.Penalty, tacklecount: bestPlan.tacklecount })))
                     }
 
@@ -7302,6 +7339,24 @@ module.exports = {
         return res.status(200).json("ok");
     },
 
+    ReGen: async function (req, res) {
+
+        const importer = await sails.helpers.importer()
+        //console.log(importer)
+        // Recursive function to get files
+        const fs = require("fs");
+
+        const sqlfiles = '../SQL/Standard/RemoveFile/RemoveAllSchedule.sql'
+
+        await importer.import(sqlfiles);
+        var files_imported = importer.getImported();
+        console.log(`${files_imported.length} SQL file(s) imported.`);
+
+
+        return res.status(200).json("ok");
+
+    },
+
     removeRecord: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
@@ -7363,26 +7418,26 @@ module.exports = {
             element.Date = date.toLocaleDateString("en-GB");
         });
 
-        var getManualBox = await new Promise((resolve) => {
-            db.query("select t2.sid as StuID, t1.supname as SupName, t3.supname as ObsName from manualhandlecase as t2 left join supervisor as t1 on t1.tid =t2.tid left join supervisor as t3 on t3.tid = t2.oid where planno = \"" + req.body.planNo + "\"", (err, res) => {
-                try {
-                    var string = JSON.stringify(res);
-                    var json = JSON.parse(string);
-                    var ans = json;
-                    resolve(ans)
-                } catch (err) { console.log(err) }
+        // var getManualBox = await new Promise((resolve) => {
+        //     db.query("select t2.sid as StuID, t1.supname as SupName, t3.supname as ObsName from manualhandlecase as t2 left join supervisor as t1 on t1.tid =t2.tid left join supervisor as t3 on t3.tid = t2.oid where planno = \"" + req.body.planNo + "\"", (err, res) => {
+        //         try {
+        //             var string = JSON.stringify(res);
+        //             var json = JSON.parse(string);
+        //             var ans = json;
+        //             resolve(ans)
+        //         } catch (err) { console.log(err) }
 
-            })
-        }).catch((err) => {
-            errmsg = "error happened in ScheduleController.outputCSV.getPlanBox"
-        })
+        //     })
+        // }).catch((err) => {
+        //     errmsg = "error happened in ScheduleController.outputCSV.getPlanBox"
+        // })
 
         const opts = {};
         const parser = new Parser(opts);
         const csv = parser.parse(getPlanBox);
 
-        const parser2 = new Parser(opts);
-        const csv2 = parser2.parse(getManualBox);
+        // const parser2 = new Parser(opts);
+        // const csv2 = parser2.parse(getManualBox);
 
 
         // console.log(csv);

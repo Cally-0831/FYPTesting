@@ -1,10 +1,24 @@
 <div>
     <div class="Pagetitle">Schedule List </div>
-    <div class="row">
-        <div class="buttons">
-            <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+   
+        <div class="rows">
+            <div class="columns is-multiline is-mobile">
+                <div class="column is-half-desktop is-3-mobile">
+                    <div class="buttons is-left">
+                        <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
+                    </div>
+                </div>
+           
+            <div class="column is-half-desktop is-9-mobile">
+                <div class="buttons is-right">
+                    <div class="button buttonlogout is-responsive " onclick="ReGeneration()">ReGenerate</div>
+                </div>
+            </div>
+ </div>
+
         </div>
-    </div>
+
+   
     <br>
 
     <div class="rows">
@@ -13,35 +27,34 @@
                 <div class="column is-fullwidth-mobile is-8-desktop">
                     <div class="tabs is-toggle">
                         <ul>
-                            
-                                <%plannumber.forEach(element=>{%>
 
-                                    <%if(req.query.planNo==element.planNo){%>
-                                        <li class="is-active"><a>Plan No. <%=element.planNo%></a></li>
-                                        <%}else{%>
-                                            <%if(element.planStatus=="Manual Handling" ){%>
-                                                <li style="background-color: rgb(245, 159, 159);"><a
-                                                        href="/scheduledesign/scheduleList?planNo=<%=element.planNo%>">Plan
+                            <%plannumber.forEach(element=>{%>
+
+                                <%if(req.query.planNo==element.planNo){%>
+                                    <li class="is-active"><a>Plan No. <%=element.planNo%></a></li>
+                                    <%}else{%>
+                                        <%if(element.planStatus=="Manual Handling" ){%>
+                                            <li style="background-color: rgb(245, 159, 159);"><a
+                                                    href="/scheduledesign/scheduleList?planNo=<%=element.planNo%>">Plan
+                                                    No.
+                                                    <%=element.planNo%>
+                                                </a></li>
+                                            <%}else{%>
+                                                <li><a href="/scheduledesign/scheduleList?planNo=<%=element.planNo%>">Plan
                                                         No.
                                                         <%=element.planNo%>
                                                     </a></li>
-                                                <%}else{%>
-                                                    <li><a
-                                                            href="/scheduledesign/scheduleList?planNo=<%=element.planNo%>">Plan
-                                                            No.
-                                                            <%=element.planNo%>
-                                                        </a></li>
-                                                    <%}%>
+                                                <%}%>
 
-                                                        <%}%>
-                                                            <%})%>
+                                                    <%}%>
+                                                        <%})%>
 
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <%if(planhandlecase != null ){%>
+        <%if(planhandlecase !=null ){%>
             <div class="row">
                 <div class="columns is-centered is-multiline">
                     <div class="column is-fullwidth-mobile is-6-desktop">
@@ -54,41 +67,53 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
+                                    <th
+                                        style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
                                         StudentID
                                     </th>
-                                    <th style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
+                                    <th
+                                        style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
                                         StuName
-                                    </th> 
-                                    <th style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
+                                    </th>
+                                    <th
+                                        style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
                                         SupName
                                     </th>
-                                    <th style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
+                                    <th
+                                        style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
                                         ObsName
                                     </th>
-                                    <th style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
-                                       Action
+                                    <th
+                                        style="text-align:center; font-size: calc(15px + 0.390625vw);vertical-align: middle;">
+                                        Action
                                     </th>
                                 </tr>
-                               <%planhandlecase.forEach((element)=>{%>
-                                <tr>
-                                    <td  style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                        <%=element.sid%>
-                                    </td>
-                                   <td  style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                        <%=element.stdname%>
-                                    </td>
-                                   <td  style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                        <%=element.supname%>
-                                    </td>
-                                   <td  style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                        <%=element.obsname%>
-                                    </td>
-                                   <td  style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                       <div class="button greenbutton" onclick="Edit(null,'<%=element.sid%>','<%=req.query.planNo%>',null)"> Edit </div>
-                                    </td>
-                                </tr>
-                                <%})%>
+                                <%planhandlecase.forEach((element)=>{%>
+                                    <tr>
+                                        <td
+                                            style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                            <%=element.sid%>
+                                        </td>
+                                        <td
+                                            style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                            <%=element.stdname%>
+                                        </td>
+                                        <td
+                                            style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                            <%=element.supname%>
+                                        </td>
+                                        <td
+                                            style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                            <%=element.obsname%>
+                                        </td>
+                                        <td
+                                            style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                            <div class="button greenbutton"
+                                                onclick="Edit(null,'<%=element.sid%>','<%=req.query.planNo%>',null)">
+                                                Edit </div>
+                                        </td>
+                                    </tr>
+                                    <%})%>
                             </table>
                         </div>
                     </div>
@@ -105,12 +130,12 @@
                                         <th colspan="9"
                                             style="text-align:center; font-size: calc(20px + 0.390625vw); background-color: bisque;">
                                             Plan Number : <%=req.query.planNo%> (Handled : <%=plandetails.length%>)
-                                                <div class="buttons is-responsive is-right is-bordered">
-                                                    <div class="button greenbutton"
-                                                        onclick="output('<%=req.query.planNo%>')">
-                                                        Output CSV file
+                                                    <div class="buttons is-responsive is-right is-bordered">
+                                                        <div class="button greenbutton"
+                                                            onclick="output('<%=req.query.planNo%>')">
+                                                            Output CSV file
+                                                        </div>
                                                     </div>
-                                                </div>
 
 
                                         </th>
@@ -195,60 +220,62 @@
                                                                             <%=element.Classroom%>
                                                                         </td>
                                                                         <%break;%>
-                                                                        <%case "FSC901E" :%>
-                                                                <td
-                                                                    style="background-color: rgb(57, 111, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                    <%=element.Classroom%>
-                                                                </td>
-                                                                <%break;%>
-                                                                            <%case "RRS638" :%>
+                                                                            <%case "FSC901E" :%>
                                                                                 <td
-                                                                                    style="background-color: rgb(147, 249, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                    style="background-color: rgb(57, 111, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
                                                                                     <%=element.Classroom%>
                                                                                 </td>
                                                                                 <%break;%>
-                                                                                    <%default: %>
+                                                                                    <%case "RRS638" :%>
                                                                                         <td
-                                                                                            style="background-color: rgb(160, 160, 254); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                            style="background-color: rgb(147, 249, 247); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
                                                                                             <%=element.Classroom%>
                                                                                         </td>
-                                                                                        <%}%>
+                                                                                        <%break;%>
+                                                                                            <%default: %>
+                                                                                                <td
+                                                                                                    style="background-color: rgb(160, 160, 254); text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                    <%=element.Classroom%>
+                                                                                                </td>
+                                                                                                <%}%>
 
 
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <%=element.StuID%>
-                                                                                            </td>
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <%=element.SupName%>
-                                                                                            </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <%=element.StuID%>
+                                                                                                    </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <%=element.SupName%>
+                                                                                                    </td>
 
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <%=element.StuName%>
-                                                                                            </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <%=element.StuName%>
+                                                                                                    </td>
 
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <%=element.ObsName%>
-                                                                                            </td>
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <%=element.Topic%>
-                                                                                            </td>
-                                                                                            <td
-                                                                                                style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
-                                                                                                <div
-                                                                                                    class="buttons is-responsive">
-                                                                                                    <div class="button bluebutton is-multiline"
-                                                                                                        onclick="Edit('<%=element.boxID%>','<%=element.StuID%>','<%=req.query.planNo%>','<%=element.Type%>')">
-                                                                                                        Edit</div>
-                                                                                                    <div class="button redbutton is-multiline"
-                                                                                                        onclick="Remove('<%=element.boxID%>','<%=element.StuID%>','<%=req.query.planNo%>')">
-                                                                                                        Remove</div>
-                                                                                                </div>
-                                                                                            </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <%=element.ObsName%>
+                                                                                                    </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <%=element.Topic%>
+                                                                                                    </td>
+                                                                                                    <td
+                                                                                                        style="text-align:center; font-size: calc(10px + 0.390625vw);vertical-align: middle;">
+                                                                                                        <div
+                                                                                                            class="buttons is-responsive">
+                                                                                                            <div class="button bluebutton is-multiline"
+                                                                                                                onclick="Edit('<%=element.boxID%>','<%=element.StuID%>','<%=req.query.planNo%>','<%=element.Type%>')">
+                                                                                                                Edit
+                                                                                                            </div>
+                                                                                                            <div class="button redbutton is-multiline"
+                                                                                                                onclick="Remove('<%=element.boxID%>','<%=element.StuID%>','<%=req.query.planNo%>')">
+                                                                                                                Remove
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </td>
                                         </tr>
                                         <%})%>
                                 </table>
@@ -269,6 +296,24 @@
     function datecolor() {
 
     }
+
+    async function ReGeneration() {
+        var r = confirm("Are you sure to regenerat?\nThe currenet result will be displosed and cannot be recoverd.")
+        if (r) {
+            var response = await fetch("/scheduledesign/ReGen", {
+                method: "POST",
+
+            });
+            if (response.status == 200) {
+                alert("Records are removed, please process the scheduling process again")
+                location.assign("/scheduledesign")
+            } else {
+                alert("Error exists during records removal.")
+            }
+        }
+    }
+
+
     async function output(planNo) {
         var reqbody = JSON.stringify({ planNo: planNo });
         // console.log(reqbody);
@@ -278,6 +323,7 @@
         });
         if (response.status == 200) {
             var filefile = await response.json();
+            console.log(filefile)
             downloadBlob(filefile, "SchedulePlanNo" + planNo + ".csv", 'text/csv;charset=utf-8;')
             function downloadBlob(content, filename, contentType) {
                 // Create a blob
