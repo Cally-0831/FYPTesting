@@ -159,7 +159,8 @@ insert ignore  into alltakecourse values("COMP2027_00001","sid152222");
 insert ignore into alltakecourse values("COMP2045_00002","sid161111");
 insert ignore  into alltakecourse values("COMP2045_20201","sid161111");
 
-Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid011111";
+
+-- Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid011111";
 Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid012222";
 Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Approve by Demo"  where allstudenttakecourse.pid="sid013333";
 Update allstudenttakecourse set allstudenttakecourse.confirmation = "2",  allstudenttakecourse.review = now(), allstudenttakecourse.ttbcomments = "Rejected by Demo"  where allstudenttakecourse.pid="sid014444";

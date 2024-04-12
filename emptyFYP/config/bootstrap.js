@@ -53,7 +53,7 @@ const importer = await sails.helpers.importer()
     '../SQL/Standard/Setting.sql',
     '../SQL/Standard/AllclassSQL.sql',
 
-    '../SQL/Standard/SettingUpdateForFastTesting.sql',
+    // '../SQL/Standard/SettingUpdateForFastTesting.sql',
     '../SQL/Standard/PairingObserver.sql',
   ]
 

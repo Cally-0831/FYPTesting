@@ -4444,17 +4444,17 @@ module.exports = {
                     }
                 });
                 // console.log("need to Tackle ", needtoTackle.length, "  ", needtoTackle);
-                var result = await forceInsert(needtoTackle, Plan, PlanNo);
-                // var result2 = await forceinsert2(needtoTackle, Plan, PlanNo);
-                // console.log("return in manal ");
-                Plan = result.Schedule;
+                // var result = await forceInsert(needtoTackle, Plan, PlanNo);
+                // // var result2 = await forceinsert2(needtoTackle, Plan, PlanNo);
+                // // console.log("return in manal ");
+                // Plan = result.Schedule;
 
-                // console.log(Plan);
-                // console.log("return in manal ");
-                Plan.Penalty = await Penalty(Plan.Schedule);
-                countTackle(Plan)
-                console.log(Plan.tacklecount, "  ", Plan.Penalty);
-                needtoTackle = result.needToTackleCase;
+                // // console.log(Plan);
+                // // console.log("return in manal ");
+                // Plan.Penalty = await Penalty(Plan.Schedule);
+                // countTackle(Plan)
+                // console.log(Plan.tacklecount, "  ", Plan.Penalty);
+                // needtoTackle = result.needToTackleCase;
 
                 if (needtoTackle.length == 0) {
                     var UpdateQuery = "update allschedulebox set planStatus = \"Successful\" where planNo = " + PlanNo + " "
@@ -4513,8 +4513,9 @@ module.exports = {
             return NewTemplate;
         }
 
-        function changeRoom(Plan, datecombin) {
+        function changeRoom(Plan2, datecombin) {
             /** move rooms in between */
+            var Plan = Plan2.Schedule
 
 
             Plan = Plan.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot))
@@ -4566,7 +4567,7 @@ module.exports = {
                                         console.log(obj3 ,"from ",Plan[present3index].SQLdate,"  ",Plan[present3index].SQLtime,"  ",Plan[present3index].room," to ",Plan[present2index].SQLdate,"  ",Plan[present2index].SQLtime,"  ",Plan[present2index].room)
                                     }
                                     setAppear(Plan[present3index], obj2, 1)
-                                    console.log(obj3 ,"from ",Plan[present2index].SQLdate,"  ",Plan[present2index].SQLtime,"  ",Plan[present2index].room," to ",Plan[present3index].SQLdate,"  ",Plan[present3index].SQLtime,"  ",Plan[present3index].room)
+                                    console.log(obj2 ,"from ",Plan[present2index].SQLdate,"  ",Plan[present2index].SQLtime,"  ",Plan[present2index].room," to ",Plan[present3index].SQLdate,"  ",Plan[present3index].SQLtime,"  ",Plan[present3index].room)
                                   
                                     
                                 }else{
@@ -4591,7 +4592,7 @@ module.exports = {
         var teachingList = await getTeachingList();
         var StudentList = new Array();
         var TeachingList = new Array();
-        var Generation = 500;
+        var Generation = 1000;
         studenList.forEach(element => {
             var Obj = JSON.parse(JSON.stringify({
                 sid: element.sid,
@@ -4643,7 +4644,7 @@ module.exports = {
             var teachingList = await getTeachingList();
             var StudentList = new Array();
             var TeachingList = new Array();
-            var Generation = 500;
+            var Generation = 1000;
             studenList.forEach(element => {
                 var Obj = JSON.parse(JSON.stringify({
                     sid: element.sid,
@@ -4794,13 +4795,13 @@ module.exports = {
                     if (bestPlan.tacklecount == totalStudNum) {
                         checkSuccess = true;
                     }
-                    // changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
+                    // changeRoom(bestPlan, possibledatecombination[datecombin])
                     // finalResultOfPlans.push(bestPlan);
                     for (var timeslot = 0; timeslot < bestPlan.Schedule.length; timeslot++) {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
                             } else {
                                 // await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
@@ -4963,7 +4964,7 @@ module.exports = {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
                             } else {
                                 await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),

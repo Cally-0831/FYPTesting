@@ -1,83 +1,83 @@
 INSERT INTO  allusers VALUES ("Admin","admin","P@ssw0rd","Active",0,"adm");
 insert into allclass values("EMPTY","","","","","","0","08:30","09:30","0");
 
-insert IGNORE into allusers values("Dr. LIU, Yang","tid00001","tpw00001","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. LIU Yang","tid00001","tpw00001","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00001";
 
-insert IGNORE into allusers values("Dr. WANG, Juncheng","tid00002","tpw00002","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. WANG Juncheng","tid00002","tpw00002","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00002";
 
-insert IGNORE into allusers values("Dr. HAN, Bo","tid00003","tpw00003","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. HAN Bo","tid00003","tpw00003","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00003";
 
-insert IGNORE into allusers values("Dr. ZHOU, Kaiyang","tid00004","tpw00004","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. ZHOU Kaiyang","tid00004","tpw00004","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00004";
 
-insert IGNORE into allusers values("Dr. MA, Jing","tid00005","tpw00005","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. MA Jing","tid00005","tpw00005","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00005";
 
-insert IGNORE into allusers values("Prof. XU, Jianliang","tid00006","tpw00006","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. XU Jianliang","tid00006","tpw00006","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00006";
 
-insert IGNORE into allusers values("Dr. ZHANG, Eric Lu","tid00007","tpw00007","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. ZHANG Eric Lu","tid00007","tpw00007","ACTIVE","0","sup");
 update supervisor set priority = "1" where tid = "tid00007";
 
-insert IGNORE into allusers values("Prof. CHEUNG, William Kwok Wai","tid00008","tpw00008","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. CHEUNG William Kwok Wai","tid00008","tpw00008","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00008";
 
-insert IGNORE into allusers values("Prof. CHOI, Byron Koon Kau","tid00009","tpw00009","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. CHOI Byron Koon Kau","tid00009","tpw00009","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00009";
 
-insert IGNORE into allusers values("Dr. YANG, Renchi","tid00010","tpw00010","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. YANG Renchi","tid00010","tpw00010","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00010";
 
-insert IGNORE into allusers values("Prof. CHEN, Li","tid00011","tpw00011","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. CHEN Li","tid00011","tpw00011","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00011";
 
-insert IGNORE into allusers values("Dr. UMAIR, Zuneera","tid00012","tpw00012","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. UMAIR Zuneera","tid00012","tpw00012","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00012";
 
-insert IGNORE into allusers values("Dr. CHAN, Jacky Chun Pong","tid00013","tpw00013","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. CHAN Jacky Chun Pong","tid00013","tpw00013","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00013";
 
-insert IGNORE into allusers values("Dr. LEE, Fion Sau Ling","tid00014","tpw00014","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. LEE Fion Sau Ling","tid00014","tpw00014","ACTIVE","0","sup");
 update supervisor set priority = "3" where tid = "tid00014";
 
-insert IGNORE into allusers values("Prof. LEUNG, Yiu Wing","tid00015","tpw00015","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. LEUNG Yiu Wing","tid00015","tpw00015","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00015";
 
-insert IGNORE into allusers values("Dr. FENG, Jian","tid00016","tpw00016","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. FENG Jian","tid00016","tpw00016","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00016";
 
-insert IGNORE into allusers values("Dr. WAN, Renjie","tid00017","tpw00017","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. WAN Renjie","tid00017","tpw00017","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00017";
 
 
-insert IGNORE into allusers values("Dr. CHEN, Jie","tid00018","tpw00018","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. CHEN Jie","tid00018","tpw00018","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00018";
 
 
-insert IGNORE into allusers values("Dr. DAI, Henry Hong Ning","tid00019","tpw00019","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. DAI Henry Hong Ning","tid00019","tpw00019","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00019";
 
 
-insert IGNORE into allusers values("Dr. CHOY, Martin Man Ting","tid00020","tpw00020","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. CHOY Martin Man Ting","tid00020","tpw00020","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00020";
 
 
-insert IGNORE into allusers values("Dr. WANG, Kevin King Hang","tid00021","tpw00021","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. WANG Kevin King Hang","tid00021","tpw00021","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00021";
 
-insert IGNORE into allusers values("Prof. YUEN, Pong Chi","tid00022","tpw00022","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. YUEN Pong Chi","tid00022","tpw00022","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00022";
 
-insert IGNORE into allusers values("Prof. CHEUNG, Yiu Ming","tid00023","tpw00023","ACTIVE","0","sup");
+insert IGNORE into allusers values("Prof. CHEUNG Yiu Ming","tid00023","tpw00023","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00023";
 
-insert IGNORE into allusers values("Dr. YU, Wilson Shih Bun","tid00024","tpw00024","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. YU Wilson Shih Bun","tid00024","tpw00024","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00024";
 
-insert IGNORE into allusers values("Dr. LI, Kristen Yuanxi","tid00025","tpw00025","ACTIVE","0","sup");
+insert IGNORE into allusers values("Dr. LI Kristen Yuanxi","tid00025","tpw00025","ACTIVE","0","sup");
 update supervisor set priority = "2" where tid = "tid00025";
 
 
@@ -647,7 +647,7 @@ insert into allrequestfromsupervisor values("tid00025FsI11","tid00025","2024-05-
 -- insert into allpreffromsup values("tid00007",true,true,now());
 -- insert into allpreffromsup values("tid00008",true,true,now());
 -- insert into allpreffromsup values("tid00009",false,true,now());
--- insert into allpreffromsup values("tid00010",true,true,now());
+-- insert into allpreffromsup values("tid00010",true,false,now());
 -- insert into allpreffromsup values("tid00011",false,false,now());
 -- insert into allpreffromsup values("tid00012",false,true,now());
 -- insert into allpreffromsup values("tid00013",true,true,now());
@@ -665,57 +665,57 @@ insert into allrequestfromsupervisor values("tid00025FsI11","tid00025","2024-05-
 -- insert into allpreffromsup values("tid00025",true,true,now());
 
 
--- insert into allpreffromsup values("tid00001",true,true,now());
--- insert into allpreffromsup values("tid00002",true,true,now());
--- insert into allpreffromsup values("tid00003",true,true,now());
--- insert into allpreffromsup values("tid00004",true,true,now());
--- insert into allpreffromsup values("tid00005",true,true,now());
--- insert into allpreffromsup values("tid00006",true,true,now());
--- insert into allpreffromsup values("tid00007",true,true,now());
--- insert into allpreffromsup values("tid00008",true,true,now());
--- insert into allpreffromsup values("tid00009",true,true,now());
--- insert into allpreffromsup values("tid00010",true,true,now());
--- insert into allpreffromsup values("tid00011",true,true,now());
--- insert into allpreffromsup values("tid00012",true,true,now());
--- insert into allpreffromsup values("tid00013",true,true,now());
--- insert into allpreffromsup values("tid00014",true,true,now());
--- insert into allpreffromsup values("tid00015",true,true,now());
--- insert into allpreffromsup values("tid00016",true,true,now());
--- insert into allpreffromsup values("tid00017",true,true,now());
--- insert into allpreffromsup values("tid00018",true,true,now());
--- insert into allpreffromsup values("tid00019",true,true,now());
--- insert into allpreffromsup values("tid00020",true,true,now());
--- insert into allpreffromsup values("tid00021",true,true,now());
--- insert into allpreffromsup values("tid00022",true,true,now());
--- insert into allpreffromsup values("tid00023",true,true,now());
--- insert into allpreffromsup values("tid00024",true,true,now());
--- insert into allpreffromsup values("tid00025",true,true,now());
+insert into allpreffromsup values("tid00001",true,true,now());
+insert into allpreffromsup values("tid00002",true,true,now());
+insert into allpreffromsup values("tid00003",true,true,now());
+insert into allpreffromsup values("tid00004",true,true,now());
+insert into allpreffromsup values("tid00005",true,true,now());
+insert into allpreffromsup values("tid00006",true,true,now());
+insert into allpreffromsup values("tid00007",true,true,now());
+insert into allpreffromsup values("tid00008",true,true,now());
+insert into allpreffromsup values("tid00009",true,true,now());
+insert into allpreffromsup values("tid00010",true,true,now());
+insert into allpreffromsup values("tid00011",true,true,now());
+insert into allpreffromsup values("tid00012",true,true,now());
+insert into allpreffromsup values("tid00013",true,true,now());
+insert into allpreffromsup values("tid00014",true,true,now());
+insert into allpreffromsup values("tid00015",true,true,now());
+insert into allpreffromsup values("tid00016",true,true,now());
+insert into allpreffromsup values("tid00017",true,true,now());
+insert into allpreffromsup values("tid00018",true,true,now());
+insert into allpreffromsup values("tid00019",true,true,now());
+insert into allpreffromsup values("tid00020",true,true,now());
+insert into allpreffromsup values("tid00021",true,true,now());
+insert into allpreffromsup values("tid00022",true,true,now());
+insert into allpreffromsup values("tid00023",true,true,now());
+insert into allpreffromsup values("tid00024",true,true,now());
+insert into allpreffromsup values("tid00025",true,true,now());
 
 
-insert into allpreffromsup values("tid00001",false,false,now());
-insert into allpreffromsup values("tid00002",false,false,now());
-insert into allpreffromsup values("tid00003",false,false,now());
-insert into allpreffromsup values("tid00004",false,false,now());
-insert into allpreffromsup values("tid00005",false,false,now());
-insert into allpreffromsup values("tid00006",false,false,now());
-insert into allpreffromsup values("tid00007",false,false,now());
-insert into allpreffromsup values("tid00008",false,false,now());
-insert into allpreffromsup values("tid00009",false,false,now());
-insert into allpreffromsup values("tid00010",false,false,now());
-insert into allpreffromsup values("tid00011",false,false,now());
-insert into allpreffromsup values("tid00012",false,false,now());
-insert into allpreffromsup values("tid00013",false,false,now());
-insert into allpreffromsup values("tid00014",false,false,now());
-insert into allpreffromsup values("tid00015",false,false,now());
-insert into allpreffromsup values("tid00016",false,false,now());
-insert into allpreffromsup values("tid00017",false,false,now());
-insert into allpreffromsup values("tid00018",false,false,now());
-insert into allpreffromsup values("tid00019",false,false,now());
-insert into allpreffromsup values("tid00020",false,false,now());
-insert into allpreffromsup values("tid00021",false,false,now());
-insert into allpreffromsup values("tid00022",false,false,now());
-insert into allpreffromsup values("tid00023",false,false,now());
-insert into allpreffromsup values("tid00024",false,false,now());
-insert into allpreffromsup values("tid00025",false,false,now());
+-- insert into allpreffromsup values("tid00001",false,false,now());
+-- insert into allpreffromsup values("tid00002",false,false,now());
+-- insert into allpreffromsup values("tid00003",false,false,now());
+-- insert into allpreffromsup values("tid00004",false,false,now());
+-- insert into allpreffromsup values("tid00005",false,false,now());
+-- insert into allpreffromsup values("tid00006",false,false,now());
+-- insert into allpreffromsup values("tid00007",false,false,now());
+-- insert into allpreffromsup values("tid00008",false,false,now());
+-- insert into allpreffromsup values("tid00009",false,false,now());
+-- insert into allpreffromsup values("tid00010",false,false,now());
+-- insert into allpreffromsup values("tid00011",false,false,now());
+-- insert into allpreffromsup values("tid00012",false,false,now());
+-- insert into allpreffromsup values("tid00013",false,false,now());
+-- insert into allpreffromsup values("tid00014",false,false,now());
+-- insert into allpreffromsup values("tid00015",false,false,now());
+-- insert into allpreffromsup values("tid00016",false,false,now());
+-- insert into allpreffromsup values("tid00017",false,false,now());
+-- insert into allpreffromsup values("tid00018",false,false,now());
+-- insert into allpreffromsup values("tid00019",false,false,now());
+-- insert into allpreffromsup values("tid00020",false,false,now());
+-- insert into allpreffromsup values("tid00021",false,false,now());
+-- insert into allpreffromsup values("tid00022",false,false,now());
+-- insert into allpreffromsup values("tid00023",false,false,now());
+-- insert into allpreffromsup values("tid00024",false,false,now());
+-- insert into allpreffromsup values("tid00025",false,false,now());
 
 

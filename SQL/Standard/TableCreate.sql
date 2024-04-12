@@ -1,10 +1,10 @@
 
 
-create table  allusers(allusersname	varchar(100) Not null,pid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,role	varchar(20),PRIMARY key (pid));
+create table  allusers(allusersname	varchar(800) Not null,pid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,role	varchar(20),PRIMARY key (pid));
 
 create table   student(stdname		varchar(100) Not null,sid			varchar(20) not null,password	varchar(20) not null,states		varchar(20) default "ACTIVE",errortime	int default 0,credit int default 3,ttbsubmission  varchar(20) default "N",ttbcomments varchar(200) default "",ttbdeadline timestamp default null,requestdeadline timestamp default null,PRIMARY key (sid));
 
-create table supervisor(supname		varchar(100) Not null,tid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,submission  varchar(10) default "N", draft 		varchar(10) default "N", priority	int default 0,PRIMARY key (tid));
+create table supervisor(supname		varchar(800) Not null,tid			varchar(20) not null,password	varchar(20) not null,states		varchar(20),errortime	int,submission  varchar(10) default "N", draft 		varchar(10) default "N", priority	int default 0,PRIMARY key (tid));
 
 create table alltopics(topicname varchar(500), tid varchar(10), primary key(topicname,tid));
 
@@ -30,7 +30,7 @@ create table observerpairstudent( OID		varchar(20) not null, SID		varchar(10) no
 
 create table allclassroomtimeslot( ReqID	varchar(30) not null, Campus varchar(10) not null, RID		varchar(10) Not null, StartDate DATE not null, EndDate DATE not null, StartTime time not null, EndTime time not null, Remarks varchar(100), primary key (ReqID) );
 
-create table allnotice( NID	varchar(20) not null, Creator		varchar(10) Not null, Creatorname		varchar(10), CreateDate  timestamp not null, type int default 1, title varchar(50) not null, content varchar(1000), primary key (NID) );
+create table allnotice( NID	varchar(20) not null, Creator		varchar(50) Not null, Creatorname		varchar(800), CreateDate  timestamp not null, type int default 1, title varchar(50) not null, content varchar(1000), primary key (NID) );
 
 create table allsupersetting( STID	varchar(20) not null, Creator		varchar(10) Not null, CreateDate  timestamp , typeofsetting integer, deadlinedate date, deadlinetime time, startdate date, starttime time, enddate date, endtime time, LastUpdate timestamp, Announcetime timestamp default null, primary key (STID) );
 
