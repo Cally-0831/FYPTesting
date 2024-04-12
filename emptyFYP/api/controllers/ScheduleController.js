@@ -7371,7 +7371,7 @@ module.exports = {
             var getRoomquery = "select distinct(rid) as Room  from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid !=\"\" "
                 + "and (rid not in (select rid from allclass where Campus =\"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (time(\"" + newdate.toLocaleTimeString("en-GB") + "\") between starttime and endtime)  ))"
                 + "and (rid not in (select rid from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and (time(\"" + newdate.toLocaleTimeString("en-GB") + "\") between starttime and endtime)  )) "
-                + "and (rid not in (select rid from allscheduleboxboxdate = \"" + timestampstring + "\"))"
+                + "and (rid not in (select rid from allschedulebox where boxdate = \"" + timestampstring + "\"))"
             console.log(getRoomquery)
             roomlist = await new Promise((resolve) => {
                 pool.query(getRoomquery, (err, res) => {
