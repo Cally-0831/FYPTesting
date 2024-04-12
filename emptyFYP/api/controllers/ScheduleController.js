@@ -4794,7 +4794,7 @@ module.exports = {
                     if (bestPlan.tacklecount == totalStudNum) {
                         checkSuccess = true;
                     }
-                    changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
+                    // changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
                     // finalResultOfPlans.push(bestPlan);
                     for (var timeslot = 0; timeslot < bestPlan.Schedule.length; timeslot++) {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
