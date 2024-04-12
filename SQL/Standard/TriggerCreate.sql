@@ -35,7 +35,7 @@ CREATE TRIGGER addalluserstoroletable BEFORE INSERT ON allusers FOR EACH ROW BEG
 
 DELIMITER |
 CREATE TRIGGER insertcreatorname BEFORE INSERT ON allnotice FOR EACH ROW BEGIN
-  declare stringstring  varchar(10);
+  declare stringstring  varchar(800);
   declare timetime timestamp;
   declare idid varchar(15);
   declare deaddate date;
