@@ -71,7 +71,7 @@ module.exports = {
             }
         } else {
             console.log(setting.errmsg);
-            return res.status(401).json("Sorry, encountered error");
+            return res.status(401).json("The disclosing date wasn't set, please wait for the admin to setup.");
         }
 
     },
