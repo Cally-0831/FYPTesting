@@ -6,7 +6,7 @@ module.exports = {
     viewFinalSchedule :async function(req,res)
     {
     
-        console.log("did enter here")
+        // console.log("did enter here")
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
         var getsettinginfo;
@@ -66,7 +66,8 @@ module.exports = {
                     }
                 });
             } else {
-                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " + "Date : " + setting.deadlinedate.split("T")[0] + "\nTime : " + setting.deadlinetime);
+                
+                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " + "Date : " + settingdate.toLocaleDateString("en-GB") + "\nTime : " + setting.deadlinetime);
             }
         } else {
             console.log(setting.errmsg);
