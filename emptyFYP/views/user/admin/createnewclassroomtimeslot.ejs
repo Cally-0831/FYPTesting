@@ -112,6 +112,7 @@
     }
 
     async function createnewclassroomtimeslot(formElem) {
+        if(document.getElementById("Unavailabletype").value == ""){return alert("Please input unavailable type")}
 
         if (document.getElementById("Unavailabletype").value == "dayrange") {
             var startstart = document.getElementById("notokstartday").value;

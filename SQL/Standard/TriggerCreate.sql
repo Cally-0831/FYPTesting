@@ -204,7 +204,7 @@ CREATE TRIGGER addtopicinsupervisor before insert ON supervisorpairstudent FOR E
     if countcountcount =0 THEN
         select count(*) into  countcount from supervisorpairstudent where Topic like new.Topic and tid = new.tid;
         if countcount = 0 THEN
-            insert into alltopics values(new.topic,new.tid);
+            insert ignore into alltopics values(new.topic,new.tid);
         END if;
     END if;
     if requestdeadlineannounced is not null THEN

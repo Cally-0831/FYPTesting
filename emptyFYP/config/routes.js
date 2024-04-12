@@ -39,6 +39,7 @@ module.exports.routes = {
   "GET /scheduledesign/scheduleList/modifyschedule": "ScheduleController.HandleManualCase",
   'GET /scheduledesign/scheduleList/modifyschedule/HandleManualCase/getdata': "ScheduleController.GetData",
   "POST /scheduledesign/scheduleList/modifyschedule/HandleManualCase": "ScheduleController.EditScheduleBox",
+  "POST /scheduledesign/select": "ScheduleController.Select",
 
 
 
@@ -197,7 +198,7 @@ module.exports.routes = {
 
   //"POST /setting/createnotice": "NoticeListController.viewnoticepage",
 
-  "GET /viewFinalSchedule": "ScheduleController.viewFinalSchedule",
+  "GET /viewFinalSchedule": "RequestController.viewFinalSchedule",
 
   /***************************************************************************
   *                                                                          *

@@ -81,7 +81,7 @@ module.exports = {
     createnewclassroom: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();
-        thisistheline = "insert into classroom values(\"" +
+        thisistheline = "insert ignore into classroom values(\"" +
             req.body.Campus + "\"\,\""
             + req.body.RID + "\",\"Open\"\)\;\n";
         console.log(thisistheline);

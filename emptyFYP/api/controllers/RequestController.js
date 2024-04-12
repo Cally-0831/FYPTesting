@@ -2,6 +2,80 @@
 
 module.exports = {
 
+
+    viewFinalSchedule :async function(req,res)
+    {
+    
+        console.log("did enter here")
+        var db = await sails.helpers.database();
+        var pool = await sails.helpers.database2();
+        var getsettinginfo;
+        var getschedulebox;
+        var thisistheline3;
+        var releasedate;
+        var releasetime;
+
+        // check the displaytime has come
+        checkdisplaydate = "select deadlinedate , deadlinetime from allsupersetting where typeofsetting = 4 and Announcetime is not null;"
+
+        var setting = await new Promise((resolve) => {
+            pool.query(checkdisplaydate, (err, res) => {
+                var string = JSON.stringify(res);
+                var json = JSON.parse(string);
+                var ans;
+                if (json.length > 0) {
+                    ans = json[0];
+                    resolve(ans)
+                } else {
+                    var errmsg = JSON.parse(JSON.stringify({ "errmsg": "error happened in ScheduleController.viewFinalSchedule.checkdisplaydate" }));
+                    err = errmsg;
+                    resolve(err)
+                }
+            })
+        })
+        console.log(setting)
+
+        if (setting.errmsg == undefined) {
+            var settingdate = new Date(setting.deadlinedate);
+            settingdate.setHours(setting.deadlinetime.split(":")[0]);
+            settingdate.setMinutes(setting.deadlinetime.split(":")[1]);
+            var today = new Date();
+            console.log(">>settingdate", settingdate.toLocaleDateString(), "  ", settingdate.toLocaleTimeString("en-GB"), " ", today.toLocaleDateString(), "  ", today.toLocaleTimeString("en-GB"))
+            // console.log(settingdate >= new Date())
+            // console.log(settingdate >= today)
+            if (settingdate <= new Date()) {
+
+                if (req.session.role == "sup") {
+                    getschedulebox = "select * from allschedulebox where (tid = \"" + req.session.userid + "\" or oid =\"" + req.session.userid + "\" )and planStatus = \"Selected\" order by boxdate";
+                } else if (req.session.role == "stu") {
+                    getschedulebox = "select * from allschedulebox where sid = \"" + req.session.userid + "\" and planStatus = \"Selected\" "
+                }
+                db.query(getschedulebox, (err, results) => {
+                    try {
+                        var string = JSON.stringify(results);
+                        var json = JSON.parse(string);
+                        var personalschedulebox = json;
+                        return res.view('user/viewFinalSchedule.ejs', {
+                            releasedate: settingdate,
+                            personalschedulebox: personalschedulebox
+                        });
+
+                    } catch (err) {
+                        console.log("error happened in ScheduleController.viewFinalSchedule.getschedulebox\n " + getschedulebox)
+                        return res.status(401).json("Sorry, encountered error");
+                    }
+                });
+            } else {
+                return res.status(401).json("The Schedule will not be disclosed until the disclosing date\n " + "Date : " + setting.deadlinedate.split("T")[0] + "\nTime : " + setting.deadlinetime);
+            }
+        } else {
+            console.log(setting.errmsg);
+            return res.status(401).json("Sorry, encountered error");
+        }
+
+    },
+
+
     getview: async function (req, res) {
         var db = await sails.helpers.database();
         var pool = await sails.helpers.database2();

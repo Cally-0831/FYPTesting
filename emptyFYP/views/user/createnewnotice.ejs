@@ -77,6 +77,8 @@
 
 <script>
     async function submitplainform(level) {
+
+        if(document.getElementById("content").value == "" || document.getElementById("title").value == ""){return alert("Please Input both title and contents for notice.")}
         
         const r = confirm("Confirm to create this notice?");
         var stringstring = document.getElementById("content").value;
@@ -191,7 +193,7 @@
                 content = document.getElementById("content").value.replace(/\n/g, "<br>") 
                 +"<br><br>----------------------------<br>"
                 +"This emails send towards : <br>"+ content;
-                console.log("check type",type);
+                console.log(type);
                 console.log(typeof type);
                 
                 if(type == 1){

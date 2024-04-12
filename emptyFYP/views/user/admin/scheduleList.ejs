@@ -1,24 +1,24 @@
 <div>
     <div class="Pagetitle">Schedule List </div>
-   
-        <div class="rows">
-            <div class="columns is-multiline is-mobile">
-                <div class="column is-half-desktop is-3-mobile">
-                    <div class="buttons is-left">
-                        <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
-                    </div>
+
+    <div class="rows">
+        <div class="columns is-multiline is-mobile">
+            <div class="column is-half-desktop is-3-mobile">
+                <div class="buttons is-left">
+                    <div class="button buttonlogout is-responsive" onclick="backback()">Back</div>
                 </div>
-           
+            </div>
+
             <div class="column is-half-desktop is-9-mobile">
                 <div class="buttons is-right">
                     <div class="button buttonlogout is-responsive " onclick="ReGeneration()">ReGenerate</div>
                 </div>
             </div>
- </div>
-
         </div>
 
-   
+    </div>
+
+
     <br>
 
     <div class="rows">
@@ -127,6 +127,10 @@
                             <div class="table" style="width: 100%;overflow-x: auto; overflow-y: auto;">
                                 <table id="mytable" class="table is-bordered is-striped is-hoverable is-fullwidth">
                                     <tr>
+                                        <%var thisplan = plannumber.find((plans)=> plans.planNo == req.query.planNo);var planhandlecasenum ; 
+                                        if(planhandlecase == null){planhandlecasenum = 0} else{
+                                            planhandlecasenum = planhandlecase.length
+                                        }%>
                                         <th colspan="9"
                                             style="text-align:center; font-size: calc(20px + 0.390625vw); background-color: bisque;">
                                             Plan Number : <%=req.query.planNo%> (Handled : <%=plandetails.length%>)
@@ -135,11 +139,25 @@
                                                             onclick="output('<%=req.query.planNo%>')">
                                                             Output CSV file
                                                         </div>
+
+                                                        
+                                                       
+                                                        <%if(thisplan.planStatus == "Selected"){%>
+                                                            <div class="button greenbutton" disabled>Selected</div>
+                                                            <%}else if(thisplan.planStatus == "Successful"){%>
+                                                                <div class="button greenbutton"
+                                                            onclick="Select('<%=req.query.planNo%>' , '<%=planhandlecasenum%>')">
+                                                            Select As Final Schedule
+                                                        </div>
+                                                                <%}%>
+                                                        
                                                     </div>
 
 
-                                        </th>
+                                        </th> 
+                                        
                                     </tr>
+                                    <%if(thisplan.planStatus == "Selected"){%> <tr><th colspan="9" style="text-align:center; font-size: calc(20px + 0.390625vw); background-color: rgb(128, 248, 115);">(Current Selected Final Schedule)</th></tr> <%}%>
                                     </tr>
                                     <th
                                         style="text-align:center; font-size: calc(15px + 0.390625vw); vertical-align: middle;">
@@ -313,6 +331,26 @@
         }
     }
 
+    async function Select(planNo, manualcasenum) {
+        if (manualcasenum != 0) { return alert("Cannot set this template as final schedule since there are still untackled caases") }
+
+        var r = confirm("Confirm Selecting this template as final schedule?");
+
+        if (r) {
+            var reqbody = JSON.stringify({ planNo: planNo });
+            var response = await fetch("/scheduledesign/select", {
+                method: "POST",
+                body: reqbody
+            });
+            console.log(response.status)
+            if(response.status == 200){
+                alert("Plan "+planNo+" Selected, this will be shown as final schedule towards all users after preset disclose date.\n"+
+                "Please be reminded that after the disclose date, the schedule can not be modified, and this modify page will not be accessible")
+                location.reload();
+            }
+        }
+
+    }
 
     async function output(planNo) {
         var reqbody = JSON.stringify({ planNo: planNo });
