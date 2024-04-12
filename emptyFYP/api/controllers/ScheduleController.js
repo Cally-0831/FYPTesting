@@ -4444,17 +4444,17 @@ module.exports = {
                     }
                 });
                 // console.log("need to Tackle ", needtoTackle.length, "  ", needtoTackle);
-                // var result = await forceInsert(needtoTackle, Plan, PlanNo);
-                // // var result2 = await forceinsert2(needtoTackle, Plan, PlanNo);
-                // // console.log("return in manal ");
-                // Plan = result.Schedule;
+                var result = await forceInsert(needtoTackle, Plan, PlanNo);
+                // var result2 = await forceinsert2(needtoTackle, Plan, PlanNo);
+                // console.log("return in manal ");
+                Plan = result.Schedule;
 
-                // // console.log(Plan);
-                // // console.log("return in manal ");
-                // Plan.Penalty = await Penalty(Plan.Schedule);
-                // countTackle(Plan)
-                // console.log(Plan.tacklecount, "  ", Plan.Penalty);
-                // needtoTackle = result.needToTackleCase;
+                // console.log(Plan);
+                // console.log("return in manal ");
+                Plan.Penalty = await Penalty(Plan.Schedule);
+                countTackle(Plan)
+                console.log(Plan.tacklecount, "  ", Plan.Penalty);
+                needtoTackle = result.needToTackleCase;
 
                 if (needtoTackle.length == 0) {
                     var UpdateQuery = "update allschedulebox set planStatus = \"Successful\" where planNo = " + PlanNo + " "
