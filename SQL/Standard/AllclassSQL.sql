@@ -217,7 +217,7 @@ insert into allclassroomtimeslot values("Sin_Hang_FSC801E_oa0N7","Sin Hang","FSC
 
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N8","Sin Hang","RRS638","2024-04-25","2024-04-25","09:00","11:15","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_RRS638_oa0N9","Sin Hang","RRS638","2024-04-25","2024-04-25","12:00","13:30","Lunch");
-insert into allclassroomtimeslot values("Sin_Hang_RRS732_oa010","Sin Hang","RRS732","2024-04-25","2024-04-25","12:00","13:30","Lunch");
+insert into allclassroomtimeslot values("Sin_Hang_RRS732_oa010","Sin Hang","RRS732","2024-04-25","2024-04-25","12:01","13:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801D_oa111","Sin Hang","FSC801D","2024-04-25","2024-04-25","13:30","15:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC801C_oa121","Sin Hang","FSC801C","2024-04-25","2024-04-25","13:30","15:30","Lunch");
 insert into allclassroomtimeslot values("Sin_Hang_FSC901E_oa131","Sin Hang","FSC901E","2024-04-25","2024-04-25","13:30","15:30","Lunch");

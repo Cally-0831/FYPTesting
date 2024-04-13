@@ -51,14 +51,16 @@
                         <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Current Preference :</th>
                            <td>
                             <%if(oldpref.daypref == true){%>
-                                    Minimize Days<br>
+                                Don't matter
+                                    <br>
                                 <%}else{%>
-                                    Don't matter<br>
+                                    Minimize Daysr<br>
                                 <%}%>
                                 <%if(oldpref.movementpref == true){%>
-                                    Minimize Movement<br>
-                                <%}else{%>
                                     Don't matter<br>
+                                <%}else{%>
+                                    Minimize Movement
+                                    <br>
                                 <%}%>
                             </td>
                        </tr>
@@ -66,10 +68,10 @@
                 <tr>
                     <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Day Arragement:</th>
                     <td>
-                        <input type="radio" id="leastdays" name="daypref" value="true">
+                        <input type="radio" id="leastdays" name="daypref" value="false">
                         <label for="leastdays">Minimize</label>
                         <br>
-                        <input type="radio" id="moredays" name="daypref" value="false">
+                        <input type="radio" id="moredays" name="daypref" value="true">
                         <label for="moredays">Don't matter</label>
                     </td>
                     
@@ -78,10 +80,10 @@
                 <tr>
                     <th style="vertical-align: middle; font-size : calc(15px + 0.390625vw);">Movement:</th>
                     <td>
-                        <input type="radio" id="leastmove" name="movementpref" value="true">
+                        <input type="radio" id="leastmove" name="movementpref" value="false">
                         <label for="leastmove">Minimize</label>
                         <br>
-                        <input type="radio" id="moremove" name="movementpref" value="false">
+                        <input type="radio" id="moremove" name="movementpref" value="true">
                         <label for="moremove">Don't matter</label>
                     </td>
                     
