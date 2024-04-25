@@ -36,7 +36,7 @@
                             <div class="message-body" style="font-size: 20px;">
                                 Cannot design the Presentation Schedule now since the settings for
                                 accpecting
-                                inputs of timetable, requests, and preferences are still ongoing.
+                                inputs of timetable, requests, and preferences are still ongoing,<br>or the disclosing date has been set wrongly.
                             </div>
                         </article>
                     </div>
@@ -284,15 +284,15 @@
             }
 
             async function confirmcreate(startdaydatetype, enddaydatetype) {
-                // roomList= [
-                //             "FSC801C",
-                //             "FSC801D",
-                //             "FSC901C",
-                //             "FSC901D",
-                //             "FSC901E",
-                //             "RRS638",
-                //             "RRS732"];
-if(roomList.length == 0){return alert("Please Select rooms for presentation venues arragnement.")}
+                // roomList = [
+                //     "FSC801C",
+                //     "FSC801D",
+                //     "FSC901C",
+                //     "FSC901D",
+                //     "FSC901E",
+                //     "RRS638",
+                //     "RRS732"];
+                if (roomList.length == 0) { return alert("Please Select rooms for presentation venues arragnement.") }
                 var ClassroomTTB = document.getElementsByName("RoomTTBConsideration");
                 var pplTTB = document.getElementsByName("pplTTBConsideration");
                 var pplTimeslot = document.getElementsByName("pplTimeSlotConsideration");
@@ -313,8 +313,8 @@ if(roomList.length == 0){return alert("Please Select rooms for presentation venu
                         pplTimeslot = pplTimeslot[i].value;
                     }
                 }
-              
-                       
+
+
                 roomList.sort();
                 // console.log(ClassroomTTB)
                 var r = confirm("Confirm to create with following deatils?\n"
@@ -365,7 +365,7 @@ if(roomList.length == 0){return alert("Please Select rooms for presentation venu
                         body: requestbody
                     });
                     if (response.ok) {
-                       
+
                         // response = await fetch("/scheduledesign/nqueenversion", {
                         //     method: "POST",
                         //     body: requestbody

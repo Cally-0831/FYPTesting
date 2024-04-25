@@ -4641,7 +4641,7 @@ module.exports = {
         console.log(checking)
         var finalduration = possibledatecombination[possibledatecombination.length - 1]
 
-        var plans = 5;
+        var plans = 10;
 
         for (var datecombin = 0; datecombin < plans; datecombin++) {
 
@@ -4811,7 +4811,7 @@ module.exports = {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
                             } else {
                                 // await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
@@ -4974,7 +4974,7 @@ module.exports = {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
                             } else {
                                 await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
@@ -7697,7 +7697,7 @@ module.exports = {
         var db = await sails.helpers.database();
 
         var removepreviousselection = await new Promise((resolve) => {
-            db.query("update allschedulebox set planstatus = \"Success\" where planno != \"" + req.body.planNo + "\" and planstatus = \"Selected\"", (err, res) => {
+            db.query("update allschedulebox set planstatus = \"Successful\" where planno != \"" + req.body.planNo + "\" and planstatus = \"Selected\"", (err, res) => {
                 try {
                     console.log(
                         "update previous selection as Success"
