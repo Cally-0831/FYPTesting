@@ -2152,7 +2152,6 @@ module.exports = {
 
             // copyTemplate.Schedule.sort(() => 0.6 - Math.random())
             // console.log(copyTemplate.Schedule[0])
-            console.log(AllPopulation.length, "  ", Population)
 
             while (AllPopulation.length < Population) {
                 var copyTemplate = JSON.parse(JSON.stringify(Template))
@@ -2473,7 +2472,6 @@ module.exports = {
                 //     // console.log(copyTemplate.Schedule[0].StudentAy)
                 // }
                 // Print(copyTemplate)
-                // console.log(copyTemplate.tacklecount,"   ",Template.Schedule[0].StudentAy.length)
                 if (copyTemplate.tacklecount == Template.Schedule[0].StudentAy.length) {
                     // console.log(copyTemplate)
                     if (!reduceDuplicate(AllPopulation, copyTemplate)) {
@@ -2584,7 +2582,7 @@ module.exports = {
              *  - Supervisors preferences on days (minimizing)
              */
             // console.log("calculate Penalty")
-            console.log(Schedule[0].StudentAy.filter((student) => student.appears == 1))
+            // console.log(Schedule[0].StudentAy.filter((student)=> student.appears ==1))
             // console.log("entering ",Schedule)
             var Penaltymark = 0;
             // var WholePlanAccordingtoTime = new Array();
@@ -2633,18 +2631,11 @@ module.exports = {
                 }
                 a += thistimeslotCombin.length;
             }
-            // console.log(WholePlanAccordingtoTime.length)
+
             var teachingList = copyarray(Schedule[0].TeachingAy);
-            var teachteach = await getTeachingList();
-            // console.log(teachteach)
-
-            var PrefList = await getPrefList(teachteach);
-            // console.log(PrefList)
+            var PrefList = await getPrefList(await getTeachingList());
             // counting marks for consective sessions
-
-
             PrefList.forEach(staff => {
-
                 var roomPen = 0;
                 var conseccount = 0;
                 var isConsec = 0;
@@ -2674,15 +2665,14 @@ module.exports = {
 
                 // console.log(WholePlanAccordingtoTime)
                 WholePlanAccordingtoTime.forEach(timeslot => {
-                    // console.log("enter here")
                     // console.log(timeslot.length,timeslot.filter((staff2) => staff2.tid == staff.tid || staff2.oid == staff.tid) )
                     // console.log("timeslot    1",timeslot.filter((staff2) => staff2.tid == staff.tid).length)
-                    // if (timeslot.filter((staff2) => staff2.tid == staff.tid || staff2.oid == staff.tid).length > 1) {
-                    //     console.log("timeslot    3",timeslot.filter((staff2) => staff2.tid == staff.tid),"  ",timeslot.filter((staff2) => staff2.tid == staff.tid).length)
-                    //     appearingcount += timeslot.filter((staff2) => staff2.tid == staff.tid || staff2.oid == staff.tid).length;
-                    // } else {
-                    //     console.log("timeslot    2",timeslot.filter((staff2) => staff2.tid == staff.tid),"  ",timeslot.filter((staff2) => staff2.tid == staff.tid).length)
-                    // }
+                    if (timeslot.filter((staff2) => staff2.tid == staff.tid || staff2.oid == staff.tid).length > 1) {
+                        // console.log("timeslot    3",timeslot.filter((staff2) => staff2.tid == staff.tid),"  ",timeslot.filter((staff2) => staff2.tid == staff.tid).length)
+                        appearingcount += timeslot.filter((staff2) => staff2.tid == staff.tid || staff2.oid == staff.tid).length;
+                    } else {
+                        // console.log("timeslot    2",timeslot.filter((staff2) => staff2.tid == staff.tid),"  ",timeslot.filter((staff2) => staff2.tid == staff.tid).length)
+                    }
                     if (currentdate == null || currentdate == undefined) {
                         currentdate = timeslot[0].SQLdate;
                     } else if (currentdate != timeslot[0].SQLdate) {
@@ -2796,7 +2786,7 @@ module.exports = {
                     appearingcount = 0
                 }
                 // console.log(staff, "   ", sitcount, "  ", reward, "   ", isConsec, "    ", movementCount, "   ", roomPen, "   ", dayPen, " ", appearingcount, "\n")
-                Penaltymark += (isConsec * 10) + (roomPen * 5) + (dayPen * 8) - (reward) + (appearingcount * 10000)
+                Penaltymark += (isConsec * 10) + (roomPen * 5) + (dayPen * 8) - (reward) + (appearingcount * 100)
             });
 
             // console.log(Penaltymark)
@@ -4160,7 +4150,7 @@ module.exports = {
         }
 
         async function forceInsert(needToTackleCase, Schedule, planNo) {
-            console.log("forceInsert   ", needToTackleCase)
+            console.log(needToTackleCase)
             var orgPlaninorder = copyarray(Schedule.Schedule);
             orgPlaninorder = orgPlaninorder.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot))
             console.log(orgPlaninorder[0].SQLdate, "  ", orgPlaninorder[0].SQLtime)
@@ -4448,8 +4438,6 @@ module.exports = {
             return JSON.parse(JSON.stringify({ Schedule: Schedule, needToTackleCase: needToTackleCase }));
         }
 
-
-
         async function checkAnyManalHandling(Plan, PlanNo) {
             var TotalStudentList = await getPairingList();
             var appeared = new Array();
@@ -4536,9 +4524,8 @@ module.exports = {
             return NewTemplate;
         }
 
-        function changeRoom(Plan2, datecombin) {
+        function changeRoom(Plan, datecombin) {
             /** move rooms in between */
-            var Plan = Plan2.Schedule
 
 
             Plan = Plan.sort((a, b) => new Date(a.timeslot) - new Date(b.timeslot))
@@ -4570,31 +4557,31 @@ module.exports = {
                             // console.log(room2)
                             if (room.room != room2.room) {
                                 var obj2 = room.StudentAy.filter((present) => present.appears == 1)[0]
-                                console.log("move this ", obj2, " from ", room.room, " ", room.SQLdate, "  ", room.SQLtime, " to ", room2.room, " ", room2.SQLdate, "  ", room2.SQLtime)
-
-
-
+                                console.log("move this ", obj2 , " from ",room.room , " ",room.SQLdate,"  ",room.SQLtime , " to ", room2.room, " ",room2.SQLdate,"  ",room2.SQLtime)
+                                
+                                
+                                
                                 var present3 = Wy[a].find((present) => present.room == room2.room);
                                 if (present3 != undefined) {
                                     // console.log(present3.room , "   ",present3.SQLdate,"  ",present3.SQLtime )
                                     var obj3 = present3.StudentAy.filter((present) => present.appears == 1)
                                     var present3index = Plan.findIndex((present) => present == present3)
-
+                                    
                                     setAppear(Plan[present2index], obj2, 0)
                                     if (obj3.length > 0) {
-
+                                    
                                         // console.log(obj3[0])
                                         obj3 = obj3[0];
                                         setAppear(Plan[present2index], obj3, 1)
                                         setAppear(Plan[present3index], obj3, 0)
-                                        console.log(obj3, "from ", Plan[present3index].SQLdate, "  ", Plan[present3index].SQLtime, "  ", Plan[present3index].room, " to ", Plan[present2index].SQLdate, "  ", Plan[present2index].SQLtime, "  ", Plan[present2index].room)
+                                        console.log(obj3 ,"from ",Plan[present3index].SQLdate,"  ",Plan[present3index].SQLtime,"  ",Plan[present3index].room," to ",Plan[present2index].SQLdate,"  ",Plan[present2index].SQLtime,"  ",Plan[present2index].room)
                                     }
                                     setAppear(Plan[present3index], obj2, 1)
-                                    console.log(obj2, "from ", Plan[present2index].SQLdate, "  ", Plan[present2index].SQLtime, "  ", Plan[present2index].room, " to ", Plan[present3index].SQLdate, "  ", Plan[present3index].SQLtime, "  ", Plan[present3index].room)
-
-
-                                } else {
-
+                                    console.log(obj3 ,"from ",Plan[present2index].SQLdate,"  ",Plan[present2index].SQLtime,"  ",Plan[present2index].room," to ",Plan[present3index].SQLdate,"  ",Plan[present3index].SQLtime,"  ",Plan[present3index].room)
+                                  
+                                    
+                                }else{
+                                   
                                 }
 
 
@@ -4610,54 +4597,12 @@ module.exports = {
 
         }
 
-        function LastCheck(Plan) {
-            var copyarray1 = copyarray(Plan.Schedule);
-            console.log(copyarray1.length)
-            copyarray1.forEach(element => {
-                var onetimeslot = copyarray1.filter((timetime) => timetime.timeslot == element.timeslot);
-                console.log(onetimeslot)
-                var arranged = new Array();
-                onetimeslot.forEach(element => {
-                    var pre = element.StudentAy.find((present) => present.appears == 1)
-                    console.log(pre)
-                    arranged.push(pre)
-                });
-                if (arranged.length != 0) {
-                    arranged.forEach(element => {
-                        var studentcheck = -1;
-                        var supcheck = -1;
-                        var obscheck = -1;
-                        if (arranged.filter((presentation) => presentation.sid == element.sid).length > 1) {
-                            studentcheck =arranged.lastIndexOf((presentation) => presentation.sid == element.sid) ;
-                        }
-                        if (arranged.filter((presentation) => presentation.tid == element.tid).length > 1) {
-                            supcheck =arranged.lastIndexOf((presentation) => presentation.tid == element.tid) ;
-                        }
-                        if (arranged.filter((presentation) => presentation.oid == element.oid).length > 1) {
-                            obscheck =arranged.lastIndexOf((presentation) => presentation.oid == element.oid) ;
-                        }
-                        if(studentcheck !=-1){
-                            console.log("student check hv problem ", element.sid)
-                        }
-                        if(supcheck !=-1){
-                            console.log("sup check hv problem ", element.tid)
-                        }
-                        if(obscheck !=-1){
-                            console.log("obs check hv problem ", element.oid)
-                        }
-
-                    });
-                }
-
-            });
-        }
-
         var totalStudNum = await getStudentnum();
         var studenList = await getPairingList();
         var teachingList = await getTeachingList();
         var StudentList = new Array();
         var TeachingList = new Array();
-        var Generation = 1000;
+        var Generation = 500;
         studenList.forEach(element => {
             var Obj = JSON.parse(JSON.stringify({
                 sid: element.sid,
@@ -4693,10 +4638,10 @@ module.exports = {
 
             }
         })
-        // console.log(checking)
+        console.log(checking)
         var finalduration = possibledatecombination[possibledatecombination.length - 1]
 
-        var plans = 10;
+        var plans = 5;
 
         for (var datecombin = 0; datecombin < plans; datecombin++) {
 
@@ -4709,7 +4654,7 @@ module.exports = {
             var teachingList = await getTeachingList();
             var StudentList = new Array();
             var TeachingList = new Array();
-            var Generation = 1000;
+            var Generation = 500;
             studenList.forEach(element => {
                 var Obj = JSON.parse(JSON.stringify({
                     sid: element.sid,
@@ -4857,17 +4802,16 @@ module.exports = {
                     var bestPlan = bestresults[randomNum(bestresults)];
                     // console.log(" here")
                     var checkSuccess = false;
-                    // LastCheck(bestPlan)
                     if (bestPlan.tacklecount == totalStudNum) {
                         checkSuccess = true;
                     }
-                    // changeRoom(bestPlan, possibledatecombination[datecombin])
+                    // changeRoom(bestPlan.Schedule, possibledatecombination[datecombin])
                     // finalResultOfPlans.push(bestPlan);
                     for (var timeslot = 0; timeslot < bestPlan.Schedule.length; timeslot++) {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
                             } else {
                                 // await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
@@ -5030,7 +4974,7 @@ module.exports = {
                         if (bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1) != undefined) {
                             if (checkSuccess) {
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
-                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Successful", req.body.typeOfPresent)
+                                    bestPlan.Schedule[timeslot].SQLdate, bestPlan.Schedule[timeslot].SQLtime, bestPlan.Schedule[timeslot].room, "Success", req.body.typeOfPresent)
                             } else {
                                 await checkAnyManalHandling(bestPlan, datecombin)
                                 insertbox(datecombin, bestPlan.Schedule[timeslot].StudentAy.find((presentation) => presentation.appears == 1),
@@ -7437,7 +7381,7 @@ module.exports = {
             var getRoomquery = "select distinct(rid) as Room  from classroom where Campus = \"" + req.query.Campus + "\" and status = \"Open\" and rid !=\"\" "
                 + "and (rid not in (select rid from allclass where Campus =\"" + req.query.Campus + "\" and weekdays = \"" + newdate.getDay() + "\" and (time(\"" + newdate.toLocaleTimeString("en-GB") + "\") between starttime and endtime)  ))"
                 + "and (rid not in (select rid from allclassroomtimeslot where Campus = \"" + req.query.Campus + "\" and (time(\"" + newdate.toLocaleTimeString("en-GB") + "\") between starttime and endtime)  )) "
-                + "and (rid not in (select rid from allschedulebox where boxdate = \"" + timestampstring + "\"))"
+                + "and (rid not in (select rid from allscheduleboxboxdate = \"" + timestampstring + "\"))"
             console.log(getRoomquery)
             roomlist = await new Promise((resolve) => {
                 pool.query(getRoomquery, (err, res) => {
