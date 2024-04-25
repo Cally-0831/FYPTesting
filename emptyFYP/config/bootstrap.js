@@ -49,14 +49,17 @@ const importer = await sails.helpers.importer()
     '../SQL/Standard/dropcommand.sql',
     '../SQL/Standard/TableCreate.sql',
     '../SQL/Standard/TriggerCreate.sql',
+
+    // "../SQL/Standard/EssentialData.sql",
+    
     '../SQL/Standard/SampleData.sql',
     '../SQL/Standard/Setting.sql',
     '../SQL/Standard/AllclassSQL.sql',
+    '../SQL/Standard/PairingObserver.sql',
+
 
     // '../SQL/Standard/SettingUpdateForFastTesting.sql',
-    '../SQL/Standard/PairingObserver.sql',
   ]
-
   // New onProgress method, added in version 5.0!
 
   importer.onProgress(progress=>{

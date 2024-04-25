@@ -733,7 +733,7 @@ module.exports = {
                 return Math.floor(Math.random() * max);
               }
               console.log(count == parseInt(supervisor.stdnum))
-            while(count != supervisor.stdnum){
+            while(count != supervisor.stdnum && notPairedStudentlist.length >0){
                 var index = getRandomInt(notPairedStudentlist.length);
                 console.log(index)
                 var pairingline = "insert ignore into observerpairstudent(obsname,oid,sid) values(\""+supervisor.supname+"\",\""+supervisor.tid+"\",\""+notPairedStudentlist[index].sid+"\");"

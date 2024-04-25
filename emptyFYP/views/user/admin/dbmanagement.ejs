@@ -7,13 +7,7 @@
             Back
         </button>
     </div>
-    <div class="column is-half" style="align-self: right;">
-        <div class="buttons is-right">
-            <button class="button buttonlogout is-responsive" onclick="resetDB()">
-                Reset Defalut DB
-            </button>
-        </div>
-    </div>
+   
 </div>
 <div class="columns is-mobile is-multiline is-centered">
     <!--remove all user-->
@@ -248,19 +242,5 @@
             }
         }
     }
-    async function resetDB() {
-        var r = confirm("Confirm to restore defalut DB?")
-        if (r) {
-            var response = await fetch("/resetDB", {
-                method: "POST",
-            });
-            if (response.status == 200) {
-                alert("reset DB success");
-                location.reload();
-            } else {
-                alert("Reset DB fail")
-                location.reload();
-            }
-        }
-    }
+ 
 </script>

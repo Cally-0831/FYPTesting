@@ -284,7 +284,15 @@
             }
 
             async function confirmcreate(startdaydatetype, enddaydatetype) {
-
+                // roomList= [
+                //             "FSC801C",
+                //             "FSC801D",
+                //             "FSC901C",
+                //             "FSC901D",
+                //             "FSC901E",
+                //             "RRS638",
+                //             "RRS732"];
+if(roomList.length == 0){return alert("Please Select rooms for presentation venues arragnement.")}
                 var ClassroomTTB = document.getElementsByName("RoomTTBConsideration");
                 var pplTTB = document.getElementsByName("pplTTBConsideration");
                 var pplTimeslot = document.getElementsByName("pplTimeSlotConsideration");
@@ -305,17 +313,8 @@
                         pplTimeslot = pplTimeslot[i].value;
                     }
                 }
-                // ClassroomTTB= "No"
-                //         pplTTB= "Yes"
-                //         pplTimeslot= "Yes",
-                //         roomList= [
-                //             "FSC801C",
-                //             "FSC801D",
-                //             "FSC901C",
-                //             "FSC901D",
-                //             "FSC901E",
-                //             "RRS638",
-                //             "RRS735"];
+              
+                       
                 roomList.sort();
                 // console.log(ClassroomTTB)
                 var r = confirm("Confirm to create with following deatils?\n"
@@ -325,7 +324,7 @@
                 var boxlist = [];
 
                 if (r) {
-                    alert("The Schedule takes time for generation.\n\nDO NOT leave the page or refresh the page while generating.\n\nOr else, the generation process may requires to start over again");
+                    alert("The Schedule takes time for generation.\n\nDO NOT leave the page or refresh the page before the next alert appears.\n\nOr else, the generation process may requires to start over again");
                     // document.getElementById("createdraftbtn").innerText = "";
                     // document.getElementById("createdraftbtn").classList.add("is-loading");
                     document.getElementById("createdraftbtn").innerHTML = "<div class=\"loader\" id=\"loader\" style=\"visibility:visible; align-self: center;\"></div>";
@@ -347,9 +346,9 @@
                     })
                     // var requestbody = JSON.stringify({
                     //     typeOfPresent: typeOfPresent,
-                    //     ClassroomTTB: "No",
-                    //     pplTTB: "Yes",
-                    //     pplTimeslot: "Yes",
+                    //     ClassroomTTB: ClassroomTTB,
+                    //     pplTTB: pplTTB,
+                    //     pplTimeslot: pplTimeslot,
                     //     roomList: [
                     //         "FSC801C",
                     //         "FSC801D",
@@ -357,7 +356,7 @@
                     //         "FSC901D",
                     //         "FSC901E",
                     //         "RRS638",
-                    //         "RRS735"
+                    //         "RRS732",
                     //     ]
                     // })
 
@@ -366,6 +365,7 @@
                         body: requestbody
                     });
                     if (response.ok) {
+                       
                         // response = await fetch("/scheduledesign/nqueenversion", {
                         //     method: "POST",
                         //     body: requestbody
@@ -378,7 +378,7 @@
                             method: "POST",
                             body: requestbody
                         });
-                        alert("Please comback after 15 mintues, the plans will be appeared after generation")
+                        // alert("Please comback after 15 mintues, the plans will be appeared after generation")
                         if (response.ok) {
                             document.getElementById("loader").style.visibility = "hidden";
                             location.assign(response.url)

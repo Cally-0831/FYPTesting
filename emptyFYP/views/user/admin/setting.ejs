@@ -9,11 +9,7 @@
 
 
     </div>
-    <div class="column is-half">
-        <div class="buttons is-right">
-            <button class="button buttonlogout is-responsive" onclick="FastUpdate()">FastUpdate</button>
-        </div>
-    </div>
+   
 </div>
 <br><br>
 <%var hv1anoun = -1;var hv2anoun = -1;var hv3anoun = -1;var hv4anoun = -1;var hv5anoun = -1;var hv6anoun = -1;%>
@@ -570,22 +566,22 @@
         location.assign("home")
     }
 
-    async function FastUpdate(){
-        var r = confirm("Confirm to adopt fast update?")
+    // async function FastUpdate(){
+    //     var r = confirm("Confirm to adopt fast update?")
 
-        if(r){
-            var response = await fetch("/FastUpdateSetting", {
-                    method: "GET",
-            });
+    //     if(r){
+    //         var response = await fetch("/FastUpdateSetting", {
+    //                 method: "GET",
+    //         });
 
-            var msg = await response.json();
+    //         var msg = await response.json();
 
-            alert(msg);
-            location.reload();
+    //         alert(msg);
+    //         location.reload();
 
 
-        }
-    }
+    //     }
+    // }
 
     async function CreateNotice(command, startdatedate,starttime, id,oidid, enddatedate,endtime,type) {
         console.log(type)
@@ -789,14 +785,14 @@
         }
         var today = new Date();
         //console.log(today.toISOString().toLocaleString('en-GB', { timeZone: 'UTC' }));
-        var presentstartdate = new Date(startdate + " 09:30:00");
+        var presentstartdate = new Date(startdate + " 09:00:00");
         var presentenddate = new Date(enddate + " 18:30:00");
 
         if (presentstartdate >= presentenddate) { return alert("Please Review Your Setting \nYou cannot set an endday earlier than the startday.") }
         if (presentstartdate <= today) { return alert("Please Review Your Setting \nYou cannot set a startday earlier than today.") }
         if (presentenddate <= today) { return alert("Please Review Your Setting \nYou cannot set an endday earlier than today.") }
         var r = confirm("Please Confirm Your Setting for Presentation Period\n\n"
-            + "StartDate :       " + document.getElementById("startpresent").value + "  "+ "09:30:00"+"\n"
+            + "StartDate :       " + document.getElementById("startpresent").value + "  "+ "09:00:00"+"\n"
             + "EndDate :         " + document.getElementById("endpresent").value + "  "+ "18:30:00"+"\n"
         )
         if (r) {
@@ -815,7 +811,7 @@
                 if (response.ok) {
 
 
-                    alert("Presentation Period has been settle as \nFrom: " + document.getElementById("startpresent").value + " , " + "09:30:00"
+                    alert("Presentation Period has been settle as \nFrom: " + document.getElementById("startpresent").value + " , " + "09:00:00"
                      +"\nTo: "+ document.getElementById("endpresent").value+ " , " + "18:30:00");
                     location.assign("/setting");
 

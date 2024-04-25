@@ -1,129 +1,66 @@
-<!---
-    <div class="navbar" >
-        <a class="navbar-Logo" href="/">
-            <img src="\images\login\compbg.png" width=150 height =50>
-        </a>
-    </div>
-    -->
 
-    <div class="welcome">FYP Scheduling System</div>
-    <br><br>
-    <div class="buttons is-centered is-mobile">
-        <button class="button is-responsive" id="autoinputsup" style="background-color:  pink;"
-            onclick="inputsup(1)">tid00001</button>
-        <button class="button is-responsive" id="autoinputsup" style="background-color:  pink;"
-            onclick="inputsup(2)">tid00002</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
-            onclick="inputsup(3)">tid00003</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
-            onclick="inputsup(4)">tid00004</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  pink;"
-            onclick="inputsup(5)">tid00005</button>
-    </div>
-    <div class="buttons is-centered is-mobile">
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(1,1)">sid1_1</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(1,2)">sid1_2</button>
-    
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(2,1)">sid2_1</button>
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(2,2)">sid2_2</button>
-    
-        <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(3,1)">sid3_1</button>
-            <button class="button  is-responsive" id="autoinputstd" style="background-color:  lightsalmon;"
-            onclick="inputstd(3,2)">sid3_2</button>
-    </div>
-    <div class="buttons is-centered is-mobile">
-        <button class="button  is-responsive" id="autoinputadm" style="background-color:  lightgreen;"
-            onclick="inputadm()">Admin</button>
-    </div>
-    <div class="columns is-centered">
-        <div class="column is-half is-mobile">
-            <div class="scheduledesignchecking">
-                <div class="rows">
-                    <div class="row">
-                        <div class="title">Login</div>
-                    </div>
-                    <div class="row">&nbsp;</div>
-                    <div class="row">
-                        <form action="/login" method="post" onsubmit="submitform(this);return false;">
-                            <label for="username" class="subtitle">Username</label>
-                            <input type="text" class="input is-rounded is-half" placeholder="Enter Username (SID/TID)"
-                                id="username" name="username" value=""><br>
-                            <br>
-                            <label for="pw" class="subtitle">Password </label>
-                            <input type="password" class="input is-rounded is-half" placeholder="Enter Password" id="pw"
-                                name="pw" value=""><br><br>
-                            <div class="buttons is-centered">
-                                <button class="button button-64 is-responsive" type="submit is-success">Login</button>
-                            </div>
-    
-                        </form>
-    
-                    </div>
+<div class="welcome">FYP Scheduling System</div>
+<br><br>
+
+<div class="columns is-centered">
+    <div class="column is-half is-mobile">
+        <div class="scheduledesignchecking">
+            <div class="rows">
+                <div class="row">
+                    <div class="title">Login</div>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div class="row">
+                    <form action="/login" method="post" onsubmit="submitform(this);return false;">
+                        <label for="username" class="subtitle">Username</label>
+                        <input type="text" class="input is-rounded is-half" placeholder="Enter Username (SID/TID)"
+                            id="username" name="username" value=""><br>
+                        <br>
+                        <label for="pw" class="subtitle">Password </label>
+                        <input type="password" class="input is-rounded is-half" placeholder="Enter Password" id="pw"
+                            name="pw" value=""><br><br>
+                        <div class="buttons is-centered">
+                            <button class="button button-64 is-responsive" type="submit is-success">Login</button>
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    
-    <script>
-    
-    
-        async function submitform(formElem) {
-    
-            try {
-                var response = await fetch(formElem.action, {
-                    method: formElem.method,
-                    body: new FormData(formElem),
-                });
-                if (response.ok) {
-                    const user = await response.json();
-                    alert("Welcom back, " + user.allusersname);
-                    location.assign("/home");
-    
-                } else if (response.status == 401) {
-                    var msg = await response.json();
-                    alert(msg);
-                } else {
-                    alert(response.statusTest);
-                }
-    
-            } catch (error) {
-                console.log("" + error + "");
-            }
-        }
-    
-    
-        function inputstd(supcode, selfcode) {
-            if(supcode < 10){
-                supcode = "0"+supcode;
-            }
-            document.getElementById("username").value = "sid" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
-            document.getElementById("pw").value = "spw" + supcode + "" + selfcode + selfcode + selfcode + selfcode;
-        }
-    
-        function inputsup(supcode) {
-            if (parseInt(supcode) < 10) {
-                document.getElementById("username").value = "tid0000" + supcode;
-                document.getElementById("pw").value = "tpw0000" + supcode;
-    
+</div>
+
+
+
+<script>
+
+
+    async function submitform(formElem) {
+
+        try {
+            var response = await fetch(formElem.action, {
+                method: formElem.method,
+                body: new FormData(formElem),
+            });
+            if (response.ok) {
+                const user = await response.json();
+                alert("Welcom back, " + user.allusersname);
+                location.assign("/home");
+
+            } else if (response.status == 401) {
+                var msg = await response.json();
+                alert(msg);
             } else {
-                document.getElementById("username").value = "tid000" + supcode;
-                document.getElementById("pw").value = "tpw000" + supcode;
+                alert(response.statusTest);
             }
-    
+
+        } catch (error) {
+            console.log("" + error + "");
         }
-    
-    
-    
-        function inputadm() {
-            document.getElementById("username").value = "admin";
-            document.getElementById("pw").value = "P@ssw0rd";
-        }
-    
-    </script>
+    }
+
+
+ 
+
+</script>
